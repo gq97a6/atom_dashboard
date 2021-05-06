@@ -10,17 +10,16 @@ import com.netDashboard.R
 import com.netDashboard.createToast
 import com.netDashboard.getContrastColor
 import com.netDashboard.getScreenWidth
-import java.util.*
 import java.io.Serializable
+import java.util.*
 
 abstract class Tile(
     var name: String,
     var color: Int,
     private var layout: Int,
-    var configLayout: Int,
     var width: Int,
     var height: Int
-): Serializable {
+) : Serializable {
 
     val id: Long?
 
@@ -53,6 +52,7 @@ abstract class Tile(
 
         val view = holder.itemView
         val params = view.layoutParams
+
         params.height = ((getScreenWidth() - view.paddingLeft * 2) / spanCount) * height
         view.layoutParams = params
 

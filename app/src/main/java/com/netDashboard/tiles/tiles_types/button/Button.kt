@@ -11,7 +11,7 @@ import com.netDashboard.tiles.TilesAdapter
 import java.util.*
 
 class ButtonTile(name: String, color: Int, x: Int, y: Int) :
-    Tile(name, color, R.layout.button_tile, R.layout.slider_config, x, y) {
+    Tile(name, color, R.layout.button_tile, x, y) {
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

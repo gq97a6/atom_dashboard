@@ -37,12 +37,10 @@
         android:valueFrom="0.0"
         android:valueTo="100.0"
 
-        app:thumbColor="#424242"
-
-        app:tickColorActive="#373737"
-        app:tickColorInactive="#151515"
-
-        app:trackColorActive="#555555"
-        app:trackColorInactive="#ACACAC" />
+        app:thumbColor="@color/slider_thumbColor"
+        app:tickColorActive="@color/slider_tickColorActive"
+        app:tickColorInactive="@color/slider_tickColorInactive"
+        app:trackColorActive="@color/slider_trackColorActive"
+        app:trackColorInactive="@color/slider_trackColorInactive" />
 
 </FrameLayout>

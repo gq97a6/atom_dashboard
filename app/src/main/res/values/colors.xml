@@ -2,4 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#7C7C7C</color>
+
+    <color name="slider_trackColorInactive">#ACACAC</color>
+    <color name="slider_trackColorActive">#555555</color>
+    <color name="slider_tickColorInactive">#151515</color>
+    <color name="slider_tickColorActive">#373737</color>
+    <color name="slider_thumbColor">#424242</color>
+    <color name="dark_gray">#404040</color>
 </resources>

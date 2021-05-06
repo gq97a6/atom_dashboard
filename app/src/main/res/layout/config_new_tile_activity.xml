@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
+    android:paddingLeft="@dimen/layout_padding"
+    android:paddingRight="@dimen/layout_padding"
     android:paddingBottom="100dp"
     tools:context="com.netDashboard.new_tile_activity.NewTileActivity">
 
@@ -15,14 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Configuration"
+        android:text="@string/config_new_tile_banner0"
         android:textColor="@color/black"
         android:textSize="40sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
         android:layout_marginBottom="50dp">
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Picked tile: "
+            android:text="@string/config_new_tile_banner1"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text=""
-            android:textColor="#9C9C9C"
+            android:textColor="@color/gray"
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -52,24 +52,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Height must be equal one, to change width."
+        android:text="@string/config_new_tile_height_warning"
         android:textColor="#555555"
         android:textSize="15sp"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:gravity="center"
         android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Width: "
+            android:text="@string/config_new_tile_slider_width"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -83,20 +83,18 @@
             android:valueFrom="0.0"
             android:valueTo="100.0"
 
-            app:thumbColor="#424242"
-
-            app:tickColorActive="#373737"
-            app:tickColorInactive="#151515"
-
-            app:trackColorActive="#555555"
-            app:trackColorInactive="#ACACAC" />
+            app:thumbColor="@color/slider_thumbColor"
+            app:tickColorActive="@color/slider_tickColorActive"
+            app:tickColorInactive="@color/slider_tickColorInactive"
+            app:trackColorActive="@color/slider_trackColorActive"
+            app:trackColorInactive="@color/slider_trackColorInactive" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -104,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Height: "
+            android:text="@string/config_new_tile_slider_height"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
@@ -118,13 +116,11 @@
             android:valueFrom="0.0"
             android:valueTo="100.0"
 
-            app:thumbColor="#424242"
-
-            app:tickColorActive="#373737"
-            app:tickColorInactive="#151515"
-
-            app:trackColorActive="#555555"
-            app:trackColorInactive="#ACACAC" />
+            app:thumbColor="@color/slider_thumbColor"
+            app:tickColorActive="@color/slider_tickColorActive"
+            app:tickColorInactive="@color/slider_tickColorInactive"
+            app:trackColorActive="@color/slider_trackColorActive"
+            app:trackColorInactive="@color/slider_trackColorInactive" />
 
     </LinearLayout>
 
@@ -133,6 +129,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Add" />
+        android:text="@string/config_new_tile_button_add" />
 
 </LinearLayout>

@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.graphics.ColorUtils
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 

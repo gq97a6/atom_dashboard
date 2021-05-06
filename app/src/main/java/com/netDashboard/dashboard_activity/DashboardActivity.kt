@@ -1,35 +1,57 @@
 package com.netDashboard.dashboard_activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.abyss.AbyssHandler
 import com.netDashboard.createToast
+import com.netDashboard.dashboard_settings_activity.DashboardSettings
+import com.netDashboard.dashboard_settings_activity.DashboardSettingsActivity
 import com.netDashboard.databinding.DashboardActivityBinding
+import com.netDashboard.main_activity.MainActivity
 import com.netDashboard.margins
 import com.netDashboard.new_tile_activity.NewTileActivity
-import com.netDashboard.tiles.Tile
+import com.netDashboard.tiles.Tiles
 import com.netDashboard.tiles.TilesAdapter
-import com.netDashboard.tiles.TilesSource
 import com.netDashboard.toPx
 
 class DashboardActivity : AppCompatActivity() {
-    lateinit var b: DashboardActivityBinding
-    lateinit var dashboardTilesAdapter: TilesAdapter
+    private lateinit var b: DashboardActivityBinding
 
-    private val dashboardViewModel by viewModels<DashboardViewModel> {
-        DashboardViewModelFactory(this)
-    }
+    private lateinit var settings: DashboardSettings
+    lateinit var dashboardTilesAdapter: TilesAdapter
+    private var abyss = AbyssHandler(this)
+
+    private lateinit var dashboardName: String
+    private lateinit var dashboardFileName: String
+    private lateinit var dashboardSettingsFileName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = DashboardActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        dashboardName = intent.getStringExtra("dashboardName") ?: ""
+
+        if (dashboardName.isEmpty()) {
+            Intent(this, MainActivity::class.java).also {
+                finish()
+                startActivity(it)
+            }
+        }
+
+        dashboardFileName = filesDir.canonicalPath + "/" + dashboardName
+        dashboardSettingsFileName = filesDir.canonicalPath + "/settings_" + dashboardName
+        settings = DashboardSettings().getSettings(dashboardSettingsFileName)
+
+        abyss.start()
+        abyss.bind()
 
         setupRecyclerView()
 
@@ -54,7 +76,7 @@ class DashboardActivity : AppCompatActivity() {
                 b.set.setBackgroundResource(R.drawable.button_more)
 
                 val saveMe = dashboardTilesAdapter.tiles.toList()
-                TilesSource().saveList(saveMe, filesDir.canonicalPath + "/tileList")
+                Tiles().saveList(saveMe, dashboardFileName)
             }
 
             for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
@@ -75,9 +97,14 @@ class DashboardActivity : AppCompatActivity() {
                     dashboardTilesAdapter.tiles[i].editMode(true)
                     dashboardTilesAdapter.tiles[i].flag(false)
                 }
-            }
-            else if(!dashboardTilesAdapter.swapMode) {
-                createToast(this, "RESTORE")
+            } else if (!dashboardTilesAdapter.swapMode) {
+                Intent(this, DashboardSettingsActivity::class.java).also {
+                    it.putExtra("dashboardName", dashboardName)
+                    it.putExtra("dashboardFileName", dashboardFileName)
+                    it.putExtra("dashboardSettingsFileName", dashboardSettingsFileName)
+                    finish()
+                    startActivity(it)
+                }
             }
         }
 
@@ -94,12 +121,13 @@ class DashboardActivity : AppCompatActivity() {
                 }
 
                 if (!toDelete) {
-                    createToast(this, "Mark tile, click again.", 1)
+                    createToast(this, getString(R.string.dashboard_remove), 1)
                 } else {
 
+                    @SuppressLint("ShowToast")
                     val snackbar = Snackbar.make(
                         b.root,
-                        "Are you sure? Wait to dismiss.",
+                        getString(R.string.snackbar_confirmation),
                         Snackbar.LENGTH_LONG
                     ).margins().setAction("YES") {
 
@@ -113,6 +141,11 @@ class DashboardActivity : AppCompatActivity() {
                                     i,
                                     dashboardTilesAdapter.itemCount - i
                                 )
+
+                                if (dashboardTilesAdapter.itemCount == 0) {
+                                    b.placeholder.visibility = View.VISIBLE
+                                }
+
                                 break
                             }
                         }
@@ -131,12 +164,15 @@ class DashboardActivity : AppCompatActivity() {
                     dashboardTilesAdapter.tiles[i].flag(false)
                 }
 
-                createToast(this, "Mark tile, click again.")
+                createToast(this, getString(R.string.dashboard_remove))
             }
         }
 
         b.add.setOnClickListener {
             Intent(this, NewTileActivity::class.java).also {
+                it.putExtra("dashboardName", dashboardName)
+                it.putExtra("dashboardFileName", dashboardFileName)
+                it.putExtra("dashboardSettingsFileName", dashboardSettingsFileName)
                 startActivity(it)
             }
         }
@@ -144,29 +180,37 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onPause() {
         val saveMe = dashboardTilesAdapter.tiles.toList()
-        TilesSource().saveList(saveMe, filesDir.canonicalPath + "/tileList")
+        Tiles().saveList(saveMe, dashboardFileName)
+
+        //TMP
+        abyss.stop()
 
         super.onPause()
     }
 
     private fun setupRecyclerView() {
-        val spanCount = 3
+        val spanCount = settings.spanCount
+
         dashboardTilesAdapter = TilesAdapter(this, spanCount)
         b.recyclerView.adapter = dashboardTilesAdapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return dashboardTilesAdapter.tiles[position].width
+                return if(dashboardTilesAdapter.tiles[position].height == 1) {
+                    dashboardTilesAdapter.tiles[position].width
+                } else {
+                    spanCount
+                }
             }
         }
 
         b.recyclerView.layoutManager = layoutManager
 
-        if(TilesSource().getList(filesDir.canonicalPath + "/tileList") != null) {
-            dashboardTilesAdapter.submitList(TilesSource().getList(filesDir.canonicalPath + "/tileList") as MutableList<Tile>)
-        } else {
-            dashboardTilesAdapter.submitList(mutableListOf())
+        dashboardTilesAdapter.submitList(Tiles().getList(dashboardFileName).toMutableList())
+
+        if (dashboardTilesAdapter.itemCount == 0) {
+            b.placeholder.visibility = View.VISIBLE
         }
     }
 
@@ -179,4 +223,27 @@ class DashboardActivity : AppCompatActivity() {
     //Handler(Looper.getMainLooper()).postDelayed({
     //    moveIndicator(0f, 300)
     //}, 400)
+
+
+    //b.get.setOnClickListener() {
+    //    if (abyss.isBounded) {
+    //        val data:String = abyss.service.udpd.getData()
+    //        Toast.makeText(this, "number: $data", Toast.LENGTH_SHORT).show()
+    //    }
+    //}
+//
+    //override fun onStart() {
+    //    super.onStart()
+
+    //}
+//
+    //override fun onDestroy() {
+    //    abyss.unbound()
+    //    super.onDestroy()
+    //}
+//
+    //override fun onStop() {
+    //    abyss.unbound()
+    //    super.onStop()
+    //}
 }

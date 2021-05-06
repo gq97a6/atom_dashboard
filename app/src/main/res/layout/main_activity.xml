@@ -3,32 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:paddingBottom="100dp"
-    tools:context="com.netDashboard.MainActivity">
+    android:orientation="vertical"
+    tools:context=".main_activity.MainActivity">
 
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/logo_main"
-        android:contentDescription="logo"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:gravity="center"
+        android:text="Main screen in development."
+        android:textColor="#7A7A7A"
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="22dp"
-        android:shadowColor="#92515151"
-        android:shadowDx="4"
-        android:shadowDy="4"
-        android:shadowRadius="10"
-        android:text="NetDashboard"
-        android:textColor="#F6F6F6"
-        android:textSize="35sp"
+        android:gravity="center"
+        android:paddingBottom="100dp"
+        android:text="Moving to single-only dashboard."
+        android:textColor="#7A7A7A"
         tools:ignore="HardcodedText" />
 
+    <TextView
+        android:id="@+id/counter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="3"
+        android:textColor="#7A7A7A"
+        android:textSize="60sp"
+        tools:ignore="HardcodedText" />
 </LinearLayout>

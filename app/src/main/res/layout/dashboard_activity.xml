@@ -56,6 +56,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Add new tiles first. \n Use left icon to access edit mode."
+        android:textColor="#A3A3A3"
+        android:textSize="20sp"
+        android:paddingBottom="50dp"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"

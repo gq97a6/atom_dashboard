@@ -3,8 +3,10 @@ package com.netDashboard.abyss
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.*
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -78,6 +80,53 @@ class Abyss : Service() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
+    }
+}
+
+class AbyssHandler(var context: Context) {
+    var isBounded: Boolean = false
+    lateinit var service: Abyss
+
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
+            val binder = IBinder as Abyss.AbyssBinder
+            service = binder.getService()
+            isBounded = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            isBounded = false
+        }
+    }
+
+    fun start() {
+        Intent(context, Abyss::class.java).also {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(it)
+            } else {
+                context.startService(it)
+            }
+        }
+    }
+
+    fun stop() {
+        Intent(context, Abyss::class.java).also {
+            context.stopService(it)
+        }
+    }
+
+    fun bind() {
+        Intent(context, Abyss::class.java).also {
+            context.bindService(it, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    fun unbind() {
+        if (isBounded) {
+            context.unbindService(connection)
+            isBounded = false
+        }
     }
 }
 

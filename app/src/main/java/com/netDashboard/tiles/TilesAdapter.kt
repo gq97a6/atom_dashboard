@@ -97,7 +97,7 @@ class TilesAdapter(
                     tileOnClick.postValue(position)
                 }
                 else -> {
-                    createToast(context, "$position:S")
+                    tiles[position].onClick()
                 }
             }
         }

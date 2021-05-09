@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="60dp"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/tile_padding">
 
-    <ImageView
-        android:id="@+id/swapReady"
+    <View
+        android:id="@+id/flag_mark"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_gravity="center"
         android:background="@drawable/icon_swap_flag"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/flag_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#80000000"
+        android:elevation="5dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
 
     <Button
         android:id="@+id/button"
@@ -24,14 +36,18 @@
         android:layout_height="match_parent"
         android:backgroundTint="#000000"
         android:gravity="center"
+        android:paddingLeft="6dp"
+        android:paddingTop="15dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="15dp"
         android:text="Default value"
         android:textColor="#FFFFFF"
-        android:padding="1dp"
-        app:autoSizeMaxTextSize="15sp"
-        app:autoSizeMinTextSize="5sp"
-        app:autoSizeStepGranularity="3sp"
+        app:autoSizeMaxTextSize="25dp"
+        app:autoSizeMinTextSize="8dp"
+        app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform"
-        app:rippleColor="#FFFFFF">
+        app:rippleColor="#FFFFFF"
+        tools:ignore="HardcodedText">
 
     </Button>
 

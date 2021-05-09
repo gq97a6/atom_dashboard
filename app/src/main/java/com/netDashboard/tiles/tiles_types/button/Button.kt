@@ -3,7 +3,7 @@ package com.netDashboard.tiles.tiles_types.button
 import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
-import com.netDashboard.createToast
+import com.netDashboard.alpha
 import com.netDashboard.getContrastColor
 import com.netDashboard.getRandomColor
 import com.netDashboard.tiles.Tile
@@ -24,25 +24,17 @@ class ButtonTile(name: String, color: Int, x: Int, y: Int) :
             if (!editMode()) {
                 setThemeColor(getRandomColor())
             }
-
-            holder.itemView.findViewById<Button>(R.id.button).setOnLongClickListener {
-                if (editMode()) {
-                    createToast(context!!, "open settings! ${holder.adapterPosition}")
-                }
-
-                return@setOnLongClickListener true
-            }
         }
     }
 
     override fun setThemeColor(color: Int) {
-        this.color = color
+        super.setThemeColor(color)
 
         holder?.itemView?.findViewById<Button>(R.id.button)?.backgroundTintList =
             ColorStateList.valueOf(
                 color
             )
 
-        holder?.itemView?.findViewById<Button>(R.id.button)?.setTextColor(getContrastColor(color))
+        holder?.itemView?.findViewById<Button>(R.id.button)?.setTextColor(getContrastColor(color).alpha(75))
     }
 }

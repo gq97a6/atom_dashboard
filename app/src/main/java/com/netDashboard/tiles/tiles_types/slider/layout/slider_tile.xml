@@ -7,40 +7,67 @@
     android:elevation="10dp"
     android:padding="@dimen/tile_padding">
 
-    <ImageView
-        android:id="@+id/swapReady"
+    <View
+        android:id="@+id/flag_mark"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_margin="10dp"
+        android:layout_gravity="center"
         android:background="@drawable/icon_swap_flag"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <View
+        android:id="@+id/flag_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#40808080"
+        android:elevation="5dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <View
         android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#000000"
+        android:background="@color/gray"
+        android:clickable="true"
+        android:focusable="true"
         tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/slider_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="15dp"
+        android:text="100"
+        android:textColor="#BFFFFFFF"
+        app:autoSizeMaxTextSize="30dp"
+        app:autoSizeMinTextSize="8dp"
+        app:autoSizeStepGranularity="1dp"
+        app:autoSizeTextType="uniform" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
-
         android:stepSize="10.0"
-        android:value="0"
         android:valueFrom="0.0"
         android:valueTo="100.0"
-
-        app:thumbColor="@color/slider_thumbColor"
-        app:tickColorActive="@color/slider_tickColorActive"
-        app:tickColorInactive="@color/slider_tickColorInactive"
-        app:trackColorActive="@color/slider_trackColorActive"
-        app:trackColorInactive="@color/slider_trackColorInactive" />
+        android:visibility="invisible"
+        app:haloColor="#00000000"
+        app:haloRadius="0dp"
+        app:labelBehavior="gone"
+        app:thumbRadius="0dp"
+        app:tickColor="#00000000"
+        app:trackColor="#00000000" />
 
 </FrameLayout>

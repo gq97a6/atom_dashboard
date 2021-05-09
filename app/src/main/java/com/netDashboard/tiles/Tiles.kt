@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream
 
 
 class Tiles {
-    val color = Color.parseColor("#00000000")
+    val color = Color.parseColor("#A3A3A3")
 
     private val tileList = listOf(
         ButtonTile("button", color, 3, 1),

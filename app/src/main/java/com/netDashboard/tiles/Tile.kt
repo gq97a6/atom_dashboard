@@ -5,11 +5,7 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import com.netDashboard.R
-import com.netDashboard.createToast
-import com.netDashboard.getContrastColor
-import com.netDashboard.getScreenWidth
+import com.netDashboard.*
 import java.io.Serializable
 import java.util.*
 
@@ -76,6 +72,8 @@ abstract class Tile(
         return oldItem.id == newItem.id
     }
 
+    open fun onClick() {}
+
     open fun editMode(isEnabled: Boolean) {
         editMode = isEnabled
     }
@@ -87,7 +85,8 @@ abstract class Tile(
     open fun flag(flag: Boolean, type: Int = 0) {
         this.flag = flag
 
-        val flagMark = holder?.itemView?.findViewById<ImageView>(R.id.swapReady)
+        val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
+        val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
 
         when (type) {
             0 -> flagMark?.setBackgroundResource(R.drawable.icon_swap)
@@ -96,9 +95,13 @@ abstract class Tile(
 
         if (flag) {
             flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
+            flagBackground?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color,true).alpha(60))
+
             flagMark?.visibility = View.VISIBLE
+            flagBackground?.visibility = View.VISIBLE
         } else {
             flagMark?.visibility = View.GONE
+            flagBackground?.visibility = View.GONE
         }
     }
 
@@ -106,5 +109,7 @@ abstract class Tile(
         return flag
     }
 
-    open fun setThemeColor(color: Int) {}
+    open fun setThemeColor(color: Int) {
+        this.color = color
+    }
 }

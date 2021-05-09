@@ -173,8 +173,17 @@ class DashboardActivity : AppCompatActivity() {
                 it.putExtra("dashboardName", dashboardName)
                 it.putExtra("dashboardFileName", dashboardFileName)
                 it.putExtra("dashboardSettingsFileName", dashboardSettingsFileName)
+                finish()
                 startActivity(it)
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
+            b.edit.callOnClick()
+        } else {
+            super.onBackPressed()
         }
     }
 

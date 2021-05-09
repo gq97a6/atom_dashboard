@@ -90,6 +90,16 @@ class ConfigNewTileActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        Intent(this, DashboardActivity::class.java).also {
+            it.putExtra("dashboardName", dashboardName)
+            finish()
+            startActivity(it)
+        }
+    }
+
     private fun configTile(tile: Tile) {
         tile.width = b.width.value.toInt()
         tile.height = b.height.value.toInt()

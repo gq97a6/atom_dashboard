@@ -1,9 +1,11 @@
 package com.netDashboard.main_activity
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 finish()
                 startActivity(it)
             }
-        }, 1) //3300
+        }, 3300)
 
         counter.observe(this, {
             b.counter.text = it.toString()

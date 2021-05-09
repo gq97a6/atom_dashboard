@@ -17,8 +17,7 @@
             style="@style/defaultButton"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
-            android:background="@drawable/button_edit"
-            android:backgroundTint="@color/white" />
+            android:background="@drawable/button_edit" />
 
         <TextView
             android:id="@+id/ban"

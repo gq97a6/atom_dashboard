@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.config_new_tile_activity.ConfigNewTileActivity
+import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.NewTileActivityBinding
 import com.netDashboard.main_activity.MainActivity
 import com.netDashboard.tiles.Tile
@@ -45,10 +46,22 @@ class NewTileActivity : AppCompatActivity() {
                     it.putExtra("dashboardFileName", dashboardFileName)
                     it.putExtra("dashboardSettingsFileName", dashboardSettingsFileName)
                     it.putExtra("tileId", tileId)
+
+                    finish()
                     startActivity(it)
                 }
             }
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        Intent(this, DashboardActivity::class.java).also {
+            it.putExtra("dashboardName", dashboardName)
+            finish()
+            startActivity(it)
+        }
     }
 
     private fun setupRecyclerView() {

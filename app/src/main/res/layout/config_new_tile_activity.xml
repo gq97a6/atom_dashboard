@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:paddingTop="@dimen/layout_padding"
     android:paddingLeft="@dimen/layout_padding"
     android:paddingRight="@dimen/layout_padding"
-    android:paddingBottom="100dp"
     tools:context="com.netDashboard.new_tile_activity.NewTileActivity">
 
     <TextView
@@ -22,15 +22,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
         android:background="@color/white"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_marginBottom="50dp">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/config_new_tile_banner1"
             android:textColor="@color/black"
             android:textSize="20sp" />
@@ -39,96 +38,107 @@
             android:id="@+id/tileType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text=""
             android:textColor="@color/gray"
             android:textSize="20sp" />
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/warning"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="@string/config_new_tile_height_warning"
-        android:textColor="#555555"
-        android:textSize="15sp"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/config_new_tile_slider_width"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:orientation="vertical">
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/width"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            <TextView
+                android:id="@+id/warning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/config_new_tile_height_warning"
+                android:textColor="#555555"
+                android:textSize="15sp"
+                android:visibility="gone" />
 
-            android:stepSize="1"
-            android:valueFrom="0.0"
-            android:valueTo="100.0"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            app:thumbColor="@color/slider_thumbColor"
-            app:tickColorActive="@color/slider_tickColorActive"
-            app:tickColorInactive="@color/slider_tickColorInactive"
-            app:trackColorActive="@color/slider_trackColorActive"
-            app:trackColorInactive="@color/slider_trackColorInactive" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/config_new_tile_slider_width"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
-    </LinearLayout>
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/width"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center"
-        android:orientation="horizontal">
+                    android:stepSize="1"
+                    android:valueFrom="0.0"
+                    android:valueTo="100.0"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/config_new_tile_slider_height"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
+                    app:thumbColor="@color/slider_thumbColor"
+                    app:tickColorActive="@color/slider_tickColorActive"
+                    app:tickColorInactive="@color/slider_tickColorInactive"
+                    app:trackColorActive="@color/slider_trackColorActive"
+                    app:trackColorInactive="@color/slider_trackColorInactive" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/height"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            </LinearLayout>
 
-            android:stepSize="1"
-            android:valueFrom="0.0"
-            android:valueTo="100.0"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-            app:thumbColor="@color/slider_thumbColor"
-            app:tickColorActive="@color/slider_tickColorActive"
-            app:tickColorInactive="@color/slider_tickColorInactive"
-            app:trackColorActive="@color/slider_trackColorActive"
-            app:trackColorInactive="@color/slider_trackColorInactive" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/config_new_tile_slider_height"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
-    </LinearLayout>
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/height"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
 
-    <Button
-        android:id="@+id/push"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/config_new_tile_button_add" />
+                    android:stepSize="1"
+                    android:valueFrom="0.0"
+                    android:valueTo="100.0"
+
+                    app:thumbColor="@color/slider_thumbColor"
+                    app:tickColorActive="@color/slider_tickColorActive"
+                    app:tickColorInactive="@color/slider_tickColorInactive"
+                    app:trackColorActive="@color/slider_trackColorActive"
+                    app:trackColorInactive="@color/slider_trackColorInactive" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/push"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/config_new_tile_button_add" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

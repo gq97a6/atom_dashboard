@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
                 finish()
                 startActivity(it)
             }
-        }, 3300)
+        }, 1) //3300
 
         counter.observe(this, {
             b.counter.text = it.toString()

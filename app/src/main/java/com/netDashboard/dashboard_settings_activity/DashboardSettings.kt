@@ -5,6 +5,7 @@ import java.io.*
 class DashboardSettings : Serializable {
     var name = ""
     var spanCount = 3
+    var udpPort = 65535
 
     fun saveSettings(settings: DashboardSettings, name: String) {
 

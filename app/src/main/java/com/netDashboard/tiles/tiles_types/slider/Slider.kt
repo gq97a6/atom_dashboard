@@ -43,23 +43,25 @@ class SliderTile(
                 MotionEvent.ACTION_DOWN -> view.performClick()
             }
 
-            //Make slider width equal to screen width
-            val params = slider.layoutParams as FrameLayout.LayoutParams
-            params.width = getScreenWidth() - 100.toPx()
-            slider.layoutParams = params
+            if ((event.eventTime - event.downTime) > 0) {
 
-            //Get offset
-            val center = getScreenWidth() / 2
-            val location = IntArray(2)
-            background.getLocationOnScreen(location)
-            val offset = center - location[0] - slider.width / 2
+                //Make slider width equal to screen width
+                val params = slider.layoutParams as FrameLayout.LayoutParams
+                params.width = getScreenWidth() - 100.toPx()
+                slider.layoutParams = params
 
-            //Apply offset to event
-            event.setLocation(event.x - offset, event.y)
+                //Get offset
+                val center = getScreenWidth() / 2
+                val location = IntArray(2)
+                background.getLocationOnScreen(location)
+                val offset = center - location[0] - slider.width / 2
 
-            //Push event
-            slider.dispatchTouchEvent(event)
+                //Apply offset to event
+                event.setLocation(event.x - offset, event.y)
 
+                //Push event
+                slider.dispatchTouchEvent(event)
+            }
             return@setOnTouchListener true
         }
 

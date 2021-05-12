@@ -3,7 +3,8 @@ package com.netDashboard.dashboard_settings_activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
@@ -46,6 +47,8 @@ class DashboardSettingsActivity : AppCompatActivity() {
         b.span.value = settings.spanCount.toFloat()
         b.span.callOnClick()
 
+        b.udpPort.setText(settings.udpPort.toString())
+
         b.span.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
             }
@@ -74,7 +77,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
                 val list = Tiles().getList(dashboardFileName)
 
                 for ((i, t) in list.withIndex()) {
-                    if(t.width > b.span.value) {
+                    if (t.width > b.span.value) {
                         list[i].width = b.span.value.toInt()
                     }
                 }
@@ -90,6 +93,19 @@ class DashboardSettingsActivity : AppCompatActivity() {
             snackBarView.translationY = -20.toPx().toFloat()
             snackbar.show()
         }
+
+        b.udpPort.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                if(count > 0) settings.udpPort= Integer.parseInt(cs.toString())
+            }
+        })
     }
 
     override fun onBackPressed() {

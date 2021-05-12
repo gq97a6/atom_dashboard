@@ -13,8 +13,8 @@ class Tiles {
     val color = Color.parseColor("#A3A3A3")
 
     private val tileList = listOf(
-        ButtonTile("button", color, 3, 1),
-        SliderTile("slider", color, 3, 1)
+        ButtonTile("Button", color, 3, 1),
+        SliderTile("Slider", color, 3, 1)
     )
 
     fun getTileList(): List<Tile> {

@@ -7,7 +7,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.*
+import android.os.Binder
+import android.os.Build
+import android.os.IBinder
+import android.os.StrictMode
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -20,12 +23,23 @@ import java.net.BindException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 import java.net.InetAddress
-import java.util.*
 
+class Abyss(val context: Context? = null) : Service() {
 
-class Abyss : Service() {
+    var udpd = udpd(this, 65535) //TODO - context should not be in use
 
-    var udpd = udpd(this, 4445)
+    var isBounded: Boolean = false
+
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
+            isBounded = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            isBounded = false
+        }
+    }
 
     override fun onCreate() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -44,27 +58,56 @@ class Abyss : Service() {
             .setNotificationSilent()
 
         startForeground(1, notification.build())
-        udpd.start()
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         return START_STICKY
     }
 
-
-    private val binder = AbyssBinder()
-
-    inner class AbyssBinder : Binder() {
-        fun getService(): Abyss = this@Abyss
+    override fun onDestroy() {
+        Log.d("OUY", "END")
     }
 
     override fun onBind(intent: Intent): IBinder {
-        return binder
+        return AbyssBinder()
     }
 
-    override fun onDestroy() {
-        Log.d("OUY", "END")
-        udpd.close()
+    inner class AbyssBinder : Binder() {
+        //fun getService(): Abyss = this@Abyss
+    }
+
+    fun start() {
+        Intent(context, Abyss::class.java).also {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context?.startForegroundService(it)
+            } else {
+                context?.startService(it)
+            }
+        }
+
+        bind()
+    }
+
+    fun stop() {
+        Intent(context, Abyss::class.java).also {
+            context?.stopService(it)
+        }
+
+        udpd.kill()
+        unbind()
+    }
+
+    private fun bind() {
+        Intent(context, Abyss::class.java).also {
+            context?.bindService(it, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun unbind() {
+        if (isBounded) {
+            context?.unbindService(connection)
+            isBounded = false
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -83,64 +126,9 @@ class Abyss : Service() {
     }
 }
 
-class AbyssHandler(var context: Context) {
-    var isBounded: Boolean = false
-    lateinit var service: Abyss
+class udpd(private val context: Context, var port: Int) : Thread() {
 
-    private val connection = object : ServiceConnection {
-
-        override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
-            val binder = IBinder as Abyss.AbyssBinder
-            service = binder.getService()
-            isBounded = true
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            isBounded = false
-        }
-    }
-
-    fun start() {
-        Intent(context, Abyss::class.java).also {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(it)
-            } else {
-                context.startService(it)
-            }
-        }
-    }
-
-    fun stop() {
-        Intent(context, Abyss::class.java).also {
-            context.stopService(it)
-        }
-    }
-
-    fun bind() {
-        Intent(context, Abyss::class.java).also {
-            context.bindService(it, connection, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    fun unbind() {
-        if (isBounded) {
-            context.unbindService(connection)
-            isBounded = false
-        }
-    }
-}
-
-class udpd(private val context: Context, private val port: Int) : Thread() {
     private lateinit var socket: DatagramSocket
-
-    init {
-        try {
-            socket = DatagramSocket(port)
-
-        } catch (e: Exception) {
-            Log.d("OUY", "PORT_ERR")
-        }
-    }
 
     private var running = false
     private val buf = ByteArray(256)
@@ -148,12 +136,17 @@ class udpd(private val context: Context, private val port: Int) : Thread() {
 
     override fun run() {
         val packet = DatagramPacket(buf, buf.size)
-        running = true
+
+        try {
+            socket = DatagramSocket(6667)
+
+        } catch (e: Exception) {
+            Log.d("OUY", e.toString())
+        }
 
         while (running) {
             try {
                 socket.receive(packet)
-
 
                 data = String(packet.data, 0, packet.length)
                 onData(data)
@@ -165,6 +158,8 @@ class udpd(private val context: Context, private val port: Int) : Thread() {
             }
         }
 
+        Log.d("OUY", "CLOSED")
+
         socket.close()
     }
 
@@ -172,8 +167,8 @@ class udpd(private val context: Context, private val port: Int) : Thread() {
         val notification = NotificationCompat.Builder(context, "foreground_service_id")
             .setAutoCancel(true)
             .setOngoing(false)
-            .setContentTitle("Boop!")
-            .setContentText("You have been booped!")
+            .setContentTitle("Title!")
+            .setContentText("ContentText")
             .setSmallIcon(R.drawable.icon_main)
             .setPriority(2)
 
@@ -184,18 +179,19 @@ class udpd(private val context: Context, private val port: Int) : Thread() {
         createToast(context, data)
     }
 
-    fun getData(): String {
+    fun receive(): String {
         return data
     }
 
-    fun sendCmd(cmd: String, adr: String = "192.168.0.18", port: Int = 4445) {
+    fun send(data: String, address: String, port: Int) {
         //Hack Prevent crash (sending should be done using an async task)
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
         try {
-            val address = InetAddress.getByName(adr)
-            val packet = DatagramPacket(cmd.toByteArray(), cmd.toByteArray().size, address, port)
+            val inetAddress = InetAddress.getByName(address)
+            val packet =
+                DatagramPacket(data.toByteArray(), data.toByteArray().size, inetAddress, port)
 
             if (packet.port == this.port) {
                 this.socket.send(packet)
@@ -209,8 +205,14 @@ class udpd(private val context: Context, private val port: Int) : Thread() {
         }
     }
 
-    fun close() {
-        socket.close()
+    override fun start() {
+        super.start()
+
+        running = true
+    }
+
+    fun kill() {
+        running = false
     }
 }
 

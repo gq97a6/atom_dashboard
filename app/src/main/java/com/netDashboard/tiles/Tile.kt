@@ -26,6 +26,23 @@ abstract class Tile(
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
 
+    //MQTT
+    var mqttSubTopic = ""
+    var mqttPubTopic = ""
+    var mqttSubConfirmation = false
+    var mqttSubAnswer = false
+    var mqttPubAnswer = false
+    var mqttQoS = 0
+    var mqttPayloadJSON = false
+    var mqttOutputJSON = ""
+
+    //Bluetooth
+    var bltPattern = ""
+    var bltDelimiter = ""
+    var bltRequestToGet = ""
+    var bltPayloadJSON = false
+    var bltOutputJSON = ""
+
     init {
         id = Random().nextLong()
     }
@@ -95,7 +112,8 @@ abstract class Tile(
 
         if (flag) {
             flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
-            flagBackground?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color,true).alpha(60))
+            flagBackground?.backgroundTintList =
+                ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
 
             flagMark?.visibility = View.VISIBLE
             flagBackground?.visibility = View.VISIBLE
@@ -112,4 +130,6 @@ abstract class Tile(
     open fun setThemeColor(color: Int) {
         this.color = color
     }
+
+    open fun onData(data: String) {}
 }

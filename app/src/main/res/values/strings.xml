@@ -27,6 +27,8 @@
 
     <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
 
+    <string name="tile_button_default_text">Default value</string>
+
     <string name="config_new_tile_banner0">Configuration</string>
     <string name="config_new_tile_banner1">Picked tile: </string>
     <string name="config_new_tile_height_warning">Only one-row tiles can have custom height.</string>

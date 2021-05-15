@@ -4,25 +4,22 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LiveData
 import com.google.android.material.slider.Slider
 import com.netDashboard.*
+import com.netDashboard.abyss.Abyss
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesAdapter
 
-class SliderTile(
-    name: String,
-    color: Int,
-    x: Int,
-    y: Int
-) :
-    Tile(name, color, R.layout.slider_tile, x, y) {
+class SliderTile(name: String, color: Int, width: Int, height: Int) :
+    Tile(name, color, R.layout.slider_tile, width, height) {
 
     private var value = 50f
     private var from = 0f
     private var to = 100f
     private var step = 10f
-
-    private var centerOffset: Int = 0
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -62,6 +59,11 @@ class SliderTile(
                 //Push event
                 slider.dispatchTouchEvent(event)
             }
+
+            if ((event.eventTime - event.downTime) > 1000 && event.action == MotionEvent.ACTION_UP) {
+                //Abyss().udpd.send(value.toString(), "192.168.0.18", 5452)
+            }
+
             return@setOnTouchListener true
         }
 
@@ -72,11 +74,11 @@ class SliderTile(
 
         //Interpret click on slider as click on tile
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: Slider) {
+            override fun onStartTrackingTouch(s: Slider) {
                 holder.itemView.callOnClick()
             }
 
-            override fun onStopTrackingTouch(slider: Slider) {
+            override fun onStopTrackingTouch(s: Slider) {
             }
         })
 
@@ -122,5 +124,13 @@ class SliderTile(
                 slider.value = from
             }
         }
+    }
+
+    override fun onData(data: String) {
+        super.onData(data)
+
+        val numData = data.toIntOrNull() ?: 0
+        value = numData.toFloat()
+        holder?.itemView?.findViewById<TextView>(R.id.slider_value)?.text = value.toString()
     }
 }

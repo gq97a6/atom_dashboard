@@ -40,15 +40,12 @@
         android:paddingTop="15dp"
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
-        android:text="Default value"
+        android:text="@string/tile_button_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform"
-        app:rippleColor="#FFFFFF"
-        tools:ignore="HardcodedText">
-
-    </Button>
+        app:rippleColor="#FFFFFF" />
 
 </FrameLayout>

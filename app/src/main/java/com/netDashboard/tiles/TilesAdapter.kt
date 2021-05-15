@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.netDashboard.createToast
+import com.netDashboard.dashboard_activity.DashboardActivity
 import java.util.*
 
 class TilesAdapter(
@@ -18,8 +18,16 @@ class TilesAdapter(
 ) : ListAdapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
 
     var swapMode = false
+        get() = field
+        set(value) { field = value }
+
     var removeMode = false
+        get() = field
+        set(value) { field = value }
+
     var addMode = false
+        get() = field
+        set(value) { field = value }
 
     lateinit var tiles: MutableList<Tile>
     lateinit var currentTile: Tile
@@ -40,7 +48,7 @@ class TilesAdapter(
 
     override fun submitList(list: MutableList<Tile>?) {
         super.submitList(list)
-        tiles = list!!.toMutableList() //Do not remove .{...}
+        tiles = list!!.toMutableList()
     }
 
     override fun getCurrentList(): MutableList<Tile> {
@@ -49,6 +57,10 @@ class TilesAdapter(
 
     override fun getItemCount(): Int {
         return tiles.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return tiles[position].id!!
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -113,3 +125,4 @@ object TileDiffCallback : DiffUtil.ItemCallback<Tile>() {
         return oldItem.areContentsTheSame(oldItem, newItem) //Tile function
     }
 }
+

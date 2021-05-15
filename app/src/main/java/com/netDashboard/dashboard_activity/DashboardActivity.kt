@@ -1,17 +1,15 @@
 package com.netDashboard.dashboard_activity
 
 import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.abyss.Abyss
-import com.netDashboard.abyss.udpd
 import com.netDashboard.createToast
 import com.netDashboard.dashboard_settings_activity.DashboardSettings
 import com.netDashboard.dashboard_settings_activity.DashboardSettingsActivity
@@ -22,6 +20,10 @@ import com.netDashboard.new_tile_activity.NewTileActivity
 import com.netDashboard.tiles.Tiles
 import com.netDashboard.tiles.TilesAdapter
 import com.netDashboard.toPx
+import java.io.File
+import java.io.FileInputStream
+import java.io.ObjectInputStream
+import java.nio.file.Files
 
 
 class DashboardActivity : AppCompatActivity() {
@@ -29,11 +31,12 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var settings: DashboardSettings
     lateinit var dashboardTilesAdapter: TilesAdapter
-    private var abyss = Abyss(this) //TODO - don't recreate
+    //private var abyss = Abyss(this)
 
     private lateinit var dashboardName: String
     private lateinit var dashboardFileName: String
     private lateinit var dashboardSettingsFileName: String
+    private lateinit var dashboardAbyssFileName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +44,8 @@ class DashboardActivity : AppCompatActivity() {
         b = DashboardActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        //Get dashboardName, return to main screen if empty
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-
         if (dashboardName.isEmpty()) {
             Intent(this, MainActivity::class.java).also {
                 finish()
@@ -50,18 +53,27 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        dashboardFileName = filesDir.canonicalPath + "/" + dashboardName
-        dashboardSettingsFileName = filesDir.canonicalPath + "/settings_" + dashboardName
+        //Create root folder, if doesn't exist
+        val rootFolder = filesDir.canonicalPath + "/dashboards_data_"
+        val f = File(rootFolder)
+        if(!f.exists()) {
+            f.mkdir()
+        }
+
+        //Setup files names
+        dashboardFileName = rootFolder + dashboardName + "_tiles"
+        dashboardSettingsFileName = rootFolder + dashboardName + "_settings"
+        dashboardAbyssFileName = rootFolder + dashboardName + "_abyss"
+
+        //Get settings
         settings = DashboardSettings().getSettings(dashboardSettingsFileName)
 
-        abyss.start()
-
-        abyss.udpd.port = settings.udpPort
-        abyss.udpd.start()
-
-        abyss.udpd.send("test send", "192.168.0.18", 5452) //TODO - implement ?intents
-
+        //Setup data
+        setUpAbyss()
         setupRecyclerView()
+
+        //TMP
+        Log.i("OUY", "SAVED_COUNTER: ${getAbyssCounter()}")
 
         b.edit.setOnClickListener {
             editButtonOnClick()
@@ -101,6 +113,7 @@ class DashboardActivity : AppCompatActivity() {
         val spanCount = settings.spanCount
 
         dashboardTilesAdapter = TilesAdapter(this, spanCount)
+
         b.recyclerView.adapter = dashboardTilesAdapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
@@ -115,12 +128,28 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         b.recyclerView.layoutManager = layoutManager
+        //b.recyclerView.itemAnimator = TilesAnimator()
 
         dashboardTilesAdapter.submitList(Tiles().getList(dashboardFileName).toMutableList())
 
         if (dashboardTilesAdapter.itemCount == 0) {
             b.placeholder.visibility = View.VISIBLE
         }
+
+        //abyss.udpd.receive().observe(this, { data ->
+        //    //TODO - move to abyss, update on data
+        //    if (data != "C9ZF56ZLF4EW5355") {
+        //        //for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
+        //        //    dashboardTilesAdapter.tiles[i].onData(data)
+        //        //}
+        //    }
+        //})
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun setUpAbyss() {
+        Abyss().start(this, dashboardAbyssFileName)
     }
 
     //----------------------------------------------------------------------------------------------
@@ -171,7 +200,7 @@ class DashboardActivity : AppCompatActivity() {
                 dashboardTilesAdapter.tiles[i].flag(false)
             }
         } else if (!dashboardTilesAdapter.swapMode) {
-            abyss.stop()
+            //abyss.stop()
 
             Intent(this, DashboardSettingsActivity::class.java).also {
                 it.putExtra("dashboardName", dashboardName)
@@ -196,10 +225,6 @@ class DashboardActivity : AppCompatActivity() {
             finish()
             startActivity(it)
         }
-    }
-
-    private fun swapButtonOnClick() {
-
     }
 
     //----------------------------------------------------------------------------------------------
@@ -265,36 +290,26 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    //TMP
+    private fun getAbyssCounter(): Int {
+        return try {
+            val file = FileInputStream(dashboardAbyssFileName)
+            val inStream = ObjectInputStream(file)
+
+            val counter = inStream.readObject() as Int
+
+            inStream.close()
+            file.close()
+
+            counter
+        } catch (e: Exception) {
+            0
+        }
+    }
+
     //ObjectAnimator.ofFloat(b.indicator, "translationX", distance)
     //.apply {
     //    this.duration = duration
     //    start()
-    //}
-
-    //Handler(Looper.getMainLooper()).postDelayed({
-    //    moveIndicator(0f, 300)
-    //}, 400)
-
-
-    //b.get.setOnClickListener() {
-    //    if (abyss.isBounded) {
-    //        val data:String = abyss.service.udpd.getData()
-    //        Toast.makeText(this, "number: $data", Toast.LENGTH_SHORT).show()
-    //    }
-    //}
-//
-    //override fun onStart() {
-    //    super.onStart()
-
-    //}
-//
-    //override fun onDestroy() {
-    //    abyss.unbound()
-    //    super.onDestroy()
-    //}
-//
-    //override fun onStop() {
-    //    abyss.unbound()
-    //    super.onStop()
     //}
 }

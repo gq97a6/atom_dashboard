@@ -3,11 +3,8 @@ package com.netDashboard.abyss
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.StrictMode
@@ -16,32 +13,20 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
-import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.createToast
-import java.net.BindException
-import java.net.DatagramPacket
-import java.net.DatagramSocket
-import java.net.InetAddress
+import java.io.FileOutputStream
+import java.io.ObjectOutputStream
+import java.io.Serializable
+import java.net.*
 
-class Abyss(val context: Context? = null) : Service() {
 
-    var udpd = udpd(this, 65535) //TODO - context should not be in use
-
-    var isBounded: Boolean = false
-
-    private val connection = object : ServiceConnection {
-
-        override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
-            isBounded = true
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            isBounded = false
-        }
-    }
+class Abyss : Service(), Serializable {
 
     override fun onCreate() {
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
@@ -61,52 +46,46 @@ class Abyss(val context: Context? = null) : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val fileName = intent.getStringExtra("file")
+
+        if(fileName != null) {
+            Log.i("OUY", fileName)
+            val file = FileOutputStream(fileName)
+
+            val outStream = ObjectOutputStream(file)
+
+            outStream.writeObject(123)
+
+            outStream.close()
+            file.close()
+        }
         return START_STICKY
     }
 
     override fun onDestroy() {
-        Log.d("OUY", "END")
+
     }
 
-    override fun onBind(intent: Intent): IBinder {
-        return AbyssBinder()
+    override fun onBind(intent: Intent): IBinder? {
+        return null
     }
 
-    inner class AbyssBinder : Binder() {
-        //fun getService(): Abyss = this@Abyss
-    }
+    fun start(context: Context, dashboardAbyssFileName: String) {
 
-    fun start() {
         Intent(context, Abyss::class.java).also {
+            it.putExtra("file", dashboardAbyssFileName)
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context?.startForegroundService(it)
+                context.startForegroundService(it)
             } else {
-                context?.startService(it)
+                context.startService(it)
             }
         }
-
-        bind()
     }
 
-    fun stop() {
+    fun stop(context: Context) {
         Intent(context, Abyss::class.java).also {
-            context?.stopService(it)
-        }
-
-        udpd.kill()
-        unbind()
-    }
-
-    private fun bind() {
-        Intent(context, Abyss::class.java).also {
-            context?.bindService(it, connection, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    private fun unbind() {
-        if (isBounded) {
-            context?.unbindService(connection)
-            isBounded = false
+            context.stopService(it)
         }
     }
 
@@ -126,20 +105,24 @@ class Abyss(val context: Context? = null) : Service() {
     }
 }
 
-class udpd(private val context: Context, var port: Int) : Thread() {
+class Udpd(val context: Context, var port: Int) : Thread() {
 
     private lateinit var socket: DatagramSocket
 
-    private var running = false
+    var running = false
+
+    var counter = 0
+
     private val buf = ByteArray(256)
-    private var data = ""
+    private var data = MutableLiveData("C9ZF56ZLF4EW5355")
 
     override fun run() {
         val packet = DatagramPacket(buf, buf.size)
 
         try {
-            socket = DatagramSocket(6667)
-
+            socket = DatagramSocket(null)
+            socket.reuseAddress = true
+            socket.bind(InetSocketAddress(port))
         } catch (e: Exception) {
             Log.d("OUY", e.toString())
         }
@@ -148,40 +131,37 @@ class udpd(private val context: Context, var port: Int) : Thread() {
             try {
                 socket.receive(packet)
 
-                data = String(packet.data, 0, packet.length)
-                onData(data)
+                data.postValue(String(packet.data, 0, packet.length))
+
+                counter++
+
+                createToast(context, counter.toString())
+
                 socket.send(packet)
 
             } catch (e: Exception) {
-                Log.d("OUY", "EXCEPTION")
+                Log.d("OUY", e.toString())
                 return
             }
         }
 
-        Log.d("OUY", "CLOSED")
-
         socket.close()
     }
 
-    private fun onData(data: String) {
-        val notification = NotificationCompat.Builder(context, "foreground_service_id")
-            .setAutoCancel(true)
-            .setOngoing(false)
-            .setContentTitle("Title!")
-            .setContentText("ContentText")
-            .setSmallIcon(R.drawable.icon_main)
-            .setPriority(2)
+    override fun start() {
+        super.start()
 
-        with(NotificationManagerCompat.from(context)) {
-            notify(2, notification.build())
-        }
-
-        createToast(context, data)
+        running = true
     }
 
-    fun receive(): String {
+    fun kill() {
+        running = false
+    }
+
+    fun receive(): LiveData<String> {
         return data
     }
+
 
     fun send(data: String, address: String, port: Int) {
         //Hack Prevent crash (sending should be done using an async task)
@@ -201,23 +181,16 @@ class udpd(private val context: Context, var port: Int) : Thread() {
                 socket.close()
             }
         } catch (e: BindException) {
-            Log.e("ERR", "IOException: " + e.message)
+            Log.e("OUY", e.toString())
         }
-    }
-
-    override fun start() {
-        super.start()
-
-        running = true
-    }
-
-    fun kill() {
-        running = false
     }
 }
 
 //class tcpd(private val port: Int):Thread() {
 //TODO
+//serverSocket = ServerSocket()
+//serverSocket.setReuseAddress(true)
+//serverSocket.bind(InetSocketAddress(SERVER_PORT))
 //}
 
 //class mqttd(private val port: Int):Thread() {

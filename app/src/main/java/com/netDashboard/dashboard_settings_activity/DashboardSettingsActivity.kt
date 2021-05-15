@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.abyss.Abyss
 import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.DashboardSettingsActivityBinding
 import com.netDashboard.main_activity.MainActivity
@@ -103,7 +104,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                if(count > 0) settings.udpPort= Integer.parseInt(cs.toString())
+                if (count > 0) settings.udpPort = Integer.parseInt(cs.toString())
             }
         })
     }

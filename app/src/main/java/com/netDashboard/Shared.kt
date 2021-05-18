@@ -1,12 +1,18 @@
 package com.netDashboard
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import androidx.core.graphics.*
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
@@ -44,9 +50,9 @@ fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): 
 fun getContrastColor(color: Int, negative: Boolean = false): Int {
 
     return if ((ColorUtils.calculateLuminance(color) < 0.5) xor negative) {
-        (-1) //White
+        -1 //White
     } else {
-        (-16777216) //Black
+        -16777216 //Black
     }
 }
 
@@ -55,20 +61,26 @@ fun Int.alpha(a: Int): Int {
     return Color.argb(alpha, this.red, this.green, this.blue)
 }
 
-fun Int.darken(d: Int): Int {
-
-    val r = this.red * (100 - d) / 100
-    val g = this.green * (100 - d) / 100
-    val b = this.blue * (100 - d) / 100
-
-    return Color.argb(this.alpha, r, g, b)
+//For fun ----------------------------------------------------------------
+fun View.move(property: String, distance: Float, duration: Long = 300) {
+    ObjectAnimator.ofFloat(this, property, distance)
+        .apply {
+            this.duration = duration
+            start()
+        }
 }
 
-fun Int.lighten(l: Int): Int { //TODO
+fun View.rotate(duration: Long = 300) {
+    ObjectAnimator.ofFloat(this, View.ROTATION, 0f, 360f)
+        .apply {
+            this.duration = duration
+            start()
+        }
+}
 
-    val r = if(this.red + (this.red * l / 100) < 255) this.red + (this.red * l / 100) else 255
-    val g = if(this.green + (this.green * l / 100) < 255) this.green + (this.green * l / 100) else 255
-    val b = if(this.blue + (this.blue * l / 100) < 255) this.blue + (this.blue * l / 100) else 255
-
-    return Color.argb(this.alpha, r, g, b)
+fun View.scale(duration: Long = 300, by: Float) {
+    this.animate()
+        .scaleY(by)
+        .scaleX(by)
+        .setInterpolator(AccelerateDecelerateInterpolator()).duration = duration
 }

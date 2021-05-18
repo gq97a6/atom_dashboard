@@ -19,7 +19,7 @@ class TilesAnimator : DefaultItemAnimator() {
         oldHolder.itemView.alpha = oldHolderAlpha
         newHolder.itemView.alpha = newHolderAlpha
 
-        return toReturn
+        return false
     }
 
     override fun animateChange(

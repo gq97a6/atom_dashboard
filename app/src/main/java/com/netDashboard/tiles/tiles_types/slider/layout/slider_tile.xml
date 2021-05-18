@@ -52,7 +52,8 @@
         app:autoSizeMaxTextSize="30dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform" />
+        app:autoSizeTextType="uniform"
+        tools:ignore="HardcodedText" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/slider"

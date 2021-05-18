@@ -43,4 +43,5 @@
     <string name="dashboard_settings_span_warning">You have tiles with higher row span. Apply to fit them.</string>
     <string name="dashboard_settings_button_apply">Apply</string>
     <string name="dashboard_settings_udp_port">Udp port:</string>
+    <string name="empty_dashboard">Add new tiles first. \n Use left icon to access edit mode.</string>
 </resources>

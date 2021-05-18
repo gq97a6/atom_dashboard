@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.*
-import java.io.Serializable
+import java.io.*
 import java.util.*
 
 abstract class Tile(
@@ -22,7 +22,7 @@ abstract class Tile(
     private var editMode = false
     private var flag = false
 
-    var spanCount = 1
+    private var spanCount = 1
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
 

@@ -5,20 +5,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
+import com.netDashboard.dashboard_activity.Dashboard
 import com.netDashboard.dashboard_activity.DashboardActivity
-import com.netDashboard.dashboard_settings_activity.DashboardSettings
 import com.netDashboard.databinding.ConfigNewTileActivityBinding
-import com.netDashboard.main_activity.MainActivity
+import com.netDashboard.tiles.TilesList
 import com.netDashboard.tiles.Tile
-import com.netDashboard.tiles.Tiles
 
 class ConfigNewTileActivity : AppCompatActivity() {
     private lateinit var b: ConfigNewTileActivityBinding
-    private lateinit var settings: DashboardSettings
 
     private lateinit var dashboardName: String
-    private lateinit var dashboardFileName: String
-    private lateinit var dashboardSettingsFileName: String
+    private lateinit var dashboard: Dashboard
+    private lateinit var settings: Dashboard.Settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,22 +25,11 @@ class ConfigNewTileActivity : AppCompatActivity() {
         setContentView(b.root)
 
         val tileId = intent.getIntExtra("tileId", 0)
-        val tile = Tiles().getTileList()[tileId]
+        val tile = TilesList().get()[tileId]
 
-        dashboardFileName = intent.getStringExtra("dashboardFileName") ?: ""
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboardSettingsFileName = intent.getStringExtra("dashboardSettingsFileName") ?: ""
-
-        if (dashboardName.isEmpty() || dashboardFileName.isEmpty() || dashboardSettingsFileName.isEmpty()) {
-            Intent(this, MainActivity::class.java).also {
-                finish()
-                startActivity(it)
-            }
-        }
-
-        dashboardFileName = filesDir.canonicalPath + "/" + dashboardName
-        dashboardSettingsFileName = filesDir.canonicalPath + "/settings_" + dashboardName
-        settings = DashboardSettings().getSettings(dashboardSettingsFileName)
+        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
+        settings = dashboard.settings
 
         b.height.value = 1f
         b.height.valueFrom = 1f
@@ -50,7 +37,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
 
         b.width.value = 1f
 
-        if(settings.spanCount.toFloat() > 1f) {
+        if (settings.spanCount.toFloat() > 1f) {
             b.width.valueFrom = 1f
             b.width.valueTo = settings.spanCount.toFloat()
         } else {
@@ -76,7 +63,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(slider: Slider) {
-                if(settings.spanCount.toFloat() > 1f) {
+                if (settings.spanCount.toFloat() > 1f) {
                     if (b.height.value == 1f) {
                         b.width.isEnabled = true
                         b.warning.visibility = View.GONE
@@ -104,7 +91,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
         tile.width = b.width.value.toInt()
         tile.height = b.height.value.toInt()
 
-        var list = Tiles().getList(dashboardFileName)
+        var list = dashboard.tiles
 
         if (list.isEmpty()) {
             list = listOf(tile)
@@ -114,6 +101,6 @@ class ConfigNewTileActivity : AppCompatActivity() {
             list = list.toList()
         }
 
-        Tiles().saveList(list, dashboardFileName)
+        dashboard.tiles = list
     }
 }

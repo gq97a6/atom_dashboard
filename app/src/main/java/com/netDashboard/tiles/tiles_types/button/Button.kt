@@ -1,12 +1,11 @@
 package com.netDashboard.tiles.tiles_types.button
 
 import android.content.res.ColorStateList
+import android.os.Handler
+import android.os.Looper
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
-import com.netDashboard.R
-import com.netDashboard.abyss.Abyss
-import com.netDashboard.alpha
-import com.netDashboard.getContrastColor
-import com.netDashboard.getRandomColor
+import com.netDashboard.*
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesAdapter
 import java.util.*
@@ -24,8 +23,6 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
 
             if (!editMode()) {
                 setThemeColor(getRandomColor())
-
-                //Udpd().send("wen;fan;-1", "192.168.0.19", 54091)
             }
         }
 
@@ -37,13 +34,14 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     override fun setThemeColor(color: Int) {
         super.setThemeColor(color)
 
-        holder?.itemView?.findViewById<Button>(R.id.button)?.backgroundTintList =
+        val button = holder?.itemView?.findViewById<Button>(R.id.button)
+
+        button?.backgroundTintList =
             ColorStateList.valueOf(
                 color
             )
 
-        holder?.itemView?.findViewById<Button>(R.id.button)
-            ?.setTextColor(getContrastColor(color).alpha(75))
+        button?.setTextColor(getContrastColor(color).alpha(75))
     }
 
     override fun onData(data: String) {

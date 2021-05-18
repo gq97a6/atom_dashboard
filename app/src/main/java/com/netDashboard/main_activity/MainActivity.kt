@@ -1,15 +1,11 @@
 package com.netDashboard.main_activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.netDashboard.config_new_tile_activity.ConfigNewTileActivity
 import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.MainActivityBinding
 import kotlin.concurrent.thread
@@ -41,8 +37,6 @@ class MainActivity : AppCompatActivity() {
                 Thread.sleep(1000)
                 counter.postValue(counter.value!! - 1)
             }
-
-
         }
     }
 }

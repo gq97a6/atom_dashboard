@@ -3,7 +3,6 @@ package com.netDashboard
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.SplashScreenActivityBinding
 import com.netDashboard.main_activity.MainActivity
 import java.util.*

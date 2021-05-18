@@ -102,7 +102,9 @@
             android:maxLength="5"
             android:padding="10dp"
             android:text="0"
-            android:textColor="@color/gray" />
+            android:textColor="@color/gray"
+            android:autofillHints=""
+            tools:ignore="HardcodedText" />
 
     </LinearLayout>
 

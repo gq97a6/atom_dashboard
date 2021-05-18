@@ -1,15 +1,12 @@
 package com.netDashboard.tiles.tiles_types.slider
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.LiveData
 import com.google.android.material.slider.Slider
 import com.netDashboard.*
-import com.netDashboard.abyss.Abyss
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesAdapter
 
@@ -60,10 +57,6 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
                 slider.dispatchTouchEvent(event)
             }
 
-            if ((event.eventTime - event.downTime) > 1000 && event.action == MotionEvent.ACTION_UP) {
-                //Abyss().udpd.send(value.toString(), "192.168.0.18", 5452)
-            }
-
             return@setOnTouchListener true
         }
 
@@ -79,12 +72,13 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
             }
 
             override fun onStopTrackingTouch(s: Slider) {
+                value = s.value
+
+                Log.i("OUY", "APPLIED: $value")
             }
         })
 
         slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
-
-            this.value = slider.value
             holder.itemView.findViewById<TextView>(R.id.slider_value).text = value.toString()
         })
 

@@ -7,18 +7,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.config_new_tile_activity.ConfigNewTileActivity
 import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.NewTileActivityBinding
-import com.netDashboard.main_activity.MainActivity
-import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesAdapter
-import com.netDashboard.tiles.Tiles
+import com.netDashboard.tiles.TilesList
+import com.netDashboard.tiles.Tile
 
 class NewTileActivity : AppCompatActivity() {
     private lateinit var b: NewTileActivityBinding
-    lateinit var newTileTilesAdapter: TilesAdapter
 
     private lateinit var dashboardName: String
-    private lateinit var dashboardFileName: String
-    private lateinit var dashboardSettingsFileName: String
+    private lateinit var newTileTilesAdapter: TilesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,16 +23,7 @@ class NewTileActivity : AppCompatActivity() {
         b = NewTileActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        dashboardFileName = intent.getStringExtra("dashboardFileName") ?: ""
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboardSettingsFileName = intent.getStringExtra("dashboardSettingsFileName") ?: ""
-
-        if (dashboardName.isEmpty() || dashboardFileName.isEmpty() || dashboardSettingsFileName.isEmpty()) {
-            Intent(this, MainActivity::class.java).also {
-                finish()
-                startActivity(it)
-            }
-        }
 
         setupRecyclerView()
 
@@ -43,8 +31,6 @@ class NewTileActivity : AppCompatActivity() {
             if (tileId >= 0) {
                 Intent(this, ConfigNewTileActivity::class.java).also {
                     it.putExtra("dashboardName", dashboardName)
-                    it.putExtra("dashboardFileName", dashboardFileName)
-                    it.putExtra("dashboardSettingsFileName", dashboardSettingsFileName)
                     it.putExtra("tileId", tileId)
 
                     finish()
@@ -59,6 +45,7 @@ class NewTileActivity : AppCompatActivity() {
 
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
+
             finish()
             startActivity(it)
         }
@@ -76,8 +63,7 @@ class NewTileActivity : AppCompatActivity() {
             }
         }
 
-        //Enable edit mode
-        val list = Tiles().getTileList()
+        val list = TilesList().get()
         for ((i, _) in list.withIndex()) {
             list[i].editMode(true)
         }

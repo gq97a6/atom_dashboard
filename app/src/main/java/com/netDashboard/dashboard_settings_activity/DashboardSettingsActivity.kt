@@ -10,21 +10,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
-import com.netDashboard.abyss.Abyss
+import com.netDashboard.dashboard_activity.Dashboard
 import com.netDashboard.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.DashboardSettingsActivityBinding
-import com.netDashboard.main_activity.MainActivity
 import com.netDashboard.margins
-import com.netDashboard.tiles.Tiles
 import com.netDashboard.toPx
 
 class DashboardSettingsActivity : AppCompatActivity() {
     private lateinit var b: DashboardSettingsActivityBinding
-    private lateinit var settings: DashboardSettings
 
     private lateinit var dashboardName: String
-    private lateinit var dashboardFileName: String
-    private lateinit var dashboardSettingsFileName: String
+    private lateinit var dashboard: Dashboard
+    private lateinit var settings: Dashboard.Settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,22 +30,11 @@ class DashboardSettingsActivity : AppCompatActivity() {
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboardFileName = intent.getStringExtra("dashboardFileName") ?: ""
-        dashboardSettingsFileName = intent.getStringExtra("dashboardSettingsFileName") ?: ""
-
-        if (dashboardName.isEmpty() || dashboardFileName.isEmpty() || dashboardSettingsFileName.isEmpty()) {
-            Intent(this, MainActivity::class.java).also {
-                finish()
-                startActivity(it)
-            }
-        }
-
-        settings = DashboardSettings().getSettings(dashboardSettingsFileName)
+        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
+        settings = dashboard.settings
 
         b.span.value = settings.spanCount.toFloat()
         b.span.callOnClick()
-
-        b.udpPort.setText(settings.udpPort.toString())
 
         b.span.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
@@ -75,7 +61,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
                 getString(R.string.snackbar_confirmation),
                 Snackbar.LENGTH_LONG
             ).margins().setAction("YES") {
-                val list = Tiles().getList(dashboardFileName)
+                val list = dashboard.tiles
 
                 for ((i, t) in list.withIndex()) {
                     if (t.width > b.span.value) {
@@ -84,7 +70,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
                 }
 
                 settings.spanCount = b.span.value.toInt()
-                Tiles().saveList(list, dashboardFileName)
+                dashboard.tiles = list
 
                 b.warningSpan.visibility = View.GONE
                 b.buttonApplySpan.visibility = View.GONE
@@ -112,7 +98,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        DashboardSettings().saveSettings(settings, dashboardSettingsFileName)
+        dashboard.settings = settings
 
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
@@ -122,9 +108,9 @@ class DashboardSettingsActivity : AppCompatActivity() {
     }
 
     fun checkSpan(span: Int): Boolean {
-        val list = Tiles().getList(dashboardFileName)
+        val list = dashboard.tiles
 
-        for ((i, t) in list.withIndex()) {
+        for (t in list) {
             if (t.width > span) {
                 return false
             }

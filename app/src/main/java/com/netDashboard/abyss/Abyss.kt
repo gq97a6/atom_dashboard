@@ -1,3 +1,8 @@
+@file:Suppress("unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused",
+    "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused",
+    "unused", "unused", "unused", "unused", "unused"
+)
+
 package com.netDashboard.abyss
 
 import android.app.NotificationChannel
@@ -17,15 +22,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.createToast
-import java.io.FileOutputStream
-import java.io.ObjectOutputStream
-import java.io.Serializable
+import java.io.*
 import java.net.*
 
+class Abyss : Serializable, Service() {
 
-class Abyss : Service(), Serializable {
+    val udpd = Udpd(this, 65535)
+    //private lateinit var abyssFileName: String
 
     override fun onCreate() {
+        Log.i("OUY", "onCreate")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
@@ -46,47 +52,21 @@ class Abyss : Service(), Serializable {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val fileName = intent.getStringExtra("file")
+        Log.i("OUY", "onStartCommand")
 
-        if(fileName != null) {
-            Log.i("OUY", fileName)
-            val file = FileOutputStream(fileName)
+        if(!udpd.running) udpd.start()
 
-            val outStream = ObjectOutputStream(file)
-
-            outStream.writeObject(123)
-
-            outStream.close()
-            file.close()
-        }
         return START_STICKY
     }
 
     override fun onDestroy() {
+        Log.i("OUY", "onDestroy")
 
+        udpd.kill()
     }
 
     override fun onBind(intent: Intent): IBinder? {
         return null
-    }
-
-    fun start(context: Context, dashboardAbyssFileName: String) {
-
-        Intent(context, Abyss::class.java).also {
-            it.putExtra("file", dashboardAbyssFileName)
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(it)
-            } else {
-                context.startService(it)
-            }
-        }
-    }
-
-    fun stop(context: Context) {
-        Intent(context, Abyss::class.java).also {
-            context.stopService(it)
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -96,7 +76,7 @@ class Abyss : Service(), Serializable {
             "Server service notification",
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
-            description = "com/netDashboard/new_tile_activities"
+            description = "com/netDashboard/notification_channel"
         }
 
         val notificationManager =
@@ -105,13 +85,33 @@ class Abyss : Service(), Serializable {
     }
 }
 
-class Udpd(val context: Context, var port: Int) : Thread() {
+fun runAbyss(context: Context) {
+    Log.i("OUY", "runAbyss")
+
+    Intent(context, Abyss::class.java).also {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(it)
+        } else {
+            context.startService(it)
+        }
+    }
+}
+
+fun stopAbyss(context: Context) {
+
+    Intent(context, Abyss::class.java).also {
+        context.stopService(it)
+    }
+}
+
+class Udpd(val context: Context, private var port: Int) : Thread() {
 
     private lateinit var socket: DatagramSocket
 
     var running = false
 
-    var counter = 0
+    private var counter = 0
 
     private val buf = ByteArray(256)
     private var data = MutableLiveData("C9ZF56ZLF4EW5355")

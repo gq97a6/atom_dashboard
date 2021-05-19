@@ -1,6 +1,7 @@
 package com.netDashboard.dashboard_activity
 
 import com.netDashboard.tiles.Tile
+import com.netDashboard.tiles.TilesList
 import java.io.*
 
 class Dashboard(rootPath: String, dashboardName: String) : Serializable {
@@ -88,7 +89,7 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
 
             list.filterIsInstance<Tile>().takeIf { it.size == list.size } ?: listOf()
         } catch (e: Exception) {
-            listOf()
+            TilesList().getButtons()
         }
     }
 

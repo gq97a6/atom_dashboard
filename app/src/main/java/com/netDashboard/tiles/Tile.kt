@@ -21,6 +21,7 @@ abstract class Tile(
 
     private var editMode = false
     private var flag = false
+    var swapLock = false
 
     private var spanCount = 1
     var context: Context? = null
@@ -111,6 +112,7 @@ abstract class Tile(
         }
 
         if (flag) {
+
             flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
             flagBackground?.backgroundTintList =
                 ColorStateList.valueOf(getContrastColor(color, true).alpha(60))

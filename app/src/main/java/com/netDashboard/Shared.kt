@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -15,7 +16,6 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
-
 
 fun createToast(context: Context, msg: String, time: Int = 0) {
     if (Looper.myLooper() == Looper.getMainLooper()) {

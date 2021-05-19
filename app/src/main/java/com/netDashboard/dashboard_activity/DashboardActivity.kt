@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.createToast
@@ -16,6 +17,7 @@ import com.netDashboard.new_tile_activity.NewTileActivity
 import com.netDashboard.tiles.TilesAdapter
 import com.netDashboard.tiles.TilesGridLayoutManager
 import com.netDashboard.toPx
+
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: DashboardActivityBinding
@@ -98,7 +100,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         b.recyclerView.layoutManager = layoutManager
-        b.recyclerView.itemAnimator?.changeDuration = 0
+        //b.recyclerView.itemAnimator?.changeDuration = 0
 
         dashboardTilesAdapter.submitList(dashboard.tiles.toMutableList())
 
@@ -238,6 +240,9 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(it)
         }
     }
+
+    //----------------------------------------------------------------------------------------------
+
 
     //ObjectAnimator.ofFloat(b.indicator, "translationX", distance)
     //.apply {

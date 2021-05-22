@@ -1,6 +1,5 @@
 package com.netDashboard.tiles.tiles_types.slider
 
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -73,8 +72,6 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
 
             override fun onStopTrackingTouch(s: Slider) {
                 value = s.value
-
-                Log.i("OUY", "APPLIED: $value")
             }
         })
 
@@ -120,11 +117,11 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         }
     }
 
-    override fun onData(data: String) {
-        super.onData(data)
-
-        val numData = data.toIntOrNull() ?: 0
-        value = numData.toFloat()
-        holder?.itemView?.findViewById<TextView>(R.id.slider_value)?.text = value.toString()
+    override fun onData(data: String, isLive: Boolean) {
+        //super.onData(data, isLive)
+//
+        //val numData = data.toIntOrNull() ?: 0
+        //value = numData.toFloat()
+        //holder?.itemView?.findViewById<TextView>(R.id.slider_value)?.text = value.toString()
     }
 }

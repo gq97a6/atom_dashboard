@@ -3,12 +3,13 @@ package com.netDashboard.dashboard_activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.abyss.runAbyss
 import com.netDashboard.createToast
 import com.netDashboard.dashboard_settings_activity.DashboardSettingsActivity
 import com.netDashboard.databinding.DashboardActivityBinding
@@ -30,6 +31,8 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.i("OUY", "onCreateActivity")
 
         b = DashboardActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
@@ -57,6 +60,22 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        Log.i("OUY", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.i("OUY", "onResume")
+
+        if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
+            b.edit.callOnClick()
+        }
+    }
+
     override fun onBackPressed() {
         if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
             b.edit.callOnClick()
@@ -65,17 +84,10 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
-            b.edit.callOnClick()
-        }
-    }
-
     override fun onPause() {
         dashboard.tiles = dashboardTilesAdapter.tiles.toList()
 
+        runAbyss(this)
         super.onPause()
     }
 
@@ -85,7 +97,10 @@ class DashboardActivity : AppCompatActivity() {
         val spanCount = settings.spanCount
 
         dashboardTilesAdapter = TilesAdapter(this, spanCount)
+        dashboardTilesAdapter.setHasStableIds(true)
+
         b.recyclerView.adapter = dashboardTilesAdapter
+        b.recyclerView.setItemViewCacheSize(20)
 
         val layoutManager = TilesGridLayoutManager(this, spanCount)
 

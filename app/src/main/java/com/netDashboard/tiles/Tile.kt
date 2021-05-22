@@ -133,5 +133,5 @@ abstract class Tile(
         this.color = color
     }
 
-    open fun onData(data: String) {}
+    open fun onData(data: String, isLive: Boolean) {}
 }

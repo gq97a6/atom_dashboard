@@ -1,5 +1,6 @@
 package com.netDashboard.dashboard_activity
 
+import android.util.Log
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesList
 import java.io.*
@@ -18,8 +19,13 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
 
 
     var tiles: List<Tile> = listOf()
-        get() = field.getSaved()
+        get() {
+            Log.i("OUY", "GET_TILES")
+            return field.getSaved()
+        }
+
         set(value) {
+            Log.i("OUY", "SAVE_TILES")
             field = value
             field.save()
         }

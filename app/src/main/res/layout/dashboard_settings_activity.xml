@@ -9,7 +9,7 @@
     android:paddingStart="@dimen/layout_padding"
     android:paddingEnd="@dimen/layout_padding"
     android:paddingBottom="100dp"
-    tools:context=".dashboard_settings_activity.DashboardSettingsActivity">
+    tools:context=".main_activity.dashboard_activity.dashboard_settings_activity.DashboardSettingsActivity">
 
     <TextView
         android:id="@+id/text"

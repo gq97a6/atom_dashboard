@@ -8,6 +8,7 @@ import com.netDashboard.getContrastColor
 import com.netDashboard.getRandomColor
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesAdapter
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     Tile(name, color, R.layout.button_tile, width, height) {
@@ -22,13 +23,22 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
             holder.itemView.callOnClick()
 
             if (!editMode()) {
-                counter = 0
                 text = counter.toString()
 
                 holder.itemView.findViewById<Button>(R.id.tile_button).text = text
 
+                mqttd?.publish("123", "test_click")
+
                 setThemeColor(getRandomColor())
             }
+        }
+
+        holder.itemView.findViewById<Button>(R.id.tile_button).setOnLongClickListener {
+            counter = 0
+
+            holder.itemView.findViewById<Button>(R.id.tile_button).callOnClick()
+
+            return@setOnLongClickListener true
         }
 
         holder.itemView.findViewById<Button>(R.id.tile_button).text = text
@@ -50,16 +60,16 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     }
 
     override fun onData(data: String, isLive: Boolean) {
-        //if (!editMode()) {
-        //    super.onData(data, isLive)
-        //    //val temperature = data.split(";").toTypedArray()[2]
-        //    val temperature = Random().nextInt(99999).toString()
-        //    holder?.itemView?.findViewById<Button>(R.id.button)
-        //        ?.text = temperature
-        //    text = temperature
-        //}
-
+        super.onData(data, isLive)
         counter += data.toIntOrNull() ?: 1
+    }
+
+    override fun onData(topic: String, message: MqttMessage, isLive: Boolean) {
+        super.onData(topic, message, isLive)
+
+        counter += message.toString().toIntOrNull() ?: 1
         text = counter.toString()
+
+        holder?.itemView?.findViewById<Button>(R.id.tile_button)?.text = text
     }
 }

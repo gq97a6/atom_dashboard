@@ -1,6 +1,5 @@
-package com.netDashboard.dashboard_activity
+package com.netDashboard.main_activity.dashboard_activity
 
-import android.util.Log
 import com.netDashboard.tiles.Tile
 import com.netDashboard.tiles.TilesList
 import java.io.*
@@ -20,12 +19,9 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
 
     var tiles: List<Tile> = listOf()
         get() {
-            Log.i("OUY", "GET_TILES")
             return field.getSaved()
         }
-
         set(value) {
-            Log.i("OUY", "SAVE_TILES")
             field = value
             field.save()
         }
@@ -65,6 +61,7 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
         for ((i, _) in this.withIndex()) {
             this[i].context = null
             this[i].holder = null
+            this[i].mqttd = null
 
             this[i].editMode(false)
             this[i].flag(false)
@@ -101,7 +98,6 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
 
     inner class Settings : Serializable {
         var spanCount = 3
-        var udpPort = 65535
 
         fun save() {
             try {

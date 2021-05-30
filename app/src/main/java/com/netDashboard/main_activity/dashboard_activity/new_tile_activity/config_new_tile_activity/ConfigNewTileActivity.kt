@@ -1,12 +1,12 @@
-package com.netDashboard.config_new_tile_activity
+package com.netDashboard.main_activity.dashboard_activity.new_tile_activity.config_new_tile_activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
-import com.netDashboard.dashboard_activity.Dashboard
-import com.netDashboard.dashboard_activity.DashboardActivity
+import com.netDashboard.main_activity.dashboard_activity.Dashboard
+import com.netDashboard.main_activity.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.ConfigNewTileActivityBinding
 import com.netDashboard.tiles.TilesList
 import com.netDashboard.tiles.Tile

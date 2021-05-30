@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.abyss.stopAbyss
-import com.netDashboard.dashboard_activity.DashboardActivity
+import com.netDashboard.main_activity.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.MainActivityBinding
 import kotlin.concurrent.thread
 

@@ -116,12 +116,4 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
             }
         }
     }
-
-    override fun onData(data: String, isLive: Boolean) {
-        //super.onData(data, isLive)
-//
-        //val numData = data.toIntOrNull() ?: 0
-        //value = numData.toFloat()
-        //holder?.itemView?.findViewById<TextView>(R.id.slider_value)?.text = value.toString()
-    }
 }

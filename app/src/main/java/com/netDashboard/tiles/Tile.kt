@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.*
+import com.netDashboard.abyss.demons.Mqttd
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.*
 import java.util.*
 
@@ -23,18 +25,19 @@ abstract class Tile(
     private var flag = false
     var swapLock = false
 
-    private var spanCount = 1
+    var mqttd: Mqttd? = null
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
+
+    private var spanCount = 1
 
     //MQTT
     var mqttSubTopic = ""
     var mqttPubTopic = ""
-    var mqttSubConfirmation = false
+    var mqttPubConfirmation = false
     var mqttSubAnswer = false
-    var mqttPubAnswer = false
     var mqttQoS = 0
-    var mqttPayloadJSON = false
+    var mqttPayloadJSON = ""
     var mqttOutputJSON = ""
 
     //Bluetooth
@@ -133,5 +136,7 @@ abstract class Tile(
         this.color = color
     }
 
-    open fun onData(data: String, isLive: Boolean) {}
+    open fun onData(data: String, isLive: Boolean = true) {}
+
+    open fun onData(topic: String, message: MqttMessage, isLive: Boolean = true) {}
 }

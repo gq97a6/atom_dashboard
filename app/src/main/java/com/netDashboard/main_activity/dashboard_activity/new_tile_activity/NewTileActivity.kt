@@ -1,11 +1,11 @@
-package com.netDashboard.new_tile_activity
+package com.netDashboard.main_activity.dashboard_activity.new_tile_activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.netDashboard.config_new_tile_activity.ConfigNewTileActivity
-import com.netDashboard.dashboard_activity.DashboardActivity
+import com.netDashboard.main_activity.dashboard_activity.new_tile_activity.config_new_tile_activity.ConfigNewTileActivity
+import com.netDashboard.main_activity.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.NewTileActivityBinding
 import com.netDashboard.tiles.TilesAdapter
 import com.netDashboard.tiles.TilesList

@@ -1,24 +1,25 @@
-package com.netDashboard.dashboard_activity
+package com.netDashboard.main_activity.dashboard_activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.abyss.demons.Mqttd
 import com.netDashboard.abyss.runAbyss
 import com.netDashboard.createToast
-import com.netDashboard.dashboard_settings_activity.DashboardSettingsActivity
+import com.netDashboard.main_activity.dashboard_activity.dashboard_settings_activity.DashboardSettingsActivity
 import com.netDashboard.databinding.DashboardActivityBinding
 import com.netDashboard.margins
-import com.netDashboard.new_tile_activity.NewTileActivity
+import com.netDashboard.main_activity.dashboard_activity.new_tile_activity.NewTileActivity
 import com.netDashboard.tiles.TilesAdapter
 import com.netDashboard.tiles.TilesGridLayoutManager
 import com.netDashboard.toPx
-
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: DashboardActivityBinding
@@ -29,10 +30,10 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var dashboardTilesAdapter: TilesAdapter
 
+    private lateinit var mqttd: Mqttd
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.i("OUY", "onCreateActivity")
 
         b = DashboardActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
@@ -41,7 +42,42 @@ class DashboardActivity : AppCompatActivity() {
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
+        mqttd = Mqttd("tcp://192.168.0.29:1883")
+
+        //Try to connect
+        Thread {
+            var connectionDeployed = false
+
+            mqttd.connect(this)
+
+            while (!mqttd.isConnected) {
+
+                if(!connectionDeployed) {
+
+                    connectionDeployed = true
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        connectionDeployed = false
+                        mqttd.connect(this)
+                    }, 5000)
+                }
+            }
+
+            //Connection established
+
+            mqttd.subscribe("abc")
+
+            //stopAbyss(this)
+
+            createToast(this, "done")
+
+        }.start()
+
         setupRecyclerView()
+
+        for (i in 0 until dashboardTilesAdapter.itemCount) {
+            dashboardTilesAdapter.tiles[i].mqttd = mqttd
+        }
 
         b.edit.setOnClickListener {
             editOnClick()
@@ -60,16 +96,8 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        Log.i("OUY", "onStart")
-    }
-
     override fun onResume() {
         super.onResume()
-
-        Log.i("OUY", "onResume")
 
         if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
             b.edit.callOnClick()
@@ -85,9 +113,12 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+
         dashboard.tiles = dashboardTilesAdapter.tiles.toList()
 
+        mqttd.disconnect()
         runAbyss(this)
+
         super.onPause()
     }
 
@@ -113,6 +144,16 @@ class DashboardActivity : AppCompatActivity() {
                 }
             }
         }
+
+        mqttd.data.observe(this, { p ->
+
+            if(p.first != "R73JETTY") {
+
+                for (i in 0 until dashboardTilesAdapter.itemCount) {
+                    dashboardTilesAdapter.tiles[i].onData(p.first, p.second)
+                }
+            }
+        })
 
         b.recyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
@@ -151,7 +192,7 @@ class DashboardActivity : AppCompatActivity() {
             dashboard.tiles = dashboardTilesAdapter.tiles.toList()
         }
 
-        for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
+        for (i in 0 until dashboardTilesAdapter.itemCount) {
             dashboardTilesAdapter.tiles[i].editMode(dashboardTilesAdapter.swapMode)
             dashboardTilesAdapter.tiles[i].flag(false)
         }
@@ -167,7 +208,7 @@ class DashboardActivity : AppCompatActivity() {
             dashboardTilesAdapter.swapMode = true
             b.ban.text = getString(R.string.swap_mode)
 
-            for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
+            for (i in 0 until dashboardTilesAdapter.itemCount) {
                 dashboardTilesAdapter.tiles[i].editMode(true)
                 dashboardTilesAdapter.tiles[i].flag(false)
             }
@@ -188,8 +229,8 @@ class DashboardActivity : AppCompatActivity() {
         if (dashboardTilesAdapter.removeMode) {
             var toDelete = false
 
-            for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
 
+            for (i in 0 until dashboardTilesAdapter.itemCount) {
                 if (dashboardTilesAdapter.tiles[i].flag()) {
                     toDelete = true
                     break
@@ -207,7 +248,7 @@ class DashboardActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).margins().setAction("YES") {
 
-                    for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
+                    for (i in 0 until dashboardTilesAdapter.itemCount) {
 
                         if (dashboardTilesAdapter.tiles[i].flag()) {
                             dashboardTilesAdapter.tiles.removeAt(i)
@@ -236,7 +277,7 @@ class DashboardActivity : AppCompatActivity() {
             dashboardTilesAdapter.removeMode = true
             b.ban.text = getString(R.string.remove_mode)
 
-            for ((i, _) in dashboardTilesAdapter.tiles.withIndex()) {
+            for (i in 0 until dashboardTilesAdapter.itemCount) {
                 dashboardTilesAdapter.tiles[i].flag(false)
             }
 

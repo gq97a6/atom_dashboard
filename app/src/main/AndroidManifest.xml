@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="false"
         android:icon="@drawable/icon_main"
@@ -23,12 +26,13 @@
         </activity>
 
         <activity android:name=".main_activity.MainActivity" />
-        <activity android:name=".dashboard_settings_activity.DashboardSettingsActivity" />
-        <activity android:name=".dashboard_activity.DashboardActivity" />
-        <activity android:name=".new_tile_activity.NewTileActivity" />
-        <activity android:name=".config_new_tile_activity.ConfigNewTileActivity" />
+        <activity android:name="com.netDashboard.main_activity.dashboard_activity.dashboard_settings_activity.DashboardSettingsActivity" />
+        <activity android:name="com.netDashboard.main_activity.dashboard_activity.DashboardActivity" />
+        <activity android:name="com.netDashboard.main_activity.dashboard_activity.new_tile_activity.NewTileActivity" />
+        <activity android:name="com.netDashboard.main_activity.dashboard_activity.new_tile_activity.config_new_tile_activity.ConfigNewTileActivity" />
 
         <service android:name=".abyss.Abyss" android:enabled="true" />
+        <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 
 </manifest>

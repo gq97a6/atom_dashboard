@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context="com.netDashboard.new_tile_activity.NewTileActivity">
+    tools:context=".main_activity.dashboard_activity.new_tile_activity.NewTileActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

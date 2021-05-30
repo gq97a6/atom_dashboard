@@ -1,4 +1,4 @@
-package com.netDashboard.dashboard_settings_activity
+package com.netDashboard.main_activity.dashboard_activity.dashboard_settings_activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
-import com.netDashboard.dashboard_activity.Dashboard
-import com.netDashboard.dashboard_activity.DashboardActivity
+import com.netDashboard.main_activity.dashboard_activity.Dashboard
+import com.netDashboard.main_activity.dashboard_activity.DashboardActivity
 import com.netDashboard.databinding.DashboardSettingsActivityBinding
 import com.netDashboard.margins
 import com.netDashboard.toPx
@@ -90,7 +90,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                if (count > 0) settings.udpPort = Integer.parseInt(cs.toString())
+                //if (count > 0) settings.udpPort = Integer.parseInt(cs.toString())
             }
         })
     }

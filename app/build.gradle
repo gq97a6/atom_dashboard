@@ -44,9 +44,7 @@ android {
         main {
             res {
                 srcDirs 'src\\main\\res',
-                        'src\\main\\res\\tiles',
-                        'src\\main\\java\\com\\netDashboard\\tiles\\test',
-                        file('src\\main\\java\\com\\netDashboard\\tiles\\tiles_types').listFiles()
+                        file('src\\main\\java\\com\\netDashboard\\tile\\types').listFiles()
             }
         }
     }

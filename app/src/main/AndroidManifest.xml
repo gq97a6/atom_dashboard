@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -16,22 +15,22 @@
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
-
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.dashboard.settings.DashboardSettingsActivity" />
+        <activity android:name=".activities.dashboard.DashboardActivity" />
+        <activity android:name=".activities.dashboard.new_tile.NewTileActivity" />
+        <activity android:name=".activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity" />
 
-        <activity android:name=".main_activity.MainActivity" />
-        <activity android:name="com.netDashboard.main_activity.dashboard_activity.dashboard_settings_activity.DashboardSettingsActivity" />
-        <activity android:name="com.netDashboard.main_activity.dashboard_activity.DashboardActivity" />
-        <activity android:name="com.netDashboard.main_activity.dashboard_activity.new_tile_activity.NewTileActivity" />
-        <activity android:name="com.netDashboard.main_activity.dashboard_activity.new_tile_activity.config_new_tile_activity.ConfigNewTileActivity" />
-
-        <service android:name=".abyss.Abyss" android:enabled="true" />
+        <service
+            android:name=".foreground_service.ForegroundService"
+            android:enabled="true" />
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 

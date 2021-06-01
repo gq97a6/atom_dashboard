@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?colorSecondary">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:color="?colorSecondary"
+    tools:keep="@drawable/ripple_background">
     <item>
         <shape>
             <solid android:color="#000000" />

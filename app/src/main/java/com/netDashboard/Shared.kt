@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.view.View

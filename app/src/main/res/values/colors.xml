@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#7C7C7C</color>
     <color name="dark_gray">#404040</color>
+    <color name="light_gray">#C1C1C1</color>
 
     <color name="slider_trackColorInactive">#B3535353</color>
     <color name="slider_tickColorInactive">#000000</color>

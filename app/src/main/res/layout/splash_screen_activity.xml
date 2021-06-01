@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingBottom="100dp"
-    tools:context=".SplashScreenActivity">
+    tools:context=".activities.SplashScreenActivity">
 
     <ImageView
         android:layout_width="70dp"

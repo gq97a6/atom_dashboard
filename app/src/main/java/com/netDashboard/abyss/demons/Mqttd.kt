@@ -5,26 +5,32 @@ import androidx.lifecycle.MutableLiveData
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
-class Mqttd(private val uri: String) {
+class Mqttd(private val URI: String) {
 
-    lateinit var mqttClient: MqttAndroidClient
-
-    var isConnected = false
+    lateinit var client: MqttAndroidClient
 
     private var msg: MqttMessage = MqttMessage()
     var data = MutableLiveData(Pair("R73JETTY", msg))
 
+    val isConnected:Boolean
+        get() {
+            return if(::client.isInitialized) {
+                client.isConnected
+            } else {
+                false
+            }
+        }
+
     fun connect(context: Context) {
 
-        mqttClient = MqttAndroidClient(context, uri, "kotlin_client")
-        mqttClient.setCallback(object : MqttCallback {
+        client = MqttAndroidClient(context, URI, "kotlin_client")
+        client.setCallback(object : MqttCallback {
 
             override fun messageArrived(t: String?, m: MqttMessage) {
                 data.postValue(Pair(t ?: "", m))
             }
 
             override fun connectionLost(cause: Throwable?) {
-                isConnected = false
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -34,13 +40,11 @@ class Mqttd(private val uri: String) {
         val options = MqttConnectOptions()
 
         try {
-            mqttClient.connect(options, null, object : IMqttActionListener {
+            client.connect(options, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    isConnected = true
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                    isConnected = false
                 }
             })
         } catch (e: MqttException) {
@@ -50,14 +54,14 @@ class Mqttd(private val uri: String) {
 
     fun disconnect() {
 
+        if (!isConnected) return
+
         try {
-            mqttClient.disconnect(null, object : IMqttActionListener {
+            client.disconnect(null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    isConnected = false
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-                    isConnected = true
                 }
             })
         } catch (e: MqttException) {
@@ -76,7 +80,7 @@ class Mqttd(private val uri: String) {
             message.qos = qos
             message.isRetained = retained
 
-            mqttClient.publish(topic, message, null, object : IMqttActionListener {
+            client.publish(topic, message, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -93,7 +97,7 @@ class Mqttd(private val uri: String) {
         if (!isConnected) return
 
         try {
-            mqttClient.subscribe(topic, qos, null, object : IMqttActionListener {
+            client.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -110,7 +114,7 @@ class Mqttd(private val uri: String) {
         if (!isConnected) return
 
         try {
-            mqttClient.unsubscribe(topic, null, object : IMqttActionListener {
+            client.unsubscribe(topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 

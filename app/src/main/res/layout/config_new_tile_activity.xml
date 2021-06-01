@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/layout_padding"
     android:paddingLeft="@dimen/layout_padding"
     android:paddingRight="@dimen/layout_padding"
-    tools:context=".main_activity.dashboard_activity.new_tile_activity.NewTileActivity">
+    tools:context=".activities.dashboard.new_tile.NewTileActivity">
 
     <TextView
         android:layout_width="match_parent"

@@ -14,15 +14,14 @@ import androidx.lifecycle.LifecycleService
 import com.netDashboard.R
 import com.netDashboard.abyss.Abyss
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.main.Dashboards
 import java.io.Serializable
 
 class ForegroundService : Serializable, LifecycleService() {
 
     private var isRunning = false
 
-    private lateinit var dashboardName: String
-    private lateinit var dashboard: Dashboard
-    private lateinit var settings: Dashboard.Settings
+    private lateinit var dashboards: MutableList<Dashboard>
 
     private lateinit var abyss: Abyss
 
@@ -48,22 +47,21 @@ class ForegroundService : Serializable, LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        dashboardName = intent?.getStringExtra("dashboardName") ?: ""
-        val ifStop = intent?.getBooleanExtra("ifStop", false) ?: false
+        val dashboardName = intent?.getStringExtra("dashboardName") ?: ""
+        val ifSave = intent?.getBooleanExtra("ifSave", false) ?: false
 
         when {
-            ifStop -> {
-                if (isRunning) abyss.close()
-                stopBackgroundAbyss(this)
+            ifSave -> {
+                if (isRunning) abyss.save()
             }
 
-            isRunning -> startBackgroundAbyss(this, dashboardName, true)
+            !isRunning -> {
+                val dashboards = Dashboards().get(filesDir.canonicalPath)
 
-            else -> {
-                dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-                settings = dashboard.settings
-
-                abyss = Abyss(this, filesDir.canonicalPath, dashboardName, false)
+                for(d in dashboards) {
+                    if(d.name == dashboardName) continue
+                    abyss = Abyss(this, filesDir.canonicalPath, d.name, true)
+                }
 
                 isRunning = true
             }
@@ -100,12 +98,11 @@ class ForegroundService : Serializable, LifecycleService() {
     }
 }
 
-fun startBackgroundAbyss(context: Context, dashboardName: String, ifStop: Boolean = false) {
+fun startForegroundAbyss(context: Context, dashboardName: String = "") {
 
     Intent(context, ForegroundService::class.java).also {
 
         it.putExtra("dashboardName", dashboardName)
-        it.putExtra("ifStop", ifStop)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(it)
@@ -115,9 +112,24 @@ fun startBackgroundAbyss(context: Context, dashboardName: String, ifStop: Boolea
     }
 }
 
-fun stopBackgroundAbyss(context: Context) {
+fun stopForegroundAbyss(context: Context) {
 
     Intent(context, ForegroundService::class.java).also {
         context.stopService(it)
+    }
+}
+
+fun saveForegroundAbyss(context: Context, dashboardName: String = "") {
+
+    Intent(context, ForegroundService::class.java).also {
+
+        it.putExtra("dashboardName", dashboardName)
+        it.putExtra("ifSave", true)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(it)
+        } else {
+            context.startService(it)
+        }
     }
 }

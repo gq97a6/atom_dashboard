@@ -3,7 +3,6 @@ package com.netDashboard.abyss
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.netDashboard.abyss.demons.Mqttd
 import com.netDashboard.dashboard.Dashboard
@@ -13,7 +12,7 @@ class Abyss(
     context: Context,
     rootPath: String,
     dashboardName: String,
-    private val isLive: Boolean
+    private val isForeground: Boolean
 ) {
 
     val dashboard = Dashboard(rootPath, dashboardName)
@@ -36,13 +35,13 @@ class Abyss(
 
                 if (!connectionDeployed) {
 
-                    connectionDeployed = true
-
                     //Try to connect every 5 seconds
                     Handler(Looper.getMainLooper()).postDelayed({
                         connectionDeployed = false
                         mqttd.connect(context)
                     }, 5000)
+
+                    connectionDeployed = true
                 }
             }
 
@@ -51,7 +50,7 @@ class Abyss(
 
         }.start()
 
-        if (!isLive) {
+        if (isForeground) {
             tiles = dashboard.tiles
 
             mqttd.data.observe(context as LifecycleOwner, { p ->
@@ -64,8 +63,11 @@ class Abyss(
         }
     }
 
+    fun save() {
+        if (isForeground) dashboard.tiles = tiles
+    }
+
     fun close() {
-        Log.i("OUY", "SAVE")
-        if (!isLive) dashboard.tiles = tiles
+        mqttd.disconnect()
     }
 }

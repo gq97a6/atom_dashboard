@@ -1,6 +1,7 @@
 package com.netDashboard.abyss.demons
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
@@ -12,9 +13,9 @@ class Mqttd(private val URI: String) {
     private var msg: MqttMessage = MqttMessage()
     var data = MutableLiveData(Pair("R73JETTY", msg))
 
-    val isConnected:Boolean
+    val isConnected: Boolean
         get() {
-            return if(::client.isInitialized) {
+            return if (::client.isInitialized) {
                 client.isConnected
             } else {
                 false

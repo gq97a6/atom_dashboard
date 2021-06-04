@@ -3,20 +3,24 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.netDashboard.*
+import com.netDashboard.R
 import com.netDashboard.abyss.Abyss
-import com.netDashboard.databinding.DashboardActivityBinding
 import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.settings.DashboardSettingsActivity
+import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.foreground_service.startBackgroundAbyss
-import com.netDashboard.tile.TilesAdapter
+import com.netDashboard.databinding.DashboardActivityBinding
+import com.netDashboard.foreground_service.saveForegroundAbyss
+import com.netDashboard.foreground_service.stopForegroundAbyss
+import com.netDashboard.margins
 import com.netDashboard.tile.TileGridLayoutManager
+import com.netDashboard.tile.TilesAdapter
+import com.netDashboard.toPx
+import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: DashboardActivityBinding
@@ -39,21 +43,26 @@ class DashboardActivity : AppCompatActivity() {
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
-        startBackgroundAbyss(this, dashboardName, true)
-        Log.i("OUY", "CREATE")
-        abyss = Abyss(this, filesDir.canonicalPath, dashboardName, true)
+        saveForegroundAbyss(this, dashboardName)
+        abyss = Abyss(this, filesDir.canonicalPath, dashboardName, false)
 
         Thread {
 
             //Wait for connection
-            while (!abyss.mqttd.isConnected) { continue }
+            while (!abyss.mqttd.isConnected) {
+                continue
+            }
 
             //Connection established
+            stopForegroundAbyss(this)
             createToast(this, "done")
 
         }.start()
 
         setupRecyclerView()
+
+        //Set dashboard tag name
+        b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
 
         for (i in 0 until dashboardTilesAdapter.itemCount) {
             dashboardTilesAdapter.tiles[i].mqttd = abyss.mqttd
@@ -96,8 +105,7 @@ class DashboardActivity : AppCompatActivity() {
 
         dashboard.tiles = dashboardTilesAdapter.tiles.toList()
 
-        abyss.close()
-        startBackgroundAbyss(this, dashboardName)
+        abyss.save()
 
         super.onPause()
     }
@@ -162,7 +170,7 @@ class DashboardActivity : AppCompatActivity() {
 
             dashboardTilesAdapter.swapModeLock = false
         } else {
-            b.ban.text = getString(R.string.dashboard)
+            b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
 
             b.remove.visibility = View.GONE
             b.add.visibility = View.GONE

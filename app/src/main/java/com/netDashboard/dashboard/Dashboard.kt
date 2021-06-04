@@ -1,15 +1,31 @@
-@file:Suppress("unused")
-
 package com.netDashboard.dashboard
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.Button
+import com.netDashboard.R
+import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.main.FolderTree
+import com.netDashboard.main.Settings
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileList
 import java.io.*
+import java.util.*
 
-class Dashboard(rootPath: String, dashboardName: String) : Serializable {
+open class Dashboard(private val rootPath: String, val name: String) :
+    Serializable {
 
-    private val tilesFileName = "$rootPath/$dashboardName" + "_tiles"
-    private val settingsFileName = "$rootPath/$dashboardName" + "_settings"
+    val id: Long?
+
+    var context: Context? = null
+    private var holder: DashboardAdapter.DashboardsViewHolder? = null
+
+    private val rootFolder = "$rootPath/dashboard_data/$name"
+    private val tilesFileName = "$rootFolder/tiles"
+    private val settingsFileName = "$rootFolder/settings"
 
     var settings = Settings()
         get() = Settings().getSaved()
@@ -18,7 +34,6 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
             field.save()
         }
 
-
     var tiles: List<Tile> = listOf()
         get() = field.getSaved()
         set(value) {
@@ -26,7 +41,54 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
             field.save()
         }
 
+    init {
+        id = Random().nextLong()
+    }
+
+    fun getItemViewType(context: Context): Int {
+        this.context = context
+
+        return R.layout.dashboard
+    }
+
+    open fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DashboardAdapter.DashboardsViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+
+        view.findViewById<Button>(R.id.button).text = name.uppercase(Locale.getDefault())
+
+        view.findViewById<Button>(R.id.button).setOnClickListener {
+
+            Intent(context, DashboardActivity::class.java).also {
+                val settings = Settings(rootPath).getSaved()
+                settings.lastDashboardName = name
+                settings.save()
+
+                it.putExtra("dashboardName", name)
+                (context as Activity).overridePendingTransition(0, 0)
+                context?.startActivity(it)
+            }
+        }
+        return DashboardAdapter.DashboardsViewHolder(view)
+    }
+
+    open fun onBindViewHolder(holder: DashboardAdapter.DashboardsViewHolder, position: Int) {
+        this.holder = holder
+    }
+
+    fun areItemsTheSame(oldItem: Dashboard, newItem: Dashboard): Boolean {
+        return oldItem == newItem
+    }
+
+    fun areContentsTheSame(oldItem: Dashboard, newItem: Dashboard): Boolean {
+        return oldItem.id == newItem.id
+    }
+
     fun List<Tile>.save() {
+
+        FolderTree(rootFolder).check()
 
         for ((i, _) in this.withIndex()) {
             this[i].context = null
@@ -50,7 +112,11 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
         }
     }
 
+    @Suppress("unused")
     private fun List<Tile>.getSaved(): List<Tile> {
+
+        if (!FolderTree(rootFolder).check()) return TileList().getButtons()
+
         return try {
             val file = FileInputStream(tilesFileName)
             val inStream = ObjectInputStream(file)
@@ -74,7 +140,12 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
         val mqttURI
             get() = "$mqttAddress:$mqttPort"
 
+        var dashboardTagName = name
+
         fun save() {
+
+            FolderTree(rootFolder).check()
+
             try {
                 val file = FileOutputStream(settingsFileName)
 
@@ -89,6 +160,9 @@ class Dashboard(rootPath: String, dashboardName: String) : Serializable {
         }
 
         fun getSaved(): Settings {
+
+            if (!FolderTree(rootFolder).check()) return Settings()
+
             return try {
                 val file = FileInputStream(settingsFileName)
                 val inStream = ObjectInputStream(file)

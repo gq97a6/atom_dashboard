@@ -2,8 +2,11 @@ package com.netDashboard.foreground_service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -12,18 +15,11 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.netDashboard.R
-import com.netDashboard.abyss.Abyss
-import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.main.Dashboards
 import java.io.Serializable
 
 class ForegroundService : Serializable, LifecycleService() {
 
     private var isRunning = false
-
-    private lateinit var dashboards: MutableList<Dashboard>
-
-    private lateinit var abyss: Abyss
 
     override fun onCreate() {
         super.onCreate()
@@ -36,7 +32,7 @@ class ForegroundService : Serializable, LifecycleService() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentTitle("Server working in background")
-            .setContentText("Running servers: MQTT")
+            //.setContentText("Running servers: MQTT")
             .setSmallIcon(R.drawable.icon_main)
             .setPriority(PRIORITY_MIN)
             .setVisibility(VISIBILITY_SECRET)
@@ -47,24 +43,8 @@ class ForegroundService : Serializable, LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        val dashboardName = intent?.getStringExtra("dashboardName") ?: ""
-        val ifSave = intent?.getBooleanExtra("ifSave", false) ?: false
-
-        when {
-            ifSave -> {
-                if (isRunning) abyss.save()
-            }
-
-            !isRunning -> {
-                val dashboards = Dashboards().get(filesDir.canonicalPath)
-
-                for(d in dashboards) {
-                    if(d.name == dashboardName) continue
-                    abyss = Abyss(this, filesDir.canonicalPath, d.name, true)
-                }
-
-                isRunning = true
-            }
+        if (!isRunning) {
+            isRunning = true
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -72,14 +52,22 @@ class ForegroundService : Serializable, LifecycleService() {
 
     override fun onDestroy() {
 
-        if (isRunning) abyss.close()
+        if (isRunning) isRunning = false
 
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent): IBinder? {
+    private val binder = AbyssServiceBinder()
+
+    inner class AbyssServiceBinder : Binder() {
+        fun getService(): ForegroundService = this@ForegroundService
+    }
+
+    override fun onBind(intent: Intent): IBinder {
+
         super.onBind(intent)
-        return null
+
+        return binder
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -98,38 +86,50 @@ class ForegroundService : Serializable, LifecycleService() {
     }
 }
 
-fun startForegroundAbyss(context: Context, dashboardName: String = "") {
+class ForegroundServiceHandler(var context: Context) {
 
-    Intent(context, ForegroundService::class.java).also {
+    var isBounded: Boolean = false
+    lateinit var service: ForegroundService
 
-        it.putExtra("dashboardName", dashboardName)
+    private val connection = object : ServiceConnection {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(it)
-        } else {
-            context.startService(it)
+        override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
+            val binder = IBinder as ForegroundService.AbyssServiceBinder
+            service = binder.getService()
+            isBounded = true
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            isBounded = false
         }
     }
-}
 
-fun stopForegroundAbyss(context: Context) {
-
-    Intent(context, ForegroundService::class.java).also {
-        context.stopService(it)
+    fun start() {
+        Intent(context, ForegroundService::class.java).also {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(it)
+            } else {
+                context.startService(it)
+            }
+        }
     }
-}
 
-fun saveForegroundAbyss(context: Context, dashboardName: String = "") {
+    fun stop() {
+        Intent(context, ForegroundService::class.java).also {
+            context.stopService(it)
+        }
+    }
 
-    Intent(context, ForegroundService::class.java).also {
+    fun bind() {
+        Intent(context, ForegroundService::class.java).also {
+            context.bindService(it, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
 
-        it.putExtra("dashboardName", dashboardName)
-        it.putExtra("ifSave", true)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(it)
-        } else {
-            context.startService(it)
+    fun unbind() {
+        if (isBounded) {
+            context.unbindService(connection)
+            isBounded = false
         }
     }
 }

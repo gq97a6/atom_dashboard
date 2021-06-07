@@ -8,14 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
-import com.netDashboard.abyss.Abyss
 import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.settings.DashboardSettingsActivity
 import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.DashboardActivityBinding
-import com.netDashboard.foreground_service.saveForegroundAbyss
-import com.netDashboard.foreground_service.stopForegroundAbyss
 import com.netDashboard.margins
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
@@ -31,8 +28,6 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var dashboardTilesAdapter: TilesAdapter
 
-    private lateinit var abyss: Abyss
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,30 +38,10 @@ class DashboardActivity : AppCompatActivity() {
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
-        saveForegroundAbyss(this, dashboardName)
-        abyss = Abyss(this, filesDir.canonicalPath, dashboardName, false)
-
-        Thread {
-
-            //Wait for connection
-            while (!abyss.mqttd.isConnected) {
-                continue
-            }
-
-            //Connection established
-            stopForegroundAbyss(this)
-            createToast(this, "done")
-
-        }.start()
-
         setupRecyclerView()
 
         //Set dashboard tag name
         b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
-
-        for (i in 0 until dashboardTilesAdapter.itemCount) {
-            dashboardTilesAdapter.tiles[i].mqttd = abyss.mqttd
-        }
 
         b.edit.setOnClickListener {
             editOnClick()
@@ -91,6 +66,8 @@ class DashboardActivity : AppCompatActivity() {
         if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
             b.edit.callOnClick()
         }
+
+        dashboardTilesAdapter.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
@@ -104,8 +81,6 @@ class DashboardActivity : AppCompatActivity() {
     override fun onPause() {
 
         dashboard.tiles = dashboardTilesAdapter.tiles.toList()
-
-        abyss.save()
 
         super.onPause()
     }
@@ -125,26 +100,15 @@ class DashboardActivity : AppCompatActivity() {
 
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return if (dashboardTilesAdapter.tiles[position].height == 1) {
-                    dashboardTilesAdapter.tiles[position].width
-                } else {
-                    spanCount
+                val t = dashboardTilesAdapter.tiles[position]
+                return when {
+                    t.height != 1 || t.width > spanCount -> spanCount
+                    else -> t.width
                 }
             }
         }
 
-        abyss.mqttd.data.observe(this, { p ->
-
-            if (p.first != "R73JETTY") {
-
-                for (i in 0 until dashboardTilesAdapter.itemCount) {
-                    dashboardTilesAdapter.tiles[i].onData(p.first, p.second)
-                }
-            }
-        })
-
         b.recyclerView.layoutManager = layoutManager
-        //b.recyclerView.itemAnimator?.changeDuration = 0
 
         dashboardTilesAdapter.submitList(dashboard.tiles.toMutableList())
 
@@ -180,9 +144,14 @@ class DashboardActivity : AppCompatActivity() {
             dashboard.tiles = dashboardTilesAdapter.tiles.toList()
         }
 
+        for (t in dashboardTilesAdapter.tiles) {
+            t.editMode(dashboardTilesAdapter.swapMode)
+            t.flag(false)
+            t.lock = false
+        }
+
         for (i in 0 until dashboardTilesAdapter.itemCount) {
-            dashboardTilesAdapter.tiles[i].editMode(dashboardTilesAdapter.swapMode)
-            dashboardTilesAdapter.tiles[i].flag(false)
+            b.recyclerView.getChildAt(i)?.animation?.cancel()
         }
 
         dashboardTilesAdapter.notifyDataSetChanged()
@@ -196,9 +165,9 @@ class DashboardActivity : AppCompatActivity() {
             dashboardTilesAdapter.swapMode = true
             b.ban.text = getString(R.string.swap_mode)
 
-            for (i in 0 until dashboardTilesAdapter.itemCount) {
-                dashboardTilesAdapter.tiles[i].editMode(true)
-                dashboardTilesAdapter.tiles[i].flag(false)
+            for (t in dashboardTilesAdapter.tiles) {
+                t.editMode(true)
+                t.flag(false)
             }
         } else if (!dashboardTilesAdapter.swapMode) {
             Intent(this, DashboardSettingsActivity::class.java).also {
@@ -218,8 +187,8 @@ class DashboardActivity : AppCompatActivity() {
             var toDelete = false
 
 
-            for (i in 0 until dashboardTilesAdapter.itemCount) {
-                if (dashboardTilesAdapter.tiles[i].flag()) {
+            for (t in dashboardTilesAdapter.tiles) {
+                if (t.flag) {
                     toDelete = true
                     break
                 }
@@ -236,9 +205,10 @@ class DashboardActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).margins().setAction("YES") {
 
-                    for (i in 0 until dashboardTilesAdapter.itemCount) {
+                    for ((i, t) in dashboardTilesAdapter.tiles.withIndex()) {
 
-                        if (dashboardTilesAdapter.tiles[i].flag()) {
+
+                        if (t.flag) {
                             dashboardTilesAdapter.tiles.removeAt(i)
 
                             dashboardTilesAdapter.notifyItemRemoved(i)
@@ -265,8 +235,8 @@ class DashboardActivity : AppCompatActivity() {
             dashboardTilesAdapter.removeMode = true
             b.ban.text = getString(R.string.remove_mode)
 
-            for (i in 0 until dashboardTilesAdapter.itemCount) {
-                dashboardTilesAdapter.tiles[i].flag(false)
+            for (t in dashboardTilesAdapter.tiles) {
+                t.flag(false)
             }
 
             createToast(this, getString(R.string.dashboard_remove))

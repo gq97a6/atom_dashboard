@@ -12,7 +12,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_swap_flag"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
         android:visibility="gone"
@@ -56,7 +55,7 @@
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.slider.Slider
-        android:id="@+id/slider"
+        android:id="@+id/tile_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -65,7 +64,6 @@
         android:valueTo="100.0"
         android:visibility="invisible"
         app:haloColor="#00000000"
-        app:haloRadius="0dp"
         app:labelBehavior="gone"
         app:thumbRadius="0dp"
         app:tickColor="#00000000"

@@ -1,20 +1,14 @@
 package com.netDashboard.activities.dashboard.settings
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.slider.Slider
-import com.google.android.material.snackbar.Snackbar
-import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.DashboardSettingsActivityBinding
-import com.netDashboard.margins
-import com.netDashboard.toPx
+import com.netDashboard.foreground_service.ForegroundServiceHandler
 
 class DashboardSettingsActivity : AppCompatActivity() {
     private lateinit var b: DashboardSettingsActivityBinding
@@ -29,59 +23,24 @@ class DashboardSettingsActivity : AppCompatActivity() {
         b = DashboardSettingsActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        val abyssHandler = ForegroundServiceHandler(this)
+        abyssHandler.start()
+        abyssHandler.bind()
+
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
         b.span.value = settings.spanCount.toFloat()
         b.span.callOnClick()
+        b.spanValue.text = settings.spanCount.toString()
 
         b.mqttAddress.setText(settings.mqttAddress)
         b.mqttPort.setText(settings.mqttPort.toString())
 
-        b.span.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(slider: Slider) {
-            }
-
-            override fun onStopTrackingTouch(slider: Slider) {
-                if (checkSpan(slider.value.toInt())) {
-                    settings.spanCount = slider.value.toInt()
-
-                    b.warningSpan.visibility = View.GONE
-                    b.buttonApplySpan.visibility = View.GONE
-                } else {
-                    b.warningSpan.visibility = View.VISIBLE
-                    b.buttonApplySpan.visibility = View.VISIBLE
-                }
-            }
-        })
-
-        b.buttonApplySpan.setOnClickListener {
-
-            @SuppressLint("ShowToast")
-            val snackbar = Snackbar.make(
-                b.root,
-                getString(R.string.snackbar_confirmation),
-                Snackbar.LENGTH_LONG
-            ).margins().setAction("YES") {
-                val list = dashboard.tiles
-
-                for ((i, t) in list.withIndex()) {
-                    if (t.width > b.span.value) {
-                        list[i].width = b.span.value.toInt()
-                    }
-                }
-
-                settings.spanCount = b.span.value.toInt()
-                dashboard.tiles = list
-
-                b.warningSpan.visibility = View.GONE
-                b.buttonApplySpan.visibility = View.GONE
-            }
-
-            val snackBarView = snackbar.view
-            snackBarView.translationY = -20.toPx().toFloat()
-            snackbar.show()
+        b.span.addOnChangeListener { _, value, _ ->
+            b.spanValue.text = value.toInt().toString()
+            settings.spanCount = value.toInt()
         }
 
         b.mqttAddress.addTextChangedListener(object : TextWatcher {
@@ -114,13 +73,17 @@ class DashboardSettingsActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        dashboard.settings = settings
-
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
             finish()
             startActivity(it)
         }
+    }
+
+    override fun onPause() {
+        dashboard.settings = settings
+
+        super.onPause()
     }
 
     fun checkSpan(span: Int): Boolean {

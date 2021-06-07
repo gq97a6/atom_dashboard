@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.*
-import com.netDashboard.abyss.demons.Mqttd
+import com.netDashboard.foreground_service.demons.Mqttd
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.*
 import java.util.*
@@ -22,8 +22,32 @@ abstract class Tile(
     val id: Long?
 
     private var editMode = false
-    private var flag = false
-    var swapLock = false
+    var flag = false
+        private set
+
+    var lock = false
+        set(value) {
+            field = value
+            
+            onLock(value)
+
+            val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
+            val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
+
+            flagMark?.setBackgroundResource(R.drawable.icon_lock_flag)
+
+            if (value) {
+                flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
+                flagBackground?.backgroundTintList =
+                    ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
+
+                flagMark?.visibility = View.VISIBLE
+                flagBackground?.visibility = View.VISIBLE
+            } else {
+                flagMark?.visibility = View.GONE
+                flagBackground?.visibility = View.GONE
+            }
+        }
 
     var mqttd: Mqttd? = null
     var context: Context? = null
@@ -103,19 +127,18 @@ abstract class Tile(
         return editMode
     }
 
-    open fun flag(flag: Boolean, type: Int = 0) {
+    open fun flag(flag: Boolean, type: String = "") {
         this.flag = flag
 
         val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
         val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
 
         when (type) {
-            0 -> flagMark?.setBackgroundResource(R.drawable.icon_swap)
-            1 -> flagMark?.setBackgroundResource(R.drawable.icon_remove)
+            "swap" -> flagMark?.setBackgroundResource(R.drawable.icon_swap_flag)
+            "remove" -> flagMark?.setBackgroundResource(R.drawable.icon_remove_flag)
         }
 
         if (flag) {
-
             flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
             flagBackground?.backgroundTintList =
                 ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
@@ -128,13 +151,11 @@ abstract class Tile(
         }
     }
 
-    fun flag(): Boolean {
-        return flag
-    }
-
     open fun setThemeColor(color: Int) {
         this.color = color
     }
+
+    open fun onLock(isLocked: Boolean) {}
 
     open fun onData(data: String, isLive: Boolean = true) {}
 

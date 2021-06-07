@@ -16,7 +16,7 @@ class Dashboards {
         return list
     }
 
-    fun getNames(rootPath: String): List<String> {
+    private fun getNames(rootPath: String): List<String> {
 
         val list: MutableList<String> = mutableListOf()
         File("$rootPath/dashboard_data").list()?.forEach {

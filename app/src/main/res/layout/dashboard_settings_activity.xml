@@ -21,16 +21,6 @@
         android:textColor="@color/dark_gray"
         android:textSize="40sp" />
 
-    <TextView
-        android:id="@+id/warning_span"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="@string/dashboard_settings_span_warning"
-        android:textColor="@color/gray"
-        android:textSize="13sp"
-        android:visibility="gone" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,31 +38,32 @@
             android:textColor="@color/dark_gray"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/span_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:gravity="center"
+            android:textColor="@color/dark_gray"
+            android:textSize="15sp" />
+
         <com.google.android.material.slider.Slider
             android:id="@+id/span"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="1"
-
+            android:layout_weight="2"
             android:stepSize="1"
             android:valueFrom="1"
             android:valueTo="6"
-
+            app:haloRadius="0dp"
+            app:haloColor="#00000000"
+            app:labelBehavior="gone"
             app:thumbColor="@color/slider_thumbColor"
             app:tickColorActive="@color/slider_tickColorActive"
             app:tickColorInactive="@color/slider_tickColorInactive"
             app:trackColorActive="@color/slider_trackColorActive"
             app:trackColorInactive="@color/slider_trackColorInactive" />
-
-        <Button
-            android:id="@+id/button_apply_span"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:text="@string/dashboard_settings_button_apply"
-            android:textSize="12sp"
-            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -99,14 +90,14 @@
             android:background="#337C7C7C"
             android:ems="12"
             android:hint="tcp://"
+            android:importantForAutofill="no"
             android:inputType="textUri"
             android:maxLength="30"
             android:padding="10dp"
             android:text="tcp://"
             android:textColor="@color/gray"
             android:textColorHint="@color/light_gray"
-            tools:ignore="HardcodedText,TextFields"
-            android:importantForAutofill="no" />
+            tools:ignore="HardcodedText,TextFields" />
 
     </LinearLayout>
 
@@ -133,14 +124,14 @@
             android:background="#337C7C7C"
             android:ems="12"
             android:hint="1883"
+            android:importantForAutofill="no"
             android:inputType="numberDecimal"
             android:maxLength="5"
             android:padding="10dp"
             android:text="1883"
             android:textColor="@color/gray"
             android:textColorHint="@color/light_gray"
-            tools:ignore="HardcodedText,TextFields"
-            android:importantForAutofill="no" />
+            tools:ignore="HardcodedText,TextFields" />
 
     </LinearLayout>
 

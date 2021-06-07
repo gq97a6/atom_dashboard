@@ -13,6 +13,8 @@ import com.netDashboard.main.Settings
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileList
 import java.io.*
+import java.net.InetAddress
+import java.net.URI
 import java.util.*
 
 open class Dashboard(private val rootPath: String, val name: String) :
@@ -57,9 +59,9 @@ open class Dashboard(private val rootPath: String, val name: String) :
     ): DashboardAdapter.DashboardsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
-        view.findViewById<Button>(R.id.button).text = name.uppercase(Locale.getDefault())
+        view.findViewById<Button>(R.id.dashboard_button).text = name.uppercase(Locale.getDefault())
 
-        view.findViewById<Button>(R.id.button).setOnClickListener {
+        view.findViewById<Button>(R.id.dashboard_button).setOnClickListener {
 
             Intent(context, DashboardActivity::class.java).also {
                 val settings = Settings(rootPath).getSaved()
@@ -137,6 +139,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
 
         var mqttAddress = "tcp://"
         var mqttPort = 1883
+
         val mqttURI
             get() = "$mqttAddress:$mqttPort"
 

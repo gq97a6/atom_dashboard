@@ -13,7 +13,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-        android:background="@drawable/icon_swap_flag"
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
         android:visibility="gone"

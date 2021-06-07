@@ -15,7 +15,7 @@
         android:right="10dp"
         android:top="10dp">
         <ripple android:color="?colorSecondary">
-            <item android:drawable="@drawable/icon_remove" />
+            <item android:drawable="@drawable/icon_remove_flag" />
         </ripple>
     </item>
 </layer-list>

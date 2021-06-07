@@ -20,7 +20,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        val slider = holder.itemView.findViewById<Slider>(R.id.slider)
+        val slider = holder.itemView.findViewById<Slider>(R.id.tile_slider)
         val background = holder.itemView.findViewById<View>(R.id.background)
 
         slider.isEnabled = !editMode()
@@ -91,7 +91,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun editMode(isEnabled: Boolean) {
         super.editMode(isEnabled)
 
-        holder?.itemView?.findViewById<Slider>(R.id.slider)?.isEnabled = !editMode()
+        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !editMode()
     }
 
     override fun setThemeColor(color: Int) {
@@ -104,7 +104,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     }
 
     private fun setRange(from: Float, to: Float, step: Float = 1f) {
-        val slider = holder?.itemView?.findViewById<Slider>(R.id.slider)
+        val slider = holder?.itemView?.findViewById<Slider>(R.id.tile_slider)
 
         if (from < to && slider != null) {
             slider.valueFrom = from
@@ -115,5 +115,11 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
                 slider.value = from
             }
         }
+    }
+
+    override fun onLock(isLocked: Boolean) {
+        super.onLock(isLocked)
+
+        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !isLocked
     }
 }

@@ -72,4 +72,10 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
 
         holder?.itemView?.findViewById<Button>(R.id.tile_button)?.text = text
     }
+
+    override fun onLock(isLocked: Boolean) {
+        super.onLock(isLocked)
+
+        holder?.itemView?.findViewById<Button>(R.id.tile_button)?.isEnabled = !isLocked
+    }
 }

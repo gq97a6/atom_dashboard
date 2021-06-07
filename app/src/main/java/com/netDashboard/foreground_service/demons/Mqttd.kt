@@ -1,31 +1,29 @@
-package com.netDashboard.abyss.demons
+package com.netDashboard.foreground_service.demons
 
 import android.content.Context
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
-class Mqttd(private val URI: String) {
+class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
-    lateinit var client: MqttAndroidClient
+    override val isWorking: Boolean
+        get() = client?.isConnected ?: false
 
-    private var msg: MqttMessage = MqttMessage()
-    var data = MutableLiveData(Pair("R73JETTY", msg))
+    override var isSentenced: Boolean = false
 
-    val isConnected: Boolean
-        get() {
-            return if (::client.isInitialized) {
-                client.isConnected
-            } else {
-                false
-            }
-        }
+    override var isDead: Boolean = false
 
-    fun connect(context: Context) {
+    private var client: MqttAndroidClient? = null
+
+    var data: MutableLiveData<Any> = MutableLiveData(Pair("R73JETTY", MqttMessage()))
+
+    override fun run() {
 
         client = MqttAndroidClient(context, URI, "kotlin_client")
-        client.setCallback(object : MqttCallback {
+        client?.setCallback(object : MqttCallback {
 
             override fun messageArrived(t: String?, m: MqttMessage) {
                 data.postValue(Pair(t ?: "", m))
@@ -41,7 +39,7 @@ class Mqttd(private val URI: String) {
         val options = MqttConnectOptions()
 
         try {
-            client.connect(options, null, object : IMqttActionListener {
+            client?.connect(options, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -53,12 +51,12 @@ class Mqttd(private val URI: String) {
         }
     }
 
-    fun disconnect() {
+    override fun kill() {
 
-        if (!isConnected) return
+        if (!isWorking && !isDead) return
 
         try {
-            client.disconnect(null, object : IMqttActionListener {
+            client?.disconnect(null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -68,11 +66,36 @@ class Mqttd(private val URI: String) {
         } catch (e: MqttException) {
             e.printStackTrace()
         }
+    }
+
+
+    override fun sentence() {
+        if (isSentenced) return
+
+        isSentenced = true
+        Thread {
+            var sentenceDeployed = false
+
+            while (isWorking) {
+
+                if (!sentenceDeployed) {
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        if (!isDead) kill()
+                        sentenceDeployed = false
+                    }, 500)
+
+                    sentenceDeployed = true
+                }
+            }
+
+            isDead = true
+        }.start()
     }
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
 
-        if (!isConnected) return
+        if (!isWorking) return
 
         try {
             val message = MqttMessage()
@@ -81,7 +104,7 @@ class Mqttd(private val URI: String) {
             message.qos = qos
             message.isRetained = retained
 
-            client.publish(topic, message, null, object : IMqttActionListener {
+            client?.publish(topic, message, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -95,10 +118,10 @@ class Mqttd(private val URI: String) {
 
     fun subscribe(topic: String, qos: Int = 1) {
 
-        if (!isConnected) return
+        if (!isWorking) return
 
         try {
-            client.subscribe(topic, qos, null, object : IMqttActionListener {
+            client?.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -112,10 +135,10 @@ class Mqttd(private val URI: String) {
 
     fun unsubscribe(topic: String) {
 
-        if (!isConnected) return
+        if (!isWorking) return
 
         try {
-            client.unsubscribe(topic, null, object : IMqttActionListener {
+            client?.unsubscribe(topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 

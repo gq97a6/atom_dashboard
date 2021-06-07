@@ -97,13 +97,13 @@ class TilesAdapter(
     private fun swapTiles(position: Int) {
 
         if (!swapModeLock) {
-            if (!tiles[position].swapLock) {
-                tiles[position].flag(!tiles[position].flag())
+            if (!tiles[position].lock) {
+                tiles[position].flag(!tiles[position].flag, "swap")
             }
 
             for ((pos, t) in tiles.withIndex()) {
 
-                if (t.flag() && tiles[position].id != t.id) {
+                if (t.flag && tiles[position].id != t.id) {
                     val recyclerView =
                         tiles[position].holder?.itemView?.parent as RecyclerView
 
@@ -124,8 +124,8 @@ class TilesAdapter(
 
                         recyclerView.suppressLayout(true)
 
-                        tiles[pos].swapLock = true
-                        tiles[position].swapLock = true
+                        tiles[pos].lock = true
+                        tiles[position].lock = true
 
                         val xyA = IntArray(2)
                         tiles[pos].holder?.itemView?.getLocationOnScreen(xyA)
@@ -145,7 +145,7 @@ class TilesAdapter(
                         val distance = kotlin.math.sqrt(
                             (xA - xB).toDouble().pow(2) + (yA - yB).toDouble().pow(2)
                         )
-                        val duration = (distance * 0.7).toLong()
+                        val duration = (distance * 0.5).toLong()
 
                         tiles[pos].holder?.itemView?.animate()?.cancel()
 
@@ -162,8 +162,8 @@ class TilesAdapter(
                             duration
 
                         Handler(Looper.getMainLooper()).postDelayed({
-                            tiles[pos].swapLock = false
-                            tiles[position].swapLock = false
+                            tiles[pos].lock = false
+                            tiles[position].lock = false
 
                             Collections.swap(tiles, position, pos)
                             notifyItemChanged(position)
@@ -172,14 +172,7 @@ class TilesAdapter(
                             tiles[pos].holder?.itemView?.elevation = 0f
                             tiles[position].holder?.itemView?.elevation = 0f
 
-                            var noneIsMoving = true
-                            for (tt in tiles) {
-                                if (tt.swapLock) noneIsMoving = false; break
-                            }
-
-                            if (noneIsMoving) {
-                                recyclerView.suppressLayout(false)
-                            }
+                            recyclerView.suppressLayout(false)
 
                             swapModeLock = false
                         }, duration + 50)
@@ -201,12 +194,12 @@ class TilesAdapter(
 
         for ((i, t) in tiles.withIndex()) {
 
-            if (t.flag() && tiles[position].id != t.id) {
+            if (t.flag && tiles[position].id != t.id) {
                 tiles[i].flag(false)
             }
         }
 
-        tiles[position].flag(!tiles[position].flag(), 1)
+        tiles[position].flag(!tiles[position].flag, "remove")
     }
 }
 

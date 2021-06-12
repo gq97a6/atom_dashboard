@@ -4,7 +4,7 @@ import android.graphics.Color
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
 
-class TileList {
+class TileTypeList {
     fun get(color: Int = Color.parseColor("#A3A3A3")): List<Tile> {
         return listOf(
             ButtonTile("Button", color, 3, 1),
@@ -12,6 +12,7 @@ class TileList {
         )
     }
 
+    //TMP
     fun getButtons(color: Int = Color.parseColor("#A3A3A3")): List<Tile> {
         return listOf(
             ButtonTile("Button", color, 1, 1),

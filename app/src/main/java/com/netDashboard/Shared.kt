@@ -1,14 +1,15 @@
 package com.netDashboard
 
-import android.animation.ObjectAnimator
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
+import android.os.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
@@ -60,26 +61,63 @@ fun Int.alpha(a: Int): Int {
     return Color.argb(alpha, this.red, this.green, this.blue)
 }
 
-//For fun ----------------------------------------------------------------
-fun View.move(property: String, distance: Float, duration: Long = 300) {
-    ObjectAnimator.ofFloat(this, property, distance)
-        .apply {
-            this.duration = duration
-            start()
-        }
+fun createNotification(context: Context, id: Int) {
+    createNotification(context, "Title", "Text", id)
 }
 
-fun View.rotate(duration: Long = 300) {
-    ObjectAnimator.ofFloat(this, View.ROTATION, 0f, 360f)
-        .apply {
-            this.duration = duration
-            start()
-        }
+fun createNotification(
+    context: Context,
+    title: String = "Title",
+    text: String = "Text",
+    id: Int = Random().nextInt()
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        createNotificationChannel(context)
+    }
+
+    val notification = NotificationCompat.Builder(context, "notification_id")
+        .setAutoCancel(true)
+        .setContentTitle(title)
+        .setContentText(text)
+        .setSmallIcon(R.drawable.icon_main)
+        .setPriority(NotificationCompat.PRIORITY_MIN)
+        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+    //.setSilent(true)
+
+    with(NotificationManagerCompat.from(context)) {
+        notify(id, notification.build())
+    }
 }
 
-fun View.scale(duration: Long = 300, by: Float) {
-    this.animate()
-        .scaleY(by)
-        .scaleX(by)
-        .setInterpolator(AccelerateDecelerateInterpolator()).duration = duration
+@RequiresApi(Build.VERSION_CODES.O)
+private fun createNotificationChannel(context: Context) {
+    val channel = NotificationChannel(
+        "notification_id",
+        "notification",
+        NotificationManager.IMPORTANCE_DEFAULT
+    ).apply {
+        description = "com/netDashboard/notification_channel"
+    }
+
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
+}
+
+@Suppress("DEPRECATION")
+fun createVibration(context: Context, ms: Long = 500) {
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+    if (vibrator.hasVibrator()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    ms,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            vibrator.vibrate(ms)
+        }
+    }
 }

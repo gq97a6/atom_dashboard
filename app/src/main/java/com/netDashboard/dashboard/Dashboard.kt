@@ -8,13 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.main.FolderTree
-import com.netDashboard.main.Settings
+import com.netDashboard.folder_tree.FolderTree
+import com.netDashboard.main_settings.MainSettings
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.TileList
+import com.netDashboard.tile.TileTypeList
 import java.io.*
-import java.net.InetAddress
-import java.net.URI
 import java.util.*
 
 open class Dashboard(private val rootPath: String, val name: String) :
@@ -64,7 +62,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
         view.findViewById<Button>(R.id.dashboard_button).setOnClickListener {
 
             Intent(context, DashboardActivity::class.java).also {
-                val settings = Settings(rootPath).getSaved()
+                val settings = MainSettings(rootPath).getSaved()
                 settings.lastDashboardName = name
                 settings.save()
 
@@ -117,7 +115,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
     @Suppress("unused")
     private fun List<Tile>.getSaved(): List<Tile> {
 
-        if (!FolderTree(rootFolder).check()) return TileList().getButtons()
+        if (!FolderTree(rootFolder).check()) return TileTypeList().getButtons()
 
         return try {
             val file = FileInputStream(tilesFileName)
@@ -130,18 +128,22 @@ open class Dashboard(private val rootPath: String, val name: String) :
 
             list.filterIsInstance<Tile>().takeIf { it.size == list.size } ?: listOf()
         } catch (e: Exception) {
-            TileList().getButtons()
+            TileTypeList().getButtons()
         }
     }
 
     inner class Settings : Serializable {
         var spanCount = 3
 
+        //MQTT
+        var mqttEnabled: Boolean = false
         var mqttAddress = "tcp://"
         var mqttPort = 1883
-
         val mqttURI
             get() = "$mqttAddress:$mqttPort"
+
+        //Bluetooth
+        var bluetoothEnabled: Boolean = false
 
         var dashboardTagName = name
 

@@ -13,11 +13,14 @@ import com.netDashboard.activities.dashboard.settings.DashboardSettingsActivity
 import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.DashboardActivityBinding
+import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.margins
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toPx
 import java.util.*
+
 
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: DashboardActivityBinding
@@ -28,6 +31,8 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var dashboardTilesAdapter: TilesAdapter
 
+    private lateinit var foregroundService: ForegroundService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,6 +42,17 @@ class DashboardActivity : AppCompatActivity() {
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
+
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
+        foregroundServiceHandler.bind()
+
+        foregroundServiceHandler.service.observe(this, { s ->
+            if (s != null) {
+                foregroundService = s
+                onServiceReady()
+            }
+        })
 
         setupRecyclerView()
 
@@ -257,6 +273,17 @@ class DashboardActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
 
+    private fun onServiceReady() {
+        for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {
+            if (dg.d.name == dashboard.name) {
+                dg.mqttd?.data?.observe(this, { p ->
+                    if (p.first != null && p.second != null) {
+                        foregroundService.alarm.on(1000)
+                    }
+                })
+            }
+        }
+    }
 
     //ObjectAnimator.ofFloat(b.indicator, "translationX", distance)
     //.apply {

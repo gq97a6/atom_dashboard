@@ -6,20 +6,25 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Binder
-import android.os.Build
-import android.os.IBinder
+import android.media.AudioManager
+import android.media.ToneGenerator
+import android.os.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
+import com.netDashboard.createVibration
 import java.io.Serializable
 
 class ForegroundService : Serializable, LifecycleService() {
 
     private var isRunning = false
+    lateinit var daemonGroupCollection: DaemonGroupCollection
+
+    val alarm = Alarm(this)
 
     override fun onCreate() {
         super.onCreate()
@@ -44,6 +49,8 @@ class ForegroundService : Serializable, LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (!isRunning) {
+            daemonGroupCollection = DaemonGroupCollection(this, filesDir.canonicalPath)
+
             isRunning = true
         }
 
@@ -57,9 +64,9 @@ class ForegroundService : Serializable, LifecycleService() {
         super.onDestroy()
     }
 
-    private val binder = AbyssServiceBinder()
+    private val binder = ForegroundServiceBinder()
 
-    inner class AbyssServiceBinder : Binder() {
+    inner class ForegroundServiceBinder : Binder() {
         fun getService(): ForegroundService = this@ForegroundService
     }
 
@@ -84,18 +91,64 @@ class ForegroundService : Serializable, LifecycleService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
+
+    fun kill() {
+        if (isRunning) daemonGroupCollection.stop()
+    }
+
+    fun rerun() {
+        if (isRunning) daemonGroupCollection.rerun()
+    }
+
+    fun rerun(name: String) {
+        if (isRunning) daemonGroupCollection.rerun(name)
+    }
+
+    inner class Alarm(val context: Context) {
+        private var isOn = false
+
+        private fun on() {
+            if (isOn) return
+            isOn = true
+            loop()
+        }
+
+        private fun off() {
+            isOn = false
+        }
+
+        private fun loop() {
+            if (!isOn) return
+
+            Thread {
+                createVibration(context, 250)
+                ToneGenerator(AudioManager.STREAM_ALARM, 40).startTone(37, 500)
+            }.start()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                loop()
+            }, 600)
+        }
+
+        fun on(t: Long) {
+            alarm.on()
+            Handler(Looper.getMainLooper()).postDelayed({
+                alarm.off()
+            }, t)
+        }
+    }
 }
 
 class ForegroundServiceHandler(var context: Context) {
 
     var isBounded: Boolean = false
-    lateinit var service: ForegroundService
+    var service: MutableLiveData<ForegroundService?> = MutableLiveData(null)
 
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(className: ComponentName, IBinder: IBinder) {
-            val binder = IBinder as ForegroundService.AbyssServiceBinder
-            service = binder.getService()
+            val binder = IBinder as ForegroundService.ForegroundServiceBinder
+            service.postValue(binder.getService())
             isBounded = true
         }
 

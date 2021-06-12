@@ -1,5 +1,5 @@
 package com.netDashboard.foreground_service.demons
 
-class Bluetoothd {
+class Bluetoothd : Daemon() {
     //TODO
 }

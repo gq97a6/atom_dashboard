@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
@@ -28,7 +27,7 @@
             android:gravity="center"
             android:text="@string/dashboard"
             android:textColor="#000000"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/add"
@@ -60,13 +59,13 @@
         android:id="@+id/placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="20dp"
         android:gravity="center"
+        android:paddingBottom="50dp"
         android:text="@string/empty_dashboard"
         android:textColor="#A3A3A3"
         android:textSize="20sp"
-        android:paddingBottom="50dp"
-        android:layout_margin="20dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

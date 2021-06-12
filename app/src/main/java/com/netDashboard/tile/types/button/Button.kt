@@ -2,13 +2,11 @@ package com.netDashboard.tile.types.button
 
 import android.content.res.ColorStateList
 import android.widget.Button
-import com.netDashboard.R
-import com.netDashboard.alpha
-import com.netDashboard.getContrastColor
-import com.netDashboard.getRandomColor
+import com.netDashboard.*
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.util.*
 
 class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     Tile(name, color, R.layout.button_tile, width, height) {
@@ -27,7 +25,10 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
 
                 holder.itemView.findViewById<Button>(R.id.tile_button).text = text
 
-                mqttd?.publish("123", "test_click")
+                //mqttd?.publish("123", "test_click")
+
+                createNotification(context!!, Random().nextInt().toString())
+                createVibration(context!!, 50)
 
                 setThemeColor(getRandomColor())
             }

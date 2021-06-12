@@ -8,7 +8,7 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity
 import com.netDashboard.databinding.NewTileActivityBinding
 import com.netDashboard.tile.TilesAdapter
-import com.netDashboard.tile.TileList
+import com.netDashboard.tile.TileTypeList
 import com.netDashboard.tile.Tile
 
 class NewTileActivity : AppCompatActivity() {
@@ -63,7 +63,7 @@ class NewTileActivity : AppCompatActivity() {
             }
         }
 
-        val list = TileList().get()
+        val list = TileTypeList().get()
         for ((i, _) in list.withIndex()) {
             list[i].editMode(true)
         }

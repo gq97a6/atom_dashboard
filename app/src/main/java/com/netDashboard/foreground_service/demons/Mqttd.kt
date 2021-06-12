@@ -3,33 +3,75 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
-    override val isWorking: Boolean
+    private val isConnected
         get() = client?.isConnected ?: false
 
-    override var isSentenced: Boolean = false
+    private var isReady = false
+        get() = client != null && field
 
-    override var isDead: Boolean = false
+    private var isEnabled = false
+    private var isClientBusy = false
 
     private var client: MqttAndroidClient? = null
 
-    var data: MutableLiveData<Any> = MutableLiveData(Pair("R73JETTY", MqttMessage()))
+    var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
-    override fun run() {
+    init {
+        start()
+    }
+
+    private fun start() {
+        if (isEnabled) return
+
+        isEnabled = true
+        toggleLoop()
+    }
+
+    fun stop() {
+        if (!isEnabled) return
+
+        isEnabled = false
+        toggleLoop()
+    }
+
+    private fun toggleLoop(d: Long = 3000) {
+        if (isConnected == isEnabled) return
+
+        if (isEnabled) {
+            startRaw()
+        } else {
+            stopRaw()
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            toggleLoop()
+        }, d)
+    }
+
+    private fun startRaw() {
+        if (isClientBusy) return
+
+        Log.i("OUY", "trying to connect to: $URI")
+
+        isClientBusy = true
 
         client = MqttAndroidClient(context, URI, "kotlin_client")
         client?.setCallback(object : MqttCallback {
 
             override fun messageArrived(t: String?, m: MqttMessage) {
                 data.postValue(Pair(t ?: "", m))
+                Log.i("OUY", m.toString())
             }
 
             override fun connectionLost(cause: Throwable?) {
+                toggleLoop()
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -49,11 +91,25 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         } catch (e: MqttException) {
             e.printStackTrace()
         }
+
+        //TMP
+        Thread {
+            while (!isConnected) continue
+            subscribe("abc")
+        }.start()
+        //TMP
+
+        isReady = true
+        isClientBusy = false
     }
 
-    override fun kill() {
+    private fun stopRaw() {
+        if (!isReady || isClientBusy) return
 
-        if (!isWorking && !isDead) return
+        isClientBusy = true
+
+        client?.unregisterResources()
+        client?.close()
 
         try {
             client?.disconnect(null, object : IMqttActionListener {
@@ -66,36 +122,17 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-    }
 
+        client?.setCallback(null)
+        client = null
 
-    override fun sentence() {
-        if (isSentenced) return
-
-        isSentenced = true
-        Thread {
-            var sentenceDeployed = false
-
-            while (isWorking) {
-
-                if (!sentenceDeployed) {
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (!isDead) kill()
-                        sentenceDeployed = false
-                    }, 500)
-
-                    sentenceDeployed = true
-                }
-            }
-
-            isDead = true
-        }.start()
+        isReady = false
+        isClientBusy = false
     }
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
 
-        if (!isWorking) return
+        if (!isConnected) return
 
         try {
             val message = MqttMessage()
@@ -116,9 +153,9 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         }
     }
 
-    fun subscribe(topic: String, qos: Int = 1) {
+    private fun subscribe(topic: String, qos: Int = 1) {
 
-        if (!isWorking) return
+        if (!isConnected) return
 
         try {
             client?.subscribe(topic, qos, null, object : IMqttActionListener {
@@ -135,7 +172,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     fun unsubscribe(topic: String) {
 
-        if (!isWorking) return
+        if (!isConnected) return
 
         try {
             client?.unsubscribe(topic, null, object : IMqttActionListener {

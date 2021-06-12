@@ -1,28 +1,42 @@
 package com.netDashboard.foreground_service
 
 import android.content.Context
-import com.netDashboard.foreground_service.demons.Mqttd
-import com.netDashboard.main.Dashboards
+import com.netDashboard.dashboard.DashboardSavedList
 
-class DaemonGroupCollection(private val context: Context, rootPath: String) {
+class DaemonGroupCollection(private val context: Context, private val rootPath: String) {
 
-    private val dashboards = Dashboards().get(rootPath)
-    private val mqttDaemons: MutableList<Mqttd> = mutableListOf()
+    private val dashboards = DashboardSavedList().get(rootPath)
+    val daemonsGroups: MutableList<DaemonGroup> = mutableListOf()
 
-    fun run() {
+    init {
+        start()
+    }
 
+    private fun start() {
         for (d in dashboards) {
-
-            if(d.settings.mqttAddress != "tcp://") {
-                val mqttd = Mqttd(context, d.settings.mqttURI)
-                mqttd.run()
-
-                mqttDaemons.add(mqttd)
-            }
+            daemonsGroups.add(DaemonGroup(context, rootPath, d.name))
         }
     }
 
-    fun kill() {
+    fun stop() {
+        for (dg in daemonsGroups) {
+            dg.stop()
+        }
+    }
+
+    fun rerun() {
+        for (dg in daemonsGroups) {
+            dg.rerun()
+        }
+    }
+
+    fun rerun(name: String) {
+        for (dg in daemonsGroups) {
+            if(dg.d.name == name) {
+                dg.rerun()
+                break
+            }
+        }
     }
 
     // mqttd.data.observe(context as LifecycleOwner, { p ->

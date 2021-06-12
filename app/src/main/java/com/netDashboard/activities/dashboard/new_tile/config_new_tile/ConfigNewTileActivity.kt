@@ -8,7 +8,7 @@ import com.google.android.material.slider.Slider
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.databinding.ConfigNewTileActivityBinding
-import com.netDashboard.tile.TileList
+import com.netDashboard.tile.TileTypeList
 import com.netDashboard.tile.Tile
 
 class ConfigNewTileActivity : AppCompatActivity() {
@@ -25,7 +25,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
         setContentView(b.root)
 
         val tileId = intent.getIntExtra("tileId", 0)
-        val tile = TileList().get()[tileId]
+        val tile = TileTypeList().get()[tileId]
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)

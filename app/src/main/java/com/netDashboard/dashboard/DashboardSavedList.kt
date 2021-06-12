@@ -1,9 +1,8 @@
-package com.netDashboard.main
+package com.netDashboard.dashboard
 
-import com.netDashboard.dashboard.Dashboard
 import java.io.File
 
-class Dashboards {
+class DashboardSavedList {
 
     fun get(rootPath: String): MutableList<Dashboard> {
 

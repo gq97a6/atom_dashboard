@@ -1,10 +1,11 @@
-package com.netDashboard.main
+package com.netDashboard.main_settings
 
+import com.netDashboard.folder_tree.FolderTree
 import java.io.*
 
-class Settings(private val rootPath: String) : Serializable {
+class MainSettings(private val rootPath: String) : Serializable {
 
-    var lastDashboardName:String? = null
+    var lastDashboardName: String? = null
 
     private val rootFolder = "$rootPath/app_data/"
     private val fileName = "$rootFolder/settings/"
@@ -26,22 +27,22 @@ class Settings(private val rootPath: String) : Serializable {
         }
     }
 
-    fun getSaved(): Settings {
+    fun getSaved(): MainSettings {
 
-        if (!FolderTree(rootFolder).check()) return Settings(rootPath)
+        if (!FolderTree(rootFolder).check()) return MainSettings(rootPath)
 
         return try {
             val file = FileInputStream(fileName)
             val inStream = ObjectInputStream(file)
 
-            val settings = inStream.readObject() as Settings
+            val settings = inStream.readObject() as MainSettings
 
             inStream.close()
             file.close()
 
             settings
         } catch (e: Exception) {
-            Settings(rootPath)
+            MainSettings(rootPath)
         }
     }
 }

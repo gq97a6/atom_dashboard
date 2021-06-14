@@ -20,14 +20,14 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
         holder.itemView.findViewById<Button>(R.id.tile_button).setOnClickListener {
             holder.itemView.callOnClick()
 
-            if (!editMode()) {
+            if (!isEdit) {
                 text = counter.toString()
 
                 holder.itemView.findViewById<Button>(R.id.tile_button).text = text
 
                 //mqttd?.publish("123", "test_click")
 
-                createNotification(context!!, Random().nextInt().toString())
+                //createNotification(context!!, Random().nextInt().toString())
                 createVibration(context!!, 50)
 
                 setThemeColor(getRandomColor())

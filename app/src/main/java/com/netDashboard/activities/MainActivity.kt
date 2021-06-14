@@ -9,6 +9,8 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.MainActivityBinding
 import com.netDashboard.dashboard.DashboardSavedList
+import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.main_settings.MainSettings
 
 class MainActivity : AppCompatActivity() {
@@ -17,11 +19,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var dashboardAdapter: DashboardAdapter
     private lateinit var settings: MainSettings
 
+    private lateinit var foregroundService: ForegroundService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = MainActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
+        foregroundServiceHandler.bind()
+
+        foregroundServiceHandler.service.observe(this, { s ->
+            if (s != null) {
+                foregroundService = s
+                onServiceReady()
+            }
+        })
 
         settings = MainSettings(filesDir.canonicalPath).getSaved()
 
@@ -55,5 +70,8 @@ class MainActivity : AppCompatActivity() {
         if (dashboardAdapter.itemCount == 0) {
             b.placeholder.visibility = View.VISIBLE
         }
+    }
+
+    private fun onServiceReady() {
     }
 }

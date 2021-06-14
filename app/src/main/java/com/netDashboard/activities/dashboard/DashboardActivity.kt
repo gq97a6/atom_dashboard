@@ -39,10 +39,6 @@ class DashboardActivity : AppCompatActivity() {
         b = DashboardActivityBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        settings = dashboard.settings
-
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()
         foregroundServiceHandler.bind()
@@ -54,6 +50,10 @@ class DashboardActivity : AppCompatActivity() {
             }
         })
 
+        dashboardName = intent.getStringExtra("dashboardName") ?: ""
+        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
+        settings = dashboard.settings
+
         setupRecyclerView()
 
         //Set dashboard tag name
@@ -63,8 +63,9 @@ class DashboardActivity : AppCompatActivity() {
             editOnClick()
         }
 
-        b.set.setOnClickListener {
+        b.duo.setOnClickListener {
             setOnClick()
+            swapOnClick()
         }
 
         b.remove.setOnClickListener {
@@ -79,7 +80,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
+        if (dashboardTilesAdapter.isEdit) {
             b.edit.callOnClick()
         }
 
@@ -87,7 +88,7 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode) {
+        if (dashboardTilesAdapter.isEdit) {
             b.edit.callOnClick()
         } else {
             super.onBackPressed()
@@ -136,56 +137,36 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun editOnClick() {
-        dashboardTilesAdapter.swapMode =
-            !(dashboardTilesAdapter.swapMode || dashboardTilesAdapter.removeMode)
+        dashboardTilesAdapter.isEdit = !dashboardTilesAdapter.isEdit
 
-        dashboardTilesAdapter.removeMode = false
-
-        if (dashboardTilesAdapter.swapMode) {
-            b.ban.text = getString(R.string.swap_mode)
+        if (dashboardTilesAdapter.isEdit) {
 
             b.remove.visibility = View.VISIBLE
             b.add.visibility = View.VISIBLE
-            b.set.setBackgroundResource(R.drawable.button_swap)
-
-            dashboardTilesAdapter.swapModeLock = false
+            b.duo.setBackgroundResource(R.drawable.button_swap)
         } else {
-            b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
 
             b.remove.visibility = View.GONE
             b.add.visibility = View.GONE
+            b.duo.setBackgroundResource(R.drawable.button_more)
+        }
 
-            b.set.setBackgroundResource(R.drawable.button_more)
+        b.ban.text = if (dashboardTilesAdapter.isEdit) {
+            getString(R.string.swap_mode)
+        } else {
+            settings.dashboardTagName.uppercase(Locale.getDefault())
+        }
 
+        if (!dashboardTilesAdapter.isEdit) {
+            b.recyclerView.suppressLayout(false)
             dashboard.tiles = dashboardTilesAdapter.tiles.toList()
         }
-
-        for (t in dashboardTilesAdapter.tiles) {
-            t.editMode(dashboardTilesAdapter.swapMode)
-            t.flag(false)
-            t.lock = false
-        }
-
-        for (i in 0 until dashboardTilesAdapter.itemCount) {
-            b.recyclerView.getChildAt(i)?.animation?.cancel()
-        }
-
-        dashboardTilesAdapter.notifyDataSetChanged()
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun setOnClick() {
-        if (dashboardTilesAdapter.removeMode) {
-            dashboardTilesAdapter.removeMode = false
-            dashboardTilesAdapter.swapMode = true
-            b.ban.text = getString(R.string.swap_mode)
-
-            for (t in dashboardTilesAdapter.tiles) {
-                t.editMode(true)
-                t.flag(false)
-            }
-        } else if (!dashboardTilesAdapter.swapMode) {
+        if (!dashboardTilesAdapter.isEdit) {
             Intent(this, DashboardSettingsActivity::class.java).also {
                 it.putExtra("dashboardName", dashboardName)
 
@@ -193,15 +174,41 @@ class DashboardActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
+    }
 
+    //----------------------------------------------------------------------------------------------
+
+    private fun swapOnClick() {
+        if (dashboardTilesAdapter.isEdit) {
+
+            dashboardTilesAdapter.swapMode = true
+
+            b.ban.text = getString(R.string.swap_mode)
+
+            for (t in dashboardTilesAdapter.tiles) {
+                t.isEdit = true
+                t.flag(false)
+            }
+        }
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun removeOnClick() {
-        if (dashboardTilesAdapter.removeMode) {
-            var toDelete = false
+        if (dashboardTilesAdapter.isEdit && !dashboardTilesAdapter.removeMode) {
 
+            dashboardTilesAdapter.removeMode = true
+
+            b.ban.text = getString(R.string.remove_mode)
+
+            for (t in dashboardTilesAdapter.tiles) {
+                t.flag(false)
+            }
+
+            createToast(this, getString(R.string.dashboard_remove))
+        } else if (dashboardTilesAdapter.removeMode) {
+
+            var toDelete = false
 
             for (t in dashboardTilesAdapter.tiles) {
                 if (t.flag) {
@@ -246,18 +253,7 @@ class DashboardActivity : AppCompatActivity() {
                 snackBarView.translationY = -20.toPx().toFloat()
                 snackbar.show()
             }
-        } else if (dashboardTilesAdapter.swapMode) {
-            dashboardTilesAdapter.swapMode = false
-            dashboardTilesAdapter.removeMode = true
-            b.ban.text = getString(R.string.remove_mode)
-
-            for (t in dashboardTilesAdapter.tiles) {
-                t.flag(false)
-            }
-
-            createToast(this, getString(R.string.dashboard_remove))
         }
-
     }
 
     //----------------------------------------------------------------------------------------------

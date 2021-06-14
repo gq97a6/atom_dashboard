@@ -19,14 +19,55 @@ import kotlin.math.pow
 class TilesAdapter(
     private val context: Context,
     private val spanCount: Int,
-    mode: String = ""
+    private var mode: String = ""
 ) : ListAdapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
 
-    var swapMode = false
-    var swapModeLock = false
+    var isEdit
+        get() = swapMode || removeMode || addMode
+        set(value) {
+            mode = ""
 
-    var removeMode = false
-    private var addMode = false
+            if (value) {
+                mode = "swap"
+                swapLock = false
+            }
+
+            for (t in tiles) {
+                t.isEdit
+                t.flag(false)
+                t.lock = false
+            }
+
+            notifyDataSetChanged()
+        }
+
+    private fun mode(type: String): Boolean {
+        return mode == type
+    }
+
+    private fun mode(type: String, b: Boolean) {
+        if (b) mode = type
+    }
+
+    var swapMode
+        get() = mode == "swap"
+        set(value) {
+            mode("swap", value)
+        }
+
+    var removeMode
+        get() = mode == "remove"
+        set(value) {
+            mode("remove", value)
+        }
+
+    private var addMode
+        get() = mode == "add"
+        set(value) {
+            mode("add", value)
+        }
+
+    private var swapLock = false
 
     lateinit var tiles: MutableList<Tile>
     private lateinit var currentTile: Tile
@@ -35,14 +76,6 @@ class TilesAdapter(
 
     fun getTileOnClickLiveData(): LiveData<Int> {
         return tileOnClick
-    }
-
-    init {
-        when (mode) {
-            "swap" -> swapMode = true
-            "remove" -> removeMode = true
-            "add" -> addMode = true
-        }
     }
 
     override fun submitList(list: MutableList<Tile>?) {
@@ -96,7 +129,7 @@ class TilesAdapter(
 
     private fun swapTiles(position: Int) {
 
-        if (!swapModeLock) {
+        if (!swapLock) {
             if (!tiles[position].lock) {
                 tiles[position].flag(!tiles[position].flag, "swap")
             }
@@ -120,7 +153,7 @@ class TilesAdapter(
                     tiles[position].flag(false)
 
                     if (abs(position - pos + 1) <= max && position in f..l && pos in f..l) {
-                        swapModeLock = true
+                        swapLock = true
 
                         recyclerView.suppressLayout(true)
 
@@ -162,6 +195,8 @@ class TilesAdapter(
                             duration
 
                         Handler(Looper.getMainLooper()).postDelayed({
+                            recyclerView.suppressLayout(false)
+
                             tiles[pos].lock = false
                             tiles[position].lock = false
 
@@ -172,9 +207,7 @@ class TilesAdapter(
                             tiles[pos].holder?.itemView?.elevation = 0f
                             tiles[position].holder?.itemView?.elevation = 0f
 
-                            recyclerView.suppressLayout(false)
-
-                            swapModeLock = false
+                            swapLock = false
                         }, duration + 50)
                     } else {
                         Collections.swap(tiles, position, pos)

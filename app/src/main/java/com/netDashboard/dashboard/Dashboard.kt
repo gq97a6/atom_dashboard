@@ -95,7 +95,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
             this[i].holder = null
             this[i].mqttd = null
 
-            this[i].editMode(false)
+            this[i].isEdit = false
             this[i].flag(false)
         }
 

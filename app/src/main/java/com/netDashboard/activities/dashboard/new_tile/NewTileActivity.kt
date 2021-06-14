@@ -65,7 +65,7 @@ class NewTileActivity : AppCompatActivity() {
 
         val list = TileTypeList().get()
         for ((i, _) in list.withIndex()) {
-            list[i].editMode(true)
+            list[i].isEdit = true
         }
 
         b.recyclerView.layoutManager = layoutManager

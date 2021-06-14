@@ -21,7 +21,9 @@ abstract class Tile(
 
     val id: Long?
 
-    private var editMode = false
+    var isEdit = false
+        set(value) { field = value; onEdit(value)}
+
     var flag = false
         private set
 
@@ -98,14 +100,14 @@ abstract class Tile(
         view.layoutParams = params
 
         holder.itemView.setOnLongClickListener {
-            if (editMode) {
+            if (isEdit) {
                 createToast(context!!, "open settings! ${holder.adapterPosition}")
             }
 
             return@setOnLongClickListener true
         }
 
-        editMode(editMode)
+        onEdit(isEdit)
         flag(flag)
     }
 
@@ -118,14 +120,6 @@ abstract class Tile(
     }
 
     open fun onClick() {}
-
-    open fun editMode(isEnabled: Boolean) {
-        editMode = isEnabled
-    }
-
-    fun editMode(): Boolean {
-        return editMode
-    }
 
     open fun flag(flag: Boolean, type: String = "") {
         this.flag = flag
@@ -151,9 +145,9 @@ abstract class Tile(
         }
     }
 
-    open fun setThemeColor(color: Int) {
-        this.color = color
-    }
+    open fun setThemeColor(color: Int) { this.color = color }
+
+    open fun onEdit(isEdit: Boolean) {}
 
     open fun onLock(isLocked: Boolean) {}
 

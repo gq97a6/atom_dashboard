@@ -23,7 +23,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         val slider = holder.itemView.findViewById<Slider>(R.id.tile_slider)
         val background = holder.itemView.findViewById<View>(R.id.background)
 
-        slider.isEnabled = !editMode()
+        slider.isEnabled = !isEdit
         setRange(from, to, step)
         slider.value = value
 
@@ -83,15 +83,15 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     }
 
     override fun onClick() {
-        if (!editMode()) {
+        if (!isEdit) {
             setThemeColor(getRandomColor())
         }
     }
 
-    override fun editMode(isEnabled: Boolean) {
-        super.editMode(isEnabled)
+    override fun onEdit(isEdit: Boolean) {
+        super.onEdit(isEdit)
 
-        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !editMode()
+        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !isEdit
     }
 
     override fun setThemeColor(color: Int) {

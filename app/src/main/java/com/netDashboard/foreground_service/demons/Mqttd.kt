@@ -10,8 +10,10 @@ import org.eclipse.paho.client.mqttv3.*
 
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
-    private val isConnected
+    val isConnected
         get() = client?.isConnected ?: false
+
+    var onConnect = MutableLiveData(false)
 
     private var isReady = false
         get() = client != null && field
@@ -83,6 +85,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         try {
             client?.connect(options, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    onConnect.postValue(true)
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -91,13 +94,6 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         } catch (e: MqttException) {
             e.printStackTrace()
         }
-
-        //TMP
-        Thread {
-            while (!isConnected) continue
-            subscribe("abc")
-        }.start()
-        //TMP
 
         isReady = true
         isClientBusy = false
@@ -153,7 +149,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         }
     }
 
-    private fun subscribe(topic: String, qos: Int = 1) {
+    fun subscribe(topic: String, qos: Int = 1) {
 
         if (!isConnected) return
 

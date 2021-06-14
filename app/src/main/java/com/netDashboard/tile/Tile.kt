@@ -22,7 +22,9 @@ abstract class Tile(
     val id: Long?
 
     var isEdit = false
-        set(value) { field = value; onEdit(value)}
+        set(value) {
+            field = value; onEdit(value)
+        }
 
     var flag = false
         private set
@@ -30,7 +32,7 @@ abstract class Tile(
     var lock = false
         set(value) {
             field = value
-            
+
             onLock(value)
 
             val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
@@ -58,13 +60,12 @@ abstract class Tile(
     private var spanCount = 1
 
     //MQTT
-    var mqttSubTopic = ""
-    var mqttPubTopic = ""
+    var mqttSubTopics: MutableList<String> = mutableListOf("abc") //TMP ("abc")
+    var mqttPubTopics: MutableList<String> = mutableListOf()
     var mqttPubConfirmation = false
-    var mqttSubAnswer = false
     var mqttQoS = 0
-    var mqttPayloadJSON = ""
-    var mqttOutputJSON = ""
+    var mqttPayloadJSON = false
+    var mqttOutputJSON = false
 
     //Bluetooth
     var bltPattern = ""
@@ -145,7 +146,9 @@ abstract class Tile(
         }
     }
 
-    open fun setThemeColor(color: Int) { this.color = color }
+    open fun setThemeColor(color: Int) {
+        this.color = color
+    }
 
     open fun onEdit(isEdit: Boolean) {}
 

@@ -21,7 +21,6 @@ import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toPx
 import java.util.*
 
-
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: DashboardActivityBinding
 
@@ -140,26 +139,22 @@ class DashboardActivity : AppCompatActivity() {
         dashboardTilesAdapter.isEdit = !dashboardTilesAdapter.isEdit
 
         if (dashboardTilesAdapter.isEdit) {
-
             b.remove.visibility = View.VISIBLE
             b.add.visibility = View.VISIBLE
             b.duo.setBackgroundResource(R.drawable.button_swap)
         } else {
-
             b.remove.visibility = View.GONE
             b.add.visibility = View.GONE
             b.duo.setBackgroundResource(R.drawable.button_more)
         }
 
-        b.ban.text = if (dashboardTilesAdapter.isEdit) {
-            getString(R.string.swap_mode)
-        } else {
-            settings.dashboardTagName.uppercase(Locale.getDefault())
-        }
-
         if (!dashboardTilesAdapter.isEdit) {
+            b.duo.alpha = 1f
             b.recyclerView.suppressLayout(false)
+            b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
             dashboard.tiles = dashboardTilesAdapter.tiles.toList()
+        } else {
+            swapOnClick()
         }
     }
 
@@ -181,6 +176,9 @@ class DashboardActivity : AppCompatActivity() {
     private fun swapOnClick() {
         if (dashboardTilesAdapter.isEdit) {
 
+            b.duo.alpha = 1f
+            b.remove.alpha = 0.4f
+
             dashboardTilesAdapter.swapMode = true
 
             b.ban.text = getString(R.string.swap_mode)
@@ -196,6 +194,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun removeOnClick() {
         if (dashboardTilesAdapter.isEdit && !dashboardTilesAdapter.removeMode) {
+
+            b.duo.alpha = 0.4f
+            b.remove.alpha = 1f
 
             dashboardTilesAdapter.removeMode = true
 

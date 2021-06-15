@@ -35,6 +35,12 @@ class DaemonGroup(private val context: Context, rootPath: String, val name: Stri
                     for (st in mqttdSubTopics) mqttd?.subscribe(st)
                 }
             })
+
+            //mqttd?.data?.observe(context as LifecycleOwner, { p ->
+            //    if (p.first != null && p.second != null) {
+            //
+            //    }
+            //})
         }
 
         if (d.settings.bluetoothEnabled) bluetoothd = Bluetoothd()

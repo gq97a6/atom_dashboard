@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
+import com.netDashboard.createNotification
 import com.netDashboard.createVibration
 import java.io.Serializable
 
@@ -50,6 +51,15 @@ class ForegroundService : Serializable, LifecycleService() {
 
         if (!isRunning) {
             daemonGroupCollection = DaemonGroupCollection(this, filesDir.canonicalPath)
+
+            for (g in daemonGroupCollection.daemonsGroups) {
+                g.mqttd?.data?.observe(this, { p ->
+                    if (p.first != null && p.second != null) {
+                        alarm.on(2000)
+                        createNotification(this, "${g.name}: ${p.first}", p.second.toString(), true)
+                    }
+                })
+            }
 
             isRunning = true
         }
@@ -127,7 +137,7 @@ class ForegroundService : Serializable, LifecycleService() {
 
             Handler(Looper.getMainLooper()).postDelayed({
                 loop()
-            }, 600)
+            }, 500)
         }
 
         fun on(t: Long) {

@@ -8,7 +8,6 @@
                 android:height="24dp" />
         </shape>
     </item>
-
     <item
         android:bottom="7dp"
         android:left="10dp"

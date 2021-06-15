@@ -31,7 +31,7 @@ fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toIn
 fun Snackbar.margins(): Snackbar {
     val params = this.view.layoutParams as android.widget.FrameLayout.LayoutParams
 
-    params.setMargins(30.toPx(), 30.toPx(), 30.toPx(), 30.toPx())
+    params.setMargins(60.toPx(), 60.toPx(), 60.toPx(), 60.toPx())
 
     this.view.layoutParams = params
 
@@ -61,14 +61,11 @@ fun Int.alpha(a: Int): Int {
     return Color.argb(alpha, this.red, this.green, this.blue)
 }
 
-fun createNotification(context: Context, id: Int) {
-    createNotification(context, "Title", "Text", id)
-}
-
 fun createNotification(
     context: Context,
     title: String = "Title",
     text: String = "Text",
+    isSilent: Boolean = false,
     id: Int = Random().nextInt()
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -82,7 +79,8 @@ fun createNotification(
         .setSmallIcon(R.drawable.icon_main)
         .setPriority(NotificationCompat.PRIORITY_MIN)
         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-    //.setSilent(true)
+
+    if (isSilent) notification.setSilent(true)
 
     with(NotificationManagerCompat.from(context)) {
         notify(id, notification.build())

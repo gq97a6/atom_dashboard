@@ -10,7 +10,7 @@ import org.eclipse.paho.client.mqttv3.*
 
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
-    val isConnected
+    private val isConnected
         get() = client?.isConnected ?: false
 
     var onConnect = MutableLiveData(false)

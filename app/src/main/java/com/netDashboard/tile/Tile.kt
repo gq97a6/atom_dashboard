@@ -120,8 +120,6 @@ abstract class Tile(
         return oldItem.id == newItem.id
     }
 
-    open fun onClick() {}
-
     open fun flag(flag: Boolean, type: String = "") {
         this.flag = flag
 
@@ -149,6 +147,10 @@ abstract class Tile(
     open fun setThemeColor(color: Int) {
         this.color = color
     }
+
+    open fun onClick() {}
+
+    open fun onLongClick() {}
 
     open fun onEdit(isEdit: Boolean) {}
 

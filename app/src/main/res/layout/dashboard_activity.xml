@@ -1,11 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="bottom"
+    android:gravity="top"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -13,14 +12,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/edit"
+            android:id="@+id/touch"
             style="@style/defaultButton"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
-            android:background="@drawable/button_edit"/>
+            android:background="@drawable/button_touch" />
 
         <TextView
-            android:id="@+id/ban"
+            android:id="@+id/tag_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
@@ -30,24 +29,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/add"
-            style="@style/defaultButton"
-            android:layout_width="52.8dp"
-            android:layout_height="49.2dp"
-            android:background="@drawable/button_add"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/remove"
-            style="@style/defaultButton"
-            android:layout_width="52.8dp"
-            android:layout_height="49.2dp"
-            android:background="@drawable/button_remove"
-            android:textColor="#FFFFFF"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/duo"
+            android:id="@+id/settings"
             style="@style/defaultButton"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
@@ -70,8 +52,58 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/white"
-        android:padding="@dimen/tile_padding" />
+        android:paddingLeft="@dimen/tile_padding"
+        android:paddingTop="@dimen/tile_padding"
+        android:paddingRight="@dimen/tile_padding" />
 
+    <LinearLayout
+        android:id="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="2dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/add"
+            style="@style/defaultButton"
+            android:layout_width="52.8dp"
+            android:layout_height="49.2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_add" />
+
+        <Button
+            android:id="@+id/remove"
+            style="@style/defaultButton"
+            android:layout_width="52.8dp"
+            android:layout_height="49.2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_remove" />
+
+        <Button
+            android:id="@+id/swap"
+            style="@style/defaultButton"
+            android:layout_width="52.8dp"
+            android:layout_height="49.2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_swap" />
+
+        <Button
+            android:id="@+id/edit"
+            style="@style/defaultButton"
+            android:layout_width="52.8dp"
+            android:layout_height="49.2dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_edit" />
+
+    </LinearLayout>
 </LinearLayout>

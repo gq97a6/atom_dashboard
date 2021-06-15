@@ -16,6 +16,7 @@
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
+        <activity android:name=".activities.dashboard.edit_tile.EditTileActivity" />
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,6 +1,8 @@
 package com.netDashboard.tile
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.View
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.netDashboard.activities.dashboard.edit_tile.EditTileActivity
+import com.netDashboard.createNotification
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.pow
@@ -19,11 +23,12 @@ import kotlin.math.pow
 class TilesAdapter(
     private val context: Context,
     private val spanCount: Int,
-    private var mode: String = ""
+    private var mode: String = "",
+    private val dashboardName: String = ""
 ) : ListAdapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
 
     var isEdit
-        get() = swapMode || removeMode || addMode
+        get() = swapMode || removeMode || addMode || editMode
         set(value) {
             mode = ""
 
@@ -33,7 +38,7 @@ class TilesAdapter(
             }
 
             for (t in tiles) {
-                t.isEdit
+                t.isEdit = value
                 t.flag(false)
                 t.lock = false
             }
@@ -46,7 +51,15 @@ class TilesAdapter(
     }
 
     private fun mode(type: String, b: Boolean) {
-        if (b) mode = type
+        if (b) {
+            mode = type
+
+            for (t in tiles) {
+                t.flag(false)
+                t.lock = false
+            }
+        }
+
     }
 
     var swapMode
@@ -59,6 +72,12 @@ class TilesAdapter(
         get() = mode == "remove"
         set(value) {
             mode("remove", value)
+        }
+
+    var editMode
+        get() = mode == "edit"
+        set(value) {
+            mode("edit", value)
         }
 
     private var addMode
@@ -117,6 +136,15 @@ class TilesAdapter(
                 removeMode -> {
                     removeTile(position)
                 }
+                editMode -> {
+                    Intent(context, EditTileActivity::class.java).also {
+                        it.putExtra("tileId", 12)
+                        it.putExtra("dashboardName", dashboardName)
+                        (context as Activity).overridePendingTransition(0, 0)
+                        context.startActivity(it)
+                        context.finish()
+                    }
+                }
                 addMode -> {
                     tileOnClick.postValue(position)
                 }
@@ -124,6 +152,11 @@ class TilesAdapter(
                     tiles[position].onClick()
                 }
             }
+        }
+
+        holder.itemView.setOnLongClickListener {
+            createNotification(context, "longClick", "performed")
+            return@setOnLongClickListener true
         }
     }
 

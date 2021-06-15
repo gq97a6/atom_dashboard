@@ -11,11 +11,11 @@
 
     <item
         android:bottom="7dp"
-        android:left="10dp"
+        android:left="20dp"
         android:right="10dp"
         android:top="10dp">
         <ripple android:color="?colorSecondary">
-            <item android:drawable="@drawable/icon_edit" />
+            <item android:drawable="@drawable/icon_touch" />
         </ripple>
     </item>
 </layer-list>

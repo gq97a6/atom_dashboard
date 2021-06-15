@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -15,7 +16,6 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.DashboardActivityBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.margins
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toPx
@@ -28,7 +28,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var dashboard: Dashboard
     private lateinit var settings: Dashboard.Settings
 
-    lateinit var dashboardTilesAdapter: TilesAdapter
+    lateinit var adapter: TilesAdapter
 
     private lateinit var foregroundService: ForegroundService
 
@@ -56,14 +56,21 @@ class DashboardActivity : AppCompatActivity() {
         setupRecyclerView()
 
         //Set dashboard tag name
-        b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
+        b.tagName.text = settings.dashboardTagName.uppercase(Locale.getDefault())
+
+        b.touch.setOnClickListener {
+            touchOnClick()
+        }
+
+        b.settings.setOnClickListener {
+            settingsOnClick()
+        }
 
         b.edit.setOnClickListener {
             editOnClick()
         }
 
-        b.duo.setOnClickListener {
-            setOnClick()
+        b.swap.setOnClickListener {
             swapOnClick()
         }
 
@@ -79,16 +86,16 @@ class DashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (dashboardTilesAdapter.isEdit) {
+        if (adapter.isEdit) {
             b.edit.callOnClick()
         }
 
-        dashboardTilesAdapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
-        if (dashboardTilesAdapter.isEdit) {
-            b.edit.callOnClick()
+        if (adapter.isEdit) {
+            b.touch.callOnClick()
         } else {
             super.onBackPressed()
         }
@@ -96,7 +103,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onPause() {
 
-        dashboard.tiles = dashboardTilesAdapter.tiles.toList()
+        dashboard.tiles = adapter.tiles.toList()
 
         super.onPause()
     }
@@ -106,17 +113,17 @@ class DashboardActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val spanCount = settings.spanCount
 
-        dashboardTilesAdapter = TilesAdapter(this, spanCount)
-        dashboardTilesAdapter.setHasStableIds(true)
+        adapter = TilesAdapter(this, spanCount, "", dashboardName)
+        adapter.setHasStableIds(true)
 
-        b.recyclerView.adapter = dashboardTilesAdapter
+        b.recyclerView.adapter = adapter
         b.recyclerView.setItemViewCacheSize(20)
 
         val layoutManager = TileGridLayoutManager(this, spanCount)
 
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                val t = dashboardTilesAdapter.tiles[position]
+                val t = adapter.tiles[position]
                 return when {
                     t.height != 1 || t.width > spanCount -> spanCount
                     else -> t.width
@@ -126,92 +133,89 @@ class DashboardActivity : AppCompatActivity() {
 
         b.recyclerView.layoutManager = layoutManager
 
-        dashboardTilesAdapter.submitList(dashboard.tiles.toMutableList())
+        adapter.submitList(dashboard.tiles.toMutableList())
 
-        if (dashboardTilesAdapter.itemCount == 0) {
+        if (adapter.itemCount == 0) {
             b.placeholder.visibility = View.VISIBLE
         }
     }
 
     //----------------------------------------------------------------------------------------------
 
-    private fun editOnClick() {
-        dashboardTilesAdapter.isEdit = !dashboardTilesAdapter.isEdit
+    private fun touchOnClick() {
+        adapter.isEdit = !adapter.isEdit
 
-        if (dashboardTilesAdapter.isEdit) {
-            b.remove.visibility = View.VISIBLE
-            b.add.visibility = View.VISIBLE
-            b.duo.setBackgroundResource(R.drawable.button_swap)
+        if (!adapter.isEdit) {
+            b.recyclerView.suppressLayout(false)
+            dashboard.tiles = adapter.tiles.toList()
         } else {
-            b.remove.visibility = View.GONE
-            b.add.visibility = View.GONE
-            b.duo.setBackgroundResource(R.drawable.button_more)
+            highlightOnly(b.swap)
+
+            adapter.swapMode = true
+
+            for (t in adapter.tiles) {
+                t.isEdit = true
+                t.flag(false)
+            }
         }
 
-        if (!dashboardTilesAdapter.isEdit) {
-            b.duo.alpha = 1f
-            b.recyclerView.suppressLayout(false)
-            b.ban.text = settings.dashboardTagName.uppercase(Locale.getDefault())
-            dashboard.tiles = dashboardTilesAdapter.tiles.toList()
+        b.bar.visibility = if (adapter.isEdit) {
+            View.VISIBLE
         } else {
-            swapOnClick()
+            View.GONE
         }
     }
 
     //----------------------------------------------------------------------------------------------
 
-    private fun setOnClick() {
-        if (!dashboardTilesAdapter.isEdit) {
-            Intent(this, DashboardSettingsActivity::class.java).also {
-                it.putExtra("dashboardName", dashboardName)
+    private fun settingsOnClick() {
+        Intent(this, DashboardSettingsActivity::class.java).also {
+            it.putExtra("dashboardName", dashboardName)
 
-                finish()
-                startActivity(it)
-            }
+            finish()
+            startActivity(it)
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun editOnClick() {
+        if (!adapter.isEdit) return
+
+        highlightOnly(b.edit)
+        createToast(this, getString(R.string.dashboard_edit), 1)
+
+        adapter.editMode = true
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
-        if (dashboardTilesAdapter.isEdit) {
+        if (!adapter.isEdit) return
 
-            b.duo.alpha = 1f
-            b.remove.alpha = 0.4f
+        highlightOnly(b.swap)
+        createToast(this, getString(R.string.dashboard_swap), 1)
 
-            dashboardTilesAdapter.swapMode = true
-
-            b.ban.text = getString(R.string.swap_mode)
-
-            for (t in dashboardTilesAdapter.tiles) {
-                t.isEdit = true
-                t.flag(false)
-            }
-        }
+        adapter.swapMode = true
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun removeOnClick() {
-        if (dashboardTilesAdapter.isEdit && !dashboardTilesAdapter.removeMode) {
+        if (!adapter.isEdit) return
 
-            b.duo.alpha = 0.4f
-            b.remove.alpha = 1f
+        highlightOnly(b.remove)
 
-            dashboardTilesAdapter.removeMode = true
+        if (!adapter.removeMode) {
 
-            b.ban.text = getString(R.string.remove_mode)
-
-            for (t in dashboardTilesAdapter.tiles) {
-                t.flag(false)
-            }
+            adapter.removeMode = true
 
             createToast(this, getString(R.string.dashboard_remove))
-        } else if (dashboardTilesAdapter.removeMode) {
+        } else {
 
             var toDelete = false
 
-            for (t in dashboardTilesAdapter.tiles) {
+            for (t in adapter.tiles) {
                 if (t.flag) {
                     toDelete = true
                     break
@@ -227,21 +231,21 @@ class DashboardActivity : AppCompatActivity() {
                     b.root,
                     getString(R.string.snackbar_confirmation),
                     Snackbar.LENGTH_LONG
-                ).margins().setAction("YES") {
+                ).setAction("YES") {
 
-                    for ((i, t) in dashboardTilesAdapter.tiles.withIndex()) {
+                    for ((i, t) in adapter.tiles.withIndex()) {
 
 
                         if (t.flag) {
-                            dashboardTilesAdapter.tiles.removeAt(i)
+                            adapter.tiles.removeAt(i)
 
-                            dashboardTilesAdapter.notifyItemRemoved(i)
-                            dashboardTilesAdapter.notifyItemRangeChanged(
+                            adapter.notifyItemRemoved(i)
+                            adapter.notifyItemRangeChanged(
                                 i,
-                                dashboardTilesAdapter.itemCount - i
+                                adapter.itemCount - i
                             )
 
-                            if (dashboardTilesAdapter.itemCount == 0) {
+                            if (adapter.itemCount == 0) {
                                 b.placeholder.visibility = View.VISIBLE
                             }
 
@@ -251,7 +255,7 @@ class DashboardActivity : AppCompatActivity() {
                 }
 
                 val snackBarView = snackbar.view
-                snackBarView.translationY = -20.toPx().toFloat()
+                snackBarView.translationY = -60.toPx().toFloat()
                 snackbar.show()
             }
         }
@@ -269,6 +273,13 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     //----------------------------------------------------------------------------------------------
+
+    private fun highlightOnly(button: Button) {
+        b.remove.alpha = 0.4f
+        b.swap.alpha = 0.4f
+        b.edit.alpha = 0.4f
+        button.alpha = 1f
+    }
 
     private fun onServiceReady() {
         for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {

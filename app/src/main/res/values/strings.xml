@@ -36,12 +36,12 @@
     <string name="config_new_tile_slider_width">Width:</string>
     <string name="config_new_tile_button_add">Add</string>
 
-    <string name="dashboard_remove">Mark tile, click again.</string>
+    <string name="dashboard_edit">Click to edit.</string>
+    <string name="dashboard_swap">Mark to swap.</string>
+    <string name="dashboard_remove">Mark, click again.</string>
 
     <string name="dashboard_settings_banner">Settings</string>
     <string name="dashboard_settings_slider_span">Row span: </string>
-
-    <string name="dashboard_settings_span_warning">You have wider tiles. Apply to shrink them.</string>
 
     <string name="dashboard_settings_button_apply">Apply</string>
     <string name="empty_dashboard">Add new tiles first. \n Use left icon to access edit mode.</string>

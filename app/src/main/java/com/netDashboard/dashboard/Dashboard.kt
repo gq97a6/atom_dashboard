@@ -48,7 +48,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
     fun getItemViewType(context: Context): Int {
         this.context = context
 
-        return R.layout.dashboard
+        return R.layout.dashboard_list_element
     }
 
     open fun onCreateViewHolder(
@@ -57,9 +57,9 @@ open class Dashboard(private val rootPath: String, val name: String) :
     ): DashboardAdapter.DashboardsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
-        view.findViewById<Button>(R.id.dashboard_button).text = name.uppercase(Locale.getDefault())
+        view.findViewById<Button>(R.id.dle_button).text = name.uppercase(Locale.getDefault())
 
-        view.findViewById<Button>(R.id.dashboard_button).setOnClickListener {
+        view.findViewById<Button>(R.id.dle_button).setOnClickListener {
 
             Intent(context, DashboardActivity::class.java).also {
                 val settings = MainSettings(rootPath).getSaved()

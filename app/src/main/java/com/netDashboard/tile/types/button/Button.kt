@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 class ButtonTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.button_tile, width, height) {
+    Tile(name, color, R.layout.tile_button, width, height) {
 
     var text = "Default value"
     private var counter = 0
@@ -17,13 +17,13 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<Button>(R.id.tile_button).setOnClickListener {
+        holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {
             holder.itemView.callOnClick()
 
             if (!isEdit) {
                 text = counter.toString()
 
-                holder.itemView.findViewById<Button>(R.id.tile_button).text = text
+                holder.itemView.findViewById<Button>(R.id.tb_button).text = text
 
                 //mqttd?.publish("123", "test_click")
 
@@ -34,15 +34,15 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
             }
         }
 
-        holder.itemView.findViewById<Button>(R.id.tile_button).setOnLongClickListener {
+        holder.itemView.findViewById<Button>(R.id.tb_button).setOnLongClickListener {
             counter = 0
 
-            holder.itemView.findViewById<Button>(R.id.tile_button).callOnClick()
+            holder.itemView.findViewById<Button>(R.id.tb_button).callOnClick()
 
             return@setOnLongClickListener true
         }
 
-        holder.itemView.findViewById<Button>(R.id.tile_button).text = text
+        holder.itemView.findViewById<Button>(R.id.tb_button).text = text
 
         setThemeColor(color)
     }
@@ -50,7 +50,7 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     override fun setThemeColor(color: Int) {
         super.setThemeColor(color)
 
-        val button = holder?.itemView?.findViewById<Button>(R.id.tile_button)
+        val button = holder?.itemView?.findViewById<Button>(R.id.tb_button)
 
         button?.backgroundTintList =
             ColorStateList.valueOf(
@@ -71,12 +71,12 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
         counter += message.toString().toIntOrNull() ?: 1
         text = counter.toString()
 
-        holder?.itemView?.findViewById<Button>(R.id.tile_button)?.text = text
+        holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = text
     }
 
     override fun onLock(isLocked: Boolean) {
         super.onLock(isLocked)
 
-        holder?.itemView?.findViewById<Button>(R.id.tile_button)?.isEnabled = !isLocked
+        holder?.itemView?.findViewById<Button>(R.id.tb_button)?.isEnabled = !isLocked
     }
 }

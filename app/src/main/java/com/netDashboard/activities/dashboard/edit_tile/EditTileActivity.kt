@@ -5,10 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.databinding.EditTileActivityBinding
+import com.netDashboard.databinding.ActivityEditTileBinding
 
 class EditTileActivity : AppCompatActivity() {
-    private lateinit var b: EditTileActivityBinding
+    private lateinit var b: ActivityEditTileBinding
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
@@ -17,7 +17,7 @@ class EditTileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = EditTileActivityBinding.inflate(layoutInflater)
+        b = ActivityEditTileBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""

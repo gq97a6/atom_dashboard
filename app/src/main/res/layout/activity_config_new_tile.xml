@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="@dimen/layout_padding"
     android:paddingLeft="@dimen/layout_padding"
+    android:paddingTop="@dimen/layout_padding_top"
     android:paddingRight="@dimen/layout_padding"
     tools:context=".activities.dashboard.new_tile.NewTileActivity">
 
@@ -30,15 +30,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:text="@string/config_new_tile_banner1"
-            android:textColor="@color/black"
+            android:textColor="@color/dark_gray"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tileType"
+            android:id="@+id/cnt_tile_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="test"
             android:textColor="@color/gray"
             android:textSize="20sp" />
 
@@ -46,7 +47,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,14 +55,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/warning"
+                android:id="@+id/cnt_warning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:text="@string/config_new_tile_height_warning"
-                android:textColor="#555555"
+                android:textColor="@color/gray"
                 android:textSize="15sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -76,11 +77,22 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/config_new_tile_slider_width"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_gray"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/cnt_width_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
                 <com.google.android.material.slider.Slider
-                    android:id="@+id/width"
+                    android:id="@+id/cnt_width"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -109,11 +121,22 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/config_new_tile_slider_height"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_gray"
                     android:textSize="15sp" />
 
+                <TextView
+                    android:id="@+id/cnt_height_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
                 <com.google.android.material.slider.Slider
-                    android:id="@+id/height"
+                    android:id="@+id/cnt_height"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -130,15 +153,15 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/push"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="@string/config_new_tile_button_add" />
-
         </LinearLayout>
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/cnt_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/config_new_tile_button_add" />
 
 </LinearLayout>

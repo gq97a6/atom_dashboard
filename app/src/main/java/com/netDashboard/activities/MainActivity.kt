@@ -7,14 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.DashboardAdapter
-import com.netDashboard.databinding.MainActivityBinding
 import com.netDashboard.dashboard.DashboardSavedList
+import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.main_settings.MainSettings
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var b: MainActivityBinding
+    private lateinit var b: ActivityMainBinding
 
     private lateinit var dashboardAdapter: DashboardAdapter
     private lateinit var settings: MainSettings
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = MainActivityBinding.inflate(layoutInflater)
+        b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
@@ -57,18 +57,18 @@ class MainActivity : AppCompatActivity() {
         dashboardAdapter = DashboardAdapter(this)
         dashboardAdapter.setHasStableIds(true)
 
-        b.recyclerView.adapter = dashboardAdapter
-        b.recyclerView.setItemViewCacheSize(20)
+        b.mRecyclerView.adapter = dashboardAdapter
+        b.mRecyclerView.setItemViewCacheSize(20)
 
         val layoutManager = GridLayoutManager(this, 1)
 
-        b.recyclerView.layoutManager = layoutManager
+        b.mRecyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
 
         dashboardAdapter.submitList(DashboardSavedList().get(filesDir.canonicalPath))
 
         if (dashboardAdapter.itemCount == 0) {
-            b.placeholder.visibility = View.VISIBLE
+            b.mPlaceholder.visibility = View.VISIBLE
         }
     }
 

@@ -13,7 +13,7 @@ import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.settings.DashboardSettingsActivity
 import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.databinding.DashboardActivityBinding
+import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.tile.TileGridLayoutManager
@@ -22,7 +22,7 @@ import com.netDashboard.toPx
 import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
-    private lateinit var b: DashboardActivityBinding
+    private lateinit var b: ActivityDashboardBinding
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
@@ -35,7 +35,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = DashboardActivityBinding.inflate(layoutInflater)
+        b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
@@ -56,29 +56,29 @@ class DashboardActivity : AppCompatActivity() {
         setupRecyclerView()
 
         //Set dashboard tag name
-        b.tagName.text = settings.dashboardTagName.uppercase(Locale.getDefault())
+        b.dTagName.text = settings.dashboardTagName.uppercase(Locale.getDefault())
 
-        b.touch.setOnClickListener {
+        b.dTouch.setOnClickListener {
             touchOnClick()
         }
 
-        b.settings.setOnClickListener {
+        b.dSettings.setOnClickListener {
             settingsOnClick()
         }
 
-        b.edit.setOnClickListener {
+        b.dEdit.setOnClickListener {
             editOnClick()
         }
 
-        b.swap.setOnClickListener {
+        b.dSwap.setOnClickListener {
             swapOnClick()
         }
 
-        b.remove.setOnClickListener {
+        b.dRemove.setOnClickListener {
             removeOnClick()
         }
 
-        b.add.setOnClickListener {
+        b.dAdd.setOnClickListener {
             addOnClick()
         }
     }
@@ -87,7 +87,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onResume()
 
         if (adapter.isEdit) {
-            b.edit.callOnClick()
+            b.dEdit.callOnClick()
         }
 
         adapter.notifyDataSetChanged()
@@ -95,7 +95,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (adapter.isEdit) {
-            b.touch.callOnClick()
+            b.dTouch.callOnClick()
         } else {
             super.onBackPressed()
         }
@@ -116,8 +116,8 @@ class DashboardActivity : AppCompatActivity() {
         adapter = TilesAdapter(this, spanCount, "", dashboardName)
         adapter.setHasStableIds(true)
 
-        b.recyclerView.adapter = adapter
-        b.recyclerView.setItemViewCacheSize(20)
+        b.dRecyclerView.adapter = adapter
+        b.dRecyclerView.setItemViewCacheSize(20)
 
         val layoutManager = TileGridLayoutManager(this, spanCount)
 
@@ -131,12 +131,12 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        b.recyclerView.layoutManager = layoutManager
+        b.dRecyclerView.layoutManager = layoutManager
 
         adapter.submitList(dashboard.tiles.toMutableList())
 
         if (adapter.itemCount == 0) {
-            b.placeholder.visibility = View.VISIBLE
+            b.dPlaceholder.visibility = View.VISIBLE
         }
     }
 
@@ -146,10 +146,10 @@ class DashboardActivity : AppCompatActivity() {
         adapter.isEdit = !adapter.isEdit
 
         if (!adapter.isEdit) {
-            b.recyclerView.suppressLayout(false)
+            b.dRecyclerView.suppressLayout(false)
             dashboard.tiles = adapter.tiles.toList()
         } else {
-            highlightOnly(b.swap)
+            highlightOnly(b.dSwap)
 
             adapter.swapMode = true
 
@@ -159,7 +159,7 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        b.bar.visibility = if (adapter.isEdit) {
+        b.dBar.visibility = if (adapter.isEdit) {
             View.VISIBLE
         } else {
             View.GONE
@@ -182,7 +182,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun editOnClick() {
         if (!adapter.isEdit) return
 
-        highlightOnly(b.edit)
+        highlightOnly(b.dEdit)
         createToast(this, getString(R.string.dashboard_edit), 1)
 
         adapter.editMode = true
@@ -193,7 +193,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun swapOnClick() {
         if (!adapter.isEdit) return
 
-        highlightOnly(b.swap)
+        highlightOnly(b.dSwap)
         createToast(this, getString(R.string.dashboard_swap), 1)
 
         adapter.swapMode = true
@@ -204,7 +204,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun removeOnClick() {
         if (!adapter.isEdit) return
 
-        highlightOnly(b.remove)
+        highlightOnly(b.dRemove)
 
         if (!adapter.removeMode) {
 
@@ -246,7 +246,7 @@ class DashboardActivity : AppCompatActivity() {
                             )
 
                             if (adapter.itemCount == 0) {
-                                b.placeholder.visibility = View.VISIBLE
+                                b.dPlaceholder.visibility = View.VISIBLE
                             }
 
                             break
@@ -275,9 +275,9 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun highlightOnly(button: Button) {
-        b.remove.alpha = 0.4f
-        b.swap.alpha = 0.4f
-        b.edit.alpha = 0.4f
+        b.dRemove.alpha = 0.4f
+        b.dSwap.alpha = 0.4f
+        b.dEdit.alpha = 0.4f
         button.alpha = 1f
     }
 

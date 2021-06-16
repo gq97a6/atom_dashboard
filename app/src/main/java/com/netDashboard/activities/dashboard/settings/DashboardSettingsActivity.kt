@@ -8,12 +8,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.databinding.DashboardSettingsActivityBinding
+import com.netDashboard.databinding.ActivityDashboardSettingsBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 
 class DashboardSettingsActivity : AppCompatActivity() {
-    private lateinit var b: DashboardSettingsActivityBinding
+    private lateinit var b: ActivityDashboardSettingsBinding
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
@@ -24,7 +24,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = DashboardSettingsActivityBinding.inflate(layoutInflater)
+        b = ActivityDashboardSettingsBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
@@ -42,26 +42,26 @@ class DashboardSettingsActivity : AppCompatActivity() {
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
-        b.span.value = settings.spanCount.toFloat()
-        b.span.callOnClick()
-        b.spanValue.text = settings.spanCount.toString()
+        b.dsSpan.value = settings.spanCount.toFloat()
+        b.dsSpan.callOnClick()
+        b.dsSpanValue.text = settings.spanCount.toString()
 
-        b.mqttSwitch.isChecked = settings.mqttEnabled
-        mqttSwitchHandle(b.mqttSwitch.isChecked)
+        b.dsMqttSwitch.isChecked = settings.mqttEnabled
+        mqttSwitchHandle(b.dsMqttSwitch.isChecked)
 
-        b.mqttAddress.setText(settings.mqttAddress)
-        b.mqttPort.setText(settings.mqttPort.toString())
+        b.dsMqttAddress.setText(settings.mqttAddress)
+        b.dsMqttPort.setText(settings.mqttPort.toString())
 
-        b.span.addOnChangeListener { _, value, _ ->
-            b.spanValue.text = value.toInt().toString()
+        b.dsSpan.addOnChangeListener { _, value, _ ->
+            b.dsSpanValue.text = value.toInt().toString()
             settings.spanCount = value.toInt()
         }
 
-        b.mqttSwitch.setOnCheckedChangeListener { _, state ->
+        b.dsMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchHandle(state)
         }
 
-        b.mqttAddress.addTextChangedListener(object : TextWatcher {
+        b.dsMqttAddress.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(cs: Editable) {
             }
@@ -74,7 +74,7 @@ class DashboardSettingsActivity : AppCompatActivity() {
             }
         })
 
-        b.mqttPort.addTextChangedListener(object : TextWatcher {
+        b.dsMqttPort.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
             }
@@ -120,15 +120,15 @@ class DashboardSettingsActivity : AppCompatActivity() {
 
     private fun mqttSwitchHandle(state: Boolean) {
         if (state) {
-            b.mqttAddress.visibility = View.VISIBLE
-            b.mqttPort.visibility = View.VISIBLE
-            b.mqttAddressText.visibility = View.VISIBLE
-            b.mqttPortText.visibility = View.VISIBLE
+            b.dsMqttAddress.visibility = View.VISIBLE
+            b.dsMqttPort.visibility = View.VISIBLE
+            b.dsMqttAddressText.visibility = View.VISIBLE
+            b.dsMqttPortText.visibility = View.VISIBLE
         } else {
-            b.mqttAddress.visibility = View.GONE
-            b.mqttPort.visibility = View.GONE
-            b.mqttAddressText.visibility = View.GONE
-            b.mqttPortText.visibility = View.GONE
+            b.dsMqttAddress.visibility = View.GONE
+            b.dsMqttPort.visibility = View.GONE
+            b.dsMqttAddressText.visibility = View.GONE
+            b.dsMqttPortText.visibility = View.GONE
         }
 
         settings.mqttEnabled = state

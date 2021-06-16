@@ -12,14 +12,14 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/touch"
+            android:id="@+id/d_touch"
             style="@style/defaultButton"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
             android:background="@drawable/button_touch" />
 
         <TextView
-            android:id="@+id/tag_name"
+            android:id="@+id/d_tag_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
@@ -29,7 +29,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/settings"
+            android:id="@+id/d_settings"
             style="@style/defaultButton"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
@@ -38,7 +38,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/placeholder"
+        android:id="@+id/d_placeholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
@@ -50,7 +50,7 @@
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/d_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -60,7 +60,7 @@
         android:paddingRight="@dimen/tile_padding" />
 
     <LinearLayout
-        android:id="@+id/bar"
+        android:id="@+id/d_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
@@ -70,7 +70,7 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/add"
+            android:id="@+id/d_add"
             style="@style/defaultButton"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
@@ -79,7 +79,7 @@
             android:background="@drawable/button_add" />
 
         <Button
-            android:id="@+id/remove"
+            android:id="@+id/d_remove"
             style="@style/defaultButton"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
@@ -88,7 +88,7 @@
             android:background="@drawable/button_remove" />
 
         <Button
-            android:id="@+id/swap"
+            android:id="@+id/d_swap"
             style="@style/defaultButton"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
@@ -97,7 +97,7 @@
             android:background="@drawable/button_swap" />
 
         <Button
-            android:id="@+id/edit"
+            android:id="@+id/d_edit"
             style="@style/defaultButton"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"

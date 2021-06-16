@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:elevation="10dp"
+    android:padding="@dimen/tile_padding">
+
+    <View
+        android:id="@+id/ts_flag_mark"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:backgroundTint="#FFFFFF"
+        android:elevation="10dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/flag_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#40808080"
+        android:elevation="5dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/gray"
+        android:clickable="true"
+        android:focusable="true"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/ts_value"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="15dp"
+        android:text="100"
+        android:textColor="#BFFFFFFF"
+        app:autoSizeMaxTextSize="30dp"
+        app:autoSizeMinTextSize="8dp"
+        app:autoSizeStepGranularity="1dp"
+        app:autoSizeTextType="uniform"
+        tools:ignore="HardcodedText" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/ts_slider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:stepSize="10.0"
+        android:valueFrom="0.0"
+        android:valueTo="100.0"
+        android:visibility="invisible"
+        app:haloColor="#00000000"
+        app:labelBehavior="gone"
+        app:thumbRadius="0dp"
+        app:tickColor="#00000000"
+        app:trackColor="#00000000" />
+
+</FrameLayout>

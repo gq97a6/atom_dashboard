@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.slider.Slider
-import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.databinding.ConfigNewTileActivityBinding
-import com.netDashboard.tile.TileTypeList
+import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.databinding.ActivityConfigNewTileBinding
 import com.netDashboard.tile.Tile
+import com.netDashboard.tile.TileTypeList
 
 class ConfigNewTileActivity : AppCompatActivity() {
-    private lateinit var b: ConfigNewTileActivityBinding
+    private lateinit var b: ActivityConfigNewTileBinding
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
@@ -21,7 +21,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = ConfigNewTileActivityBinding.inflate(layoutInflater)
+        b = ActivityConfigNewTileBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         val tileId = intent.getIntExtra("tileId", 0)
@@ -31,24 +31,24 @@ class ConfigNewTileActivity : AppCompatActivity() {
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
         settings = dashboard.settings
 
-        b.height.value = 1f
-        b.height.valueFrom = 1f
-        b.height.valueTo = 10f
+        b.cntHeight.value = 1f
+        b.cntHeight.valueFrom = 1f
+        b.cntHeight.valueTo = 10f
 
-        b.width.value = 1f
+        b.cntWidth.value = 1f
 
         if (settings.spanCount.toFloat() > 1f) {
-            b.width.valueFrom = 1f
-            b.width.valueTo = settings.spanCount.toFloat()
+            b.cntWidth.valueFrom = 1f
+            b.cntWidth.valueTo = settings.spanCount.toFloat()
         } else {
-            b.width.valueFrom = 0f
-            b.width.valueTo = 1f
-            b.width.isEnabled = false
+            b.cntWidth.valueFrom = 0f
+            b.cntWidth.valueTo = 1f
+            b.cntWidth.isEnabled = false
         }
 
-        b.tileType.text = tile.name
+        b.cntTileType.text = tile.name
 
-        b.push.setOnClickListener {
+        b.cntAdd.setOnClickListener {
             configTile(tile)
 
             Intent(this, DashboardActivity::class.java).also {
@@ -58,19 +58,19 @@ class ConfigNewTileActivity : AppCompatActivity() {
             }
         }
 
-        b.height.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+        b.cntHeight.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
             }
 
             override fun onStopTrackingTouch(slider: Slider) {
                 if (settings.spanCount.toFloat() > 1f) {
-                    if (b.height.value == 1f) {
-                        b.width.isEnabled = true
-                        b.warning.visibility = View.GONE
+                    if (b.cntHeight.value == 1f) {
+                        b.cntWidth.isEnabled = true
+                        b.cntWarning.visibility = View.GONE
                     } else {
-                        b.warning.visibility = View.VISIBLE
-                        b.width.isEnabled = false
-                        b.width.value = settings.spanCount.toFloat()
+                        b.cntWarning.visibility = View.VISIBLE
+                        b.cntWidth.isEnabled = false
+                        b.cntWidth.value = settings.spanCount.toFloat()
                     }
                 }
             }
@@ -88,8 +88,8 @@ class ConfigNewTileActivity : AppCompatActivity() {
     }
 
     private fun configTile(tile: Tile) {
-        tile.width = b.width.value.toInt()
-        tile.height = b.height.value.toInt()
+        tile.width = b.cntWidth.value.toInt()
+        tile.height = b.cntHeight.value.toInt()
 
         var list = dashboard.tiles
 

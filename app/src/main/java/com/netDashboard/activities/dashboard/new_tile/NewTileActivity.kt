@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity
-import com.netDashboard.databinding.NewTileActivityBinding
-import com.netDashboard.tile.TilesAdapter
-import com.netDashboard.tile.TileTypeList
+import com.netDashboard.databinding.ActivityNewTileBinding
 import com.netDashboard.tile.Tile
+import com.netDashboard.tile.TileTypeList
+import com.netDashboard.tile.TilesAdapter
 
 class NewTileActivity : AppCompatActivity() {
-    private lateinit var b: NewTileActivityBinding
+    private lateinit var b: ActivityNewTileBinding
 
     private lateinit var dashboardName: String
     private lateinit var newTileTilesAdapter: TilesAdapter
@@ -20,7 +20,7 @@ class NewTileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = NewTileActivityBinding.inflate(layoutInflater)
+        b = ActivityNewTileBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
@@ -54,7 +54,7 @@ class NewTileActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val spanCount = 3
         newTileTilesAdapter = TilesAdapter(this, spanCount, "add")
-        b.recyclerView.adapter = newTileTilesAdapter
+        b.ntRecyclerView.adapter = newTileTilesAdapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -68,7 +68,7 @@ class NewTileActivity : AppCompatActivity() {
             list[i].isEdit = true
         }
 
-        b.recyclerView.layoutManager = layoutManager
+        b.ntRecyclerView.layoutManager = layoutManager
         newTileTilesAdapter.submitList(list as MutableList<Tile>)
     }
 }

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/layout_padding"
+    android:paddingTop="@dimen/layout_padding_top"
+    android:paddingRight="@dimen/layout_padding"
+    tools:context=".activities.dashboard.settings.DashboardSettingsActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="20dp"
+        android:text="@string/ds_banner"
+        android:textColor="@color/dark_gray"
+        android:textSize="40sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="10dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/ds_span"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/ds_span_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/ds_span"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="6"
+                    app:haloColor="#00000000"
+                    app:haloRadius="0dp"
+                    app:labelBehavior="gone"
+                    app:thumbColor="@color/slider_thumbColor"
+                    app:tickColorActive="@color/slider_tickColorActive"
+                    app:tickColorInactive="@color/slider_tickColorInactive"
+                    app:trackColorActive="@color/slider_trackColorActive"
+                    app:trackColorInactive="@color/slider_trackColorInactive" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/mqtt_switch"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/ds_mqtt_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ds_mqtt_address_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/mqtt_address"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/ds_mqtt_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="#337C7C7C"
+                    android:ems="12"
+                    android:hint="tcp://"
+                    android:importantForAutofill="no"
+                    android:inputType="textUri"
+                    android:maxLength="30"
+                    android:padding="10dp"
+                    android:text="tcp://"
+                    android:textColor="@color/gray"
+                    android:textColorHint="@color/light_gray"
+                    tools:ignore="HardcodedText,TextFields" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ds_mqtt_port_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/mqtt_port"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/ds_mqtt_port"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="#337C7C7C"
+                    android:ems="12"
+                    android:hint="1883"
+                    android:importantForAutofill="no"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5"
+                    android:padding="10dp"
+                    android:text="1883"
+                    android:textColor="@color/gray"
+                    android:textColorHint="@color/light_gray"
+                    tools:ignore="HardcodedText,TextFields" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -10,7 +10,7 @@ import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 
 class SliderTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.slider_tile, width, height) {
+    Tile(name, color, R.layout.tile_slider, width, height) {
 
     private var value = 50f
     private var from = 0f
@@ -20,7 +20,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        val slider = holder.itemView.findViewById<Slider>(R.id.tile_slider)
+        val slider = holder.itemView.findViewById<Slider>(R.id.ts_slider)
         val background = holder.itemView.findViewById<View>(R.id.background)
 
         slider.isEnabled = !isEdit
@@ -28,7 +28,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         slider.value = value
 
         //Display value
-        holder.itemView.findViewById<TextView>(R.id.slider_value).text = value.toString()
+        holder.itemView.findViewById<TextView>(R.id.ts_value).text = value.toString()
 
         //Use background of tile as slider input
         background.setOnTouchListener { view, event ->
@@ -76,7 +76,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         })
 
         slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
-            holder.itemView.findViewById<TextView>(R.id.slider_value).text = value.toString()
+            holder.itemView.findViewById<TextView>(R.id.ts_value).text = value.toString()
         })
 
         setThemeColor(color)
@@ -91,7 +91,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun onEdit(isEdit: Boolean) {
         super.onEdit(isEdit)
 
-        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !isEdit
+        holder?.itemView?.findViewById<Slider>(R.id.ts_value)?.isEnabled = !isEdit
     }
 
     override fun setThemeColor(color: Int) {
@@ -99,12 +99,12 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
 
         holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(color)
 
-        holder?.itemView?.findViewById<TextView>(R.id.slider_value)
+        holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             ?.setTextColor(getContrastColor(color).alpha(75))
     }
 
     private fun setRange(from: Float, to: Float, step: Float = 1f) {
-        val slider = holder?.itemView?.findViewById<Slider>(R.id.tile_slider)
+        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
 
         if (from < to && slider != null) {
             slider.valueFrom = from
@@ -120,6 +120,6 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun onLock(isLocked: Boolean) {
         super.onLock(isLocked)
 
-        holder?.itemView?.findViewById<Slider>(R.id.tile_slider)?.isEnabled = !isLocked
+        holder?.itemView?.findViewById<Slider>(R.id.ts_slider)?.isEnabled = !isLocked
     }
 }

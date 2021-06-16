@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/layout_padding"
-    android:paddingTop="@dimen/layout_padding_top"
-    android:paddingRight="@dimen/layout_padding"
+    android:paddingLeft="30dp"
+    android:paddingTop="80dp"
+    android:paddingRight="30dp"
     tools:context=".activities.dashboard.settings.DashboardSettingsActivity">
 
     <TextView
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:gravity="center"
-                    android:text="0"
+                    android:text="1"
                     android:textColor="@color/gray"
                     android:textSize="15sp"
                     tools:ignore="HardcodedText" />

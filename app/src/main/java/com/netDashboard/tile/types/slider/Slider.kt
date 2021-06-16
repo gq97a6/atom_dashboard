@@ -91,7 +91,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     override fun onEdit(isEdit: Boolean) {
         super.onEdit(isEdit)
 
-        holder?.itemView?.findViewById<Slider>(R.id.ts_value)?.isEnabled = !isEdit
+        holder?.itemView?.findViewById<Slider>(R.id.ts_slider)?.isEnabled = !isEdit
     }
 
     override fun setThemeColor(color: Int) {

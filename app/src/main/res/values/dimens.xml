@@ -12,7 +12,5 @@
     inner_frame_layout_padding (below variable) on round screens.
     -->
     <dimen name="inner_frame_layout_padding" tools:keep="@dimen/inner_frame_layout_padding">5dp</dimen>
-    <dimen name="layout_padding">30dp</dimen>
-    <dimen name="layout_padding_top">80dp</dimen>
     <dimen name="tile_padding">5dp</dimen>
 </resources>

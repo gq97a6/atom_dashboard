@@ -31,7 +31,6 @@
 
     <string name="config_new_tile_banner0">Configuration</string>
     <string name="config_new_tile_banner1">Picked tile type:</string>
-    <string name="config_new_tile_height_warning">Only one-row tiles can have custom height.</string>
     <string name="config_new_tile_slider_height">Height:</string>
     <string name="config_new_tile_slider_width">Width:</string>
     <string name="config_new_tile_button_add">Add</string>
@@ -48,4 +47,7 @@
     <string name="mqtt_address">MQTT address:</string>
     <string name="mqtt_switch">MQTT server enabled:</string>
     <string name="mqtt_port">MQTT port:</string>
+    <string name="cnt_dimensions">Dimensions</string>
+    <string name="cnt_communication">Communication</string>
+    <string name="cnt_design">Design</string>
 </resources>

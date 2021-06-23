@@ -33,7 +33,7 @@ class TilesAdapter(
             mode = ""
 
             if (value) {
-                mode = "swap"
+                mode = "edit"
                 swapLock = false
             }
 

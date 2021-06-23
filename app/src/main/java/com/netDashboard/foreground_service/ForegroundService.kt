@@ -27,6 +27,8 @@ class ForegroundService : Serializable, LifecycleService() {
 
     val alarm = Alarm(this)
 
+    private lateinit var foregroundService: ForegroundService
+
     override fun onCreate() {
         super.onCreate()
 
@@ -55,8 +57,7 @@ class ForegroundService : Serializable, LifecycleService() {
             for (g in daemonGroupCollection.daemonsGroups) {
                 g.mqttd?.data?.observe(this, { p ->
                     if (p.first != null && p.second != null) {
-                        alarm.on(2000)
-                        createNotification(this, "${g.name}: ${p.first}", p.second.toString(), true)
+                        createNotification(this, "${g.name}: ${p.first}", p.second.toString(), false)
                     }
                 })
             }
@@ -70,6 +71,11 @@ class ForegroundService : Serializable, LifecycleService() {
     override fun onDestroy() {
 
         if (isRunning) isRunning = false
+
+        createNotification(this, "foregroundService", "onDestroy")
+
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
 
         super.onDestroy()
     }

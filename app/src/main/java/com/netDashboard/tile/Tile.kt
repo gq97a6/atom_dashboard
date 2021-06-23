@@ -12,6 +12,7 @@ import java.io.*
 import java.util.*
 
 abstract class Tile(
+    val type: String,
     var name: String,
     var color: Int,
     private var layout: Int,
@@ -20,6 +21,8 @@ abstract class Tile(
 ) : Serializable {
 
     val id: Long?
+
+    var isColouredByTheme = false
 
     var isEdit = false
         set(value) {
@@ -60,6 +63,7 @@ abstract class Tile(
     private var spanCount = 1
 
     //MQTT
+    var mqttEnabled = false
     var mqttSubTopics: MutableList<String> = mutableListOf("abc") //TMP ("abc")
     var mqttPubTopics: MutableList<String> = mutableListOf()
     var mqttPubConfirmation = false

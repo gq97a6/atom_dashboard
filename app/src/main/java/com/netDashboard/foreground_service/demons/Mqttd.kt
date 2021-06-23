@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import kotlin.random.Random
 
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
@@ -15,11 +16,11 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     var onConnect = MutableLiveData(false)
 
-    private var isReady = false
+    private var isClientBusy = false
+    private var isClientReady = false
         get() = client != null && field
 
     private var isEnabled = false
-    private var isClientBusy = false
 
     private var client: MqttAndroidClient? = null
 
@@ -33,18 +34,27 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         if (isEnabled) return
 
         isEnabled = true
-        toggleLoop()
+        connectionHandler()
     }
 
     fun stop() {
         if (!isEnabled) return
 
         isEnabled = false
-        toggleLoop()
+        connectionHandler()
     }
 
-    private fun toggleLoop(d: Long = 3000) {
+    private var isConnectionHandlerWaiting = false
+    private fun connectionHandler(force: Boolean = false, d: Long = 3000) {
+        Log.i("OUY", "connectionHandler")
+        if (force) isConnectionHandlerWaiting = false
+
+        if (isConnectionHandlerWaiting) return
+        Log.i("OUY", "isNotWaiting")
         if (isConnected == isEnabled) return
+        Log.i("OUY", "isNotDone")
+
+        isConnectionHandlerWaiting = true
 
         if (isEnabled) {
             startRaw()
@@ -53,7 +63,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            toggleLoop()
+            connectionHandler(true)
         }, d)
     }
 
@@ -64,7 +74,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
         isClientBusy = true
 
-        client = MqttAndroidClient(context, URI, "kotlin_client")
+        client = MqttAndroidClient(context, URI, Random.nextInt().toString())
         client?.setCallback(object : MqttCallback {
 
             override fun messageArrived(t: String?, m: MqttMessage) {
@@ -73,7 +83,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             }
 
             override fun connectionLost(cause: Throwable?) {
-                toggleLoop()
+                connectionHandler()
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -95,12 +105,12 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             e.printStackTrace()
         }
 
-        isReady = true
+        isClientReady = true
         isClientBusy = false
     }
 
     private fun stopRaw() {
-        if (!isReady || isClientBusy) return
+        if (!isClientReady || isClientBusy) return
 
         isClientBusy = true
 
@@ -122,7 +132,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         client?.setCallback(null)
         client = null
 
-        isReady = false
+        isClientReady = false
         isClientBusy = false
     }
 

@@ -28,7 +28,11 @@ fun createToast(context: Context, msg: String, time: Int = 0) {
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
+fun Float.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
+fun Float.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
 fun Snackbar.margins(): Snackbar {
+    14f.toPx()
     val params = this.view.layoutParams as android.widget.FrameLayout.LayoutParams
 
     params.setMargins(60.toPx(), 60.toPx(), 60.toPx(), 60.toPx())
@@ -88,7 +92,7 @@ fun createNotification(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun createNotificationChannel(context: Context) {
+internal fun createNotificationChannel(context: Context) {
     val channel = NotificationChannel(
         "notification_id",
         "notification",

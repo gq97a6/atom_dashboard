@@ -21,33 +21,35 @@
     <string name="attachment_summary_on" tools:keep="@string/attachment_summary_on">Automatically download attachments for incoming emails \n</string>
     <string name="attachment_summary_off" tools:keep="@string/attachment_summary_off">Only download attachments when manually requested</string>
 
-    <string name="dashboard">DASHBOARD</string>
-    <string name="remove_mode">REMOVE MODE</string>
-    <string name="swap_mode">SWAP MODE</string>
+    <string name="d_edit">Click to edit.</string>
+    <string name="d_swap">Mark to swap.</string>
+    <string name="d_remove">Mark, click again.</string>
+    <string name="d_empty">Add new tiles first. \n Use left icon to access edit mode.</string>
+    <string name="d_remove_mode">REMOVE MODE</string>
+    <string name="d_swap_mode">SWAP MODE</string>
+
+    <string name="p_banner">Properties</string>
+    <string name="p_span">Row span: </string>
+    <string name="p_apply">Apply</string>
+
+    <string name="cnt_dimensions">Dimensions</string>
+    <string name="cnt_cnt_dimensions_info">You can only control one dimension.</string>
+    <string name="cnt_design">Design</string>
+    <string name="cnt_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
+    <string name="cnt_design_info_color">_</string>
+    <string name="cnt_communication">Communication:</string>
+    <string name="cnt_mqtt">MQTT</string>
+    <string name="cnt_switch">Enabled:</string>
+    <string name="cnt_mqtt_address">Address:</string>
+    <string name="cnt_port">Port:</string>
+    <string name="cnt_publish_topic">Publish topic:</string>
+    <string name="cnt_subscribe_topic">Subscribe topic:</string>
+    <string name="cnt_banner0">Configuration</string>
+    <string name="cnt_banner1">Picked tile type:</string>
+    <string name="cnt_slider_height">Height:</string>
+    <string name="cnt_slider_width">Width:</string>
+    <string name="cnt_button_add">Add</string>
 
     <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
-
-    <string name="tile_button_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
-
-    <string name="config_new_tile_banner0">Configuration</string>
-    <string name="config_new_tile_banner1">Picked tile type:</string>
-    <string name="config_new_tile_slider_height">Height:</string>
-    <string name="config_new_tile_slider_width">Width:</string>
-    <string name="config_new_tile_button_add">Add</string>
-
-    <string name="dashboard_edit">Click to edit.</string>
-    <string name="dashboard_swap">Mark to swap.</string>
-    <string name="dashboard_remove">Mark, click again.</string>
-
-    <string name="ds_banner">Settings</string>
-    <string name="ds_span">Row span: </string>
-
-    <string name="dashboard_settings_button_apply">Apply</string>
-    <string name="empty_dashboard">Add new tiles first. \n Use left icon to access edit mode.</string>
-    <string name="mqtt_address">MQTT address:</string>
-    <string name="mqtt_switch">MQTT server enabled:</string>
-    <string name="mqtt_port">MQTT port:</string>
-    <string name="cnt_dimensions">Dimensions</string>
-    <string name="cnt_communication">Communication</string>
-    <string name="cnt_design">Design</string>
+    <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
 </resources>

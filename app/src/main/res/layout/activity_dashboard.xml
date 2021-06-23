@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="top"
@@ -13,7 +14,7 @@
 
         <Button
             android:id="@+id/d_touch"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
             android:background="@drawable/button_touch" />
@@ -24,13 +25,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:gravity="center"
-            android:text="@string/dashboard"
             android:textColor="#000000"
             android:textSize="18sp" />
 
         <Button
             android:id="@+id/d_settings"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="64.8dp"
             android:layout_height="49.2dp"
             android:background="@drawable/button_more" />
@@ -44,7 +44,7 @@
         android:layout_margin="20dp"
         android:gravity="center"
         android:paddingBottom="50dp"
-        android:text="@string/empty_dashboard"
+        android:text="@string/d_empty"
         android:textColor="#A3A3A3"
         android:textSize="20sp"
         android:visibility="gone" />
@@ -71,7 +71,7 @@
 
         <Button
             android:id="@+id/d_add"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
             android:layout_marginStart="15dp"
@@ -80,7 +80,7 @@
 
         <Button
             android:id="@+id/d_remove"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
             android:layout_marginStart="15dp"
@@ -89,7 +89,7 @@
 
         <Button
             android:id="@+id/d_swap"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
             android:layout_marginStart="15dp"
@@ -98,7 +98,7 @@
 
         <Button
             android:id="@+id/d_edit"
-            style="@style/defaultButton"
+            style="@style/button"
             android:layout_width="52.8dp"
             android:layout_height="49.2dp"
             android:layout_marginStart="15dp"

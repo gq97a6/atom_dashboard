@@ -10,7 +10,7 @@ import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 
 class SliderTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.tile_slider, width, height) {
+    Tile("slider", name, color, R.layout.tile_slider, width, height) {
 
     private var value = 50f
     private var from = 0f
@@ -31,12 +31,13 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         holder.itemView.findViewById<TextView>(R.id.ts_value).text = value.toString()
 
         //Use background of tile as slider input
-        background.setOnTouchListener { view, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> view.performClick()
+        background.setOnTouchListener { v, e ->
+
+            when (e.action) {
+                MotionEvent.ACTION_DOWN -> v.performClick()
             }
 
-            if ((event.eventTime - event.downTime) > 0) {
+            if ((e.eventTime - e.downTime) > 0) {
 
                 //Make slider width equal to screen width
                 val params = slider.layoutParams as FrameLayout.LayoutParams
@@ -50,10 +51,10 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
                 val offset = center - location[0] - slider.width / 2
 
                 //Apply offset to event
-                event.setLocation(event.x - offset, event.y)
+                e.setLocation(e.x - offset, e.y)
 
                 //Push event
-                slider.dispatchTouchEvent(event)
+                slider.dispatchTouchEvent(e)
             }
 
             return@setOnTouchListener true
@@ -83,9 +84,6 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     }
 
     override fun onClick() {
-        if (!isEdit) {
-            setThemeColor(getRandomColor())
-        }
     }
 
     override fun onEdit(isEdit: Boolean) {

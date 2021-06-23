@@ -2,16 +2,16 @@ package com.netDashboard.activities.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.databinding.ActivityDashboardSettingsBinding
+import com.netDashboard.databinding.ActivitySettingsBinding
 
-class MainSettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var b: ActivityDashboardSettingsBinding
+    private lateinit var b: ActivitySettingsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = ActivityDashboardSettingsBinding.inflate(layoutInflater)
+        b = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(b.root)
     }
 }

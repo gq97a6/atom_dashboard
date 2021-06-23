@@ -3,6 +3,8 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
-import com.netDashboard.activities.dashboard.settings.DashboardSettingsActivity
+import com.netDashboard.activities.dashboard.properties.PropertiesActivity
+import com.netDashboard.createNotification
 import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.ActivityDashboardBinding
@@ -83,6 +86,17 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+
+        Log.i("OUY", event.toString())
+
+        if(event?.pointerCount ?: 0 > 3) {
+            createNotification(this, "test", "test")
+        }
+
+        return super.onTouchEvent(event)
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -149,9 +163,9 @@ class DashboardActivity : AppCompatActivity() {
             b.dRecyclerView.suppressLayout(false)
             dashboard.tiles = adapter.tiles.toList()
         } else {
-            highlightOnly(b.dSwap)
+            highlightOnly(b.dEdit)
 
-            adapter.swapMode = true
+            adapter.editMode = true
 
             for (t in adapter.tiles) {
                 t.isEdit = true
@@ -169,7 +183,7 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun settingsOnClick() {
-        Intent(this, DashboardSettingsActivity::class.java).also {
+        Intent(this, PropertiesActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
 
             finish()
@@ -183,7 +197,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.isEdit) return
 
         highlightOnly(b.dEdit)
-        createToast(this, getString(R.string.dashboard_edit), 1)
+        createToast(this, getString(R.string.d_edit), 1)
 
         adapter.editMode = true
     }
@@ -194,7 +208,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.isEdit) return
 
         highlightOnly(b.dSwap)
-        createToast(this, getString(R.string.dashboard_swap), 1)
+        createToast(this, getString(R.string.d_swap), 1)
 
         adapter.swapMode = true
     }
@@ -210,7 +224,7 @@ class DashboardActivity : AppCompatActivity() {
 
             adapter.removeMode = true
 
-            createToast(this, getString(R.string.dashboard_remove))
+            createToast(this, getString(R.string.d_remove))
         } else {
 
             var toDelete = false
@@ -223,7 +237,7 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             if (!toDelete) {
-                createToast(this, getString(R.string.dashboard_remove), 1)
+                createToast(this, getString(R.string.d_remove), 1)
             } else {
 
                 @SuppressLint("ShowToast")
@@ -282,15 +296,15 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {
-            if (dg.d.name == dashboard.name) {
-                dg.mqttd?.data?.observe(this, { p ->
-                    if (p.first != null && p.second != null) {
-                        foregroundService.alarm.on(1000)
-                    }
-                })
-            }
-        }
+        //for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {
+        //    if (dg.d.name == dashboard.name) {
+        //        dg.mqttd?.data?.observe(this, { p ->
+        //            if (p.first != null && p.second != null) {
+        //                foregroundService.alarm.on(1000)
+        //            }
+        //        })
+        //    }
+        //}
     }
 
     //ObjectAnimator.ofFloat(b.indicator, "translationX", distance)

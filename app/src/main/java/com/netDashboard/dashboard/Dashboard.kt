@@ -115,7 +115,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
     @Suppress("unused")
     private fun List<Tile>.getSaved(): List<Tile> {
 
-        if (!FolderTree(rootFolder).check()) return TileTypeList().getButtons()
+        if (!FolderTree(rootFolder).check()) return TileTypeList().getTestDashboard()
 
         return try {
             val file = FileInputStream(tilesFileName)
@@ -128,7 +128,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
 
             list.filterIsInstance<Tile>().takeIf { it.size == list.size } ?: listOf()
         } catch (e: Exception) {
-            TileTypeList().getButtons()
+            TileTypeList().getTestDashboard()
         }
     }
 

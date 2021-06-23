@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.App" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
@@ -15,13 +15,26 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="defaultButton" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="button" parent="Theme.MaterialComponents.NoActionBar">
         <item name="cornerRadius">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetBottom">0dp</item>
     </style>
 
-    <style name="Widget.App.Snackbar" parent="Widget.MaterialComponents.Snackbar" tools:keep="@style/Widget_App_Snackbar">
-        <item name="android:layout_margin">10dp</item>
+    <style name="chip" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_background</item>
+        <item name="android:textColor">@color/chip_text</item>
     </style>
+
+    <style name="slider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="haloColor">#00000000</item>
+        <item name="labelBehavior">gone</item>
+        <item name="haloRadius">0dp</item>
+        <item name="thumbColor">@color/slider_thumbColor</item>
+        <item name="tickColorActive">@color/slider_tickColorActive</item>
+        <item name="tickColorInactive">@color/slider_tickColorInactive</item>
+        <item name="trackColorActive">@color/slider_trackColorActive</item>
+        <item name="trackColorInactive">@color/slider_trackColorInactive</item>
+    </style>
+
 </resources>

@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.dashboard.settings.DashboardSettingsActivity" />
+        <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
         <activity android:name=".activities.dashboard.DashboardActivity" />
         <activity android:name=".activities.dashboard.new_tile.NewTileActivity" />
         <activity android:name=".activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity" />

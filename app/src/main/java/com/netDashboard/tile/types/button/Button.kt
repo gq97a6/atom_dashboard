@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 class ButtonTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.tile_button, width, height) {
+    Tile("button", name, color, R.layout.tile_button, width, height) {
 
     var text = "Default value"
     private var counter = 0
@@ -19,25 +19,12 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
 
         holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {
             holder.itemView.callOnClick()
-
-            if (!isEdit) {
-                text = counter.toString()
-
-                holder.itemView.findViewById<Button>(R.id.tb_button).text = text
-
-                //mqttd?.publish("123", "test_click")
-
-                //createNotification(context!!, Random().nextInt().toString())
-                createVibration(context!!, 50)
-
-                setThemeColor(getRandomColor())
-            }
         }
 
         holder.itemView.findViewById<Button>(R.id.tb_button).setOnLongClickListener {
             counter = 0
 
-            holder.itemView.findViewById<Button>(R.id.tb_button).callOnClick()
+            holder.itemView.performLongClick()
 
             return@setOnLongClickListener true
         }

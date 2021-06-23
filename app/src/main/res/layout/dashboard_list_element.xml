@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/dle_button"
-        style="@style/defaultButton"
+        style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="#000000"
@@ -18,7 +18,7 @@
         android:paddingTop="15dp"
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
-        android:text="@string/tile_button_default_text"
+        android:text="@string/tb_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"

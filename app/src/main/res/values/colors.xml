@@ -2,13 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#7C7C7C</color>
-    <color name="dark_gray">#404040</color>
-    <color name="light_gray">#C1C1C1</color>
+    <color name="gray65">#C1C1C1</color>
+    <color name="gray100">#7F7F7F</color>
+    <color name="gray150">#555555</color>
+    <color name="gray230">#373737</color>
 
-    <color name="slider_trackColorInactive">#B3535353</color>
-    <color name="slider_tickColorInactive">#000000</color>
-    <color name="slider_trackColorActive">#CC222222</color>
-    <color name="slider_tickColorActive">#000000</color>
-    <color name="slider_thumbColor">#000000</color>
+    <color name="slider_trackColorInactive">@color/gray65</color>
+    <color name="slider_tickColorInactive">@color/gray65</color>
+    <color name="slider_trackColorActive">@color/gray100</color>
+    <color name="slider_tickColorActive">@color/gray100</color>
+    <color name="slider_thumbColor">@color/gray230</color>
 </resources>

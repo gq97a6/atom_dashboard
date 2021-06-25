@@ -101,7 +101,7 @@ class PropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         dashboard.settings = settings
 
-        foregroundService.rerun(dashboard.name)
+        foregroundService.restart(dashboard.name)
 
         super.onPause()
     }

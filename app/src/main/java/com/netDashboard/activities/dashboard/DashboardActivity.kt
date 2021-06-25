@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
 import com.netDashboard.createNotification
@@ -33,7 +34,7 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var adapter: TilesAdapter
 
-    private lateinit var foregroundService: ForegroundService
+    private lateinit var service: ForegroundService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +48,7 @@ class DashboardActivity : AppCompatActivity() {
 
         foregroundServiceHandler.service.observe(this, { s ->
             if (s != null) {
-                foregroundService = s
+                service = s
                 onServiceReady()
             }
         })
@@ -90,7 +91,7 @@ class DashboardActivity : AppCompatActivity() {
 
         Log.i("OUY", event.toString())
 
-        if(event?.pointerCount ?: 0 > 3) {
+        if (event?.pointerCount ?: 0 > 3) {
             createNotification(this, "test", "test")
         }
 
@@ -112,6 +113,11 @@ class DashboardActivity : AppCompatActivity() {
             b.dTouch.callOnClick()
         } else {
             super.onBackPressed()
+
+            Intent(this, MainActivity::class.java).also {
+                startActivity(it)
+                finish()
+            }
         }
     }
 
@@ -169,7 +175,7 @@ class DashboardActivity : AppCompatActivity() {
 
             for (t in adapter.tiles) {
                 t.isEdit = true
-                t.flag(false)
+                t.flag()
             }
         }
 
@@ -230,7 +236,7 @@ class DashboardActivity : AppCompatActivity() {
             var toDelete = false
 
             for (t in adapter.tiles) {
-                if (t.flag) {
+                if (t.flag == "remove") {
                     toDelete = true
                     break
                 }
@@ -248,9 +254,7 @@ class DashboardActivity : AppCompatActivity() {
                 ).setAction("YES") {
 
                     for ((i, t) in adapter.tiles.withIndex()) {
-
-
-                        if (t.flag) {
+                        if (t.flag == "remove") {
                             adapter.tiles.removeAt(i)
 
                             adapter.notifyItemRemoved(i)
@@ -262,6 +266,9 @@ class DashboardActivity : AppCompatActivity() {
                             if (adapter.itemCount == 0) {
                                 b.dPlaceholder.visibility = View.VISIBLE
                             }
+
+                            dashboard.tiles = adapter.tiles.toList()
+                            service.restart(dashboard.name)
 
                             break
                         }
@@ -296,6 +303,9 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
+        for (t in adapter.tiles) {
+            t.service = service
+        }
         //for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {
         //    if (dg.d.name == dashboard.name) {
         //        dg.mqttd?.data?.observe(this, { p ->

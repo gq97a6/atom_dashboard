@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.netDashboard.activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity
+import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.DashboardSavedList
 import com.netDashboard.databinding.ActivityMainBinding
@@ -37,22 +37,6 @@ class MainActivity : AppCompatActivity() {
                 onServiceReady()
             }
         })
-
-        settings = MainSettings(filesDir.canonicalPath).getSaved()
-
-        if (settings.lastDashboardName != null) {
-
-            //Intent(this, DashboardActivity::class.java).also {
-            //    it.putExtra("dashboardName", settings.lastDashboardName)
-            //    overridePendingTransition(0, 0)
-            //    startActivity(it)
-            //}
-
-            Intent(this, ConfigNewTileActivity::class.java).also {
-                overridePendingTransition(0, 0)
-                startActivity(it)
-            }
-        }
 
         setupRecyclerView()
     }

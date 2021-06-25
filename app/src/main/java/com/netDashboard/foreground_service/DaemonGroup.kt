@@ -15,12 +15,20 @@ class DaemonGroup(private val context: Context, rootPath: String, val name: Stri
 
     var bluetoothd: Bluetoothd? = null
 
+    var isDone = false
+        get() = field && mqttd?.isClientDone ?: false
+        set(value) {
+            field = value
+            isClosed = value
+        }
+
+    var isClosed = false
+
     init {
         start()
     }
 
     private fun start() {
-
         if (d.settings.mqttEnabled) {
             mqttd = Mqttd(context, d.settings.mqttURI)
 
@@ -35,12 +43,6 @@ class DaemonGroup(private val context: Context, rootPath: String, val name: Stri
                     for (st in mqttdSubTopics) mqttd?.subscribe(st)
                 }
             })
-
-            //mqttd?.data?.observe(context as LifecycleOwner, { p ->
-            //    if (p.first != null && p.second != null) {
-            //
-            //    }
-            //})
         }
 
         if (d.settings.bluetoothEnabled) bluetoothd = Bluetoothd()
@@ -49,10 +51,5 @@ class DaemonGroup(private val context: Context, rootPath: String, val name: Stri
     fun stop() {
         mqttd?.stop()
         mqttdSubTopics.clear()
-    }
-
-    fun rerun() {
-        stop()
-        start()
     }
 }

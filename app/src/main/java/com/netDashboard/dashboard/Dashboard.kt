@@ -93,10 +93,10 @@ open class Dashboard(private val rootPath: String, val name: String) :
         for ((i, _) in this.withIndex()) {
             this[i].context = null
             this[i].holder = null
-            this[i].mqttd = null
+            this[i].service = null
 
             this[i].isEdit = false
-            this[i].flag(false)
+            this[i].flag()
         }
 
         try {

@@ -1,12 +1,14 @@
 package com.netDashboard.foreground_service
 
 import android.content.Context
+import androidx.lifecycle.LifecycleOwner
+import com.netDashboard.createNotification
 import com.netDashboard.dashboard.DashboardSavedList
 
 class DaemonGroupCollection(private val context: Context, private val rootPath: String) {
 
     private val dashboards = DashboardSavedList().get(rootPath)
-    val daemonsGroups: MutableList<DaemonGroup> = mutableListOf()
+    private val collection: MutableList<DaemonGroup> = mutableListOf()
 
     init {
         start()
@@ -14,37 +16,70 @@ class DaemonGroupCollection(private val context: Context, private val rootPath: 
 
     private fun start() {
         for (d in dashboards) {
-            daemonsGroups.add(DaemonGroup(context, rootPath, d.name))
+            val g = DaemonGroup(context, rootPath, d.name)
+
+            g.mqttd?.data?.observe(context as LifecycleOwner, { p ->
+                if (p.first != null && p.second != null) {
+                    createNotification(context, "${g.name}: ${p.first}", p.second.toString(), false)
+                }
+            })
+
+            collection.add(g)
         }
+    }
+
+    private fun start(name: String) {
+        val g = DaemonGroup(context, rootPath, name)
+
+        g.mqttd?.data?.observe(context as LifecycleOwner, { p ->
+            if (p.first != null && p.second != null && !g.isClosed) {
+                createNotification(context, "${g.name}: ${p.first}", p.second.toString(), false)
+            }
+        })
+
+        collection.add(g)
     }
 
     fun stop() {
-        for (dg in daemonsGroups) {
+        for (dg in collection) {
+            dg.isDone = true
+            dg.mqttd?.data?.removeObservers(context as LifecycleOwner)
             dg.stop()
         }
+
+        clean()
     }
 
-    fun rerun() {
-        for (dg in daemonsGroups) {
-            dg.rerun()
-        }
-    }
-
-    fun rerun(name: String) {
-        for (dg in daemonsGroups) {
-            if(dg.d.name == name) {
-                dg.rerun()
+    private fun stop(name: String) {
+        for (dg in collection) {
+            if (dg.d.name == name) {
+                dg.isDone = true
+                dg.mqttd?.data?.removeObservers(context as LifecycleOwner)
+                dg.stop()
                 break
             }
         }
+
+        clean()
     }
 
-    // mqttd.data.observe(context as LifecycleOwner, { p ->
-    //     if (p.first != "R73JETTY") {
-    //         Log.i("OUY", "MSG: ${p.second} | D: ${dashboard.name}")
-    //         for (element in tiles) {
-    //             element.onData(p.first, p.second)
-    //         }
-    //     }
-    // })
+    fun restart() {
+        stop()
+        start()
+    }
+
+    fun restart(name: String) {
+        stop(name)
+        start(name)
+    }
+
+    private fun clean() {
+        var ii = 0
+        for (i in 0 until collection.size) {
+            if (collection[i - ii].isDone) {
+                collection.removeAt(i -ii)
+                ii++
+            }
+        }
+    }
 }

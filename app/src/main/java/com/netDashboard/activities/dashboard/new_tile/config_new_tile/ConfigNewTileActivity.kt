@@ -14,6 +14,8 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.alpha
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.ActivityConfigNewTileBinding
+import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.getContrastColor
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList
@@ -26,6 +28,8 @@ class ConfigNewTileActivity : AppCompatActivity() {
     private lateinit var dashboard: Dashboard
     private lateinit var settings: Dashboard.Settings
 
+    private lateinit var foregroundService: ForegroundService
+
     private lateinit var tile: Tile
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +41,17 @@ class ConfigNewTileActivity : AppCompatActivity() {
         b = ActivityConfigNewTileBinding.inflate(layoutInflater)
         configView()
         setContentView(b.root)
+
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
+        foregroundServiceHandler.bind()
+
+        foregroundServiceHandler.service.observe(this, { s ->
+            if (s != null) {
+                foregroundService = s
+                onServiceReady()
+            }
+        })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
@@ -67,6 +82,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
         b.cntAdd.setOnClickListener {
             configTile()
             configTileExtra()
+            foregroundService.restart(dashboard.name)
 
             Intent(this, DashboardActivity::class.java).also {
                 it.putExtra("dashboardName", dashboardName)
@@ -137,7 +153,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
         tile.width = b.cntWidth.value.toInt()
         tile.height = b.cntHeight.value.toInt()
 
-        tile.isColouredByTheme = if(b.chip0.isChecked) {
+        tile.isColouredByTheme = if (b.chip0.isChecked) {
             true
         } else {
             tile.color = Color.HSVToColor(
@@ -288,5 +304,9 @@ class ConfigNewTileActivity : AppCompatActivity() {
 
         b.chip1.chipBackgroundColor = ColorStateList(states, colorsBackground)
         b.chip1.setTextColor(ColorStateList(states, colorsText))
+    }
+
+    private fun onServiceReady() {
+
     }
 }

@@ -11,20 +11,22 @@ import kotlin.random.Random
 
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
+
+    private var isEnabled = false
     private val isConnected
         get() = client?.isConnected ?: false
 
-    var onConnect = MutableLiveData(false)
+    private var client: MqttAndroidClient? = null
 
     private var isClientBusy = false
     private var isClientReady = false
         get() = client != null && field
-
-    private var isEnabled = false
-
-    private var client: MqttAndroidClient? = null
+    val isClientDone
+        get() = isConnected == isEnabled
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
+
+    var onConnect = MutableLiveData(false)
 
     init {
         start()
@@ -51,7 +53,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
         if (isConnectionHandlerWaiting) return
         Log.i("OUY", "isNotWaiting")
-        if (isConnected == isEnabled) return
+        if (isClientDone) return
         Log.i("OUY", "isNotDone")
 
         isConnectionHandlerWaiting = true

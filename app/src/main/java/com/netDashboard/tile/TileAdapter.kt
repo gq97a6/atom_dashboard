@@ -39,8 +39,7 @@ class TilesAdapter(
 
             for (t in tiles) {
                 t.isEdit = value
-                t.flag(false)
-                t.lock = false
+                t.flag()
             }
 
             notifyDataSetChanged()
@@ -55,8 +54,7 @@ class TilesAdapter(
             mode = type
 
             for (t in tiles) {
-                t.flag(false)
-                t.lock = false
+                t.flag()
             }
         }
 
@@ -163,13 +161,14 @@ class TilesAdapter(
     private fun swapTiles(position: Int) {
 
         if (!swapLock) {
-            if (!tiles[position].lock) {
-                tiles[position].flag(!tiles[position].flag, "swap")
+
+            if (tiles[position].flag != "lock") {
+                tiles[position].toggleFlag("swap")
             }
 
             for ((pos, t) in tiles.withIndex()) {
 
-                if (t.flag && tiles[position].id != t.id) {
+                if (t.flag == "swap" && tiles[position].id != t.id) {
                     val recyclerView =
                         tiles[position].holder?.itemView?.parent as RecyclerView
 
@@ -182,16 +181,16 @@ class TilesAdapter(
                     val f = layoutManager.findFirstVisibleItemPosition()
                     val l = layoutManager.findLastVisibleItemPosition()
 
-                    tiles[pos].flag(false)
-                    tiles[position].flag(false)
+                    tiles[pos].flag()
+                    tiles[position].flag()
 
                     if (abs(position - pos + 1) <= max && position in f..l && pos in f..l) {
                         swapLock = true
 
                         recyclerView.suppressLayout(true)
 
-                        tiles[pos].lock = true
-                        tiles[position].lock = true
+                        tiles[pos].flag("lock")
+                        tiles[position].flag("lock")
 
                         val xyA = IntArray(2)
                         tiles[pos].holder?.itemView?.getLocationOnScreen(xyA)
@@ -230,8 +229,8 @@ class TilesAdapter(
                         Handler(Looper.getMainLooper()).postDelayed({
                             recyclerView.suppressLayout(false)
 
-                            tiles[pos].lock = false
-                            tiles[position].lock = false
+                            tiles[pos].flag()
+                            tiles[position].flag()
 
                             Collections.swap(tiles, position, pos)
                             notifyItemChanged(position)
@@ -260,12 +259,12 @@ class TilesAdapter(
 
         for ((i, t) in tiles.withIndex()) {
 
-            if (t.flag && tiles[position].id != t.id) {
-                tiles[i].flag(false)
+            if (t.flag == "remove" && tiles[position].id != t.id) {
+                tiles[i].flag()
             }
         }
 
-        tiles[position].flag(!tiles[position].flag, "remove")
+        tiles[position].toggleFlag("remove")
     }
 }
 

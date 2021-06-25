@@ -54,14 +54,6 @@ class ForegroundService : Serializable, LifecycleService() {
         if (!isRunning) {
             daemonGroupCollection = DaemonGroupCollection(this, filesDir.canonicalPath)
 
-            for (g in daemonGroupCollection.daemonsGroups) {
-                g.mqttd?.data?.observe(this, { p ->
-                    if (p.first != null && p.second != null) {
-                        createNotification(this, "${g.name}: ${p.first}", p.second.toString(), false)
-                    }
-                })
-            }
-
             isRunning = true
         }
 
@@ -108,16 +100,16 @@ class ForegroundService : Serializable, LifecycleService() {
         notificationManager.createNotificationChannel(channel)
     }
 
-    fun kill() {
+    fun stop() {
         if (isRunning) daemonGroupCollection.stop()
     }
 
-    fun rerun() {
-        if (isRunning) daemonGroupCollection.rerun()
+    fun restart() {
+        if (isRunning) daemonGroupCollection.restart()
     }
 
-    fun rerun(name: String) {
-        if (isRunning) daemonGroupCollection.rerun(name)
+    fun restart(name: String) {
+        if (isRunning) daemonGroupCollection.restart(name)
     }
 
     inner class Alarm(val context: Context) {

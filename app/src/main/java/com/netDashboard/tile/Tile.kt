@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.*
-import com.netDashboard.foreground_service.demons.Mqttd
+import com.netDashboard.foreground_service.ForegroundService
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.*
 import java.util.*
@@ -29,34 +29,10 @@ abstract class Tile(
             field = value; onEdit(value)
         }
 
-    var flag = false
+    var flag = ""
         private set
 
-    var lock = false
-        set(value) {
-            field = value
-
-            onLock(value)
-
-            val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
-            val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
-
-            flagMark?.setBackgroundResource(R.drawable.icon_lock_flag)
-
-            if (value) {
-                flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
-                flagBackground?.backgroundTintList =
-                    ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
-
-                flagMark?.visibility = View.VISIBLE
-                flagBackground?.visibility = View.VISIBLE
-            } else {
-                flagMark?.visibility = View.GONE
-                flagBackground?.visibility = View.GONE
-            }
-        }
-
-    var mqttd: Mqttd? = null
+    var service: ForegroundService? = null
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
 
@@ -104,14 +80,6 @@ abstract class Tile(
         params.height = ((getScreenWidth() - view.paddingLeft * 2) / spanCount) * height
         view.layoutParams = params
 
-        holder.itemView.setOnLongClickListener {
-            if (isEdit) {
-                createToast(context!!, "open settings! ${holder.adapterPosition}")
-            }
-
-            return@setOnLongClickListener true
-        }
-
         onEdit(isEdit)
         flag(flag)
     }
@@ -124,18 +92,27 @@ abstract class Tile(
         return oldItem.id == newItem.id
     }
 
-    open fun flag(flag: Boolean, type: String = "") {
+    fun toggleFlag(flag: String) {
+        if(this.flag.isNotEmpty()) {
+            flag("")
+        } else {
+            flag(flag)
+        }
+    }
+
+    fun flag(flag: String = "") {
         this.flag = flag
 
         val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
         val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
 
-        when (type) {
+        when (flag) {
             "swap" -> flagMark?.setBackgroundResource(R.drawable.icon_swap_flag)
             "remove" -> flagMark?.setBackgroundResource(R.drawable.icon_remove_flag)
+            "lock" -> flagMark?.setBackgroundResource(R.drawable.icon_lock_flag)
         }
 
-        if (flag) {
+        if (flag.isNotEmpty()) {
             flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
             flagBackground?.backgroundTintList =
                 ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
@@ -158,9 +135,5 @@ abstract class Tile(
 
     open fun onEdit(isEdit: Boolean) {}
 
-    open fun onLock(isLocked: Boolean) {}
-
-    open fun onData(data: String, isLive: Boolean = true) {}
-
-    open fun onData(topic: String, message: MqttMessage, isLive: Boolean = true) {}
+    //open fun onData() {}
 }

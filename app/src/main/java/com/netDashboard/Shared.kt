@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
 import android.widget.Toast
+import androidx.annotation.FloatRange
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -46,6 +47,10 @@ fun getScreenWidth(): Int {
     return Resources.getSystem().displayMetrics.widthPixels
 }
 
+fun getScreenHeight(): Int {
+    return Resources.getSystem().displayMetrics.heightPixels
+}
+
 fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): Int {
     val r = Random()
     return Color.argb(alpha, r.nextInt(R + 1), r.nextInt(G + 1), r.nextInt(B + 1))
@@ -60,8 +65,8 @@ fun getContrastColor(color: Int, negative: Boolean = false): Int {
     }
 }
 
-fun Int.alpha(a: Int): Int {
-    val alpha = 255 * a / 100
+fun Int.alpha(@FloatRange(from = 0.0, to = 1.0) a: Float): Int {
+    val alpha = (255 * a).toInt()
     return Color.argb(alpha, this.red, this.green, this.blue)
 }
 
@@ -122,4 +127,11 @@ fun createVibration(context: Context, ms: Long = 500) {
             vibrator.vibrate(ms)
         }
     }
+}
+
+fun Float.dezero(): String {
+    return when (this - this.toInt()) {
+        0f -> this.toInt()
+        else -> this
+    }.toString()
 }

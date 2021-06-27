@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.netDashboard.activities.dashboard.edit_tile.EditTileActivity
+import com.netDashboard.activities.dashboard.config_new_tile.ConfigTileActivity
 import com.netDashboard.createNotification
 import java.util.*
 import kotlin.math.abs
@@ -135,7 +135,7 @@ class TilesAdapter(
                     removeTile(position)
                 }
                 editMode -> {
-                    Intent(context, EditTileActivity::class.java).also {
+                    Intent(context, ConfigTileActivity::class.java).also {
                         it.putExtra("tileId", 12)
                         it.putExtra("dashboardName", dashboardName)
                         (context as Activity).overridePendingTransition(0, 0)

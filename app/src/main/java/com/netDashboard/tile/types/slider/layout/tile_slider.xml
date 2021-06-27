@@ -22,7 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#40808080"
         android:elevation="5dp"
         android:visibility="gone"
         tools:ignore="ContentDescription" />
@@ -48,7 +47,7 @@
         android:paddingBottom="15dp"
         android:text="100"
         android:textColor="#BFFFFFFF"
-        app:autoSizeMaxTextSize="30dp"
+        app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform"

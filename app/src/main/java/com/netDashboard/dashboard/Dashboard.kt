@@ -3,6 +3,7 @@ package com.netDashboard.dashboard
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -94,6 +95,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
             this[i].context = null
             this[i].holder = null
             this[i].service = null
+            this[i].dg = null
 
             this[i].isEdit = false
             this[i].flag()
@@ -109,13 +111,14 @@ open class Dashboard(private val rootPath: String, val name: String) :
             outStream.close()
             file.close()
         } catch (e: Exception) {
+            Log.i("OUY", e.toString())
         }
     }
 
     @Suppress("unused")
     private fun List<Tile>.getSaved(): List<Tile> {
 
-        if (!FolderTree(rootFolder).check()) return TileTypeList().getTestDashboard()
+        if (!FolderTree(rootFolder).check()) return TileTypeList().getDefault()
 
         return try {
             val file = FileInputStream(tilesFileName)
@@ -128,7 +131,8 @@ open class Dashboard(private val rootPath: String, val name: String) :
 
             list.filterIsInstance<Tile>().takeIf { it.size == list.size } ?: listOf()
         } catch (e: Exception) {
-            TileTypeList().getTestDashboard()
+            Log.i("OUY", e.toString())
+            TileTypeList().getDefault()
         }
     }
 

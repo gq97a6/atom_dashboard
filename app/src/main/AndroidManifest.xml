@@ -16,7 +16,6 @@
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
-        <activity android:name=".activities.dashboard.edit_tile.EditTileActivity" />
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +27,7 @@
         <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
         <activity android:name=".activities.dashboard.DashboardActivity" />
         <activity android:name=".activities.dashboard.new_tile.NewTileActivity" />
-        <activity android:name=".activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity" />
+        <activity android:name="com.netDashboard.activities.dashboard.config_new_tile.ConfigTileActivity" />
 
         <service
             android:name=".foreground_service.ForegroundService"

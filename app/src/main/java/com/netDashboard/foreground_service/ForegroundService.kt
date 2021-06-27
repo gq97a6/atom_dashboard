@@ -23,7 +23,7 @@ import java.io.Serializable
 class ForegroundService : Serializable, LifecycleService() {
 
     private var isRunning = false
-    lateinit var daemonGroupCollection: DaemonGroupCollection
+    lateinit var dgc: DaemonGroupCollection
 
     val alarm = Alarm(this)
 
@@ -52,7 +52,7 @@ class ForegroundService : Serializable, LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (!isRunning) {
-            daemonGroupCollection = DaemonGroupCollection(this, filesDir.canonicalPath)
+            dgc = DaemonGroupCollection(this, filesDir.canonicalPath)
 
             isRunning = true
         }
@@ -101,15 +101,15 @@ class ForegroundService : Serializable, LifecycleService() {
     }
 
     fun stop() {
-        if (isRunning) daemonGroupCollection.stop()
+        if (isRunning) dgc.stop()
     }
 
     fun restart() {
-        if (isRunning) daemonGroupCollection.restart()
+        if (isRunning) dgc.restart()
     }
 
     fun restart(name: String) {
-        if (isRunning) daemonGroupCollection.restart(name)
+        if (isRunning) dgc.restart(name)
     }
 
     inner class Alarm(val context: Context) {

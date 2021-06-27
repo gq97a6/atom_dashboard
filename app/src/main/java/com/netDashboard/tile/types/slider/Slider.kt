@@ -11,12 +11,34 @@ import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SliderTile(name: String, color: Int, width: Int, height: Int) :
-    Tile("slider", name, color, R.layout.tile_slider, width, height) {
+    Tile(name, color, R.layout.tile_slider, width, height) {
 
-    private var value = 50f
+    private var value = 0f
     private var from = 0f
     private var to = 100f
-    private var step = 10f
+    var step = 10f
+
+    private var liveValue: Float
+        get() {
+            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+
+            return when {
+                from < to -> slider?.value ?: 0f
+                to < from -> slider?.valueFrom ?: 0f - (slider?.value ?: 0f)
+                else -> 0f
+            }
+        }
+        set(value) {
+            this.value = value
+            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+
+            when {
+                from < to -> slider?.value = value
+                to < from -> slider?.value = from - value
+            }
+
+            holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = value.dezero()
+        }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -26,9 +48,6 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
 
         slider.isEnabled = !isEdit
         setRange(from, to, step)
-        slider.value = value
-
-        holder.itemView.findViewById<TextView>(R.id.ts_value).text = value.toString()
 
         background.setOnTouchListener { v, e ->
 
@@ -65,12 +84,12 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
             }
 
             override fun onStopTrackingTouch(s: Slider) {
-                value = s.value
+                onSend(mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
             }
         })
 
         slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
-            holder.itemView.findViewById<TextView>(R.id.ts_value).text = value.toString()
+            liveValue = value
         })
 
         setThemeColor(color)
@@ -82,24 +101,35 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
         holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(color)
 
         holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            ?.setTextColor(getContrastColor(color).alpha(75))
+            ?.setTextColor(getContrastColor(color).alpha(.75f))
     }
 
     private fun setRange(from: Float, to: Float, step: Float = 1f) {
-        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+        if (from == to || step !in 0.0000000001..1000000000.0) return
+        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider) ?: return
 
-        if (from < to && slider != null) {
+        this.from = from
+        this.to = to
+        this.step = step
+
+        if (from < to) {
             slider.valueFrom = from
             slider.valueTo = to
             slider.stepSize = step
-
-            if (value !in from..to) {
-                slider.value = from
-            }
+        } else if (to < from) {
+            slider.valueFrom = to
+            slider.valueTo = from
+            slider.stepSize = step
         }
+
+        liveValue = if (value in from..to) value else slider.valueFrom
     }
 
-    override fun onClick() {
-        super.onClick()
+    override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
+        if (!super.onData(data)) return false
+
+        liveValue = data.second.toString().toFloatOrNull() ?: liveValue
+
+        return true
     }
 }

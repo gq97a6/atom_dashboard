@@ -180,14 +180,14 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:enabled="false"
-                        android:text="colour by theme" />
+                        android:text="@string/cnt_design_chip0" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip1"
                         style="@style/chip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="specify color" />
+                        android:text="@string/cnt_design_chip1" />
 
                 </com.google.android.material.chip.ChipGroup>
 
@@ -215,7 +215,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Hue:"
+                            android:text="@string/cnt_design_hue"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -244,7 +244,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Saturation:"
+                            android:text="@string/cnt_design_saturation"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -273,7 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Value:"
+                            android:text="@string/cnt_design_value"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -296,7 +296,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-            
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -378,6 +378,7 @@
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
                             android:ems="12"
+                            android:hint="topic"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLength="25"
@@ -409,6 +410,7 @@
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
                             android:ems="12"
+                            android:hint="topic"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLength="25"
@@ -416,6 +418,38 @@
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
                             tools:ignore="HardcodedText,TextFields" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/cnt_mqtt_button_pub_msg"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <EditText
+                            android:id="@+id/cnt_mqtt_button_pub_msg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="#337C7C7C"
+                            android:ems="12"
+                            android:importantForAutofill="no"
+                            android:text="1"
+                            android:inputType="text"
+                            android:maxLength="25"
+                            android:padding="10dp"
+                            android:textColor="@color/gray100"
+                            android:textColorHint="@color/gray65"
+                            tools:ignore="HardcodedText,LabelFor,TextFields" />
 
                     </LinearLayout>
 

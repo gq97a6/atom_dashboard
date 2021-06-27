@@ -1,11 +1,9 @@
 package com.netDashboard.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.DashboardSavedList
 import com.netDashboard.databinding.ActivityMainBinding

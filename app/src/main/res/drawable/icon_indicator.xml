@@ -4,7 +4,8 @@
     android:height="24dp"
     android:viewportWidth="284"
     android:viewportHeight="24"
-    tools:keep="@drawable/icon_indicator">
+    tools:keep="@drawable/icon_indicator"
+    tools:ignore="VectorRaster">
   <path
       android:fillColor="#FF000000"
       android:pathData="M283.464,11.811C283.464,5.291 278.173,0 271.653,0L11.811,0C5.291,0 -0,5.291 -0,11.811C-0,18.331 5.291,23.622 11.811,23.622L271.653,23.622C278.173,23.622 283.464,18.331 283.464,11.811Z"/>

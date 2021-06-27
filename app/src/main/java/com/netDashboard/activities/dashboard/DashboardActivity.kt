@@ -3,26 +3,23 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.netDashboard.R
+import com.netDashboard.*
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
-import com.netDashboard.createNotification
-import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
-import com.netDashboard.toPx
 import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
@@ -66,7 +63,7 @@ class DashboardActivity : AppCompatActivity() {
             touchOnClick()
         }
 
-        b.dSettings.setOnClickListener {
+        b.dProperties.setOnClickListener {
             settingsOnClick()
         }
 
@@ -88,8 +85,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        Log.i("OUY", event.toString())
 
         if (event?.pointerCount ?: 0 > 3) {
             createNotification(this, "test", "test")
@@ -179,10 +174,19 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        b.dBar.visibility = if (adapter.isEdit) {
-            View.VISIBLE
+        if (adapter.isEdit) {
+            b.dBar.y = getScreenHeight().toFloat()
+
+            b.dBar.visibility = View.VISIBLE
+
+            b.dBar.animate()
+                .translationY(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         } else {
-            View.GONE
+
+            b.dBar.animate()
+                ?.y(getScreenHeight().toFloat())
+                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         }
     }
 
@@ -305,21 +309,30 @@ class DashboardActivity : AppCompatActivity() {
     private fun onServiceReady() {
         for (t in adapter.tiles) {
             t.service = service
+            t.dg = service.dgc.get(dashboard.name)
         }
-        //for (dg in foregroundService.daemonGroupCollection.daemonsGroups) {
-        //    if (dg.d.name == dashboard.name) {
-        //        dg.mqttd?.data?.observe(this, { p ->
-        //            if (p.first != null && p.second != null) {
-        //                foregroundService.alarm.on(1000)
-        //            }
-        //        })
-        //    }
-        //}
+
+        service.dgc.get(dashboard.name)?.mqttd?.data?.observe(this, { p ->
+            if (p.first != null && p.second != null) {
+                for (t in adapter.tiles) {
+                    t.onData(p)
+                }
+            }
+        })
     }
 
-    //ObjectAnimator.ofFloat(b.indicator, "translationX", distance)
-    //.apply {
-    //    this.duration = duration
-    //    start()
-    //}
+    fun clickTouch(v: View) = b.dTouch.click()
+    fun clickProperties(v: View) = b.dProperties.click()
+    fun clickAdd(v: View) = b.dAdd.click()
+    fun clickRemove(v: View) = b.dRemove.click()
+    fun clickSwap(v: View) = b.dSwap.click()
+    fun clickEdit(v: View) = b.dEdit.click()
+
+    private fun Button.click() {
+        this.performClick()
+        this.isPressed = true
+        this.invalidate()
+        this.isPressed = false
+        this.invalidate()
+    }
 }

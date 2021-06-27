@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.activities.dashboard.new_tile.config_new_tile.ConfigNewTileActivity
+import com.netDashboard.activities.dashboard.config_new_tile.ConfigTileActivity
 import com.netDashboard.databinding.ActivityNewTileBinding
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList
@@ -29,9 +29,10 @@ class NewTileActivity : AppCompatActivity() {
 
         newTileTilesAdapter.getTileOnClickLiveData().observe(this, { tileId ->
             if (tileId >= 0) {
-                Intent(this, ConfigNewTileActivity::class.java).also {
+                Intent(this, ConfigTileActivity::class.java).also {
                     it.putExtra("dashboardName", dashboardName)
                     it.putExtra("tileId", tileId)
+                    it.putExtra("newTile", true)
 
                     finish()
                     startActivity(it)

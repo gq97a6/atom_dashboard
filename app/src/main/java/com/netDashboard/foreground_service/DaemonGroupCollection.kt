@@ -52,7 +52,7 @@ class DaemonGroupCollection(private val context: Context, private val rootPath: 
 
     private fun stop(name: String) {
         for (dg in collection) {
-            if (dg.d.name == name) {
+            if (dg.dashboard.name == name) {
                 dg.isDone = true
                 dg.mqttd?.data?.removeObservers(context as LifecycleOwner)
                 dg.stop()
@@ -77,9 +77,14 @@ class DaemonGroupCollection(private val context: Context, private val rootPath: 
         var ii = 0
         for (i in 0 until collection.size) {
             if (collection[i - ii].isDone) {
-                collection.removeAt(i -ii)
+                collection.removeAt(i - ii)
                 ii++
             }
         }
+    }
+
+    fun get(name: String): DaemonGroup? {
+        for (dg in collection) if(dg.dashboard.name == name) return dg
+        return null
     }
 }

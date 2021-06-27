@@ -1,4 +1,4 @@
-package com.netDashboard.activities.dashboard.new_tile.config_new_tile
+package com.netDashboard.activities.dashboard.config_new_tile
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -19,9 +19,12 @@ import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.getContrastColor
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList
+import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.toPx
 
-class ConfigNewTileActivity : AppCompatActivity() {
+//TODO: old and new tile config
+
+class ConfigTileActivity : AppCompatActivity() {
     private lateinit var b: ActivityConfigNewTileBinding
 
     private lateinit var dashboardName: String
@@ -31,15 +34,19 @@ class ConfigNewTileActivity : AppCompatActivity() {
     private lateinit var foregroundService: ForegroundService
 
     private lateinit var tile: Tile
+    private var newTile = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tileId = intent.getIntExtra("tileId", 0)
-        tile = TileTypeList().getById(tileId)
+        dashboardName = intent.getStringExtra("dashboardName") ?: ""
+        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
+        settings = dashboard.settings
+        newTile = intent.getBooleanExtra("newTile", false)
 
         b = ActivityConfigNewTileBinding.inflate(layoutInflater)
-        configView()
+        viewConfig()
+        viewConfigSpecific()
         setContentView(b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
@@ -53,9 +60,10 @@ class ConfigNewTileActivity : AppCompatActivity() {
             }
         })
 
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        settings = dashboard.settings
+        if (newTile) {
+            val tileId = intent.getIntExtra("tileId", 0)
+            tile = TileTypeList().getById(tileId)
+        }
 
         if (settings.spanCount.toFloat() > 1f) {
             b.cntWidth.valueFrom = 1f
@@ -80,8 +88,10 @@ class ConfigNewTileActivity : AppCompatActivity() {
         }
 
         b.cntAdd.setOnClickListener {
-            configTile()
-            configTileExtra()
+            tileConfig()
+            tileConfigSpecific()
+            tileAdd()
+
             foregroundService.restart(dashboard.name)
 
             Intent(this, DashboardActivity::class.java).also {
@@ -139,17 +149,41 @@ class ConfigNewTileActivity : AppCompatActivity() {
         }
     }
 
-    private fun configView() {
+    private fun viewConfigSpecific() {
+        if (newTile) {
+            //when (tile) {
+            //    is ButtonTile ->
+            //    is SliderTile ->
+            //}
 
-        b.cntTileType.text = tile.type
-        handleHueSlider()
-
-        //if (tile.type == "button") {
-        //} else if (tile.type == "slider") {
-        //}
+        } else {
+            //when (tile) {
+            //    is ButtonTile ->
+            //    is SliderTile ->
+            //}
+        }
     }
 
-    private fun configTile() {
+    private fun viewConfig() {
+
+        b.cntTileType.text = tile.name
+        handleHueSlider()
+
+        if (newTile) {
+
+        }
+    }
+
+    private fun tileConfigSpecific() {
+        when (tile) {
+            //is ButtonTile ->
+            is SliderTile -> (tile as SliderTile).step = .01f
+        }
+    }
+
+    //TODO: config tiles
+
+    private fun tileConfig() {
         tile.width = b.cntWidth.value.toInt()
         tile.height = b.cntHeight.value.toInt()
 
@@ -167,15 +201,14 @@ class ConfigNewTileActivity : AppCompatActivity() {
             false
         }
 
-        tile.mqttEnabled = if (b.cntMqttSwitch.isChecked) {
-            tile.mqttSubTopics.add(b.cntSliderMqttSub.text.toString())
-            tile.mqttPubTopics.add(b.cntSliderMqttPub.text.toString())
-
-            true
-        } else {
-            false
+        tile.mqttEnabled = b.cntMqttSwitch.isChecked
+        if (tile.mqttEnabled) {
+            tile.mqttTopics.sub.set(b.cntSliderMqttSub.text.toString(), "sub")
+            tile.mqttTopics.pub.set(b.cntSliderMqttPub.text.toString(), "pub")
         }
+    }
 
+    private fun tileAdd() {
         var list = dashboard.tiles
 
         if (list.isEmpty()) {
@@ -187,12 +220,6 @@ class ConfigNewTileActivity : AppCompatActivity() {
         }
 
         dashboard.tiles = list
-    }
-
-    private fun configTileExtra() {
-        //if (tile.type == "button") {
-        //} else if (tile.type == "slider") {
-        //}
     }
 
     private fun handleHueSlider() {
@@ -295,7 +322,7 @@ class ConfigNewTileActivity : AppCompatActivity() {
         val colorsText = intArrayOf(
             chipText?.getColorForState(intArrayOf(android.R.attr.state_enabled), Color.RED)
                 ?: Color.RED,
-            getContrastColor(color).alpha(75),
+            getContrastColor(color).alpha(.75f),
             chipText?.getColorForState(intArrayOf(-android.R.attr.state_checked), Color.RED)
                 ?: Color.RED,
             chipText?.getColorForState(intArrayOf(-android.R.attr.state_pressed), Color.RED)

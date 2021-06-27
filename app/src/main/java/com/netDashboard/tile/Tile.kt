@@ -5,14 +5,16 @@ import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.netDashboard.*
+import com.netDashboard.R
+import com.netDashboard.alpha
+import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.getScreenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.io.*
+import java.io.Serializable
 import java.util.*
 
 abstract class Tile(
-    val type: String,
     var name: String,
     var color: Int,
     private var layout: Int,
@@ -33,6 +35,8 @@ abstract class Tile(
         private set
 
     var service: ForegroundService? = null
+    var dg: DaemonGroup? = null
+
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
 
@@ -40,8 +44,9 @@ abstract class Tile(
 
     //MQTT
     var mqttEnabled = false
-    var mqttSubTopics: MutableList<String> = mutableListOf("abc") //TMP ("abc")
-    var mqttPubTopics: MutableList<String> = mutableListOf()
+
+    var mqttTopics = MqttTopics()
+
     var mqttPubConfirmation = false
     var mqttQoS = 0
     var mqttPayloadJSON = false
@@ -92,8 +97,37 @@ abstract class Tile(
         return oldItem.id == newItem.id
     }
 
+    class MqttTopics : Serializable {
+        val sub = List()
+        val pub = List()
+
+        class List : Serializable {
+            private val topics: MutableList<Pair<String, String>> = mutableListOf()
+
+            fun set(topic: String, name: String) {
+                topics.add(Pair(topic, name))
+            }
+
+            fun get(name: String): String? {
+                for (p in topics) {
+                    if (p.second == name) return p.first
+                }
+
+                return null
+            }
+
+            fun get(): MutableList<String> {
+                val list: MutableList<String> = mutableListOf()
+
+                for (p in topics) list.add(p.first)
+
+                return list
+            }
+        }
+    }
+
     fun toggleFlag(flag: String) {
-        if(this.flag.isNotEmpty()) {
+        if (this.flag.isNotEmpty()) {
             flag("")
         } else {
             flag(flag)
@@ -113,9 +147,8 @@ abstract class Tile(
         }
 
         if (flag.isNotEmpty()) {
-            flagMark?.backgroundTintList = ColorStateList.valueOf(getContrastColor(color))
-            flagBackground?.backgroundTintList =
-                ColorStateList.valueOf(getContrastColor(color, true).alpha(60))
+            flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
+            flagBackground?.setBackgroundColor((-1).alpha(.7f))
 
             flagMark?.visibility = View.VISIBLE
             flagBackground?.visibility = View.VISIBLE
@@ -135,5 +168,20 @@ abstract class Tile(
 
     open fun onEdit(isEdit: Boolean) {}
 
-    //open fun onData() {}
+    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
+        dg?.mqttd?.publish(
+            topic,
+            msg
+        )
+    }
+
+    fun onSend(topic: String, msg: String, retained: Boolean = false) {
+        onSend(topic,msg, 1, retained)
+    }
+
+    open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
+        if(!mqttEnabled) return false
+        if(data.first != mqttTopics.sub.get("sub")) return false
+        return true
+    }
 }

@@ -81,7 +81,6 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
             override fun messageArrived(t: String?, m: MqttMessage) {
                 data.postValue(Pair(t ?: "", m))
-                Log.i("OUY", m.toString())
             }
 
             override fun connectionLost(cause: Throwable?) {

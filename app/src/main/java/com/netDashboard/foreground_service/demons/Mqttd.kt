@@ -139,6 +139,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
                 override fun messageArrived(t: String?, m: MqttMessage) {
                     data.postValue(Pair(t ?: "", m))
+                    data.value = Pair(null, null)
                 }
 
                 override fun connectionLost(cause: Throwable?) {

@@ -11,7 +11,10 @@ import kotlin.random.Random
 class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     var isEnabled = false
-    var clientHandler = ClientHandler()
+
+    var client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
+    var conHandler = ConnectionHandler()
+
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     init {
@@ -22,19 +25,19 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         if (isEnabled) return
 
         isEnabled = true
-        clientHandler.dispatch()
+        conHandler.dispatch()
     }
 
     fun stop() {
         if (!isEnabled) return
 
         isEnabled = false
-        clientHandler.dispatch()
+        conHandler.dispatch()
     }
 
     fun publish(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
 
-        if (!clientHandler.client?.isConnected ?: false) return
+        if (!client.isConnected) return
 
         try {
             val message = MqttMessage()
@@ -43,7 +46,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             message.qos = qos
             message.isRetained = retained
 
-            client?.publish(topic, message, null, object : IMqttActionListener {
+            client.publish(topic, message, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -57,10 +60,10 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     fun subscribe(topic: String, qos: Int = 1) {
 
-        if (!isConnected) return
+        if (!client.isConnected) return
 
         try {
-            client?.subscribe(topic, qos, null, object : IMqttActionListener {
+            client.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -74,10 +77,10 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     fun unsubscribe(topic: String) {
 
-        if (!isConnected) return
+        if (!client.isConnected) return
 
         try {
-            client?.unsubscribe(topic, null, object : IMqttActionListener {
+            client.unsubscribe(topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -89,17 +92,22 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         }
     }
 
-    inner class ClientHandler(private val retryDelay: Long = 3000) {
+    inner class ConnectionHandler(private val retryDelay: Long = 3000) {
 
         private var isDispatched = false
-        lateinit var client: MqttAndroidClientExtended
-
-        val isDone
-            get() = client.isConnected == isEnabled
-        var isDoneFlag = MutableLiveData(false)
+        private var isDone = MutableLiveData(false)
 
         fun dispatch(force: Boolean = false) {
-            if (client.isConnected == isEnabled) return
+
+            isDispatched = true
+
+            if (isDispatched && !force) return
+            if (client.isConnected == isEnabled) {
+                isDispatched = false
+                isDone.postValue(true)
+                isDone.value = false
+                return
+            }
 
             if (isEnabled) {
                 client.start()
@@ -107,99 +115,84 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
                 client.stop()
             }
 
-            if (isDispatched && !force) return
-            if (isDone) {
-                isDoneFlag.postValue(isDone)
-                return
-            }
-
             Handler(Looper.getMainLooper()).postDelayed({
                 dispatch(true)
             }, retryDelay)
-            isDispatched = true
         }
+    }
 
-        inner class MqttAndroidClientExtended(
-            context: Context,
-            serverURI: String,
-            clientId: String
-        ) : MqttAndroidClient(context, serverURI, clientId) {
+    inner class MqttAndroidClientExtended(
+        context: Context,
+        serverURI: String,
+        clientId: String
+    ) : MqttAndroidClient(context, serverURI, clientId) {
 
-            var isBusy = false
-            private var isReady = false
-                get() = client != null && field
+        private var isBusy = false
 
-            fun start() {
-                if (isBusy) return
+        fun start() {
+            if (isBusy) return
 
-                isBusy = true
+            isBusy = true
 
-                client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
-                client?.setCallback(object : MqttCallback {
+            client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
+            client.setCallback(object : MqttCallback {
 
-                    override fun messageArrived(t: String?, m: MqttMessage) {
-                        data.postValue(Pair(t ?: "", m))
-                    }
+                override fun messageArrived(t: String?, m: MqttMessage) {
+                    data.postValue(Pair(t ?: "", m))
+                }
 
-                    override fun connectionLost(cause: Throwable?) {
-                        clientHandler.dispatch()
-                    }
+                override fun connectionLost(cause: Throwable?) {
+                    conHandler.dispatch()
+                }
 
-                    override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                override fun deliveryComplete(token: IMqttDeliveryToken?) {
+                }
+            })
+
+            val options = MqttConnectOptions()
+
+            try {
+                client.connect(options, null, object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {}
+
+                    override fun onFailure(
+                        asyncActionToken: IMqttToken?,
+                        exception: Throwable?
+                    ) {
                     }
                 })
-
-                val options = MqttConnectOptions()
-
-                try {
-                    client?.connect(options, null, object : IMqttActionListener {
-                        override fun onSuccess(asyncActionToken: IMqttToken?) {
-                            onConnectedFlag.postValue(true)
-                        }
-
-                        override fun onFailure(
-                            asyncActionToken: IMqttToken?,
-                            exception: Throwable?
-                        ) {
-                        }
-                    })
-                } catch (e: MqttException) {
-                    e.printStackTrace()
-                }
-
-                isReady = true
-                isBusy
+            } catch (e: MqttException) {
+                e.printStackTrace()
             }
 
-            fun stop() {
-                if (!isReady || isBusy) return
+            isBusy = false
+        }
 
-                isBusy = true
+        fun stop() {
+            if (isBusy) return
 
-                client?.unregisterResources()
-                client?.close()
+            isBusy = true
 
-                try {
-                    client?.disconnect(null, object : IMqttActionListener {
-                        override fun onSuccess(asyncActionToken: IMqttToken?) {
-                        }
+            client.unregisterResources()
+            client.close()
 
-                        override fun onFailure(
-                            asyncActionToken: IMqttToken?,
-                            exception: Throwable?
-                        ) {
-                        }
-                    })
-                } catch (e: MqttException) {
-                    e.printStackTrace()
-                }
+            try {
+                client.disconnect(null, object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    }
 
-                client?.setCallback(null)
-                client = null
-
-                isReady = false
-                isBusy = false
+                    override fun onFailure(
+                        asyncActionToken: IMqttToken?,
+                        exception: Throwable?
+                    ) {
+                    }
+                })
+            } catch (e: MqttException) {
+                e.printStackTrace()
             }
+
+            client.setCallback(null)
+            isBusy = false
         }
     }
 }

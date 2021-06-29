@@ -17,7 +17,7 @@ class PropertiesActivity : AppCompatActivity() {
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
-    private lateinit var settings: Dashboard.Settings
+    private lateinit var properties: Dashboard.Properties
 
     private lateinit var foregroundService: ForegroundService
 
@@ -40,21 +40,21 @@ class PropertiesActivity : AppCompatActivity() {
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        settings = dashboard.settings
+        properties = dashboard.properties
 
-        b.pSpan.value = settings.spanCount.toFloat()
+        b.pSpan.value = properties.spanCount.toFloat()
         b.pSpan.callOnClick()
-        b.pSpanValue.text = settings.spanCount.toString()
+        b.pSpanValue.text = properties.spanCount.toString()
 
-        b.pMqttSwitch.isChecked = settings.mqttEnabled
+        b.pMqttSwitch.isChecked = properties.mqttEnabled
         mqttSwitchHandle(b.pMqttSwitch.isChecked)
 
-        b.pMqttAddress.setText(settings.mqttAddress)
-        b.pMqttPort.setText(settings.mqttPort.toString())
+        b.pMqttAddress.setText(properties.mqttAddress)
+        b.pMqttPort.setText(properties.mqttPort.toString())
 
         b.pSpan.addOnChangeListener { _, value, _ ->
             b.pSpanValue.text = value.toInt().toString()
-            settings.spanCount = value.toInt()
+            properties.spanCount = value.toInt()
         }
 
         b.pMqttSwitch.setOnCheckedChangeListener { _, state ->
@@ -62,28 +62,18 @@ class PropertiesActivity : AppCompatActivity() {
         }
 
         b.pMqttAddress.addTextChangedListener(object : TextWatcher {
-
-            override fun afterTextChanged(cs: Editable) {
-            }
-
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {
-            }
-
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                settings.mqttAddress = cs.toString()
+                properties.mqttAddress = cs.toString()
             }
         })
 
         b.pMqttPort.addTextChangedListener(object : TextWatcher {
-
-            override fun afterTextChanged(s: Editable) {
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
-
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                if (count > 0) settings.mqttPort = cs.toString().toInt()
+                if (count > 0) properties.mqttPort = cs.toString().toInt()
             }
         })
     }
@@ -99,18 +89,20 @@ class PropertiesActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        dashboard.settings = settings
-
-        foregroundService.restart(dashboard.name)
+        dashboard.properties = properties
 
         super.onPause()
+    }
+
+    private fun onServiceReady() {
+
     }
 
     fun checkSpan(span: Int): Boolean {
         val list = dashboard.tiles
 
         for (t in list) {
-            if (t.width > span) {
+            if (t.p.width > span) {
                 return false
             }
         }
@@ -131,10 +123,6 @@ class PropertiesActivity : AppCompatActivity() {
             b.pMqttPortText.visibility = View.GONE
         }
 
-        settings.mqttEnabled = state
-    }
-
-    private fun onServiceReady() {
-
+        properties.mqttEnabled = state
     }
 }

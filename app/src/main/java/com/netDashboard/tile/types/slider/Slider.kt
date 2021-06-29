@@ -16,7 +16,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
     private var value = 0f
     private var from = 0f
     private var to = 100f
-    var step = 10f
+    private var step = 10f
 
     private var liveValue: Float
         get() {
@@ -84,7 +84,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
             }
 
             override fun onStopTrackingTouch(s: Slider) {
-                onSend(mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
+                onSend(p.mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
             }
         })
 
@@ -92,7 +92,7 @@ class SliderTile(name: String, color: Int, width: Int, height: Int) :
             liveValue = value
         })
 
-        setThemeColor(color)
+        setThemeColor(p.color)
     }
 
     override fun setThemeColor(color: Int) {

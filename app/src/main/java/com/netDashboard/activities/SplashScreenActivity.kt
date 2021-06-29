@@ -6,18 +6,27 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree
+import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.main_settings.MainSettings
-import java.util.*
-import kotlin.concurrent.schedule
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
+
+    private lateinit var settings: MainSettings
+    private lateinit var service: ForegroundService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        settings = MainSettings(filesDir.canonicalPath).getSaved()
+
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
+        foregroundServiceHandler.bind()
 
         //TMP
         val rootPath = "${filesDir.canonicalPath}/dashboard_data"
@@ -29,24 +38,28 @@ class SplashScreenActivity : AppCompatActivity() {
         FolderTree("$rootPath/test5").check()
         //TMP
 
-        val con = this
-        Timer().schedule(500) {
+        foregroundServiceHandler.service.observe(this, { s ->
+            if (s != null) {
+                service = s
+                onServiceReady()
+            }
+        })
+    }
 
-            val settings = MainSettings(filesDir.canonicalPath).getSaved()
+    private fun onServiceReady() {
+        if (settings.lastDashboardName != null) {
 
-            if (settings.lastDashboardName != null) {
+            Intent(this, DashboardActivity::class.java).also {
+                it.putExtra("dashboardName", settings.lastDashboardName)
+                overridePendingTransition(0, 0)
+                startActivity(it)
+                finish()
+            }
+        } else {
 
-                Intent(con, DashboardActivity::class.java).also {
-                    it.putExtra("dashboardName", settings.lastDashboardName)
-                    overridePendingTransition(0, 0)
-                    startActivity(it)
-                    finish()
-                }
-            } else {
-                Intent(con, MainActivity::class.java).also {
-                    finish()
-                    startActivity(it)
-                }
+            Intent(this, MainActivity::class.java).also {
+                startActivity(it)
+                finish()
             }
         }
     }

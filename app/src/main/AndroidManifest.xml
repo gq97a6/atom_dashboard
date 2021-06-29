@@ -23,11 +23,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
         <activity android:name=".activities.dashboard.DashboardActivity" />
-        <activity android:name=".activities.dashboard.new_tile.NewTileActivity" />
-        <activity android:name="com.netDashboard.activities.dashboard.config_new_tile.ConfigTileActivity" />
+        <activity android:name=".activities.dashboard.tile_new.TileNewActivity" />
+        <activity android:name=".activities.dashboard.tile_properties.TilePropertiesActivity" />
 
         <service
             android:name=".foreground_service.ForegroundService"

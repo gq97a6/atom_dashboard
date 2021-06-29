@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.netDashboard.activities.dashboard.config_new_tile.ConfigTileActivity
+import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.createNotification
 import java.util.*
 import kotlin.math.abs
@@ -127,6 +127,8 @@ class TilesAdapter(
         tiles[position].onBindViewHolder(holder, position)
 
         holder.itemView.setOnClickListener {
+            tileOnClick.postValue(position)
+
             when {
                 swapMode -> {
                     swapTiles(position)
@@ -135,8 +137,8 @@ class TilesAdapter(
                     removeTile(position)
                 }
                 editMode -> {
-                    Intent(context, ConfigTileActivity::class.java).also {
-                        it.putExtra("tileId", 12)
+                    Intent(context, TilePropertiesActivity::class.java).also {
+                        it.putExtra("tileId", position)
                         it.putExtra("dashboardName", dashboardName)
                         (context as Activity).overridePendingTransition(0, 0)
                         context.startActivity(it)

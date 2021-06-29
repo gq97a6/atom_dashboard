@@ -28,8 +28,8 @@ open class Dashboard(private val rootPath: String, val name: String) :
     private val tilesFileName = "$rootFolder/tiles"
     private val settingsFileName = "$rootFolder/settings"
 
-    var settings = Settings()
-        get() = Settings().getSaved()
+    var properties = Properties()
+        get() = Properties().getSaved()
         set(value) {
             field = value
             field.save()
@@ -136,7 +136,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
         }
     }
 
-    inner class Settings : Serializable {
+    inner class Properties : Serializable {
         var spanCount = 3
 
         //MQTT
@@ -168,22 +168,22 @@ open class Dashboard(private val rootPath: String, val name: String) :
             }
         }
 
-        fun getSaved(): Settings {
+        fun getSaved(): Properties {
 
-            if (!FolderTree(rootFolder).check()) return Settings()
+            if (!FolderTree(rootFolder).check()) return Properties()
 
             return try {
                 val file = FileInputStream(settingsFileName)
                 val inStream = ObjectInputStream(file)
 
-                val settings = inStream.readObject() as Settings
+                val settings = inStream.readObject() as Properties
 
                 inStream.close()
                 file.close()
 
                 settings
             } catch (e: Exception) {
-                Settings()
+                Properties()
             }
         }
     }

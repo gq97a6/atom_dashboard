@@ -30,7 +30,7 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
         holder.itemView.findViewById<Button>(R.id.tb_button).text = text
 
         liveText = text
-        setThemeColor(color)
+        setThemeColor(p.color)
     }
 
     override fun setThemeColor(color: Int) {
@@ -49,13 +49,15 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
     override fun onClick() {
         super.onClick()
 
-        onSend(mqttTopics.pub.get("pub") ?: "", "0")
+        onSend(p.mqttTopics.pub.get("pub") ?: "", "0")
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
 
-        liveText = data.second.toString()
+        var counter = liveText.toIntOrNull() ?: 0
+        counter++
+        liveText = counter.toString()
 
         return true
     }

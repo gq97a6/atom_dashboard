@@ -30,7 +30,7 @@
     <string name="p_span">Row span: </string>
 
     <string name="cnt_dimensions">Dimensions</string>
-    <string name="cnt_cnt_dimensions_info">You can only control one dimension.</string>
+    <string name="cnt_cnt_dimensions_info">You can control only one dimension.</string>
     <string name="cnt_design">Design</string>
     <string name="cnt_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
     <string name="cnt_communication">Communication:</string>
@@ -40,11 +40,10 @@
     <string name="cnt_port">Port:</string>
     <string name="cnt_publish_topic">Publish topic:</string>
     <string name="cnt_subscribe_topic">Subscribe topic:</string>
-    <string name="cnt_banner0">Configuration</string>
-    <string name="cnt_banner1">Picked tile type:</string>
+    <string name="cnt_banner0">Tile properties</string>
+    <string name="cnt_banner1">type:</string>
     <string name="cnt_slider_height">Height:</string>
     <string name="cnt_slider_width">Width:</string>
-    <string name="cnt_button_add">Add</string>
 
     <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
     <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
@@ -53,5 +52,4 @@
     <string name="cnt_design_hue">Hue:</string>
     <string name="cnt_design_saturation">Saturation:</string>
     <string name="cnt_design_value">Value:</string>
-    <string name="cnt_mqtt_button_pub_msg">Publish message:</string>
 </resources>

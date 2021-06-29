@@ -59,6 +59,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onServiceReady() {
-    }
+    private fun onServiceReady() {}
 }

@@ -6,8 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.media.AudioManager
-import android.media.ToneGenerator
 import android.os.*
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -17,17 +15,11 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.createNotification
-import com.netDashboard.createVibration
 import java.io.Serializable
 
 class ForegroundService : Serializable, LifecycleService() {
 
     private var isRunning = false
-    lateinit var dgc: DaemonGroupCollection
-
-    val alarm = Alarm(this)
-
-    private lateinit var foregroundService: ForegroundService
 
     override fun onCreate() {
         super.onCreate()
@@ -52,8 +44,6 @@ class ForegroundService : Serializable, LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (!isRunning) {
-            dgc = DaemonGroupCollection(this, filesDir.canonicalPath)
-
             isRunning = true
         }
 
@@ -79,9 +69,7 @@ class ForegroundService : Serializable, LifecycleService() {
     }
 
     override fun onBind(intent: Intent): IBinder {
-
         super.onBind(intent)
-
         return binder
     }
 
@@ -98,52 +86,6 @@ class ForegroundService : Serializable, LifecycleService() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
-    }
-
-    fun stop() {
-        if (isRunning) dgc.stop()
-    }
-
-    fun restart() {
-        if (isRunning) dgc.restart()
-    }
-
-    fun restart(name: String) {
-        if (isRunning) dgc.restart(name)
-    }
-
-    inner class Alarm(val context: Context) {
-        private var isOn = false
-
-        private fun on() {
-            if (isOn) return
-            isOn = true
-            loop()
-        }
-
-        private fun off() {
-            isOn = false
-        }
-
-        private fun loop() {
-            if (!isOn) return
-
-            Thread {
-                createVibration(context, 250)
-                ToneGenerator(AudioManager.STREAM_ALARM, 40).startTone(37, 500)
-            }.start()
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                loop()
-            }, 500)
-        }
-
-        fun on(t: Long) {
-            alarm.on()
-            Handler(Looper.getMainLooper()).postDelayed({
-                alarm.off()
-            }, t)
-        }
     }
 }
 

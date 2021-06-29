@@ -15,57 +15,40 @@ import java.io.Serializable
 import java.util.*
 
 abstract class Tile(
-    var name: String,
-    var color: Int,
+    name: String,
+    color: Int,
     private var layout: Int,
-    var width: Int,
-    var height: Int
+    width: Int,
+    height: Int
 ) : Serializable {
 
     val id: Long?
+    var p = Properties()
 
-    var isColouredByTheme = false
+    var context: Context? = null
+    var holder: TilesAdapter.TileViewHolder? = null
+    var service: ForegroundService? = null
+    var dg: DaemonGroup? = null
+
+    var flag = ""
+        private set
 
     var isEdit = false
         set(value) {
             field = value; onEdit(value)
         }
 
-    var flag = ""
-        private set
-
-    var service: ForegroundService? = null
-    var dg: DaemonGroup? = null
-
-    var context: Context? = null
-    var holder: TilesAdapter.TileViewHolder? = null
-
-    private var spanCount = 1
-
-    //MQTT
-    var mqttEnabled = false
-
-    var mqttTopics = MqttTopics()
-
-    var mqttPubConfirmation = false
-    var mqttQoS = 0
-    var mqttPayloadJSON = false
-    var mqttOutputJSON = false
-
-    //Bluetooth
-    var bltPattern = ""
-    var bltDelimiter = ""
-    var bltRequestToGet = ""
-    var bltPayloadJSON = false
-    var bltOutputJSON = ""
-
     init {
         id = Random().nextLong()
+        p.name = name
+        p.color = color
+        p.width = width
+        p.height = height
     }
 
     fun getItemViewType(context: Context, spanCount: Int): Int {
         this.context = context
-        this.spanCount = spanCount
+        p.spanCount = spanCount
 
         return layout
     }
@@ -82,7 +65,7 @@ abstract class Tile(
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((getScreenWidth() - view.paddingLeft * 2) / spanCount) * height
+        params.height = ((getScreenWidth() - view.paddingLeft * 2) / p.spanCount) * p.height
         view.layoutParams = params
 
         onEdit(isEdit)
@@ -102,26 +85,31 @@ abstract class Tile(
         val pub = List()
 
         class List : Serializable {
-            private val topics: MutableList<Pair<String, String>> = mutableListOf()
+            private val topics: MutableList<String> = mutableListOf()
+            private val names: MutableList<String> = mutableListOf()
 
             fun set(topic: String, name: String) {
-                topics.add(Pair(topic, name))
+                for ((i, n) in names.withIndex()) {
+                    if (n == name) {
+                        topics[i] = topic
+                        return
+                    }
+                }
+
+                topics.add(topic)
+                names.add(name)
             }
 
             fun get(name: String): String? {
-                for (p in topics) {
-                    if (p.second == name) return p.first
+                for ((i, n) in names.withIndex()) {
+                    if (n == name) return topics[i]
                 }
 
                 return null
             }
 
             fun get(): MutableList<String> {
-                val list: MutableList<String> = mutableListOf()
-
-                for (p in topics) list.add(p.first)
-
-                return list
+                return topics
             }
         }
     }
@@ -159,7 +147,7 @@ abstract class Tile(
     }
 
     open fun setThemeColor(color: Int) {
-        this.color = color
+        p.color = color
     }
 
     open fun onClick() {}
@@ -176,12 +164,36 @@ abstract class Tile(
     }
 
     fun onSend(topic: String, msg: String, retained: Boolean = false) {
-        onSend(topic,msg, 1, retained)
+        onSend(topic, msg, 1, retained)
     }
 
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
-        if(!mqttEnabled) return false
-        if(data.first != mqttTopics.sub.get("sub")) return false
+        if (!p.mqttEnabled) return false
+        if (data.first != p.mqttTopics.sub.get("sub")) return false
         return true
+    }
+
+    inner class Properties : Serializable {
+        var name = ""
+
+        var width = 0
+        var height = 0
+        var spanCount = 1
+
+        var color = 0
+        var isColouredByTheme = false
+
+        var mqttEnabled = true
+        var mqttTopics = MqttTopics()
+        var mqttPubConfirmation = false
+        var mqttQoS = 0
+        var mqttPayloadJSON = false
+        var mqttOutputJSON = false
+
+        var bltPattern = ""
+        var bltDelimiter = ""
+        var bltRequestToGet = ""
+        var bltPayloadJSON = false
+        var bltOutputJSON = ""
     }
 }

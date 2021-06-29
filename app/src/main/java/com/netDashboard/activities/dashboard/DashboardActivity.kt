@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.*
 import com.netDashboard.activities.MainActivity
-import com.netDashboard.activities.dashboard.new_tile.NewTileActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
+import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
@@ -27,7 +27,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
-    private lateinit var settings: Dashboard.Settings
+    private lateinit var properties: Dashboard.Properties
 
     lateinit var adapter: TilesAdapter
 
@@ -52,12 +52,12 @@ class DashboardActivity : AppCompatActivity() {
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        settings = dashboard.settings
+        properties = dashboard.properties
 
         setupRecyclerView()
 
         //Set dashboard tag name
-        b.dTagName.text = settings.dashboardTagName.uppercase(Locale.getDefault())
+        b.dTagName.text = properties.dashboardTagName.uppercase(Locale.getDefault())
 
         b.dTouch.setOnClickListener {
             touchOnClick()
@@ -123,10 +123,13 @@ class DashboardActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    private fun onServiceReady() {
+    }
+
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
-        val spanCount = settings.spanCount
+        val spanCount = properties.spanCount
 
         adapter = TilesAdapter(this, spanCount, "", dashboardName)
         adapter.setHasStableIds(true)
@@ -140,8 +143,8 @@ class DashboardActivity : AppCompatActivity() {
             override fun getSpanSize(position: Int): Int {
                 val t = adapter.tiles[position]
                 return when {
-                    t.height != 1 || t.width > spanCount -> spanCount
-                    else -> t.width
+                    t.p.height != 1 || t.p.width > spanCount -> spanCount
+                    else -> t.p.width
                 }
             }
         }
@@ -260,19 +263,13 @@ class DashboardActivity : AppCompatActivity() {
                     for ((i, t) in adapter.tiles.withIndex()) {
                         if (t.flag == "remove") {
                             adapter.tiles.removeAt(i)
+                            dashboard.tiles = adapter.tiles.toList()
 
-                            adapter.notifyItemRemoved(i)
-                            adapter.notifyItemRangeChanged(
-                                i,
-                                adapter.itemCount - i
-                            )
+                            adapter.notifyDataSetChanged()
 
                             if (adapter.itemCount == 0) {
                                 b.dPlaceholder.visibility = View.VISIBLE
                             }
-
-                            dashboard.tiles = adapter.tiles.toList()
-                            service.restart(dashboard.name)
 
                             break
                         }
@@ -289,7 +286,7 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun addOnClick() {
-        Intent(this, NewTileActivity::class.java).also {
+        Intent(this, TileNewActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
 
             finish()
@@ -304,21 +301,6 @@ class DashboardActivity : AppCompatActivity() {
         b.dSwap.alpha = 0.4f
         b.dEdit.alpha = 0.4f
         button.alpha = 1f
-    }
-
-    private fun onServiceReady() {
-        for (t in adapter.tiles) {
-            t.service = service
-            t.dg = service.dgc.get(dashboard.name)
-        }
-
-        service.dgc.get(dashboard.name)?.mqttd?.data?.observe(this, { p ->
-            if (p.first != null && p.second != null) {
-                for (t in adapter.tiles) {
-                    t.onData(p)
-                }
-            }
-        })
     }
 
     fun clickTouch(v: View) = b.dTouch.click()

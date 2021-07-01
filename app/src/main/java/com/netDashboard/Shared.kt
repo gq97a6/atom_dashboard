@@ -100,7 +100,7 @@ fun createNotification(
 internal fun createNotificationChannel(context: Context) {
     val channel = NotificationChannel(
         "notification_id",
-        "notification",
+        "Other notification",
         NotificationManager.IMPORTANCE_DEFAULT
     ).apply {
         description = "com/netDashboard/notification_channel"

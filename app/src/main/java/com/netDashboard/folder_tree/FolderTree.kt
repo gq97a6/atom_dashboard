@@ -2,15 +2,26 @@ package com.netDashboard.folder_tree
 
 import java.io.File
 
-class FolderTree(private val rootFolder: String) {
-    fun check(): Boolean {
-        val f = File(rootFolder)
-        return if (!f.isDirectory) {
-            f.mkdirs()
+object FolderTree {
 
-            false
-        } else {
-            true
-        }
+    var rootFolder: String = ""
+    val dashboardsFolder
+        get() = "$rootFolder/dashboards"
+
+    fun tilesPropertiesFile(name: String): String = "$dashboardsFolder/$name/tilesProperties"
+    fun dashboardPropertiesFile(name: String): String = "$dashboardsFolder/$name/properties"
+    val settingsFile
+        get() = "$rootFolder/settings"
+
+    fun build() {
+        buildPath("$rootFolder/dashboards")
+        buildPath(rootFolder)
+    }
+
+    fun buildDashboard(name: String) = buildPath("$dashboardsFolder/$name")
+
+    private fun buildPath(path: String) {
+        val f = File(path)
+        if (!f.isDirectory) f.mkdirs()
     }
 }

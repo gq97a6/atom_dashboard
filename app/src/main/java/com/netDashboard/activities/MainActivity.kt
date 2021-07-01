@@ -5,17 +5,16 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.dashboard.DashboardAdapter
-import com.netDashboard.dashboard.DashboardSavedList
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.main_settings.MainSettings
+import com.netDashboard.settings.Settings
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
 
     private lateinit var dashboardAdapter: DashboardAdapter
-    private lateinit var settings: MainSettings
+    private lateinit var settings: Settings
 
     private lateinit var foregroundService: ForegroundService
 
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
 
-        dashboardAdapter.submitList(DashboardSavedList().get(filesDir.canonicalPath))
+        dashboardAdapter.submitList(mutableListOf())
 
         if (dashboardAdapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE

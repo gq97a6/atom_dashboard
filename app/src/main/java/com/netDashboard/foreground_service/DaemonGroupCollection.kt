@@ -1,11 +1,11 @@
 package com.netDashboard.foreground_service
 
 import android.content.Context
-import com.netDashboard.dashboard.DashboardSavedList
+import com.netDashboard.dashboard.Dashboards
 
 class DaemonGroupCollection(private val context: Context, private val rootPath: String) {
 
-    private val dashboards = DashboardSavedList().get(rootPath)
+    private val dashboards = Dashboards.list
     private val collection: MutableList<DaemonGroup> = mutableListOf()
 
     init {
@@ -14,7 +14,7 @@ class DaemonGroupCollection(private val context: Context, private val rootPath: 
 
     private fun start() {
         for (d in dashboards) {
-            val g = DaemonGroup(context, rootPath, d.name)
+            val g = DaemonGroup(context, d)
             collection.add(g)
         }
     }

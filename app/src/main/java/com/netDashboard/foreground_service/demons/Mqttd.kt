@@ -17,11 +17,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
-    init {
-        start()
-    }
-
-    private fun start() {
+    fun start() {
         if (isEnabled) return
 
         isEnabled = true
@@ -95,7 +91,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
     inner class ConnectionHandler(private val retryDelay: Long = 3000) {
 
         private var isDispatched = false
-        private var isDone = MutableLiveData(false)
+        var isDone = MutableLiveData(false)
 
         fun dispatch(force: Boolean = false) {
 

@@ -3,44 +3,24 @@ package com.netDashboard.dashboard
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.folder_tree.FolderTree
-import com.netDashboard.main_settings.MainSettings
+import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.TileTypeList
 import java.io.*
 import java.util.*
 
-open class Dashboard(private val rootPath: String, val name: String) :
-    Serializable {
+open class Dashboard(val name: String) : Serializable {
 
     val id: Long?
+    var p = Properties()
 
     var context: Context? = null
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
-
-    private val rootFolder = "$rootPath/dashboard_data/$name"
-    private val tilesFileName = "$rootFolder/tiles"
-    private val settingsFileName = "$rootFolder/settings"
-
-    var properties = Properties()
-        get() = Properties().getSaved()
-        set(value) {
-            field = value
-            field.save()
-        }
-
     var tiles: List<Tile> = listOf()
-        get() = field.getSaved()
-        set(value) {
-            field = value
-            field.save()
-        }
 
     init {
         id = Random().nextLong()
@@ -63,9 +43,7 @@ open class Dashboard(private val rootPath: String, val name: String) :
         view.findViewById<Button>(R.id.dle_button).setOnClickListener {
 
             Intent(context, DashboardActivity::class.java).also {
-                val settings = MainSettings(rootPath).getSaved()
-                settings.lastDashboardName = name
-                settings.save()
+                Settings.lastDashboardName = name
 
                 it.putExtra("dashboardName", name)
                 (context as Activity).overridePendingTransition(0, 0)
@@ -87,104 +65,26 @@ open class Dashboard(private val rootPath: String, val name: String) :
         return oldItem.id == newItem.id
     }
 
-    fun List<Tile>.save() {
+    inner class Properties {
 
-        FolderTree(rootFolder).check()
+        var dashboardTagName = name
 
-        for ((i, _) in this.withIndex()) {
-            this[i].context = null
-            this[i].holder = null
-            this[i].service = null
-            this[i].dg = null
-
-            this[i].isEdit = false
-            this[i].flag()
-        }
-
-        try {
-            val file = FileOutputStream(tilesFileName)
-
-            val outStream = ObjectOutputStream(file)
-
-            outStream.writeObject(this)
-
-            outStream.close()
-            file.close()
-        } catch (e: Exception) {
-            Log.i("OUY", e.toString())
-        }
-    }
-
-    @Suppress("unused")
-    private fun List<Tile>.getSaved(): List<Tile> {
-
-        if (!FolderTree(rootFolder).check()) return TileTypeList().getDefault()
-
-        return try {
-            val file = FileInputStream(tilesFileName)
-            val inStream = ObjectInputStream(file)
-
-            val list = inStream.readObject() as List<*>
-
-            inStream.close()
-            file.close()
-
-            list.filterIsInstance<Tile>().takeIf { it.size == list.size } ?: listOf()
-        } catch (e: Exception) {
-            Log.i("OUY", e.toString())
-            TileTypeList().getDefault()
-        }
-    }
-
-    inner class Properties : Serializable {
         var spanCount = 3
 
-        //MQTT
         var mqttEnabled: Boolean = false
         var mqttAddress = "tcp://"
         var mqttPort = 1883
         val mqttURI
             get() = "$mqttAddress:$mqttPort"
 
-        //Bluetooth
         var bluetoothEnabled: Boolean = false
-
-        var dashboardTagName = name
 
         fun save() {
 
-            FolderTree(rootFolder).check()
-
-            try {
-                val file = FileOutputStream(settingsFileName)
-
-                val outStream = ObjectOutputStream(file)
-
-                outStream.writeObject(this)
-
-                outStream.close()
-                file.close()
-            } catch (e: Exception) {
-            }
         }
 
-        fun getSaved(): Properties {
+        fun getSaved() {
 
-            if (!FolderTree(rootFolder).check()) return Properties()
-
-            return try {
-                val file = FileInputStream(settingsFileName)
-                val inStream = ObjectInputStream(file)
-
-                val settings = inStream.readObject() as Properties
-
-                inStream.close()
-                file.close()
-
-                settings
-            } catch (e: Exception) {
-                Properties()
-            }
         }
     }
 }

@@ -2,18 +2,20 @@ package com.netDashboard.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree
+import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.main_settings.MainSettings
+import com.netDashboard.settings.Settings
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
 
-    private lateinit var settings: MainSettings
     private lateinit var service: ForegroundService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,21 +24,19 @@ class SplashScreenActivity : AppCompatActivity() {
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        settings = MainSettings(filesDir.canonicalPath).getSaved()
+        rootFolder = filesDir.canonicalPath.toString()
+        Log.i("OUY", filesDir.canonicalPath.toString())
+        Log.i("OUY", rootFolder)
+        FolderTree.build()
+
+        //TMP
+        FolderTree.buildDashboard("test")
+
+        Dashboards.set()
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()
         foregroundServiceHandler.bind()
-
-        //TMP
-        val rootPath = "${filesDir.canonicalPath}/dashboard_data"
-        FolderTree("$rootPath/test0").check()
-        FolderTree("$rootPath/test1").check()
-        FolderTree("$rootPath/test2").check()
-        FolderTree("$rootPath/test3").check()
-        FolderTree("$rootPath/test4").check()
-        FolderTree("$rootPath/test5").check()
-        //TMP
 
         foregroundServiceHandler.service.observe(this, { s ->
             if (s != null) {
@@ -47,20 +47,27 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        if (settings.lastDashboardName != null) {
+        if (Settings.lastDashboardName != null) {
 
             Intent(this, DashboardActivity::class.java).also {
-                it.putExtra("dashboardName", settings.lastDashboardName)
+                it.putExtra("dashboardName", Settings.lastDashboardName)
                 overridePendingTransition(0, 0)
                 startActivity(it)
                 finish()
             }
         } else {
 
-            Intent(this, MainActivity::class.java).also {
+            Intent(this, DashboardActivity::class.java).also {
+                it.putExtra("dashboardName", "test")
+                overridePendingTransition(0, 0)
                 startActivity(it)
                 finish()
             }
+
+            //Intent(this, MainActivity::class.java).also {
+            //    startActivity(it)
+            //    finish()
+            //}
         }
     }
 }

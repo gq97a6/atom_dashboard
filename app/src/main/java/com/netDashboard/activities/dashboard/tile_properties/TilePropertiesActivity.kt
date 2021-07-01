@@ -15,6 +15,7 @@ import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.alpha
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
@@ -38,8 +39,8 @@ class TilePropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        properties = dashboard.properties
+        dashboard = Dashboards.get(dashboardName)!!
+        properties = dashboard.p
 
         tileId = intent.getIntExtra("tileId", 0)
         tileProperties = dashboard.tiles[tileId].p

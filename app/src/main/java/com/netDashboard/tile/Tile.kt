@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.getScreenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.Serializable
@@ -27,8 +25,6 @@ abstract class Tile(
 
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
-    var service: ForegroundService? = null
-    var dg: DaemonGroup? = null
 
     var flag = ""
         private set
@@ -156,12 +152,7 @@ abstract class Tile(
 
     open fun onEdit(isEdit: Boolean) {}
 
-    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {
-        dg?.mqttd?.publish(
-            topic,
-            msg
-        )
-    }
+    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {}
 
     fun onSend(topic: String, msg: String, retained: Boolean = false) {
         onSend(topic, msg, 1, retained)
@@ -173,7 +164,7 @@ abstract class Tile(
         return true
     }
 
-    inner class Properties : Serializable {
+    inner class Properties {
         var name = ""
 
         var width = 0
@@ -195,5 +186,13 @@ abstract class Tile(
         var bltRequestToGet = ""
         var bltPayloadJSON = false
         var bltOutputJSON = ""
+
+        fun save() {
+
+        }
+
+        fun getSaved() {
+
+        }
     }
 }

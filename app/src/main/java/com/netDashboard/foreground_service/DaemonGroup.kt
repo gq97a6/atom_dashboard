@@ -1,4 +1,4 @@
-package com.netDashboard.foreground_service
+ package com.netDashboard.foreground_service
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
@@ -7,12 +7,10 @@ import com.netDashboard.foreground_service.demons.Bluetoothd
 import com.netDashboard.foreground_service.demons.Mqttd
 import java.io.Serializable
 
-class DaemonGroup(private val context: Context, rootPath: String, val name: String) : Serializable {
+class DaemonGroup(private val context: Context, val dashboard: Dashboard) : Serializable {
 
-    val dashboard = Dashboard(rootPath, name)
-
-    var mqttd: Mqttd? = null
-    var bluetoothd: Bluetoothd? = null
+    var mqttd = Mqttd(context, dashboard.p.mqttURI)
+    var bluetoothd = Bluetoothd()
 
     init {
         start()
@@ -20,22 +18,30 @@ class DaemonGroup(private val context: Context, rootPath: String, val name: Stri
 
     private fun start() {
         //MQTT
-        if (dashboard.properties.mqttEnabled) {
-            mqttd = Mqttd(context, dashboard.properties.mqttURI)
+        if (dashboard.p.mqttEnabled) {
+            mqttd.start()
 
-            //mqttd?.onConnectFlag?.observe(context as LifecycleOwner, { isConnected ->
-            //    if (isConnected) {
-            //        for (st in mqttdSubTopics) mqttd?.subscribe(st)
-            //    }
-            //})
+            mqttd.conHandler.isDone.observe(context as LifecycleOwner, { isDone ->
+                if (isDone) {
+                    val list: MutableList<String> = mutableListOf()
+                    for (tile in dashboard.tiles) {
+                        for (topic in tile.p.mqttTopics.sub.get()) {
+                            if (!list.contains(topic)) {
+                                mqttd.subscribe(topic)
+                                list.add(topic)
+                            }
+                        }
+                    }
+                }
+            })
+
+            //Bluetooth
+            //if (dashboard.properties.bluetoothEnabled) bluetoothd.start()
         }
-
-        //Bluetooth
-        if (dashboard.properties.bluetoothEnabled) bluetoothd = Bluetoothd()
     }
 
     fun stop() {
-        mqttd?.stop()
-        //bluetoothd?.stop()
+        mqttd.stop()
+        //bluetoothd.stop()
     }
 }

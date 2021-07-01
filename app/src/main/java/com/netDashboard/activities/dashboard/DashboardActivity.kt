@@ -15,6 +15,7 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
@@ -51,8 +52,8 @@ class DashboardActivity : AppCompatActivity() {
         })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        properties = dashboard.properties
+        dashboard = Dashboards.get(dashboardName)!!
+        properties = dashboard.p
 
         setupRecyclerView()
 

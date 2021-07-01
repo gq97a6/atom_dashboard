@@ -2,11 +2,13 @@ package com.netDashboard.activities.dashboard.tile_new
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityNewTileBinding
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList
@@ -26,7 +28,7 @@ class TileNewActivity : AppCompatActivity() {
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
+        dashboard = Dashboards.get(dashboardName)!!
 
         setupRecyclerView()
 
@@ -66,7 +68,7 @@ class TileNewActivity : AppCompatActivity() {
             }
         }
 
-        val list = TileTypeList().get()
+        val list = TileTypeList.get()
         for ((i, _) in list.withIndex()) {
             list[i].isEdit = true
         }
@@ -77,7 +79,7 @@ class TileNewActivity : AppCompatActivity() {
 
     private fun tileAdd(id: Int): Int {
 
-        val tile = TileTypeList().getById(id)
+        val tile = TileTypeList.getTileById(id)
         tile.p.width = 1
         tile.p.height = 1
 

@@ -39,8 +39,8 @@ class PropertiesActivity : AppCompatActivity() {
         })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(filesDir.canonicalPath, dashboardName)
-        properties = dashboard.properties
+        dashboard = Dashboard(dashboardName)
+        properties = dashboard.p
 
         b.pSpan.value = properties.spanCount.toFloat()
         b.pSpan.callOnClick()
@@ -86,12 +86,6 @@ class PropertiesActivity : AppCompatActivity() {
             finish()
             startActivity(it)
         }
-    }
-
-    override fun onPause() {
-        dashboard.properties = properties
-
-        super.onPause()
     }
 
     private fun onServiceReady() {

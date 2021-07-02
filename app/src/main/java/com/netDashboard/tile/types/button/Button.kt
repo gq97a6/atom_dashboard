@@ -9,8 +9,7 @@ import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class ButtonTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.tile_button, width, height) {
+class ButtonTile : Tile() {
 
     var text = "Default value"
     var liveText: String
@@ -19,6 +18,11 @@ class ButtonTile(name: String, color: Int, width: Int, height: Int) :
             text = value
             holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = value
         }
+
+    init {
+        layout = R.layout.tile_button
+        p.type = "button"
+    }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

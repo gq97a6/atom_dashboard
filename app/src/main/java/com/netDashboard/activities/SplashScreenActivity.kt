@@ -2,7 +2,6 @@ package com.netDashboard.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.Dashboards
@@ -25,8 +24,6 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()
-        Log.i("OUY", filesDir.canonicalPath.toString())
-        Log.i("OUY", rootFolder)
         FolderTree.build()
 
         //TMP

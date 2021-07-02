@@ -1,6 +1,9 @@
 package com.netDashboard.folder_tree
 
+import com.google.gson.Gson
 import java.io.File
+import java.io.FileReader
+import java.lang.reflect.Type
 
 object FolderTree {
 
@@ -23,5 +26,17 @@ object FolderTree {
     private fun buildPath(path: String) {
         val f = File(path)
         if (!f.isDirectory) f.mkdirs()
+    }
+
+    fun Any.save(fileName: String) {
+        File(fileName)
+            .writeText(Gson().toJson(this))
+    }
+
+    fun getSaved(type: Type, fileName: String): Any {
+        return Gson().fromJson(
+            FileReader(fileName),
+            type
+        )
     }
 }

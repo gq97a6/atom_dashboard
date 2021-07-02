@@ -21,6 +21,7 @@ open class Dashboard(val name: String) : Serializable {
     var context: Context? = null
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
     var tiles: List<Tile> = listOf()
+        //todo:setter
 
     init {
         id = Random().nextLong()
@@ -78,13 +79,5 @@ open class Dashboard(val name: String) : Serializable {
             get() = "$mqttAddress:$mqttPort"
 
         var bluetoothEnabled: Boolean = false
-
-        fun save() {
-
-        }
-
-        fun getSaved() {
-
-        }
     }
 }

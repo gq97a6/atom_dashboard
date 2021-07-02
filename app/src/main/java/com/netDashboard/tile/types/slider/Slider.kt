@@ -10,8 +10,12 @@ import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class SliderTile(name: String, color: Int, width: Int, height: Int) :
-    Tile(name, color, R.layout.tile_slider, width, height) {
+class SliderTile : Tile() {
+
+    init {
+        layout = R.layout.tile_slider
+        p.type = "slider"
+    }
 
     private var value = 0f
     private var from = 0f

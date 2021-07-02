@@ -2,6 +2,7 @@ package com.netDashboard.tile
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +13,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.Serializable
 import java.util.*
 
-abstract class Tile(
-    name: String,
-    color: Int,
-    private var layout: Int,
-    width: Int,
-    height: Int
-) : Serializable {
+abstract class Tile : Serializable {
 
     val id: Long?
     var p = Properties()
 
+    var layout = 0
     var context: Context? = null
     var holder: TilesAdapter.TileViewHolder? = null
 
@@ -36,10 +32,6 @@ abstract class Tile(
 
     init {
         id = Random().nextLong()
-        p.name = name
-        p.color = color
-        p.width = width
-        p.height = height
     }
 
     fun getItemViewType(context: Context, spanCount: Int): Int {
@@ -166,12 +158,13 @@ abstract class Tile(
 
     inner class Properties {
         var name = ""
+        var type = ""
 
-        var width = 0
-        var height = 0
+        var width = 1
+        var height = 1
         var spanCount = 1
 
-        var color = 0
+        var color = Color.parseColor("#BF4040")
         var isColouredByTheme = false
 
         var mqttEnabled = true
@@ -186,13 +179,9 @@ abstract class Tile(
         var bltRequestToGet = ""
         var bltPayloadJSON = false
         var bltOutputJSON = ""
+    }
 
-        fun save() {
-
-        }
-
-        fun getSaved() {
-
-        }
+    class PropertiesList {
+        val list: MutableList<Properties> = mutableListOf()
     }
 }

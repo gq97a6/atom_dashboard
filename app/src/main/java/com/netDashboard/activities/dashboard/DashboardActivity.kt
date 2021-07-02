@@ -120,6 +120,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onPause() {
 
         dashboard.tiles = adapter.tiles.toList()
+        Dashboards.save()
 
         super.onPause()
     }

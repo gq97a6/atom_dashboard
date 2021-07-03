@@ -2,7 +2,6 @@ package com.netDashboard.activities.dashboard.tile_new
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
@@ -64,7 +63,7 @@ class TileNewActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, spanCount)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return newTileTilesAdapter.tiles[position].p.width
+                return newTileTilesAdapter.tiles[position].width
             }
         }
 
@@ -80,8 +79,8 @@ class TileNewActivity : AppCompatActivity() {
     private fun tileAdd(id: Int): Int {
 
         val tile = TileTypeList.getTileById(id)
-        tile.p.width = 1
-        tile.p.height = 1
+        tile.width = 1
+        tile.height = 1
 
         var list = dashboard.tiles
 

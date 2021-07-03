@@ -2,8 +2,11 @@ package com.netDashboard.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree
@@ -11,6 +14,7 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
+import com.netDashboard.tile.types.button.ButtonTile
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding

@@ -21,7 +21,7 @@ class ButtonTile : Tile() {
 
     init {
         layout = R.layout.tile_button
-        p.type = "button"
+        type = "button"
     }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
@@ -34,7 +34,7 @@ class ButtonTile : Tile() {
         holder.itemView.findViewById<Button>(R.id.tb_button).text = text
 
         liveText = text
-        setThemeColor(p.color)
+        setThemeColor(color)
     }
 
     override fun setThemeColor(color: Int) {
@@ -53,7 +53,7 @@ class ButtonTile : Tile() {
     override fun onClick() {
         super.onClick()
 
-        onSend(p.mqttTopics.pub.get("pub") ?: "", "0")
+        onSend(mqttTopics.pub.get("pub") ?: "", "0")
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

@@ -28,22 +28,19 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
-    private lateinit var properties: Dashboard.Properties
+    private lateinit var tile: Tile
+    private var tileId = 0
 
     private lateinit var foregroundService: ForegroundService
-
-    private lateinit var tileProperties: Tile.Properties
-    private var tileId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)!!
-        properties = dashboard.p
 
         tileId = intent.getIntExtra("tileId", 0)
-        tileProperties = dashboard.tiles[tileId].p
+        tile = dashboard.tiles[tileId]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
         viewConfig()
@@ -60,9 +57,9 @@ class TilePropertiesActivity : AppCompatActivity() {
             }
         })
 
-        if (properties.spanCount.toFloat() > 1f) {
+        if (dashboard.spanCount.toFloat() > 1f) {
             b.cntDimenWidth.valueFrom = 1f
-            b.cntDimenWidth.valueTo = properties.spanCount.toFloat()
+            b.cntDimenWidth.valueTo = dashboard.spanCount.toFloat()
         } else {
             b.cntDimenWidth.valueFrom = 0f
             b.cntDimenWidth.valueTo = 1f
@@ -88,7 +85,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.cntDesignHue.addOnChangeListener { _, _, _ ->
             colorOnChangeListener()
 
-            tileProperties.color = Color.HSVToColor(
+            tile.color = Color.HSVToColor(
                 floatArrayOf(
                     b.cntDesignHue.value,
                     1 - b.cntDesignSaturation.value,
@@ -100,7 +97,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.cntDesignSaturation.addOnChangeListener { _, _, _ ->
             colorOnChangeListener()
 
-            tileProperties.color = Color.HSVToColor(
+            tile.color = Color.HSVToColor(
                 floatArrayOf(
                     b.cntDesignHue.value,
                     1 - b.cntDesignSaturation.value,
@@ -112,7 +109,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.cntDesignValue.addOnChangeListener { _, _, _ ->
             colorOnChangeListener()
 
-            tileProperties.color = Color.HSVToColor(
+            tile.color = Color.HSVToColor(
                 floatArrayOf(
                     b.cntDesignHue.value,
                     1 - b.cntDesignSaturation.value,
@@ -125,7 +122,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tileProperties.mqttTopics.pub.set(cs.toString(), "pub")
+                tile.mqttTopics.pub.set(cs.toString(), "pub")
             }
         })
 
@@ -133,18 +130,9 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tileProperties.mqttTopics.sub.set(cs.toString(), "sub")
+                tile.mqttTopics.sub.set(cs.toString(), "sub")
             }
         })
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        val list = dashboard.tiles
-        list[tileId].p = tileProperties
-
-        dashboard.tiles = list
     }
 
     override fun onBackPressed() {
@@ -163,30 +151,30 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     private fun viewConfig() {
 
-        b.cntTileType.text = tileProperties.name
+        b.cntTileType.text = tile.name
 
         //Dimensions
-        b.cntDimenWidth.value = tileProperties.width.toFloat()
-        b.cntDimenHeight.value = tileProperties.height.toFloat()
-        dimenOnChangeListener(tileProperties.width.toFloat(), tileProperties.height.toFloat())
+        b.cntDimenWidth.value = tile.width.toFloat()
+        b.cntDimenHeight.value = tile.height.toFloat()
+        dimenOnChangeListener(tile.width.toFloat(), tile.height.toFloat())
 
         //Design
         val hsv = floatArrayOf(0f, 0f, 0f)
-        Color.colorToHSV(tileProperties.color, hsv)
+        Color.colorToHSV(tile.color, hsv)
 
         b.cntDesignHue.value = hsv[0]
         b.cntDesignSaturation.value = 1 - hsv[1]
         b.cntDesignValue.value = 1 - hsv[2]
         colorOnChangeListener()
 
-        b.cntDesignChipTheme.isChecked = tileProperties.isColouredByTheme
-        b.cntDesignChipColor.isChecked = !tileProperties.isColouredByTheme
+        b.cntDesignChipTheme.isChecked = tile.isColouredByTheme
+        b.cntDesignChipColor.isChecked = !tile.isColouredByTheme
         designChipsOnCheckedChangeListener() //have influence on tile
 
         //MQTT
-        b.cntMqttSwitch.isChecked = tileProperties.mqttEnabled
-        b.cntMqttPub.setText(tileProperties.mqttTopics.pub.get("pub"))
-        b.cntMqttSub.setText(tileProperties.mqttTopics.sub.get("sub"))
+        b.cntMqttSwitch.isChecked = tile.mqttEnabled
+        b.cntMqttPub.setText(tile.mqttTopics.pub.get("pub"))
+        b.cntMqttSub.setText(tile.mqttTopics.sub.get("sub"))
         mqttSwitchOnCheckedChangeListener(b.cntMqttSwitch.isChecked)
 
         //when (tile) {
@@ -199,16 +187,16 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     private fun dimenOnChangeListener(w: Float, h: Float) {
         //Validate
-        if (w != properties.spanCount.toFloat()) b.cntDimenHeight.value = 1f
-        if (properties.spanCount.toFloat() > 1f && h != 1f) {
-            b.cntDimenWidth.value = properties.spanCount.toFloat()
+        if (w != dashboard.spanCount.toFloat()) b.cntDimenHeight.value = 1f
+        if (dashboard.spanCount.toFloat() > 1f && h != 1f) {
+            b.cntDimenWidth.value = dashboard.spanCount.toFloat()
         }
 
         b.cntDimenWidthText.text = b.cntDimenWidth.value.toInt().toString()
         b.cntDimenHeightText.text = b.cntDimenHeight.value.toInt().toString()
 
-        tileProperties.width = b.cntDimenWidth.value.toInt()
-        tileProperties.height = b.cntDimenHeight.value.toInt()
+        tile.width = b.cntDimenWidth.value.toInt()
+        tile.height = b.cntDimenHeight.value.toInt()
     }
 
     private fun designChipsOnCheckedChangeListener() {
@@ -224,7 +212,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             View.GONE
         }
 
-        tileProperties.isColouredByTheme = b.cntDesignChipTheme.isChecked
+        tile.isColouredByTheme = b.cntDesignChipTheme.isChecked
 
         b.cntDesignChipTheme.isEnabled = !b.cntDesignChipTheme.isChecked
         b.cntDesignChipColor.isEnabled = !b.cntDesignChipColor.isChecked
@@ -242,7 +230,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             View.GONE
         }
 
-        tileProperties.mqttEnabled = state
+        tile.mqttEnabled = state
     }
 
     private fun View.setGradientSliderBackground(colors: List<FloatArray>) {

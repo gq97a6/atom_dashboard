@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityPropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
@@ -17,7 +18,6 @@ class PropertiesActivity : AppCompatActivity() {
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
-    private lateinit var properties: Dashboard.Properties
 
     private lateinit var foregroundService: ForegroundService
 
@@ -39,22 +39,21 @@ class PropertiesActivity : AppCompatActivity() {
         })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboard(dashboardName)
-        properties = dashboard.p
+        dashboard = Dashboards.get(dashboardName)!!
 
-        b.pSpan.value = properties.spanCount.toFloat()
+        b.pSpan.value = dashboard.spanCount.toFloat()
         b.pSpan.callOnClick()
-        b.pSpanValue.text = properties.spanCount.toString()
+        b.pSpanValue.text = dashboard.spanCount.toString()
 
-        b.pMqttSwitch.isChecked = properties.mqttEnabled
+        b.pMqttSwitch.isChecked = dashboard.mqttEnabled
         mqttSwitchHandle(b.pMqttSwitch.isChecked)
 
-        b.pMqttAddress.setText(properties.mqttAddress)
-        b.pMqttPort.setText(properties.mqttPort.toString())
+        b.pMqttAddress.setText(dashboard.mqttAddress)
+        b.pMqttPort.setText(dashboard.mqttPort.toString())
 
         b.pSpan.addOnChangeListener { _, value, _ ->
             b.pSpanValue.text = value.toInt().toString()
-            properties.spanCount = value.toInt()
+            dashboard.spanCount = value.toInt()
         }
 
         b.pMqttSwitch.setOnCheckedChangeListener { _, state ->
@@ -65,7 +64,7 @@ class PropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                properties.mqttAddress = cs.toString()
+                dashboard.mqttAddress = cs.toString()
             }
         })
 
@@ -73,9 +72,15 @@ class PropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                if (count > 0) properties.mqttPort = cs.toString().toInt()
+                if (count > 0) dashboard.mqttPort = cs.toString().toInt()
             }
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Dashboards.save()
     }
 
     override fun onBackPressed() {
@@ -96,7 +101,7 @@ class PropertiesActivity : AppCompatActivity() {
         val list = dashboard.tiles
 
         for (t in list) {
-            if (t.p.width > span) {
+            if (t.width > span) {
                 return false
             }
         }
@@ -117,6 +122,6 @@ class PropertiesActivity : AppCompatActivity() {
             b.pMqttPortText.visibility = View.GONE
         }
 
-        properties.mqttEnabled = state
+        dashboard.mqttEnabled = state
     }
 }

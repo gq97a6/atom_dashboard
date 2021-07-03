@@ -28,7 +28,6 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
-    private lateinit var properties: Dashboard.Properties
 
     lateinit var adapter: TilesAdapter
 
@@ -53,12 +52,11 @@ class DashboardActivity : AppCompatActivity() {
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)!!
-        properties = dashboard.p
 
         setupRecyclerView()
 
         //Set dashboard tag name
-        b.dTagName.text = properties.dashboardTagName.uppercase(Locale.getDefault())
+        b.dTagName.text = dashboard.dashboardTagName.uppercase(Locale.getDefault())
 
         b.dTouch.setOnClickListener {
             touchOnClick()
@@ -131,7 +129,7 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
-        val spanCount = properties.spanCount
+        val spanCount = dashboard.spanCount
 
         adapter = TilesAdapter(this, spanCount, "", dashboardName)
         adapter.setHasStableIds(true)
@@ -145,8 +143,8 @@ class DashboardActivity : AppCompatActivity() {
             override fun getSpanSize(position: Int): Int {
                 val t = adapter.tiles[position]
                 return when {
-                    t.p.height != 1 || t.p.width > spanCount -> spanCount
-                    else -> t.p.width
+                    t.height != 1 || t.width > spanCount -> spanCount
+                    else -> t.width
                 }
             }
         }

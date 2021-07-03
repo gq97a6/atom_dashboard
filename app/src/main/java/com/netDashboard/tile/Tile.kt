@@ -13,18 +13,47 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.Serializable
 import java.util.*
 
-abstract class Tile : Serializable {
+open class Tile {
+
+    var name = ""
+
+    var width = 1
+    var height = 1
+    var spanCount = 1
+
+    var color = Color.parseColor("#BF4040")
+    var isColouredByTheme = false
+
+    var mqttEnabled = true
+    var mqttTopics = MqttTopics()
+    var mqttPubConfirmation = false
+    var mqttQoS = 0
+    var mqttPayloadJSON = false
+    var mqttOutputJSON = false
+
+    var bltPattern = ""
+    var bltDelimiter = ""
+    var bltRequestToGet = ""
+    var bltPayloadJSON = false
+    var bltOutputJSON = ""
 
     val id: Long?
-    var p = Properties()
 
-    var layout = 0
+    open var type = ""
+
+    open var layout = 0
+
+    @Transient
     var context: Context? = null
+
+    @Transient
     var holder: TilesAdapter.TileViewHolder? = null
 
+    @Transient
     var flag = ""
         private set
 
+    @Transient
     var isEdit = false
         set(value) {
             field = value; onEdit(value)
@@ -36,7 +65,7 @@ abstract class Tile : Serializable {
 
     fun getItemViewType(context: Context, spanCount: Int): Int {
         this.context = context
-        p.spanCount = spanCount
+        this.spanCount = spanCount
 
         return layout
     }
@@ -53,7 +82,7 @@ abstract class Tile : Serializable {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((getScreenWidth() - view.paddingLeft * 2) / p.spanCount) * p.height
+        params.height = ((getScreenWidth() - view.paddingLeft * 2) / spanCount) * height
         view.layoutParams = params
 
         onEdit(isEdit)
@@ -135,7 +164,7 @@ abstract class Tile : Serializable {
     }
 
     open fun setThemeColor(color: Int) {
-        p.color = color
+        this.color = color
     }
 
     open fun onClick() {}
@@ -151,37 +180,8 @@ abstract class Tile : Serializable {
     }
 
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!p.mqttEnabled) return false
-        if (data.first != p.mqttTopics.sub.get("sub")) return false
+        if (!mqttEnabled) return false
+        if (data.first != mqttTopics.sub.get("sub")) return false
         return true
-    }
-
-    inner class Properties {
-        var name = ""
-        var type = ""
-
-        var width = 1
-        var height = 1
-        var spanCount = 1
-
-        var color = Color.parseColor("#BF4040")
-        var isColouredByTheme = false
-
-        var mqttEnabled = true
-        var mqttTopics = MqttTopics()
-        var mqttPubConfirmation = false
-        var mqttQoS = 0
-        var mqttPayloadJSON = false
-        var mqttOutputJSON = false
-
-        var bltPattern = ""
-        var bltDelimiter = ""
-        var bltRequestToGet = ""
-        var bltPayloadJSON = false
-        var bltOutputJSON = ""
-    }
-
-    class PropertiesList {
-        val list: MutableList<Properties> = mutableListOf()
     }
 }

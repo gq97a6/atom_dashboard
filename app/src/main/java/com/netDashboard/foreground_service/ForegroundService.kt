@@ -54,7 +54,7 @@ class ForegroundService : Serializable, LifecycleService() {
 
         if (isRunning) isRunning = false
 
-        createNotification(this, "foregroundService", "onDestroy")
+        //createNotification(this, "foregroundService", "onDestroy")
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()

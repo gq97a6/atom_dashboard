@@ -9,7 +9,7 @@ import java.io.Serializable
 
 class DaemonGroup(private val context: Context, val dashboard: Dashboard) : Serializable {
 
-    var mqttd = Mqttd(context, dashboard.p.mqttURI)
+    var mqttd = Mqttd(context, dashboard.mqttURI)
     var bluetoothd = Bluetoothd()
 
     init {
@@ -18,14 +18,14 @@ class DaemonGroup(private val context: Context, val dashboard: Dashboard) : Seri
 
     private fun start() {
         //MQTT
-        if (dashboard.p.mqttEnabled) {
+        if (dashboard.mqttEnabled) {
             mqttd.start()
 
             mqttd.conHandler.isDone.observe(context as LifecycleOwner, { isDone ->
                 if (isDone) {
                     val list: MutableList<String> = mutableListOf()
                     for (tile in dashboard.tiles) {
-                        for (topic in tile.p.mqttTopics.sub.get()) {
+                        for (topic in tile.mqttTopics.sub.get()) {
                             if (!list.contains(topic)) {
                                 mqttd.subscribe(topic)
                                 list.add(topic)

@@ -14,7 +14,7 @@ class SliderTile : Tile() {
 
     init {
         layout = R.layout.tile_slider
-        p.type = "slider"
+        type = "slider"
     }
 
     private var value = 0f
@@ -88,7 +88,7 @@ class SliderTile : Tile() {
             }
 
             override fun onStopTrackingTouch(s: Slider) {
-                onSend(p.mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
+                onSend(mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
             }
         })
 
@@ -96,7 +96,7 @@ class SliderTile : Tile() {
             liveValue = value
         })
 
-        setThemeColor(p.color)
+        setThemeColor(color)
     }
 
     override fun setThemeColor(color: Int) {

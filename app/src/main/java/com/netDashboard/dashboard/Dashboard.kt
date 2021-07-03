@@ -10,18 +10,33 @@ import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
-import java.io.*
+import java.io.Serializable
 import java.util.*
 
-open class Dashboard(val name: String) : Serializable {
+open class Dashboard(val name: String) {
 
     val id: Long?
-    var p = Properties()
 
+    @Transient
     var context: Context? = null
+
+    @Transient
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
+
+    //@Transient
     var tiles: List<Tile> = listOf()
-        //todo:setter
+
+    var dashboardTagName = name
+
+    var spanCount = 3
+
+    var mqttEnabled: Boolean = false
+    var mqttAddress = "tcp://"
+    var mqttPort = 1883
+    val mqttURI
+        get() = "$mqttAddress:$mqttPort"
+
+    var bluetoothEnabled: Boolean = false
 
     init {
         id = Random().nextLong()
@@ -64,20 +79,5 @@ open class Dashboard(val name: String) : Serializable {
 
     fun areContentsTheSame(oldItem: Dashboard, newItem: Dashboard): Boolean {
         return oldItem.id == newItem.id
-    }
-
-    inner class Properties {
-
-        var dashboardTagName = name
-
-        var spanCount = 3
-
-        var mqttEnabled: Boolean = false
-        var mqttAddress = "tcp://"
-        var mqttPort = 1883
-        val mqttURI
-            get() = "$mqttAddress:$mqttPort"
-
-        var bluetoothEnabled: Boolean = false
     }
 }

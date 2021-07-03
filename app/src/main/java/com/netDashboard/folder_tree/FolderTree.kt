@@ -1,5 +1,6 @@
 package com.netDashboard.folder_tree
 
+import android.util.Log
 import com.google.gson.Gson
 import java.io.File
 import java.io.FileReader
@@ -12,7 +13,7 @@ object FolderTree {
         get() = "$rootFolder/dashboards"
 
     fun tilesPropertiesFile(name: String): String = "$dashboardsFolder/$name/tilesProperties"
-    fun dashboardPropertiesFile(name: String): String = "$dashboardsFolder/$name/properties"
+    fun dashboardFile(name: String): String = "$dashboardsFolder/$name/properties"
     val settingsFile
         get() = "$rootFolder/settings"
 
@@ -31,6 +32,7 @@ object FolderTree {
     fun Any.save(fileName: String) {
         File(fileName)
             .writeText(Gson().toJson(this))
+        Log.i("OUY", Gson().toJson(this))
     }
 
     fun getSaved(type: Type, fileName: String): Any {

@@ -24,7 +24,7 @@ open class Dashboard(val name: String) {
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
 
     //@Transient
-    var tiles: List<Tile> = listOf()
+    var tiles: MutableList<Tile> = mutableListOf()
 
     var dashboardTagName = name
 

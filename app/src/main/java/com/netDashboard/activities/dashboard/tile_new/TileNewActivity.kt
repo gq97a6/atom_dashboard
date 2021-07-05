@@ -85,12 +85,11 @@ class TileNewActivity : AppCompatActivity() {
         var list = dashboard.tiles
 
         if (list.isEmpty()) {
-            list = listOf(tile)
+            list = mutableListOf(tile)
         } else {
-            list = list.toMutableList()
             list.add(tile)
         }
-
+        
         dashboard.tiles = list
 
         return list.size - 1

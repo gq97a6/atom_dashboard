@@ -21,7 +21,7 @@ class ButtonTile : Tile() {
 
     init {
         layout = R.layout.tile_button
-        type = "button"
+        name = "button"
     }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {

@@ -2,6 +2,7 @@ package com.netDashboard.tile
 
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
+import java.lang.reflect.Type
 
 class TileTypeList {
     companion object {
@@ -14,6 +15,14 @@ class TileTypeList {
 
         fun getTileById(id: Int): Tile {
             return get()[id]
+        }
+
+        fun String.toTileType(): Class<*>? {
+            return when (this) {
+                ButtonTile().type -> ButtonTile::class.java
+                SliderTile().type -> SliderTile::class.java
+                else -> null
+            }
         }
     }
 }

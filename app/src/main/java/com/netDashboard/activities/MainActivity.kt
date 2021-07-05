@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.dashboard.DashboardAdapter
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
 
-        dashboardAdapter.submitList(mutableListOf())
+        dashboardAdapter.submitList(Dashboards.list)
 
         if (dashboardAdapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE

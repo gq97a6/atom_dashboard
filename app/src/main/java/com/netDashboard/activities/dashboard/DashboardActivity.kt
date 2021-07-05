@@ -117,7 +117,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onPause() {
 
-        dashboard.tiles = adapter.tiles.toList()
+        dashboard.tiles = adapter.tiles
         Dashboards.save()
 
         super.onPause()
@@ -151,7 +151,9 @@ class DashboardActivity : AppCompatActivity() {
 
         b.dRecyclerView.layoutManager = layoutManager
 
+
         adapter.submitList(dashboard.tiles.toMutableList())
+        adapter.isEdit = false
 
         if (adapter.itemCount == 0) {
             b.dPlaceholder.visibility = View.VISIBLE
@@ -165,7 +167,7 @@ class DashboardActivity : AppCompatActivity() {
 
         if (!adapter.isEdit) {
             b.dRecyclerView.suppressLayout(false)
-            dashboard.tiles = adapter.tiles.toList()
+            dashboard.tiles = adapter.tiles
         } else {
             highlightOnly(b.dEdit)
 
@@ -263,7 +265,7 @@ class DashboardActivity : AppCompatActivity() {
                     for ((i, t) in adapter.tiles.withIndex()) {
                         if (t.flag == "remove") {
                             adapter.tiles.removeAt(i)
-                            dashboard.tiles = adapter.tiles.toList()
+                            dashboard.tiles = adapter.tiles
 
                             adapter.notifyDataSetChanged()
 

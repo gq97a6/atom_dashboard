@@ -15,8 +15,6 @@ import java.util.*
 
 open class Tile {
 
-    var name = ""
-
     var width = 1
     var height = 1
     var spanCount = 1
@@ -39,9 +37,12 @@ open class Tile {
 
     val id: Long?
 
-    open var type = ""
+    val type = this.javaClass.toString()
 
     open var layout = 0
+
+    @Transient
+    var name = ""
 
     @Transient
     var context: Context? = null

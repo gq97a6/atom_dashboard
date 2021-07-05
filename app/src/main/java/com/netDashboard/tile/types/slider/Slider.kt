@@ -14,7 +14,7 @@ class SliderTile : Tile() {
 
     init {
         layout = R.layout.tile_slider
-        type = "slider"
+        name = "slider"
     }
 
     private var value = 0f

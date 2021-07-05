@@ -30,11 +30,11 @@ class TilesAdapter(
     var isEdit
         get() = swapMode || removeMode || addMode || editMode
         set(value) {
-            mode = ""
-
-            if (value) {
-                mode = "edit"
+            mode = if (value) {
                 swapLock = false
+                "edit"
+            } else {
+                ""
             }
 
             for (t in tiles) {

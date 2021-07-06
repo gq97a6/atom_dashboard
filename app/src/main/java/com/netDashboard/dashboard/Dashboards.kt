@@ -13,8 +13,6 @@ import java.lang.reflect.Type
 
 object Dashboards {
 
-    var text = ""
-
     private var isLive = false
 
     private val Gson = Gson()
@@ -44,10 +42,6 @@ object Dashboards {
 
             val jsonArray = try {
                 val fileName = FolderTree.tilesFile(name)
-                if(name == "test_full") {
-                    text = FileReader(fileName).readText()
-                    Log.i("OUY", text)
-                }
                 Gson.fromJson(FileReader(fileName), JsonArray::class.java)
             } catch (e: Exception) {
                 Log.i("OUY", "Dashboards.getSaved: $e")

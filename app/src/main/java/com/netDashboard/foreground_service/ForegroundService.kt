@@ -111,7 +111,6 @@ class ForegroundServiceHandler(var context: Context) {
     }
 
     fun start() {
-        return
         Intent(context, ForegroundService::class.java).also {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(it)
@@ -128,7 +127,6 @@ class ForegroundServiceHandler(var context: Context) {
     }
 
     fun bind() {
-        return
         Intent(context, ForegroundService::class.java).also {
             context.bindService(it, connection, Context.BIND_AUTO_CREATE)
         }

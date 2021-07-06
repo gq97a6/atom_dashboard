@@ -3,24 +3,27 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.netDashboard.*
+import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
+import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
+import com.netDashboard.getScreenHeight
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
+import com.netDashboard.toPx
 import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
@@ -83,15 +86,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        if (event?.pointerCount ?: 0 > 3) {
-            createNotification(this, "test", "test")
-        }
-
-        return super.onTouchEvent(event)
-    }
-
     override fun onResume() {
         super.onResume()
 
@@ -100,6 +94,19 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         adapter.notifyDataSetChanged()
+    }
+
+    override fun onPause() {
+
+        dashboard.tiles = adapter.tiles
+        Dashboards.save(dashboardName)
+
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     override fun onBackPressed() {
@@ -113,14 +120,6 @@ class DashboardActivity : AppCompatActivity() {
                 finish()
             }
         }
-    }
-
-    override fun onPause() {
-
-        dashboard.tiles = adapter.tiles
-        Dashboards.save()
-
-        super.onPause()
     }
 
     private fun onServiceReady() {

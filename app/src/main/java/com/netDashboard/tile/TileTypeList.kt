@@ -2,7 +2,6 @@ package com.netDashboard.tile
 
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
-import java.lang.reflect.Type
 
 class TileTypeList {
     companion object {

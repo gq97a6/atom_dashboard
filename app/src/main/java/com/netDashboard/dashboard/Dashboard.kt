@@ -10,7 +10,6 @@ import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
-import java.io.Serializable
 import java.util.*
 
 open class Dashboard(val name: String) {
@@ -23,7 +22,7 @@ open class Dashboard(val name: String) {
     @Transient
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
 
-    //@Transient
+    @Transient
     var tiles: MutableList<Tile> = mutableListOf()
 
     var dashboardTagName = name

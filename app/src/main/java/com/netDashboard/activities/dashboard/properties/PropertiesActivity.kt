@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityPropertiesBinding
@@ -80,7 +81,12 @@ class PropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        Dashboards.save()
+        Dashboards.save(dashboardName)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     override fun onBackPressed() {

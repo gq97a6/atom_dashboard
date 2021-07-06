@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
@@ -37,6 +38,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         setupRecyclerView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     private fun setupRecyclerView() {

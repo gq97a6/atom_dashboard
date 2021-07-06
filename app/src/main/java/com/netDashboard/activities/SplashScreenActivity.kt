@@ -3,8 +3,8 @@ package com.netDashboard.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree
@@ -12,8 +12,6 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
-import com.netDashboard.tile.types.button.ButtonTile
-import com.netDashboard.tile.types.slider.SliderTile
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -50,6 +48,11 @@ class SplashScreenActivity : AppCompatActivity() {
                 onServiceReady()
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     private fun onServiceReady() {

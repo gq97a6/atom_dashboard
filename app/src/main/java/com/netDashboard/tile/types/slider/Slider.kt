@@ -1,5 +1,6 @@
 package com.netDashboard.tile.types.slider
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -131,6 +132,9 @@ class SliderTile : Tile() {
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
+
+        val num = data.second.toString().toFloatOrNull() ?: 1f
+        Log.i("OUY", "n: ${num * value}")
 
         liveValue = data.second.toString().toFloatOrNull() ?: liveValue
 

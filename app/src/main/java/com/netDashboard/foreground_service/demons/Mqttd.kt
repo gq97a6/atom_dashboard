@@ -95,9 +95,9 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
         fun dispatch(force: Boolean = false) {
 
+            if (isDispatched && !force) return
             isDispatched = true
 
-            if (isDispatched && !force) return
             if (client.isConnected == isEnabled) {
                 isDispatched = false
                 isDone.postValue(true)
@@ -105,11 +105,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
                 return
             }
 
-            if (isEnabled) {
-                client.start()
-            } else {
-                client.stop()
-            }
+            if (isEnabled) client.start() else client.stop()
 
             Handler(Looper.getMainLooper()).postDelayed({
                 dispatch(true)
@@ -131,6 +127,7 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             isBusy = true
 
             client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
+
             client.setCallback(object : MqttCallback {
 
                 override fun messageArrived(t: String?, m: MqttMessage) {

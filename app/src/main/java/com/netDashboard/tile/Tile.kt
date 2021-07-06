@@ -10,7 +10,6 @@ import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.getScreenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.io.Serializable
 import java.util.*
 
 open class Tile {
@@ -98,11 +97,11 @@ open class Tile {
         return oldItem.id == newItem.id
     }
 
-    class MqttTopics : Serializable {
+    class MqttTopics {
         val sub = List()
         val pub = List()
 
-        class List : Serializable {
+        class List {
             private val topics: MutableList<String> = mutableListOf()
             private val names: MutableList<String> = mutableListOf()
 
@@ -182,7 +181,7 @@ open class Tile {
 
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!mqttEnabled) return false
-        if (data.first != mqttTopics.sub.get("sub")) return false
+        if (!mqttTopics.sub.get().contains(data.first)) return false
         return true
     }
 }

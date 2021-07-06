@@ -13,6 +13,8 @@ import java.lang.reflect.Type
 
 object Dashboards {
 
+    private var isLive = false
+
     private val Gson = Gson()
     var list: MutableList<Dashboard> = mutableListOf()
 
@@ -24,6 +26,7 @@ object Dashboards {
     }
 
     fun getSaved() {
+        if(isLive) return
 
         val list: MutableList<Dashboard> = mutableListOf()
 
@@ -67,6 +70,7 @@ object Dashboards {
         }
 
         this.list = list
+        isLive = true
     }
 
     fun save() {

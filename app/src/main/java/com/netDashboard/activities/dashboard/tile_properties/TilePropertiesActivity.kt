@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.alpha
+import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
@@ -133,6 +134,17 @@ class TilePropertiesActivity : AppCompatActivity() {
                 tile.mqttTopics.sub.set(cs.toString(), "sub")
             }
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Dashboards.save(dashboardName)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     override fun onBackPressed() {

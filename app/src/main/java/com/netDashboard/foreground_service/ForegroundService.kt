@@ -15,11 +15,12 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.createNotification
-import java.io.Serializable
+import com.netDashboard.dashboard.Dashboards
 
-class ForegroundService : Serializable, LifecycleService() {
+class ForegroundService : LifecycleService() {
 
     private var isRunning = false
+    private lateinit var dgc: DaemonGroupCollection
 
     override fun onCreate() {
         super.onCreate()
@@ -44,6 +45,7 @@ class ForegroundService : Serializable, LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (!isRunning) {
+            dgc = DaemonGroupCollection(this)
             isRunning = true
         }
 
@@ -54,10 +56,11 @@ class ForegroundService : Serializable, LifecycleService() {
 
         if (isRunning) isRunning = false
 
-        //createNotification(this, "foregroundService", "onDestroy")
+        createNotification(this, "foregroundService", "onDestroy")
+        Dashboards.save()
 
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
+        //val foregroundServiceHandler = ForegroundServiceHandler(this)
+        //foregroundServiceHandler.start()
 
         super.onDestroy()
     }

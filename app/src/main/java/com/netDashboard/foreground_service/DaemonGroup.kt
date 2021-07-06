@@ -1,13 +1,13 @@
- package com.netDashboard.foreground_service
+package com.netDashboard.foreground_service
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.foreground_service.demons.Bluetoothd
 import com.netDashboard.foreground_service.demons.Mqttd
-import java.io.Serializable
 
-class DaemonGroup(private val context: Context, val dashboard: Dashboard) : Serializable {
+class DaemonGroup(private val context: Context, val dashboard: Dashboard) {
 
     var mqttd = Mqttd(context, dashboard.mqttURI)
     var bluetoothd = Bluetoothd()
@@ -31,6 +31,14 @@ class DaemonGroup(private val context: Context, val dashboard: Dashboard) : Seri
                                 list.add(topic)
                             }
                         }
+                    }
+                }
+            })
+
+            mqttd.data.observe(context as LifecycleOwner, { data ->
+                if (data.first != null && data.second != null) {
+                    for (t in dashboard.tiles) {
+                        t.onData(data)
                     }
                 }
             })

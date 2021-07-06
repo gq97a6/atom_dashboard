@@ -1,6 +1,5 @@
 package com.netDashboard.tile.types.slider
 
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -13,15 +12,17 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SliderTile : Tile() {
 
+    override val layout: Int
+        get() = R.layout.tile_slider
+
     init {
-        layout = R.layout.tile_slider
         name = "slider"
     }
 
-    private var value = 0f
-    private var from = 0f
+    var value = 0f
+    var from = 0f
     private var to = 100f
-    private var step = 10f
+    var step = 10f
 
     private var liveValue: Float
         get() {
@@ -132,11 +133,6 @@ class SliderTile : Tile() {
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
-
-        val num = data.second.toString().toFloatOrNull() ?: 1f
-        Log.i("OUY", "n: ${num * value}")
-
-        liveValue = data.second.toString().toFloatOrNull() ?: liveValue
 
         return true
     }

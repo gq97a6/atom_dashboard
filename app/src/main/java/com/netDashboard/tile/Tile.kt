@@ -38,7 +38,8 @@ open class Tile {
 
     val type = this.javaClass.toString()
 
-    open var layout = 0
+    @Transient
+    open val layout = 0
 
     @Transient
     var name = ""

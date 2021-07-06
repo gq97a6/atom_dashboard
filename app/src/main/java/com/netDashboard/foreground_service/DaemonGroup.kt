@@ -1,7 +1,6 @@
 package com.netDashboard.foreground_service
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.foreground_service.demons.Bluetoothd

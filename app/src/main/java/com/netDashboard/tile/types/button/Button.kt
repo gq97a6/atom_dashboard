@@ -11,6 +11,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ButtonTile : Tile() {
 
+    override val layout: Int
+        get() = R.layout.tile_button
+
+    init {
+        name = "button"
+    }
+
     var text = "Default value"
     var liveText: String
         get() = holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text.toString()
@@ -18,11 +25,6 @@ class ButtonTile : Tile() {
             text = value
             holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = value
         }
-
-    init {
-        layout = R.layout.tile_button
-        name = "button"
-    }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -58,10 +60,6 @@ class ButtonTile : Tile() {
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
-
-        var counter = liveText.toIntOrNull() ?: 0
-        counter++
-        liveText = counter.toString()
 
         return true
     }

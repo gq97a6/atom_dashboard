@@ -5,7 +5,7 @@ import com.netDashboard.dashboard.Dashboards
 
 class DaemonGroupCollection(private val context: Context) {
 
-    private val dashboards = Dashboards.list
+    private val dashboards = Dashboards.get()
     private val collection: MutableList<DaemonGroup> = mutableListOf()
 
     init {
@@ -23,5 +23,12 @@ class DaemonGroupCollection(private val context: Context) {
         for (dg in collection) {
             dg.stop()
         }
+    }
+
+    fun get(name: String): DaemonGroup? {
+        for (dg in collection) {
+            if (dg.dashboard.name == name) return dg
+        }
+        return null
     }
 }

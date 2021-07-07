@@ -20,7 +20,7 @@ import com.netDashboard.dashboard.Dashboards
 class ForegroundService : LifecycleService() {
 
     private var isRunning = false
-    private lateinit var dgc: DaemonGroupCollection
+    lateinit var dgc: DaemonGroupCollection
 
     override fun onCreate() {
         super.onCreate()

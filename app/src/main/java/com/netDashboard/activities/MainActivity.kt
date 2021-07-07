@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
 
-        dashboardAdapter.submitList(Dashboards.list)
+        dashboardAdapter.submitList(Dashboards.get())
 
         if (dashboardAdapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE

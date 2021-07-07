@@ -16,14 +16,10 @@ object Dashboards {
     private var isLive = false
 
     private val Gson = Gson()
-    var list: MutableList<Dashboard> = mutableListOf()
+    private var dashboards: MutableMap<String, Dashboard> = mutableMapOf()
 
-    fun get(name: String): Dashboard? {
-        for (d in list) {
-            if (d.name == name) return d
-        }
-        return null
-    }
+    fun get(): MutableList<Dashboard> = dashboards.values.toMutableList()
+    fun get(name: String): Dashboard? = dashboards[name]
 
     fun getSaved() {
         if(isLive) return
@@ -69,21 +65,15 @@ object Dashboards {
             list.add(dashboard)
         }
 
-        this.list = list
+        for(d in list) dashboards[d.name] = d
         isLive = true
     }
 
     fun save() {
-        for (d in list) d.save()
+        for (d in dashboards.values) d.save()
     }
 
-    fun save(name: String) {
-        for (d in list) {
-            if (d.name != name) continue
-            d.save()
-            if (d.name == name) break
-        }
-    }
+    fun save(name: String) = dashboards[name]?.save()
 
     private fun Dashboard.save() {
         try {

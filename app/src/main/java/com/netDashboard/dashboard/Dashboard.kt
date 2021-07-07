@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
 import java.util.*
@@ -23,7 +24,14 @@ open class Dashboard(val name: String) {
     private var holder: DashboardAdapter.DashboardsViewHolder? = null
 
     @Transient
+    var daemonGroup: DaemonGroup? = null
+
+    @Transient
     var tiles: MutableList<Tile> = mutableListOf()
+        set(value) {
+            for (t in value) t.dashboardName = name
+            field = value
+        }
 
     var dashboardTagName = name
 

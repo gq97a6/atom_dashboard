@@ -35,15 +35,22 @@ class SliderTile : Tile() {
             }
         }
         set(value) {
-            this.value = value
+            val m = value % step
+            val v = if(m <= step / 2) {
+                value - m
+            } else {
+                value - m + step
+            }
+
+            this.value = v
             val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
 
             when {
-                from < to -> slider?.value = value
-                to < from -> slider?.value = from - value
+                from < to -> slider?.value = v
+                to < from -> slider?.value = from - v
             }
 
-            holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = value.dezero()
+            holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = v.dezero()
         }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
@@ -131,8 +138,16 @@ class SliderTile : Tile() {
         liveValue = if (value in from..to) value else slider.valueFrom
     }
 
+    override fun onClick() {
+        super.onClick()
+        onSend("test0", "slider")
+    }
+
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
+
+        val value = data.second.toString().toFloatOrNull()
+        if(value != null) liveValue = value
 
         return true
     }

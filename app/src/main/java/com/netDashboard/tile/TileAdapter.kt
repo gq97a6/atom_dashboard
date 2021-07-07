@@ -153,11 +153,6 @@ class TilesAdapter(
                 }
             }
         }
-
-        holder.itemView.setOnLongClickListener {
-            createNotification(context, "longClick", "performed")
-            return@setOnLongClickListener true
-        }
     }
 
     private fun swapTiles(position: Int) {

@@ -57,6 +57,10 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
+        for (d in Dashboards.get()) {
+            d.daemonGroup = service.dgc.get(d.name)
+        }
+
         if (Settings.lastDashboardName != null) {
 
             Intent(this, DashboardActivity::class.java).also {

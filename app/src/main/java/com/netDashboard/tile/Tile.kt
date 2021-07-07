@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.getScreenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
@@ -35,7 +36,6 @@ open class Tile {
     var bltOutputJSON = ""
 
     val id: Long?
-
     val type = this.javaClass.toString()
 
     @Transient
@@ -49,6 +49,9 @@ open class Tile {
 
     @Transient
     var holder: TilesAdapter.TileViewHolder? = null
+
+    @Transient
+    var dashboardName: String = ""
 
     @Transient
     var flag = ""
@@ -174,10 +177,19 @@ open class Tile {
 
     open fun onEdit(isEdit: Boolean) {}
 
-    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false) {}
+    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false):Boolean {
+        Dashboards.get(dashboardName)?.daemonGroup?.mqttd.let {
+            return if(it != null) {
+                it.publish(topic, msg)
+                true
+            } else {
+                false
+            }
+        }
+    }
 
-    fun onSend(topic: String, msg: String, retained: Boolean = false) {
-        onSend(topic, msg, 1, retained)
+    fun onSend(topic: String, msg: String, retained: Boolean = false):Boolean {
+        return onSend(topic, msg, 1, retained)
     }
 
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {

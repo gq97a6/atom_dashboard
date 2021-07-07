@@ -54,8 +54,7 @@ class ButtonTile : Tile() {
 
     override fun onClick() {
         super.onClick()
-
-        onSend(mqttTopics.pub.get("pub") ?: "", "0")
+        onSend("test0", "button")
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

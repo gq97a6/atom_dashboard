@@ -20,7 +20,7 @@ import com.netDashboard.dashboard.Dashboards
 class ForegroundService : LifecycleService() {
 
     private var isRunning = false
-    lateinit var dgc: DaemonGroupCollection
+    lateinit var dgc: DaemonGroups
 
     override fun onCreate() {
         super.onCreate()
@@ -44,7 +44,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         if (!isRunning) {
-            dgc = DaemonGroupCollection(this)
+            dgc = DaemonGroups(this)
             isRunning = true
         }
 

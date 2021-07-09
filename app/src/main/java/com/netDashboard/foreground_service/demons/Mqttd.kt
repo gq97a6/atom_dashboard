@@ -3,16 +3,18 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.netDashboard.dashboard.Dashboard
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import kotlin.random.Random
 
-class Mqttd(private val context: Context, private val URI: String) : Daemon() {
+class Mqttd(private val context: Context, private val dashboard: Dashboard) : Daemon() {
 
     var isEnabled = false
 
-    var client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
+    var client = MqttAndroidClientExtended(context, dashboard.mqttURI, Random.nextInt().toString())
     var conHandler = ConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
@@ -98,10 +100,14 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             if (isDispatched && !force) return
             isDispatched = true
 
-            if (client.isConnected == isEnabled) {
+            if (isDone.value == true) {
                 isDispatched = false
-                isDone.postValue(true)
-                isDone.value = false
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    Log.i("OUY", "STOP")
+                    stop()
+                }, 3000)
+
                 return
             }
 
@@ -110,6 +116,13 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
             Handler(Looper.getMainLooper()).postDelayed({
                 dispatch(true)
             }, retryDelay)
+        }
+
+        fun checkCon() {
+            if (client.isConnected == isEnabled) {
+                conHandler.isDone.postValue(true)
+                conHandler.isDone.value = false
+            }
         }
     }
 
@@ -126,16 +139,19 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
             isBusy = true
 
-            client = MqttAndroidClientExtended(context, URI, Random.nextInt().toString())
+            client =
+                MqttAndroidClientExtended(context, dashboard.mqttURI, Random.nextInt().toString())
 
             client.setCallback(object : MqttCallback {
 
                 override fun messageArrived(t: String?, m: MqttMessage) {
+                    for (tile in dashboard.tiles) tile.onData(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                     data.value = Pair(null, null)
                 }
 
                 override fun connectionLost(cause: Throwable?) {
+                    Log.i("OUY", "connectionLost")
                     conHandler.dispatch()
                 }
 
@@ -147,7 +163,10 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
             try {
                 client.connect(options, null, object : IMqttActionListener {
-                    override fun onSuccess(asyncActionToken: IMqttToken?) {}
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        Log.i("OUY", "connected")
+                        conHandler.checkCon()
+                    }
 
                     override fun onFailure(
                         asyncActionToken: IMqttToken?,
@@ -167,12 +186,14 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
 
             isBusy = true
 
-            client.unregisterResources()
-            client.close()
+            //client.unregisterResources()
+            //client.close()
 
             try {
                 client.disconnect(null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
+                        Log.i("OUY", "disconnected")
+                        conHandler.checkCon()
                     }
 
                     override fun onFailure(
@@ -190,3 +211,17 @@ class Mqttd(private val context: Context, private val URI: String) : Daemon() {
         }
     }
 }
+
+//mqttd.conHandler.isDone.observe(context as LifecycleOwner, { isDone ->
+//    if (isDone) {
+//        val list: MutableList<String> = mutableListOf()
+//        for (tile in dashboard.tiles) {
+//            for (topic in tile.mqttTopics.sub.get()) {
+//                if (!list.contains(topic)) {
+//                    mqttd.subscribe(topic)
+//                    list.add(topic)
+//                }
+//            }
+//        }
+//    }
+//})

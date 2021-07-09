@@ -82,7 +82,6 @@ class PropertiesActivity : AppCompatActivity() {
         super.onPause()
 
         Dashboards.save(dashboardName)
-        dashboard.daemonGroup?.stop()
     }
 
     override fun onDestroy() {

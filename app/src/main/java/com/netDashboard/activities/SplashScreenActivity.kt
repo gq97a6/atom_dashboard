@@ -1,7 +1,6 @@
 package com.netDashboard.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
@@ -13,6 +12,7 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
+import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
 
@@ -38,6 +38,62 @@ class SplashScreenActivity : AppCompatActivity() {
         //TMP
 
         Dashboards.getSaved()
+
+        //tmp
+        val test:MutableList<Tile> = mutableListOf(
+            SliderTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            ButtonTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile(),
+            SliderTile()
+        )
+
+        Dashboards.get("test0")?.tiles = test
+        //tmp
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()

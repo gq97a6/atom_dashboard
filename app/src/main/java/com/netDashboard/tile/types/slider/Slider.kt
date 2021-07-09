@@ -66,6 +66,7 @@ class SliderTile : Tile() {
 
             when (e.action) {
                 MotionEvent.ACTION_DOWN -> v.performClick()
+                MotionEvent.ACTION_UP -> holder.itemView.callOnClick()
             }
 
             if ((e.eventTime - e.downTime) > 0) {
@@ -85,10 +86,6 @@ class SliderTile : Tile() {
             }
 
             return@setOnTouchListener true
-        }
-
-        background.setOnClickListener {
-            holder.itemView.callOnClick()
         }
 
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
@@ -136,11 +133,6 @@ class SliderTile : Tile() {
         }
 
         liveValue = if (value in from..to) value else slider.valueFrom
-    }
-
-    override fun onClick() {
-        super.onClick()
-        onSend("test0", "slider")
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

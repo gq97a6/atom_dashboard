@@ -9,17 +9,15 @@ import com.netDashboard.foreground_service.demons.Mqttd
 class DaemonGroup(private val context: Context, val dashboard: Dashboard) {
 
     var mqttd = Mqttd(context, dashboard.mqttURI)
-    var bluetoothd = Bluetoothd()
 
     init {
         start()
     }
 
     private fun start() {
-        //MQTT
         if (dashboard.mqttEnabled) {
-            mqttd.start()
 
+            mqttd.conHandler.isDone.removeObservers(context as LifecycleOwner)
             mqttd.conHandler.isDone.observe(context as LifecycleOwner, { isDone ->
                 if (isDone) {
                     val list: MutableList<String> = mutableListOf()
@@ -34,6 +32,7 @@ class DaemonGroup(private val context: Context, val dashboard: Dashboard) {
                 }
             })
 
+            mqttd.data.removeObservers(context as LifecycleOwner)
             mqttd.data.observe(context as LifecycleOwner, { data ->
                 if (data.first != null && data.second != null) {
                     for (t in dashboard.tiles) {
@@ -42,13 +41,16 @@ class DaemonGroup(private val context: Context, val dashboard: Dashboard) {
                 }
             })
 
-            //Bluetooth
-            //if (dashboard.properties.bluetoothEnabled) bluetoothd.start()
+            mqttd.start()
         }
     }
 
     fun stop() {
         mqttd.stop()
-        //bluetoothd.stop()
+    }
+
+    fun restart() {
+        stop()
+        start()
     }
 }

@@ -61,6 +61,13 @@ class DashboardActivity : AppCompatActivity() {
         //Set dashboard tag name
         b.dTagName.text = dashboard.dashboardTagName.uppercase(Locale.getDefault())
 
+        //Set dashboard status
+        dashboard.daemonGroup?.mqttd?.conHandler?.isDone?.observe(this) { isDone ->
+            b.dTagStatus.text = getString(
+                if (isDone) R.string.d_connected else R.string.d_disconnected
+            )
+        }
+
         b.dTouch.setOnClickListener {
             touchOnClick()
         }

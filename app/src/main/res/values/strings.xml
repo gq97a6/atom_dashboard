@@ -25,6 +25,8 @@
     <string name="d_swap">Mark to swap.</string>
     <string name="d_remove">Mark, click again.</string>
     <string name="d_empty">Add new tiles first. \n Use left icon to access edit mode.</string>
+    <string name="d_disconnected">DISCONNECTED</string>
+    <string name="d_connected">CONNECTED</string>
 
     <string name="p_banner">Properties</string>
     <string name="p_span">Row span: </string>
@@ -44,12 +46,15 @@
     <string name="cnt_banner1">type:</string>
     <string name="cnt_slider_height">Height:</string>
     <string name="cnt_slider_width">Width:</string>
-
-    <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
-    <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
     <string name="cnt_design_chip0">colour by theme</string>
     <string name="cnt_design_chip1">specify color</string>
     <string name="cnt_design_hue">Hue:</string>
     <string name="cnt_design_saturation">Saturation:</string>
     <string name="cnt_design_value">Value:</string>
+    <string name="cnt_publish_value">Publish value:</string>
+    <string name="cnt_topic_hint">disabled</string>
+    <string name="cnt_publish_value_hint">default</string>
+
+    <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
+    <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
 </resources>

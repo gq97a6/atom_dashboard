@@ -24,10 +24,10 @@ open class Tile {
 
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
-    var mqttPubConfirmation = false
+    var mqttPubValue = ""
     var mqttQoS = 0
+    var mqttPubConfirmation = false
     var mqttPayloadJSON = false
-    var mqttOutputJSON = false
 
     var bltPattern = ""
     var bltDelimiter = ""

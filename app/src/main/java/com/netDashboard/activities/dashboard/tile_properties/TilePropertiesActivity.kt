@@ -134,6 +134,14 @@ class TilePropertiesActivity : AppCompatActivity() {
                 tile.mqttTopics.sub.set(cs.toString(), "sub")
             }
         })
+
+        b.cntMqttPubValue.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                tile.mqttTopics.pub.set(cs.toString(), "pub")
+            }
+        })
     }
 
     override fun onPause() {

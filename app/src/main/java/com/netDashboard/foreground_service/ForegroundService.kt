@@ -14,8 +14,8 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
-import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboards
+
 
 class ForegroundService : LifecycleService() {
 
@@ -33,7 +33,6 @@ class ForegroundService : LifecycleService() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentTitle("Server working in background")
-            //.setContentText("Running servers: MQTT")
             .setSmallIcon(R.drawable.icon_main)
             .setPriority(PRIORITY_MIN)
             .setVisibility(VISIBILITY_SECRET)
@@ -56,11 +55,11 @@ class ForegroundService : LifecycleService() {
 
         if (isRunning) isRunning = false
 
-        createNotification(this, "foregroundService", "onDestroy")
+        //createNotification(this, "foregroundService", "onDestroy")
         Dashboards.save()
 
-        //val foregroundServiceHandler = ForegroundServiceHandler(this)
-        //foregroundServiceHandler.start()
+        val foregroundServiceHandler = ForegroundServiceHandler(this)
+        foregroundServiceHandler.start()
 
         super.onDestroy()
     }

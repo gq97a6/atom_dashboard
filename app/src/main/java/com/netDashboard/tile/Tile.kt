@@ -102,35 +102,38 @@ open class Tile {
     }
 
     class MqttTopics {
-        val sub = List()
-        val pub = List()
+        val subs = TopicList()
+        val pubs = TopicList()
 
-        class List {
-            private val topics: MutableList<String> = mutableListOf()
-            private val names: MutableList<String> = mutableListOf()
+        class TopicList {
 
-            fun set(topic: String, name: String) {
-                for ((i, n) in names.withIndex()) {
-                    if (n == name) {
-                        topics[i] = topic
-                        return
+            val topics: MutableList<Topic>
+                get() = topicMap.values.toMutableList()
+
+            val topicList: MutableList<String>
+                get() = topicListMap.values.toMutableList()
+
+            private val topicMap: MutableMap<String, Topic> = mutableMapOf()
+            private val topicListMap: MutableMap<String, String> = mutableMapOf()
+
+            fun get(name: String): Topic = topicMap[name] ?: Topic("", 0, false)
+
+            fun set(topic: String?, qos: Int?, retained: Boolean?, name: String) {
+                val t = topicMap[name] ?: Topic("", 0, false)
+
+                if (retained != null) t.retained = retained
+                if (qos != null) t.qos = qos
+                if (topic != null) t.topic = topic
+
+                topicMap[name] = t
+                topicListMap[name] = t.topic
+            }
+
+            class Topic(var topic: String, qos: Int, var retained: Boolean) {
+                var qos = qos
+                    set(value) {
+                        if (value in 0..3) field = value
                     }
-                }
-
-                topics.add(topic)
-                names.add(name)
-            }
-
-            fun get(name: String): String? {
-                for ((i, n) in names.withIndex()) {
-                    if (n == name) return topics[i]
-                }
-
-                return null
-            }
-
-            fun get(): MutableList<String> {
-                return topics
             }
         }
     }
@@ -177,9 +180,9 @@ open class Tile {
 
     open fun onEdit(isEdit: Boolean) {}
 
-    open fun onSend(topic: String, msg: String, qos: Int = 1, retained: Boolean = false):Boolean {
+    open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
         Dashboards.get(dashboardName)?.daemonGroup?.mqttd.let {
-            return if(it != null) {
+            return if (it != null) {
                 it.publish(topic, msg)
                 true
             } else {
@@ -188,13 +191,9 @@ open class Tile {
         }
     }
 
-    fun onSend(topic: String, msg: String, retained: Boolean = false):Boolean {
-        return onSend(topic, msg, 1, retained)
-    }
-
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!mqttEnabled) return false
-        if (!mqttTopics.sub.get().contains(data.first)) return false
+        if (!mqttTopics.subs.topicList.contains(data.first)) return false
         return true
     }
 }

@@ -36,7 +36,7 @@ class SliderTile : Tile() {
         }
         set(value) {
             val m = value % step
-            val v = if(m <= step / 2) {
+            val v = if (m <= step / 2) {
                 value - m
             } else {
                 value - m + step
@@ -94,7 +94,9 @@ class SliderTile : Tile() {
             }
 
             override fun onStopTrackingTouch(s: Slider) {
-                onSend(mqttTopics.pub.get("pub") ?: "", liveValue.dezero())
+
+                val topic = mqttTopics.pubs.get("base")
+                onSend(topic.topic, liveValue.dezero(), topic.qos)
             }
         })
 
@@ -139,7 +141,7 @@ class SliderTile : Tile() {
         if (!super.onData(data)) return false
 
         val value = data.second.toString().toFloatOrNull()
-        if(value != null) liveValue = value
+        if (value != null) liveValue = value
 
         return true
     }

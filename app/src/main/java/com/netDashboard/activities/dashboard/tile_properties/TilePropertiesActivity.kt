@@ -123,7 +123,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.pub.set(cs.toString(), "pub")
+                tile.mqttTopics.pubs.set(cs.toString(), null, null,"base")
             }
         })
 
@@ -131,17 +131,17 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.sub.set(cs.toString(), "sub")
+                tile.mqttTopics.subs.set(cs.toString(), null, null,"base")
             }
         })
 
-        b.cntMqttPubValue.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.pub.set(cs.toString(), "pub")
-            }
-        })
+        //b.cntMqttPubValue.addTextChangedListener(object : TextWatcher {
+        //    override fun afterTextChanged(cs: Editable) {}
+        //    override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+        //    override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+        //        tile.mqttTopics.pubs.topic = cs.toString()
+        //    }
+        //})
     }
 
     override fun onPause() {
@@ -193,8 +193,8 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         //MQTT
         b.cntMqttSwitch.isChecked = tile.mqttEnabled
-        b.cntMqttPub.setText(tile.mqttTopics.pub.get("pub"))
-        b.cntMqttSub.setText(tile.mqttTopics.sub.get("sub"))
+        b.cntMqttPub.setText(tile.mqttTopics.pubs.get("base").topic)
+        b.cntMqttSub.setText(tile.mqttTopics.subs.get("base").topic)
         mqttSwitchOnCheckedChangeListener(b.cntMqttSwitch.isChecked)
 
         //when (tile) {

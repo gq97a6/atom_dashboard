@@ -11,6 +11,7 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
+import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
 import java.util.*
 
 open class Dashboard(val name: String) {

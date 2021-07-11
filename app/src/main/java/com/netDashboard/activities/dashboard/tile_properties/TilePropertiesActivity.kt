@@ -123,7 +123,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.pubs.set(cs.toString(), null, null,"base")
+                tile.mqttTopics.pubs.set(cs.toString(), null, null, "base")
             }
         })
 
@@ -131,7 +131,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.subs.set(cs.toString(), null, null,"base")
+                tile.mqttTopics.subs.set(cs.toString(), null, null, "base")
             }
         })
 
@@ -148,6 +148,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         super.onPause()
 
         Dashboards.save(dashboardName)
+        dashboard.daemonGroup?.mqttd?.reinit()
     }
 
     override fun onDestroy() {

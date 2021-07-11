@@ -54,12 +54,20 @@ class PropertiesActivity : AppCompatActivity() {
 
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
-                if (it.client.isConnected) {
-                    b.pMqttAddress.background = b.pMqttConnected.background
-                    b.pMqttPort.background = b.pMqttConnected.background
-                } else if (isDone) {
-                    b.pMqttAddress.background = b.pMqttAttempting.background
-                    b.pMqttPort.background = b.pMqttAttempting.background
+                when {
+                    it.client.isConnected -> {
+                        b.pMqttAddress.background = b.pMqttConnected.background
+                        b.pMqttPort.background = b.pMqttConnected.background
+                    }
+                    isDone -> {
+                        b.pMqttAddress.background = b.pMqttAttempting.background
+                        b.pMqttPort.background = b.pMqttAttempting.background
+                    }
+                    else -> {
+
+                        b.pMqttAddress.background = b.pMqttFailed.background
+                        b.pMqttPort.background = b.pMqttFailed.background
+                    }
                 }
             }
         }

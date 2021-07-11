@@ -25,7 +25,14 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         conHandler.decide()
     }
 
-    fun reinit() = conHandler.decide(true)
+    fun reinit() {
+        conHandler.decide()
+        if (client.isConnected) topicCheck()
+        Log.i(
+            "OUY",
+            "reinit"
+        )
+    }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
 
@@ -50,13 +57,17 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         }
     }
 
-    fun subscribe(topic: String, qos: Int = 1) {
+    private fun subscribe(topic: Tile.MqttTopics.TopicList.Topic) {
 
         if (!client.isConnected) return
 
         try {
-            client.subscribe(topic, qos, null, object : IMqttActionListener {
+            client.subscribe(topic.topic, topic.qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.i(
+                        "OUY",
+                        "${dashboard.dashboardTagName}: topic sub: ${topic.topic}:${topic.qos}"
+                    )
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -67,13 +78,17 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         }
     }
 
-    fun unsubscribe(topic: String) {
+    private fun unsubscribe(topic: Tile.MqttTopics.TopicList.Topic) {
 
         if (!client.isConnected) return
 
         try {
-            client.unsubscribe(topic, null, object : IMqttActionListener {
+            client.unsubscribe(topic.topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    Log.i(
+                        "OUY",
+                        "${dashboard.dashboardTagName}: topic unsub: ${topic.topic}:${topic.qos}"
+                    )
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -82,6 +97,35 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         } catch (e: MqttException) {
             e.printStackTrace()
         }
+    }
+
+    //todo: make it work
+    fun topicCheck() {
+        Log.i("OUY", "topicCheck")
+
+        val mqttTopics: MutableList<Tile.MqttTopics.TopicList.Topic> = mutableListOf()
+        for (t in dashboard.tiles) {
+            for (topic in t.mqttTopics.subs.topics) {
+                if (!mqttTopics.contains(topic)) mqttTopics.add(topic)
+            }
+        }
+
+        Log.i("OUY", mqttTopics.size.toString())
+        Log.i("OUY", client.topics.size.toString())
+
+        for (topic in client.topics) {
+            if (!mqttTopics.contains(topic)) {
+                unsubscribe(topic)
+            }
+        }
+
+        for (topic in mqttTopics) {
+            if (!client.topics.contains(topic)) {
+                subscribe(topic)
+            }
+        }
+
+        client.topics = mqttTopics
     }
 
     inner class ConnectionHandler(private var retryDelay: Long = 3000) {
@@ -96,10 +140,8 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
         private fun handleDispatch() {
             if (!isDispatched) return
-            Log.i("OUY", "${dashboard.dashboardTagName}: handler handling")
 
             if (client.isConnected == isEnabled) {
-                Log.i("OUY", "${dashboard.dashboardTagName}: handler done")
                 isDispatched = false
             }
 
@@ -120,10 +162,9 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
             }, retryDelay)
         }
 
-        fun decide(now: Boolean = false) {
+        fun decide() {
             if (client.isConnected != isEnabled || client.serverURI != dashboard.mqttURI) {
                 if (!isDispatched) {
-                    Log.i("OUY", "${dashboard.dashboardTagName}: handler dispatched")
                     isDispatched = true
                     handleDispatch()
                 }
@@ -141,7 +182,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
         private var isBusy = false
         var isClosed = false
-        val topics: MutableList<Tile.MqttTopics.TopicList.Topic> = mutableListOf()
+        var topics: MutableList<Tile.MqttTopics.TopicList.Topic> = mutableListOf()
 
         override fun isConnected(): Boolean {
             return try {
@@ -153,7 +194,6 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
         fun connectAttempt() {
             if (isBusy) return
-            Log.i("OUY", "${dashboard.dashboardTagName}: connectAttempt")
 
             isBusy = true
 
@@ -175,7 +215,6 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                 }
 
                 override fun connectionLost(cause: Throwable?) {
-                    Log.i("OUY", "${dashboard.dashboardTagName}: connectionLost")
                     conHandler.decide()
                 }
 
@@ -188,7 +227,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
             try {
                 client.connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
-                        Log.i("OUY", "${dashboard.dashboardTagName}: connected")
+                        topicCheck()
                         conHandler.decide()
                     }
 
@@ -207,20 +246,17 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
         fun disconnectAttempt(close: Boolean = false) {
             if (isBusy || isClosed) return
-            Log.i("OUY", "${dashboard.dashboardTagName}: disconnectAttempt")
 
             isBusy = true
 
             try {
                 client.disconnect(null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
-                        Log.i("OUY", "${dashboard.dashboardTagName}: disconnected")
 
                         client.unregisterResources()
                         client.setCallback(null)
 
                         if (close) {
-                            Log.i("OUY", "${dashboard.dashboardTagName}: client close")
                             client.close()
                             isClosed = true
                         }

@@ -52,6 +52,18 @@ class PropertiesActivity : AppCompatActivity() {
         b.pMqttAddress.setText(dashboard.mqttAddress)
         b.pMqttPort.setText(dashboard.mqttPort.toString())
 
+        dashboard.daemonGroup?.mqttd?.let {
+            it.conHandler.isDone.observe(this) { isDone ->
+                if (it.client.isConnected) {
+                    b.pMqttAddress.background = b.pMqttConnected.background
+                    b.pMqttPort.background = b.pMqttConnected.background
+                } else if (isDone) {
+                    b.pMqttAddress.background = b.pMqttAttempting.background
+                    b.pMqttPort.background = b.pMqttAttempting.background
+                }
+            }
+        }
+
         b.pSpan.addOnChangeListener { _, value, _ ->
             b.pSpanValue.text = value.toInt().toString()
             dashboard.spanCount = value.toInt()
@@ -80,7 +92,7 @@ class PropertiesActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                 cs.toString().trim().toInt().let {
-                    if (dashboard.mqttPort != it && count > 0) {
+                    if (dashboard.mqttPort != it) {
                         dashboard.mqttPort = it
                         dashboard.daemonGroup?.mqttd?.reinit()
                     }

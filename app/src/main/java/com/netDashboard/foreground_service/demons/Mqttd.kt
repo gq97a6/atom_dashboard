@@ -87,6 +87,11 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
     inner class ConnectionHandler(private var retryDelay: Long = 3000) {
 
         private var isDispatched = false
+            set(value) {
+                isDone.postValue(!value)
+                field = value
+            }
+
         var isDone = MutableLiveData(true)
 
         private fun handleDispatch() {
@@ -96,9 +101,6 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
             if (client.isConnected == isEnabled) {
                 Log.i("OUY", "${dashboard.dashboardTagName}: handler done")
                 isDispatched = false
-
-                isDone.postValue(true)
-                isDone.value = false
             }
 
             if (isEnabled) {

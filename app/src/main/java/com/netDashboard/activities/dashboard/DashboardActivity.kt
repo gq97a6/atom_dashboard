@@ -62,10 +62,12 @@ class DashboardActivity : AppCompatActivity() {
         b.dTagName.text = dashboard.dashboardTagName.uppercase(Locale.getDefault())
 
         //Set dashboard status
-        dashboard.daemonGroup?.mqttd?.conHandler?.isDone?.observe(this) { isDone ->
-            b.dTagStatus.text = getString(
-                if (isDone && dashboard.daemonGroup?.mqttd?.client?.isConnected == true) R.string.d_connected else R.string.d_disconnected
-            )
+        dashboard.daemonGroup?.mqttd?.let {
+            it.conHandler.isDone.observe(this) { isDone ->
+                b.dTagStatus.text = getString(
+                    if (isDone && it.client.isConnected) R.string.d_connected else R.string.d_disconnected
+                )
+            }
         }
 
         b.dTouch.setOnClickListener {

@@ -59,4 +59,8 @@
     <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
     <string name="tp_json_switch">Payload is JSON:</string>
     <string name="tp_conf_switch">Confirm publishing:</string>
+    <string name="p_mqtt_failed">Failed:</string>
+    <string name="p_mqtt_attempting">Attempting:</string>
+    <string name="p_mqtt_connected">Connected:</string>
+    <string name="t_mqtt_status_info">Server attempts to connect every 3 seconds.</string>
 </resources>

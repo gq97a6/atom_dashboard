@@ -204,7 +204,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Connected:"
+                            android:text="@string/p_mqtt_connected"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -216,6 +216,7 @@
                             android:layout_marginEnd="10dp">
 
                             <View
+                                android:id="@+id/p_mqtt_connected"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="#C1FFC1" />
@@ -230,7 +231,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Attempting:"
+                            android:text="@string/p_mqtt_attempting"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -242,6 +243,7 @@
                             android:layout_marginEnd="10dp">
 
                             <View
+                                android:id="@+id/p_mqtt_attempting"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="#FFFFC1" />
@@ -256,7 +258,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Disconnected:"
+                            android:text="@string/p_mqtt_failed"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
@@ -268,6 +270,7 @@
                             android:layout_marginEnd="10dp">
 
                             <View
+                                android:id="@+id/p_mqtt_failed"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:background="#FFC1C1" />
@@ -280,6 +283,13 @@
                         </FrameLayout>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/t_mqtt_status_info"
+                        android:textColor="@color/gray100"
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"

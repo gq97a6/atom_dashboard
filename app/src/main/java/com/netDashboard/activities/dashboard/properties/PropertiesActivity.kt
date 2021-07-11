@@ -59,13 +59,19 @@ class PropertiesActivity : AppCompatActivity() {
 
         b.pMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchHandle(state)
+            dashboard.daemonGroup?.mqttd?.reinit()
         }
 
         b.pMqttAddress.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                dashboard.mqttAddress = cs.toString()
+                cs.toString().trim().let {
+                    if (dashboard.mqttAddress != it) {
+                        dashboard.mqttAddress = it
+                        dashboard.daemonGroup?.mqttd?.reinit()
+                    }
+                }
             }
         })
 
@@ -73,14 +79,18 @@ class PropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                if (count > 0) dashboard.mqttPort = cs.toString().toInt()
+                cs.toString().trim().toInt().let {
+                    if (dashboard.mqttPort != it && count > 0) {
+                        dashboard.mqttPort = it
+                        dashboard.daemonGroup?.mqttd?.reinit()
+                    }
+                }
             }
         })
     }
 
     override fun onPause() {
         super.onPause()
-
         Dashboards.save(dashboardName)
     }
 
@@ -116,16 +126,10 @@ class PropertiesActivity : AppCompatActivity() {
     }
 
     private fun mqttSwitchHandle(state: Boolean) {
-        if (state) {
-            b.pMqttAddress.visibility = View.VISIBLE
-            b.pMqttPort.visibility = View.VISIBLE
-            b.pMqttAddressText.visibility = View.VISIBLE
-            b.pMqttPortText.visibility = View.VISIBLE
+        b.pMqtt.visibility = if (state) {
+            View.VISIBLE
         } else {
-            b.pMqttAddress.visibility = View.GONE
-            b.pMqttPort.visibility = View.GONE
-            b.pMqttAddressText.visibility = View.GONE
-            b.pMqttPortText.visibility = View.GONE
+            View.GONE
         }
 
         dashboard.mqttEnabled = state

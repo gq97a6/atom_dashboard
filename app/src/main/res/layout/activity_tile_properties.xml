@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="@string/cnt_banner0"
+        android:text="@string/tp_banner0"
         android:textColor="@color/black"
         android:textSize="40sp" />
 
@@ -28,12 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:text="@string/cnt_banner1"
+            android:text="@string/tp_banner1"
             android:textColor="@color/gray150"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/cnt_tile_type"
+            android:id="@+id/tp_tile_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/gray100"
@@ -55,7 +55,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/cnt_dimensions"
+                android:text="@string/tp_dimensions"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
@@ -76,12 +76,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/cnt_slider_width"
+                        android:text="@string/tp_slider_width"
                         android:textColor="@color/gray150"
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/cnt_dimen_width_text"
+                        android:id="@+id/tp_dimen_width_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
@@ -92,7 +92,7 @@
                         tools:ignore="HardcodedText" />
 
                     <com.google.android.material.slider.Slider
-                        android:id="@+id/cnt_dimen_width"
+                        android:id="@+id/tp_dimen_width"
                         style="@style/slider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -113,12 +113,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/cnt_slider_height"
+                        android:text="@string/tp_slider_height"
                         android:textColor="@color/gray150"
                         android:textSize="15sp" />
 
                     <TextView
-                        android:id="@+id/cnt_dimen_height_text"
+                        android:id="@+id/tp_dimen_height_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
@@ -129,7 +129,7 @@
                         tools:ignore="HardcodedText" />
 
                     <com.google.android.material.slider.Slider
-                        android:id="@+id/cnt_dimen_height"
+                        android:id="@+id/tp_dimen_height"
                         style="@style/slider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="5dp"
-                    android:text="@string/cnt_cnt_dimensions_info"
+                    android:text="@string/tp_dimensions_info"
                     android:textColor="@color/gray100"
                     android:textSize="12sp" />
 
@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/cnt_design"
+                android:text="@string/tp_design"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
@@ -166,7 +166,7 @@
                 android:padding="10dp">
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/cnt_design_chips"
+                    android:id="@+id/tp_design_chips"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -174,33 +174,33 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/cnt_design_chip_theme"
+                        android:id="@+id/tp_design_chip_theme"
                         style="@style/chip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:enabled="false"
-                        android:text="@string/cnt_design_chip0" />
+                        android:text="@string/tp_design_chip0" />
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/cnt_design_chip_color"
+                        android:id="@+id/tp_design_chip_color"
                         style="@style/chip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cnt_design_chip1" />
+                        android:text="@string/tp_design_chip1" />
 
                 </com.google.android.material.chip.ChipGroup>
 
                 <TextView
-                    android:id="@+id/cnt_design_info"
+                    android:id="@+id/tp_design_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/cnt_design_info_theme"
+                    android:text="@string/tp_design_info_theme"
                     android:textColor="@color/gray100"
                     android:textSize="12sp" />
 
                 <LinearLayout
-                    android:id="@+id/cnt_design_color"
+                    android:id="@+id/tp_design_color"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -215,12 +215,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/cnt_design_hue"
+                            android:text="@string/tp_design_hue"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
                         <com.google.android.material.slider.Slider
-                            android:id="@+id/cnt_design_hue"
+                            android:id="@+id/tp_design_hue"
                             style="@style/slider"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -244,12 +244,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/cnt_design_saturation"
+                            android:text="@string/tp_design_saturation"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
                         <com.google.android.material.slider.Slider
-                            android:id="@+id/cnt_design_saturation"
+                            android:id="@+id/tp_design_saturation"
                             style="@style/slider"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -273,12 +273,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/cnt_design_value"
+                            android:text="@string/tp_design_value"
                             android:textColor="@color/gray100"
                             android:textSize="12sp" />
 
                         <com.google.android.material.slider.Slider
-                            android:id="@+id/cnt_design_value"
+                            android:id="@+id/tp_design_value"
                             style="@style/slider"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -307,7 +307,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
-                    android:text="@string/cnt_communication"
+                    android:text="@string/p_communication"
                     android:textColor="@color/gray150"
                     android:textSize="20sp" />
 
@@ -315,7 +315,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="@string/cnt_mqtt"
+                    android:text="@string/p_mqtt"
                     android:textColor="@color/gray100"
                     android:textSize="20sp" />
 
@@ -338,7 +338,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/cnt_switch"
+                        android:text="@string/p_switch"
                         android:textColor="@color/gray150"
                         android:textSize="15sp" />
 
@@ -353,10 +353,11 @@
                             android:layout_height="wrap_content"
                             android:text="OFF"
                             android:textColor="@color/gray150"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/cnt_mqtt_switch"
+                            android:id="@+id/tp_mqtt_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -365,14 +366,15 @@
                             android:layout_height="wrap_content"
                             android:text="ON"
                             android:textColor="@color/gray150"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/cnt_mqtt"
+                    android:id="@+id/tp_mqtt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -387,18 +389,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/cnt_publish_topic"
+                            android:text="@string/tp_publish_topic"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
                         <EditText
-                            android:id="@+id/cnt_mqtt_pub"
+                            android:id="@+id/tp_mqtt_pub"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
                             android:ems="12"
-                            android:hint="@string/cnt_topic_hint"
+                            android:hint="@string/tp_topic_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLength="25"
@@ -419,18 +421,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/cnt_subscribe_topic"
+                            android:text="@string/tp_subscribe_topic"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
                         <EditText
-                            android:id="@+id/cnt_mqtt_sub"
+                            android:id="@+id/tp_mqtt_sub"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
                             android:ems="12"
-                            android:hint="@string/cnt_topic_hint"
+                            android:hint="@string/tp_topic_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLength="25"
@@ -451,18 +453,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="@string/cnt_publish_value"
+                            android:text="@string/tp_publish_value"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
                         <EditText
-                            android:id="@+id/cnt_mqtt_pub_value"
+                            android:id="@+id/tp_mqtt_pub_value"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
                             android:ems="12"
-                            android:hint="@string/cnt_publish_value_hint"
+                            android:hint="@string/p_publish_value_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLength="25"
@@ -482,7 +484,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Payload is JSON:"
+                            android:text="@string/tp_json_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
@@ -497,7 +499,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="OFF"
                                 android:textColor="@color/gray150"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="wrap_content"
@@ -509,7 +512,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="ON"
                                 android:textColor="@color/gray150"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
 
                         </LinearLayout>
 
@@ -524,7 +528,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Confirm publishing:"
+                            android:text="@string/tp_conf_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
@@ -539,7 +543,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="OFF"
                                 android:textColor="@color/gray150"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
                                 android:layout_width="wrap_content"
@@ -551,7 +556,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="ON"
                                 android:textColor="@color/gray150"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
 
                         </LinearLayout>
 

@@ -21,6 +21,8 @@
     <string name="attachment_summary_on" tools:keep="@string/attachment_summary_on">Automatically download attachments for incoming emails \n</string>
     <string name="attachment_summary_off" tools:keep="@string/attachment_summary_off">Only download attachments when manually requested</string>
 
+    <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
+
     <string name="d_edit">Click to edit.</string>
     <string name="d_swap">Mark to swap.</string>
     <string name="d_remove">Mark, click again.</string>
@@ -30,31 +32,31 @@
 
     <string name="p_banner">Properties</string>
     <string name="p_span">Row span: </string>
+    <string name="p_switch">Enabled:</string>
+    <string name="p_mqtt_address">Address:</string>
+    <string name="p_publish_value_hint">default</string>
+    <string name="p_port">Port:</string>
+    <string name="p_communication">Communication:</string>
+    <string name="p_mqtt">MQTT</string>
 
-    <string name="cnt_dimensions">Dimensions</string>
-    <string name="cnt_cnt_dimensions_info">You can control only one dimension.</string>
-    <string name="cnt_design">Design</string>
-    <string name="cnt_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
-    <string name="cnt_communication">Communication:</string>
-    <string name="cnt_mqtt">MQTT</string>
-    <string name="cnt_switch">Enabled:</string>
-    <string name="cnt_mqtt_address">Address:</string>
-    <string name="cnt_port">Port:</string>
-    <string name="cnt_publish_topic">Publish topic:</string>
-    <string name="cnt_subscribe_topic">Subscribe topic:</string>
-    <string name="cnt_banner0">Tile properties</string>
-    <string name="cnt_banner1">type:</string>
-    <string name="cnt_slider_height">Height:</string>
-    <string name="cnt_slider_width">Width:</string>
-    <string name="cnt_design_chip0">colour by theme</string>
-    <string name="cnt_design_chip1">specify color</string>
-    <string name="cnt_design_hue">Hue:</string>
-    <string name="cnt_design_saturation">Saturation:</string>
-    <string name="cnt_design_value">Value:</string>
-    <string name="cnt_publish_value">Publish value:</string>
-    <string name="cnt_topic_hint">disabled</string>
-    <string name="cnt_publish_value_hint">default</string>
-
-    <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
+    <string name="tp_dimensions">Dimensions</string>
+    <string name="tp_dimensions_info">You can control only one dimension.</string>
+    <string name="tp_design">Design</string>
+    <string name="tp_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
+    <string name="tp_publish_topic">Publish topic:</string>
+    <string name="tp_subscribe_topic">Subscribe topic:</string>
+    <string name="tp_banner0">Tile properties</string>
+    <string name="tp_banner1">type:</string>
+    <string name="tp_slider_height">Height:</string>
+    <string name="tp_slider_width">Width:</string>
+    <string name="tp_design_chip0">colour by theme</string>
+    <string name="tp_design_chip1">specify color</string>
+    <string name="tp_design_hue">Hue:</string>
+    <string name="tp_design_saturation">Saturation:</string>
+    <string name="tp_design_value">Value:</string>
+    <string name="tp_publish_value">Publish value:</string>
+    <string name="tp_topic_hint">disabled</string>
     <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
+    <string name="tp_json_switch">Payload is JSON:</string>
+    <string name="tp_conf_switch">Confirm publishing:</string>
 </resources>

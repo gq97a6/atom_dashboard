@@ -129,8 +129,8 @@ open class Tile {
                 topicListMap[name] = t.topic
             }
 
-            class Topic(var topic: String, qos: Int, var retained: Boolean) {
-                var qos = qos
+            data class Topic(var topic: String, private val _qos: Int, var retained: Boolean) {
+                var qos = _qos
                     set(value) {
                         if (value in 0..3) field = value
                     }

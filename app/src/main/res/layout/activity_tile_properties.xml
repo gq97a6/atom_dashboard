@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".activities.dashboard.tile_new.TileNewActivity">
 
@@ -43,8 +43,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
         android:paddingHorizontal="30dp">
 
         <LinearLayout
@@ -226,7 +226,6 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:layout_margin="15dp"
-                            android:background="@drawable/background_rgb_slider"
                             android:value="180"
                             android:valueFrom="0"
                             android:valueTo="360"

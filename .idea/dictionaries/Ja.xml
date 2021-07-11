@@ -10,6 +10,7 @@
       <w>snackbar</w>
       <w>tcpd</w>
       <w>udpd</w>
+      <w>unsub</w>
     </words>
   </dictionary>
 </component>

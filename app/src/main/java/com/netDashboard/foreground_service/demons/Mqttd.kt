@@ -6,7 +6,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.tile.Tile
+import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import kotlin.random.Random
@@ -26,8 +26,8 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
     }
 
     fun reinit() {
-        conHandler.decide()
         if (client.isConnected) topicCheck()
+        conHandler.decide()
         Log.i(
             "OUY",
             "reinit"
@@ -57,7 +57,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         }
     }
 
-    private fun subscribe(topic: Tile.MqttTopics.TopicList.Topic) {
+    private fun subscribe(topic: Topic) {
 
         if (!client.isConnected) return
 
@@ -78,7 +78,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         }
     }
 
-    private fun unsubscribe(topic: Tile.MqttTopics.TopicList.Topic) {
+    private fun unsubscribe(topic: Topic) {
 
         if (!client.isConnected) return
 
@@ -87,7 +87,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.i(
                         "OUY",
-                        "${dashboard.dashboardTagName}: topic unsub: ${topic.topic}:${topic.qos}"
+                        "${dashboard.dashboardTagName}: topic unsubscribe: ${topic.topic}:${topic.qos}"
                     )
                 }
 
@@ -99,33 +99,24 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         }
     }
 
-    //todo: make it work
     fun topicCheck() {
-        Log.i("OUY", "topicCheck")
 
-        val mqttTopics: MutableList<Tile.MqttTopics.TopicList.Topic> = mutableListOf()
-        for (t in dashboard.tiles) {
-            for (topic in t.mqttTopics.subs.topics) {
-                if (!mqttTopics.contains(topic)) mqttTopics.add(topic)
+        val topics: MutableList<Topic> = mutableListOf()
+        for (tile in dashboard.tiles) {
+            for (t in tile.mqttTopics.subs.topics) {
+                if (!topics.contains(t) && t.topic.isNotBlank()) {
+                    topics.add(t.copy())
+                }
             }
         }
 
-        Log.i("OUY", mqttTopics.size.toString())
-        Log.i("OUY", client.topics.size.toString())
+        val unsubTopics = client.topics - topics
+        val subTopics = topics - client.topics
 
-        for (topic in client.topics) {
-            if (!mqttTopics.contains(topic)) {
-                unsubscribe(topic)
-            }
-        }
+        for(t in unsubTopics) unsubscribe(t)
+        for(t in subTopics) subscribe(t)
 
-        for (topic in mqttTopics) {
-            if (!client.topics.contains(topic)) {
-                subscribe(topic)
-            }
-        }
-
-        client.topics = mqttTopics
+        client.topics = topics
     }
 
     inner class ConnectionHandler(private var retryDelay: Long = 3000) {
@@ -182,7 +173,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
         private var isBusy = false
         var isClosed = false
-        var topics: MutableList<Tile.MqttTopics.TopicList.Topic> = mutableListOf()
+        var topics: MutableList<Topic> = mutableListOf()
 
         override fun isConnected(): Boolean {
             return try {
@@ -223,6 +214,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
             })
 
             val options = MqttConnectOptions()
+            options.isCleanSession = true
 
             try {
                 client.connect(options, null, object : IMqttActionListener {

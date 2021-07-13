@@ -3,6 +3,7 @@ package com.netDashboard.tile
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -183,7 +184,7 @@ open class Tile {
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
         Dashboards.get(dashboardName)?.daemonGroup?.mqttd.let {
             return if (it != null) {
-                it.publish(topic, msg)
+                it.publish(topic, msg, qos, retained)
                 true
             } else {
                 false

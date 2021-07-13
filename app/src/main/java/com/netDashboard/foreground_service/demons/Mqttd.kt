@@ -28,10 +28,6 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     fun reinit() {
         if (client.isConnected) topicCheck()
         conHandler.dispatch()
-        Log.i(
-            "OUY",
-            "reinit"
-        )
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {

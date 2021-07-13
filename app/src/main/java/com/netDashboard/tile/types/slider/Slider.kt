@@ -94,7 +94,6 @@ class SliderTile : Tile() {
             }
 
             override fun onStopTrackingTouch(s: Slider) {
-
                 val topic = mqttTopics.pubs.get("base")
                 onSend(topic.topic, liveValue.dezero(), topic.qos)
             }

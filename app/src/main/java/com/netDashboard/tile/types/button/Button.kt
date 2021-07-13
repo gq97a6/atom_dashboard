@@ -19,7 +19,7 @@ class ButtonTile : Tile() {
     }
 
     var text = "Default value"
-    var liveText: String
+    var liveText: String //todo:validate
         get() = holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text.toString()
         set(value) {
             text = value
@@ -61,7 +61,7 @@ class ButtonTile : Tile() {
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
-
+        liveText = data.second.toString() //todo:validate
         return true
     }
 }

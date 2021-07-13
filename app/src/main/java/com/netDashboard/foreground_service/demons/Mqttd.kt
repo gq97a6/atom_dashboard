@@ -11,23 +11,23 @@ import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import kotlin.random.Random
 
-class Mqttd(private val context: Context, private val dashboard: Dashboard) : Daemon() {
+class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
     val isEnabled
-        get() = dashboard.mqttEnabled
+        get() = d.mqttEnabled
 
-    var client = MqttAndroidClientExtended(context, dashboard.mqttURI, Random.nextInt().toString())
+    var client = MqttAndroidClientExtended(context, d.mqttURI, Random.nextInt().toString())
     var conHandler = ConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     init {
-        conHandler.decide()
+        conHandler.dispatch()
     }
 
     fun reinit() {
         if (client.isConnected) topicCheck()
-        conHandler.decide()
+        conHandler.dispatch()
         Log.i(
             "OUY",
             "reinit"
@@ -66,7 +66,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.i(
                         "OUY",
-                        "${dashboard.dashboardTagName}: topic sub: ${topic.topic}:${topic.qos}"
+                        "${d.dashboardTagName}: topic sub: ${topic.topic}:${topic.qos}"
                     )
                 }
 
@@ -87,7 +87,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     Log.i(
                         "OUY",
-                        "${dashboard.dashboardTagName}: topic unsubscribe: ${topic.topic}:${topic.qos}"
+                        "${d.dashboardTagName}: topic unsubscribe: ${topic.topic}:${topic.qos}"
                     )
                 }
 
@@ -102,7 +102,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
     fun topicCheck() {
 
         val topics: MutableList<Topic> = mutableListOf()
-        for (tile in dashboard.tiles) {
+        for (tile in d.tiles) {
             for (t in tile.mqttTopics.subs.topics) {
                 if (!topics.contains(t) && t.topic.isNotBlank()) {
                     topics.add(t.copy())
@@ -113,54 +113,49 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
         val unsubTopics = client.topics - topics
         val subTopics = topics - client.topics
 
-        for(t in unsubTopics) unsubscribe(t)
-        for(t in subTopics) subscribe(t)
+        for (t in unsubTopics) unsubscribe(t)
+        for (t in subTopics) subscribe(t)
 
         client.topics = topics
     }
 
     inner class ConnectionHandler(private var retryDelay: Long = 3000) {
 
-        private var isDispatched = false
+        var isDone = MutableLiveData(false)
+
+        private var _isDone = false
             set(value) {
-                isDone.postValue(!value)
+                if (value != field) isDone.postValue(value)
                 field = value
             }
 
-        var isDone = MutableLiveData(true)
+        private var isDispatchScheduled = false
 
-        private fun handleDispatch() {
-            if (!isDispatched) return
-
-            if (client.isConnected == isEnabled) {
-                isDispatched = false
-            }
-
+        private fun handleDispatch(): Long {
             if (isEnabled) {
-                if (client.serverURI == dashboard.mqttURI || client.isClosed) {
+                if (client.serverURI == d.mqttURI || client.isClosed) {
                     client.connectAttempt()
                 } else {
                     client.disconnectAttempt(true)
-
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        handleDispatch()
-                    }, 300)
+                    return 300
                 }
             } else client.disconnectAttempt()
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                handleDispatch()
-            }, retryDelay)
+            return 3000
         }
 
-        fun decide() {
-            if (client.isConnected != isEnabled || client.serverURI != dashboard.mqttURI) {
-                if (!isDispatched) {
-                    isDispatched = true
-                    handleDispatch()
+        fun dispatch() {
+            _isDone =
+                isEnabled == client.isConnected && (!isEnabled || (client.serverURI == d.mqttURI))
+
+            if (!_isDone) {
+                if (!isDispatchScheduled) {
+                    isDone.postValue(_isDone)
+                    isDispatchScheduled = true
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        isDispatchScheduled = false
+                        dispatch()
+                    }, handleDispatch())
                 }
-            } else {
-                isDispatched = false
             }
         }
     }
@@ -188,11 +183,11 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
 
             isBusy = true
 
-            if (client.isClosed || client.isClosed && client.serverURI != dashboard.mqttURI) {
+            if (client.isClosed || client.isClosed && client.serverURI != d.mqttURI) {
                 client =
                     MqttAndroidClientExtended(
                         context,
-                        dashboard.mqttURI,
+                        d.mqttURI,
                         Random.nextInt().toString()
                     )
             }
@@ -200,13 +195,13 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
             client.setCallback(object : MqttCallback {
 
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in dashboard.tiles) tile.onData(Pair(t ?: "", m))
+                    for (tile in d.tiles) tile.onData(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                     data.value = Pair(null, null)
                 }
 
                 override fun connectionLost(cause: Throwable?) {
-                    conHandler.decide()
+                    conHandler.dispatch()
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -220,7 +215,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                 client.connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
-                        conHandler.decide()
+                        conHandler.dispatch()
                     }
 
                     override fun onFailure(
@@ -253,7 +248,7 @@ class Mqttd(private val context: Context, private val dashboard: Dashboard) : Da
                             isClosed = true
                         }
 
-                        conHandler.decide()
+                        conHandler.dispatch()
                     }
 
                     override fun onFailure(

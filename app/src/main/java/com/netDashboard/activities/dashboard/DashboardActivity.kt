@@ -65,7 +65,19 @@ class DashboardActivity : AppCompatActivity() {
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
                 b.dTagStatus.text = getString(
-                    if (isDone && it.client.isConnected) R.string.d_connected else R.string.d_disconnected
+                    if (!dashboard.mqttEnabled) {
+                        R.string.d_disconnected
+                    } else {
+                        if (it.client.isConnected) {
+                            R.string.d_connected
+                        } else {
+                            if (isDone) {
+                                R.string.d_failed
+                            } else {
+                                R.string.d_attempting
+                            }
+                        }
+                    }
                 )
             }
         }

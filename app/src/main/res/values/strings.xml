@@ -27,6 +27,8 @@
     <string name="d_swap">Mark to swap.</string>
     <string name="d_remove">Mark, click again.</string>
     <string name="d_empty">Add new tiles first. \n Use left icon to access edit mode.</string>
+    <string name="d_failed">FAILED TO CONNECT</string>
+    <string name="d_attempting">ATTEMPTING TO CONNECT</string>
     <string name="d_disconnected">DISCONNECTED</string>
     <string name="d_connected">CONNECTED</string>
 

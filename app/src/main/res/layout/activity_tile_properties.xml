@@ -397,7 +397,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:background="#337C7C7C"
+                            android:background="#19000000"
                             android:ems="12"
                             android:hint="@string/tp_topic_hint"
                             android:importantForAutofill="no"

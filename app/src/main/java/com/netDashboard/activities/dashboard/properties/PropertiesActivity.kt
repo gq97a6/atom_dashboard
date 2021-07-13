@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
@@ -50,23 +52,52 @@ class PropertiesActivity : AppCompatActivity() {
         mqttSwitchHandle(b.pMqttSwitch.isChecked)
 
         b.pMqttAddress.setText(dashboard.mqttAddress)
-        b.pMqttPort.setText(dashboard.mqttPort.toString())
+        dashboard.mqttPort.let {
+            b.pMqttPort.setText(if (it != -1) it.toString() else "")
+        }
 
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
-                when {
-                    it.client.isConnected -> {
-                        b.pMqttAddress.background = b.pMqttConnected.background
-                        b.pMqttPort.background = b.pMqttConnected.background
-                    }
-                    isDone -> {
-                        b.pMqttAddress.background = b.pMqttAttempting.background
-                        b.pMqttPort.background = b.pMqttAttempting.background
-                    }
-                    else -> {
+                if (!dashboard.mqttEnabled) {
+                    R.string.d_disconnected
+                } else {
+                    if (it.client.isConnected) {
+                        b.pMqttAddressStatus.background = b.pMqttConnected.background
+                        b.pMqttPortStatus.background = b.pMqttConnected.background
 
-                        b.pMqttAddress.background = b.pMqttFailed.background
-                        b.pMqttPort.background = b.pMqttFailed.background
+                        b.pMqttAddressStatus.animate().alpha(1f)
+                        b.pMqttPortStatus.animate().alpha(1f)
+                    } else {
+                        if (isDone) {
+                            b.pMqttAddressStatus.background = b.pMqttFailed.background
+                            b.pMqttPortStatus.background = b.pMqttFailed.background
+
+                            b.pMqttAddressStatus.animate().alpha(1f)
+                            b.pMqttPortStatus.animate().alpha(1f)
+                        } else {
+                            b.pMqttAddressStatus.background = b.pMqttAttempting.background
+                            b.pMqttPortStatus.background = b.pMqttAttempting.background
+
+                            b.pMqttAddressStatus.animate()
+                                .alpha(1f)
+                                .withEndAction {
+                                    b.pMqttAddressStatus.animate()
+                                        .alpha(0f)
+                                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
+                                        4000
+                                }
+                                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 200
+
+                            b.pMqttPortStatus.animate()
+                                .alpha(1f)
+                                .withEndAction {
+                                    b.pMqttPortStatus.animate()
+                                        .alpha(0f)
+                                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
+                                        4000
+                                }
+                                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 200
+                        }
                     }
                 }
             }
@@ -99,11 +130,10 @@ class PropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().toInt().let {
-                    if (dashboard.mqttPort != it) {
-                        dashboard.mqttPort = it
-                        dashboard.daemonGroup?.mqttd?.reinit()
-                    }
+                val port = cs.toString().trim().toIntOrNull() ?: (-1)
+                if (dashboard.mqttPort != port) {
+                    dashboard.mqttPort = port
+                    dashboard.daemonGroup?.mqttd?.reinit()
                 }
             }
         })

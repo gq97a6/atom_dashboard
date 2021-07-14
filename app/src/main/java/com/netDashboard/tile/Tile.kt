@@ -3,7 +3,6 @@ package com.netDashboard.tile
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.netDashboard.getScreenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
-open class Tile {
+abstract class Tile {
 
     var width = 1
     var height = 1
@@ -25,10 +24,11 @@ open class Tile {
 
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
-    var mqttPubValue = ""
+    abstract val mqttDefaultPubValue: String
+    abstract var mqttPubValue: String
     var mqttQoS = 0
-    var mqttPubConfirmation = false
-    var mqttPayloadJSON = false
+    var mqttPubConfirm = false
+    var mqttPayloadIsJSON = false
 
     var bltPattern = ""
     var bltDelimiter = ""
@@ -39,8 +39,7 @@ open class Tile {
     val id: Long?
     val type = this.javaClass.toString()
 
-    @Transient
-    open val layout = 0
+    abstract val layout:Int
 
     @Transient
     var name = ""

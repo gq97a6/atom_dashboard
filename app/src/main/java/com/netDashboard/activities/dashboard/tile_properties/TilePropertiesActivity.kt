@@ -135,13 +135,21 @@ class TilePropertiesActivity : AppCompatActivity() {
             }
         })
 
-        //b.tpMqttPubValue.addTextChangedListener(object : TextWatcher {
-        //    override fun afterTextChanged(cs: Editable) {}
-        //    override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-        //    override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-        //        tile.mqttTopics.pubs.topic = cs.toString()
-        //    }
-        //})
+        b.tpMqttPubValue.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                tile.mqttPubValue = cs.toString()
+            }
+        })
+
+        b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttPayloadIsJSON = state
+        }
+
+        b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttPubConfirm = state
+        }
     }
 
     override fun onPause() {
@@ -196,6 +204,9 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttSwitch.isChecked = tile.mqttEnabled
         b.tpMqttPub.setText(tile.mqttTopics.pubs.get("base").topic)
         b.tpMqttSub.setText(tile.mqttTopics.subs.get("base").topic)
+        b.tpMqttPubValue.setText(tile.mqttPubValue)
+        b.tpMqttJsonSwitch.isChecked = tile.mqttPayloadIsJSON
+        b.tpMqttConfirmSwitch.isChecked = tile.mqttPubConfirm
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
         //when (tile) {

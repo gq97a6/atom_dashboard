@@ -36,7 +36,7 @@
     <string name="p_span">Row span: </string>
     <string name="p_switch">Enabled:</string>
     <string name="p_mqtt_address">Address:</string>
-    <string name="p_publish_value_hint">default</string>
+    <string name="p_publish_value_hint">empty</string>
     <string name="p_port">Port:</string>
     <string name="p_communication">Communication:</string>
     <string name="p_mqtt">MQTT</string>

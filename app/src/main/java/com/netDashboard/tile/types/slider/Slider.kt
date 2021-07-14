@@ -12,17 +12,21 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SliderTile : Tile() {
 
-    override val layout: Int
-        get() = R.layout.tile_slider
+    @Transient
+    override val layout = R.layout.tile_slider
+
+    @Transient
+    override val mqttDefaultPubValue = "@value"
+    override var mqttPubValue = mqttDefaultPubValue
 
     init {
         name = "slider"
     }
 
     var value = 0f
-    var from = 0f
+    private var from = 0f
     private var to = 100f
-    var step = 10f
+    private var step = 10f
 
     private var liveValue: Float
         get() {
@@ -95,7 +99,7 @@ class SliderTile : Tile() {
 
             override fun onStopTrackingTouch(s: Slider) {
                 val topic = mqttTopics.pubs.get("base")
-                onSend(topic.topic, liveValue.dezero(), topic.qos)
+                onSend(topic.topic, mqttPubValue.replace("@value", liveValue.dezero()), topic.qos)
             }
         })
 

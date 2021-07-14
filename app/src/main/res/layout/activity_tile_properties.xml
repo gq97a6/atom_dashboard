@@ -502,6 +502,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_mqtt_json_switch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:enabled="false" />
@@ -546,6 +547,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_mqtt_confirm_switch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:enabled="false" />

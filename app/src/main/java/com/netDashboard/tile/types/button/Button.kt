@@ -14,12 +14,16 @@ class ButtonTile : Tile() {
     override val layout: Int
         get() = R.layout.tile_button
 
+    @Transient
+    override val mqttDefaultPubValue = "1"
+    override var mqttPubValue = mqttDefaultPubValue
+
     init {
         name = "button"
     }
 
     var text = "Default value"
-    var liveText: String //todo:validate
+    var liveText: String
         get() = holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text.toString()
         set(value) {
             text = value
@@ -56,12 +60,12 @@ class ButtonTile : Tile() {
         super.onClick()
 
         val topic = mqttTopics.pubs.get("base")
-        onSend(topic.topic, "1", topic.qos)
+        onSend(topic.topic, mqttPubValue, topic.qos)
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
-        liveText = data.second.toString() //todo:validate
+        liveText = data.second.toString()
         return true
     }
 }

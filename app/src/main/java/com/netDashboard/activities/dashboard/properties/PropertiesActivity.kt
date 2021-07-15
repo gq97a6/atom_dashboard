@@ -15,6 +15,7 @@ import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityPropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
+import java.util.*
 
 class PropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityPropertiesBinding
@@ -43,6 +44,8 @@ class PropertiesActivity : AppCompatActivity() {
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)!!
+
+        b.pDTag.text = dashboard.dashboardTagName.lowercase(Locale.getDefault())
 
         b.pSpan.value = dashboard.spanCount.toFloat()
         b.pSpan.callOnClick()

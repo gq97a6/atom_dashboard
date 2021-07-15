@@ -1,5 +1,6 @@
 package com.netDashboard.tile.types.slider
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -24,9 +25,9 @@ class SliderTile : Tile() {
     }
 
     var value = 0f
-    private var from = 0f
-    private var to = 100f
-    private var step = 10f
+    var from = 0f
+    var to = 100f
+    var step = 1f
 
     private var liveValue: Float
         get() {
@@ -39,22 +40,17 @@ class SliderTile : Tile() {
             }
         }
         set(value) {
-            val m = value % step
-            val v = if (m <= step / 2) {
-                value - m
-            } else {
-                value - m + step
+            value.roundCloser(step).let {
+                this.value = it
+                val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+
+                when {
+                    from < to -> slider?.value = it
+                    to < from -> slider?.value = from - it
+                }
+
+                holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = it.dezero()
             }
-
-            this.value = v
-            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
-
-            when {
-                from < to -> slider?.value = v
-                to < from -> slider?.value = from - v
-            }
-
-            holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = v.dezero()
         }
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
@@ -123,19 +119,28 @@ class SliderTile : Tile() {
         if (from == to || step !in 0.0000000001..1000000000.0) return
         val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider) ?: return
 
-        this.from = from
-        this.to = to
-        this.step = step
+        val f = from.roundCloser(step)
+        val t = to.roundCloser(step)
 
         if (from < to) {
-            slider.valueFrom = from
-            slider.valueTo = to
+            slider.valueFrom = f
+            slider.valueTo = t
             slider.stepSize = step
         } else if (to < from) {
-            slider.valueFrom = to
-            slider.valueTo = from
+            slider.valueFrom = t
+            slider.valueTo = f
             slider.stepSize = step
         }
+
+        if(slider.value !in f..t) slider.value = f
+
+        Log.i("OUY", from.toString())
+        Log.i("OUY", to.toString())
+        Log.i("OUY", step.toString())
+
+        this.from = f
+        this.to = t
+        this.step = step
 
         liveValue = if (value in from..to) value else slider.valueFrom
     }

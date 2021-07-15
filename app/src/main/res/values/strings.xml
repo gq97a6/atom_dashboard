@@ -65,4 +65,6 @@
     <string name="p_mqtt_attempting">Attempting:</string>
     <string name="p_mqtt_connected">Connected:</string>
     <string name="t_mqtt_status_info">Server attempts to connect every 3 seconds.</string>
+    <string name="tp_tile_specific">Type specific:</string>
+    <string name="p_tag">tag:</string>
 </resources>

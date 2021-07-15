@@ -398,7 +398,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#19000000"
-                            android:ems="12"
+                            android:ems="100"
                             android:hint="@string/tp_topic_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
@@ -430,7 +430,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
-                            android:ems="12"
+                            android:ems="100"
                             android:hint="@string/tp_topic_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
@@ -462,7 +462,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="#337C7C7C"
-                            android:ems="12"
+                            android:ems="100"
                             android:hint="@string/p_publish_value_hint"
                             android:importantForAutofill="no"
                             android:inputType="text"
@@ -561,6 +561,145 @@
                                 tools:ignore="HardcodedText" />
 
                         </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tp_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/tp_tile_specific"
+                        android:textColor="@color/gray150"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="slider"
+                        android:textColor="@color/gray100"
+                        android:textSize="20sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_layout"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="From value:"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <EditText
+                            android:id="@+id/tp_slider_from"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="#19000000"
+                            android:ems="100"
+                            android:hint="0"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:maxLength="25"
+                            android:padding="10dp"
+                            android:textColor="@color/gray100"
+                            android:textColorHint="@color/gray65"
+                            tools:ignore="HardcodedText,TextFields" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="To value:"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <EditText
+                            android:id="@+id/tp_slider_to"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="#19000000"
+                            android:ems="100"
+                            android:hint="100"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:maxLength="25"
+                            android:padding="10dp"
+                            android:textColor="@color/gray100"
+                            android:textColorHint="@color/gray65"
+                            tools:ignore="HardcodedText,TextFields" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Step value:"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <EditText
+                            android:id="@+id/tp_slider_step"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="#19000000"
+                            android:ems="100"
+                            android:hint="1"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:maxLength="25"
+                            android:padding="10dp"
+                            android:textColor="@color/gray100"
+                            android:textColorHint="@color/gray65"
+                            tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
 

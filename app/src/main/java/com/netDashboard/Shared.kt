@@ -135,3 +135,7 @@ fun Float.dezero(): String {
         else -> this
     }.toString()
 }
+
+fun Float.roundCloser(step: Float): Float {
+    return (this / step).toInt() / (1 / step)
+}

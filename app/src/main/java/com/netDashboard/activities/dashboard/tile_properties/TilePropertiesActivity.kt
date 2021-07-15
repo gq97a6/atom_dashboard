@@ -11,18 +11,16 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.netDashboard.R
+import com.netDashboard.*
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.alpha
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.getContrastColor
 import com.netDashboard.tile.Tile
-import com.netDashboard.toPx
+import com.netDashboard.tile.types.slider.SliderTile
 
 class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityTilePropertiesBinding
@@ -150,6 +148,62 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttPubConfirm = state
         }
+
+        if (tile is SliderTile) {
+            b.tpSliderFrom.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(cs: Editable) {}
+                override fun beforeTextChanged(
+                    cs: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                    cs.toString().let {
+                        (tile as SliderTile).from =
+                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().from
+                    }
+                }
+            })
+
+            b.tpSliderTo.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(cs: Editable) {}
+                override fun beforeTextChanged(
+                    cs: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                    cs.toString().let {
+                        (tile as SliderTile).to =
+                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().to
+                    }
+                }
+            })
+
+            b.tpSliderStep.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(cs: Editable) {}
+                override fun beforeTextChanged(
+                    cs: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                    cs.toString().let {
+                        (tile as SliderTile).step =
+                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().step
+                    }
+                }
+            })
+        }
     }
 
     override fun onPause() {
@@ -175,7 +229,6 @@ class TilePropertiesActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-
     }
 
     private fun viewConfig() {
@@ -209,12 +262,15 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttConfirmSwitch.isChecked = tile.mqttPubConfirm
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
-        //when (tile) {
-        //    is ButtonTile -> {
-        //    }
-        //    is SliderTile -> {
-        //    }
-        //}
+        when (tile) {
+            is SliderTile -> {
+                b.tpSlider.visibility = View.VISIBLE
+
+                b.tpSliderFrom.setText((tile as SliderTile).from.dezero())
+                b.tpSliderTo.setText((tile as SliderTile).to.dezero())
+                b.tpSliderStep.setText((tile as SliderTile).step.dezero())
+            }
+        }
     }
 
     private fun dimenOnChangeListener(w: Float, h: Float) {

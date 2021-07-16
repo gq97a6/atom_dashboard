@@ -1,6 +1,5 @@
 package com.netDashboard.tile.types.slider
 
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -132,11 +131,7 @@ class SliderTile : Tile() {
             slider.stepSize = step
         }
 
-        if(slider.value !in f..t) slider.value = f
-
-        Log.i("OUY", from.toString())
-        Log.i("OUY", to.toString())
-        Log.i("OUY", step.toString())
+        if (slider.value !in f..t) slider.value = f
 
         this.from = f
         this.to = t

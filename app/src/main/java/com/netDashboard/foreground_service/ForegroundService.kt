@@ -2,6 +2,7 @@ package com.netDashboard.foreground_service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -15,10 +16,10 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboards
+import kotlin.system.exitProcess
 
 
 class ForegroundService : LifecycleService() {
-
     private var isRunning = false
     lateinit var dgc: DaemonGroups
 
@@ -29,12 +30,21 @@ class ForegroundService : LifecycleService() {
             createNotificationChannel()
         }
 
+        val intent = Intent(this, ForegroundService::class.java)
+        intent.action = "STOP"
+
+        val pendingIntent = PendingIntent
+            .getService(
+                this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT
+            )
+
         val notification = NotificationCompat.Builder(this, "foreground_service_id")
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentTitle("Server working in background")
             .setSmallIcon(R.drawable.icon_main)
             .setPriority(PRIORITY_MIN)
+            .addAction(R.drawable.icon_remove_flag, "stop working in background", pendingIntent)
             .setVisibility(VISIBILITY_SECRET)
             .setSilent(true)
 
@@ -42,6 +52,13 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent?.action == "STOP") {
+            stopForeground(true)
+            stopSelf()
+
+            onDestroy()
+            exitProcess(0)
+        }
 
         if (!isRunning) {
             dgc = DaemonGroups(this)
@@ -52,8 +69,6 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onDestroy() {
-
-        if (isRunning) isRunning = false
 
         //createNotification(this, "foregroundService", "onDestroy")
         Dashboards.save()

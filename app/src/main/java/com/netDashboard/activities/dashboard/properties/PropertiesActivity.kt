@@ -157,8 +157,8 @@ class PropertiesActivity : AppCompatActivity() {
 
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
-            finish()
             startActivity(it)
+            finish()
         }
     }
 

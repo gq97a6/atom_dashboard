@@ -53,16 +53,16 @@ class ForegroundService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
+            isRunning = false
+            Dashboards.save()
             stopForeground(true)
             stopSelf()
-
-            onDestroy()
             exitProcess(0)
-        }
-
-        if (!isRunning) {
-            dgc = DaemonGroups(this)
-            isRunning = true
+        } else {
+            if (!isRunning) {
+                dgc = DaemonGroups(this)
+                isRunning = true
+            }
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -73,8 +73,10 @@ class ForegroundService : LifecycleService() {
         //createNotification(this, "foregroundService", "onDestroy")
         Dashboards.save()
 
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
+        if (isRunning) {
+            val foregroundServiceHandler = ForegroundServiceHandler(this)
+            foregroundServiceHandler.start()
+        }
 
         super.onDestroy()
     }

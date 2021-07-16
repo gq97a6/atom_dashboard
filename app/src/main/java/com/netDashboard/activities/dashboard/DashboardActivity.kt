@@ -220,9 +220,8 @@ class DashboardActivity : AppCompatActivity() {
     private fun settingsOnClick() {
         Intent(this, PropertiesActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
-
-            finish()
             startActivity(it)
+            finish()
         }
     }
 
@@ -310,9 +309,8 @@ class DashboardActivity : AppCompatActivity() {
     private fun addOnClick() {
         Intent(this, TileNewActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
-
-            finish()
             startActivity(it)
+            finish()
         }
     }
 

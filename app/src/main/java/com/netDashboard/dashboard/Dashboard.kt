@@ -11,7 +11,6 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
 import java.util.*
 
 open class Dashboard(val name: String) {
@@ -71,7 +70,8 @@ open class Dashboard(val name: String) {
 
                 it.putExtra("dashboardName", name)
                 (context as Activity).overridePendingTransition(0, 0)
-                context?.startActivity(it)
+                (context as Activity).startActivity(it)
+                (context as Activity).finish()
             }
         }
         return DashboardAdapter.DashboardsViewHolder(view)

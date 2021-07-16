@@ -37,9 +37,8 @@ class TileNewActivity : AppCompatActivity() {
                 Intent(this, TilePropertiesActivity::class.java).also {
                     it.putExtra("dashboardName", dashboardName)
                     it.putExtra("tileId", tileAdd(tileId))
-
-                    finish()
                     startActivity(it)
+                    finish()
                 }
             }
         })
@@ -55,9 +54,8 @@ class TileNewActivity : AppCompatActivity() {
 
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
-
-            finish()
             startActivity(it)
+            finish()
         }
     }
 

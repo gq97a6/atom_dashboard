@@ -1,6 +1,5 @@
 package com.netDashboard.dashboard
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.netDashboard.folder_tree.FolderTree
@@ -22,7 +21,7 @@ object Dashboards {
     fun get(name: String): Dashboard? = dashboards[name]
 
     fun getSaved() {
-        if(isLive) return
+        if (isLive) return
 
         val list: MutableList<Dashboard> = mutableListOf()
 
@@ -32,7 +31,6 @@ object Dashboards {
                 val fileName = FolderTree.dashboardFile(name)
                 Gson.fromJson(FileReader(fileName), Dashboard::class.java)
             } catch (e: Exception) {
-                Log.i("OUY", "Dashboards.getSaved: $e")
                 Dashboard(name)
             }
 
@@ -40,7 +38,6 @@ object Dashboards {
                 val fileName = FolderTree.tilesFile(name)
                 Gson.fromJson(FileReader(fileName), JsonArray::class.java)
             } catch (e: Exception) {
-                Log.i("OUY", "Dashboards.getSaved: $e")
                 JsonArray()
             }
 
@@ -58,14 +55,13 @@ object Dashboards {
                     }
                 }
             } catch (e: Exception) {
-                Log.i("OUY", "Dashboards.getSaved: $e")
             }
 
             dashboard.tiles = tiles
             list.add(dashboard)
         }
 
-        for(d in list) dashboards[d.name] = d
+        for (d in list) dashboards[d.name] = d
         isLive = true
     }
 
@@ -83,7 +79,6 @@ object Dashboards {
             File(FolderTree.tilesFile(this.name))
                 .writeText(Gson.toJson(this.tiles))
         } catch (e: Exception) {
-            Log.i("OUY", "Dashboard.save: $e")
         }
     }
 

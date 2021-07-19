@@ -9,6 +9,7 @@ import com.netDashboard.*
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import kotlin.math.abs
 
 class SliderTile : Tile() {
 
@@ -23,34 +24,32 @@ class SliderTile : Tile() {
         name = "slider"
     }
 
-    var value = 0f
     var from = 0f
     var to = 100f
     var step = 1f
 
-    private var liveValue: Float
-        get() {
-            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
-
-            return when {
-                from < to -> slider?.value ?: 0f
-                to < from -> slider?.valueFrom ?: 0f - (slider?.value ?: 0f)
-                else -> 0f
-            }
-        }
+    private var _value = 0f
         set(value) {
-            value.roundCloser(step).let {
-                this.value = it
-                val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+            val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
+            displayValue?.text = value.dezero()
+            field = value
+        }
 
-                when {
-                    from < to -> slider?.value = it
-                    to < from -> slider?.value = from - it
-                }
+    var value: Float
+        set(value) {
+            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+            var v = value
 
-                holder?.itemView?.findViewById<TextView>(R.id.ts_value)?.text = it.dezero()
+            if (value !in from..to && value !in to..from) {
+                v = if (abs(from - value) < abs(to - value)) from else to
+            }
+
+            v.roundCloser(step).let {
+                slider?.value = it.checkScale()
+                _value = it
             }
         }
+        get() = _value
 
     override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -94,12 +93,16 @@ class SliderTile : Tile() {
 
             override fun onStopTrackingTouch(s: Slider) {
                 val topic = mqttTopics.pubs.get("base")
-                onSend(topic.topic, mqttPubValue.replace("@value", liveValue.dezero()), topic.qos)
+                onSend(
+                    topic.topic,
+                    mqttPubValue.replace("@value", value.dezero()),
+                    topic.qos
+                )
             }
         })
 
         slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
-            liveValue = value
+            this._value = value.roundCloser(step).checkScale()
         })
 
         setThemeColor(color)
@@ -114,37 +117,42 @@ class SliderTile : Tile() {
             ?.setTextColor(getContrastColor(color).alpha(.75f))
     }
 
+    private fun Float.checkScale(): Float {
+        return if (from < to) this else from - this + to
+    }
+
     private fun setRange(from: Float, to: Float, step: Float = 1f) {
-        if (from == to || step !in 0.0000000001..1000000000.0) return
         val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider) ?: return
 
-        val f = from.roundCloser(step)
-        val t = to.roundCloser(step)
+        val s = if (step in 0.000001..1000000000.0) step else SliderTile().step
+        var f = from.roundCloser(s)
+        var t = to.roundCloser(s)
 
-        if (from < to) {
-            slider.valueFrom = f
-            slider.valueTo = t
-            slider.stepSize = step
-        } else if (to < from) {
-            slider.valueFrom = t
-            slider.valueTo = f
-            slider.stepSize = step
+        if (f == t) {
+            f = SliderTile().from.roundCloser(s)
+            t = SliderTile().to.roundCloser(s)
         }
 
-        if (slider.value !in f..t) slider.value = f
+        if (f < t) {
+            slider.valueFrom = f
+            slider.valueTo = t
+        } else {
+            slider.valueFrom = t
+            slider.valueTo = f
+        }
+        slider.stepSize = s
 
         this.from = f
         this.to = t
-        this.step = step
-
-        liveValue = if (value in from..to) value else slider.valueFrom
+        this.step = s
+        value = _value
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onData(data)) return false
 
         val value = data.second.toString().toFloatOrNull()
-        if (value != null) liveValue = value
+        if (value != null) this.value = value.roundCloser(step)
 
         return true
     }

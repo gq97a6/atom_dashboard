@@ -3,7 +3,6 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
@@ -60,10 +59,6 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         try {
             client.subscribe(topic.topic, topic.qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    Log.i(
-                        "OUY",
-                        "${d.dashboardTagName}: topic sub: ${topic.topic}:${topic.qos}"
-                    )
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -81,10 +76,6 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         try {
             client.unsubscribe(topic.topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    Log.i(
-                        "OUY",
-                        "${d.dashboardTagName}: topic unsubscribe: ${topic.topic}:${topic.qos}"
-                    )
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {

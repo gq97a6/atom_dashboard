@@ -162,8 +162,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).from =
-                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().from
+                        (tile as SliderTile).from = it.toFloatOrNull() ?: SliderTile().from
                     }
                 }
             })
@@ -180,8 +179,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).to =
-                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().to
+                        (tile as SliderTile).to = it.toFloatOrNull() ?: SliderTile().to
                     }
                 }
             })
@@ -198,8 +196,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).step =
-                            if (it.isNotEmpty()) it.toFloatOrNull() ?: 1f else SliderTile().step
+                        (tile as SliderTile).step = it.toFloatOrNull() ?: SliderTile().step
                     }
                 }
             })

@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
-import com.netDashboard.createNotification
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.pow
@@ -109,12 +108,12 @@ class TilesAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return tiles[position].id!!
+        return tiles[position].id
     }
 
     override fun getItemViewType(position: Int): Int {
         currentTile = tiles[position]
-        return tiles[position].getItemViewType(context, spanCount)
+        return tiles[position].getItemViewType(context, spanCount, this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TileViewHolder {

@@ -31,7 +31,7 @@ class SliderTile : Tile() {
     private var _value = 0f
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            displayValue?.text = value.dezero()
+            displayValue?.text = value.toString()
             field = value
         }
 

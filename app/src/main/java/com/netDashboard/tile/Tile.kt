@@ -36,10 +36,11 @@ abstract class Tile {
     var bltPayloadJSON = false
     var bltOutputJSON = ""
 
-    val id: Long?
+    @Transient
+    var id = Random().nextLong()
     val type = this.javaClass.toString()
 
-    abstract val layout:Int
+    abstract val layout: Int
 
     @Transient
     var name = ""
@@ -49,6 +50,9 @@ abstract class Tile {
 
     @Transient
     var holder: TilesAdapter.TileViewHolder? = null
+
+    @Transient
+    var adapter: TilesAdapter? = null
 
     @Transient
     var dashboardName: String = ""
@@ -63,13 +67,10 @@ abstract class Tile {
             field = value; onEdit(value)
         }
 
-    init {
-        id = Random().nextLong()
-    }
-
-    fun getItemViewType(context: Context, spanCount: Int): Int {
+    fun getItemViewType(context: Context, spanCount: Int, adapter: TilesAdapter): Int {
         this.context = context
         this.spanCount = spanCount
+        this.adapter = adapter
 
         return layout
     }

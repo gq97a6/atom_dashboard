@@ -54,7 +54,7 @@ class DashboardActivity : AppCompatActivity() {
         })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)!!
+        dashboard = Dashboards.get(dashboardName)
 
         setupRecyclerView()
 

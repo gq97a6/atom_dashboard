@@ -18,7 +18,7 @@ object Dashboards {
     private var dashboards: MutableMap<String, Dashboard> = mutableMapOf()
 
     fun get(): MutableList<Dashboard> = dashboards.values.toMutableList()
-    fun get(name: String): Dashboard? = dashboards[name]
+    fun get(name: String): Dashboard = dashboards[name] ?: Dashboard("err")
 
     fun getSaved() {
         if (isLive) return

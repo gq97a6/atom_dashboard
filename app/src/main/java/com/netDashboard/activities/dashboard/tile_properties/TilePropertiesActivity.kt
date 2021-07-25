@@ -36,7 +36,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)!!
+        dashboard = Dashboards.get(dashboardName)
 
         tileId = intent.getIntExtra("tileId", 0)
         tile = dashboard.tiles[tileId]
@@ -50,8 +50,8 @@ class TilePropertiesActivity : AppCompatActivity() {
         foregroundServiceHandler.bind()
 
         foregroundServiceHandler.service.observe(this, { s ->
-            if (s != null) {
-                foregroundService = s
+            s?.let {
+                foregroundService = it
                 onServiceReady()
             }
         })

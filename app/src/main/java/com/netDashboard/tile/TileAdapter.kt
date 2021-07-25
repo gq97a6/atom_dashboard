@@ -20,8 +20,8 @@ import kotlin.math.abs
 import kotlin.math.pow
 
 class TilesAdapter(
-    private val context: Context,
-    private val spanCount: Int,
+    val context: Context,
+    val spanCount: Int,
     private var mode: String = "",
     private val dashboardName: String = ""
 ) : ListAdapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
@@ -96,7 +96,7 @@ class TilesAdapter(
 
     override fun submitList(list: MutableList<Tile>?) {
         super.submitList(list)
-        tiles = list!!.toMutableList()
+        tiles = list ?: mutableListOf()
     }
 
     override fun getCurrentList(): MutableList<Tile> {
@@ -113,7 +113,7 @@ class TilesAdapter(
 
     override fun getItemViewType(position: Int): Int {
         currentTile = tiles[position]
-        return tiles[position].getItemViewType(context, spanCount, this)
+        return tiles[position].getItemViewType(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TileViewHolder {
@@ -172,7 +172,7 @@ class TilesAdapter(
 
                     val layoutManager = recyclerView.layoutManager as GridLayoutManager
 
-                    val tileHeight = tiles[position].holder?.itemView?.height!!
+                    val tileHeight = tiles[position].holder?.itemView?.height ?: 1
                     val max = (recyclerView.height / tileHeight) * spanCount
                     val f = layoutManager.findFirstVisibleItemPosition()
                     val l = layoutManager.findLastVisibleItemPosition()
@@ -197,11 +197,11 @@ class TilesAdapter(
                         tiles[pos].holder?.itemView?.elevation = 2f
                         tiles[position].holder?.itemView?.elevation = 1f
 
-                        val xA = tiles[pos].holder?.itemView?.x!!
-                        val xB = tiles[position].holder?.itemView?.x!!
+                        val xA = tiles[pos].holder?.itemView?.x ?: 0f
+                        val xB = tiles[position].holder?.itemView?.x ?: 0f
 
-                        val yA = tiles[pos].holder?.itemView?.y!!
-                        val yB = tiles[position].holder?.itemView?.y!!
+                        val yA = tiles[pos].holder?.itemView?.y ?: 0f
+                        val yB = tiles[position].holder?.itemView?.y ?: 0f
 
                         val distance = kotlin.math.sqrt(
                             (xA - xB).toDouble().pow(2) + (yA - yB).toDouble().pow(2)

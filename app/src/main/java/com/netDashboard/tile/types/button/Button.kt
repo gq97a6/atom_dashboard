@@ -1,7 +1,6 @@
 package com.netDashboard.tile.types.button
 
 import android.content.res.ColorStateList
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.alpha
@@ -9,8 +8,6 @@ import com.netDashboard.getContrastColor
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.util.*
-import kotlin.concurrent.timerTask
 
 class ButtonTile : Tile() {
 
@@ -66,21 +63,12 @@ class ButtonTile : Tile() {
         val topic = mqttTopics.pubs.get("base")
         onSend(topic.topic, mqttPubValue, topic.qos)
 
-        holder?.itemView?.animate()
-            ?.alpha(0f)
-            ?.withEndAction {
-                holder?.itemView?.animate()?.alpha(1f)
-                    ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+        adapter?.spanCount?.let { sp ->
+            holder?.adapterPosition?.let { ap ->
+                width = if (width == 1) sp else 1
+                adapter?.notifyItemChanged(ap)
             }
-            ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
-
-        width = if (width == 1) spanCount else 1
-        adapter?.notifyItemChanged(holder?.adapterPosition!!)
-
-        val test = timerTask {
         }
-
-        Timer().schedule(test, 1000, 800)
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

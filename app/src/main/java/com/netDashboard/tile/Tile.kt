@@ -1,6 +1,5 @@
 package com.netDashboard.tile
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -17,7 +16,9 @@ abstract class Tile {
 
     var width = 1
     var height = 1
-    var spanCount = 1
+
+    var displayWidth = 0
+    var displayHeight = 0
 
     var color = Color.parseColor("#BF4040")
     var isColouredByTheme = false
@@ -46,9 +47,6 @@ abstract class Tile {
     var name = ""
 
     @Transient
-    var context: Context? = null
-
-    @Transient
     var holder: TilesAdapter.TileViewHolder? = null
 
     @Transient
@@ -67,9 +65,7 @@ abstract class Tile {
             field = value; onEdit(value)
         }
 
-    fun getItemViewType(context: Context, spanCount: Int, adapter: TilesAdapter): Int {
-        this.context = context
-        this.spanCount = spanCount
+    fun getItemViewType(adapter: TilesAdapter): Int {
         this.adapter = adapter
 
         return layout
@@ -87,7 +83,7 @@ abstract class Tile {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((getScreenWidth() - view.paddingLeft * 2) / spanCount) * height
+        params.height = ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
 
         onEdit(isEdit)
@@ -182,7 +178,7 @@ abstract class Tile {
     open fun onEdit(isEdit: Boolean) {}
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
-        Dashboards.get(dashboardName)?.daemonGroup?.mqttd.let {
+        Dashboards.get(dashboardName).daemonGroup?.mqttd.let {
             return if (it != null) {
                 it.publish(topic, msg, qos, retained)
                 true

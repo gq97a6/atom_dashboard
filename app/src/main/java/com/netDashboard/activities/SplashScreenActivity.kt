@@ -92,7 +92,7 @@ class SplashScreenActivity : AppCompatActivity() {
             SliderTile()
         )
 
-        Dashboards.get("test0")?.tiles = test
+        Dashboards.get("test0").tiles = test
         //tmp
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)

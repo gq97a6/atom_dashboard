@@ -43,7 +43,7 @@ class PropertiesActivity : AppCompatActivity() {
         })
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)!!
+        dashboard = Dashboards.get(dashboardName)
 
         b.pDTag.text = dashboard.dashboardTagName.lowercase(Locale.getDefault())
 

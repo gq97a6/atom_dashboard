@@ -28,7 +28,7 @@ class TileNewActivity : AppCompatActivity() {
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)!!
+        dashboard = Dashboards.get(dashboardName)
 
         setupRecyclerView()
 

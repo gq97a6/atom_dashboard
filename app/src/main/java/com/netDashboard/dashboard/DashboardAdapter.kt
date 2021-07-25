@@ -16,7 +16,7 @@ class DashboardAdapter(
 
     override fun submitList(list: MutableList<Dashboard>?) {
         super.submitList(list)
-        dashboards = list!!.toMutableList()
+        dashboards = list ?: mutableListOf()
     }
 
     override fun getCurrentList(): MutableList<Dashboard> {
@@ -28,7 +28,7 @@ class DashboardAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return dashboards[position].id!!
+        return dashboards[position].id ?: 0
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -4,12 +4,12 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.netDashboard.adapter.Adapter
 
 class DashboardAdapter(
     private val context: Context
-) : ListAdapter<Dashboard, DashboardAdapter.DashboardsViewHolder>(DashboardDiffCallback) {
+) : Adapter<Dashboard, DashboardAdapter.DashboardsViewHolder>(DashboardDiffCallback) {
 
     private lateinit var dashboards: MutableList<Dashboard>
     private lateinit var currentDashboard: Dashboard

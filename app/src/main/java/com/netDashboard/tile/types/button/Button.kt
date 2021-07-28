@@ -63,12 +63,12 @@ class ButtonTile : Tile() {
         val topic = mqttTopics.pubs.get("base")
         onSend(topic.topic, mqttPubValue, topic.qos)
 
-        adapter?.spanCount?.let { sp ->
-            holder?.adapterPosition?.let { ap ->
-                width = if (width == 1) sp else 1
-                adapter?.notifyItemChanged(ap)
-            }
-        }
+        //adapter?.spanCount?.let { sp ->
+        //    holder?.adapterPosition?.let { ap ->
+        //        width = if (width == 1) sp else 1
+        //        adapter?.notifyItemChanged(ap)
+        //    }
+        //}
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

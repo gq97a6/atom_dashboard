@@ -65,7 +65,7 @@
             android:layout_weight="3"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="clickProperties"
+            android:onClick="clickSettings"
             android:paddingTop="10dp"
             android:paddingBottom="@dimen/tile_padding">
 

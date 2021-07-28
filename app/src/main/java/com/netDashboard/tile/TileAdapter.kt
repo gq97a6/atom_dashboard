@@ -12,9 +12,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
+import com.netDashboard.adapter.Adapter
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.pow
@@ -24,7 +24,7 @@ class TilesAdapter(
     val spanCount: Int,
     private var mode: String = "",
     private val dashboardName: String = ""
-) : ListAdapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
+) : Adapter<Tile, TilesAdapter.TileViewHolder>(TileDiffCallback) {
 
     var isEdit
         get() = swapMode || removeMode || addMode || editMode

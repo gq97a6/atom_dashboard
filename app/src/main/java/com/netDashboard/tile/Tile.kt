@@ -17,8 +17,8 @@ abstract class Tile {
     var width = 1
     var height = 1
 
-    var displayWidth = 0
-    var displayHeight = 0
+    //var displayWidth = 0
+    //var displayHeight = 0
 
     var color = Color.parseColor("#BF4040")
     var isColouredByTheme = false

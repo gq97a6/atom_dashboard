@@ -25,10 +25,11 @@
         </activity>
 
         <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
+        <activity android:name=".activities.settings.SettingsActivity" />
         <activity android:name=".activities.dashboard.DashboardActivity" />
         <activity android:name=".activities.dashboard.tile_new.TileNewActivity" />
         <activity android:name=".activities.dashboard.tile_properties.TilePropertiesActivity" />
+        <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
 
         <service
             android:name=".foreground_service.ForegroundService"

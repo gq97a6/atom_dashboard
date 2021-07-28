@@ -14,7 +14,6 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
-import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
@@ -87,7 +86,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         b.dProperties.setOnClickListener {
-            settingsOnClick()
+            propertiesOnClick()
         }
 
         b.dEdit.setOnClickListener {
@@ -217,7 +216,7 @@ class DashboardActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
 
-    private fun settingsOnClick() {
+    private fun propertiesOnClick() {
         Intent(this, PropertiesActivity::class.java).also {
             it.putExtra("dashboardName", dashboardName)
             startActivity(it)
@@ -231,7 +230,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.isEdit) return
 
         highlightOnly(b.dEdit)
-        createToast(this, getString(R.string.d_edit), 1)
+        //createToast(this, getString(R.string.d_edit), 1)
 
         adapter.editMode = true
     }
@@ -242,7 +241,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.isEdit) return
 
         highlightOnly(b.dSwap)
-        createToast(this, getString(R.string.d_swap), 1)
+        //createToast(this, getString(R.string.d_swap), 1)
 
         adapter.swapMode = true
     }
@@ -258,7 +257,7 @@ class DashboardActivity : AppCompatActivity() {
 
             adapter.removeMode = true
 
-            createToast(this, getString(R.string.d_remove))
+            //createToast(this, getString(R.string.d_remove))
         } else {
 
             var toDelete = false
@@ -271,7 +270,7 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             if (!toDelete) {
-                createToast(this, getString(R.string.d_remove), 1)
+                //createToast(this, getString(R.string.d_remove), 1)
             } else {
 
                 @SuppressLint("ShowToast")

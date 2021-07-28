@@ -4,4 +4,3 @@ Android dashboard-app for easy control of IoT devices.
 -------------------------------------------------------
 Types of supported ways of communication:
     - MQTT
-    - Bluetooth

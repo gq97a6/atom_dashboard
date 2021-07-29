@@ -9,11 +9,12 @@ import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.recycler_view.RecyclerViewElement
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
 import java.util.*
 
-open class Dashboard(val name: String) {
+class Dashboard(val name: String) : RecyclerViewElement() {
 
     val id: Long?
 

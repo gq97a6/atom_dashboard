@@ -26,7 +26,7 @@ class DashboardAdapter(
     override fun getItemCount(): Int {
         return dashboards.size
     }
-
+    
     override fun getItemId(position: Int): Long {
         return dashboards[position].id ?: 0
     }

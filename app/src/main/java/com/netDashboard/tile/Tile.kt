@@ -9,10 +9,11 @@ import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.getScreenWidth
+import com.netDashboard.recycler_view.RecyclerViewElement
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
-abstract class Tile {
+abstract class Tile : RecyclerViewElement() {
 
     var width = 1
     var height = 1
@@ -83,7 +84,8 @@ abstract class Tile {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
+        params.height =
+            ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
 
         onEdit(isEdit)

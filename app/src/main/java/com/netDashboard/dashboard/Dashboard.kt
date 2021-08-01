@@ -9,19 +9,19 @@ import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewElement
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
 import java.util.*
 
-open class Dashboard(val name: String) {
+open class Dashboard(val name: String) : RecyclerViewElement() {
 
-    val id: Long?
+    @Transient
+    override val layout = R.layout.dashboard_list_element
 
     @Transient
     var context: Context? = null
-
-    @Transient
-    private var holder: DashboardAdapter.DashboardsViewHolder? = null
 
     @Transient
     var daemonGroup: DaemonGroup? = null
@@ -55,10 +55,12 @@ open class Dashboard(val name: String) {
         return R.layout.dashboard_list_element
     }
 
-    open fun onCreateViewHolder(
+    override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): DashboardAdapter.DashboardsViewHolder {
+    ): RecyclerViewAdapter.ViewHolder {
+        super.onCreateViewHolder(parent, viewType)
+
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
 
         view.findViewById<Button>(R.id.dle_button).text = name.uppercase(Locale.getDefault())
@@ -74,18 +76,7 @@ open class Dashboard(val name: String) {
                 (context as Activity).finish()
             }
         }
-        return DashboardAdapter.DashboardsViewHolder(view)
-    }
 
-    open fun onBindViewHolder(holder: DashboardAdapter.DashboardsViewHolder, position: Int) {
-        this.holder = holder
-    }
-
-    fun areItemsTheSame(oldItem: Dashboard, newItem: Dashboard): Boolean {
-        return oldItem == newItem
-    }
-
-    fun areContentsTheSame(oldItem: Dashboard, newItem: Dashboard): Boolean {
-        return oldItem.id == newItem.id
+        return RecyclerViewAdapter.ViewHolder(view)
     }
 }

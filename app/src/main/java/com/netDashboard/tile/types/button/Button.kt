@@ -5,8 +5,8 @@ import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.getContrastColor
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ButtonTile : Tile() {
@@ -23,14 +23,14 @@ class ButtonTile : Tile() {
     }
 
     var text = "Default value"
-    var liveText: String
+    private var liveText: String
         get() = holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text.toString()
         set(value) {
             text = value
             holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = value
         }
 
-    override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {

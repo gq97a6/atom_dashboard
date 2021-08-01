@@ -1,24 +1,11 @@
 package com.netDashboard.tile
 
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.netDashboard.R
-import com.netDashboard.alpha
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.getScreenWidth
+import com.netDashboard.recycler_view.RecyclerViewElement
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.util.*
 
-abstract class Tile {
-
-    var width = 1
-    var height = 1
-
-    //var displayWidth = 0
-    //var displayHeight = 0
+abstract class Tile : RecyclerViewElement() {
 
     var color = Color.parseColor("#BF4040")
     var isColouredByTheme = false
@@ -37,55 +24,13 @@ abstract class Tile {
     var bltPayloadJSON = false
     var bltOutputJSON = ""
 
-    @Transient
-    var id = Random().nextLong()
     val type = this.javaClass.toString()
-
-    abstract val layout: Int
 
     @Transient
     var name = ""
 
     @Transient
-    var holder: TilesAdapter.TileViewHolder? = null
-
-    @Transient
-    var adapter: TilesAdapter? = null
-
-    @Transient
     var dashboardName: String = ""
-
-    @Transient
-    var flag = ""
-        private set
-
-    @Transient
-    var isEdit = false
-
-    fun getItemViewType(adapter: TilesAdapter): Int {
-        this.adapter = adapter
-
-        return layout
-    }
-
-    open fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TilesAdapter.TileViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
-
-        return TilesAdapter.TileViewHolder(view)
-    }
-
-    open fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
-        this.holder = holder
-
-        val view = holder.itemView
-        val params = view.layoutParams
-
-        params.height =
-            ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
-        view.layoutParams = params
-
-        flag(flag)
-    }
 
     fun areItemsTheSame(oldItem: Tile, newItem: Tile): Boolean {
         return oldItem == newItem
@@ -132,45 +77,9 @@ abstract class Tile {
         }
     }
 
-    fun toggleFlag(flag: String) {
-        if (this.flag.isNotEmpty()) {
-            flag("")
-        } else {
-            flag(flag)
-        }
-    }
-
-    fun flag(flag: String = "") {
-        this.flag = flag
-
-        val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
-        val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
-
-        when (flag) {
-            "swap" -> flagMark?.setBackgroundResource(R.drawable.icon_swap_flag)
-            "remove" -> flagMark?.setBackgroundResource(R.drawable.icon_remove_flag)
-            "lock" -> flagMark?.setBackgroundResource(R.drawable.icon_lock_flag)
-        }
-
-        if (flag.isNotEmpty()) {
-            flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
-            flagBackground?.setBackgroundColor((-1).alpha(.7f))
-
-            flagMark?.visibility = View.VISIBLE
-            flagBackground?.visibility = View.VISIBLE
-        } else {
-            flagMark?.visibility = View.GONE
-            flagBackground?.visibility = View.GONE
-        }
-    }
-
     open fun setThemeColor(color: Int) {
         this.color = color
     }
-
-    open fun onClick() {}
-
-    open fun onLongClick() {}
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
         Dashboards.get(dashboardName).daemonGroup?.mqttd.let {

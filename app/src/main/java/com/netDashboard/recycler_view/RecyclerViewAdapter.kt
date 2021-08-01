@@ -71,112 +71,19 @@ abstract class RecyclerViewAdapter :
                     list[position].onClick()
                 }
                 editType.isSwap -> {
-                    swapElements(position)
-                }
-                editType.isRemove -> {
-                    removeElements(position)
-                }
-            }
-        }
-    }
-
-    private fun swapElements(position: Int) {
-
-        if (!editType.isLock) {
-
-            if (!list[position].flag.isLock) {
-                list[position].flag.let {
-                    if (!it.isNone) it.setSwap() else it.setNone()
-                }
-            }
-
-            for ((pos, t) in list.withIndex()) {
-
-                if (t.flag.isSwap && list[position].id != t.id) {
-                    val recyclerView =
-                        list[position].holder?.itemView?.parent as RecyclerView
-
-                    recyclerView.itemAnimator?.changeDuration = 0
-
-                    val layoutManager = recyclerView.layoutManager as GridLayoutManager
-
-                    val elementHeight = list[position].holder?.itemView?.height ?: 1
-                    val max = (recyclerView.height / elementHeight) * spanCount
-                    val f = layoutManager.findFirstVisibleItemPosition()
-                    val l = layoutManager.findLastVisibleItemPosition()
-
-                    list[pos].flag.setNone()
-                    list[position].flag.setNone()
-
-                    if (abs(position - pos + 1) <= max && position in f..l && pos in f..l) {
-                        editType.setLock()
-
-                        recyclerView.suppressLayout(true)
-
-                        list[pos].flag.setLock()
-                        list[position].flag.setLock()
-
-                        val xyA = IntArray(2)
-                        list[pos].holder?.itemView?.getLocationOnScreen(xyA)
-
-                        val xyB = IntArray(2)
-                        list[position].holder?.itemView?.getLocationOnScreen(xyB)
-
-                        list[pos].holder?.itemView?.elevation = 2f
-                        list[position].holder?.itemView?.elevation = 1f
-
-                        val xA = list[pos].holder?.itemView?.x ?: 0f
-                        val xB = list[position].holder?.itemView?.x ?: 0f
-
-                        val yA = list[pos].holder?.itemView?.y ?: 0f
-                        val yB = list[position].holder?.itemView?.y ?: 0f
-
-                        val distance = kotlin.math.sqrt(
-                            (xA - xB).toDouble().pow(2) + (yA - yB).toDouble().pow(2)
-                        )
-                        val duration = (distance * 0.5).toLong()
-
-                        list[pos].holder?.itemView?.animate()?.cancel()
-
-                        list[pos].holder?.itemView?.animate()
-                            ?.x(xB)
-                            ?.y(yB)
-                            ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
-                            duration
-
-                        list[position].holder?.itemView?.animate()
-                            ?.x(xA)
-                            ?.y(yA)
-                            ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
-                            duration
-
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            recyclerView.suppressLayout(false)
-
-                            list[pos].flag.setNone()
-                            list[position].flag.setNone()
-
-                            Collections.swap(list, position, pos)
-                            notifyItemChanged(position)
-                            notifyItemChanged(pos)
-
-                            list[pos].holder?.itemView?.elevation = 0f
-                            list[position].holder?.itemView?.elevation = 0f
-
-                            if(editType.isLock) editType.setSwap()
-                        }, duration + 50)
-                    } else {
-                        Collections.swap(list, position, pos)
-                        notifyItemChanged(position)
-                        notifyItemChanged(pos)
+                    if (!editType.isLock) {
+                        markElementSwap(position)
+                        swapMarkedElements(position)
                     }
                 }
+                editType.isRemove -> {
+                    markElementRemove(position)
+                }
             }
         }
     }
 
-    //TODO
-    private fun removeElements(position: Int) {
+    private fun markElementRemove(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 
@@ -191,6 +98,100 @@ abstract class RecyclerViewAdapter :
 
         list[position].flag.let {
             if (!it.isNone) it.setRemove() else it.setNone()
+        }
+    }
+
+    private fun markElementSwap(position: Int) {
+        if (!list[position].flag.isLock) {
+            list[position].flag.let {
+                if (!it.isNone) it.setSwap() else it.setNone()
+            }
+        }
+    }
+
+    private fun swapMarkedElements(position: Int) {
+
+        for ((pos, t) in list.withIndex()) {
+
+            if (t.flag.isSwap && list[position].id != t.id) {
+                val recyclerView =
+                    list[position].holder?.itemView?.parent as RecyclerView
+
+                recyclerView.itemAnimator?.changeDuration = 0
+
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+
+                val elementHeight = list[position].holder?.itemView?.height ?: 1
+                val max = (recyclerView.height / elementHeight) * spanCount
+                val f = layoutManager.findFirstVisibleItemPosition()
+                val l = layoutManager.findLastVisibleItemPosition()
+
+                list[pos].flag.setNone()
+                list[position].flag.setNone()
+
+                if (abs(position - pos + 1) <= max && position in f..l && pos in f..l) {
+                    editType.setLock()
+
+                    recyclerView.suppressLayout(true)
+
+                    list[pos].flag.setLock()
+                    list[position].flag.setLock()
+
+                    val xyA = IntArray(2)
+                    list[pos].holder?.itemView?.getLocationOnScreen(xyA)
+
+                    val xyB = IntArray(2)
+                    list[position].holder?.itemView?.getLocationOnScreen(xyB)
+
+                    list[pos].holder?.itemView?.elevation = 2f
+                    list[position].holder?.itemView?.elevation = 1f
+
+                    val xA = list[pos].holder?.itemView?.x ?: 0f
+                    val xB = list[position].holder?.itemView?.x ?: 0f
+
+                    val yA = list[pos].holder?.itemView?.y ?: 0f
+                    val yB = list[position].holder?.itemView?.y ?: 0f
+
+                    val distance = kotlin.math.sqrt(
+                        (xA - xB).toDouble().pow(2) + (yA - yB).toDouble().pow(2)
+                    )
+                    val duration = (distance * 0.5).toLong()
+
+                    list[pos].holder?.itemView?.animate()?.cancel()
+
+                    list[pos].holder?.itemView?.animate()
+                        ?.x(xB)
+                        ?.y(yB)
+                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
+                        duration
+
+                    list[position].holder?.itemView?.animate()
+                        ?.x(xA)
+                        ?.y(yA)
+                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
+                        duration
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        recyclerView.suppressLayout(false)
+
+                        list[pos].flag.setNone()
+                        list[position].flag.setNone()
+
+                        Collections.swap(list, position, pos)
+                        notifyItemChanged(position)
+                        notifyItemChanged(pos)
+
+                        list[pos].holder?.itemView?.elevation = 0f
+                        list[position].holder?.itemView?.elevation = 0f
+
+                        if (editType.isLock) editType.setSwap()
+                    }, duration + 50)
+                } else {
+                    Collections.swap(list, position, pos)
+                    notifyItemChanged(position)
+                    notifyItemChanged(pos)
+                }
+            }
         }
     }
 

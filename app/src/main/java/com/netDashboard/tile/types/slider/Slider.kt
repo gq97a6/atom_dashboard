@@ -6,8 +6,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
 import com.netDashboard.*
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.TilesAdapter
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 
@@ -51,7 +51,7 @@ class SliderTile : Tile() {
         }
         get() = _value
 
-    override fun onBindViewHolder(holder: TilesAdapter.TileViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val slider = holder.itemView.findViewById<Slider>(R.id.ts_slider)

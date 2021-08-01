@@ -61,9 +61,6 @@ abstract class Tile {
 
     @Transient
     var isEdit = false
-        set(value) {
-            field = value; onEdit(value)
-        }
 
     fun getItemViewType(adapter: TilesAdapter): Int {
         this.adapter = adapter
@@ -87,7 +84,6 @@ abstract class Tile {
             ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
 
-        onEdit(isEdit)
         flag(flag)
     }
 
@@ -175,8 +171,6 @@ abstract class Tile {
     open fun onClick() {}
 
     open fun onLongClick() {}
-
-    open fun onEdit(isEdit: Boolean) {}
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
         Dashboards.get(dashboardName).daemonGroup?.mqttd.let {

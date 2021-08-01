@@ -25,13 +25,13 @@ abstract class RecyclerViewElement {
     var adapter: RecyclerViewAdapter? = null
 
     @Transient
-    var flag = ""
-        private set
+    var flag = Flags()
 
     @Transient
     var isEdit = false
         set(value) {
-            field = value; onEdit(value)
+            field = value
+            onEdit(value)
         }
 
     fun getItemViewType(adapter: RecyclerViewAdapter): Int {
@@ -57,7 +57,7 @@ abstract class RecyclerViewElement {
         view.layoutParams = params
 
         onEdit(isEdit)
-        flag(flag)
+        flag.show()
     }
 
     fun areItemsTheSame(oldItem: RecyclerViewElement, newItem: RecyclerViewElement): Boolean {
@@ -68,44 +68,56 @@ abstract class RecyclerViewElement {
         return oldItem.id == newItem.id
     }
 
-    fun toggleFlag(flag: String) {
-        if (this.flag.isNotEmpty()) {
-            flag("")
-        } else {
-            flag(flag)
-        }
-    }
-
-    fun flag(flag: String = "") {
-        this.flag = flag
-
-        val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
-        val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
-
-        when (flag) {
-            "swap" -> flagMark?.setBackgroundResource(R.drawable.icon_swap_flag)
-            "remove" -> flagMark?.setBackgroundResource(R.drawable.icon_remove_flag)
-            "lock" -> flagMark?.setBackgroundResource(R.drawable.icon_lock_flag)
-        }
-
-        if (flag.isNotEmpty()) {
-            flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
-            flagBackground?.setBackgroundColor((-1).alpha(.7f))
-
-            flagMark?.visibility = View.VISIBLE
-            flagBackground?.visibility = View.VISIBLE
-        } else {
-            flagMark?.visibility = View.GONE
-            flagBackground?.visibility = View.GONE
-        }
-    }
-
     open fun onClick() {}
 
     open fun onEdit(isEdit: Boolean) {}
-}
 
-//flags
-//to remove
-//to swap
-//to edit
+    inner class Flags {
+        private var flag = -1
+
+        val isNone
+            get() = flag == -1
+        val isSwap
+            get() = flag == 0
+        val isRemove
+            get() = flag == 1
+        val isLock
+            get() = flag == 2
+
+        fun setNone() = setFlag(-1)
+        fun setSwap() = setFlag(0)
+        fun setRemove() = setFlag(1)
+        fun setLock() = setFlag(2)
+
+        private fun setFlag(type: Int) {
+            flag = type
+            show()
+        }
+
+        fun show() {
+
+            val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
+            val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
+
+            if (!isNone) {
+                flagMark?.setBackgroundResource(
+                    when {
+                        isSwap -> R.drawable.icon_swap_flag
+                        isRemove -> R.drawable.icon_remove_flag
+                        isLock -> R.drawable.icon_lock_flag
+                        else -> R.drawable.icon_lock_flag
+                    }
+                )
+
+                flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
+                flagBackground?.setBackgroundColor((-1).alpha(.7f))
+
+                flagMark?.visibility = View.VISIBLE
+                flagBackground?.visibility = View.VISIBLE
+            } else {
+                flagMark?.visibility = View.GONE
+                flagBackground?.visibility = View.GONE
+            }
+        }
+    }
+}

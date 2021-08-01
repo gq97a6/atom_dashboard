@@ -1,5 +1,6 @@
 package com.netDashboard.tile
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -35,6 +36,7 @@ class TilesAdapter(
 
     var isEdit
         get() = swapMode || removeMode || addMode || editMode
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             mode = if (value) {
                 swapLock = false
@@ -50,10 +52,6 @@ class TilesAdapter(
 
             notifyDataSetChanged()
         }
-
-    private fun mode(type: String): Boolean {
-        return mode == type
-    }
 
     private fun mode(type: String, b: Boolean) {
         if (b) {

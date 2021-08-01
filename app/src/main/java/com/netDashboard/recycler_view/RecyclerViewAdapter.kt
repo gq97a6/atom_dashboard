@@ -1,6 +1,5 @@
 package com.netDashboard.recycler_view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -20,76 +19,17 @@ import kotlin.math.pow
 abstract class RecyclerViewAdapter :
     ListAdapter<RecyclerViewElement, RecyclerViewAdapter.ViewHolder>(DiffCallback) {
 
-    private var mode = ""
+    private var editType = Modes()
     private var context: Context? = null
-    private var swapLock = false
     var spanCount = 0
 
     lateinit var list: MutableList<RecyclerViewElement>
     private lateinit var current: RecyclerViewElement
 
-    private val tileOnClick = MutableLiveData(-1)
+    private val onClick = MutableLiveData(-1)
 
-    var isEdit
-        get() = swapMode || removeMode || addMode || editMode
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            mode = if (value) {
-                swapLock = false
-                "edit"
-            } else {
-                ""
-            }
-
-            for (t in list) {
-                t.isEdit = value
-                t.flag()
-            }
-
-            notifyDataSetChanged()
-        }
-
-    private fun mode(type: String): Boolean {
-        return mode == type
-    }
-
-    private fun mode(type: String, b: Boolean) {
-        if (b) {
-            mode = type
-
-            for (t in list) {
-                t.flag()
-            }
-        }
-
-    }
-
-    private var swapMode
-        get() = mode == "swap"
-        set(value) {
-            mode("swap", value)
-        }
-
-    private var removeMode
-        get() = mode == "remove"
-        set(value) {
-            mode("remove", value)
-        }
-
-    private var editMode
-        get() = mode == "edit"
-        set(value) {
-            mode("edit", value)
-        }
-
-    private var addMode
-        get() = mode == "add"
-        set(value) {
-            mode("add", value)
-        }
-
-    fun getTileOnClickLiveData(): LiveData<Int> {
-        return tileOnClick
+    fun getOnClick(): LiveData<Int> {
+        return onClick
     }
 
     override fun submitList(list: MutableList<RecyclerViewElement>?) {
@@ -124,39 +64,35 @@ abstract class RecyclerViewAdapter :
         list[position].onBindViewHolder(holder, position)
 
         holder.itemView.setOnClickListener {
-            tileOnClick.postValue(position)
+            onClick.postValue(position)
 
             when {
-                swapMode -> {
-                    swapTiles(position)
-                }
-                removeMode -> {
-                    removeTile(position)
-                }
-                editMode -> {
-                    //TODO
-                }
-                addMode -> {
-                    tileOnClick.postValue(position)
-                }
-                else -> {
+                editType.isNone -> {
                     list[position].onClick()
+                }
+                editType.isSwap -> {
+                    swapElements(position)
+                }
+                editType.isRemove -> {
+                    removeElements(position)
                 }
             }
         }
     }
 
-    private fun swapTiles(position: Int) {
+    private fun swapElements(position: Int) {
 
-        if (!swapLock) {
+        if (!editType.isLock) {
 
-            if (list[position].flag != "lock") {
-                list[position].toggleFlag("swap")
+            if (!list[position].flag.isLock) {
+                list[position].flag.let {
+                    if (!it.isNone) it.setSwap() else it.setNone()
+                }
             }
 
             for ((pos, t) in list.withIndex()) {
 
-                if (t.flag == "swap" && list[position].id != t.id) {
+                if (t.flag.isSwap && list[position].id != t.id) {
                     val recyclerView =
                         list[position].holder?.itemView?.parent as RecyclerView
 
@@ -164,21 +100,21 @@ abstract class RecyclerViewAdapter :
 
                     val layoutManager = recyclerView.layoutManager as GridLayoutManager
 
-                    val tileHeight = list[position].holder?.itemView?.height ?: 1
-                    val max = (recyclerView.height / tileHeight) * spanCount
+                    val elementHeight = list[position].holder?.itemView?.height ?: 1
+                    val max = (recyclerView.height / elementHeight) * spanCount
                     val f = layoutManager.findFirstVisibleItemPosition()
                     val l = layoutManager.findLastVisibleItemPosition()
 
-                    list[pos].flag()
-                    list[position].flag()
+                    list[pos].flag.setNone()
+                    list[position].flag.setNone()
 
                     if (abs(position - pos + 1) <= max && position in f..l && pos in f..l) {
-                        swapLock = true
+                        editType.setLock()
 
                         recyclerView.suppressLayout(true)
 
-                        list[pos].flag("lock")
-                        list[position].flag("lock")
+                        list[pos].flag.setLock()
+                        list[position].flag.setLock()
 
                         val xyA = IntArray(2)
                         list[pos].holder?.itemView?.getLocationOnScreen(xyA)
@@ -217,8 +153,8 @@ abstract class RecyclerViewAdapter :
                         Handler(Looper.getMainLooper()).postDelayed({
                             recyclerView.suppressLayout(false)
 
-                            list[pos].flag()
-                            list[position].flag()
+                            list[pos].flag.setNone()
+                            list[position].flag.setNone()
 
                             Collections.swap(list, position, pos)
                             notifyItemChanged(position)
@@ -227,7 +163,7 @@ abstract class RecyclerViewAdapter :
                             list[pos].holder?.itemView?.elevation = 0f
                             list[position].holder?.itemView?.elevation = 0f
 
-                            swapLock = false
+                            if(editType.isLock) editType.setSwap()
                         }, duration + 50)
                     } else {
                         Collections.swap(list, position, pos)
@@ -239,7 +175,8 @@ abstract class RecyclerViewAdapter :
         }
     }
 
-    private fun removeTile(position: Int) {
+    //TODO
+    private fun removeElements(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 
@@ -247,12 +184,37 @@ abstract class RecyclerViewAdapter :
 
         for ((i, t) in list.withIndex()) {
 
-            if (t.flag == "remove" && list[position].id != t.id) {
-                list[i].flag()
+            if (t.flag.isRemove && list[position].id != t.id) {
+                list[i].flag.setNone()
             }
         }
 
-        list[position].toggleFlag("remove")
+        list[position].flag.let {
+            if (!it.isNone) it.setRemove() else it.setNone()
+        }
+    }
+
+    inner class Modes {
+        private var mode = -1
+
+        val isNone
+            get() = mode == -1
+        val isSwap
+            get() = mode == 0
+        val isRemove
+            get() = mode == 1
+        val isLock
+            get() = mode == 2
+
+        fun setNone() = setMode(-1)
+        fun setSwap() = setMode(0)
+        fun setRemove() = setMode(1)
+        fun setLock() = setMode(2)
+
+        private fun setMode(type: Int) {
+            mode = type
+            for (e in list) e.flag.setNone()
+        }
     }
 }
 

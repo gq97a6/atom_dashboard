@@ -9,11 +9,10 @@ import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.getScreenWidth
-import com.netDashboard.recycler_view.RecyclerViewElement
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
-abstract class Tile : RecyclerViewElement() {
+abstract class Tile {
 
     var width = 1
     var height = 1

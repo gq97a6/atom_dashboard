@@ -3,6 +3,7 @@ package com.netDashboard.recycler_view
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -17,22 +18,16 @@ import kotlin.math.abs
 import kotlin.math.pow
 
 abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
-    @Transient
     var context: Context,
-    @Transient
     var spanCount: Int,
     c: DiffUtil.ItemCallback<element>
 ) :
     ListAdapter<element, RecyclerViewAdapter.ViewHolder>(c) {
-
-    @Transient
     var editType = Modes()
 
     lateinit var list: MutableList<element>
-    @Transient
     private lateinit var current: element
 
-    @Transient
     private val onClick = MutableLiveData(-1)
 
     fun getOnClick(): LiveData<Int> {
@@ -75,15 +70,18 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
 
             when {
                 editType.isNone -> {
+                    Log.i("OUY", "isNone")
                     list[position].onClick()
                 }
                 editType.isSwap -> {
+                    Log.i("OUY", "isSwap")
                     if (!editType.isLock) {
                         markElementSwap(position)
                         swapMarkedElements(position)
                     }
                 }
                 editType.isRemove -> {
+                    Log.i("OUY", "isRemove")
                     markElementRemove(position)
                 }
             }
@@ -103,15 +101,13 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
             }
         }
 
-        list[position].flag.let {
-            if (!it.isNone) it.setRemove() else it.setNone()
-        }
+        list[position].flag.setRemove()
     }
 
     private fun markElementSwap(position: Int) {
         if (!list[position].flag.isLock) {
             list[position].flag.let {
-                if (!it.isNone) it.setSwap() else it.setNone()
+                if (!it.isSwap) it.setSwap() else it.setNone()
             }
         }
     }
@@ -211,17 +207,26 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
             get() = mode == 0
         val isRemove
             get() = mode == 1
-        val isLock
+        val isEdit
             get() = mode == 2
+        val isAdd
+            get() = mode == 3
+        val isLock
+            get() = mode == 4
 
         fun setNone() = setMode(-1)
         fun setSwap() = setMode(0)
         fun setRemove() = setMode(1)
-        fun setLock() = setMode(2)
+        fun setEdit() = setMode(2)
+        fun setAdd() = setMode(3)
+        fun setLock() = setMode(4)
 
         private fun setMode(type: Int) {
             mode = type
-            for (e in list) e.flag.setNone()
+            for (e in list){
+                e.flag.setNone()
+                e.onEdit(isNone)
+            }
         }
     }
 }

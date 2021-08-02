@@ -3,6 +3,7 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -171,7 +172,6 @@ class DashboardActivity : AppCompatActivity() {
 
         b.dRecyclerView.layoutManager = layoutManager
 
-
         adapter.submitList(dashboard.tiles.toMutableList())
         adapter.editType.setNone()
 
@@ -185,21 +185,23 @@ class DashboardActivity : AppCompatActivity() {
     private fun touchOnClick() {
         if (adapter.editType.isNone) {
             adapter.editType.setSwap()
-            highlightOnly(b.dEdit)
+            highlightOnly(b.dSwap)
 
+            b.dBar.visibility = View.VISIBLE
+            b.dBar.y = getScreenHeight().toFloat()
             b.dBar.animate()
-                ?.y(getScreenHeight().toFloat())
-                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                .translationY(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         } else {
+
+            Log.i("OUY", "normal")
             adapter.editType.setNone()
             b.dRecyclerView.suppressLayout(false)
             dashboard.tiles = adapter.list
 
-            b.dBar.y = getScreenHeight().toFloat()
-            b.dBar.visibility = View.VISIBLE
             b.dBar.animate()
-                .translationY(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                ?.y(getScreenHeight().toFloat())
+                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         }
     }
 
@@ -220,6 +222,8 @@ class DashboardActivity : AppCompatActivity() {
 
         highlightOnly(b.dEdit)
         //createToast(this, getString(R.string.d_edit), 1)
+
+        adapter.editType.setEdit()
 
         //todo
     }

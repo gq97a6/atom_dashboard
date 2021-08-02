@@ -41,10 +41,6 @@ open class Dashboard(val name: String) : RecyclerViewElement() {
 
     var bluetoothEnabled: Boolean = false
 
-    init {
-        id = Random().nextLong()
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

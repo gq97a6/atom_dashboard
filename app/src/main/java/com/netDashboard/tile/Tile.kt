@@ -37,9 +37,6 @@ abstract class Tile : RecyclerViewElement() {
         params.height =
             ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
-
-        onEdit(isEdit)
-        flag.show()
     }
 
     @Transient

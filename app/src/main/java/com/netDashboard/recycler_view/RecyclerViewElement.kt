@@ -1,6 +1,7 @@
 package com.netDashboard.recycler_view
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,13 +26,6 @@ abstract class RecyclerViewElement {
 
     @Transient
     var flag = Flags()
-
-    @Transient
-    var isEdit = false
-        set(value) {
-            field = value
-            onEdit(value)
-        }
 
     fun <a : RecyclerViewElement> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
         this.adapter = adapter
@@ -84,7 +78,6 @@ abstract class RecyclerViewElement {
         }
 
         fun show() {
-
             val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
             val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
 

@@ -57,7 +57,6 @@ class SliderTile : Tile() {
         val slider = holder.itemView.findViewById<Slider>(R.id.ts_slider)
         val background = holder.itemView.findViewById<View>(R.id.background)
 
-        slider.isEnabled = !isEdit
         setRange(from, to, step)
 
         background.setOnTouchListener { v, e ->
@@ -115,6 +114,13 @@ class SliderTile : Tile() {
 
         holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             ?.setTextColor(getContrastColor(color).alpha(.75f))
+    }
+
+    override fun onEdit(isEdit: Boolean) {
+        super.onEdit(isEdit)
+
+        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
+        slider?.isEnabled = isEdit
     }
 
     private fun Float.checkScale(): Float {

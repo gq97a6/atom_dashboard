@@ -62,6 +62,7 @@ class TileNewActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val spanCount = 3
         newTileTilesAdapter = TilesAdapter(this, spanCount)
+        newTileTilesAdapter.editType.setAdd()
         b.ntRecyclerView.adapter = newTileTilesAdapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
@@ -72,9 +73,6 @@ class TileNewActivity : AppCompatActivity() {
         }
 
         val list = TileTypeList.get()
-        for ((i, _) in list.withIndex()) {
-            list[i].isEdit = true
-        }
 
         b.ntRecyclerView.layoutManager = layoutManager
         newTileTilesAdapter.submitList(list as MutableList<Tile>)

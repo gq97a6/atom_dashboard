@@ -2,6 +2,8 @@ package com.netDashboard.tile
 
 import android.graphics.Color
 import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.getScreenWidth
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewElement
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -26,19 +28,25 @@ abstract class Tile : RecyclerViewElement() {
 
     val type = this.javaClass.toString()
 
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        val view = holder.itemView
+        val params = view.layoutParams
+
+        params.height =
+            ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
+        view.layoutParams = params
+
+        onEdit(isEdit)
+        flag.show()
+    }
+
     @Transient
     var name = ""
 
     @Transient
     var dashboardName: String = ""
-
-    fun areItemsTheSame(oldItem: Tile, newItem: Tile): Boolean {
-        return oldItem == newItem
-    }
-
-    fun areContentsTheSame(oldItem: Tile, newItem: Tile): Boolean {
-        return oldItem.id == newItem.id
-    }
 
     class MqttTopics {
         val subs = TopicList()

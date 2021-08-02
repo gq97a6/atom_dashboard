@@ -32,7 +32,7 @@ class TileNewActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
-        newTileTilesAdapter.getTileOnClickLiveData().observe(this, { tileId ->
+        newTileTilesAdapter.getOnClick().observe(this, { tileId ->
             if (tileId >= 0) {
                 Intent(this, TilePropertiesActivity::class.java).also {
                     it.putExtra("dashboardName", dashboardName)
@@ -61,13 +61,13 @@ class TileNewActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val spanCount = 3
-        newTileTilesAdapter = TilesAdapter(this, spanCount, "add")
+        newTileTilesAdapter = TilesAdapter(this, spanCount)
         b.ntRecyclerView.adapter = newTileTilesAdapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return newTileTilesAdapter.tiles[position].width
+                return newTileTilesAdapter.list[position].width
             }
         }
 

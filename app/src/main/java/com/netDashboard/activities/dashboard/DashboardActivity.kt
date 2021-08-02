@@ -110,7 +110,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (adapter.isEdit) {
+        if (!adapter.editType.isNone) {
             b.dEdit.callOnClick()
         }
 
@@ -119,7 +119,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onPause() {
 
-        dashboard.tiles = adapter.tiles
+        dashboard.tiles = adapter.list
         Dashboards.save(dashboardName)
 
         super.onPause()
@@ -131,7 +131,7 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (adapter.isEdit) {
+        if (!adapter.editType.isNone) {
             b.dTouch.callOnClick()
         } else {
             super.onBackPressed()
@@ -151,7 +151,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val spanCount = dashboard.spanCount
 
-        adapter = TilesAdapter(this, spanCount, "", dashboardName)
+        adapter = TilesAdapter(this, spanCount)
         adapter.setHasStableIds(true)
 
         b.dRecyclerView.adapter = adapter
@@ -161,7 +161,7 @@ class DashboardActivity : AppCompatActivity() {
 
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                val t = adapter.tiles[position]
+                val t = adapter.list[position]
                 return when {
                     t.height != 1 || t.width > spanCount -> spanCount
                     else -> t.width
@@ -173,7 +173,7 @@ class DashboardActivity : AppCompatActivity() {
 
 
         adapter.submitList(dashboard.tiles.toMutableList())
-        adapter.isEdit = false
+        adapter.editType.setNone()
 
         if (adapter.itemCount == 0) {
             b.dPlaceholder.visibility = View.VISIBLE
@@ -183,35 +183,23 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun touchOnClick() {
-        adapter.isEdit = !adapter.isEdit
-
-        if (!adapter.isEdit) {
-            b.dRecyclerView.suppressLayout(false)
-            dashboard.tiles = adapter.tiles
-        } else {
+        if (adapter.editType.isNone) {
+            adapter.editType.setSwap()
             highlightOnly(b.dEdit)
-
-            adapter.editMode = true
-
-            for (t in adapter.tiles) {
-                t.isEdit = true
-                t.flag()
-            }
-        }
-
-        if (adapter.isEdit) {
-            b.dBar.y = getScreenHeight().toFloat()
-
-            b.dBar.visibility = View.VISIBLE
-
-            b.dBar.animate()
-                .translationY(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
-        } else {
 
             b.dBar.animate()
                 ?.y(getScreenHeight().toFloat())
                 ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+        } else {
+            adapter.editType.setNone()
+            b.dRecyclerView.suppressLayout(false)
+            dashboard.tiles = adapter.list
+
+            b.dBar.y = getScreenHeight().toFloat()
+            b.dBar.visibility = View.VISIBLE
+            b.dBar.animate()
+                .translationY(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         }
     }
 
@@ -228,43 +216,44 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun editOnClick() {
-        if (!adapter.isEdit) return
+        if (adapter.editType.isNone) return
 
         highlightOnly(b.dEdit)
         //createToast(this, getString(R.string.d_edit), 1)
 
-        adapter.editMode = true
+        //todo
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
-        if (!adapter.isEdit) return
+        if (adapter.editType.isNone) return
 
         highlightOnly(b.dSwap)
         //createToast(this, getString(R.string.d_swap), 1)
 
-        adapter.swapMode = true
+        adapter.editType.setSwap()
     }
 
     //----------------------------------------------------------------------------------------------
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun removeOnClick() {
-        if (!adapter.isEdit) return
+        if (adapter.editType.isNone) return
 
         highlightOnly(b.dRemove)
 
-        if (!adapter.removeMode) {
+        if (!adapter.editType.isRemove) {
 
-            adapter.removeMode = true
+            adapter.editType.setRemove()
 
             //createToast(this, getString(R.string.d_remove))
         } else {
 
             var toDelete = false
 
-            for (t in adapter.tiles) {
-                if (t.flag == "remove") {
+            for (t in adapter.list) {
+                if (t.flag.isRemove) {
                     toDelete = true
                     break
                 }
@@ -281,10 +270,10 @@ class DashboardActivity : AppCompatActivity() {
                     Snackbar.LENGTH_LONG
                 ).setAction("YES") {
 
-                    for ((i, t) in adapter.tiles.withIndex()) {
-                        if (t.flag == "remove") {
-                            adapter.tiles.removeAt(i)
-                            dashboard.tiles = adapter.tiles
+                    for ((i, t) in adapter.list.withIndex()) {
+                        if (t.flag.isRemove) {
+                            adapter.list.removeAt(i)
+                            dashboard.tiles = adapter.list
 
                             adapter.notifyDataSetChanged()
 

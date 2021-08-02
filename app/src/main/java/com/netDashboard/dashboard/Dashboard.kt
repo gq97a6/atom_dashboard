@@ -1,7 +1,6 @@
 package com.netDashboard.dashboard
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,9 +18,6 @@ open class Dashboard(val name: String) : RecyclerViewElement() {
 
     @Transient
     override val layout = R.layout.dashboard_list_element
-
-    @Transient
-    var context: Context? = null
 
     @Transient
     var daemonGroup: DaemonGroup? = null
@@ -49,12 +45,6 @@ open class Dashboard(val name: String) : RecyclerViewElement() {
         id = Random().nextLong()
     }
 
-    fun getItemViewType(context: Context): Int {
-        this.context = context
-
-        return R.layout.dashboard_list_element
-    }
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -67,13 +57,13 @@ open class Dashboard(val name: String) : RecyclerViewElement() {
 
         view.findViewById<Button>(R.id.dle_button).setOnClickListener {
 
-            Intent(context, DashboardActivity::class.java).also {
+            Intent(adapter?.context, DashboardActivity::class.java).also {
                 Settings.lastDashboardName = name
 
                 it.putExtra("dashboardName", name)
-                (context as Activity).overridePendingTransition(0, 0)
-                (context as Activity).startActivity(it)
-                (context as Activity).finish()
+                (adapter?.context as Activity).overridePendingTransition(0, 0)
+                (adapter?.context as Activity).startActivity(it)
+                (adapter?.context as Activity).finish()
             }
         }
 

@@ -16,28 +16,35 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.pow
 
-abstract class RecyclerViewAdapter :
-    ListAdapter<RecyclerViewElement, RecyclerViewAdapter.ViewHolder>(DiffCallback) {
+abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
+    @Transient
+    var context: Context,
+    @Transient
+    var spanCount: Int,
+    c: DiffUtil.ItemCallback<element>
+) :
+    ListAdapter<element, RecyclerViewAdapter.ViewHolder>(c) {
 
-    private var editType = Modes()
-    private var context: Context? = null
-    var spanCount = 0
+    @Transient
+    var editType = Modes()
 
-    lateinit var list: MutableList<RecyclerViewElement>
-    private lateinit var current: RecyclerViewElement
+    lateinit var list: MutableList<element>
+    @Transient
+    private lateinit var current: element
 
+    @Transient
     private val onClick = MutableLiveData(-1)
 
     fun getOnClick(): LiveData<Int> {
         return onClick
     }
 
-    override fun submitList(list: MutableList<RecyclerViewElement>?) {
+    override fun submitList(list: MutableList<element>?) {
         super.submitList(list)
         this.list = list ?: mutableListOf()
     }
 
-    override fun getCurrentList(): MutableList<RecyclerViewElement> {
+    override fun getCurrentList(): MutableList<element> {
         return list
     }
 
@@ -216,21 +223,5 @@ abstract class RecyclerViewAdapter :
             mode = type
             for (e in list) e.flag.setNone()
         }
-    }
-}
-
-object DiffCallback : DiffUtil.ItemCallback<RecyclerViewElement>() {
-    override fun areItemsTheSame(
-        oldItem: RecyclerViewElement,
-        newItem: RecyclerViewElement
-    ): Boolean {
-        return oldItem.areItemsTheSame(oldItem, newItem)
-    }
-
-    override fun areContentsTheSame(
-        oldItem: RecyclerViewElement,
-        newItem: RecyclerViewElement
-    ): Boolean {
-        return oldItem.areContentsTheSame(oldItem, newItem)
     }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.getScreenWidth
 import java.util.*
 
 abstract class RecyclerViewElement {
@@ -22,7 +21,7 @@ abstract class RecyclerViewElement {
     var holder: RecyclerViewAdapter.ViewHolder? = null
 
     @Transient
-    var adapter: RecyclerViewAdapter? = null
+    var adapter: RecyclerViewAdapter<*>? = null
 
     @Transient
     var flag = Flags()
@@ -34,7 +33,7 @@ abstract class RecyclerViewElement {
             onEdit(value)
         }
 
-    fun getItemViewType(adapter: RecyclerViewAdapter): Int {
+    fun <a : RecyclerViewElement> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
         this.adapter = adapter
 
         return layout
@@ -48,16 +47,6 @@ abstract class RecyclerViewElement {
 
     open fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         this.holder = holder
-
-        val view = holder.itemView
-        val params = view.layoutParams
-
-        params.height =
-            ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
-        view.layoutParams = params
-
-        onEdit(isEdit)
-        flag.show()
     }
 
     fun areItemsTheSame(oldItem: RecyclerViewElement, newItem: RecyclerViewElement): Boolean {

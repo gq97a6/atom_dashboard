@@ -3,7 +3,6 @@ package com.netDashboard.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,7 +13,6 @@ import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.getScreenHeight
 import com.netDashboard.settings.Settings
 
 class MainActivity : AppCompatActivity() {

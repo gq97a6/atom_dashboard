@@ -34,13 +34,14 @@ abstract class RecyclerViewElement {
     }
 
     open fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
 
         return RecyclerViewAdapter.ViewHolder(view)
     }
 
     open fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         this.holder = holder
+        onEdit(!(adapter?.editType?.isNone ?: true))
     }
 
     fun areItemsTheSame(oldItem: RecyclerViewElement, newItem: RecyclerViewElement): Boolean {

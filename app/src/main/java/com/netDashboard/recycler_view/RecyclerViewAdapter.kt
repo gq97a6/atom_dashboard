@@ -1,9 +1,9 @@
 package com.netDashboard.recycler_view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
+import com.netDashboard.R
+import com.netDashboard.toPx
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.pow
@@ -29,6 +32,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
     private lateinit var current: element
 
     private val onClick = MutableLiveData(-1)
+    val onRemove = MutableLiveData(-1)
 
     fun getOnClick(): LiveData<Int> {
         return onClick
@@ -70,18 +74,15 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
 
             when {
                 editType.isNone -> {
-                    Log.i("OUY", "isNone")
                     list[position].onClick()
                 }
                 editType.isSwap -> {
-                    Log.i("OUY", "isSwap")
                     if (!editType.isLock) {
                         markElementSwap(position)
                         swapMarkedElements(position)
                     }
                 }
                 editType.isRemove -> {
-                    Log.i("OUY", "isRemove")
                     markElementRemove(position)
                 }
             }
@@ -104,6 +105,39 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
         list[position].flag.setRemove()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun removeMarkedElement() {
+
+        var removeAt = -1
+        for (e in list) {
+            if (e.flag.isRemove) {
+                removeAt = e.holder?.adapterPosition ?: -1
+                break
+            }
+        }
+
+        if (removeAt == -1 || itemCount == 0) return
+
+        @SuppressLint("ShowToast")
+        val snackbar = list[0].holder?.itemView?.rootView?.let {
+            Snackbar.make(
+                it,
+                context.getString(R.string.snackbar_confirmation),
+                Snackbar.LENGTH_LONG
+            ).setAction("YES") {
+                if (list[removeAt].flag.isRemove) {
+                    list.removeAt(removeAt)
+                    notifyDataSetChanged()
+                    onRemove.postValue(removeAt)
+                }
+            }
+        }
+
+        val snackBarView = snackbar?.view
+        snackBarView?.translationY = -60.toPx().toFloat()
+        snackbar?.show()
+    }
+
     private fun markElementSwap(position: Int) {
         if (!list[position].flag.isLock) {
             list[position].flag.let {
@@ -112,6 +146,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun swapMarkedElements(position: Int) {
 
         for ((pos, t) in list.withIndex()) {
@@ -188,6 +223,10 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
                         list[position].holder?.itemView?.elevation = 0f
 
                         if (editType.isLock) editType.setSwap()
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            notifyDataSetChanged()
+                        }, 0)
                     }, duration + 50)
                 } else {
                     Collections.swap(list, position, pos)
@@ -221,11 +260,12 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
         fun setAdd() = setMode(3)
         fun setLock() = setMode(4)
 
+        @SuppressLint("NotifyDataSetChanged")
         private fun setMode(type: Int) {
             mode = type
-            for (e in list){
+            for (e in list) {
                 e.flag.setNone()
-                e.onEdit(isNone)
+                e.onEdit(!isNone)
             }
         }
     }

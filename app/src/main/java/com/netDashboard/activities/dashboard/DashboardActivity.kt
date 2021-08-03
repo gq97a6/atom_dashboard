@@ -9,7 +9,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
@@ -23,7 +22,6 @@ import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.getScreenHeight
 import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
-import com.netDashboard.toPx
 import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
@@ -81,6 +79,14 @@ class DashboardActivity : AppCompatActivity() {
                 )
             }
         }
+
+        adapter.onRemove.observe(this, {
+            if (adapter.itemCount == 0) {
+                b.dPlaceholder.visibility = View.VISIBLE
+            }
+
+            dashboard.tiles = adapter.list
+        })
 
         b.dTouch.setOnClickListener {
             touchOnClick()
@@ -246,54 +252,12 @@ class DashboardActivity : AppCompatActivity() {
         if (adapter.editType.isNone) return
 
         highlightOnly(b.dRemove)
+        //createToast(this, getString(R.string.d_remove))
 
         if (!adapter.editType.isRemove) {
-
             adapter.editType.setRemove()
-
-            //createToast(this, getString(R.string.d_remove))
         } else {
-
-            var toDelete = false
-
-            for (t in adapter.list) {
-                if (t.flag.isRemove) {
-                    toDelete = true
-                    break
-                }
-            }
-
-            if (!toDelete) {
-                //createToast(this, getString(R.string.d_remove), 1)
-            } else {
-
-                @SuppressLint("ShowToast")
-                val snackbar = Snackbar.make(
-                    b.root,
-                    getString(R.string.snackbar_confirmation),
-                    Snackbar.LENGTH_LONG
-                ).setAction("YES") {
-
-                    for ((i, t) in adapter.list.withIndex()) {
-                        if (t.flag.isRemove) {
-                            adapter.list.removeAt(i)
-                            dashboard.tiles = adapter.list
-
-                            adapter.notifyDataSetChanged()
-
-                            if (adapter.itemCount == 0) {
-                                b.dPlaceholder.visibility = View.VISIBLE
-                            }
-
-                            break
-                        }
-                    }
-                }
-
-                val snackBarView = snackbar.view
-                snackBarView.translationY = -60.toPx().toFloat()
-                snackbar.show()
-            }
+            adapter.removeMarkedElement()
         }
     }
 

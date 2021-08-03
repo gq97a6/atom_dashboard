@@ -62,6 +62,10 @@ class TileNewActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         val spanCount = 3
         newTileTilesAdapter = TilesAdapter(this, spanCount)
+
+        val list = TileTypeList.get()
+        newTileTilesAdapter.submitList(list as MutableList<Tile>)
+
         newTileTilesAdapter.editType.setAdd()
         b.ntRecyclerView.adapter = newTileTilesAdapter
 
@@ -72,10 +76,7 @@ class TileNewActivity : AppCompatActivity() {
             }
         }
 
-        val list = TileTypeList.get()
-
         b.ntRecyclerView.layoutManager = layoutManager
-        newTileTilesAdapter.submitList(list as MutableList<Tile>)
     }
 
     private fun tileAdd(id: Int): Int {

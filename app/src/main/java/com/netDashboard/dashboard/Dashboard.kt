@@ -15,9 +15,9 @@ import com.netDashboard.tile.Tile
 import java.util.*
 
 open class Dashboard(val name: String) : RecyclerViewElement() {
-
-    @Transient
-    override val layout = R.layout.dashboard_list_element
+    
+    override val layout
+        get() = R.layout.dashboard_list_element
 
     @Transient
     var daemonGroup: DaemonGroup? = null

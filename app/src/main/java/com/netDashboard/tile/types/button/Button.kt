@@ -11,16 +11,15 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ButtonTile : Tile() {
 
-    override val layout: Int
-        get() = R.layout.tile_button
+    @Transient
+    override val layout = R.layout.tile_button
 
     @Transient
     override val mqttDefaultPubValue = "1"
     override var mqttPubValue = mqttDefaultPubValue
 
-    init {
-        name = "button"
-    }
+    @Transient
+    override var name = "button"
 
     var text = "Default value"
     private var liveText: String

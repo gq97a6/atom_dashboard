@@ -20,9 +20,8 @@ class SliderTile : Tile() {
     override val mqttDefaultPubValue = "@value"
     override var mqttPubValue = mqttDefaultPubValue
 
-    init {
-        name = "slider"
-    }
+    @Transient
+    override var name = "slider"
 
     var from = 0f
     var to = 100f
@@ -120,7 +119,7 @@ class SliderTile : Tile() {
         super.onEdit(isEdit)
 
         val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
-        slider?.isEnabled = isEdit
+        slider?.isEnabled = !isEdit
     }
 
     private fun Float.checkScale(): Float {

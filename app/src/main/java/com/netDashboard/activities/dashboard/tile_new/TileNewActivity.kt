@@ -9,13 +9,13 @@ import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActiv
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.databinding.ActivityNewTileBinding
+import com.netDashboard.databinding.ActivityTileNewBinding
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList
 import com.netDashboard.tile.TilesAdapter
 
 class TileNewActivity : AppCompatActivity() {
-    private lateinit var b: ActivityNewTileBinding
+    private lateinit var b: ActivityTileNewBinding
 
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
@@ -24,7 +24,7 @@ class TileNewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = ActivityNewTileBinding.inflate(layoutInflater)
+        b = ActivityTileNewBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         dashboardName = intent.getStringExtra("dashboardName") ?: ""

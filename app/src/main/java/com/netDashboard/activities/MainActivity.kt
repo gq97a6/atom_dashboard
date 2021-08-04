@@ -1,11 +1,16 @@
 package com.netDashboard.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
+import com.netDashboard.activities.dashboard_new.DashboardNewActivity
+import com.netDashboard.activities.dashboard_properties.DashboardPropertiesActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.DashboardAdapter
@@ -13,12 +18,13 @@ import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
+import com.netDashboard.getScreenHeight
 import com.netDashboard.settings.Settings
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
 
-    private lateinit var dashboardAdapter: DashboardAdapter
+    private lateinit var adapter: DashboardAdapter
     private lateinit var settings: Settings
 
     private lateinit var foregroundService: ForegroundService
@@ -50,10 +56,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
 
-        dashboardAdapter = DashboardAdapter(this)
-        dashboardAdapter.setHasStableIds(true)
+        adapter = DashboardAdapter(this)
+        adapter.setHasStableIds(true)
 
-        b.mRecyclerView.adapter = dashboardAdapter
+        b.mRecyclerView.adapter = adapter
         b.mRecyclerView.setItemViewCacheSize(20)
 
         val layoutManager = GridLayoutManager(this, 1)
@@ -61,52 +67,72 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         //b.recyclerView.itemAnimator?.changeDuration = 0
 
-        dashboardAdapter.submitList(Dashboards.get())
+        adapter.submitList(Dashboards.get())
 
-        if (dashboardAdapter.itemCount == 0) {
+        if (adapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE
+        }
+
+        adapter.onItemRemove = {
+            if (adapter.itemCount == 0) {
+                b.mPlaceholder.visibility = View.VISIBLE
+            }
+
+            Dashboards.update(adapter.list)
+        }
+
+        adapter.onItemClick = { index ->
+            if (adapter.editType.isEdit) {
+                Intent(this, DashboardPropertiesActivity::class.java).also {
+                    it.putExtra("dashboardName", adapter.list[index].name)
+                    startActivity(it)
+                    finish()
+                }
+            }
+        }
+
+        b.mTouch.setOnClickListener {
+            touchOnClick()
         }
 
         b.mSettings.setOnClickListener {
             settingsOnClick()
         }
 
-        b.mTouch.setOnClickListener {
-            touchOnClick()
+        b.mEdit.setOnClickListener {
+            editOnClick()
+        }
+
+        b.mSwap.setOnClickListener {
+            swapOnClick()
+        }
+
+        b.mRemove.setOnClickListener {
+            removeOnClick()
+        }
+
+        b.mAdd.setOnClickListener {
+            addOnClick()
         }
     }
 
     private fun touchOnClick() {
-        //adapter.isEdit = !adapter.isEdit
-//
-        //if (!adapter.isEdit) {
-        //    b.dRecyclerView.suppressLayout(false)
-        //    dashboard.tiles = adapter.tiles
-        //} else {
-        //    highlightOnly(b.dEdit)
-//
-        //    adapter.editMode = true
-//
-        //    for (t in adapter.tiles) {
-        //        t.isEdit = true
-        //        t.flag()
-        //    }
-        //}
-//
-        //if (adapter.isEdit) {
-        //    b.dBar.y = getScreenHeight().toFloat()
-//
-        //    b.dBar.visibility = View.VISIBLE
-//
-        //    b.dBar.animate()
-        //        .translationY(0f)
-        //        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
-        //} else {
-//
-        //    b.dBar.animate()
-        //        ?.y(getScreenHeight().toFloat())
-        //        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
-        //}
+        if (adapter.editType.isNone) {
+            adapter.editType.setEdit()
+            highlightOnly(b.mEdit)
+
+            b.mBar.visibility = View.VISIBLE
+            b.mBar.y = getScreenHeight().toFloat()
+            b.mBar.animate()
+                .translationY(0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+        } else {
+            adapter.editType.setNone()
+
+            b.mBar.animate()
+                ?.y(getScreenHeight().toFloat())
+                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+        }
     }
 
     private fun settingsOnClick() {
@@ -116,7 +142,54 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+
+    private fun editOnClick() {
+        if (adapter.editType.isNone) return
+        highlightOnly(b.mEdit)
+        adapter.editType.setEdit()
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun swapOnClick() {
+        if (adapter.editType.isNone) return
+        highlightOnly(b.mSwap)
+        adapter.editType.setSwap()
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun removeOnClick() {
+        if (adapter.editType.isNone) return
+
+        highlightOnly(b.mRemove)
+
+        if (!adapter.editType.isRemove) {
+            adapter.editType.setRemove()
+        } else {
+            adapter.removeMarkedItem()
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun addOnClick() {
+        Intent(this, DashboardNewActivity::class.java).also {
+            startActivity(it)
+            finish()
+        }
+    }
+
     private fun onServiceReady() {}
+
+    private fun highlightOnly(button: Button) {
+        b.mRemove.alpha = 0.4f
+        b.mSwap.alpha = 0.4f
+        b.mEdit.alpha = 0.4f
+        button.alpha = 1f
+    }
 
     @Suppress("UNUSED_PARAMETER")
     fun clickTouch(v: View) = b.mTouch.click()

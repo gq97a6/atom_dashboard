@@ -87,10 +87,10 @@ class DashboardActivity : AppCompatActivity() {
             dashboard.tiles = adapter.list
         }
 
-        adapter.onItemClick = { position ->
+        adapter.onItemClick = { index ->
             if (adapter.editType.isEdit) {
                 Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("tileId", position)
+                    it.putExtra("tileId", index)
                     it.putExtra("dashboardName", dashboard.name)
                     startActivity(it)
                     finish()
@@ -135,7 +135,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-
         dashboard.tiles = adapter.list
         Dashboards.save(dashboard.name)
 
@@ -209,10 +208,7 @@ class DashboardActivity : AppCompatActivity() {
                 .translationY(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         } else {
-
             adapter.editType.setNone()
-            b.dRecyclerView.suppressLayout(false)
-            dashboard.tiles = adapter.list
 
             b.dBar.animate()
                 ?.y(getScreenHeight().toFloat())
@@ -234,23 +230,15 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun editOnClick() {
         if (adapter.editType.isNone) return
-
         highlightOnly(b.dEdit)
-        //createToast(this, getString(R.string.d_edit), 1)
-
         adapter.editType.setEdit()
-
-        //todo
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
         if (adapter.editType.isNone) return
-
         highlightOnly(b.dSwap)
-        //createToast(this, getString(R.string.d_swap), 1)
-
         adapter.editType.setSwap()
     }
 
@@ -261,7 +249,6 @@ class DashboardActivity : AppCompatActivity() {
         if (adapter.editType.isNone) return
 
         highlightOnly(b.dRemove)
-        //createToast(this, getString(R.string.d_remove))
 
         if (!adapter.editType.isRemove) {
             adapter.editType.setRemove()

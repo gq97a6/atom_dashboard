@@ -19,6 +19,9 @@ object Dashboards {
 
     fun get(): MutableList<Dashboard> = dashboards.values.toMutableList()
     fun get(name: String): Dashboard = dashboards[name] ?: Dashboard("err")
+    fun update(list: MutableList<Dashboard>) {
+        dashboards = list.associateBy { it.name }.toMutableMap()
+    }
 
     fun getSaved() {
         if (isLive) return
@@ -61,7 +64,7 @@ object Dashboards {
             list.add(dashboard)
         }
 
-        for (d in list) dashboards[d.name] = d
+        dashboards = list.associateBy { it.name }.toMutableMap()
         isLive = true
     }
 

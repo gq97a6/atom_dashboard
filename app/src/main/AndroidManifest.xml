@@ -16,6 +16,12 @@
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/Theme.App">
+        <activity
+            android:name=".activities.dashboard_new.DashboardNewActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.dashboard_properties.DashboardPropertiesActivity"
+            android:exported="true" />
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.settings.SettingsActivity" />
         <activity android:name=".activities.dashboard.DashboardActivity" />

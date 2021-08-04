@@ -12,6 +12,7 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.PropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
+import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
@@ -27,7 +28,6 @@ import java.util.*
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardBinding
 
-    private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
 
     lateinit var adapter: TilesAdapter
@@ -51,8 +51,7 @@ class DashboardActivity : AppCompatActivity() {
             }
         })
 
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)
+        dashboard = Dashboards.get(intent.getStringExtra("dashboardName") ?: "")
 
         setupRecyclerView()
 
@@ -86,6 +85,17 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             dashboard.tiles = adapter.list
+        }
+
+        adapter.onItemClick = { position ->
+            if (adapter.editType.isEdit) {
+                Intent(this, TilePropertiesActivity::class.java).also {
+                    it.putExtra("tileId", position)
+                    it.putExtra("dashboardName", dashboard.name)
+                    startActivity(it)
+                    finish()
+                }
+            }
         }
 
         b.dTouch.setOnClickListener {
@@ -127,7 +137,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onPause() {
 
         dashboard.tiles = adapter.list
-        Dashboards.save(dashboardName)
+        Dashboards.save(dashboard.name)
 
         super.onPause()
     }
@@ -190,8 +200,8 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun touchOnClick() {
         if (adapter.editType.isNone) {
-            adapter.editType.setSwap()
-            highlightOnly(b.dSwap)
+            adapter.editType.setEdit()
+            highlightOnly(b.dEdit)
 
             b.dBar.visibility = View.VISIBLE
             b.dBar.y = getScreenHeight().toFloat()
@@ -214,7 +224,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun propertiesOnClick() {
         Intent(this, PropertiesActivity::class.java).also {
-            it.putExtra("dashboardName", dashboardName)
+            it.putExtra("dashboardName", dashboard.name)
             startActivity(it)
             finish()
         }
@@ -264,7 +274,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun addOnClick() {
         Intent(this, TileNewActivity::class.java).also {
-            it.putExtra("dashboardName", dashboardName)
+            it.putExtra("dashboardName", dashboard.name)
             startActivity(it)
             finish()
         }

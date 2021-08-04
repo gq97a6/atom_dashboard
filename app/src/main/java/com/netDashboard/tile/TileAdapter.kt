@@ -7,14 +7,6 @@ import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class TilesAdapter(context: Context, spanCount: Int) : RecyclerViewAdapter<Tile>(context, spanCount, DiffCallback) {
 
-    init {
-        editType.onSetMode = {
-            when {
-                it.isSwap -> Log.i("OUY", "todo")
-            }
-        }
-    }
-
     object DiffCallback : DiffUtil.ItemCallback<Tile>() {
         override fun areItemsTheSame(
             oldItem: Tile,

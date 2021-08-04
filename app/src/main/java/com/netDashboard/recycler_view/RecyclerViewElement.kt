@@ -1,7 +1,6 @@
 package com.netDashboard.recycler_view
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ abstract class RecyclerViewElement {
     var height = 1
 
     @Transient
-    var id = Random().nextLong()
+    var id = kotlin.math.abs(Random().nextLong())
     abstract val layout: Int
 
     @Transient
@@ -59,7 +58,7 @@ abstract class RecyclerViewElement {
     inner class Flags {
         private var flag = -1
 
-        val isNone
+        private val isNone
             get() = flag == -1
         val isSwap
             get() = flag == 0
@@ -78,7 +77,7 @@ abstract class RecyclerViewElement {
             show()
         }
 
-        fun show() {
+        private fun show() {
             val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
             val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
 

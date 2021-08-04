@@ -8,6 +8,7 @@ import com.netDashboard.getContrastColor
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import kotlin.random.Random
 
 class ButtonTile : Tile() {
 
@@ -35,8 +36,6 @@ class ButtonTile : Tile() {
         holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {
             holder.itemView.callOnClick()
         }
-
-        holder.itemView.findViewById<Button>(R.id.tb_button).text = text
 
         liveText = text
         setThemeColor(color)

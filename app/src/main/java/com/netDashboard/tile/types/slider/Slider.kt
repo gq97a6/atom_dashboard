@@ -1,5 +1,6 @@
 package com.netDashboard.tile.types.slider
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -10,6 +11,7 @@ import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
+import kotlin.random.Random
 
 class SliderTile : Tile() {
 
@@ -27,7 +29,7 @@ class SliderTile : Tile() {
     var to = 100f
     var step = 1f
 
-    private var _value = 0f
+    private var _value = (0..100).random().toFloat()
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()
@@ -160,5 +162,11 @@ class SliderTile : Tile() {
         if (value != null) this.value = value.roundCloser(step)
 
         return true
+    }
+
+    override fun onClick() {
+        super.onClick()
+
+        Log.i("OUY", "slider: $id")
     }
 }

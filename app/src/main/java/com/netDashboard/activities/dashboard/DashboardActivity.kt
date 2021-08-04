@@ -3,7 +3,6 @@ package com.netDashboard.activities.dashboard
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -81,13 +80,13 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        adapter.onRemove.observe(this, {
+        adapter.onItemRemove = {
             if (adapter.itemCount == 0) {
                 b.dPlaceholder.visibility = View.VISIBLE
             }
 
             dashboard.tiles = adapter.list
-        })
+        }
 
         b.dTouch.setOnClickListener {
             touchOnClick()
@@ -201,7 +200,6 @@ class DashboardActivity : AppCompatActivity() {
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         } else {
 
-            Log.i("OUY", "normal")
             adapter.editType.setNone()
             b.dRecyclerView.suppressLayout(false)
             dashboard.tiles = adapter.list
@@ -258,7 +256,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.editType.isRemove) {
             adapter.editType.setRemove()
         } else {
-            adapter.removeMarkedElement()
+            adapter.removeMarkedItem()
         }
     }
 

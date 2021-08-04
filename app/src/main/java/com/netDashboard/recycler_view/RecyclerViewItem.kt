@@ -8,7 +8,7 @@ import com.netDashboard.R
 import com.netDashboard.alpha
 import java.util.*
 
-abstract class RecyclerViewElement {
+abstract class RecyclerViewItem {
 
     var width = 1
     var height = 1
@@ -26,7 +26,7 @@ abstract class RecyclerViewElement {
     @Transient
     var flag = Flags()
 
-    fun <a : RecyclerViewElement> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
+    fun <a : RecyclerViewItem> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
         this.adapter = adapter
 
         return layout
@@ -43,11 +43,11 @@ abstract class RecyclerViewElement {
         onEdit(!(adapter?.editType?.isNone ?: true))
     }
 
-    fun areItemsTheSame(oldItem: RecyclerViewElement, newItem: RecyclerViewElement): Boolean {
+    fun areItemsTheSame(oldItem: RecyclerViewItem, newItem: RecyclerViewItem): Boolean {
         return oldItem == newItem
     }
 
-    fun areContentsTheSame(oldItem: RecyclerViewElement, newItem: RecyclerViewElement): Boolean {
+    fun areContentsTheSame(oldItem: RecyclerViewItem, newItem: RecyclerViewItem): Boolean {
         return oldItem.id == newItem.id
     }
 

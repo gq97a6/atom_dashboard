@@ -4,10 +4,10 @@ import android.graphics.Color
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.getScreenWidth
 import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.recycler_view.RecyclerViewElement
+import com.netDashboard.recycler_view.RecyclerViewItem
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-abstract class Tile : RecyclerViewElement() {
+abstract class Tile : RecyclerViewItem() {
 
     var color = Color.parseColor("#BF4040")
     var isColouredByTheme = false

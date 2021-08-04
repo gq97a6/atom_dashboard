@@ -9,15 +9,15 @@ import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.recycler_view.RecyclerViewElement
+import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
 import java.util.*
 
-open class Dashboard(val name: String) : RecyclerViewElement() {
+open class Dashboard(val name: String) : RecyclerViewItem() {
     
     override val layout
-        get() = R.layout.dashboard_list_element
+        get() = R.layout.dashboard_list_item
 
     @Transient
     var daemonGroup: DaemonGroup? = null

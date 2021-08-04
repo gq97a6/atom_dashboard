@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,30 +12,26 @@ import com.netDashboard.R
 import com.netDashboard.toPx
 import java.util.*
 
-abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
+abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
     var context: Context,
     var spanCount: Int,
-    c: DiffUtil.ItemCallback<element>
+    c: DiffUtil.ItemCallback<item>
 ) :
-    ListAdapter<element, RecyclerViewAdapter.ViewHolder>(c) {
+    ListAdapter<item, RecyclerViewAdapter.ViewHolder>(c) {
     var editType = Modes()
 
-    lateinit var list: MutableList<element>
-    private lateinit var current: element
+    lateinit var list: MutableList<item>
+    private lateinit var currentItem: item
 
-    private val onClick = MutableLiveData(-1)
-    val onRemove = MutableLiveData(-1)
+    var onItemClick: (Int) -> Unit = {}
+    var onItemRemove: (Int) -> Unit = {}
 
-    fun getOnClick(): LiveData<Int> {
-        return onClick
-    }
-
-    override fun submitList(list: MutableList<element>?) {
+    override fun submitList(list: MutableList<item>?) {
         super.submitList(list)
         this.list = list ?: mutableListOf()
     }
 
-    override fun getCurrentList(): MutableList<element> {
+    override fun getCurrentList(): MutableList<item> {
         return list
     }
 
@@ -50,12 +44,12 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        current = list[position]
+        currentItem = list[position]
         return list[position].getItemViewType(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return current.onCreateViewHolder(parent, viewType)
+        return currentItem.onCreateViewHolder(parent, viewType)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -63,7 +57,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         list[position].onBindViewHolder(holder, position)
         holder.itemView.setOnClickListener {
-            onClick.postValue(position)
+            onItemClick(position)
 
             when {
                 editType.isNone -> {
@@ -71,18 +65,18 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
                 }
                 editType.isSwap -> {
                     if (!editType.isLock) {
-                        markElementSwap(position)
-                        swapMarkedElements(position)
+                        markItemSwap(position)
+                        swapMarkedItems(position)
                     }
                 }
                 editType.isRemove -> {
-                    markElementRemove(position)
+                    markItemRemove(position)
                 }
             }
         }
     }
 
-    private fun markElementRemove(position: Int) {
+    private fun markItemRemove(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 
@@ -99,7 +93,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun removeMarkedElement() {
+    fun removeMarkedItem() {
 
         var removeAt = -1
         for (e in list) {
@@ -121,7 +115,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
                 if (list[removeAt].flag.isRemove) {
                     list.removeAt(removeAt)
                     notifyDataSetChanged()
-                    onRemove.postValue(removeAt)
+                    onItemRemove(removeAt)
                 }
             }
         }
@@ -131,7 +125,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
         snackbar?.show()
     }
 
-    private fun markElementSwap(position: Int) {
+    private fun markItemSwap(position: Int) {
         if (!list[position].flag.isLock) {
             list[position].flag.let {
                 if (!it.isSwap) it.setSwap() else it.setNone()
@@ -140,7 +134,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun swapMarkedElements(position: Int) {
+    private fun swapMarkedItems(position: Int) {
 
         for ((pos, t) in list.withIndex()) {
 
@@ -155,8 +149,10 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
         }
     }
 
-    inner class Modes {
+    open inner class Modes {
         private var mode = -1
+
+        var onSetMode: (Modes) -> Unit = {}
 
         val isNone
             get() = mode == -1
@@ -180,7 +176,7 @@ abstract class RecyclerViewAdapter<element : RecyclerViewElement>(
 
         private fun setMode(type: Int) {
             mode = type
-
+            onSetMode(this)
             for (e in list) {
                 e.flag.setNone()
                 e.onEdit(!isNone)

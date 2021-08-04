@@ -32,7 +32,7 @@ class TileNewActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
-        newTileTilesAdapter.getOnClick().observe(this, { tileId ->
+        newTileTilesAdapter.onItemClick = { tileId ->
             if (tileId >= 0) {
                 Intent(this, TilePropertiesActivity::class.java).also {
                     it.putExtra("dashboardName", dashboardName)
@@ -41,7 +41,7 @@ class TileNewActivity : AppCompatActivity() {
                     finish()
                 }
             }
-        })
+        }
     }
 
     override fun onDestroy() {

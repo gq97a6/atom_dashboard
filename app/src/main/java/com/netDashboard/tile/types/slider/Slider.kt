@@ -11,7 +11,6 @@ import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
-import kotlin.random.Random
 
 class SliderTile : Tile() {
 

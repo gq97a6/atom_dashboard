@@ -118,12 +118,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun onServiceReady() {}
 
-
+    @Suppress("UNUSED_PARAMETER")
     fun clickTouch(v: View) = b.mTouch.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickSettings(v: View) = b.mSettings.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickAdd(v: View) = b.mAdd.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickRemove(v: View) = b.mRemove.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickSwap(v: View) = b.mSwap.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickEdit(v: View) = b.mEdit.click()
 
     private fun Button.click() {

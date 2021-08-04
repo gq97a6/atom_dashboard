@@ -279,11 +279,22 @@ class DashboardActivity : AppCompatActivity() {
         button.alpha = 1f
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun clickTouch(v: View) = b.dTouch.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickProperties(v: View) = b.dProperties.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickAdd(v: View) = b.dAdd.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickRemove(v: View) = b.dRemove.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickSwap(v: View) = b.dSwap.click()
+
+    @Suppress("UNUSED_PARAMETER")
     fun clickEdit(v: View) = b.dEdit.click()
 
     private fun Button.click() {

@@ -1,9 +1,383 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.dashboard_properties.DashboardPropertiesActivity">
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/p_banner"
+        android:textColor="@color/gray150"
+        android:textSize="45sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="dashboard tag:"
+            android:textColor="@color/gray150"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/dp_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray100"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:paddingHorizontal="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_layout"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/p_span"
+                        android:textColor="@color/gray150"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/dp_span_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="3dp"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/gray100"
+                        android:textSize="15sp"
+                        tools:ignore="HardcodedText" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/dp_span"
+                        style="@style/slider"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:stepSize="1"
+                        android:valueFrom="1"
+                        android:valueTo="6" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/p_communication"
+                    android:textColor="@color/gray150"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/p_mqtt"
+                    android:textColor="@color/gray100"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_layout"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/p_switch"
+                        android:textColor="@color/gray150"
+                        android:textSize="15sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="OFF"
+                            android:textColor="@color/gray150"
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/dp_mqtt_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ON"
+                            android:textColor="@color/gray150"
+                            android:textSize="12sp"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dp_mqtt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/p_mqtt_address"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#19000000" />
+
+                            <View
+                                android:id="@+id/dp_mqtt_address_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#FFC1C1" />
+
+                            <EditText
+                                android:id="@+id/dp_mqtt_address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#00000000"
+                                android:ems="12"
+                                android:hint="tcp://"
+                                android:importantForAutofill="no"
+                                android:inputType="textUri"
+                                android:maxLength="30"
+                                android:padding="10dp"
+                                android:text="tcp://"
+                                android:textColor="@color/gray100"
+                                android:textColorHint="@color/gray65"
+                                tools:ignore="HardcodedText,TextFields" />
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/p_mqtt_connected"
+                            android:textColor="@color/gray100"
+                            android:textSize="12sp" />
+
+                        <FrameLayout
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="0.5dp"
+                            android:layout_marginEnd="10dp">
+
+                            <View
+                                android:id="@+id/dp_mqtt_connected"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#C1FFC1" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/background_layout" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/p_mqtt_attempting"
+                            android:textColor="@color/gray100"
+                            android:textSize="12sp" />
+
+                        <FrameLayout
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="0.5dp"
+                            android:layout_marginEnd="10dp">
+
+                            <View
+                                android:id="@+id/dp_mqtt_attempting"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#FFFFC1" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/background_layout" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/p_mqtt_failed"
+                            android:textColor="@color/gray100"
+                            android:textSize="12sp" />
+
+                        <FrameLayout
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginTop="0.5dp"
+                            android:layout_marginEnd="10dp">
+
+                            <View
+                                android:id="@+id/dp_mqtt_failed"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#FFC1C1" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/background_layout" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/p_port"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#19000000" />
+
+                            <View
+                                android:id="@+id/dp_mqtt_port_status"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="#FFC1C1" />
+
+                            <EditText
+                                android:id="@+id/dp_mqtt_port"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="12"
+                                android:hint="1883"
+                                android:background="#00000000"
+                                android:importantForAutofill="no"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5"
+                                android:padding="10dp"
+                                android:text="1883"
+                                android:textColor="@color/gray100"
+                                android:textColorHint="@color/gray65"
+                                tools:ignore="HardcodedText,TextFields" />
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

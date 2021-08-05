@@ -13,13 +13,13 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.databinding.ActivityPropertiesBinding
+import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import java.util.*
 
 class DashboardPropertiesActivity : AppCompatActivity() {
-    private lateinit var b: ActivityPropertiesBinding
+    private lateinit var b: ActivityDashboardPropertiesBinding
 
     private lateinit var exitActivity: String
     private lateinit var dashboardName: String
@@ -30,7 +30,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = ActivityPropertiesBinding.inflate(layoutInflater)
+        b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
@@ -48,18 +48,18 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)
 
-        b.pDTag.text = dashboard.dashboardTagName.lowercase(Locale.getDefault())
+        b.dpTag.text = dashboard.dashboardTagName.lowercase(Locale.getDefault())
 
-        b.pSpan.value = dashboard.spanCount.toFloat()
-        b.pSpan.callOnClick()
-        b.pSpanValue.text = dashboard.spanCount.toString()
+        b.dpSpan.value = dashboard.spanCount.toFloat()
+        b.dpSpan.callOnClick()
+        b.dpSpanValue.text = dashboard.spanCount.toString()
 
-        b.pMqttSwitch.isChecked = dashboard.mqttEnabled
-        mqttSwitchHandle(b.pMqttSwitch.isChecked)
+        b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
+        mqttSwitchHandle(b.dpMqttSwitch.isChecked)
 
-        b.pMqttAddress.setText(dashboard.mqttAddress)
+        b.dpMqttAddress.setText(dashboard.mqttAddress)
         dashboard.mqttPort.let {
-            b.pMqttPort.setText(if (it != -1) it.toString() else "")
+            b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
 
         dashboard.daemonGroup?.mqttd?.let {
@@ -68,36 +68,36 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                     R.string.d_disconnected
                 } else {
                     if (it.client.isConnected) {
-                        b.pMqttAddressStatus.background = b.pMqttConnected.background
-                        b.pMqttPortStatus.background = b.pMqttConnected.background
+                        b.dpMqttAddressStatus.background = b.dpMqttConnected.background
+                        b.dpMqttPortStatus.background = b.dpMqttConnected.background
 
-                        b.pMqttAddressStatus.animate().alpha(1f)
-                        b.pMqttPortStatus.animate().alpha(1f)
+                        b.dpMqttAddressStatus.animate().alpha(1f)
+                        b.dpMqttPortStatus.animate().alpha(1f)
                     } else {
                         if (isDone) {
-                            b.pMqttAddressStatus.background = b.pMqttFailed.background
-                            b.pMqttPortStatus.background = b.pMqttFailed.background
+                            b.dpMqttAddressStatus.background = b.dpMqttFailed.background
+                            b.dpMqttPortStatus.background = b.dpMqttFailed.background
 
-                            b.pMqttAddressStatus.animate().alpha(1f)
-                            b.pMqttPortStatus.animate().alpha(1f)
+                            b.dpMqttAddressStatus.animate().alpha(1f)
+                            b.dpMqttPortStatus.animate().alpha(1f)
                         } else {
-                            b.pMqttAddressStatus.background = b.pMqttAttempting.background
-                            b.pMqttPortStatus.background = b.pMqttAttempting.background
+                            b.dpMqttAddressStatus.background = b.dpMqttAttempting.background
+                            b.dpMqttPortStatus.background = b.dpMqttAttempting.background
 
-                            b.pMqttAddressStatus.animate()
+                            b.dpMqttAddressStatus.animate()
                                 .alpha(1f)
                                 .withEndAction {
-                                    b.pMqttAddressStatus.animate()
+                                    b.dpMqttAddressStatus.animate()
                                         .alpha(0f)
                                         ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
                                         4000
                                 }
                                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 200
 
-                            b.pMqttPortStatus.animate()
+                            b.dpMqttPortStatus.animate()
                                 .alpha(1f)
                                 .withEndAction {
-                                    b.pMqttPortStatus.animate()
+                                    b.dpMqttPortStatus.animate()
                                         .alpha(0f)
                                         ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
                                         4000
@@ -109,17 +109,17 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             }
         }
 
-        b.pSpan.addOnChangeListener { _, value, _ ->
-            b.pSpanValue.text = value.toInt().toString()
+        b.dpSpan.addOnChangeListener { _, value, _ ->
+            b.dpSpanValue.text = value.toInt().toString()
             dashboard.spanCount = value.toInt()
         }
 
-        b.pMqttSwitch.setOnCheckedChangeListener { _, state ->
+        b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchHandle(state)
             dashboard.daemonGroup?.mqttd?.reinit()
         }
 
-        b.pMqttAddress.addTextChangedListener(object : TextWatcher {
+        b.dpMqttAddress.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
@@ -132,7 +132,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             }
         })
 
-        b.pMqttPort.addTextChangedListener(object : TextWatcher {
+        b.dpMqttPort.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
@@ -189,7 +189,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     }
 
     private fun mqttSwitchHandle(state: Boolean) {
-        b.pMqtt.visibility = if (state) {
+        b.dpMqtt.visibility = if (state) {
             View.VISIBLE
         } else {
             View.GONE

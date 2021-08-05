@@ -1,5 +1,6 @@
 package com.netDashboard.dashboard
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.netDashboard.folder_tree.FolderTree
@@ -36,10 +37,14 @@ object Dashboards {
 
             val dashboard = try {
                 val fileName = FolderTree.dashboardFile(name)
+                Log.i("OUY", FileReader(fileName).readText())
                 Gson.fromJson(FileReader(fileName), Dashboard::class.java)
             } catch (e: Exception) {
                 Dashboard(name)
             }
+
+            //"temporary" fix
+            dashboard.setFlag()
 
             val jsonArray = try {
                 val fileName = FolderTree.tilesFile(name)

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
-import com.netDashboard.activities.dashboard.properties.PropertiesActivity
+import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
@@ -20,7 +20,6 @@ import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.getScreenHeight
-import com.netDashboard.tile.TileGridLayoutManager
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -76,25 +75,6 @@ class DashboardActivity : AppCompatActivity() {
                         }
                     }
                 )
-            }
-        }
-
-        adapter.onItemRemove = {
-            if (adapter.itemCount == 0) {
-                b.dPlaceholder.visibility = View.VISIBLE
-            }
-
-            dashboard.tiles = adapter.list
-        }
-
-        adapter.onItemClick = { index ->
-            if (adapter.editType.isEdit) {
-                Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("tileId", index)
-                    it.putExtra("dashboardName", dashboard.name)
-                    startActivity(it)
-                    finish()
-                }
             }
         }
 
@@ -170,10 +150,28 @@ class DashboardActivity : AppCompatActivity() {
         adapter = TilesAdapter(this, spanCount)
         adapter.setHasStableIds(true)
 
-        b.dRecyclerView.adapter = adapter
-        b.dRecyclerView.setItemViewCacheSize(20)
+        adapter.onItemRemove = {
+            if (adapter.itemCount == 0) {
+                b.dPlaceholder.visibility = View.VISIBLE
+            }
 
-        val layoutManager = TileGridLayoutManager(this, spanCount)
+            dashboard.tiles = adapter.list
+        }
+
+        adapter.onItemClick = { index ->
+            if (adapter.editType.isEdit) {
+                Intent(this, TilePropertiesActivity::class.java).also {
+                    it.putExtra("tileId", index)
+                    it.putExtra("dashboardName", dashboard.name)
+                    startActivity(it)
+                    finish()
+                }
+            }
+        }
+
+        adapter.submitList(dashboard.tiles.toMutableList())
+
+        val layoutManager = GridLayoutManager(this, spanCount)
 
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
@@ -186,9 +184,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         b.dRecyclerView.layoutManager = layoutManager
-
-        adapter.submitList(dashboard.tiles.toMutableList())
-        adapter.editType.setNone()
+        b.dRecyclerView.adapter = adapter
 
         if (adapter.itemCount == 0) {
             b.dPlaceholder.visibility = View.VISIBLE
@@ -219,7 +215,8 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
-        Intent(this, PropertiesActivity::class.java).also {
+        Intent(this, DashboardPropertiesActivity::class.java).also {
+            it.putExtra("exitActivity", "DashboardActivity")
             it.putExtra("dashboardName", dashboard.name)
             startActivity(it)
             finish()

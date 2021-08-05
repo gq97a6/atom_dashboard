@@ -178,7 +178,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
             mode = type
             onSetMode(this)
             for (e in list) {
-                e.flag.isLock //todo: fix
+                e.flag.setNone()
                 e.onEdit(!isNone)
             }
         }

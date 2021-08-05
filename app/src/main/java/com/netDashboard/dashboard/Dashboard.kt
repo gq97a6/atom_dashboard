@@ -1,21 +1,15 @@
 package com.netDashboard.dashboard
 
-import android.app.Activity
-import android.content.Intent
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.Button
 import com.netDashboard.R
-import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
-import com.netDashboard.settings.Settings
 import com.netDashboard.tile.Tile
 import java.util.*
 
-open class Dashboard(val name: String) : RecyclerViewItem() {
-    
+class Dashboard(val name: String) : RecyclerViewItem() {
+
     override val layout
         get() = R.layout.dashboard_list_item
 
@@ -41,28 +35,14 @@ open class Dashboard(val name: String) : RecyclerViewItem() {
 
     var bluetoothEnabled: Boolean = false
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerViewAdapter.ViewHolder {
-        super.onCreateViewHolder(parent, viewType)
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
 
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        holder.itemView.findViewById<Button>(R.id.dle_button).text =
+            name.uppercase(Locale.getDefault())
 
-        view.findViewById<Button>(R.id.dle_button).text = name.uppercase(Locale.getDefault())
-
-        view.findViewById<Button>(R.id.dle_button).setOnClickListener {
-
-            Intent(adapter?.context, DashboardActivity::class.java).also {
-                Settings.lastDashboardName = name
-
-                it.putExtra("dashboardName", name)
-                (adapter?.context as Activity).overridePendingTransition(0, 0)
-                (adapter?.context as Activity).startActivity(it)
-                (adapter?.context as Activity).finish()
-            }
+        holder.itemView.findViewById<Button>(R.id.dle_button).setOnClickListener {
+            holder.itemView.callOnClick()
         }
-
-        return RecyclerViewAdapter.ViewHolder(view)
     }
 }

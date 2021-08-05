@@ -75,7 +75,7 @@
             android:layout_height="match_parent"
             android:elevation="1dp"
             android:gravity="center"
-            android:text="empty"
+            android:text="Add new dashboard first. \n Use left icon to access edit mode."
             android:textColor="#A3A3A3"
             android:textSize="20sp"
             android:visibility="gone" />

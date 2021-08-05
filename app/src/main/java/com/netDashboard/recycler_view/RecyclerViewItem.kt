@@ -74,7 +74,7 @@ abstract class RecyclerViewItem {
 
         private fun setFlag(type: Int) {
             flag = type
-            //show()
+            show()
         }
 
         private fun show() {

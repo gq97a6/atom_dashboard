@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.R
+import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
@@ -17,9 +18,10 @@ import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import java.util.*
 
-class PropertiesActivity : AppCompatActivity() {
+class DashboardPropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityPropertiesBinding
 
+    private lateinit var exitActivity: String
     private lateinit var dashboardName: String
     private lateinit var dashboard: Dashboard
 
@@ -42,6 +44,7 @@ class PropertiesActivity : AppCompatActivity() {
             }
         })
 
+        exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)
 
@@ -155,7 +158,14 @@ class PropertiesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        Intent(this, DashboardActivity::class.java).also {
+        Intent(
+            this,
+            when (exitActivity) {
+                "DashboardActivity" -> DashboardActivity::class.java
+                "MainActivity" -> MainActivity::class.java
+                else -> MainActivity::class.java
+            }
+        ).also {
             it.putExtra("dashboardName", dashboardName)
             startActivity(it)
             finish()

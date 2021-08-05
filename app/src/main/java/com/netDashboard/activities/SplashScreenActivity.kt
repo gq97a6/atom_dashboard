@@ -12,9 +12,6 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
-import com.netDashboard.tile.Tile
-import com.netDashboard.tile.types.button.ButtonTile
-import com.netDashboard.tile.types.slider.SliderTile
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -30,45 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
         rootFolder = filesDir.canonicalPath.toString()
         FolderTree.build()
 
-        //TMP
-        FolderTree.buildDashboard("example_dashboard")
-        FolderTree.buildDashboard("test0")
-        FolderTree.buildDashboard("test1")
-        FolderTree.buildDashboard("test2")
-        //TMP
-
         Dashboards.getSaved()
-
-        //tmp
-        val test:MutableList<Tile> = mutableListOf(
-            ButtonTile(),
-            ButtonTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            SliderTile(),
-            ButtonTile(),
-            ButtonTile()
-        )
-
-        Dashboards.get("example_dashboard").tiles = test
-        //tmp
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()
@@ -92,7 +51,7 @@ class SplashScreenActivity : AppCompatActivity() {
             d.daemonGroup = service.dgc.get(d.name)
         }
 
-        if (Settings.lastDashboardName != null) {
+        if (Settings.lastDashboardName != null && Settings.startFromLast) {
 
             Intent(this, DashboardActivity::class.java).also {
                 it.putExtra("dashboardName", Settings.lastDashboardName)

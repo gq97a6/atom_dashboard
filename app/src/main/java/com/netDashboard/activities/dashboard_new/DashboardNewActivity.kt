@@ -5,7 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardNewBinding
+import com.netDashboard.folder_tree.FolderTree
+import kotlin.random.Random
 
 class DashboardNewActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardNewBinding
@@ -15,6 +19,11 @@ class DashboardNewActivity : AppCompatActivity() {
 
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        val name = kotlin.math.abs(Random.nextInt()).toString()
+        FolderTree.buildDashboard(name)
+        Dashboards.add(Dashboard(name))
+        onBackPressed()
     }
 
     override fun onDestroy() {

@@ -8,9 +8,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
+import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
-import com.netDashboard.activities.dashboard_properties.DashboardPropertiesActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.DashboardAdapter
@@ -47,49 +47,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         setupRecyclerView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOnDestroy.call()
-    }
-
-    private fun setupRecyclerView() {
-
-        adapter = DashboardAdapter(this)
-        adapter.setHasStableIds(true)
-
-        b.mRecyclerView.adapter = adapter
-        b.mRecyclerView.setItemViewCacheSize(20)
-
-        val layoutManager = GridLayoutManager(this, 1)
-
-        b.mRecyclerView.layoutManager = layoutManager
-        //b.recyclerView.itemAnimator?.changeDuration = 0
-
-        adapter.submitList(Dashboards.get())
-
-        if (adapter.itemCount == 0) {
-            b.mPlaceholder.visibility = View.VISIBLE
-        }
-
-        adapter.onItemRemove = {
-            if (adapter.itemCount == 0) {
-                b.mPlaceholder.visibility = View.VISIBLE
-            }
-
-            Dashboards.update(adapter.list)
-        }
-
-        adapter.onItemClick = { index ->
-            if (adapter.editType.isEdit) {
-                Intent(this, DashboardPropertiesActivity::class.java).also {
-                    it.putExtra("dashboardName", adapter.list[index].name)
-                    startActivity(it)
-                    finish()
-                }
-            }
-        }
 
         b.mTouch.setOnClickListener {
             touchOnClick()
@@ -113,6 +70,54 @@ class MainActivity : AppCompatActivity() {
 
         b.mAdd.setOnClickListener {
             addOnClick()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
+    }
+
+    private fun setupRecyclerView() {
+        adapter = DashboardAdapter(this)
+        adapter.setHasStableIds(true)
+
+        adapter.onItemRemove = {
+            if (adapter.itemCount == 0) {
+                b.mPlaceholder.visibility = View.VISIBLE
+            }
+
+            Dashboards.update(adapter.list)
+        }
+
+        adapter.onItemClick = { index ->
+            if (adapter.editType.isEdit) {
+                Intent(this, DashboardPropertiesActivity::class.java).also {
+                    it.putExtra("dashboardName", adapter.list[index].name)
+                    it.putExtra("exitActivity", "MainActivity")
+                    startActivity(it)
+                    finish()
+                }
+            } else if (adapter.editType.isNone) {
+                Intent(this, DashboardActivity::class.java).also {
+                    Settings.lastDashboardName = adapter.list[index].name
+
+                    it.putExtra("dashboardName", adapter.list[index].name)
+                    startActivity(it)
+                    finish()
+                }
+            }
+        }
+
+        adapter.submitList(Dashboards.get())
+
+        val layoutManager = GridLayoutManager(this, 1)
+
+        b.mRecyclerView.layoutManager = layoutManager
+        b.mRecyclerView.adapter = adapter
+
+        if (adapter.itemCount == 0) {
+            b.mPlaceholder.visibility = View.VISIBLE
         }
     }
 

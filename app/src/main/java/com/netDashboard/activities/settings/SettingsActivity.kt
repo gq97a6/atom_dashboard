@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.databinding.ActivitySettingsBinding
+import com.netDashboard.settings.Settings
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -15,7 +16,12 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
+        viewConfig()
         setContentView(b.root)
+
+        b.sLast.setOnCheckedChangeListener { _, state ->
+            Settings.startFromLast = state
+        }
     }
 
     override fun onBackPressed() {
@@ -30,5 +36,11 @@ class SettingsActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         AppOnDestroy.call()
+    }
+
+    private fun viewConfig() {
+
+        b.sLast.isChecked = Settings.startFromLast
+
     }
 }

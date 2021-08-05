@@ -23,6 +23,10 @@ object Dashboards {
         dashboards = list.associateBy { it.name }.toMutableMap()
     }
 
+    fun add(dashboard: Dashboard) {
+        dashboards[dashboard.name] = dashboard
+    }
+
     fun getSaved() {
         if (isLive) return
 

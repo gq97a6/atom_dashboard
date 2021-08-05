@@ -19,9 +19,6 @@
         <activity
             android:name=".activities.dashboard_new.DashboardNewActivity"
             android:exported="true" />
-        <activity
-            android:name=".activities.dashboard_properties.DashboardPropertiesActivity"
-            android:exported="true" />
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +31,7 @@
         <activity android:name=".activities.dashboard.DashboardActivity" />
         <activity android:name=".activities.dashboard.tile_new.TileNewActivity" />
         <activity android:name=".activities.dashboard.tile_properties.TilePropertiesActivity" />
-        <activity android:name=".activities.dashboard.properties.PropertiesActivity" />
+        <activity android:name=".activities.dashboard.properties.DashboardPropertiesActivity" />
 
         <service
             android:name=".foreground_service.ForegroundService"

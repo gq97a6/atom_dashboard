@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".activities.dashboard.properties.PropertiesActivity">
+    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity">
 
     <TextView
         android:layout_width="match_parent"

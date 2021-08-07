@@ -84,8 +84,6 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         recyclerView.itemAnimator?.changeDuration = 250
 
         for ((i, t) in list.withIndex()) {
-            Log.i("OUY", "${t.id} = c0: ${t.flag.isRemove} c1: ${list[position].id != t.id}")
-
             if (t.flag.isRemove && list[position].id != t.id) {
                 list[i].flag.setNone()
             }

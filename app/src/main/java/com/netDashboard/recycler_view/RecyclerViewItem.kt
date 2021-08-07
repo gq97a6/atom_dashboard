@@ -27,11 +27,6 @@ abstract class RecyclerViewItem {
     @Transient
     var flag = Flags()
 
-    //"temporary" fix
-    fun setFlag() {
-        flag = Flags()
-    }
-
     fun <a : RecyclerViewItem> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
         this.adapter = adapter
 

@@ -8,7 +8,7 @@ import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.tile.Tile
 import java.util.*
 
-class Dashboard(var name: String) : RecyclerViewItem() {
+class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     override val layout
         get() = R.layout.dashboard_list_item

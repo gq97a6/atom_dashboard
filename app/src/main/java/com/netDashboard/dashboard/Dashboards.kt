@@ -6,7 +6,6 @@ import com.google.gson.JsonArray
 import com.netDashboard.folder_tree.FolderTree.dashboardsFile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList.Companion.toTileType
-import com.netDashboard.tile.types.slider.SliderTile
 import java.io.File
 import java.io.FileReader
 import java.lang.reflect.Type
@@ -41,13 +40,10 @@ object Dashboards {
 
             val tilesJsonArray = jsonElement.asJsonObject.getAsJsonArray("tiles")
             val tiles: MutableList<Tile> = mutableListOf()
-            for (je in tilesJsonArray) {
-                Log.i("OUY", je.toString())
+            for (tileJsonElement in tilesJsonArray) {
                 try {
-                    je.asJsonObject["type"].asString.toTileType()?.let { type ->
-                        val t: Tile = Gson.fromJson(jsonElement, type as Type)
-                        if(t is SliderTile) Log.i("OUY", "${t._value}")
-                        tiles.add(t)
+                    tileJsonElement.asJsonObject["type"].asString.toTileType()?.let { type ->
+                        tiles.add(Gson.fromJson(tileJsonElement, type as Type))
                     }
                 } catch (e: Exception) {
                     throw e
@@ -62,6 +58,7 @@ object Dashboards {
                 throw e
             }
 
+            Log.i("OUY", "${dashboard.id}")
             dashboard.setFlag()
 
             dashboard.tiles = tiles

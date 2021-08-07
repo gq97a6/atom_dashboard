@@ -16,8 +16,6 @@ abstract class RecyclerViewItem {
 
     @Transient
     var id = kotlin.math.abs(Random().nextLong())
-    set(value) {field = value
-        Log.i("OUY", "set: $id")}
 
     abstract val layout: Int
 
@@ -29,10 +27,6 @@ abstract class RecyclerViewItem {
 
     @Transient
     var flag = Flags()
-
-    init {
-        Log.i("OUY", "$id")
-    }
 
     //"temporary" fix
     fun setFlag() {

@@ -1,14 +1,12 @@
 package com.netDashboard.dashboard
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonArray
-import com.netDashboard.folder_tree.FolderTree
-import com.netDashboard.folder_tree.FolderTree.dashboardFile
-import com.netDashboard.folder_tree.FolderTree.dashboardFolder
-import com.netDashboard.folder_tree.FolderTree.dashboardRootFolder
-import com.netDashboard.folder_tree.FolderTree.tilesFile
+import com.netDashboard.folder_tree.FolderTree.dashboardsFile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.TileTypeList.Companion.toTileType
+import com.netDashboard.tile.types.slider.SliderTile
 import java.io.File
 import java.io.FileReader
 import java.lang.reflect.Type
@@ -24,8 +22,7 @@ object Dashboards {
     fun get(n: String): Dashboard = dashboards.find { it.name == n } ?: Dashboard("err")
     fun add(d: Dashboard) {
         dashboards.add(d)
-        FolderTree.buildPath(dashboardFolder(d.name))
-        d.save()
+        save()
     }
 
     fun getSaved() {
@@ -33,35 +30,39 @@ object Dashboards {
 
         val list: MutableList<Dashboard> = mutableListOf()
 
-        for (n in getNames()) {
+        val jsonArray = try {
+            Gson.fromJson(FileReader(dashboardsFile), JsonArray::class.java)
+        } catch (e: Exception) {
+            Log.e("OUY", e.toString())
+            JsonArray()
+        }
+
+        for (jsonElement in jsonArray) {
+
+            val tilesJsonArray = jsonElement.asJsonObject.getAsJsonArray("tiles")
+            val tiles: MutableList<Tile> = mutableListOf()
+            for (je in tilesJsonArray) {
+                Log.i("OUY", je.toString())
+                try {
+                    je.asJsonObject["type"].asString.toTileType()?.let { type ->
+                        val t: Tile = Gson.fromJson(jsonElement, type as Type)
+                        if(t is SliderTile) Log.i("OUY", "${t._value}")
+                        tiles.add(t)
+                    }
+                } catch (e: Exception) {
+                    throw e
+                }
+            }
+
+            jsonElement.asJsonObject.remove("tiles")
 
             val dashboard = try {
-                val fileName = dashboardFile(n)
-                //Log.i("OUY", FileReader(fileName).readText())
-                Gson.fromJson(FileReader(fileName), Dashboard::class.java)
+                Gson.fromJson(jsonElement, Dashboard::class.java)
             } catch (e: Exception) {
-                Dashboard(n)
+                throw e
             }
 
-            //"temporary" fix
             dashboard.setFlag()
-
-            val jsonArray = try {
-                val fileName = tilesFile(n)
-                Gson.fromJson(FileReader(fileName), JsonArray::class.java)
-            } catch (e: Exception) {
-                JsonArray()
-            }
-
-            val tiles: MutableList<Tile> = mutableListOf()
-            try {
-                for (jsonElement in jsonArray) {
-                    jsonElement.asJsonObject["type"].asString.toTileType()?.let { type ->
-                        tiles.add(Gson.fromJson(jsonElement, type as Type))
-                    }
-                }
-            } catch (e: Exception) {
-            }
 
             dashboard.tiles = tiles
             list.add(dashboard)
@@ -72,29 +73,10 @@ object Dashboards {
     }
 
     fun save() {
-        for (d in dashboards) d.save()
-    }
-
-    fun save(n: String) = dashboards.find { it.name == n }?.save()
-
-    private fun Dashboard.save() {
         try {
-            File(dashboardFile(this.name))
-                .writeText(Gson.toJson(this))
-
-            File(tilesFile(this.name))
-                .writeText(Gson.toJson(this.tiles))
+            File(dashboardsFile).writeText(Gson.toJson(dashboards))
         } catch (e: Exception) {
             throw e
         }
-    }
-
-    private fun getNames(): List<String> {
-        val list: MutableList<String> = mutableListOf()
-        File(dashboardRootFolder).list()?.forEach {
-            list.add(it.toString().substringAfterLast('/'))
-        }
-
-        return list
     }
 }

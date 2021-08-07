@@ -206,7 +206,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        Dashboards.save(dashboardName)
+        Dashboards.save()
         dashboard.daemonGroup?.mqttd?.reinit()
     }
 

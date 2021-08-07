@@ -25,7 +25,6 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()
-        FolderTree.build()
 
         Dashboards.getSaved()
 

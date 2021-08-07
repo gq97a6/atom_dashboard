@@ -16,7 +16,6 @@ class Dashboard(var name: String) : RecyclerViewItem() {
     @Transient
     var daemonGroup: DaemonGroup? = null
 
-    @Transient
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
             for (t in value) t.dashboardName = name

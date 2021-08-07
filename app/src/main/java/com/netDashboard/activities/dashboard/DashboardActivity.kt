@@ -116,7 +116,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onPause() {
         dashboard.tiles = adapter.list
-        Dashboards.save(dashboard.name)
+        Dashboards.save()
 
         super.onPause()
     }

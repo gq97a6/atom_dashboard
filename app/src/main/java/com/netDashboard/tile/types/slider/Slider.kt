@@ -1,6 +1,5 @@
 package com.netDashboard.tile.types.slider
 
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -28,7 +27,7 @@ class SliderTile : Tile() {
     var to = 100f
     var step = 1f
 
-    private var _value = (0..100).random().toFloat()
+    var _value = 0f
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()

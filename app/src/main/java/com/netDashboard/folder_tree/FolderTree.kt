@@ -4,23 +4,23 @@ import java.io.File
 
 object FolderTree {
 
+    //Folders
     var rootFolder: String = ""
-    val dashboardsFolder
+    val dashboardRootFolder
         get() = "$rootFolder/dashboards"
+    fun dashboardFolder(name: String): String = "$dashboardRootFolder/$name"
 
-    fun tilesFile(name: String): String = "$dashboardsFolder/$name/tiles"
-    fun dashboardFile(name: String): String = "$dashboardsFolder/$name/dashboard"
+    //Files
+    fun tilesFile(name: String): String = "$dashboardRootFolder/$name/tiles"
+    fun dashboardFile(name: String): String = "$dashboardRootFolder/$name/dashboard"
     val settingsFile
         get() = "$rootFolder/settings"
 
     fun build() {
         buildPath("$rootFolder/dashboards")
-        buildPath(rootFolder)
     }
 
-    fun buildDashboard(name: String) = buildPath("$dashboardsFolder/$name")
-
-    private fun buildPath(path: String) {
+    fun buildPath(path: String) {
         val f = File(path)
         if (!f.isDirectory) f.mkdirs()
     }

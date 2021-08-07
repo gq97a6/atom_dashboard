@@ -8,7 +8,7 @@ import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.tile.Tile
 import java.util.*
 
-class Dashboard(val name: String) : RecyclerViewItem() {
+class Dashboard(var name: String) : RecyclerViewItem() {
 
     override val layout
         get() = R.layout.dashboard_list_item
@@ -22,8 +22,6 @@ class Dashboard(val name: String) : RecyclerViewItem() {
             for (t in value) t.dashboardName = name
             field = value
         }
-
-    var dashboardTagName = name
 
     var spanCount = 3
 

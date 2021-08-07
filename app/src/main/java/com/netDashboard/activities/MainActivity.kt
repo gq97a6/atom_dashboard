@@ -86,8 +86,6 @@ class MainActivity : AppCompatActivity() {
             if (adapter.itemCount == 0) {
                 b.mPlaceholder.visibility = View.VISIBLE
             }
-
-            Dashboards.update(adapter.list)
         }
 
         adapter.onItemClick = { index ->

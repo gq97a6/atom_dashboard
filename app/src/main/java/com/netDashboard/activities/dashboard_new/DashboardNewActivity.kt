@@ -21,7 +21,6 @@ class DashboardNewActivity : AppCompatActivity() {
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()
-        FolderTree.buildDashboard(name)
         Dashboards.add(Dashboard(name))
         onBackPressed()
     }

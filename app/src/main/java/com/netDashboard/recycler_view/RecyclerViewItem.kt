@@ -1,6 +1,7 @@
 package com.netDashboard.recycler_view
 
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,9 @@ abstract class RecyclerViewItem {
 
     @Transient
     var id = kotlin.math.abs(Random().nextLong())
+    set(value) {field = value
+        Log.i("OUY", "set: $id")}
+
     abstract val layout: Int
 
     @Transient
@@ -25,6 +29,10 @@ abstract class RecyclerViewItem {
 
     @Transient
     var flag = Flags()
+
+    init {
+        Log.i("OUY", "$id")
+    }
 
     //"temporary" fix
     fun setFlag() {

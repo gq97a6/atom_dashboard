@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:text="@string/tp_banner0"
+        android:text="Tile properties"
         android:textColor="@color/black"
-        android:textSize="40sp" />
+        android:textSize="45sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -28,16 +28,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
-            android:text="@string/tp_banner1"
+            android:text="type:"
             android:textColor="@color/gray150"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/tp_tile_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/gray100"
-            android:textSize="20sp" />
+            android:textSize="25sp" />
 
     </LinearLayout>
 
@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tp_dimensions"
+                android:layout_marginBottom="3dp"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
@@ -154,6 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
                 android:text="@string/tp_design"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
@@ -299,12 +301,13 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="5dp"
                     android:text="@string/p_communication"
                     android:textColor="@color/gray150"
@@ -313,7 +316,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:text="@string/p_mqtt"
                     android:textColor="@color/gray100"
                     android:textSize="20sp" />

@@ -54,8 +54,8 @@ class DashboardActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
-        //Set dashboard tag name
-        b.dTagName.text = dashboard.dashboardTagName.uppercase(Locale.getDefault())
+        //Set dashboard name
+        b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
         //Set dashboard status
         dashboard.daemonGroup?.mqttd?.let {
@@ -154,8 +154,6 @@ class DashboardActivity : AppCompatActivity() {
             if (adapter.itemCount == 0) {
                 b.dPlaceholder.visibility = View.VISIBLE
             }
-
-            dashboard.tiles = adapter.list
         }
 
         adapter.onItemClick = { index ->

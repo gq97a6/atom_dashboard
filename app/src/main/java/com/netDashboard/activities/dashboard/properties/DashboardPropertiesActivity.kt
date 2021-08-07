@@ -17,6 +17,7 @@ import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import java.util.*
+import kotlin.random.Random
 
 class DashboardPropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardPropertiesBinding
@@ -48,7 +49,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboardName = intent.getStringExtra("dashboardName") ?: ""
         dashboard = Dashboards.get(dashboardName)
 
-        b.dpTag.text = dashboard.dashboardTagName.lowercase(Locale.getDefault())
+        b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
 
         b.dpSpan.value = dashboard.spanCount.toFloat()
         b.dpSpan.callOnClick()
@@ -119,6 +120,17 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             dashboard.daemonGroup?.mqttd?.reinit()
         }
 
+        b.dpName.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                cs.toString().trim().let {
+                    dashboard.name =
+                        if (cs.isBlank()) kotlin.math.abs(Random.nextInt()).toString() else it
+                }
+            }
+        })
+
         b.dpMqttAddress.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
@@ -166,7 +178,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 else -> MainActivity::class.java
             }
         ).also {
-            it.putExtra("dashboardName", dashboardName)
+            it.putExtra("dashboardName", dashboard.name)
             startActivity(it)
             finish()
         }

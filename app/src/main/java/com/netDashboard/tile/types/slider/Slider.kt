@@ -165,7 +165,5 @@ class SliderTile : Tile() {
 
     override fun onClick() {
         super.onClick()
-
-        Log.i("OUY", "slider: $id")
     }
 }

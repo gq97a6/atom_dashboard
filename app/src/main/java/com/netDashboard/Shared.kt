@@ -17,8 +17,8 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import java.util.*
 
-val screenHeight = Resources.getSystem().displayMetrics.widthPixels
-val screenWidth = Resources.getSystem().displayMetrics.heightPixels
+val screenHeight = Resources.getSystem().displayMetrics.heightPixels
+val screenWidth = Resources.getSystem().displayMetrics.widthPixels
 
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

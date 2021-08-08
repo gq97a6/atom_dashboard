@@ -74,7 +74,6 @@ class ForegroundService : LifecycleService() {
 
     override fun onDestroy() {
 
-        //createNotification(this, "foregroundService", "onDestroy")
         Dashboards.save()
 
         if (isRunning) {

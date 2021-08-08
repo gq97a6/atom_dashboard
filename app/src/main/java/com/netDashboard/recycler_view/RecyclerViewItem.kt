@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
-import java.util.*
 
 abstract class RecyclerViewItem {
 
@@ -14,7 +13,7 @@ abstract class RecyclerViewItem {
     var height = 1
 
     @Transient
-    var id = kotlin.math.abs(Random().nextLong())
+    var id = IdGenerator.getId()
 
     abstract val layout: Int
 

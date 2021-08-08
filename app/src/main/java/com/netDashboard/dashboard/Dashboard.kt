@@ -18,7 +18,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
-            for (t in value) t.dashboardName = name
+            for (t in value) t.dashboardId = id
             field = value
         }
 

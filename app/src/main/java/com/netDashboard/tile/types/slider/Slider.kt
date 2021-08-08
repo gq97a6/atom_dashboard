@@ -27,7 +27,7 @@ class SliderTile : Tile() {
     var to = 100f
     var step = 1f
 
-    var _value = 0f
+    private var _value = 0f
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()
@@ -162,7 +162,4 @@ class SliderTile : Tile() {
         return true
     }
 
-    override fun onClick() {
-        super.onClick()
-    }
 }

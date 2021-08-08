@@ -7,7 +7,7 @@ import com.netDashboard.foreground_service.demons.Mqttd
 
 class DaemonGroups(context: Context) {
 
-    private val dashboards = Dashboards.get()
+    private val dashboards = Dashboards.getList()
     private val collection: MutableList<DaemonGroup> = mutableListOf()
 
     init {

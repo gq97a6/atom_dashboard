@@ -44,8 +44,6 @@
     <string name="tp_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
     <string name="tp_publish_topic">Publish topic:</string>
     <string name="tp_subscribe_topic">Subscribe topic:</string>
-    <string name="tp_banner0">Tile properties</string>
-    <string name="tp_banner1">type:</string>
     <string name="tp_slider_height">Height:</string>
     <string name="tp_slider_width">Width:</string>
     <string name="tp_design_chip0">colour by theme</string>
@@ -62,5 +60,4 @@
     <string name="p_mqtt_attempting">Attempting:</string>
     <string name="p_mqtt_connected">Connected:</string>
     <string name="tp_tile_specific">Type specific:</string>
-    <string name="p_tag">tag:</string>
 </resources>

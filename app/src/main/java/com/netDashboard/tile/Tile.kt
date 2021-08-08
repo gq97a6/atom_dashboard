@@ -42,7 +42,7 @@ abstract class Tile : RecyclerViewItem() {
     abstract var name: String
 
     @Transient
-    var dashboardName: String = ""
+    var dashboardId: Long = 0
 
     class MqttTopics {
         val subs = TopicList()
@@ -86,7 +86,7 @@ abstract class Tile : RecyclerViewItem() {
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
-        Dashboards.get(dashboardName).daemonGroup?.mqttd.let {
+        Dashboards.get(dashboardId).daemonGroup?.mqttd.let {
             return if (it != null) {
                 it.publish(topic, msg, qos, retained)
                 true

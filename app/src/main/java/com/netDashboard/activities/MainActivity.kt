@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        adapter.submitList(Dashboards.get())
+        adapter.submitList(Dashboards.getList())
 
         val layoutManager = GridLayoutManager(this, 1)
 

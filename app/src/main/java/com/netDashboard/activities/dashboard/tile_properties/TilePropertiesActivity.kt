@@ -25,7 +25,7 @@ import com.netDashboard.tile.types.slider.SliderTile
 class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityTilePropertiesBinding
 
-    private lateinit var dashboardName: String
+    private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
     private lateinit var tile: Tile
     private var tileId = 0
@@ -35,8 +35,8 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)
+        dashboardId = intent.getLongExtra("dashboardId", 0)
+        dashboard = Dashboards.get(dashboardId)
 
         tileId = intent.getIntExtra("tileId", 0)
         tile = dashboard.tiles[tileId]
@@ -219,7 +219,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         super.onBackPressed()
 
         Intent(this, DashboardActivity::class.java).also {
-            it.putExtra("dashboardName", dashboardName)
+            it.putExtra("dashboardId", dashboardId)
             startActivity(it)
             finish()
         }

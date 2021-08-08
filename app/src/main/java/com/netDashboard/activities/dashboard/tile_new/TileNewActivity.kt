@@ -17,7 +17,7 @@ import com.netDashboard.tile.TilesAdapter
 class TileNewActivity : AppCompatActivity() {
     private lateinit var b: ActivityTileNewBinding
 
-    private lateinit var dashboardName: String
+    private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
     private lateinit var newTileTilesAdapter: TilesAdapter
 
@@ -27,15 +27,15 @@ class TileNewActivity : AppCompatActivity() {
         b = ActivityTileNewBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)
+        dashboardId = intent.getLongExtra("dashboardId", 0)
+        dashboard = Dashboards.get(dashboardId)
 
         setupRecyclerView()
 
         newTileTilesAdapter.onItemClick = { tileId ->
             if (tileId >= 0) {
                 Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("dashboardName", dashboardName)
+                    it.putExtra("dashboardId", dashboardId)
                     it.putExtra("tileId", tileAdd(tileId))
                     startActivity(it)
                     finish()
@@ -53,7 +53,7 @@ class TileNewActivity : AppCompatActivity() {
         super.onBackPressed()
 
         Intent(this, DashboardActivity::class.java).also {
-            it.putExtra("dashboardName", dashboardName)
+            it.putExtra("dashboardId", dashboardId)
             startActivity(it)
             finish()
         }

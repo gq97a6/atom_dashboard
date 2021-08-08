@@ -16,8 +16,8 @@ object Dashboards {
     private val Gson = Gson()
     private var dashboards: MutableList<Dashboard> = mutableListOf()
 
-    fun get(): MutableList<Dashboard> = dashboards
-    fun get(n: String): Dashboard = dashboards.find { it.name == n } ?: Dashboard("err")
+    fun getList(): MutableList<Dashboard> = dashboards
+    fun get(id: Long): Dashboard = dashboards.find { it.id == id } ?: Dashboard("err")
     fun add(d: Dashboard) {
         dashboards.add(d)
         save()

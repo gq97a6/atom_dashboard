@@ -23,7 +23,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardPropertiesBinding
 
     private lateinit var exitActivity: String
-    private lateinit var dashboardName: String
+    private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
 
     private lateinit var foregroundService: ForegroundService
@@ -46,8 +46,8 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         })
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
-        dashboardName = intent.getStringExtra("dashboardName") ?: ""
-        dashboard = Dashboards.get(dashboardName)
+        dashboardId = intent.getLongExtra("dashboardId", 0)
+        dashboard = Dashboards.get(dashboardId)
 
         b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
 

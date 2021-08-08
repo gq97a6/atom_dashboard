@@ -50,7 +50,7 @@ class DashboardActivity : AppCompatActivity() {
             }
         })
 
-        dashboard = Dashboards.get(intent.getStringExtra("dashboardName") ?: "")
+        dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))
 
         setupRecyclerView()
 

@@ -7,7 +7,6 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivitySplashScreenBinding
-import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
@@ -46,7 +45,7 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        for (d in Dashboards.get()) {
+        for (d in Dashboards.getList()) {
             d.daemonGroup = service.dgc.get(d.name)
         }
 

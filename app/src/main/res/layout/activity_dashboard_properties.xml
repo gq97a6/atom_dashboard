@@ -229,7 +229,7 @@
                                 android:id="@+id/dp_mqtt_address_status"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#FFC1C1" />
+                                android:background="#FFFFC1" />
 
                             <EditText
                                 android:id="@+id/dp_mqtt_address"
@@ -370,7 +370,7 @@
                                 android:id="@+id/dp_mqtt_port_status"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#FFC1C1" />
+                                android:background="#FFFFC1" />
 
                             <EditText
                                 android:id="@+id/dp_mqtt_port"

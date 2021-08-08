@@ -23,14 +23,14 @@ class DaemonGroups(val context: Context) {
 
     fun notifyDashboardRemoved(dashboardId: Long) {
         list.find { it.dashboard.id == dashboardId }?.deprecate()
-        Log.i("OUY", "notifyRemove")
         //todo:fix
     }
 
 
     fun notifyDashboardAdded(dashboard: Dashboard) {
-        list.add(DaemonGroup(context, dashboard))
-        Log.i("OUY", "notifyAdd")
+        val dg = DaemonGroup(context, dashboard)
+        list.add(dg)
+        dashboard.daemonGroup = dg
     }
 }
 

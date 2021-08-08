@@ -17,8 +17,6 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
-import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
@@ -31,24 +29,11 @@ class DashboardActivity : AppCompatActivity() {
 
     lateinit var adapter: TilesAdapter
 
-    private lateinit var service: ForegroundService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
-
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
-        foregroundServiceHandler.bind()
-
-        foregroundServiceHandler.service.observe(this, { s ->
-            if (s != null) {
-                service = s
-                onServiceReady()
-            }
-        })
 
         dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))
 
@@ -156,10 +141,10 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        adapter.onItemClick = { index ->
+        adapter.onItemClick = { item ->
             if (adapter.editType.isEdit) {
                 Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("tileId", index)
+                    it.putExtra("tileIndex", adapter.list.indexOf(item))
                     it.putExtra("dashboardId", dashboard.id)
                     startActivity(it)
                     finish()

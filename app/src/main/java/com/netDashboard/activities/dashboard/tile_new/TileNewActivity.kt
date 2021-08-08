@@ -19,7 +19,7 @@ class TileNewActivity : AppCompatActivity() {
 
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
-    private lateinit var newTileTilesAdapter: TilesAdapter
+    private lateinit var adapter: TilesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,14 +32,12 @@ class TileNewActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
-        newTileTilesAdapter.onItemClick = { tileId ->
-            if (tileId >= 0) {
-                Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("dashboardId", dashboardId)
-                    it.putExtra("tileId", tileAdd(tileId))
-                    startActivity(it)
-                    finish()
-                }
+        adapter.onItemClick = { item ->
+            Intent(this, TilePropertiesActivity::class.java).also {
+                it.putExtra("dashboardId", dashboardId)
+                it.putExtra("tileIndex", tileAdd(adapter.list.indexOf(item)))
+                startActivity(it)
+                finish()
             }
         }
     }
@@ -61,18 +59,18 @@ class TileNewActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         val spanCount = 3
-        newTileTilesAdapter = TilesAdapter(this, spanCount)
+        adapter = TilesAdapter(this, spanCount)
 
         val list = TileTypeList.get()
-        newTileTilesAdapter.submitList(list as MutableList<Tile>)
+        adapter.submitList(list as MutableList<Tile>)
 
-        newTileTilesAdapter.editType.setAdd()
-        b.ntRecyclerView.adapter = newTileTilesAdapter
+        adapter.editType.setAdd()
+        b.ntRecyclerView.adapter = adapter
 
         val layoutManager = GridLayoutManager(this, spanCount)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                return newTileTilesAdapter.list[position].width
+                return adapter.list[position].width
             }
         }
 
@@ -92,7 +90,7 @@ class TileNewActivity : AppCompatActivity() {
         } else {
             list.add(tile)
         }
-        
+
         dashboard.tiles = list
 
         return list.size - 1

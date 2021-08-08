@@ -45,6 +45,8 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
+        ForegroundService.service = service
+
         for (d in Dashboards.getList()) {
             d.daemonGroup = service.dgc.get(d.name)
         }

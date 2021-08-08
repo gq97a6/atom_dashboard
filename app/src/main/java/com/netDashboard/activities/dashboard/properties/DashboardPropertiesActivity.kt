@@ -14,8 +14,6 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
-import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.foreground_service.ForegroundServiceHandler
 import java.util.*
 import kotlin.random.Random
 
@@ -26,24 +24,11 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
 
-    private lateinit var foregroundService: ForegroundService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
         setContentView(b.root)
-
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
-        foregroundServiceHandler.bind()
-
-        foregroundServiceHandler.service.observe(this, { s ->
-            if (s != null) {
-                foregroundService = s
-                onServiceReady()
-            }
-        })
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardId = intent.getLongExtra("dashboardId", 0)

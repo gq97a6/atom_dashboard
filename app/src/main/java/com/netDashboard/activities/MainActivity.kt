@@ -16,8 +16,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
-import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.foreground_service.ForegroundServiceHandler
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
 
@@ -27,24 +26,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: DashboardAdapter
     private lateinit var settings: Settings
 
-    private lateinit var foregroundService: ForegroundService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
-
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
-        foregroundServiceHandler.bind()
-
-        foregroundServiceHandler.service.observe(this, { s ->
-            if (s != null) {
-                foregroundService = s
-                onServiceReady()
-            }
-        })
 
         setupRecyclerView()
 
@@ -86,21 +72,23 @@ class MainActivity : AppCompatActivity() {
             if (adapter.itemCount == 0) {
                 b.mPlaceholder.visibility = View.VISIBLE
             }
+
+            service?.dgc?.notifyDashboardRemoved(it.id)
         }
 
-        adapter.onItemClick = { index ->
+        adapter.onItemClick = { item ->
             if (adapter.editType.isEdit) {
                 Intent(this, DashboardPropertiesActivity::class.java).also {
-                    it.putExtra("dashboardId", adapter.list[index].id)
+                    it.putExtra("dashboardId", item.id)
                     it.putExtra("exitActivity", "MainActivity")
                     startActivity(it)
                     finish()
                 }
             } else if (adapter.editType.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
-                    Settings.lastDashboardId = adapter.list[index].id
+                    Settings.lastDashboardId = item.id
 
-                    it.putExtra("dashboardId", adapter.list[index].id)
+                    it.putExtra("dashboardId", item.id)
                     startActivity(it)
                     finish()
                 }

@@ -17,8 +17,6 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
-import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
 
@@ -28,9 +26,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
     private lateinit var tile: Tile
-    private var tileId = 0
-
-    private lateinit var foregroundService: ForegroundService
+    private var tileIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,23 +34,12 @@ class TilePropertiesActivity : AppCompatActivity() {
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = Dashboards.get(dashboardId)
 
-        tileId = intent.getIntExtra("tileId", 0)
-        tile = dashboard.tiles[tileId]
+        tileIndex = intent.getIntExtra("tileIndex", 0)
+        tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
         viewConfig()
         setContentView(b.root)
-
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
-        foregroundServiceHandler.bind()
-
-        foregroundServiceHandler.service.observe(this, { s ->
-            s?.let {
-                foregroundService = it
-                onServiceReady()
-            }
-        })
 
         if (dashboard.spanCount.toFloat() > 1f) {
             b.tpDimenWidth.valueFrom = 1f

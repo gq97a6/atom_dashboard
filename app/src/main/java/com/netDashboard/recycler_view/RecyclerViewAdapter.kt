@@ -23,8 +23,8 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
     lateinit var list: MutableList<item>
     private lateinit var currentItem: item
 
-    var onItemClick: (Int) -> Unit = {}
-    var onItemRemove: (Int) -> Unit = {}
+    var onItemClick: (item) -> Unit = {}
+    var onItemRemove: (item) -> Unit = {}
 
     override fun submitList(list: MutableList<item>?) {
         super.submitList(list)
@@ -57,7 +57,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         list[position].onBindViewHolder(holder, position)
         holder.itemView.setOnClickListener {
-            onItemClick(position)
+            onItemClick(list[position])
 
             when {
                 editType.isNone -> {
@@ -112,9 +112,9 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
                 Snackbar.LENGTH_LONG
             ).setAction("YES") {
                 if (list[removeAt].flag.isRemove) {
+                    onItemRemove(list[removeAt])
                     list.removeAt(removeAt)
                     notifyDataSetChanged()
-                    onItemRemove(removeAt)
                 }
             }
         }

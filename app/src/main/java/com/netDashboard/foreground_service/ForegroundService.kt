@@ -23,6 +23,10 @@ class ForegroundService : LifecycleService() {
     private var isRunning = false
     lateinit var dgc: DaemonGroups
 
+    companion object {
+        var service: ForegroundService? = null
+    }
+
     override fun onCreate() {
         super.onCreate()
 

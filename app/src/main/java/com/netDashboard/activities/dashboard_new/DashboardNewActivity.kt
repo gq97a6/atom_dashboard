@@ -9,6 +9,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardNewBinding
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import kotlin.random.Random
 
 class DashboardNewActivity : AppCompatActivity() {
@@ -23,6 +24,8 @@ class DashboardNewActivity : AppCompatActivity() {
         val name = kotlin.math.abs(Random.nextInt()).toString()
         val dashboard = Dashboard(name)
         Dashboards.add(dashboard)
+
+        service?.dgc?.notifyDashboardAdded(dashboard)
 
         Intent(this, DashboardPropertiesActivity::class.java).also {
             it.putExtra("dashboardId", dashboard.id)

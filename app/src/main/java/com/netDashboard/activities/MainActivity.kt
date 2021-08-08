@@ -18,7 +18,7 @@ import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.getScreenHeight
+import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
 
 class MainActivity : AppCompatActivity() {
@@ -91,16 +91,16 @@ class MainActivity : AppCompatActivity() {
         adapter.onItemClick = { index ->
             if (adapter.editType.isEdit) {
                 Intent(this, DashboardPropertiesActivity::class.java).also {
-                    it.putExtra("dashboardName", adapter.list[index].name)
+                    it.putExtra("dashboardId", adapter.list[index].id)
                     it.putExtra("exitActivity", "MainActivity")
                     startActivity(it)
                     finish()
                 }
             } else if (adapter.editType.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
-                    Settings.lastDashboardName = adapter.list[index].name
+                    Settings.lastDashboardId = adapter.list[index].id
 
-                    it.putExtra("dashboardName", adapter.list[index].name)
+                    it.putExtra("dashboardId", adapter.list[index].id)
                     startActivity(it)
                     finish()
                 }
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
             highlightOnly(b.mEdit)
 
             b.mBar.visibility = View.VISIBLE
-            b.mBar.y = getScreenHeight().toFloat()
+            b.mBar.y = screenHeight.toFloat()
             b.mBar.animate()
                 .translationY(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             adapter.editType.setNone()
 
             b.mBar.animate()
-                ?.y(getScreenHeight().toFloat())
+                ?.y(screenHeight.toFloat())
                 ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         }
     }

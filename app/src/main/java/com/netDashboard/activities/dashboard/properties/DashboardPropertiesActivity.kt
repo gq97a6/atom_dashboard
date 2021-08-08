@@ -178,7 +178,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 else -> MainActivity::class.java
             }
         ).also {
-            it.putExtra("dashboardName", dashboard.name)
+            it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
             finish()
         }

@@ -1,7 +1,7 @@
 package com.netDashboard.settings
 
 object Settings {
-    var lastDashboardName: String? = null
+    var lastDashboardId: Long? = null
     var startFromLast: Boolean = false
 
     init {

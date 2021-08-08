@@ -68,10 +68,10 @@ class SliderTile : Tile() {
             if ((e.eventTime - e.downTime) > 0) {
 
                 val params = slider.layoutParams as FrameLayout.LayoutParams
-                params.width = getScreenWidth() - 100.toPx()
+                params.width = screenWidth - 100.toPx()
                 slider.layoutParams = params
 
-                val center = getScreenWidth() / 2
+                val center = screenWidth / 2
                 val location = IntArray(2)
                 background.getLocationOnScreen(location)
                 val offset = center - location[0] - slider.width / 2

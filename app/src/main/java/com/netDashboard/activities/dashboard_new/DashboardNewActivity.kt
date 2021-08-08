@@ -21,10 +21,11 @@ class DashboardNewActivity : AppCompatActivity() {
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()
-        Dashboards.add(Dashboard(name))
+        val dashboard = Dashboard(name)
+        Dashboards.add(dashboard)
 
         Intent(this, DashboardPropertiesActivity::class.java).also {
-            it.putExtra("dashboardName", name)
+            it.putExtra("dashboardId", dashboard.id)
             it.putExtra("exitActivity", "MainActivity")
             startActivity(it)
             finish()

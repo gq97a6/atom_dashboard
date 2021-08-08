@@ -49,10 +49,10 @@ class SplashScreenActivity : AppCompatActivity() {
             d.daemonGroup = service.dgc.get(d.name)
         }
 
-        if (Settings.lastDashboardName != null && Settings.startFromLast) {
+        if (Settings.lastDashboardId != null && Settings.startFromLast) {
 
             Intent(this, DashboardActivity::class.java).also {
-                it.putExtra("dashboardName", Settings.lastDashboardName)
+                it.putExtra("dashboardId", Settings.lastDashboardId)
                 overridePendingTransition(0, 0)
                 startActivity(it)
                 finish()

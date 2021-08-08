@@ -2,9 +2,9 @@ package com.netDashboard.tile
 
 import android.graphics.Color
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.getScreenWidth
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 abstract class Tile : RecyclerViewItem() {
@@ -35,7 +35,7 @@ abstract class Tile : RecyclerViewItem() {
         val params = view.layoutParams
 
         params.height =
-            ((getScreenWidth() - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
+            ((screenWidth - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
     }
 

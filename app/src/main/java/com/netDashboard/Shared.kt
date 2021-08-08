@@ -15,41 +15,16 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-fun createToast(context: Context, msg: String, time: Int = 0) {
-    if (Looper.myLooper() == Looper.getMainLooper()) {
-        Toast.makeText(context, msg, time).show()
-    } else {
-        Handler(Looper.getMainLooper()).post { Toast.makeText(context, msg, time).show() }
-    }
-}
+val screenHeight = Resources.getSystem().displayMetrics.widthPixels
+val screenWidth = Resources.getSystem().displayMetrics.heightPixels
 
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 fun Float.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Float.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-fun Snackbar.margins(): Snackbar {
-    14f.toPx()
-    val params = this.view.layoutParams as android.widget.FrameLayout.LayoutParams
-
-    params.setMargins(60.toPx(), 60.toPx(), 60.toPx(), 60.toPx())
-
-    this.view.layoutParams = params
-
-    return this
-}
-
-fun getScreenWidth(): Int {
-    return Resources.getSystem().displayMetrics.widthPixels
-}
-
-fun getScreenHeight(): Int {
-    return Resources.getSystem().displayMetrics.heightPixels
-}
 
 fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): Int {
     val r = Random()
@@ -68,6 +43,17 @@ fun getContrastColor(color: Int, negative: Boolean = false): Int {
 fun Int.alpha(@FloatRange(from = 0.0, to = 1.0) a: Float): Int {
     val alpha = (255 * a).toInt()
     return Color.argb(alpha, this.red, this.green, this.blue)
+}
+
+fun Float.dezero(): String {
+    return when (this - this.toInt()) {
+        0f -> this.toInt()
+        else -> this
+    }.toString()
+}
+
+fun Float.roundCloser(step: Float): Float {
+    return (this / step).toInt() / (1 / step)
 }
 
 fun createNotification(
@@ -129,13 +115,10 @@ fun createVibration(context: Context, ms: Long = 500) {
     }
 }
 
-fun Float.dezero(): String {
-    return when (this - this.toInt()) {
-        0f -> this.toInt()
-        else -> this
-    }.toString()
-}
-
-fun Float.roundCloser(step: Float): Float {
-    return (this / step).toInt() / (1 / step)
+fun createToast(context: Context, msg: String, time: Int = 0) {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+        Toast.makeText(context, msg, time).show()
+    } else {
+        Handler(Looper.getMainLooper()).post { Toast.makeText(context, msg, time).show() }
+    }
 }

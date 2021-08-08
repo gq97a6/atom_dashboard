@@ -19,7 +19,7 @@ import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.getScreenHeight
+import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -160,7 +160,7 @@ class DashboardActivity : AppCompatActivity() {
             if (adapter.editType.isEdit) {
                 Intent(this, TilePropertiesActivity::class.java).also {
                     it.putExtra("tileId", index)
-                    it.putExtra("dashboardName", dashboard.name)
+                    it.putExtra("dashboardId", dashboard.id)
                     startActivity(it)
                     finish()
                 }
@@ -197,7 +197,7 @@ class DashboardActivity : AppCompatActivity() {
             highlightOnly(b.dEdit)
 
             b.dBar.visibility = View.VISIBLE
-            b.dBar.y = getScreenHeight().toFloat()
+            b.dBar.y = screenHeight.toFloat()
             b.dBar.animate()
                 .translationY(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
@@ -205,7 +205,7 @@ class DashboardActivity : AppCompatActivity() {
             adapter.editType.setNone()
 
             b.dBar.animate()
-                ?.y(getScreenHeight().toFloat())
+                ?.y(screenHeight.toFloat())
                 ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
         }
     }
@@ -215,7 +215,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun propertiesOnClick() {
         Intent(this, DashboardPropertiesActivity::class.java).also {
             it.putExtra("exitActivity", "DashboardActivity")
-            it.putExtra("dashboardName", dashboard.name)
+            it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
             finish()
         }
@@ -256,7 +256,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun addOnClick() {
         Intent(this, TileNewActivity::class.java).also {
-            it.putExtra("dashboardName", dashboard.name)
+            it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
             finish()
         }

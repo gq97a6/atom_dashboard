@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
-    val isEnabled
+    val isEnabled: Boolean
         get() = d.mqttEnabled
 
     var client = MqttAndroidClientExtended(context, d.mqttURI, Random.nextInt().toString())

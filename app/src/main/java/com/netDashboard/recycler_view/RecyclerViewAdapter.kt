@@ -112,9 +112,10 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
                 Snackbar.LENGTH_LONG
             ).setAction("YES") {
                 if (list[removeAt].flag.isRemove) {
-                    onItemRemove(list[removeAt])
+                    val toRemove = list[removeAt]
                     list.removeAt(removeAt)
                     notifyDataSetChanged()
+                    onItemRemove(toRemove)
                 }
             }
         }

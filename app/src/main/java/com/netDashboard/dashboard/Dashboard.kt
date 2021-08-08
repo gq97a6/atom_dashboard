@@ -10,6 +10,8 @@ import java.util.*
 
 class Dashboard(var name: String = "") : RecyclerViewItem() {
 
+    var isDeprecated = false
+
     override val layout
         get() = R.layout.dashboard_list_item
 
@@ -25,6 +27,8 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
     var spanCount = 3
 
     var mqttEnabled: Boolean = false
+        get() = field && !isDeprecated
+
     var mqttAddress = "tcp://"
     var mqttPort = 1883
     val mqttURI

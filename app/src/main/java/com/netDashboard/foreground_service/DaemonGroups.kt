@@ -1,7 +1,6 @@
 package com.netDashboard.foreground_service
 
 import android.content.Context
-import android.util.Log
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.foreground_service.demons.Mqttd
@@ -21,11 +20,10 @@ class DaemonGroups(val context: Context) {
         return null
     }
 
-    fun notifyDashboardRemoved(dashboardId: Long) {
-        list.find { it.dashboard.id == dashboardId }?.deprecate()
-        //todo:fix
+    fun notifyDashboardRemoved(dashboard: Dashboard) {
+        dashboard.daemonGroup?.deprecate()
+        list.remove(dashboard.daemonGroup)
     }
-
 
     fun notifyDashboardAdded(dashboard: Dashboard) {
         val dg = DaemonGroup(context, dashboard)
@@ -35,7 +33,7 @@ class DaemonGroups(val context: Context) {
 }
 
 class DaemonGroup(context: Context, val dashboard: Dashboard) {
-    var isDeprecated = false
+    private var isDeprecated = false
     var mqttd = Mqttd(context, dashboard)
 
     fun deprecate() {

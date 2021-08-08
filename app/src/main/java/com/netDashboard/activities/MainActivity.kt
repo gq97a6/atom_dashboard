@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity() {
                 b.mPlaceholder.visibility = View.VISIBLE
             }
 
-            service?.dgc?.notifyDashboardRemoved(it.id)
+            it.isDeprecated = true
+            service?.dgc?.notifyDashboardRemoved(it)
         }
 
         adapter.onItemClick = { item ->

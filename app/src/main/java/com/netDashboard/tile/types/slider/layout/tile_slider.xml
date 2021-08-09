@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@color/gray100"
+        android:background="@color/black"
         android:clickable="true"
         android:focusable="true"
         tools:ignore="ContentDescription" />
@@ -45,7 +45,7 @@
         android:paddingTop="15dp"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
-        android:text="100"
+        android:text="123"
         android:textColor="#BFFFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"

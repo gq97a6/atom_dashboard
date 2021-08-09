@@ -1,9 +1,10 @@
 package com.netDashboard.activities.dashboard.tile_new
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
@@ -11,16 +12,17 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTileNewBinding
 import com.netDashboard.tile.Tile
-import com.netDashboard.tile.TileTypeList
-import com.netDashboard.tile.TilesAdapter
+import com.netDashboard.tile.types.button.ButtonTile
+import com.netDashboard.tile.types.slider.SliderTile
+
 
 class TileNewActivity : AppCompatActivity() {
     private lateinit var b: ActivityTileNewBinding
 
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
-    private lateinit var adapter: TilesAdapter
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,15 +32,20 @@ class TileNewActivity : AppCompatActivity() {
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = Dashboards.get(dashboardId)
 
-        setupRecyclerView()
+        b.tnButtonLayout.setOnClickListener {
+            addTile(ButtonTile())
+        }
 
-        adapter.onItemClick = { item ->
-            Intent(this, TilePropertiesActivity::class.java).also {
-                it.putExtra("dashboardId", dashboardId)
-                it.putExtra("tileIndex", tileAdd(adapter.list.indexOf(item)))
-                startActivity(it)
-                finish()
-            }
+        b.tnButton.tbButton.setOnClickListener {
+            addTile(ButtonTile())
+        }
+
+        b.tnSliderLayout.setOnClickListener {
+            addTile(SliderTile())
+        }
+
+        b.tnSlider.background.setOnClickListener {
+            addTile(SliderTile())
         }
     }
 
@@ -57,42 +64,21 @@ class TileNewActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView() {
-        val spanCount = 3
-        adapter = TilesAdapter(this, spanCount)
+    private var isDone = false
+    private fun addTile(tile: Tile) {
+        if (isDone) return
+        isDone = true
 
-        val list = TileTypeList.get()
-        adapter.submitList(list as MutableList<Tile>)
-
-        adapter.editType.setAdd()
-        b.ntRecyclerView.adapter = adapter
-
-        val layoutManager = GridLayoutManager(this, spanCount)
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return adapter.list[position].width
-            }
-        }
-
-        b.ntRecyclerView.layoutManager = layoutManager
-    }
-
-    private fun tileAdd(id: Int): Int {
-
-        val tile = TileTypeList.getTileById(id)
         tile.width = 1
         tile.height = 1
 
-        var list = dashboard.tiles
+        dashboard.tiles.add(tile)
 
-        if (list.isEmpty()) {
-            list = mutableListOf(tile)
-        } else {
-            list.add(tile)
+        Intent(this, TilePropertiesActivity::class.java).also {
+            it.putExtra("dashboardId", dashboardId)
+            it.putExtra("tileIndex", dashboard.tiles.lastIndex)
+            startActivity(it)
+            finish()
         }
-
-        dashboard.tiles = list
-
-        return list.size - 1
     }
 }

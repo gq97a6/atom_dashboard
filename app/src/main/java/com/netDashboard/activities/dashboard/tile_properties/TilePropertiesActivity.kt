@@ -215,7 +215,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     private fun viewConfig() {
 
-        b.tpTileType.text = tile.name
+        b.tpTileType.text = tile.typeTag
 
         //Dimensions
         b.tpDimenWidth.value = tile.width.toFloat()

@@ -39,7 +39,7 @@ abstract class Tile : RecyclerViewItem() {
         view.layoutParams = params
     }
 
-    abstract var name: String
+    abstract var typeTag: String
 
     @Transient
     var dashboardId: Long = 0

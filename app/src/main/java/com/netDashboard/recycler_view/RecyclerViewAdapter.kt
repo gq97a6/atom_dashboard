@@ -2,6 +2,7 @@ package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -93,6 +94,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
 
     @SuppressLint("NotifyDataSetChanged")
     fun removeMarkedItem() {
+        Log.i("OUY", "GO")
 
         var removeAt = -1
         for (e in list) {

@@ -12,10 +12,6 @@ class TileTypeList {
             )
         }
 
-        fun getTileById(id: Int): Tile {
-            return get()[id]
-        }
-
         fun String.toTileType(): Class<*>? {
             return when (this) {
                 ButtonTile().type -> ButtonTile::class.java

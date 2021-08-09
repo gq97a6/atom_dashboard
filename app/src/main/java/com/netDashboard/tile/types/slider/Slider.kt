@@ -21,7 +21,7 @@ class SliderTile : Tile() {
     override var mqttPubValue = mqttDefaultPubValue
 
     @Transient
-    override var name = "slider"
+    override var typeTag = "slider"
 
     var from = 0f
     var to = 100f

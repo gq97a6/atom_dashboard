@@ -19,7 +19,7 @@ class ButtonTile : Tile() {
     override var mqttPubValue = mqttDefaultPubValue
 
     @Transient
-    override var name = "button"
+    override var typeTag = "button"
 
     var text = "Default value"
     private var liveText: String

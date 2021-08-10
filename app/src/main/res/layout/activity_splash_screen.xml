@@ -10,14 +10,6 @@
     tools:context=".activities.SplashScreenActivity"
     tools:ignore="UseCompoundDrawables">
 
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/logo_main"
-        android:contentDescription="logo"
-        tools:ignore="HardcodedText" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +19,6 @@
         android:shadowDy="4"
         android:shadowRadius="10"
         android:text="NetDashboard"
-        android:textColor="#F6F6F6"
         android:textSize="35sp"
         tools:ignore="HardcodedText" />
 

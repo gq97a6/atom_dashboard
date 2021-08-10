@@ -46,7 +46,7 @@
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
         android:text="123"
-        android:textColor="#BFFFFFFF"
+        android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"

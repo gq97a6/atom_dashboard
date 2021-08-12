@@ -7,7 +7,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
 import android.widget.Toast
-import androidx.annotation.FloatRange
+import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -16,6 +16,11 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import java.util.*
+
+const val A = 255 //100%
+const val B = 150 //60%
+const val C = 75 //30%
+const val D = 25 //10%
 
 val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
@@ -31,18 +36,16 @@ fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): 
     return Color.argb(alpha, r.nextInt(R + 1), r.nextInt(G + 1), r.nextInt(B + 1))
 }
 
-fun getContrastColor(color: Int, negative: Boolean = false): Int {
-
-    return if ((ColorUtils.calculateLuminance(color) < 0.5) xor negative) {
+fun Int.contrast(@IntRange(from = 0, to = 255) alpha: Int = 255): Int {
+    return if (ColorUtils.calculateLuminance(this) < 0.5) {
         -1 //White
     } else {
         -16777216 //Black
-    }
+    }.alpha(alpha)
 }
 
-fun Int.alpha(@FloatRange(from = 0.0, to = 1.0) a: Float): Int {
-    val alpha = (255 * a).toInt()
-    return Color.argb(alpha, this.red, this.green, this.blue)
+infix fun Int.alpha(@IntRange(from = 0, to = 255) a: Int): Int {
+    return Color.argb(a, this.red, this.green, this.blue)
 }
 
 fun Float.dezero(): String {

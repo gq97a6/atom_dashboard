@@ -3,8 +3,7 @@ package com.netDashboard.tile.types.button
 import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
-import com.netDashboard.alpha
-import com.netDashboard.getContrastColor
+import com.netDashboard.contrast
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -50,7 +49,7 @@ class ButtonTile : Tile() {
                 color
             )
 
-        button?.setTextColor(getContrastColor(color).alpha(.75f))
+        button?.setTextColor(color.contrast(190))
     }
 
 

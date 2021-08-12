@@ -112,7 +112,7 @@ class SliderTile : Tile() {
         holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(color)
 
         holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            ?.setTextColor(getContrastColor(color).alpha(.75f))
+            ?.setTextColor(color.contrast(190))
     }
 
     override fun onEdit(isEdit: Boolean) {

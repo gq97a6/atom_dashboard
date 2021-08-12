@@ -3,6 +3,7 @@ package com.netDashboard.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboards
@@ -20,12 +21,11 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        application.setTheme(R.style.Theme_App)
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()
-
-        Dashboards.getSaved()
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()

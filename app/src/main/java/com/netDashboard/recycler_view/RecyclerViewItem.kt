@@ -92,7 +92,7 @@ abstract class RecyclerViewItem {
                 )
 
                 flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
-                flagBackground?.setBackgroundColor((-1).alpha(.7f))
+                flagBackground?.setBackgroundColor((-1).alpha(175))
 
                 flagMark?.visibility = View.VISIBLE
                 flagBackground?.visibility = View.VISIBLE

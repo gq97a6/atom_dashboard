@@ -26,4 +26,15 @@
         <item name="android:textColor">@color/chip_text</item>
     </style>
 
+    <style name="slider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="haloColor">#00000000</item>
+        <item name="labelBehavior">gone</item>
+        <item name="haloRadius">0dp</item>
+        <item name="thumbColor">@color/slider_thumbColor</item>
+        <item name="tickColorActive">@color/slider_tickColorActive</item>
+        <item name="tickColorInactive">@color/slider_tickColorInactive</item>
+        <item name="trackColorActive">@color/slider_trackColorActive</item>
+        <item name="trackColorInactive">@color/slider_trackColorInactive</item>
+    </style>
+
 </resources>

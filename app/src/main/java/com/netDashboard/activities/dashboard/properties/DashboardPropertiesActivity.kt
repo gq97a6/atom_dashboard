@@ -14,6 +14,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
+import com.netDashboard.themes.Themes
 import java.util.*
 import kotlin.random.Random
 
@@ -27,6 +28,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
         setContentView(b.root)
 

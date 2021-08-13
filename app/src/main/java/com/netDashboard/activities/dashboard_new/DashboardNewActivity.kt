@@ -10,6 +10,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardNewBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
+import com.netDashboard.themes.Themes
 import kotlin.random.Random
 
 class DashboardNewActivity : AppCompatActivity() {
@@ -18,6 +19,7 @@ class DashboardNewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
         setContentView(b.root)
 

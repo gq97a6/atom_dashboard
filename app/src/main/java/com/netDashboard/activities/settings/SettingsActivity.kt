@@ -7,6 +7,7 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.databinding.ActivitySettingsBinding
 import com.netDashboard.settings.Settings
+import com.netDashboard.themes.Themes
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -15,6 +16,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         b = ActivitySettingsBinding.inflate(layoutInflater)
         viewConfig()
         setContentView(b.root)

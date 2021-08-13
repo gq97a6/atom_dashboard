@@ -15,6 +15,22 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <!-- Test application theme. -->
+    <style name="Theme.Test.App" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#FF0000</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
     <style name="button" parent="Theme.MaterialComponents.NoActionBar">
         <item name="cornerRadius">0dp</item>
         <item name="android:insetTop">0dp</item>

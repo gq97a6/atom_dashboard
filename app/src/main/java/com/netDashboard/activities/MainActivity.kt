@@ -19,6 +19,7 @@ import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
+import com.netDashboard.themes.Themes
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 

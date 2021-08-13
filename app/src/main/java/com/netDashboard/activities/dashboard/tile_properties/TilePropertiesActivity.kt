@@ -17,6 +17,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.themes.Themes
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
 
@@ -31,6 +32,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = Dashboards.get(dashboardId)
 

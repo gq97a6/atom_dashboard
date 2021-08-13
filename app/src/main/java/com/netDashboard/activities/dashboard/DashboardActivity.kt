@@ -18,6 +18,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.screenHeight
+import com.netDashboard.themes.Themes
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -32,6 +33,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Themes.set(this)
         b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
 

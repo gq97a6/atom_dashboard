@@ -4,5 +4,5 @@ import android.content.Context
 import com.netDashboard.R
 
 object Themes {
-    fun set(context: Context) = context.setTheme(R.style.Theme_Test_App)
+    fun set(context: Context) = context.setTheme(R.style.Theme_Dark)
 }

@@ -15,7 +15,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
-        android:theme="@style/Theme.App">
+        android:theme="@style/Theme.Dark">
         <activity
             android:name=".activities.dashboard_new.DashboardNewActivity"
             android:exported="true" />

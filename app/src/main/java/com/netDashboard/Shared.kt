@@ -48,6 +48,18 @@ infix fun Int.alpha(@IntRange(from = 0, to = 255) a: Int): Int {
     return Color.argb(a, this.red, this.green, this.blue)
 }
 
+fun Int.isDark(): Boolean {
+    return ColorUtils.calculateLuminance(this) > 0.5
+}
+
+infix fun Int.darkened(by: Float): Int {
+    return ColorUtils.blendARGB(this, Color.BLACK, by)
+}
+
+infix fun Int.lightened(by: Float): Int {
+    return ColorUtils.blendARGB(this, Color.WHITE, by)
+}
+
 fun Float.dezero(): String {
     return when (this - this.toInt()) {
         0f -> this.toInt()

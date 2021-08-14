@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ColorsActivity"
+    android:background="#B3B3B3"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/tp_design"
+        android:textColor="@color/black"
+        android:textSize="40sp" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/dark"
+        style="@style/slider"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="15dp"
+        android:background="@drawable/background_bw_slider"
+        android:value="0.01"
+        android:valueFrom="0"
+        android:valueTo="1"
+        app:thumbColor="#00000000"
+        app:thumbRadius="0dp"
+        app:tickColor="#00000000"
+        app:trackColor="#00000000" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="restart"
+        android:text="Button" />
+
+
+</LinearLayout>

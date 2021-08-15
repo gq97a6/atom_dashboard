@@ -20,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:paddingHorizontal="30dp">
+        android:paddingHorizontal="30dp"
+        android:scrollIndicators="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,10 +29,10 @@
             android:orientation="vertical">
 
             <TextView
-                android:paddingBottom="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dp"
+                android:paddingBottom="3dp"
                 android:text="Global functions"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />

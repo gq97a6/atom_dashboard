@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityMainBinding.inflate(layoutInflater)
+        Themes.apply(b)
         setContentView(b.root)
 
         setupRecyclerView()

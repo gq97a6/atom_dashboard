@@ -45,7 +45,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:paddingHorizontal="30dp">
+        android:paddingHorizontal="30dp"
+        android:scrollIndicators="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,8 +56,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tp_dimensions"
                 android:layout_marginBottom="3dp"
+                android:text="@string/tp_dimensions"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
@@ -301,8 +302,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
                 android:orientation="horizontal">
 
                 <TextView

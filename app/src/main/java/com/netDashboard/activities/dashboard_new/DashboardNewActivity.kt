@@ -21,6 +21,7 @@ class DashboardNewActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()

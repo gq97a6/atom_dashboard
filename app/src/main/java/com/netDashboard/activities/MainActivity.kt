@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityMainBinding.inflate(layoutInflater)
-        Themes.apply(b)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         setupRecyclerView()
@@ -65,6 +65,12 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         AppOnDestroy.call()
+    }
+
+    override fun onBackPressed() {
+        if (!adapter.editType.isNone) {
+            b.mTouch.callOnClick()
+        } else super.onBackPressed()
     }
 
     private fun setupRecyclerView() {

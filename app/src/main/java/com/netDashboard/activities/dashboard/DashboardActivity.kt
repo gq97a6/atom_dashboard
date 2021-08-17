@@ -35,6 +35,7 @@ class DashboardActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityDashboardBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))

@@ -28,6 +28,7 @@ class TileNewActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityTileNewBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         dashboardId = intent.getLongExtra("dashboardId", 0)

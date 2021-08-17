@@ -39,7 +39,7 @@
     <string name="p_mqtt">MQTT</string>
 
     <string name="tp_dimensions">Dimensions</string>
-    <string name="tp_dimensions_info">You can control only one dimension.</string>
+    <string name="tp_dimensions_info">You can control only one dimension at the time.</string>
     <string name="tp_design">Design</string>
     <string name="tp_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
     <string name="tp_publish_topic">Publish topic:</string>

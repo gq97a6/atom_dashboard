@@ -30,6 +30,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""

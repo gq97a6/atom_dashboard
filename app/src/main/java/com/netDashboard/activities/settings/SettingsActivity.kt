@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
         Themes.set(this)
         b = ActivitySettingsBinding.inflate(layoutInflater)
-        viewConfig()
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         b.sLast.setOnCheckedChangeListener { _, state ->

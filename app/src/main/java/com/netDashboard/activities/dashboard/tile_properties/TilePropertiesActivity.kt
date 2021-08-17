@@ -11,15 +11,18 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.netDashboard.*
+import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.contrast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.dezero
 import com.netDashboard.themes.Themes
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
+import com.netDashboard.toPx
 
 class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityTilePropertiesBinding
@@ -32,14 +35,15 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = Dashboards.get(dashboardId)
 
         tileIndex = intent.getIntExtra("tileIndex", 0)
         tile = dashboard.tiles[tileIndex]
 
+        Themes.set(this)
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -231,6 +235,9 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpDesignHue.value = hsv[0]
         b.tpDesignSaturation.value = 1 - hsv[1]
         b.tpDesignValue.value = 1 - hsv[2]
+        b.tpDesignHue.backgroundTintList = null
+        b.tpDesignSaturation.backgroundTintList = null
+        b.tpDesignValue.backgroundTintList = null
         colorOnChangeListener()
 
         b.tpDesignChipTheme.isChecked = tile.isColouredByTheme

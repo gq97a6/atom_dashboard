@@ -11,6 +11,7 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
+import com.netDashboard.themes.Themes
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -20,8 +21,9 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Themes.set(this)
+        Themes.set(this)
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
+        Themes.applyTheme(b.root)
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()

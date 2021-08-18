@@ -3,7 +3,7 @@ package com.netDashboard.themes
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.drawable.ColorDrawable
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +21,7 @@ import com.netDashboard.getRandomColor
 object Themes {
 
     fun applyTheme(context: Context, viewGroup: ViewGroup) {
+        return
         context.setTheme(R.style.Theme_Dark)
 
         WindowInsetsControllerCompat(
@@ -74,34 +75,29 @@ object Themes {
     }
 
     private fun LinearLayout.applyTheme() {
-        this.setBackgroundColor(getRandomColor())
+        this.setBackgroundColor(Color.WHITE)
     }
 
     private fun View.applyTheme() {
-        this.setBackgroundColor(getRandomColor())
-        this.background = ColorDrawable(getRandomColor())
+        this.setBackgroundColor(Color.WHITE)
     }
 
     private fun MaterialButton.applyTheme() {
         this.backgroundTintList =
             ColorStateList.valueOf(
-                getRandomColor()
+                Color.BLACK
             )
     }
 
     private fun ImageView.applyTheme() {
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                getRandomColor()
-            )
+        //this.backgroundTintList =
+        //    ColorStateList.valueOf(
+        //        getRandomColor()
+        //    )
     }
 
     private fun TextView.applyTheme() {
-        this.setTextColor(getRandomColor())
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                getRandomColor()
-            )
+        this.setTextColor(Color.BLACK)
     }
 
     private fun SwitchMaterial.applyTheme() {
@@ -112,10 +108,7 @@ object Themes {
     }
 
     private fun EditText.applyTheme() {
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                getRandomColor()
-            )
+        this.setTextColor(Color.BLACK)
     }
 
     private fun Chip.applyTheme() {

@@ -17,22 +17,17 @@
 
     <style name="Theme.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#FFFFFF</item>
-        <item name="colorPrimaryVariant">#7E1267</item>
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#474747</item>
-        <item name="colorSecondaryVariant">#D12EFF</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">?colorSecondary</item>
+        <item name="android:statusBarColor">#FFFFFF</item>
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <!-- Customize your theme here. -->
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="colorOnBackground">#FFFFFF</item>
-        <item name="colorPrimaryDark">#FFFFFF</item>
-        <item name="android:colorForeground">#FFFFFF</item>
     </style>
 
     <style name="button" parent="Theme.MaterialComponents.NoActionBar">

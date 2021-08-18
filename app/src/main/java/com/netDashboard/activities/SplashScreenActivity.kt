@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
@@ -21,9 +22,8 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        Themes.applyTheme(b.root)
+        Themes.applyTheme(this, b.root)
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()

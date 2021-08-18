@@ -28,9 +28,8 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        Themes.applyTheme(b.root)
+        Themes.applyTheme(this, b.root)
         setContentView(b.root)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""

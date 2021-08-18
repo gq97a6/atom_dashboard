@@ -16,9 +16,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         b = ActivitySettingsBinding.inflate(layoutInflater)
-        Themes.applyTheme(b.root)
+        Themes.applyTheme(this, b.root)
         setContentView(b.root)
 
         b.sLast.setOnCheckedChangeListener { _, state ->

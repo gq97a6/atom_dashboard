@@ -19,9 +19,8 @@ class DashboardNewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
-        Themes.applyTheme(b.root)
+        Themes.applyTheme(this, b.root)
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()

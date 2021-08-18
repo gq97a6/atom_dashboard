@@ -30,9 +30,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Themes.set(this)
         b = ActivityMainBinding.inflate(layoutInflater)
-        Themes.applyTheme(b.root)
+        Themes.applyTheme(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()

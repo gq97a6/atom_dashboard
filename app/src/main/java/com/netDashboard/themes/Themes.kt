@@ -1,5 +1,6 @@
 package com.netDashboard.themes
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
@@ -16,19 +18,30 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.R
 import com.netDashboard.getRandomColor
 
-
 object Themes {
 
-    fun set(context: Context) = context.setTheme(R.style.Theme_Dark)
+    fun applyTheme(context: Context, viewGroup: ViewGroup) {
+        context.setTheme(R.style.Theme_Dark)
 
-    fun applyTheme(viewGroup: ViewGroup) {
-        for (i in 0 until viewGroup.childCount) {
-            val v = viewGroup.getChildAt(i)
+        WindowInsetsControllerCompat(
+            (context as Activity).window,
+            viewGroup
+        ).isAppearanceLightStatusBars = true
 
-            if (v is ViewGroup) applyTheme(v)
+        context.window.statusBarColor = getRandomColor()
+
+        viewGroup.applyTheme()
+    }
+
+    private fun ViewGroup.applyTheme() {
+        for (i in 0 until this.childCount) {
+            val v = this.getChildAt(i)
+
+            if (v is ViewGroup) v.applyTheme()
             v.defineType()
         }
-        viewGroup.defineType()
+
+        this.defineType()
     }
 
     private fun View.defineType() {

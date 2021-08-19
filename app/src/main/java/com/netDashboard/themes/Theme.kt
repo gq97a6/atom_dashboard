@@ -30,11 +30,11 @@ object Theme {
     private val colorA
         get() = ColorUtils.blendARGB(color, color.contrast(), 0.2f)
     private val colorB
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.40f)
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.4f)
     private val colorC
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.70f)
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.6f)
     private val colorD
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.9f)
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.8f)
 
     private val isDark
         get() = color.isDark()
@@ -44,20 +44,19 @@ object Theme {
             val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
             hsv[1] = (100 * hsv[1]) / ((300 * hsv[1]) + 100)
-            hsv[2] = if (color.isDark()) 0.9f else 0.5f
+            hsv[2] = if (color.isDark()) 0.5f else 0.9f
 
             return Color.HSVToColor(hsv)
         }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
-        //return
 
         context.setTheme(if (isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         WindowInsetsControllerCompat(
             (context as Activity).window,
             viewGroup
-        ).isAppearanceLightStatusBars = color.isDark()
+        ).isAppearanceLightStatusBars = !color.isDark()
 
         context.window.statusBarColor = colorBackground
 
@@ -129,10 +128,7 @@ object Theme {
     private fun MaterialButton.applyTheme() {
         when (this.tag) {
         }
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                colorD
-            )
+        this.backgroundTintList = ColorStateList.valueOf(color)
     }
 
     private fun ImageView.applyTheme() {
@@ -162,7 +158,7 @@ object Theme {
     private fun EditText.applyTheme() {
         when (this.tag) {
         }
-        this.setTextColor(Color.BLACK)
+        this.setTextColor(colorD)
     }
 
     private fun Chip.applyTheme() {

@@ -1,3 +1,5 @@
+@file:Suppress("ControlFlowWithEmptyBody")
+
 package com.netDashboard.themes
 
 import android.app.Activity
@@ -8,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -16,20 +19,47 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.R
+import com.netDashboard.contrast
 import com.netDashboard.getRandomColor
+import com.netDashboard.isDark
 
-object Themes {
+object Theme {
 
-    fun applyTheme(context: Context, viewGroup: ViewGroup) {
-        return
-        context.setTheme(R.style.Theme_Dark)
+    var color = Color.parseColor("#d6d6bf")
+
+    private val colorA
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.2f)
+    private val colorB
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.40f)
+    private val colorC
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.70f)
+    private val colorD
+        get() = ColorUtils.blendARGB(color, color.contrast(), 0.9f)
+
+    private val isDark
+        get() = color.isDark()
+
+    private val colorBackground: Int
+        get() {
+            val hsv = floatArrayOf(0f, 0f, 0f)
+            Color.colorToHSV(color, hsv)
+            hsv[1] = (100 * hsv[1]) / ((300 * hsv[1]) + 100)
+            hsv[2] = if (color.isDark()) 0.9f else 0.5f
+
+            return Color.HSVToColor(hsv)
+        }
+
+    fun apply(context: Context, viewGroup: ViewGroup) {
+        //return
+
+        context.setTheme(if (isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         WindowInsetsControllerCompat(
             (context as Activity).window,
             viewGroup
-        ).isAppearanceLightStatusBars = true
+        ).isAppearanceLightStatusBars = color.isDark()
 
-        context.window.statusBarColor = getRandomColor()
+        context.window.statusBarColor = colorBackground
 
         viewGroup.applyTheme()
     }
@@ -66,30 +96,48 @@ object Themes {
     }
 
     private fun ChipGroup.applyTheme() {
+        when (this.tag) {
+        }
     }
 
     private fun RecyclerView.applyTheme() {
+        when (this.tag) {
+        }
     }
 
     private fun FrameLayout.applyTheme() {
+        when (this.tag) {
+        }
     }
 
     private fun LinearLayout.applyTheme() {
-        this.setBackgroundColor(Color.WHITE)
+        when (this.tag) {
+            "background" -> this.setBackgroundColor(colorBackground)
+        }
     }
 
     private fun View.applyTheme() {
-        this.setBackgroundColor(Color.WHITE)
+        when (this.tag) {
+            "color" -> this.setBackgroundColor(color)
+            "colorA" -> this.setBackgroundColor(colorA)
+            "colorB" -> this.setBackgroundColor(colorB)
+            "colorC" -> this.setBackgroundColor(colorC)
+            "colorD" -> this.setBackgroundColor(colorD)
+        }
     }
 
     private fun MaterialButton.applyTheme() {
+        when (this.tag) {
+        }
         this.backgroundTintList =
             ColorStateList.valueOf(
-                Color.BLACK
+                colorD
             )
     }
 
     private fun ImageView.applyTheme() {
+        when (this.tag) {
+        }
         //this.backgroundTintList =
         //    ColorStateList.valueOf(
         //        getRandomColor()
@@ -97,10 +145,14 @@ object Themes {
     }
 
     private fun TextView.applyTheme() {
-        this.setTextColor(Color.BLACK)
+        when (this.tag) {
+        }
+        this.setTextColor(colorD)
     }
 
     private fun SwitchMaterial.applyTheme() {
+        when (this.tag) {
+        }
         this.backgroundTintList =
             ColorStateList.valueOf(
                 getRandomColor()
@@ -108,10 +160,14 @@ object Themes {
     }
 
     private fun EditText.applyTheme() {
+        when (this.tag) {
+        }
         this.setTextColor(Color.BLACK)
     }
 
     private fun Chip.applyTheme() {
+        when (this.tag) {
+        }
         this.backgroundTintList =
             ColorStateList.valueOf(
                 getRandomColor()
@@ -119,8 +175,8 @@ object Themes {
     }
 
     private fun Slider.applyTheme() {
-        this.trackActiveTintList = ColorStateList.valueOf(
-            getRandomColor()
-        )
+        when (this.tag) {
+        }
+        this.trackActiveTintList = ColorStateList.valueOf(colorD)
     }
 }

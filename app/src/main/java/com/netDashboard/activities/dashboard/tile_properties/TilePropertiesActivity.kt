@@ -17,7 +17,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
 
@@ -39,7 +39,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 

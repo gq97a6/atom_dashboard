@@ -18,7 +18,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.screenHeight
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -34,7 +34,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))

@@ -10,7 +10,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardNewBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 import kotlin.random.Random
 
 class DashboardNewActivity : AppCompatActivity() {
@@ -20,7 +20,7 @@ class DashboardNewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()

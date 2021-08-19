@@ -14,7 +14,7 @@ import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 import java.util.*
 import kotlin.random.Random
 
@@ -29,7 +29,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""

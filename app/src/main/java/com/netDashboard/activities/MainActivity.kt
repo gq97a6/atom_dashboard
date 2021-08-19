@@ -2,6 +2,7 @@ package com.netDashboard.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -19,7 +20,11 @@ import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
+import android.os.BatteryManager
+
+
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -31,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()
@@ -58,6 +63,40 @@ class MainActivity : AppCompatActivity() {
 
         b.mAdd.setOnClickListener {
             addOnClick()
+        }
+
+
+        b.mHue.addOnChangeListener { _, _, _ ->
+            Theme.color = Color.HSVToColor(
+                floatArrayOf(
+                    b.mHue.value,
+                    1 - b.mSaturation.value,
+                    1 - b.mValue.value
+                )
+            )
+            Theme.apply(this, b.root)
+        }
+
+        b.mSaturation.addOnChangeListener { _, _, _ ->
+            Theme.color = Color.HSVToColor(
+                floatArrayOf(
+                    b.mHue.value,
+                    1 - b.mSaturation.value,
+                    1 - b.mValue.value
+                )
+            )
+            Theme.apply(this, b.root)
+        }
+
+        b.mValue.addOnChangeListener { _, _, _ ->
+            Theme.color = Color.HSVToColor(
+                floatArrayOf(
+                    b.mHue.value,
+                    1 - b.mSaturation.value,
+                    1 - b.mValue.value
+                )
+            )
+            Theme.apply(this, b.root)
         }
     }
 

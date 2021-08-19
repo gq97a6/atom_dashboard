@@ -7,7 +7,7 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.databinding.ActivitySettingsBinding
 import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         b.sLast.setOnCheckedChangeListener { _, state ->

@@ -36,17 +36,32 @@ fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): 
     return Color.argb(alpha, r.nextInt(R + 1), r.nextInt(G + 1), r.nextInt(B + 1))
 }
 
-fun Int.contrast(@IntRange(from = 0, to = 255) alpha: Int = 255): Int =
-    if (ColorUtils.calculateLuminance(this) < 0.5) {
-        -1 //White
-    } else {
-        -16777216 //Black
-    }.alpha(alpha)
+fun Int.contrast(@IntRange(from = 0, to = 255) alpha: Int = 255): Int {
+
+    val whiteContrast = ColorUtils.calculateContrast(this, Color.WHITE)
+    val blackContrast = ColorUtils.calculateContrast(this, Color.BLACK)
+
+    return (if (whiteContrast > blackContrast) Color.WHITE else Color.BLACK).alpha(alpha)
+}
 
 infix fun Int.alpha(@IntRange(from = 0, to = 255) a: Int): Int =
     Color.argb(a, this.red, this.green, this.blue)
 
-fun Int.isDark(): Boolean = ColorUtils.calculateLuminance(this) > 0.5
+fun Int.isDark(): Boolean {
+
+    val whiteContrast = ColorUtils.calculateContrast(this, Color.WHITE)
+    val blackContrast = ColorUtils.calculateContrast(this, Color.BLACK)
+
+    return whiteContrast > blackContrast
+}
+
+fun getContrastColor(color: Int): Int {
+    val whiteContrast = ColorUtils.calculateContrast(Color.WHITE, color)
+    val blackContrast = ColorUtils.calculateContrast(Color.BLACK, color)
+
+    return if (whiteContrast > blackContrast) Color.WHITE else Color.BLACK
+}
+
 
 infix fun Int.darkened(by: Float): Int = ColorUtils.blendARGB(this, Color.BLACK, by)
 infix fun Int.lightened(by: Float): Int = ColorUtils.blendARGB(this, Color.WHITE, by)

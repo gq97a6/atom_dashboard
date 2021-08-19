@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Themes
+import com.netDashboard.themes.Theme
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -23,7 +22,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        Themes.applyTheme(this, b.root)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()

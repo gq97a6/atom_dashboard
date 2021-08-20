@@ -18,10 +18,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.R
-import com.netDashboard.contrast
-import com.netDashboard.getRandomColor
-import com.netDashboard.isDark
+import com.netDashboard.*
 
 object Theme {
 
@@ -43,8 +40,8 @@ object Theme {
         get() {
             val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
-            hsv[1] = (100 * hsv[1]) / ((300 * hsv[1]) + 100)
-            hsv[2] = if (color.isDark()) 0.5f else 0.9f
+            hsv[1] = (100 * hsv[1]) / ((300 * hsv[1]) + 100).roundCloser(0.01f)
+            hsv[2] = if (color.isDark()) 0.8f else 0.5f
 
             return Color.HSVToColor(hsv)
         }
@@ -143,7 +140,7 @@ object Theme {
     private fun TextView.applyTheme() {
         when (this.tag) {
         }
-        this.setTextColor(colorD)
+        this.setTextColor(colorA)
     }
 
     private fun SwitchMaterial.applyTheme() {

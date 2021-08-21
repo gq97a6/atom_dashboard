@@ -119,6 +119,7 @@ object Theme {
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
             "colorD" -> this.setBackgroundColor(colorD)
+            "background" -> this.setBackgroundColor(color.contrast())
         }
     }
 
@@ -139,8 +140,13 @@ object Theme {
 
     private fun TextView.applyTheme() {
         when (this.tag) {
+            "color" -> this.setTextColor(color)
+            "colorA" -> this.setTextColor(colorA)
+            "colorB" -> this.setTextColor(colorB)
+            "colorC" -> this.setTextColor(colorC)
+            "colorD" -> this.setTextColor(colorD)
+            else -> this.setTextColor(colorA)
         }
-        this.setTextColor(colorA)
     }
 
     private fun SwitchMaterial.applyTheme() {

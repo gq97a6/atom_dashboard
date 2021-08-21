@@ -150,9 +150,10 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         b.mRecyclerView.adapter = adapter
 
-        if (adapter.itemCount == 0) {
-            b.mPlaceholder.visibility = View.VISIBLE
-        }
+        //TODO
+        //if (adapter.itemCount == 0) {
+        //    b.mPlaceholder.visibility = View.VISIBLE
+        //}
     }
 
     private fun touchOnClick() {

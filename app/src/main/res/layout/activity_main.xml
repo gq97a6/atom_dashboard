@@ -86,8 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="@dimen/tile_padding"
-            android:visibility="gone"
-            android:paddingTop="@dimen/tile_padding" />
+            android:paddingTop="@dimen/tile_padding"
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/m_bar"
@@ -191,12 +191,78 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="999">
+
+        <View
+            android:layout_margin="10dp"
+            android:tag="background"
+            android:layout_width="80dp"
+            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:tag="color"
+                android:text="Sample test text. ABCDEGH @#$%%^*(123456"
+                android:textColor="#A3A3A3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:tag="colorA"
+                android:text="Sample test text. ABCDEGH @#$%%^*(123456"
+                android:textColor="#A3A3A3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:tag="colorB"
+                android:text="Sample test text. ABCDEGH @#$%%^*(123456"
+                android:textColor="#A3A3A3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:tag="colorC"
+                android:text="Sample test text. ABCDEGH @#$%%^*(123456"
+                android:textColor="#A3A3A3"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:tag="colorD"
+                android:text="Sample test text. ABCDEGH @#$%%^*(123456"
+                android:textColor="#A3A3A3"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
     <LinearLayout
-        android:id="@+id/tp_design_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -285,10 +351,10 @@
         android:orientation="vertical">
 
         <View
-            android:tag="color"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/black" />
+            android:background="@color/black"
+            android:tag="color" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -298,32 +364,32 @@
             android:orientation="horizontal">
 
             <View
-                android:tag="colorA"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/gray65" />
+                android:background="@color/gray65"
+                android:tag="colorA" />
 
             <View
-                android:tag="colorB"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/gray100" />
+                android:background="@color/gray100"
+                android:tag="colorB" />
 
             <View
-                android:tag="colorC"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/gray150" />
+                android:background="@color/gray150"
+                android:tag="colorC" />
 
             <View
-                android:tag="colorD"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/gray230" />
+                android:background="@color/gray230"
+                android:tag="colorD" />
         </LinearLayout>
 
     </LinearLayout>

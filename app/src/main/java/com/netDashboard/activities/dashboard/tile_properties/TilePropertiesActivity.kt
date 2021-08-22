@@ -445,7 +445,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         val colorsText = intArrayOf(
             chipText?.getColorForState(intArrayOf(android.R.attr.state_enabled), Color.RED)
                 ?: Color.RED,
-            color.contrast(190),
+            color.contrastColor(190),
             chipText?.getColorForState(intArrayOf(-android.R.attr.state_checked), Color.RED)
                 ?: Color.RED,
             chipText?.getColorForState(intArrayOf(-android.R.attr.state_pressed), Color.RED)

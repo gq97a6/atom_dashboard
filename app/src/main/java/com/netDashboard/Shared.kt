@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
 import android.widget.Toast
+import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -15,6 +16,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import java.lang.Math.abs
 import java.util.*
 
 const val A = 255 //100%
@@ -36,14 +38,6 @@ fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): 
     return Color.argb(alpha, r.nextInt(R + 1), r.nextInt(G + 1), r.nextInt(B + 1))
 }
 
-fun Int.contrast(@IntRange(from = 0, to = 255) alpha: Int = 255): Int {
-
-    val whiteContrast = ColorUtils.calculateContrast(this, Color.WHITE)
-    val blackContrast = ColorUtils.calculateContrast(this, Color.BLACK)
-
-    return (if (whiteContrast > blackContrast) Color.WHITE else Color.BLACK).alpha(alpha)
-}
-
 infix fun Int.alpha(@IntRange(from = 0, to = 255) a: Int): Int =
     Color.argb(a, this.red, this.green, this.blue)
 
@@ -55,16 +49,51 @@ fun Int.isDark(): Boolean {
     return whiteContrast > blackContrast
 }
 
-fun getContrastColor(color: Int): Int {
-    val whiteContrast = ColorUtils.calculateContrast(Color.WHITE, color)
-    val blackContrast = ColorUtils.calculateContrast(Color.BLACK, color)
+fun Int.contrastDifference(): Float {
+    val whiteContrast = ColorUtils.calculateContrast(this, Color.WHITE)
+    val blackContrast = ColorUtils.calculateContrast(this, Color.BLACK)
 
-    return if (whiteContrast > blackContrast) Color.WHITE else Color.BLACK
+    return kotlin.math.abs(whiteContrast - blackContrast).toFloat()
 }
 
+fun Int.contrastColor(@IntRange(from = 0, to = 255) alpha: Int = 255): Int =
+    (if (this.isDark()) Color.WHITE else Color.BLACK).alpha(alpha)
 
-infix fun Int.darkened(by: Float): Int = ColorUtils.blendARGB(this, Color.BLACK, by)
-infix fun Int.lightened(by: Float): Int = ColorUtils.blendARGB(this, Color.WHITE, by)
+fun Int.contrastColor(isDark: Boolean, @IntRange(from = 0, to = 255) alpha: Int = 255): Int =
+    (if (isDark) Color.WHITE else Color.BLACK).alpha(alpha)
+
+fun Int.contrast(
+    @FloatRange(from = 0.0, to = 1.0) ratio: Float,
+    @IntRange(from = 0, to = 255) alpha: Int = 255
+): Int = this.contrast(ratio, ratio, alpha)
+
+fun Int.contrast(
+    @FloatRange(from = 0.0, to = 1.0) whiteRatio: Float,
+    @FloatRange(from = 0.0, to = 1.0) blackRatio: Float,
+    @IntRange(from = 0, to = 255) alpha: Int = 255
+): Int = this.contrast(this.isDark(), whiteRatio, blackRatio, alpha)
+
+fun Int.contrast(
+    isDark: Boolean,
+    @FloatRange(from = 0.0, to = 1.0) ratio: Float,
+    @IntRange(from = 0, to = 255) alpha: Int = 255
+): Int = this.contrast(isDark, ratio, ratio, alpha)
+
+fun Int.contrast(
+    isDark: Boolean,
+    @FloatRange(from = 0.0, to = 1.0) whiteRatio: Float,
+    @FloatRange(from = 0.0, to = 1.0) blackRatio: Float,
+    @IntRange(from = 0, to = 255) alpha: Int = 255
+): Int = ColorUtils.blendARGB(
+    this, this.contrastColor(isDark),
+    if (isDark) whiteRatio else blackRatio
+).alpha(alpha)
+
+infix fun Int.darkened(@FloatRange(from = 0.0, to = 1.0) by: Float): Int =
+    ColorUtils.blendARGB(this, Color.BLACK, by)
+
+infix fun Int.lightened(@FloatRange(from = 0.0, to = 1.0) by: Float): Int =
+    ColorUtils.blendARGB(this, Color.WHITE, by)
 
 fun Float.dezero(): String {
     return when (this - this.toInt()) {

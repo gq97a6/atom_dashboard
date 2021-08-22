@@ -25,25 +25,22 @@ object Theme {
     var color = Color.parseColor("#d6d6bf")
 
     private val colorA
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.2f)
+        get() = color.contrast(!isDark,0.2f)
     private val colorB
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.4f)
+        get() = color.contrast(!isDark,0.4f)
     private val colorC
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.6f)
-    private val colorD
-        get() = ColorUtils.blendARGB(color, color.contrast(), 0.8f)
+        get() = color.contrast(!isDark,0.6f)
 
-    private val isDark
-        get() = color.isDark()
+    var isDark = false
 
     private val colorBackground: Int
         get() {
+
             val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
-            hsv[1] = (100 * hsv[1]) / ((300 * hsv[1]) + 100).roundCloser(0.01f)
-            hsv[2] = if (color.isDark()) 0.8f else 0.5f
+            hsv[1] = hsv[1] * 0.5f
 
-            return Color.HSVToColor(hsv)
+            return Color.HSVToColor(hsv).contrast(isDark,0.6f)
         }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
@@ -53,7 +50,7 @@ object Theme {
         WindowInsetsControllerCompat(
             (context as Activity).window,
             viewGroup
-        ).isAppearanceLightStatusBars = !color.isDark()
+        ).isAppearanceLightStatusBars = isDark
 
         context.window.statusBarColor = colorBackground
 
@@ -118,8 +115,6 @@ object Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
-            "colorD" -> this.setBackgroundColor(colorD)
-            "background" -> this.setBackgroundColor(color.contrast())
         }
     }
 
@@ -140,11 +135,10 @@ object Theme {
 
     private fun TextView.applyTheme() {
         when (this.tag) {
-            "color" -> this.setTextColor(color)
+            "color" -> this.text = if(color.contrastDifference() > 10) "AUTO" else "CONTROL"
             "colorA" -> this.setTextColor(colorA)
             "colorB" -> this.setTextColor(colorB)
             "colorC" -> this.setTextColor(colorC)
-            "colorD" -> this.setTextColor(colorD)
             else -> this.setTextColor(colorA)
         }
     }
@@ -161,7 +155,7 @@ object Theme {
     private fun EditText.applyTheme() {
         when (this.tag) {
         }
-        this.setTextColor(colorD)
+        this.setTextColor(colorC)
     }
 
     private fun Chip.applyTheme() {
@@ -176,6 +170,6 @@ object Theme {
     private fun Slider.applyTheme() {
         when (this.tag) {
         }
-        this.trackActiveTintList = ColorStateList.valueOf(colorD)
+        this.trackActiveTintList = ColorStateList.valueOf(colorC)
     }
 }

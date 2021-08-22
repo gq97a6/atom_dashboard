@@ -21,10 +21,6 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
 import com.netDashboard.themes.Theme
-import android.os.BatteryManager
-
-
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -96,6 +92,11 @@ class MainActivity : AppCompatActivity() {
                     1 - b.mValue.value
                 )
             )
+            Theme.apply(this, b.root)
+        }
+
+        b.dark.setOnCheckedChangeListener { _, state ->
+            Theme.isDark = state
             Theme.apply(this, b.root)
         }
     }

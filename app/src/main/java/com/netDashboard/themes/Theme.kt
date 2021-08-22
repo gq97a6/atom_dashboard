@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -18,39 +17,43 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.*
+import com.netDashboard.R
+import com.netDashboard.contrast
+import com.netDashboard.contrastDifference
+import com.netDashboard.getRandomColor
 
 object Theme {
 
-    var color = Color.parseColor("#d6d6bf")
+    var isDark = false
+    var color = Color.parseColor("#ffaa00")
+
+    val conDiff
+        get() = color.contrastDifference()
 
     private val colorA
-        get() = color.contrast(!isDark,0.2f)
+        get() = color.contrast(isDark, 0.2f)
     private val colorB
-        get() = color.contrast(!isDark,0.4f)
+        get() = color.contrast(isDark, 0.4f)
     private val colorC
-        get() = color.contrast(!isDark,0.6f)
-
-    var isDark = false
+        get() = color.contrast(isDark, 0.6f)
 
     private val colorBackground: Int
         get() {
-
             val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
             hsv[1] = hsv[1] * 0.5f
 
-            return Color.HSVToColor(hsv).contrast(isDark,0.6f)
+            return Color.HSVToColor(hsv).contrast(!isDark, 0.6f)
         }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
 
-        context.setTheme(if (isDark) R.style.Theme_Dark else R.style.Theme_Light)
+        context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         WindowInsetsControllerCompat(
             (context as Activity).window,
             viewGroup
-        ).isAppearanceLightStatusBars = isDark
+        ).isAppearanceLightStatusBars = !isDark
 
         context.window.statusBarColor = colorBackground
 
@@ -127,15 +130,11 @@ object Theme {
     private fun ImageView.applyTheme() {
         when (this.tag) {
         }
-        //this.backgroundTintList =
-        //    ColorStateList.valueOf(
-        //        getRandomColor()
-        //    )
     }
 
     private fun TextView.applyTheme() {
         when (this.tag) {
-            "color" -> this.text = if(color.contrastDifference() > 10) "AUTO" else "CONTROL"
+            "color" -> this.setTextColor(color)
             "colorA" -> this.setTextColor(colorA)
             "colorB" -> this.setTextColor(colorB)
             "colorC" -> this.setTextColor(colorC)

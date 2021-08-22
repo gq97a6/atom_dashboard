@@ -2,7 +2,6 @@ package com.netDashboard.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -60,45 +59,6 @@ class MainActivity : AppCompatActivity() {
         b.mAdd.setOnClickListener {
             addOnClick()
         }
-
-
-        b.mHue.addOnChangeListener { _, _, _ ->
-            Theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.mHue.value,
-                    1 - b.mSaturation.value,
-                    1 - b.mValue.value
-                )
-            )
-            Theme.apply(this, b.root)
-        }
-
-        b.mSaturation.addOnChangeListener { _, _, _ ->
-            Theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.mHue.value,
-                    1 - b.mSaturation.value,
-                    1 - b.mValue.value
-                )
-            )
-            Theme.apply(this, b.root)
-        }
-
-        b.mValue.addOnChangeListener { _, _, _ ->
-            Theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.mHue.value,
-                    1 - b.mSaturation.value,
-                    1 - b.mValue.value
-                )
-            )
-            Theme.apply(this, b.root)
-        }
-
-        b.dark.setOnCheckedChangeListener { _, state ->
-            Theme.isDark = state
-            Theme.apply(this, b.root)
-        }
     }
 
     override fun onDestroy() {
@@ -151,10 +111,10 @@ class MainActivity : AppCompatActivity() {
         b.mRecyclerView.layoutManager = layoutManager
         b.mRecyclerView.adapter = adapter
 
-        //TODO
-        //if (adapter.itemCount == 0) {
-        //    b.mPlaceholder.visibility = View.VISIBLE
-        //}
+
+        if (adapter.itemCount == 0) {
+            b.mPlaceholder.visibility = View.VISIBLE
+        }
     }
 
     private fun touchOnClick() {

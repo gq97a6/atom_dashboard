@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dark">
         <activity
+            android:name=".activities.theme.ThemeActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.dashboard_new.DashboardNewActivity"
             android:exported="true" />
         <activity android:name=".activities.SplashScreenActivity">

@@ -166,6 +166,10 @@ object Theme {
             "colorA" -> this.setTextColor(colorA)
             "colorB" -> this.setTextColor(colorB)
             "colorC" -> this.setTextColor(colorC)
+            "color;contrast40" -> {
+                this.setTextColor(color)
+                this.setBackgroundColor(contrastColor(!isDark, 40))
+            }
             "con_warning" -> {
                 this.clearAnimation()
                 this.visibility = if (isDark != isDarkRec) {

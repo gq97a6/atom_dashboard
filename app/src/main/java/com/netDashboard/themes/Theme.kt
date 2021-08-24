@@ -89,8 +89,8 @@ object Theme {
         when (this) {
             is MaterialButton -> this.applyTheme()
             is SwitchMaterial -> this.applyTheme()
-            is TextView -> this.applyTheme()
             is EditText -> this.applyTheme()
+            is TextView -> this.applyTheme()
             is Chip -> this.applyTheme()
             is Slider -> this.applyTheme()
             is LinearLayout -> this.applyTheme()
@@ -140,10 +140,12 @@ object Theme {
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
             "contrast205" -> this.backgroundTintList = ColorStateList.valueOf(
-                contrastColor(
-                    !isDark, 205
-                )
+                contrastColor(!isDark, 205)
             )
+            "frame" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.setStroke(1, color)
+            }
             else -> onUnknownTag(this.tag, "view")
         }
     }
@@ -210,9 +212,13 @@ object Theme {
 
     private fun EditText.applyTheme() {
         when (this.tag) {
+            "colorA;colorC;contrast25" -> {
+                this.setTextColor(colorA)
+                this.setHintTextColor(colorC)
+                this.setBackgroundColor(contrastColor(!isDark, 25))
+            }
             else -> onUnknownTag(this.tag, "editText")
         }
-        this.setTextColor(colorC)
     }
 
     private fun Chip.applyTheme() {

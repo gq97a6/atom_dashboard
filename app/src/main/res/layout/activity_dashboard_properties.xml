@@ -43,6 +43,7 @@
             android:inputType="text"
             android:maxLength="15"
             android:paddingHorizontal="5dp"
+            android:tag="colorA;colorC;contrast25"
             android:textColor="@color/gray100"
             android:textColorHint="@color/gray65"
             android:textCursorDrawable="@null"
@@ -102,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="3dp"
                         android:gravity="center"
-                        android:tag="colorC"
+                        android:tag="colorA"
                         android:text="1"
                         android:textColor="@color/gray100"
                         android:textSize="15sp"
@@ -180,9 +181,9 @@
                         android:paddingHorizontal="10dp">
 
                         <TextView
-                            android:tag="colorD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:tag="colorC"
                             android:text="OFF"
                             android:textColor="@color/gray150"
                             android:textSize="12sp"
@@ -194,9 +195,9 @@
                             android:layout_height="wrap_content" />
 
                         <TextView
-                            android:tag="colorD"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:tag="colorC"
                             android:text="ON"
                             android:textColor="@color/gray150"
                             android:textSize="12sp"
@@ -361,7 +362,6 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#FFFFFF"
                         android:gravity="center"
                         android:orientation="horizontal">
 

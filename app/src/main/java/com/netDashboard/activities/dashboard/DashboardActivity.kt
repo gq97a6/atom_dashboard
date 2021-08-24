@@ -102,10 +102,11 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        super.onPause()
+
         dashboard.tiles = adapter.list
         Dashboards.save()
-
-        super.onPause()
+        finish()
     }
 
     override fun onDestroy() {
@@ -121,7 +122,6 @@ class DashboardActivity : AppCompatActivity() {
 
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
-                finish()
             }
         }
     }
@@ -149,7 +149,6 @@ class DashboardActivity : AppCompatActivity() {
                     it.putExtra("tileIndex", adapter.list.indexOf(item))
                     it.putExtra("dashboardId", dashboard.id)
                     startActivity(it)
-                    finish()
                 }
             }
         }
@@ -204,7 +203,6 @@ class DashboardActivity : AppCompatActivity() {
             it.putExtra("exitActivity", "DashboardActivity")
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 
@@ -245,7 +243,6 @@ class DashboardActivity : AppCompatActivity() {
         Intent(this, TileNewActivity::class.java).also {
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 

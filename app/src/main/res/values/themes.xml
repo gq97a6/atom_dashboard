@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">#FFFFFF</item>
-        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
@@ -25,8 +25,8 @@
         <item name="colorSecondaryVariant">#FFFFFF</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">#868686</item>
-        <item name="android:windowBackground">#868686</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:windowBackground">@color/black</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 

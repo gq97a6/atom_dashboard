@@ -94,7 +94,6 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
 
     @SuppressLint("NotifyDataSetChanged")
     fun removeMarkedItem() {
-        Log.i("OUY", "GO")
 
         var removeAt = -1
         for (e in list) {

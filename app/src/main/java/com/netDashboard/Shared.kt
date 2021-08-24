@@ -6,6 +6,9 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
+import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
@@ -16,7 +19,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import java.lang.Math.abs
 import java.util.*
 
 const val A = 255 //100%
@@ -49,45 +51,22 @@ fun Int.isDark(): Boolean {
     return whiteContrast > blackContrast
 }
 
-fun Int.contrastDifference(): Float {
-    val whiteContrast = ColorUtils.calculateContrast(this, Color.WHITE)
-    val blackContrast = ColorUtils.calculateContrast(this, Color.BLACK)
-
-    return kotlin.math.abs(whiteContrast - blackContrast).toFloat()
-}
+fun contrastColor(isDark: Boolean, @IntRange(from = 0, to = 255) alpha: Int = 255): Int =
+    (if (isDark) Color.WHITE else Color.BLACK).alpha(alpha)
 
 fun Int.contrastColor(@IntRange(from = 0, to = 255) alpha: Int = 255): Int =
     (if (this.isDark()) Color.WHITE else Color.BLACK).alpha(alpha)
 
-fun Int.contrastColor(isDark: Boolean, @IntRange(from = 0, to = 255) alpha: Int = 255): Int =
-    (if (isDark) Color.WHITE else Color.BLACK).alpha(alpha)
-
 fun Int.contrast(
     @FloatRange(from = 0.0, to = 1.0) ratio: Float,
     @IntRange(from = 0, to = 255) alpha: Int = 255
-): Int = this.contrast(ratio, ratio, alpha)
-
-fun Int.contrast(
-    @FloatRange(from = 0.0, to = 1.0) whiteRatio: Float,
-    @FloatRange(from = 0.0, to = 1.0) blackRatio: Float,
-    @IntRange(from = 0, to = 255) alpha: Int = 255
-): Int = this.contrast(this.isDark(), whiteRatio, blackRatio, alpha)
+): Int = this.contrast(this.isDark(), ratio, alpha)
 
 fun Int.contrast(
     isDark: Boolean,
     @FloatRange(from = 0.0, to = 1.0) ratio: Float,
     @IntRange(from = 0, to = 255) alpha: Int = 255
-): Int = this.contrast(isDark, ratio, ratio, alpha)
-
-fun Int.contrast(
-    isDark: Boolean,
-    @FloatRange(from = 0.0, to = 1.0) whiteRatio: Float,
-    @FloatRange(from = 0.0, to = 1.0) blackRatio: Float,
-    @IntRange(from = 0, to = 255) alpha: Int = 255
-): Int = ColorUtils.blendARGB(
-    this, this.contrastColor(isDark),
-    if (isDark) whiteRatio else blackRatio
-).alpha(alpha)
+): Int = ColorUtils.blendARGB(this, contrastColor(isDark), ratio).alpha(alpha)
 
 infix fun Int.darkened(@FloatRange(from = 0.0, to = 1.0) by: Float): Int =
     ColorUtils.blendARGB(this, Color.BLACK, by)
@@ -169,4 +148,20 @@ fun createToast(context: Context, msg: String, time: Int = 0) {
     } else {
         Handler(Looper.getMainLooper()).post { Toast.makeText(context, msg, time).show() }
     }
+}
+
+fun View.blink(
+    times: Int = Animation.INFINITE,
+    duration: Long = 50,
+    offset: Long = 20,
+    minAlpha: Float = 0.0f,
+    maxAlpha: Float = 1.0f,
+    repeatMode: Int = Animation.REVERSE
+) {
+    startAnimation(AlphaAnimation(maxAlpha, minAlpha).also {
+        it.duration = duration
+        it.startOffset = offset
+        it.repeatMode = repeatMode
+        it.repeatCount = times
+    })
 }

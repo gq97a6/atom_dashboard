@@ -39,6 +39,11 @@ class SplashScreenActivity : AppCompatActivity() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         AppOnDestroy.call()
@@ -57,13 +62,11 @@ class SplashScreenActivity : AppCompatActivity() {
                 it.putExtra("dashboardId", Settings.lastDashboardId)
                 overridePendingTransition(0, 0)
                 startActivity(it)
-                finish()
             }
         } else {
 
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
-                finish()
             }
         }
     }

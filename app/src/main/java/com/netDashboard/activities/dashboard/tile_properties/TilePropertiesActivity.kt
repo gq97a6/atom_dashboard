@@ -195,6 +195,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         Dashboards.save()
         dashboard.daemonGroup?.mqttd?.reinit()
+        finish()
     }
 
     override fun onDestroy() {
@@ -208,7 +209,6 @@ class TilePropertiesActivity : AppCompatActivity() {
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardId", dashboardId)
             startActivity(it)
-            finish()
         }
     }
 

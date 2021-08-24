@@ -33,8 +33,12 @@ class DashboardNewActivity : AppCompatActivity() {
             it.putExtra("dashboardId", dashboard.id)
             it.putExtra("exitActivity", "MainActivity")
             startActivity(it)
-            finish()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
     }
 
     override fun onDestroy() {
@@ -45,7 +49,6 @@ class DashboardNewActivity : AppCompatActivity() {
     override fun onBackPressed() {
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 }

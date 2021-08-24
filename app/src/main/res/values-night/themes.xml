@@ -19,14 +19,14 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryVariant">#FFFFFF</item>
-        <item name="colorOnPrimary">#5F4F33</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#FFFFFF</item>
         <item name="colorSecondaryVariant">#FFFFFF</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">#FFFFFF</item>
-        <item name="android:windowBackground">#868686</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:windowBackground">@color/black</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 

@@ -50,6 +50,11 @@ class TileNewActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         AppOnDestroy.call()
@@ -61,7 +66,6 @@ class TileNewActivity : AppCompatActivity() {
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardId", dashboardId)
             startActivity(it)
-            finish()
         }
     }
 
@@ -79,7 +83,6 @@ class TileNewActivity : AppCompatActivity() {
             it.putExtra("dashboardId", dashboardId)
             it.putExtra("tileIndex", dashboard.tiles.lastIndex)
             startActivity(it)
-            finish()
         }
     }
 }

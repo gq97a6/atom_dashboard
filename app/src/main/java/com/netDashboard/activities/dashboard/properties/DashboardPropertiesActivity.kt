@@ -15,6 +15,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.themes.Theme
+import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.random.Random
 
@@ -146,7 +147,9 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+
         Dashboards.save()
+        finish()
     }
 
     override fun onDestroy() {
@@ -167,7 +170,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         ).also {
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 

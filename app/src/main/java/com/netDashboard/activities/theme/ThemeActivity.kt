@@ -1,8 +1,11 @@
 package com.netDashboard.activities.theme
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.netDashboard.activities.MainActivity
+import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.databinding.ActivityThemeBinding
 import com.netDashboard.themes.Theme
 
@@ -52,6 +55,19 @@ class ThemeActivity : AppCompatActivity() {
         b.tIsDark.setOnCheckedChangeListener { _, state ->
             Theme.isDark = state
             Theme.apply(this, b.root)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        Intent(this, SettingsActivity::class.java).also {
+            startActivity(it)
         }
     }
 }

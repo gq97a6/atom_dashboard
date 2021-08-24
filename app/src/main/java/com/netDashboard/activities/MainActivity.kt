@@ -61,6 +61,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         AppOnDestroy.call()
@@ -91,7 +96,6 @@ class MainActivity : AppCompatActivity() {
                     it.putExtra("dashboardId", item.id)
                     it.putExtra("exitActivity", "MainActivity")
                     startActivity(it)
-                    finish()
                 }
             } else if (adapter.editType.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
@@ -99,7 +103,6 @@ class MainActivity : AppCompatActivity() {
 
                     it.putExtra("dashboardId", item.id)
                     startActivity(it)
-                    finish()
                 }
             }
         }
@@ -139,7 +142,6 @@ class MainActivity : AppCompatActivity() {
     private fun settingsOnClick() {
         Intent(this, SettingsActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 
@@ -179,7 +181,6 @@ class MainActivity : AppCompatActivity() {
     private fun addOnClick() {
         Intent(this, DashboardNewActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 

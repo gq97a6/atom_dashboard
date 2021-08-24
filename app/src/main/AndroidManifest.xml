@@ -15,7 +15,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Dark">
+        android:theme="@style/Theme.Light">
         <activity
             android:name=".activities.theme.ThemeActivity"
             android:exported="true" />

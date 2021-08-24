@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.MainActivity
+import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.databinding.ActivitySettingsBinding
 import com.netDashboard.settings.Settings
@@ -23,6 +24,26 @@ class SettingsActivity : AppCompatActivity() {
         b.sLast.setOnCheckedChangeListener { _, state ->
             Settings.startFromLast = state
         }
+
+        b.sThemeEdit.setOnClickListener {
+            Intent(this, ThemeActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
+        b.sThemeIsGlobal.setOnCheckedChangeListener { _, state ->
+            Theme.isGlobal = state
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOnDestroy.call()
     }
 
     override fun onBackPressed() {
@@ -30,13 +51,7 @@ class SettingsActivity : AppCompatActivity() {
 
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
-            finish()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOnDestroy.call()
     }
 
     private fun viewConfig() {

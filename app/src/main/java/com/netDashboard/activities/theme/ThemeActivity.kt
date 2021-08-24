@@ -16,6 +16,7 @@ class ThemeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityThemeBinding.inflate(layoutInflater)
+        viewConfig()
         Theme.apply(this, b.root)
         setContentView(b.root)
 
@@ -69,5 +70,16 @@ class ThemeActivity : AppCompatActivity() {
         Intent(this, SettingsActivity::class.java).also {
             startActivity(it)
         }
+    }
+
+    private fun viewConfig() {
+        val hsv = floatArrayOf(0f, 0f, 0f)
+        Color.colorToHSV(Theme.color, hsv)
+
+        b.tHue.value = hsv[0]
+        b.tSaturation.value = 1 - hsv[1]
+        b.tValue.value = 1 - hsv[2]
+
+        b.tIsDark.isChecked = Theme.isDark
     }
 }

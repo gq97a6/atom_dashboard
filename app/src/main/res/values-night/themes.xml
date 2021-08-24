@@ -11,14 +11,14 @@
         <item name="colorOnSecondary">#FFFFFF</item>
         <!-- Customize your theme here. -->
         <item name="android:statusBarColor">#FFFFFF</item>
-        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:windowBackground">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.Dark" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryVariant">#FFFFFF</item>
+        <item name="colorPrimaryVariant">#000000</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#FFFFFF</item>

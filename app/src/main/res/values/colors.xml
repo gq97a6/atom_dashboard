@@ -7,8 +7,6 @@
     <color name="gray150">#555555</color>
     <color name="gray230">#373737</color>
 
-    <color name="colorSecondary">#474747</color>
-
     <color name="slider_trackColorInactive">@color/gray65</color>
     <color name="slider_tickColorInactive">@color/gray65</color>
     <color name="slider_trackColorActive">@color/gray100</color>

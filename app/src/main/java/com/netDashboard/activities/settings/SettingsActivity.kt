@@ -18,6 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
+        viewConfig()
         Theme.apply(this, b.root)
         setContentView(b.root)
 
@@ -55,8 +56,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun viewConfig() {
-
         b.sLast.isChecked = Settings.startFromLast
-
+        b.sThemeIsGlobal.isChecked = Theme.isGlobal
     }
 }

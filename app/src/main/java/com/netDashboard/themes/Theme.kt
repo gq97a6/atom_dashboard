@@ -6,13 +6,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.*
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +46,8 @@ object Theme {
         get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
     private val colorC
         get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
+    private val colorD
+        get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
 
     private val colorBackground: Int
         get() = getBackground(!isDark)
@@ -65,7 +70,6 @@ object Theme {
         ).isAppearanceLightStatusBars = !isDark
 
         context.window.statusBarColor = colorBackground
-        context.window
 
         viewGroup.applyTheme()
     }
@@ -84,9 +88,8 @@ object Theme {
     private fun View.defineType() {
         when (this) {
             is MaterialButton -> this.applyTheme()
-            is ImageView -> this.applyTheme()
-            is TextView -> this.applyTheme()
             is SwitchMaterial -> this.applyTheme()
+            is TextView -> this.applyTheme()
             is EditText -> this.applyTheme()
             is Chip -> this.applyTheme()
             is Slider -> this.applyTheme()
@@ -103,26 +106,30 @@ object Theme {
 
     private fun ChipGroup.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "chipGroup")
         }
     }
 
     private fun RecyclerView.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "recyclerView")
         }
     }
 
     private fun FrameLayout.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "frameLayout")
         }
     }
 
     private fun LinearLayout.applyTheme() {
         when (this.tag) {
             "background" -> this.setBackgroundColor(colorBackground)
-            else -> onUnknownTag(this.tag)
+            "frame" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.setStroke(1, color)
+            }
+            else -> onUnknownTag(this.tag, "linearLayout")
         }
     }
 
@@ -137,16 +144,17 @@ object Theme {
                     !isDark, 205
                 )
             )
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "view")
         }
     }
 
     private fun MaterialButton.applyTheme() {
         this.backgroundTintList = ColorStateList.valueOf(color)
+
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "materialButton")
         }
     }
 
@@ -159,42 +167,57 @@ object Theme {
             "con_warning" -> {
                 this.clearAnimation()
                 this.visibility = if (isDark != isDarkRec) {
-                    this.setTextColor(color.contrast(isDark,0.6f))
+                    this.setTextColor(color.contrast(isDark, 0.6f))
                     this.blink(-1, 20, 500)
 
                     VISIBLE
-                } else{
+                } else {
                     GONE
                 }
             }
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "textView")
         }
     }
 
     //todo
     private fun SwitchMaterial.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "switchMaterial")
         }
+
         this.backgroundTintList =
             ColorStateList.valueOf(
                 getRandomColor()
             )
-        this.setBackgroundColor(getRandomColor())
-        this.setTrackResource(getRandomColor())
-        this.setTextColor(getRandomColor())
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked),
+            intArrayOf(android.R.attr.state_checked)
+        )
+
+        val colors = intArrayOf(
+            colorD,
+            colorB
+        )
+
+        val list = ColorStateList(states, colors)
+        this.thumbTintList = list
+        this.trackTintList =
+            ColorStateList.valueOf(
+                color
+            )
     }
 
     private fun EditText.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "editText")
         }
         this.setTextColor(colorC)
     }
 
     private fun Chip.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "chip")
         }
         this.backgroundTintList =
             ColorStateList.valueOf(
@@ -204,14 +227,14 @@ object Theme {
 
     private fun Slider.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag)
+            else -> onUnknownTag(this.tag, "slider")
         }
         this.trackActiveTintList = ColorStateList.valueOf(colorC)
     }
 
-    private fun onUnknownTag(tag: Any?) {
+    private fun onUnknownTag(tag: Any?, type: String) {
         tag?.toString()?.let {
-            if (it.isNotBlank()) Log.i("OUY", "Unknown tag: $it")
+            if (it.isNotBlank()) Log.i("OUY", "Unknown $type tag: $it")
         }
     }
 }

@@ -116,10 +116,11 @@
         android:textSize="20sp" />
 
     <LinearLayout
+        android:tag="frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/background_layout"
+        android:background="@drawable/background_frame"
         android:gravity="bottom"
         android:orientation="vertical"
         android:padding="10dp">

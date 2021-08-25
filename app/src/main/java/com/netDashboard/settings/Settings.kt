@@ -26,14 +26,6 @@ object Settings {
     }
 
     private fun getSaved() {
-        val result = try {
-            Gson().fromJson(FileReader(settingsFile), Settings::class.java)
-        } catch (e: Exception) {
-            null
-        }
 
-        result?.let {
-            lastDashboardId = it.lastDashboardId
-        }
     }
 }

@@ -12,13 +12,14 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
 import com.netDashboard.activities.settings.SettingsActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.screenHeight
 import com.netDashboard.settings.Settings
+import com.netDashboard.themes.Theme
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()
@@ -61,7 +63,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
+    }
+
+    override fun onBackPressed() {
+        if (!adapter.editType.isNone) {
+            b.mTouch.callOnClick()
+        } else super.onBackPressed()
     }
 
     private fun setupRecyclerView() {
@@ -83,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                     it.putExtra("dashboardId", item.id)
                     it.putExtra("exitActivity", "MainActivity")
                     startActivity(it)
-                    finish()
                 }
             } else if (adapter.editType.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
@@ -91,7 +98,6 @@ class MainActivity : AppCompatActivity() {
 
                     it.putExtra("dashboardId", item.id)
                     startActivity(it)
-                    finish()
                 }
             }
         }
@@ -102,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 
         b.mRecyclerView.layoutManager = layoutManager
         b.mRecyclerView.adapter = adapter
+
 
         if (adapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE
@@ -130,7 +137,6 @@ class MainActivity : AppCompatActivity() {
     private fun settingsOnClick() {
         Intent(this, SettingsActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 
@@ -170,7 +176,6 @@ class MainActivity : AppCompatActivity() {
     private fun addOnClick() {
         Intent(this, DashboardNewActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 

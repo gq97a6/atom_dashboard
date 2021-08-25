@@ -16,6 +16,10 @@ object Dashboards {
     private val Gson = Gson()
     private var dashboards: MutableList<Dashboard> = mutableListOf()
 
+    init {
+        getSaved()
+    }
+
     fun getList(): MutableList<Dashboard> = dashboards
     fun get(id: Long): Dashboard = dashboards.find { it.id == id } ?: Dashboard("err")
     fun add(d: Dashboard) {
@@ -23,7 +27,7 @@ object Dashboards {
         save()
     }
 
-    fun getSaved() {
+    private fun getSaved() {
         if (isLive) return
 
         val list: MutableList<Dashboard> = mutableListOf()

@@ -4,15 +4,15 @@
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical"
+    android:tag="background"
     tools:context=".activities.dashboard.DashboardActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:baselineAligned="false"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="0dp"
@@ -37,11 +37,12 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
             android:layout_gravity="bottom"
+            android:layout_weight="10"
             android:orientation="vertical">
 
             <TextView
+                android:tag="colorA"
                 android:id="@+id/d_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,6 +51,7 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:tag="colorB"
                 android:id="@+id/d_tag_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,6 +90,7 @@
         android:layout_weight="1">
 
         <TextView
+            android:tag="colorC"
             android:id="@+id/d_placeholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -102,7 +105,6 @@
             android:id="@+id/d_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
             android:paddingHorizontal="@dimen/tile_padding"
             android:paddingTop="@dimen/tile_padding" />
 
@@ -112,22 +114,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_marginBottom="20dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
-            <ImageView
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_gravity="bottom"
                 android:layout_marginHorizontal="40dp"
                 android:background="@drawable/background_button"
-                tools:ignore="ContentDescription" />
+                android:tag="contrast205" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="30dp"
-                android:background="#00FFFFFF"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -145,7 +146,8 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_add" />
+                        android:background="@drawable/button_add"
+                        android:tag="color" />
 
                 </FrameLayout>
 
@@ -163,7 +165,8 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_remove" />
+                        android:background="@drawable/button_remove"
+                        android:tag="colorA" />
 
                 </FrameLayout>
 
@@ -181,7 +184,8 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_swap" />
+                        android:background="@drawable/button_swap"
+                        android:tag="colorA" />
 
                 </FrameLayout>
 
@@ -199,7 +203,8 @@
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/button_edit" />
+                        android:background="@drawable/button_edit"
+                        android:tag="colorA" />
 
                 </FrameLayout>
 

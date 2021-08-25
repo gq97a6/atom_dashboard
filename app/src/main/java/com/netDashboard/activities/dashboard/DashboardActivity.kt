@@ -13,11 +13,12 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.screenHeight
+import com.netDashboard.themes.Theme
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -33,6 +34,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))
@@ -100,15 +102,15 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        super.onPause()
+
         dashboard.tiles = adapter.list
         Dashboards.save()
-
-        super.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {
@@ -119,7 +121,6 @@ class DashboardActivity : AppCompatActivity() {
 
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
-                finish()
             }
         }
     }
@@ -147,7 +148,6 @@ class DashboardActivity : AppCompatActivity() {
                     it.putExtra("tileIndex", adapter.list.indexOf(item))
                     it.putExtra("dashboardId", dashboard.id)
                     startActivity(it)
-                    finish()
                 }
             }
         }
@@ -202,7 +202,6 @@ class DashboardActivity : AppCompatActivity() {
             it.putExtra("exitActivity", "DashboardActivity")
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 
@@ -243,7 +242,6 @@ class DashboardActivity : AppCompatActivity() {
         Intent(this, TileNewActivity::class.java).also {
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 

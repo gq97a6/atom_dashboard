@@ -3,14 +3,14 @@ package com.netDashboard.activities.dashboard.tile_new
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTileNewBinding
+import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -27,6 +27,7 @@ class TileNewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityTileNewBinding.inflate(layoutInflater)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         dashboardId = intent.getLongExtra("dashboardId", 0)
@@ -51,7 +52,7 @@ class TileNewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {
@@ -60,7 +61,6 @@ class TileNewActivity : AppCompatActivity() {
         Intent(this, DashboardActivity::class.java).also {
             it.putExtra("dashboardId", dashboardId)
             startActivity(it)
-            finish()
         }
     }
 
@@ -78,7 +78,6 @@ class TileNewActivity : AppCompatActivity() {
             it.putExtra("dashboardId", dashboardId)
             it.putExtra("tileIndex", dashboard.tiles.lastIndex)
             startActivity(it)
-            finish()
         }
     }
 }

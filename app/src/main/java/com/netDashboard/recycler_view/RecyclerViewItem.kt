@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
+import com.netDashboard.themes.Theme
 
 abstract class RecyclerViewItem {
 
@@ -91,8 +92,8 @@ abstract class RecyclerViewItem {
                     }
                 )
 
-                flagMark?.backgroundTintList = ColorStateList.valueOf(-16777216)
-                flagBackground?.setBackgroundColor((-1).alpha(.7f))
+                flagMark?.backgroundTintList = ColorStateList.valueOf(Theme.color)
+                flagBackground?.setBackgroundColor(Theme.colorD.alpha(190))
 
                 flagMark?.visibility = View.VISIBLE
                 flagBackground?.visibility = View.VISIBLE

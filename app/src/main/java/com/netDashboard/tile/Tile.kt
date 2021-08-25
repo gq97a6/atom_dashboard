@@ -1,6 +1,5 @@
 package com.netDashboard.tile
 
-import android.graphics.Color
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
@@ -8,9 +7,6 @@ import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 abstract class Tile : RecyclerViewItem() {
-
-    var color = Color.parseColor("#BF4040")
-    var isColouredByTheme = false
 
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
@@ -37,6 +33,8 @@ abstract class Tile : RecyclerViewItem() {
         params.height =
             ((screenWidth - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
+
+        applyTheme()
     }
 
     abstract var typeTag: String
@@ -81,8 +79,7 @@ abstract class Tile : RecyclerViewItem() {
         }
     }
 
-    open fun setThemeColor(color: Int) {
-        this.color = color
+    open fun applyTheme() {
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {

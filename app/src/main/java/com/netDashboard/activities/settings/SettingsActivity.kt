@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.MainActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.activities.theme.ThemeActivity
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivitySettingsBinding
 import com.netDashboard.settings.Settings
+import com.netDashboard.themes.Theme
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -17,11 +19,27 @@ class SettingsActivity : AppCompatActivity() {
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
         viewConfig()
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         b.sLast.setOnCheckedChangeListener { _, state ->
             Settings.startFromLast = state
         }
+
+        b.sThemeEdit.setOnClickListener {
+            Intent(this, ThemeActivity::class.java).also {
+                startActivity(it)
+            }
+        }
+
+        b.sThemeIsGlobal.setOnCheckedChangeListener { _, state ->
+            Theme.isGlobal = state
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {
@@ -29,18 +47,11 @@ class SettingsActivity : AppCompatActivity() {
 
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
-            finish()
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOnDestroy.call()
-    }
-
     private fun viewConfig() {
-
         b.sLast.isChecked = Settings.startFromLast
-
+        b.sThemeIsGlobal.isChecked = Theme.isGlobal
     }
 }

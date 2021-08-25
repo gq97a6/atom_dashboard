@@ -4,10 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:tag="background"
     android:orientation="vertical"
     tools:context=".activities.settings.SettingsActivity">
 
     <TextView
+        android:tag="color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -20,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:paddingHorizontal="30dp">
+        android:paddingHorizontal="30dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,18 +31,82 @@
             android:orientation="vertical">
 
             <TextView
-                android:paddingBottom="3dp"
+                android:tag="colorA"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dp"
+                android:paddingBottom="3dp"
                 android:text="Global functions"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
             <LinearLayout
+                android:tag="frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_layout"
+                android:background="@drawable/background_frame"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:tag="colorB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Last dashboard on boot:"
+                    android:textColor="@color/gray150"
+                    android:textSize="15sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp">
+
+                    <TextView
+                        android:tag="colorC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="OFF"
+                        android:textColor="@color/gray150"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/s_last"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:tag="colorC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ON"
+                        android:textColor="@color/gray150"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:tag="colorA"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="3dp"
+                android:paddingBottom="3dp"
+                android:layout_marginTop="20dp"
+                android:text="Main theme"
+                android:textColor="@color/gray150"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:tag="frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_frame"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -50,10 +117,38 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:tag="colorB"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Last dashboard on boot:"
+                        android:text="Edit color:"
+                        android:textColor="@color/gray150"
+                        android:textSize="15sp" />
+
+                    <Button
+                        android:tag="color"
+                        android:id="@+id/s_theme_edit"
+                        style="@style/button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/button_edit" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:tag="colorB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Use globally:"
                         android:textColor="@color/gray150"
                         android:textSize="15sp" />
 
@@ -64,6 +159,7 @@
                         android:paddingHorizontal="10dp">
 
                         <TextView
+                            android:tag="colorC"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="OFF"
@@ -72,11 +168,12 @@
                             tools:ignore="HardcodedText" />
 
                         <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/s_last"
+                            android:id="@+id/s_theme_is_global"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <TextView
+                            android:tag="colorC"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ON"

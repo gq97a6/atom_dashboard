@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">NetDashboard</string>
+    <string name="app_name">\?NetDashboard</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -39,15 +39,12 @@
     <string name="p_mqtt">MQTT</string>
 
     <string name="tp_dimensions">Dimensions</string>
-    <string name="tp_dimensions_info">You can control only one dimension.</string>
+    <string name="tp_dimensions_info">You can control only one dimension at the time.</string>
     <string name="tp_design">Design</string>
-    <string name="tp_design_info_theme">Colour tile according to dashboard\'s theme. \nCheck properties to change it.</string>
     <string name="tp_publish_topic">Publish topic:</string>
     <string name="tp_subscribe_topic">Subscribe topic:</string>
     <string name="tp_slider_height">Height:</string>
     <string name="tp_slider_width">Width:</string>
-    <string name="tp_design_chip0">colour by theme</string>
-    <string name="tp_design_chip1">specify color</string>
     <string name="tp_design_hue">Hue:</string>
     <string name="tp_design_saturation">Saturation:</string>
     <string name="tp_design_value">Value:</string>
@@ -56,8 +53,5 @@
     <string name="tb_default_text" tools:keep="@string/tile_button_default_text">Default value</string>
     <string name="tp_json_switch">Payload is JSON:</string>
     <string name="tp_conf_switch">Confirm publishing:</string>
-    <string name="p_mqtt_failed">Failed:</string>
-    <string name="p_mqtt_attempting">Attempting:</string>
-    <string name="p_mqtt_connected">Connected:</string>
     <string name="tp_tile_specific">Type specific:</string>
 </resources>

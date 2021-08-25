@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
+import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
+import com.netDashboard.themes.Theme
 import java.util.*
 import kotlin.random.Random
 
@@ -28,6 +28,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
+        Theme.apply(this, b.root)
         setContentView(b.root)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
@@ -48,49 +49,24 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
 
+        var isAttempting = false
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
-                if (!dashboard.mqttEnabled) {
-                    R.string.d_disconnected
-                } else {
+                val v = b.dpMqttStatus
+                v.text = if (dashboard.mqttEnabled) {
                     if (it.client.isConnected) {
-                        b.dpMqttAddressStatus.background = b.dpMqttConnected.background
-                        b.dpMqttPortStatus.background = b.dpMqttConnected.background
-
-                        b.dpMqttAddressStatus.animate().alpha(1f)
-                        b.dpMqttPortStatus.animate().alpha(1f)
+                        v.clearAnimation()
+                        "CONNECTED"
+                    } else if (!isDone) {
+                        if (v.animation == null) v.blink(-1, 400)
+                        "ATTEMPTING"
                     } else {
-                        if (isDone) {
-                            b.dpMqttAddressStatus.background = b.dpMqttFailed.background
-                            b.dpMqttPortStatus.background = b.dpMqttFailed.background
-
-                            b.dpMqttAddressStatus.animate().alpha(1f)
-                            b.dpMqttPortStatus.animate().alpha(1f)
-                        } else {
-                            b.dpMqttAddressStatus.background = b.dpMqttAttempting.background
-                            b.dpMqttPortStatus.background = b.dpMqttAttempting.background
-
-                            b.dpMqttAddressStatus.animate()
-                                .alpha(1f)
-                                .withEndAction {
-                                    b.dpMqttAddressStatus.animate()
-                                        .alpha(0f)
-                                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
-                                        4000
-                                }
-                                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 200
-
-                            b.dpMqttPortStatus.animate()
-                                .alpha(1f)
-                                .withEndAction {
-                                    b.dpMqttPortStatus.animate()
-                                        .alpha(0f)
-                                        ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration =
-                                        4000
-                                }
-                                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 200
-                        }
+                        v.clearAnimation()
+                        "FAILED"
                     }
+                } else {
+                    v.clearAnimation()
+                    "DISCONNECTED"
                 }
             }
         }
@@ -144,12 +120,13 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+
         Dashboards.save()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {
@@ -165,7 +142,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         ).also {
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
-            finish()
         }
     }
 

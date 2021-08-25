@@ -1,5 +1,3 @@
-@file:Suppress("ControlFlowWithEmptyBody")
-
 package com.netDashboard.themes
 
 import android.app.Activity
@@ -24,28 +22,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.google.gson.Gson
 import com.netDashboard.*
-import com.netDashboard.folder_tree.FolderTree.themeFile
-import java.io.File
 
-object Theme {
-
-    init {
-        getSaved()
-    }
-
-    fun save() {
-        try {
-            File(themeFile).writeText(Gson().toJson(this))
-        } catch (e: Exception) {
-            throw e
-        }
-    }
-
-    private fun getSaved() {
-
-    }
+class Theme {
 
     var isGlobal = false
     var isDark = false
@@ -264,5 +243,14 @@ object Theme {
         tag?.toString()?.let {
             if (it.isNotBlank()) Log.i("OUY", "Unknown $type tag: $it")
         }
+    }
+
+    companion object {
+        fun getSaved(): Theme {
+            return Theme()
+        }
+    }
+
+    fun save() {
     }
 }

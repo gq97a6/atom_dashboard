@@ -7,8 +7,8 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivitySettingsBinding
-import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.settings
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -19,11 +19,11 @@ class SettingsActivity : AppCompatActivity() {
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
         viewConfig()
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         b.sLast.setOnCheckedChangeListener { _, state ->
-            Settings.startFromLast = state
+            settings.startFromLast = state
         }
 
         b.sThemeEdit.setOnClickListener {
@@ -33,7 +33,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         b.sThemeIsGlobal.setOnCheckedChangeListener { _, state ->
-            Theme.isGlobal = state
+            G.theme.isGlobal = state
         }
     }
 
@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun viewConfig() {
-        b.sLast.isChecked = Settings.startFromLast
-        b.sThemeIsGlobal.isChecked = Theme.isGlobal
+        b.sLast.isChecked = settings.startFromLast
+        b.sThemeIsGlobal.isChecked = G.theme.isGlobal
     }
 }

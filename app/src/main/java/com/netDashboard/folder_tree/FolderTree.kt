@@ -6,9 +6,9 @@ object FolderTree {
     val dashboardsFile
         get() = "$rootFolder/dashboards"
     val settingsFile
-        get() = "$rootFolder/dashboards"
+        get() = "$rootFolder/settings"
     val themeFile
-        get() = "$rootFolder/dashboards"
+        get() = "$rootFolder/theme"
 
     //fun buildPath(path: String) {
     //    val f = File(path)

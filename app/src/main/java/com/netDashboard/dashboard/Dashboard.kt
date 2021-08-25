@@ -4,9 +4,9 @@ import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
-import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import java.util.*
 
@@ -53,7 +53,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     private fun applyTheme() {
         val button = holder?.itemView?.findViewById<Button>(R.id.dle_button)
-        button?.backgroundTintList = ColorStateList.valueOf(Theme.colorB)
-        button?.setTextColor(Theme.color)
+        button?.backgroundTintList = ColorStateList.valueOf(theme.colorB)
+        button?.setTextColor(theme.color)
     }
 }

@@ -1,6 +1,7 @@
 package com.netDashboard.tile
 
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
@@ -83,14 +84,11 @@ abstract class Tile : RecyclerViewItem() {
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
-        Dashboards.get(dashboardId).daemonGroup?.mqttd.let {
-            return if (it != null) {
-                it.publish(topic, msg, qos, retained)
-                true
-            } else {
-                false
-            }
+        dashboards.byId(dashboardId).daemonGroup?.mqttd?.let {
+            it.publish(topic, msg, qos, retained)
+            return true
         }
+        return false
     }
 
     open fun onData(data: Pair<String?, MqttMessage?>): Boolean {

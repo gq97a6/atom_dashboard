@@ -2,12 +2,11 @@ package com.netDashboard.foreground_service
 
 import android.content.Context
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.foreground_service.demons.Mqttd
+import com.netDashboard.globals.G.dashboards
 
 class DaemonGroups(val context: Context) {
 
-    private val dashboards = Dashboards.getList()
     private val list: MutableList<DaemonGroup> = mutableListOf()
 
     init {

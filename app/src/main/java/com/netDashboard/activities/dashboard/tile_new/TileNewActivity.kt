@@ -8,9 +8,10 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.byId
 import com.netDashboard.databinding.ActivityTileNewBinding
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -27,11 +28,11 @@ class TileNewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityTileNewBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         dashboardId = intent.getLongExtra("dashboardId", 0)
-        dashboard = Dashboards.get(dashboardId)
+        dashboard = dashboards.byId(dashboardId)
 
         b.tnButtonLayout.setOnClickListener {
             addTile(ButtonTile())

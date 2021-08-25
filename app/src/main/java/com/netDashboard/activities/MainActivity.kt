@@ -14,24 +14,23 @@ import com.netDashboard.activities.dashboard_new.DashboardNewActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.DashboardAdapter
-import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
+import com.netDashboard.globals.G.settings
 import com.netDashboard.screenHeight
-import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Theme
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
 
     private lateinit var adapter: DashboardAdapter
-    private lateinit var settings: Settings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()
@@ -94,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                 }
             } else if (adapter.editType.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
-                    Settings.lastDashboardId = item.id
+                    settings.lastDashboardId = item.id
 
                     it.putExtra("dashboardId", item.id)
                     startActivity(it)
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        adapter.submitList(Dashboards.getList())
+        adapter.submitList(dashboards)
 
         val layoutManager = GridLayoutManager(this, 1)
 

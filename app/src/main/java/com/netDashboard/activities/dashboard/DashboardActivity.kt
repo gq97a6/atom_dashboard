@@ -15,10 +15,12 @@ import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityDashboardBinding
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.screenHeight
-import com.netDashboard.themes.Theme
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -34,10 +36,10 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
-        dashboard = Dashboards.get(intent.getLongExtra("dashboardId", 0))
+        dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
 
         setupRecyclerView()
 
@@ -105,7 +107,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onPause()
 
         dashboard.tiles = adapter.list
-        Dashboards.save()
+        dashboards.save()
     }
 
     override fun onDestroy() {

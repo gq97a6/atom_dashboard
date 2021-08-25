@@ -5,13 +5,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
-import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
+import com.netDashboard.globals.G.settings
+import java.io.File
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -21,8 +22,11 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        File("test").writeText("AAAAA")
+
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
+
         setContentView(b.root)
 
         rootFolder = filesDir.canonicalPath.toString()
@@ -47,14 +51,14 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun onServiceReady() {
         ForegroundService.service = service
 
-        for (d in Dashboards.getList()) {
+        for (d in dashboards) {
             d.daemonGroup = service.dgc.get(d.name)
         }
 
-        if (Settings.lastDashboardId != null && Settings.startFromLast) {
+        if (settings.lastDashboardId != null && settings.startFromLast) {
 
             Intent(this, DashboardActivity::class.java).also {
-                it.putExtra("dashboardId", Settings.lastDashboardId)
+                it.putExtra("dashboardId", settings.lastDashboardId)
                 overridePendingTransition(0, 0)
                 startActivity(it)
             }

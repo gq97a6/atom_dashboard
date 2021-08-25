@@ -3,8 +3,8 @@ package com.netDashboard.tile.types.button
 import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -42,8 +42,8 @@ class ButtonTile : Tile() {
         super.applyTheme()
 
         val button = holder?.itemView?.findViewById<Button>(R.id.tb_button)
-        button?.backgroundTintList = ColorStateList.valueOf(Theme.colorB)
-        button?.setTextColor(Theme.color)
+        button?.backgroundTintList = ColorStateList.valueOf(theme.colorB)
+        button?.setTextColor(theme.color)
     }
 
 

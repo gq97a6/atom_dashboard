@@ -7,10 +7,11 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityDashboardNewBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import kotlin.random.Random
 
 class DashboardNewActivity : AppCompatActivity() {
@@ -20,12 +21,13 @@ class DashboardNewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()
         val dashboard = Dashboard(name)
-        Dashboards.add(dashboard)
+        dashboards.add(dashboard)
+        dashboards.save()
 
         service?.dgc?.notifyDashboardAdded(dashboard)
 

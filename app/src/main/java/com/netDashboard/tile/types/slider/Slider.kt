@@ -6,8 +6,8 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
 import com.netDashboard.*
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
@@ -108,9 +108,9 @@ class SliderTile : Tile() {
     override fun applyTheme() {
         super.applyTheme()
 
-        holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(Theme.colorB)
+        holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(theme.colorB)
         holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            ?.setTextColor(Theme.color)
+            ?.setTextColor(theme.color)
     }
 
     override fun onEdit(isEdit: Boolean) {

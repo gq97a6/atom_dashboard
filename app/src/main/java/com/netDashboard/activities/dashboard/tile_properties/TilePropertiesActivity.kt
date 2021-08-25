@@ -14,10 +14,12 @@ import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.dezero
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.toPx
@@ -34,13 +36,13 @@ class TilePropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         dashboardId = intent.getLongExtra("dashboardId", 0)
-        dashboard = Dashboards.get(dashboardId)
+        dashboard = dashboards.byId(dashboardId)
 
         tileIndex = intent.getIntExtra("tileIndex", 0)
         tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -154,7 +156,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        Dashboards.save()
+        dashboards.save()
         dashboard.daemonGroup?.mqttd?.reinit()
     }
 

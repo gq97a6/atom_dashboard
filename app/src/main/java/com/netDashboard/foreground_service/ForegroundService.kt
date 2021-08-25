@@ -16,6 +16,8 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.save
+import com.netDashboard.globals.G.dashboards
 import kotlin.system.exitProcess
 
 
@@ -58,7 +60,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            Dashboards.save()
+            dashboards.save()
             stopForeground(true)
             stopSelf()
             exitProcess(0)
@@ -73,8 +75,7 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onDestroy() {
-
-        Dashboards.save()
+        dashboards.save()
 
         if (isRunning) {
             val foregroundServiceHandler = ForegroundServiceHandler(this)

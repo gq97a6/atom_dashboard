@@ -1,14 +1,11 @@
 package com.netDashboard.app_on
 
-import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Theme
+import com.netDashboard.dashboard.Dashboards.Companion.save
+import com.netDashboard.globals.G.dashboards
 
 object AppOn {
     fun destroy() {
-        Dashboards.save()
-        Settings.save()
-        Theme.save()
+        dashboards.save()
     }
 
     fun pause() {

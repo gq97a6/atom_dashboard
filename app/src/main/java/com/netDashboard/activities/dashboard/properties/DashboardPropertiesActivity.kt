@@ -11,9 +11,11 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
+import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
-import com.netDashboard.themes.Theme
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import java.util.*
 import kotlin.random.Random
 
@@ -28,12 +30,12 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        Theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardId = intent.getLongExtra("dashboardId", 0)
-        dashboard = Dashboards.get(dashboardId)
+        dashboard = dashboards.byId(dashboardId)
 
         b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
 
@@ -49,7 +51,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
 
-        var isAttempting = false
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
                 val v = b.dpMqttStatus
@@ -120,8 +121,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
-        Dashboards.save()
+        dashboards.save()
     }
 
     override fun onDestroy() {

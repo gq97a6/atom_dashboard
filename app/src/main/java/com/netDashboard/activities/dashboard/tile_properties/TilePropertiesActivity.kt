@@ -185,10 +185,6 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpDimenHeight.value = tile.height.toFloat()
         dimenOnChangeListener(tile.width.toFloat(), tile.height.toFloat())
 
-        //Design
-        val hsv = floatArrayOf(0f, 0f, 0f)
-        Color.colorToHSV(tile.color, hsv)
-
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttEnabled
         b.tpMqttPub.setText(tile.mqttTopics.pubs.get("base").topic)

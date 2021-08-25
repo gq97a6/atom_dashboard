@@ -90,7 +90,7 @@
             android:id="@+id/m_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/tile_padding"
+            android:paddingHorizontal="10dp"
             android:paddingTop="@dimen/tile_padding" />
 
         <FrameLayout

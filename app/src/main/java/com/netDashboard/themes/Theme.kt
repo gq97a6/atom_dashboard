@@ -40,13 +40,13 @@ object Theme {
             return if (lConCheck && dConCheck) isDark else lConCheck
         }
 
-    private val colorA
+    val colorA
         get() = ColorUtils.blendARGB(color, colorBackground, 0.4f)
-    private val colorB
+    val colorB
         get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
-    private val colorC
+    val colorC
         get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
-    private val colorD
+    val colorD
         get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
 
     private val colorBackground: Int

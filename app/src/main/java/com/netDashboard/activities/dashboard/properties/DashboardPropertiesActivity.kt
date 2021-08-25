@@ -122,7 +122,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         super.onPause()
 
         Dashboards.save()
-        finish()
     }
 
     override fun onDestroy() {

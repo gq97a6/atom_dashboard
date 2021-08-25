@@ -156,7 +156,6 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         Dashboards.save()
         dashboard.daemonGroup?.mqttd?.reinit()
-        finish()
     }
 
     override fun onDestroy() {

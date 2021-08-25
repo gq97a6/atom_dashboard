@@ -63,8 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        finish()
-    }
+        }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -39,7 +39,6 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        finish()
     }
 
     override fun onDestroy() {

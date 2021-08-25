@@ -61,7 +61,6 @@ class ThemeActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        finish()
     }
 
     override fun onBackPressed() {

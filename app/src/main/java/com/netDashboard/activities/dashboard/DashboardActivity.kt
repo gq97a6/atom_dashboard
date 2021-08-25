@@ -106,7 +106,6 @@ class DashboardActivity : AppCompatActivity() {
 
         dashboard.tiles = adapter.list
         Dashboards.save()
-        finish()
     }
 
     override fun onDestroy() {

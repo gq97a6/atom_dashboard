@@ -51,7 +51,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
         applyTheme()
     }
 
-    fun applyTheme() {
+    private fun applyTheme() {
         val button = holder?.itemView?.findViewById<Button>(R.id.dle_button)
         button?.backgroundTintList = ColorStateList.valueOf(Theme.colorB)
         button?.setTextColor(Theme.color)

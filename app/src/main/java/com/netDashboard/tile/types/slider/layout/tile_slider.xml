@@ -15,7 +15,7 @@
         android:backgroundTint="#FFFFFF"
         android:elevation="10dp"
         android:visibility="gone"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,DuplicateIncludedIds" />
 
     <View
         android:id="@+id/flag_background"
@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:elevation="5dp"
         android:visibility="gone"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,DuplicateIncludedIds" />
 
     <View
         android:id="@+id/background"

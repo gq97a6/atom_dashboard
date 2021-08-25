@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.databinding.ActivityThemeBinding
 import com.netDashboard.themes.Theme
@@ -57,10 +56,6 @@ class ThemeActivity : AppCompatActivity() {
             Theme.isDark = state
             Theme.apply(this, b.root)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onBackPressed() {

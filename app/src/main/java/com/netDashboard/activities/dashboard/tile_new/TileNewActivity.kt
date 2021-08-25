@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTileNewBinding
@@ -50,13 +50,9 @@ class TileNewActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {

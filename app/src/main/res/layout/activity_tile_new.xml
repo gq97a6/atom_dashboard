@@ -93,7 +93,8 @@
                     android:id="@+id/tn_slider"
                     layout="@layout/tile_slider"
                     android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_height="150dp"
+                    tools:ignore="DuplicateIncludedIds" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

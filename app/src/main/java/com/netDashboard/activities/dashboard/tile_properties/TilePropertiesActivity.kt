@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
@@ -160,7 +160,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {

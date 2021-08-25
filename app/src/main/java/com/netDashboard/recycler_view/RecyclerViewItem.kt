@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.contrastColor
 import com.netDashboard.themes.Theme
 
 abstract class RecyclerViewItem {

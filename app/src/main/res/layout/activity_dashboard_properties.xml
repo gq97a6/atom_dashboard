@@ -78,50 +78,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_frame"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:gravity="center"
                 android:padding="10dp"
                 android:tag="frame">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:tag="colorB"
+                    android:text="@string/p_span"
+                    android:textColor="@color/gray150"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:tag="colorB"
-                        android:text="@string/p_span"
-                        android:textColor="@color/gray150"
-                        android:textSize="15sp" />
+                <TextView
+                    android:id="@+id/dp_span_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:gravity="center"
+                    android:tag="colorA"
+                    android:text="1"
+                    android:textColor="@color/gray100"
+                    android:textSize="15sp"
+                    tools:ignore="HardcodedText" />
 
-                    <TextView
-                        android:id="@+id/dp_span_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:gravity="center"
-                        android:tag="colorA"
-                        android:text="1"
-                        android:textColor="@color/gray100"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/dp_span"
-                        style="@style/slider"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:stepSize="1"
-                        android:tag="TEST"
-                        android:valueFrom="1"
-                        android:valueTo="6" />
-
-                </LinearLayout>
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/dp_span"
+                    style="@style/slider"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="2"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="6" />
 
             </LinearLayout>
 

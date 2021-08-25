@@ -24,9 +24,28 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.gson.Gson
 import com.netDashboard.*
+import com.netDashboard.folder_tree.FolderTree.themeFile
+import java.io.File
 
 object Theme {
+
+    init {
+        getSaved()
+    }
+
+    fun save() {
+        try {
+            File(themeFile).writeText(Gson().toJson(this))
+        } catch (e: Exception) {
+            throw e
+        }
+    }
+
+    private fun getSaved() {
+
+    }
 
     var isGlobal = false
     var isDark = false
@@ -40,11 +59,11 @@ object Theme {
             return if (lConCheck && dConCheck) isDark else lConCheck
         }
 
-    val colorA
+    private val colorA
         get() = ColorUtils.blendARGB(color, colorBackground, 0.4f)
     val colorB
         get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
-    val colorC
+    private val colorC
         get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
     val colorD
         get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)

@@ -12,7 +12,7 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
 import com.netDashboard.activities.settings.SettingsActivity
-import com.netDashboard.app_on_destroy.AppOnDestroy
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityMainBinding
@@ -61,13 +61,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        }
-
     override fun onDestroy() {
         super.onDestroy()
-        AppOnDestroy.call()
+        AppOn.destroy()
     }
 
     override fun onBackPressed() {

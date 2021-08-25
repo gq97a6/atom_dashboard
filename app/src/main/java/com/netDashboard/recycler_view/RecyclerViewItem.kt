@@ -13,7 +13,6 @@ abstract class RecyclerViewItem {
     var width = 1
     var height = 1
 
-    @Transient
     var id = IdGenerator.getId()
 
     abstract val layout: Int

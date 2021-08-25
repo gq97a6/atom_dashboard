@@ -12,7 +12,6 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
-import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
@@ -119,14 +118,14 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         })
     }
 
-    override fun onPause() {
-        super.onPause()
-        dashboards.save()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         AppOn.destroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
     }
 
     override fun onBackPressed() {

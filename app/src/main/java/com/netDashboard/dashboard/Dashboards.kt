@@ -14,8 +14,6 @@ class Dashboards {
     companion object {
         fun getSaved(): MutableList<Dashboard> {
 
-            return mutableListOf() //todo
-
             val list: MutableList<Dashboard> = mutableListOf()
 
             val jsonArray = try {

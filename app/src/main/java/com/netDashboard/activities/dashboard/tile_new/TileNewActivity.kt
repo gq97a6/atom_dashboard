@@ -65,6 +65,11 @@ class TileNewActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
+    }
+
     private var isDone = false
     private fun addTile(tile: Tile) {
         if (isDone) return

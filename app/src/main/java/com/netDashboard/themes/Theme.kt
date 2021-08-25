@@ -23,6 +23,10 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.*
+import com.netDashboard.folder_tree.FolderTree
+import com.netDashboard.globals.G.gson
+import java.io.File
+import java.io.FileReader
 
 class Theme {
 
@@ -246,11 +250,19 @@ class Theme {
     }
 
     companion object {
-        fun getSaved(): Theme {
-            return Theme()
-        }
+        fun getSaved(): Theme =
+            try {
+                gson.fromJson(FileReader(FolderTree.themeFile), Theme::class.java)
+            } catch (e: Exception) {
+                Theme()
+            }
     }
 
     fun save() {
+        try {
+            File(FolderTree.themeFile).writeText(gson.toJson(this))
+        } catch (e: Exception) {
+            throw e
+        }
     }
 }

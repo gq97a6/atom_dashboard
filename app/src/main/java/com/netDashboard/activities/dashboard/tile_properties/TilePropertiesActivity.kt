@@ -15,7 +15,6 @@ import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
-import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.dezero
 import com.netDashboard.globals.G
@@ -156,8 +155,9 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        dashboards.save()
         dashboard.daemonGroup?.mqttd?.reinit()
+
+        AppOn.pause()
     }
 
     override fun onDestroy() {

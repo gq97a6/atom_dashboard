@@ -12,7 +12,6 @@ import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
-import java.io.File
 
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
@@ -22,15 +21,13 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //test
-        //File("test").writeText("AAAAA")
+        rootFolder = filesDir.canonicalPath.toString()
+        G.initialize()
 
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
 
         setContentView(b.root)
-
-        rootFolder = filesDir.canonicalPath.toString()
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()
@@ -47,6 +44,11 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         AppOn.destroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
     }
 
     private fun onServiceReady() {

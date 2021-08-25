@@ -16,7 +16,6 @@ import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActiv
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
-import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
@@ -103,16 +102,16 @@ class DashboardActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOn.destroy()
+    }
+
     override fun onPause() {
         super.onPause()
 
         dashboard.tiles = adapter.list
-        dashboards.save()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
+        AppOn.pause()
     }
 
     override fun onBackPressed() {

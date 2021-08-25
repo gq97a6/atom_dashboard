@@ -43,6 +43,11 @@ class DashboardNewActivity : AppCompatActivity() {
         AppOn.destroy()
     }
 
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
+    }
+
     override fun onBackPressed() {
         Intent(this, MainActivity::class.java).also {
             startActivity(it)

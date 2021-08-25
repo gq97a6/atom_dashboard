@@ -42,6 +42,11 @@ class SettingsActivity : AppCompatActivity() {
         AppOn.destroy()
     }
 
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
 

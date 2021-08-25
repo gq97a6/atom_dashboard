@@ -15,9 +15,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
-import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.dashboard.Dashboards.Companion.save
-import com.netDashboard.globals.G.dashboards
+import com.netDashboard.app_on.AppOn
 import kotlin.system.exitProcess
 
 
@@ -60,7 +58,6 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            dashboards.save()
             stopForeground(true)
             stopSelf()
             exitProcess(0)
@@ -75,7 +72,7 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        dashboards.save()
+        AppOn.destroy()
 
         if (isRunning) {
             val foregroundServiceHandler = ForegroundServiceHandler(this)

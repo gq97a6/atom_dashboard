@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.settings.SettingsActivity
+import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivityThemeBinding
 import com.netDashboard.globals.G
 
@@ -56,6 +57,16 @@ class ThemeActivity : AppCompatActivity() {
             G.theme.isDark = state
             G.theme.apply(this, b.root)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppOn.destroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AppOn.pause()
     }
 
     override fun onBackPressed() {

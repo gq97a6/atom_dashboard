@@ -6,6 +6,7 @@ import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 
 object AppOn {
+
     fun destroy() {
         dashboards.save()
         settings.save()

@@ -24,6 +24,10 @@ class DashboardNewActivity : AppCompatActivity() {
         G.theme.apply(this, b.root)
         setContentView(b.root)
 
+        service?.finishFlag?.observe(this) { flag ->
+            if(flag) finishAffinity()
+        }
+
         val name = kotlin.math.abs(Random.nextInt()).toString()
         val dashboard = Dashboard(name)
         dashboards.add(dashboard)

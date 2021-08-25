@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivityThemeBinding
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 
 class ThemeActivity : AppCompatActivity() {
@@ -19,6 +20,10 @@ class ThemeActivity : AppCompatActivity() {
         viewConfig()
         G.theme.apply(this, b.root)
         setContentView(b.root)
+
+        service?.finishFlag?.observe(this) { flag ->
+            if (flag) finishAffinity()
+        }
 
         b.tHue.addOnChangeListener { _, _, _ ->
             G.theme.color = Color.HSVToColor(

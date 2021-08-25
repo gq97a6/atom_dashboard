@@ -152,6 +152,10 @@ class Theme {
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
+            "colorB;color" -> {
+                this.backgroundTintList = ColorStateList.valueOf(colorB)
+                this.setTextColor(color)
+            }
             else -> onUnknownTag(this.tag, "materialButton")
         }
     }

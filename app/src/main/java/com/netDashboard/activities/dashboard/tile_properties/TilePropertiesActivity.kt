@@ -17,6 +17,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.dezero
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
@@ -44,6 +45,10 @@ class TilePropertiesActivity : AppCompatActivity() {
         G.theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
+
+        service?.finishFlag?.observe(this) { flag ->
+            if (flag) finishAffinity()
+        }
 
         if (dashboard.spanCount.toFloat() > 1f) {
             b.tpDimenWidth.valueFrom = 1f

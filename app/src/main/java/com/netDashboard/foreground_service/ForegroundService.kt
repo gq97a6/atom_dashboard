@@ -20,6 +20,8 @@ import kotlin.system.exitProcess
 
 
 class ForegroundService : LifecycleService() {
+
+    var finishFlag = MutableLiveData(false)
     private var isRunning = false
     lateinit var dgc: DaemonGroups
 
@@ -58,9 +60,9 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            stopForeground(true)
             stopSelf()
-            exitProcess(0)
+            stopForeground(true)
+            finishFlag.postValue(true)
         } else {
             if (!isRunning) {
                 dgc = DaemonGroups(this)

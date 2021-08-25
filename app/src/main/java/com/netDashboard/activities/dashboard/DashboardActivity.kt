@@ -17,6 +17,7 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.screenHeight
@@ -37,6 +38,10 @@ class DashboardActivity : AppCompatActivity() {
         b = ActivityDashboardBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
         setContentView(b.root)
+
+        service?.finishFlag?.observe(this) { flag ->
+            if (flag) finishAffinity()
+        }
 
         dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
 

@@ -35,6 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         setupRecyclerView()
 
+        service?.finishFlag?.observe(this) { flag ->
+            if (flag) finishAffinity()
+        }
+
         b.mTouch.setOnClickListener {
             touchOnClick()
         }

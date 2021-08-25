@@ -13,6 +13,7 @@ import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import java.util.*
@@ -31,6 +32,10 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
         setContentView(b.root)
+
+        service?.finishFlag?.observe(this) { flag ->
+            if (flag) finishAffinity()
+        }
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardId = intent.getLongExtra("dashboardId", 0)

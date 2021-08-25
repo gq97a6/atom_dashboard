@@ -22,7 +22,8 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        File("test").writeText("AAAAA")
+        //test
+        //File("test").writeText("AAAAA")
 
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)

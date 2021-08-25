@@ -29,8 +29,8 @@ import com.netDashboard.*
 object Theme {
 
     var isGlobal = false
-    var isDark = true
-    var color = Color.parseColor("#00dba1")
+    var isDark = false
+    var color = Color.parseColor("#00469c")
 
     private val isDarkRec: Boolean
         get() {
@@ -104,32 +104,9 @@ object Theme {
         }
     }
 
-    private fun ChipGroup.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "chipGroup")
-        }
-    }
-
-    private fun RecyclerView.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "recyclerView")
-        }
-    }
-
     private fun FrameLayout.applyTheme() {
         when (this.tag) {
             else -> onUnknownTag(this.tag, "frameLayout")
-        }
-    }
-
-    private fun LinearLayout.applyTheme() {
-        when (this.tag) {
-            "background" -> this.setBackgroundColor(colorBackground)
-            "frame" -> {
-                val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, color)
-            }
-            else -> onUnknownTag(this.tag, "linearLayout")
         }
     }
 
@@ -147,6 +124,23 @@ object Theme {
                 drawable?.setStroke(1, color)
             }
             else -> onUnknownTag(this.tag, "view")
+        }
+    }
+
+    private fun LinearLayout.applyTheme() {
+        when (this.tag) {
+            "background" -> this.setBackgroundColor(colorBackground)
+            "frame" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.setStroke(1, color)
+            }
+            else -> onUnknownTag(this.tag, "linearLayout")
+        }
+    }
+
+    private fun RecyclerView.applyTheme() {
+        when (this.tag) {
+            else -> onUnknownTag(this.tag, "recyclerView")
         }
     }
 
@@ -185,35 +179,6 @@ object Theme {
         }
     }
 
-    //todo
-    private fun SwitchMaterial.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "switchMaterial")
-        }
-
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                getRandomColor()
-            )
-
-        val states = arrayOf(
-            intArrayOf(-android.R.attr.state_checked),
-            intArrayOf(android.R.attr.state_checked)
-        )
-
-        val colors = intArrayOf(
-            colorD,
-            colorB
-        )
-
-        val list = ColorStateList(states, colors)
-        this.thumbTintList = list
-        this.trackTintList =
-            ColorStateList.valueOf(
-                color
-            )
-    }
-
     private fun EditText.applyTheme() {
         when (this.tag) {
             "colorA;colorC;contrast25" -> {
@@ -223,6 +188,41 @@ object Theme {
             }
             else -> onUnknownTag(this.tag, "editText")
         }
+    }
+
+    private fun SwitchMaterial.applyTheme() {
+        when (this.tag) {
+            else -> onUnknownTag(this.tag, "switchMaterial")
+        }
+
+        val states = arrayOf(
+            intArrayOf(-android.R.attr.state_checked),
+            intArrayOf(android.R.attr.state_checked)
+        )
+
+        val colors = intArrayOf(
+            colorC,
+            colorB
+        )
+
+        val list = ColorStateList(states, colors)
+        this.trackTintList = list
+        this.thumbTintList =
+            ColorStateList.valueOf(
+                color
+            )
+    }
+
+    private fun Slider.applyTheme() {
+        when (this.tag) {
+            else -> onUnknownTag(this.tag, "slider")
+        }
+
+        this.trackActiveTintList = ColorStateList.valueOf(colorB)
+        this.tickActiveTintList = ColorStateList.valueOf(colorB)
+        this.trackInactiveTintList = ColorStateList.valueOf(colorC)
+        this.tickInactiveTintList = ColorStateList.valueOf(colorC)
+        this.thumbTintList = ColorStateList.valueOf(color)
     }
 
     private fun Chip.applyTheme() {
@@ -235,11 +235,10 @@ object Theme {
             )
     }
 
-    private fun Slider.applyTheme() {
+    private fun ChipGroup.applyTheme() {
         when (this.tag) {
-            else -> onUnknownTag(this.tag, "slider")
+            else -> onUnknownTag(this.tag, "chipGroup")
         }
-        this.trackActiveTintList = ColorStateList.valueOf(colorC)
     }
 
     private fun onUnknownTag(tag: Any?, type: String) {

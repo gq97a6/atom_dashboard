@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
         android:paddingHorizontal="30dp"
-        android:scrollIndicators="none">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"

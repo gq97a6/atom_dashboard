@@ -9,6 +9,7 @@
     tools:context=".activities.dashboard.tile_new.TileNewActivity">
 
     <TextView
+        android:tag="color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -18,22 +19,25 @@
         android:textSize="45sp" />
 
     <TextView
-        android:layout_width="300dp"
+        android:tag="colorC"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
         android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="You will be redirected to its properties afterwards."
         android:textColor="@color/gray100"
-        android:textSize="20sp" />
+        android:textSize="17sp" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:paddingHorizontal="20dp"
-        android:scrollIndicators="none">
+        android:scrollbars="none">
 
         <LinearLayout
+            android:tag="frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/background_frame"
@@ -54,11 +58,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
+                        android:tag="colorA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Button"
@@ -66,11 +71,12 @@
                         android:textSize="25sp" />
 
                     <TextView
+                        android:tag="colorB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Simplest tile. Tap to send predefined value."
                         android:textColor="@color/gray100"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -91,11 +97,12 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:padding="10dp">
 
                     <TextView
+                        android:tag="colorA"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Slider"
@@ -103,11 +110,12 @@
                         android:textSize="25sp" />
 
                     <TextView
+                        android:tag="colorB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Easy to control. Send or receive numbers."
                         android:textColor="@color/gray100"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 

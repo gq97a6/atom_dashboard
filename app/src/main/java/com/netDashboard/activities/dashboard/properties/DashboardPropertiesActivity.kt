@@ -52,9 +52,9 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         var isAttempting = false
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
-                if (dashboard.mqttEnabled) {
-                    val v = b.dpMqttStatus
-                    v.text = if (it.client.isConnected) {
+                val v = b.dpMqttStatus
+                v.text = if (dashboard.mqttEnabled) {
+                    if (it.client.isConnected) {
                         v.clearAnimation()
                         "CONNECTED"
                     } else if (!isDone) {
@@ -64,6 +64,9 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                         v.clearAnimation()
                         "FAILED"
                     }
+                } else {
+                    v.clearAnimation()
+                    "DISCONNECTED"
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.netDashboard.activities.dashboard.tile_properties
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.InsetDrawable
@@ -11,15 +10,17 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.netDashboard.*
+import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on_destroy.AppOnDestroy
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.dezero
 import com.netDashboard.themes.Theme
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
+import com.netDashboard.toPx
 
 class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityTilePropertiesBinding
@@ -62,46 +63,6 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         b.tpMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchOnCheckedChangeListener(state)
-        }
-
-        b.tpDesignChips.setOnCheckedChangeListener { _, _ ->
-            designChipsOnCheckedChangeListener()
-        }
-
-        b.tpDesignHue.addOnChangeListener { _, _, _ ->
-            colorOnChangeListener()
-
-            tile.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tpDesignHue.value,
-                    1 - b.tpDesignSaturation.value,
-                    1 - b.tpDesignValue.value
-                )
-            )
-        }
-
-        b.tpDesignSaturation.addOnChangeListener { _, _, _ ->
-            colorOnChangeListener()
-
-            tile.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tpDesignHue.value,
-                    1 - b.tpDesignSaturation.value,
-                    1 - b.tpDesignValue.value
-                )
-            )
-        }
-
-        b.tpDesignValue.addOnChangeListener { _, _, _ ->
-            colorOnChangeListener()
-
-            tile.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tpDesignHue.value,
-                    1 - b.tpDesignSaturation.value,
-                    1 - b.tpDesignValue.value
-                )
-            )
         }
 
         b.tpMqttPub.addTextChangedListener(object : TextWatcher {
@@ -228,30 +189,6 @@ class TilePropertiesActivity : AppCompatActivity() {
         val hsv = floatArrayOf(0f, 0f, 0f)
         Color.colorToHSV(tile.color, hsv)
 
-        b.tpDesignHue.value = hsv[0]
-        b.tpDesignSaturation.value = 1 - hsv[1]
-        b.tpDesignValue.value = 1 - hsv[2]
-
-        b.tpDesignHue.backgroundTintList = null
-        b.tpDesignSaturation.backgroundTintList = null
-        b.tpDesignValue.backgroundTintList = null
-
-        b.tpDesignHue.trackActiveTintList = ColorStateList.valueOf(
-            Color.TRANSPARENT
-        )
-        b.tpDesignSaturation.trackActiveTintList = ColorStateList.valueOf(
-            Color.TRANSPARENT
-        )
-        b.tpDesignValue.trackActiveTintList = ColorStateList.valueOf(
-            Color.TRANSPARENT
-        )
-
-        colorOnChangeListener()
-
-        b.tpDesignChipTheme.isChecked = tile.isColouredByTheme
-        b.tpDesignChipColor.isChecked = !tile.isColouredByTheme
-        designChipsOnCheckedChangeListener() //have influence on tile
-
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttEnabled
         b.tpMqttPub.setText(tile.mqttTopics.pubs.get("base").topic)
@@ -284,30 +221,6 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         tile.width = b.tpDimenWidth.value.toInt()
         tile.height = b.tpDimenHeight.value.toInt()
-    }
-
-    private fun designChipsOnCheckedChangeListener() {
-        b.tpDesignInfo.visibility = if (b.tpDesignChipTheme.isChecked) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-
-        b.tpDesignColor.visibility = if (b.tpDesignChipColor.isChecked) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-
-        tile.isColouredByTheme = b.tpDesignChipTheme.isChecked
-
-        b.tpDesignChipTheme.isEnabled = !b.tpDesignChipTheme.isChecked
-        b.tpDesignChipColor.isEnabled = !b.tpDesignChipColor.isChecked
-    }
-
-    private fun colorOnChangeListener() {
-        setHSVGradient()
-        setChipColor()
     }
 
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {
@@ -344,115 +257,5 @@ class TilePropertiesActivity : AppCompatActivity() {
             (14.5f).toPx(),
             (22f).toPx()
         )
-    }
-
-    private fun setHSVGradient() {
-        val hueColors = listOf(
-            floatArrayOf(
-                0f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                60f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                120f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                180f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                240f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                300f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                360f,
-                1 - b.tpDesignSaturation.value,
-                1 - b.tpDesignValue.value
-            )
-        )
-
-        val saturationColors = listOf(
-            floatArrayOf(
-                b.tpDesignHue.value,
-                1f,
-                1 - b.tpDesignValue.value
-            ), floatArrayOf(
-                b.tpDesignHue.value,
-                0f,
-                1 - b.tpDesignValue.value
-            )
-        )
-
-        val valueColors = listOf(
-            floatArrayOf(
-                b.tpDesignHue.value,
-                1 - b.tpDesignSaturation.value,
-                1f
-            ), floatArrayOf(
-                b.tpDesignHue.value,
-                1 - b.tpDesignSaturation.value,
-                0f
-            )
-        )
-
-        b.tpDesignHue.setGradientSliderBackground(hueColors)
-        b.tpDesignSaturation.setGradientSliderBackground(saturationColors)
-        b.tpDesignValue.setGradientSliderBackground(valueColors)
-    }
-
-    private fun setChipColor() {
-        setChipColor(
-            Color.HSVToColor(
-                floatArrayOf(
-                    b.tpDesignHue.value,
-                    1 - b.tpDesignSaturation.value,
-                    1 - b.tpDesignValue.value
-                )
-            )
-        )
-    }
-
-    private fun setChipColor(color: Int) {
-        val states = arrayOf(
-            intArrayOf(android.R.attr.state_enabled),
-            intArrayOf(-android.R.attr.state_enabled),
-            intArrayOf(-android.R.attr.state_checked),
-            intArrayOf(android.R.attr.state_pressed)
-        )
-
-        val chipBackground = b.tpDesignChipColor.chipBackgroundColor
-
-        val colorsBackground = intArrayOf(
-            chipBackground?.getColorForState(intArrayOf(android.R.attr.state_enabled), Color.RED)
-                ?: Color.RED,
-            color,
-            chipBackground?.getColorForState(intArrayOf(-android.R.attr.state_checked), Color.RED)
-                ?: Color.RED,
-            chipBackground?.getColorForState(intArrayOf(-android.R.attr.state_pressed), Color.RED)
-                ?: Color.RED,
-        )
-
-        val chipText = b.tpDesignChipColor.textColors
-
-        val colorsText = intArrayOf(
-            chipText?.getColorForState(intArrayOf(android.R.attr.state_enabled), Color.RED)
-                ?: Color.RED,
-            color.contrastColor(190),
-            chipText?.getColorForState(intArrayOf(-android.R.attr.state_checked), Color.RED)
-                ?: Color.RED,
-            chipText?.getColorForState(intArrayOf(-android.R.attr.state_pressed), Color.RED)
-                ?: Color.RED,
-        )
-
-        b.tpDesignChipColor.chipBackgroundColor = ColorStateList(states, colorsBackground)
-        b.tpDesignChipColor.setTextColor(ColorStateList(states, colorsText))
     }
 }

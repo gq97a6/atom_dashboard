@@ -1,6 +1,6 @@
 package com.netDashboard.tile
 
-import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
@@ -24,6 +24,11 @@ abstract class Tile : RecyclerViewItem() {
     var bltOutputJSON = ""
 
     val type = this.javaClass.toString()
+
+    companion object {
+        fun MutableList<Tile>.byId(id: Long): Tile? =
+            this.find { it.id == id }
+    }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

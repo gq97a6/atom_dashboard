@@ -1,5 +1,6 @@
 package com.netDashboard.themes
 
+import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -27,6 +28,7 @@ import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.gson
 import java.io.File
 import java.io.FileReader
+
 
 class Theme {
 
@@ -73,6 +75,7 @@ class Theme {
 
         context.window.statusBarColor = colorBackground
 
+        viewGroup.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         viewGroup.applyTheme()
     }
 
@@ -169,6 +172,10 @@ class Theme {
             "color;contrast40" -> {
                 this.setTextColor(color)
                 this.setBackgroundColor(contrastColor(!isDark, 40))
+            }
+            "color;colorD" -> {
+                this.setTextColor(color)
+                this.backgroundTintList = ColorStateList.valueOf(colorB)
             }
             "con_warning" -> {
                 this.clearAnimation()

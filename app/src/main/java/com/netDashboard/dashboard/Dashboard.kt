@@ -38,6 +38,11 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var bluetoothEnabled: Boolean = false
 
+    companion object {
+        fun MutableList<Dashboard>.byId(id: Long): Dashboard =
+            this.find { it.id == id } ?: Dashboard("err")
+    }
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 

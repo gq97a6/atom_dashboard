@@ -1,17 +1,20 @@
 package com.netDashboard.activities.dashboard.properties
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
@@ -166,12 +169,13 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     }
 
     private fun mqttSwitchHandle(state: Boolean) {
+        
         b.dpMqtt.visibility = if (state) {
-            View.VISIBLE
+            VISIBLE
         } else {
-            View.GONE
+            GONE
         }
 
-        dashboard.mqttEnabled = state
-    }
+    dashboard.mqttEnabled = state
+}
 }

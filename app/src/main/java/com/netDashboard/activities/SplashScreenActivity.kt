@@ -2,6 +2,8 @@ package com.netDashboard.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
@@ -48,7 +50,9 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+
         AppOn.pause()
+        finish()
     }
 
     private fun onServiceReady() {
@@ -62,18 +66,20 @@ class SplashScreenActivity : AppCompatActivity() {
             d.daemonGroup = service.dgc.get(d.name)
         }
 
-        if (settings.lastDashboardId != null && settings.startFromLast) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (settings.lastDashboardId != null && settings.startFromLast) {
 
-            Intent(this, DashboardActivity::class.java).also {
-                it.putExtra("dashboardId", settings.lastDashboardId)
-                overridePendingTransition(0, 0)
-                startActivity(it)
-            }
-        } else {
+                Intent(this, DashboardActivity::class.java).also {
+                    it.putExtra("dashboardId", settings.lastDashboardId)
+                    overridePendingTransition(0, 0)
+                    startActivity(it)
+                }
+            } else {
 
-            Intent(this, MainActivity::class.java).also {
-                startActivity(it)
+                Intent(this, MainActivity::class.java).also {
+                    startActivity(it)
+                }
             }
-        }
+        }, 500)
     }
 }

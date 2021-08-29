@@ -15,7 +15,7 @@ import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards.Companion.byId
+import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G

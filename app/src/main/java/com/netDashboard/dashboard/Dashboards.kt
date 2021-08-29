@@ -58,8 +58,5 @@ class Dashboards {
                 throw e
             }
         }
-
-        fun MutableList<Dashboard>.byId(id: Long): Dashboard =
-            this.find { it.id == id } ?: Dashboard("err")
     }
 }

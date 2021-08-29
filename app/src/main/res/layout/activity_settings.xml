@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:tag="background"
     android:orientation="vertical"
+    android:tag="background"
     tools:context=".activities.settings.SettingsActivity">
 
     <TextView
-        android:tag="color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:gravity="center"
+        android:tag="color"
         android:text="Settings"
         android:textColor="@color/gray150"
         android:textSize="45sp" />
@@ -31,29 +31,29 @@
             android:orientation="vertical">
 
             <TextView
-                android:tag="colorA"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="3dp"
                 android:paddingBottom="3dp"
+                android:tag="colorA"
                 android:text="Global functions"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
             <LinearLayout
-                android:tag="frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_frame"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:tag="frame">
 
                 <TextView
-                    android:tag="colorB"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:tag="colorB"
                     android:text="Last dashboard on boot:"
                     android:textColor="@color/gray150"
                     android:textSize="15sp" />
@@ -65,9 +65,9 @@
                     android:paddingHorizontal="10dp">
 
                     <TextView
-                        android:tag="colorC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:tag="colorC"
                         android:text="OFF"
                         android:textColor="@color/gray150"
                         android:textSize="12sp"
@@ -79,9 +79,9 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:tag="colorC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:tag="colorC"
                         android:text="ON"
                         android:textColor="@color/gray150"
                         android:textSize="12sp"
@@ -92,96 +92,99 @@
             </LinearLayout>
 
             <TextView
-                android:tag="colorA"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="3dp"
                 android:paddingBottom="3dp"
-                android:layout_marginTop="20dp"
+                android:tag="colorA"
                 android:text="Main theme"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 
             <LinearLayout
-                android:tag="frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_frame"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:tag="frame">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:orientation="horizontal">
-
-                    <TextView
-                        android:tag="colorB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Edit color:"
-                        android:textColor="@color/gray150"
-                        android:textSize="15sp" />
-
-                    <Button
-                        android:tag="color"
-                        android:id="@+id/s_theme_edit"
-                        style="@style/button"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/button_edit" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:tag="colorB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Use globally:"
-                        android:textColor="@color/gray150"
-                        android:textSize="15sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="10dp">
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:tag="colorC"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="OFF"
+                            android:gravity="center"
+                            android:tag="colorB"
+                            android:text="Use globally:"
                             android:textColor="@color/gray150"
-                            android:textSize="12sp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="15sp" />
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/s_theme_is_global"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:tag="colorC"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ON"
-                            android:textColor="@color/gray150"
-                            android:textSize="12sp"
-                            tools:ignore="HardcodedText" />
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/s_theme_is_global"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/s_theme_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/button_text"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:tag="color;colorD"
+                            android:text="EDIT COLOR"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
 

@@ -8,48 +8,56 @@
     android:tag="background"
     tools:context=".activities.dashboard.properties.DashboardPropertiesActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:tag="color"
-        android:text="@string/p_banner"
-        android:textColor="@color/gray150"
-        android:textSize="45sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:tag="colorA"
-            android:text="dashboard name:"
+            android:gravity="center"
+            android:tag="color"
+            android:text="@string/p_banner"
             android:textColor="@color/gray150"
-            android:textSize="20sp" />
+            android:textSize="45sp" />
 
-        <EditText
-            android:id="@+id/dp_name"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:background="#19000000"
-            android:hint="random"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLength="15"
-            android:paddingHorizontal="5dp"
-            android:tag="colorA;colorC;contrast25"
-            android:textColor="@color/gray100"
-            android:textColorHint="@color/gray65"
-            android:textCursorDrawable="@null"
-            android:textSize="15sp"
-            tools:ignore="HardcodedText,TextFields" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:tag="colorA"
+                android:text="dashboard name:"
+                android:textColor="@color/gray150"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/dp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="#19000000"
+                android:hint="random"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="15"
+                android:paddingHorizontal="5dp"
+                android:tag="colorA;colorC;contrast25"
+                android:textColor="@color/gray100"
+                android:textColorHint="@color/gray65"
+                android:textCursorDrawable="@null"
+                android:textSize="15sp"
+                tools:ignore="HardcodedText,TextFields" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView
@@ -78,8 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_frame"
-                android:orientation="horizontal"
                 android:gravity="center"
+                android:orientation="horizontal"
                 android:padding="10dp"
                 android:tag="frame">
 
@@ -146,6 +154,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:background="@drawable/background_frame"
                 android:orientation="vertical"
                 android:padding="10dp"
@@ -153,7 +162,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -231,7 +240,31 @@
                     android:id="@+id/dp_mqtt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="30dp"
+                            android:layout_marginVertical="8dp"
+                            android:background="@drawable/button_text"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:tag="color;colorD"
+                            android:text="COPY BROKER PROPERTIES"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"

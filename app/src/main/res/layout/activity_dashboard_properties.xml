@@ -389,7 +389,7 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:layout_weight="0"
-                            android:background="@drawable/icon_arrow_up"
+                            android:background="@drawable/icon_arrow"
                             android:clickable="true"
                             android:focusable="true"
                             android:tag="group_arrow" />

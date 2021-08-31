@@ -1,14 +1,14 @@
 package com.netDashboard.activities.dashboard.properties
 
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
@@ -124,6 +124,14 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 }
             }
         })
+
+        b.dpMqttCredBar.setOnClickListener {
+            switchMqttCred()
+        }
+
+        b.dpMqttCredArrow.setOnClickListener {
+            switchMqttCred()
+        }
     }
 
     override fun onDestroy() {
@@ -152,30 +160,21 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         }
     }
 
-    private fun onServiceReady() {
-
-    }
-
-    fun checkSpan(span: Int): Boolean {
-        val list = dashboard.tiles
-
-        for (t in list) {
-            if (t.width > span) {
-                return false
-            }
+    private fun switchMqttCred() {
+        b.dpMqttCred.let {
+            it.visibility = if (it.isVisible) GONE else VISIBLE
+            b.dpMqttCredArrow.animate()
+                .rotation(if (it.isVisible) 0f else 180f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
-
-        return true
     }
 
     private fun mqttSwitchHandle(state: Boolean) {
-        
-        b.dpMqtt.visibility = if (state) {
-            VISIBLE
-        } else {
-            GONE
-        }
+        b.dpMqtt.visibility = if (state) VISIBLE else GONE
+        dashboard.mqttEnabled = state
+    }
 
-    dashboard.mqttEnabled = state
-}
+    private fun onServiceReady() {
+
+    }
 }

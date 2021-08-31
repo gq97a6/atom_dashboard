@@ -179,7 +179,7 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
-                            android:tag="color;colorD"
+                            android:tag="button"
                             android:text="EDIT COLOR"
                             android:textColor="@color/white"
                             android:textSize="11sp" />

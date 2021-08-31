@@ -49,7 +49,7 @@
                 android:inputType="text"
                 android:maxLength="15"
                 android:paddingHorizontal="5dp"
-                android:tag="colorA;colorC;contrast25"
+                android:tag="basic"
                 android:textColor="@color/gray100"
                 android:textColorHint="@color/gray65"
                 android:textCursorDrawable="@null"
@@ -83,7 +83,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:background="@drawable/background_frame"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -119,6 +119,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:stepSize="1"
+                    android:tag="basic"
                     android:valueFrom="1"
                     android:valueTo="6" />
 
@@ -161,11 +162,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -222,10 +224,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
-                            android:layout_margin="8dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginVertical="10dp"
                             android:background="#27000000"
                             android:gravity="center"
-                            android:tag="color;contrast40"
+                            android:tag="tag"
                             android:text="DISCONNECTED"
                             android:textColor="@color/gray150"
                             android:textSize="11sp" />
@@ -242,21 +245,20 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="40dp"
                             android:layout_gravity="center"
-                            android:layout_marginHorizontal="30dp"
-                            android:layout_marginVertical="8dp"
+                            android:layout_marginHorizontal="40dp"
                             android:background="@drawable/button_text"
                             android:clickable="true"
                             android:focusable="true"
                             android:gravity="center"
-                            android:tag="color;colorD"
+                            android:tag="button"
                             android:text="COPY BROKER PROPERTIES"
                             android:textColor="@color/white"
                             android:textSize="11sp" />
@@ -265,7 +267,8 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -280,16 +283,16 @@
                         <EditText
                             android:id="@+id/dp_mqtt_address"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
                             android:background="#19000000"
                             android:ems="100"
                             android:hint="tcp://"
                             android:importantForAutofill="no"
                             android:inputType="textUri"
                             android:maxLength="30"
-                            android:padding="10dp"
-                            android:tag="colorA;colorC;contrast25"
+                            android:paddingHorizontal="10dp"
+                            android:tag="basic"
                             android:text="tcp://"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
@@ -326,7 +329,8 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -342,20 +346,133 @@
                         <EditText
                             android:id="@+id/dp_mqtt_port"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
                             android:background="#19000000"
                             android:ems="100"
                             android:hint="1883"
                             android:importantForAutofill="no"
                             android:inputType="numberDecimal"
                             android:maxLength="5"
-                            android:padding="10dp"
-                            android:tag="colorA;colorC;contrast25"
+                            android:paddingHorizontal="10dp"
+                            android:tag="basic"
                             android:text="1883"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
                             tools:ignore="HardcodedText,TextFields" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:background="#19000000"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:tag="group_bar">
+
+                        <TextView
+                            android:id="@+id/dp_mqtt_cred_bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:tag="colorB"
+                            android:text="Broker login credentials"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/dp_mqtt_cred_arrow"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0"
+                            android:background="@drawable/icon_arrow_up"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:tag="group_arrow" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/dp_mqtt_cred"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#0C000000"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="group">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:tag="colorB"
+                                android:text="Login:"
+                                android:textColor="@color/gray150"
+                                android:textSize="15sp" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:background="#19000000"
+                                android:ems="100"
+                                android:hint="1883"
+                                android:importantForAutofill="no"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5"
+                                android:paddingHorizontal="10dp"
+                                android:tag="basic"
+                                android:text="1883"
+                                android:textColor="@color/gray100"
+                                android:textColorHint="@color/gray65"
+                                tools:ignore="HardcodedText,TextFields" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:tag="colorB"
+                                android:text="Password:"
+                                android:textColor="@color/gray150"
+                                android:textSize="15sp" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:background="#19000000"
+                                android:ems="100"
+                                android:hint="1883"
+                                android:importantForAutofill="no"
+                                android:inputType="numberDecimal"
+                                android:maxLength="5"
+                                android:paddingHorizontal="10dp"
+                                android:tag="basic"
+                                android:text="1883"
+                                android:textColor="@color/gray100"
+                                android:textColorHint="@color/gray65"
+                                tools:ignore="HardcodedText,TextFields" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

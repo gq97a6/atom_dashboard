@@ -38,7 +38,7 @@
         android:paddingTop="15dp"
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
-        android:tag="colorB;color"
+        android:tag="tile_button"
         android:text="@string/tb_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"

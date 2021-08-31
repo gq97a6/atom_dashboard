@@ -56,6 +56,7 @@
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.slider.Slider
+        android:tag="basic"
         android:id="@+id/ts_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

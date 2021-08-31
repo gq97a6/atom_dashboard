@@ -28,6 +28,7 @@ import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.gson
 import java.io.File
 import java.io.FileReader
+import kotlin.random.Random
 
 
 class Theme {
@@ -38,7 +39,7 @@ class Theme {
 
     private val isDarkRec: Boolean
         get() {
-            val lConCheck = (ColorUtils.calculateContrast(color, getBackground(false)) > 2.4)
+            val lConCheck = (ColorUtils.calculateContrast(color, getBackground(false)) > 2.45)
             val dConCheck = (ColorUtils.calculateContrast(color, getBackground(true)) > 1.4)
 
             return if (lConCheck && dConCheck) isDark else lConCheck
@@ -65,6 +66,7 @@ class Theme {
     }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
+        setRandomTheme()
 
         context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
@@ -76,6 +78,13 @@ class Theme {
         context.window.statusBarColor = colorBackground
 
         viewGroup.applyTheme()
+    }
+
+    private fun setRandomTheme() {
+        color = getRandomColor()
+        isDark = Random.nextBoolean()
+
+        if(isDark != isDarkRec) setRandomTheme()
     }
 
     private fun ViewGroup.applyTheme() {
@@ -114,13 +123,14 @@ class Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
-            "contrast205" -> this.backgroundTintList = ColorStateList.valueOf(
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(
                 contrastColor(!isDark, 205)
             )
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, color)
             }
+            "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
             else -> onUnknownTag(this.tag, "view")
         }
     }
@@ -141,6 +151,8 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, color)
             }
+            "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark,0.3f))
+            "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark,0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
@@ -160,7 +172,7 @@ class Theme {
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
-            "colorB;color" -> {
+            "tile_button" -> {
                 this.backgroundTintList = ColorStateList.valueOf(colorB)
                 this.setTextColor(color)
             }
@@ -174,11 +186,11 @@ class Theme {
             "colorA" -> this.setTextColor(colorA)
             "colorB" -> this.setTextColor(colorB)
             "colorC" -> this.setTextColor(colorC)
-            "color;contrast40" -> {
+            "tag" -> {
                 this.setTextColor(color)
-                this.setBackgroundColor(contrastColor(!isDark, 40))
+                this.setBackgroundColor(colorD)
             }
-            "color;colorD" -> {
+            "button" -> {
                 this.setTextColor(color)
                 this.backgroundTintList = ColorStateList.valueOf(colorB)
             }
@@ -199,10 +211,10 @@ class Theme {
 
     private fun EditText.applyTheme() {
         when (this.tag) {
-            "colorA;colorC;contrast25" -> {
+            "basic" -> {
                 this.setTextColor(colorA)
                 this.setHintTextColor(colorC)
-                this.setBackgroundColor(contrastColor(!isDark, 25))
+                this.setBackgroundColor(colorBackground.contrast(!isDark,0.2f))
             }
             else -> onUnknownTag(this.tag, "editText")
         }
@@ -233,14 +245,15 @@ class Theme {
 
     private fun Slider.applyTheme() {
         when (this.tag) {
+            "basic" -> {
+                this.trackActiveTintList = ColorStateList.valueOf(colorB)
+                this.tickActiveTintList = ColorStateList.valueOf(colorB)
+                this.trackInactiveTintList = ColorStateList.valueOf(colorC)
+                this.tickInactiveTintList = ColorStateList.valueOf(colorC)
+                this.thumbTintList = ColorStateList.valueOf(color)
+            }
             else -> onUnknownTag(this.tag, "slider")
         }
-
-        this.trackActiveTintList = ColorStateList.valueOf(colorB)
-        this.tickActiveTintList = ColorStateList.valueOf(colorB)
-        this.trackInactiveTintList = ColorStateList.valueOf(colorC)
-        this.tickInactiveTintList = ColorStateList.valueOf(colorC)
-        this.thumbTintList = ColorStateList.valueOf(color)
     }
 
     private fun Chip.applyTheme() {

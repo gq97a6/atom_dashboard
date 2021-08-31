@@ -1,11 +1,10 @@
 package com.netDashboard.globals
 
-import android.app.Activity
 import com.google.gson.Gson
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.settings.Settings
-import com.netDashboard.themes.Theme
+import com.netDashboard.theme.Theme
 
 object G {
     val gson = Gson()

@@ -1,4 +1,4 @@
-package com.netDashboard.themes
+package com.netDashboard.theme
 
 import android.animation.LayoutTransition
 import android.app.Activity
@@ -75,7 +75,6 @@ class Theme {
 
         context.window.statusBarColor = colorBackground
 
-        viewGroup.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         viewGroup.applyTheme()
     }
 
@@ -109,12 +108,6 @@ class Theme {
         }
     }
 
-    private fun FrameLayout.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "frameLayout")
-        }
-    }
-
     private fun View.applyTheme() {
         when (this.tag) {
             "color" -> this.setBackgroundColor(color)
@@ -132,6 +125,15 @@ class Theme {
         }
     }
 
+    private fun FrameLayout.applyTheme() {
+        when (this.tag) {
+            else -> onUnknownTag(this.tag, "frameLayout")
+        }
+
+        this.layoutTransition = LayoutTransition()
+        this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+    }
+
     private fun LinearLayout.applyTheme() {
         when (this.tag) {
             "background" -> this.setBackgroundColor(colorBackground)
@@ -141,6 +143,9 @@ class Theme {
             }
             else -> onUnknownTag(this.tag, "linearLayout")
         }
+
+        this.layoutTransition = LayoutTransition()
+        this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
     }
 
     private fun RecyclerView.applyTheme() {

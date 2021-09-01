@@ -10,7 +10,6 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTileNewBinding
-import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
@@ -27,14 +26,11 @@ class TileNewActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppOn.onCreate(this)
 
         b = ActivityTileNewBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
         setContentView(b.root)
-
-        service?.finishFlag?.observe(this) { flag ->
-            if (flag) finishAffinity()
-        }
 
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = dashboards.byId(dashboardId)

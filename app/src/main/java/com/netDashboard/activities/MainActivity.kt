@@ -28,16 +28,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppOn.onCreate(this)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()
-
-        service?.finishFlag?.observe(this) { flag ->
-            if (flag) finishAffinity()
-        }
 
         b.mTouch.setOnClickListener {
             touchOnClick()

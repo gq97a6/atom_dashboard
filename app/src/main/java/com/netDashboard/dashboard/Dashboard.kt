@@ -33,6 +33,8 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
+    var mqttLogin = ""
+    var mqttPass = ""
     val mqttURI
         get() = "$mqttAddress:$mqttPort"
 

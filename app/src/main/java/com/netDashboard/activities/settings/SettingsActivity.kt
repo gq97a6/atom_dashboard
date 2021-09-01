@@ -7,7 +7,6 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivitySettingsBinding
-import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.settings
 
@@ -17,15 +16,12 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppOn.onCreate(this)
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
         viewConfig()
         G.theme.apply(this, b.root)
         setContentView(b.root)
-
-        service?.finishFlag?.observe(this) { flag ->
-            if (flag) finishAffinity()
-        }
 
         b.sLast.setOnCheckedChangeListener { _, state ->
             settings.startFromLast = state

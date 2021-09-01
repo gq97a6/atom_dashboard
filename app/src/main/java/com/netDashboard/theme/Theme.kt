@@ -66,7 +66,7 @@ class Theme {
     }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
-        setRandomTheme()
+        //setRandomTheme()
 
         context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
 

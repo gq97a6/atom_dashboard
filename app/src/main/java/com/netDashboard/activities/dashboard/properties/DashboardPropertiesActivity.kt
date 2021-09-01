@@ -16,7 +16,6 @@ import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
-import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import java.util.*
@@ -31,32 +30,16 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
-        setContentView(b.root)
-
-        service?.finishFlag?.observe(this) { flag ->
-            if (flag) finishAffinity()
-        }
+        AppOn.onCreate(this)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = dashboards.byId(dashboardId)
 
-        b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
-
-        b.dpSpan.value = dashboard.spanCount.toFloat()
-        b.dpSpan.callOnClick()
-        b.dpSpanValue.text = dashboard.spanCount.toString()
-
-        b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
-        mqttSwitchHandle(b.dpMqttSwitch.isChecked)
-
-        b.dpMqttAddress.setText(dashboard.mqttAddress)
-        dashboard.mqttPort.let {
-            b.dpMqttPort.setText(if (it != -1) it.toString() else "")
-        }
+        b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
+        G.theme.apply(this, b.root)
+        viewConfig()
+        setContentView(b.root)
 
         dashboard.daemonGroup?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
@@ -131,6 +114,22 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttCredArrow.setOnClickListener {
             switchMqttCred()
+        }
+    }
+
+    private fun viewConfig() {
+        b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
+
+        b.dpSpan.value = dashboard.spanCount.toFloat()
+        b.dpSpan.callOnClick()
+        b.dpSpanValue.text = dashboard.spanCount.toString()
+
+        b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
+        mqttSwitchHandle(b.dpMqttSwitch.isChecked)
+
+        b.dpMqttAddress.setText(dashboard.mqttAddress)
+        dashboard.mqttPort.let {
+            b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
     }
 

@@ -56,11 +56,11 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        ForegroundService.service = service
-
         service.finishFlag.observe(this) { flag ->
             if (flag) finishAffinity()
         }
+
+        ForegroundService.service = service
 
         for (d in dashboards) {
             d.daemonGroup = service.dgc.get(d.name)

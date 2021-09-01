@@ -19,14 +19,11 @@ class DashboardNewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppOn.onCreate(this)
 
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)
         setContentView(b.root)
-
-        service?.finishFlag?.observe(this) { flag ->
-            if(flag) finishAffinity()
-        }
 
         val name = kotlin.math.abs(Random.nextInt()).toString()
         val dashboard = Dashboard(name)

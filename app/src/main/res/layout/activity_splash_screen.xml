@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:tag="background"
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingBottom="100dp"
+    android:tag="background"
     tools:context=".activities.SplashScreenActivity"
     tools:ignore="UseCompoundDrawables">
 
     <TextView
-        android:tag="color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tag="color"
         android:text="NetDashboard"
         android:textSize="35sp"
         tools:ignore="HardcodedText" />

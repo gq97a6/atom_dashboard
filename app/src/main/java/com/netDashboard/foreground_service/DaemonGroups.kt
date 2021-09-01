@@ -37,6 +37,6 @@ class DaemonGroup(context: Context, val dashboard: Dashboard) {
 
     fun deprecate() {
         isDeprecated = true
-        mqttd.conHandler.dispatch()
+        mqttd.conHandler.dispatch("dem_grp_dep")
     }
 }

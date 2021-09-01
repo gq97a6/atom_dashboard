@@ -305,6 +305,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -340,6 +341,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -375,6 +377,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -552,6 +555,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -587,6 +591,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -622,6 +627,7 @@
                             android:tag="basic"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>

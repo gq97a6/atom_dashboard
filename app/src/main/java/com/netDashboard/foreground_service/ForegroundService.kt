@@ -16,7 +16,6 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
 import com.netDashboard.app_on.AppOn
-import kotlin.system.exitProcess
 
 
 class ForegroundService : LifecycleService() {

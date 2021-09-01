@@ -3,6 +3,7 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
@@ -21,12 +22,12 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     init {
-        conHandler.dispatch()
+        conHandler.dispatch("init")
     }
 
     fun reinit() {
         if (client.isConnected) topicCheck()
-        conHandler.dispatch()
+        conHandler.dispatch("reinit")
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
@@ -106,7 +107,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         client.topics = topics
     }
 
-    inner class ConnectionHandler(private var retryDelay: Long = 3000) {
+    inner class ConnectionHandler {
 
         var isDone = MutableLiveData(false)
 
@@ -130,17 +131,25 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             return 3000
         }
 
-        fun dispatch() {
-            _isDone =
-                isEnabled == client.isConnected && (!isEnabled || (client.serverURI == d.mqttURI))
+        fun dispatch(reason: String) {
+            Log.i("OUY", "DISPATCH: $reason")
+
+            val sameCred = client.serverURI == d.mqttURI
+                    //client.options.userName == d.mqttUserName &&
+                    //client.options.password.contentEquals(d.mqttPass.toCharArray())
+
+            _isDone = client.isConnected == isEnabled && (!isEnabled || sameCred)
+
+            Log.i("OUY", "isDone: $_isDone, cred: $sameCred")
 
             if (!_isDone) {
                 if (!isDispatchScheduled) {
                     isDone.postValue(_isDone)
                     isDispatchScheduled = true
+                    Log.i("OUY", "handleDispatch")
                     Handler(Looper.getMainLooper()).postDelayed({
                         isDispatchScheduled = false
-                        dispatch()
+                        dispatch("internal")
                     }, handleDispatch())
                 }
             }
@@ -156,6 +165,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         private var isBusy = false
         var isClosed = false
         var topics: MutableList<Topic> = mutableListOf()
+        var options = MqttConnectOptions()
 
         override fun isConnected(): Boolean {
             return try {
@@ -188,21 +198,27 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                 }
 
                 override fun connectionLost(cause: Throwable?) {
-                    conHandler.dispatch()
+                    conHandler.dispatch("con_lost")
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
                 }
             })
 
-            val options = MqttConnectOptions()
             options.isCleanSession = true
+
+            //d.mqttPass.let {
+            //    if (it.isNotBlank()) options.password = it.toCharArray()
+            //}
+            //d.mqttUserName.let {
+            //    if (it.isNotBlank()) options.userName = it
+            //}
 
             try {
                 client.connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
-                        conHandler.dispatch()
+                        conHandler.dispatch("con_succ")
                     }
 
                     override fun onFailure(
@@ -235,7 +251,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                             isClosed = true
                         }
 
-                        conHandler.dispatch()
+                        conHandler.dispatch("discon_succ")
                     }
 
                     override fun onFailure(
@@ -252,17 +268,3 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         }
     }
 }
-
-//mqttd.conHandler.isDone.observe(context as LifecycleOwner, { isDone ->
-//    if (isDone) {
-//        val list: MutableList<String> = mutableListOf()
-//        for (tile in dashboard.tiles) {
-//            for (topic in tile.mqttTopics.sub.get()) {
-//                if (!list.contains(topic)) {
-//                    mqttd.subscribe(topic)
-//                    list.add(topic)
-//                }
-//            }
-//        }
-//    }
-//})

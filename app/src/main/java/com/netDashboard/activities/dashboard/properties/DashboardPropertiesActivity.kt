@@ -115,6 +115,32 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         b.dpMqttCredArrow.setOnClickListener {
             switchMqttCred()
         }
+
+        b.dpMqttLogin.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                cs.toString().trim().let {
+                    if (dashboard.mqttUserName != it) {
+                        dashboard.mqttUserName = it
+                        dashboard.daemonGroup?.mqttd?.reinit()
+                    }
+                }
+            }
+        })
+
+        b.dpMqttPass.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                cs.toString().trim().let {
+                    if (dashboard.mqttPass != it) {
+                        dashboard.mqttPass = it
+                        dashboard.daemonGroup?.mqttd?.reinit()
+                    }
+                }
+            }
+        })
     }
 
     private fun viewConfig() {
@@ -131,6 +157,10 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboard.mqttPort.let {
             b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
+
+        b.dpMqttLogin.setText(dashboard.mqttUserName)
+        b.dpMqttPass.setText(dashboard.mqttPass)
+        if (dashboard.mqttUserName.isEmpty() && dashboard.mqttPass.isEmpty()) switchMqttCred()
     }
 
     override fun onDestroy() {

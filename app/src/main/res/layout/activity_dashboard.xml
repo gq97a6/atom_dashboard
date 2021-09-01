@@ -42,20 +42,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:tag="colorA"
                 android:id="@+id/d_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:tag="colorA"
                 android:textColor="#000000"
                 android:textSize="18sp" />
 
             <TextView
-                android:tag="colorB"
                 android:id="@+id/d_tag_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:tag="colorB"
                 android:text="@string/d_disconnected"
                 android:textColor="@color/gray65"
                 android:textSize="12sp" />
@@ -90,12 +90,12 @@
         android:layout_weight="1">
 
         <TextView
-            android:tag="colorC"
             android:id="@+id/d_placeholder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:elevation="1dp"
             android:gravity="center"
+            android:tag="colorC"
             android:text="@string/d_empty"
             android:textColor="#A3A3A3"
             android:textSize="20sp"

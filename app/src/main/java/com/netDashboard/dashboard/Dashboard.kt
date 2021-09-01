@@ -33,12 +33,14 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
-    var mqttLogin = ""
+    var mqttUserName = ""
+        get() = if(field.isBlank()) "" else field
     var mqttPass = ""
+        get() = if(field.isBlank()) "" else field
     val mqttURI
         get() = "$mqttAddress:$mqttPort"
 
-    var bluetoothEnabled: Boolean = false
+    var bluetoothEnabled = false
 
     companion object {
         fun MutableList<Dashboard>.byId(id: Long): Dashboard =

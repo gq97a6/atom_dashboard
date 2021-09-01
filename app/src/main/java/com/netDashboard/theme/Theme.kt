@@ -84,7 +84,7 @@ class Theme {
         color = getRandomColor()
         isDark = Random.nextBoolean()
 
-        if(isDark != isDarkRec) setRandomTheme()
+        if (isDark != isDarkRec) setRandomTheme()
     }
 
     private fun ViewGroup.applyTheme() {
@@ -151,8 +151,8 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, color)
             }
-            "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark,0.3f))
-            "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark,0.1f))
+            "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.3f))
+            "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
@@ -214,7 +214,7 @@ class Theme {
             "basic" -> {
                 this.setTextColor(colorA)
                 this.setHintTextColor(colorC)
-                this.setBackgroundColor(colorBackground.contrast(!isDark,0.2f))
+                this.setBackgroundColor(colorBackground.contrast(!isDark, 0.2f))
             }
             else -> onUnknownTag(this.tag, "editText")
         }

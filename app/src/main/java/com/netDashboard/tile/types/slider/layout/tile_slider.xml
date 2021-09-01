@@ -44,9 +44,9 @@
         android:gravity="center"
         android:paddingStart="10dp"
         android:paddingTop="15dp"
-        android:tag="color"
         android:paddingEnd="10dp"
         android:paddingBottom="15dp"
+        android:tag="color"
         android:text="123"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
@@ -56,12 +56,12 @@
         tools:ignore="HardcodedText" />
 
     <com.google.android.material.slider.Slider
-        android:tag="basic"
         android:id="@+id/ts_slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:stepSize="10.0"
+        android:tag="basic"
         android:valueFrom="0.0"
         android:valueTo="100.0"
         android:visibility="invisible"

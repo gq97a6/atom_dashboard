@@ -296,6 +296,7 @@
                             android:text="tcp://"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -359,6 +360,7 @@
                             android:text="1883"
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -416,25 +418,25 @@
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:tag="colorB"
-                                android:text="Login:"
+                                android:text="User name:"
                                 android:textColor="@color/gray150"
                                 android:textSize="15sp" />
 
                             <EditText
+                                android:id="@+id/dp_mqtt_login"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="5dp"
                                 android:background="#19000000"
                                 android:ems="100"
-                                android:hint="1883"
                                 android:importantForAutofill="no"
-                                android:inputType="numberDecimal"
-                                android:maxLength="5"
+                                android:inputType="textPassword"
+                                android:maxLength="35"
                                 android:paddingHorizontal="10dp"
                                 android:tag="basic"
-                                android:text="1883"
                                 android:textColor="@color/gray100"
                                 android:textColorHint="@color/gray65"
+                                android:textCursorDrawable="@null"
                                 tools:ignore="HardcodedText,TextFields" />
 
                         </LinearLayout>
@@ -456,20 +458,20 @@
                                 android:textSize="15sp" />
 
                             <EditText
+                                android:id="@+id/dp_mqtt_pass"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="5dp"
                                 android:background="#19000000"
                                 android:ems="100"
-                                android:hint="1883"
                                 android:importantForAutofill="no"
-                                android:inputType="numberDecimal"
-                                android:maxLength="5"
+                                android:inputType="textPassword"
+                                android:maxLength="35"
                                 android:paddingHorizontal="10dp"
                                 android:tag="basic"
-                                android:text="1883"
                                 android:textColor="@color/gray100"
                                 android:textColorHint="@color/gray65"
+                                android:textCursorDrawable="@null"
                                 tools:ignore="HardcodedText,TextFields" />
 
                         </LinearLayout>

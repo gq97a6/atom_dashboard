@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)

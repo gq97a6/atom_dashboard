@@ -30,7 +30,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
         dashboardId = intent.getLongExtra("dashboardId", 0)

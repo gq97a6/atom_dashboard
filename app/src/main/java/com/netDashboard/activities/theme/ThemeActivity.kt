@@ -14,7 +14,7 @@ class ThemeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         b = ActivityThemeBinding.inflate(layoutInflater)
         viewConfig()

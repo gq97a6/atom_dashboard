@@ -19,7 +19,7 @@ class DashboardNewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         b = ActivityDashboardNewBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)

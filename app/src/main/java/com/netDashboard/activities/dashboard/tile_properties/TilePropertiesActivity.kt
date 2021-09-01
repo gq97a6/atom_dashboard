@@ -27,7 +27,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = dashboards.byId(dashboardId)

@@ -10,7 +10,7 @@ import com.netDashboard.globals.G.theme
 
 object AppOn {
 
-    fun onCreate(activity: Activity) {
+    fun create(activity: Activity) {
         service?.finishFlag?.observe(activity as LifecycleOwner) { flag ->
             if (flag) activity.finishAffinity()
         }

@@ -16,7 +16,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppOn.onCreate(this)
+        AppOn.create(this)
 
         b = ActivitySettingsBinding.inflate(layoutInflater)
         viewConfig()

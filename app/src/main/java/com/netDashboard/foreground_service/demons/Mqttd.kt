@@ -132,15 +132,11 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         }
 
         fun dispatch(reason: String) {
-            Log.i("OUY", "DISPATCH: $reason")
-
-            val sameCred = client.serverURI == d.mqttURI
-                    //client.options.userName == d.mqttUserName &&
-                    //client.options.password.contentEquals(d.mqttPass.toCharArray())
+            val sameCred = client.serverURI == d.mqttURI &&
+                    client.options.userName ?: "" == d.mqttUserName &&
+                    client.options.password.contentEquals(d.mqttPass.toCharArray())
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameCred)
-
-            Log.i("OUY", "isDone: $_isDone, cred: $sameCred")
 
             if (!_isDone) {
                 if (!isDispatchScheduled) {
@@ -207,18 +203,18 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
             options.isCleanSession = true
 
-            //d.mqttPass.let {
-            //    if (it.isNotBlank()) options.password = it.toCharArray()
-            //}
-            //d.mqttUserName.let {
-            //    if (it.isNotBlank()) options.userName = it
-            //}
+            d.mqttPass.let {
+                if (it.isNotBlank()) options.password = it.toCharArray()
+            }
+
+            d.mqttUserName.let {
+                if (it.isNotBlank()) options.userName = it
+            }
 
             try {
                 client.connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
-                        conHandler.dispatch("con_succ")
                     }
 
                     override fun onFailure(
@@ -250,8 +246,6 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                             client.close()
                             isClosed = true
                         }
-
-                        conHandler.dispatch("discon_succ")
                     }
 
                     override fun onFailure(

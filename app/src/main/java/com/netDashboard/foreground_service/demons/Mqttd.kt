@@ -121,7 +121,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         fun dispatch(reason: String) {
             val sameOptions = client.serverURI == d.mqttURI &&
-                    client.options.userName == d.mqttUserName &&
+                    client.options.userName ?: "" == d.mqttUserName &&
                     client.options.password.contentEquals(d.mqttPass?.toCharArray())
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
@@ -133,12 +133,12 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                 isDispatchScheduled = true
 
                 val retry = if (isEnabled) {
-                    if (!client.isClosed && !sameOptions) {
-                        Log.i("OUY", "disconnectAttempt(short)")
-                        client.disconnectAttempt(true); 300L
-                    } else {
+                    if (client.serverURI == d.mqttURI || client.isClosed) {
                         Log.i("OUY", "connectAttempt(long)")
                         client.connectAttempt(); 3000L
+                    } else {
+                        client.disconnectAttempt(true)
+                        Log.i("OUY", "disconnectAttempt(short)"); 300L
                     }
                 } else {
                     Log.i("OUY", "disconnectAttempt(long)")
@@ -160,7 +160,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     ) : MqttAndroidClient(context, serverURI, clientId) {
 
         private var isBusy = false
-        var isClosed = true
+        var isClosed = false
         var topics: MutableList<Topic> = mutableListOf()
         var options = MqttConnectOptions()
 

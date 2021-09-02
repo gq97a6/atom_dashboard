@@ -3,6 +3,7 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
@@ -118,34 +119,36 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         private var isDispatchScheduled = false
 
-        private fun handleDispatch(): Long {
-            if (isEnabled) {
-                if (client.serverURI == d.mqttURI || client.isClosed) {
-                    client.connectAttempt()
-                } else {
-                    client.disconnectAttempt(true)
-                    return 300
-                }
-            } else client.disconnectAttempt()
-            return 3000
-        }
-
         fun dispatch(reason: String) {
-            val sameCred = client.serverURI == d.mqttURI &&
+            val sameOptions = client.serverURI == d.mqttURI &&
                     client.options.userName ?: "" == d.mqttUserName &&
                     client.options.password.contentEquals(d.mqttPass.toCharArray())
 
-            _isDone = client.isConnected == isEnabled && (!isEnabled || sameCred)
+            _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
 
-            if (!_isDone) {
-                if (!isDispatchScheduled) {
-                    isDone.postValue(_isDone)
-                    isDispatchScheduled = true
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        isDispatchScheduled = false
-                        dispatch("internal")
-                    }, handleDispatch())
+            Log.i("OUY", "DISPATCH($reason) isDone($_isDone) sameOptions($sameOptions)")
+
+            if (!_isDone && !isDispatchScheduled) {
+                isDone.postValue(_isDone)
+                isDispatchScheduled = true
+
+                val retry = if (isEnabled) {
+                    if (!client.isClosed && !sameOptions) {
+                        Log.i("OUY", "disconnectAttempt(short)")
+                        client.disconnectAttempt(true); 300L
+                    } else {
+                        Log.i("OUY", "connectAttempt(long)")
+                        client.connectAttempt(); 3000L
+                    }
+                } else {
+                    Log.i("OUY", "disconnectAttempt(long)")
+                    client.disconnectAttempt(); 3000L
                 }
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    isDispatchScheduled = false
+                    dispatch("internal")
+                }, retry)
             }
         }
     }
@@ -157,7 +160,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     ) : MqttAndroidClient(context, serverURI, clientId) {
 
         private var isBusy = false
-        var isClosed = false
+        var isClosed = true
         var topics: MutableList<Topic> = mutableListOf()
         var options = MqttConnectOptions()
 
@@ -174,13 +177,12 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
             isBusy = true
 
-            if (client.isClosed || client.isClosed && client.serverURI != d.mqttURI) {
-                client =
-                    MqttAndroidClientExtended(
-                        context,
-                        d.mqttURI,
-                        Random.nextInt().toString()
-                    )
+            if (client.isClosed) {
+                client = MqttAndroidClientExtended(
+                    context,
+                    d.mqttURI,
+                    Random.nextInt().toString()
+                )
             }
 
             client.setCallback(object : MqttCallback {
@@ -202,11 +204,11 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             options.isCleanSession = true
 
             d.mqttPass.let {
-                if (it.isNotBlank()) options.password = it.toCharArray()
+                options.password = if (it.isNotBlank()) it.toCharArray() else null
             }
 
             d.mqttUserName.let {
-                if (it.isNotBlank()) options.userName = it
+                options.userName = if (it.isNotBlank()) it else null
             }
 
             try {

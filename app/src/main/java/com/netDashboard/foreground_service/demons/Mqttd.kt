@@ -3,7 +3,6 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
@@ -142,7 +141,6 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                 if (!isDispatchScheduled) {
                     isDone.postValue(_isDone)
                     isDispatchScheduled = true
-                    Log.i("OUY", "handleDispatch")
                     Handler(Looper.getMainLooper()).postDelayed({
                         isDispatchScheduled = false
                         dispatch("internal")

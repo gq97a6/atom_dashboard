@@ -33,10 +33,10 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
-    var mqttUserName = ""
-        get() = if(field.isBlank()) "" else field
-    var mqttPass = ""
-        get() = if(field.isBlank()) "" else field
+    var mqttUserName: String? = ""
+        get() = if ((field ?: "").isBlank()) null else field
+    var mqttPass: String? = ""
+        get() = if ((field ?: "").isBlank()) null else field
     val mqttURI
         get() = "$mqttAddress:$mqttPort"
 

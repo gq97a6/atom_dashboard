@@ -121,8 +121,8 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         fun dispatch(reason: String) {
             val sameOptions = client.serverURI == d.mqttURI &&
-                    client.options.userName ?: "" == d.mqttUserName &&
-                    client.options.password.contentEquals(d.mqttPass.toCharArray())
+                    client.options.userName == d.mqttUserName &&
+                    client.options.password.contentEquals(d.mqttPass?.toCharArray())
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
 
@@ -202,14 +202,8 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             })
 
             options.isCleanSession = true
-
-            d.mqttPass.let {
-                options.password = if (it.isNotBlank()) it.toCharArray() else null
-            }
-
-            d.mqttUserName.let {
-                options.userName = if (it.isNotBlank()) it else null
-            }
+            options.userName = d.mqttUserName
+            options.password = d.mqttPass?.toCharArray()
 
             try {
                 client.connect(options, null, object : IMqttActionListener {

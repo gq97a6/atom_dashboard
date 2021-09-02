@@ -160,7 +160,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttLogin.setText(dashboard.mqttUserName)
         b.dpMqttPass.setText(dashboard.mqttPass)
-        if (dashboard.mqttUserName.isEmpty() && dashboard.mqttPass.isEmpty()) switchMqttCred()
+        if (dashboard.mqttUserName == null && dashboard.mqttPass == null) switchMqttCred()
     }
 
     override fun onDestroy() {

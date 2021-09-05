@@ -3,7 +3,6 @@ package com.netDashboard.foreground_service.demons
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
@@ -22,6 +21,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     init {
+        client.isClosed = true
         conHandler.dispatch("init")
     }
 
@@ -121,34 +121,36 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         fun dispatch(reason: String) {
             val sameOptions = client.serverURI == d.mqttURI &&
-                    client.options.userName ?: "" == d.mqttUserName &&
+                    client.options.userName == d.mqttUserName &&
                     client.options.password.contentEquals(d.mqttPass?.toCharArray())
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
-
-            Log.i("OUY", "DISPATCH($reason) isDone($_isDone) sameOptions($sameOptions)")
 
             if (!_isDone && !isDispatchScheduled) {
                 isDone.postValue(_isDone)
                 isDispatchScheduled = true
 
-                val retry = if (isEnabled) {
-                    if (!client.isClosed && !sameOptions) {
-                        Log.i("OUY", "disconnectAttempt(short)")
-                        client.disconnectAttempt(true); 300L
+                if (isEnabled) {
+                    if (client.isConnected) {
+                        client.closeAttempt()
+                    } else if (!sameOptions) {
+                        client = MqttAndroidClientExtended(
+                            context,
+                            d.mqttURI,
+                            Random.nextInt().toString()
+                        )
+                        client.connectAttempt()
                     } else {
-                        Log.i("OUY", "connectAttempt(long)")
-                        client.connectAttempt(); 3000L
+                        client.connectAttempt()
                     }
                 } else {
-                    Log.i("OUY", "disconnectAttempt(long)")
-                    client.disconnectAttempt(); 3000L
+                    client.disconnectAttempt()
                 }
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     isDispatchScheduled = false
                     dispatch("internal")
-                }, retry)
+                }, 500)
             }
         }
     }
@@ -160,7 +162,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     ) : MqttAndroidClient(context, serverURI, clientId) {
 
         private var isBusy = false
-        var isClosed = true
+        var isClosed = false
         var topics: MutableList<Topic> = mutableListOf()
         var options = MqttConnectOptions()
 
@@ -174,19 +176,13 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         fun connectAttempt() {
             if (isBusy) return
-
             isBusy = true
 
-            if (client.isClosed) {
-                client = MqttAndroidClientExtended(
-                    context,
-                    d.mqttURI,
-                    Random.nextInt().toString()
-                )
-            }
+            options.isCleanSession = true
+            options.userName = d.mqttUserName
+            options.password = d.mqttPass?.toCharArray()
 
-            client.setCallback(object : MqttCallback {
-
+            setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
                     for (tile in d.tiles) tile.onData(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
@@ -201,12 +197,8 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                 }
             })
 
-            options.isCleanSession = true
-            options.userName = d.mqttUserName
-            options.password = d.mqttPass?.toCharArray()
-
             try {
-                client.connect(options, null, object : IMqttActionListener {
+                connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
                     }
@@ -224,20 +216,19 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             isBusy = false
         }
 
-        fun disconnectAttempt(close: Boolean = false) {
+        fun disconnectAttempt(toClose: Boolean = false) {
             if (isBusy || isClosed) return
-
             isBusy = true
 
             try {
                 client.disconnect(null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
 
-                        client.unregisterResources()
-                        client.setCallback(null)
+                        unregisterResources()
+                        setCallback(null)
 
-                        if (close) {
-                            client.close()
+                        if (toClose) {
+                            close()
                             isClosed = true
                         }
                     }
@@ -253,6 +244,10 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             }
 
             isBusy = false
+        }
+
+        fun closeAttempt() {
+            disconnectAttempt(true)
         }
     }
 }

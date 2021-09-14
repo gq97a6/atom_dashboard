@@ -8,14 +8,13 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import kotlin.random.Random
 
 class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
-    val isEnabled: Boolean
-        get() = d.mqttEnabled
+    var isEnabled = true
+        get() = d.mqttEnabled && field
 
-    var client = MqttAndroidClientExtended(context, d.mqttURI, Random.nextInt().toString())
+    var client = MqttAndroidClientExtended(context, d.mqttURI, d.mqttClientId)
     var conHandler = ConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
@@ -26,7 +25,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     }
 
     fun reinit() {
-        if (client.isConnected) topicCheck()
+        if (client.isConnected && isEnabled) topicCheck()
         conHandler.dispatch("reinit")
     }
 
@@ -137,7 +136,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
                         client = MqttAndroidClientExtended(
                             context,
                             d.mqttURI,
-                            Random.nextInt().toString()
+                            d.mqttClientId
                         )
                         client.connectAttempt()
                     } else {

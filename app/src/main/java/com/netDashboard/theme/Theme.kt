@@ -70,12 +70,16 @@ class Theme {
 
         context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
-        WindowInsetsControllerCompat(
-            (context as Activity).window,
-            viewGroup
-        ).isAppearanceLightStatusBars = !isDark
+        try {
+            WindowInsetsControllerCompat(
+                (context as Activity).window,
+                viewGroup
+            ).isAppearanceLightStatusBars = !isDark
 
-        context.window.statusBarColor = colorBackground
+            context.window.statusBarColor = colorBackground
+        } catch (e: Exception) {
+
+        }
 
         viewGroup.applyTheme()
     }

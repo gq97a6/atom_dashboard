@@ -8,11 +8,11 @@ import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.tile.Tile
+import java.lang.Math.abs
 import java.util.*
+import kotlin.random.Random
 
 class Dashboard(var name: String = "") : RecyclerViewItem() {
-
-    var isDeprecated = false
 
     override val layout
         get() = R.layout.dashboard_list_item
@@ -28,8 +28,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     var spanCount = 3
 
-    var mqttEnabled: Boolean = false
-        get() = field && !isDeprecated
+    var mqttEnabled = false
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
@@ -37,6 +36,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
         get() = if ((field ?: "").isBlank()) null else field
     var mqttPass: String? = ""
         get() = if ((field ?: "").isBlank()) null else field
+    var mqttClientId: String = kotlin.math.abs(Random.nextInt()).toString()
     val mqttURI
         get() = "$mqttAddress:$mqttPort"
 

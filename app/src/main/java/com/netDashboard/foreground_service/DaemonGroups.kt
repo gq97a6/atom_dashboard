@@ -29,6 +29,10 @@ class DaemonGroups(val context: Context) {
         list.add(dg)
         dashboard.daemonGroup = dg
     }
+
+    fun deprecate() {
+        for (dg in list) dg.deprecate()
+    }
 }
 
 class DaemonGroup(context: Context, val dashboard: Dashboard) {
@@ -37,6 +41,8 @@ class DaemonGroup(context: Context, val dashboard: Dashboard) {
 
     fun deprecate() {
         isDeprecated = true
+
+        mqttd.isEnabled = false
         mqttd.conHandler.dispatch("dem_grp_dep")
     }
 }

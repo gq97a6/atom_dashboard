@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() {
                 b.mPlaceholder.visibility = View.VISIBLE
             }
 
-            it.isDeprecated = true
             service?.dgc?.notifyDashboardRemoved(it)
         }
 

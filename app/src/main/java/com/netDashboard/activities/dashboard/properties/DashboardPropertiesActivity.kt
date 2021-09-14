@@ -68,7 +68,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         }
 
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
-            mqttSwitchHandle(state)
+            dashboard.mqttEnabled = state
             dashboard.daemonGroup?.mqttd?.reinit()
         }
 
@@ -141,6 +141,29 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 }
             }
         })
+
+        b.dpMqttClientId.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                cs.toString().trim().let {
+                    when {
+                        it.isBlank() -> {
+                            dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
+                            b.dpMqttClientId.setText(dashboard.mqttClientId)
+                            dashboard.daemonGroup?.mqttd?.reinit()
+                        }
+                        dashboard.mqttClientId != it -> {
+                            dashboard.mqttClientId = it
+                            dashboard.daemonGroup?.mqttd?.reinit()
+                        }
+                        else -> {
+                            return
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun viewConfig() {
@@ -151,7 +174,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         b.dpSpanValue.text = dashboard.spanCount.toString()
 
         b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
-        mqttSwitchHandle(b.dpMqttSwitch.isChecked)
 
         b.dpMqttAddress.setText(dashboard.mqttAddress)
         dashboard.mqttPort.let {
@@ -160,7 +182,11 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttLogin.setText(dashboard.mqttUserName)
         b.dpMqttPass.setText(dashboard.mqttPass)
-        if (dashboard.mqttUserName == null && dashboard.mqttPass == null) switchMqttCred()
+
+        b.dpMqttCredArrow.rotation = 180f
+        b.dpMqttCred.visibility = GONE
+
+        b.dpMqttClientId.setText(dashboard.mqttClientId)
     }
 
     override fun onDestroy() {
@@ -196,11 +222,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 .rotation(if (it.isVisible) 0f else 180f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
-    }
-
-    private fun mqttSwitchHandle(state: Boolean) {
-        b.dpMqtt.visibility = if (state) VISIBLE else GONE
-        dashboard.mqttEnabled = state
     }
 
     private fun onServiceReady() {

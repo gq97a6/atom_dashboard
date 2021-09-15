@@ -28,18 +28,19 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardBinding
 
     private lateinit var dashboard: Dashboard
-
     lateinit var adapter: TilesAdapter
+    val theme
+        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppOn.create(this)
 
-        b = ActivityDashboardBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
-        setContentView(b.root)
-
         dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
+
+        b = ActivityDashboardBinding.inflate(layoutInflater)
+        theme.apply(this, b.root)
+        setContentView(b.root)
 
         setupRecyclerView()
 

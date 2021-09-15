@@ -24,6 +24,8 @@ class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var dashboard: Dashboard
     private lateinit var tile: Tile
     private var tileIndex = 0
+    val theme
+        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
+        theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 

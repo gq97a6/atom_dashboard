@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
@@ -27,6 +28,8 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     private lateinit var exitActivity: String
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
+    val theme
+        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboard = dashboards.byId(dashboardId)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
+        theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -164,6 +167,19 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 }
             }
         })
+
+        b.dpThemeEdit.setOnClickListener {
+            Intent(this, ThemeActivity::class.java).also {
+                it.putExtra("exitActivity", "DashboardPropertiesActivity")
+                it.putExtra("dashboardId", dashboard.id)
+                startActivity(it)
+            }
+        }
+
+        b.dpThemeUseOver.setOnCheckedChangeListener { _, state ->
+            dashboard.theme.useOver = state
+            theme.apply(this, b.root)
+        }
     }
 
     private fun viewConfig() {
@@ -187,6 +203,8 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         b.dpMqttCred.visibility = GONE
 
         b.dpMqttClientId.setText(dashboard.mqttClientId)
+
+        b.dpThemeUseOver.isChecked = dashboard.theme.useOver
     }
 
     override fun onDestroy() {

@@ -33,7 +33,7 @@ import kotlin.random.Random
 
 class Theme {
 
-    var isGlobal = false
+    var useOver = false
     var isDark = false
     var color = Color.parseColor("#00469c")
 

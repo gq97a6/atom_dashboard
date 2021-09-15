@@ -29,12 +29,9 @@ class SettingsActivity : AppCompatActivity() {
 
         b.sThemeEdit.setOnClickListener {
             Intent(this, ThemeActivity::class.java).also {
+                it.putExtra("exitActivity", "SettingsActivity")
                 startActivity(it)
             }
-        }
-
-        b.sThemeIsGlobal.setOnCheckedChangeListener { _, state ->
-            G.theme.isGlobal = state
         }
     }
 
@@ -58,6 +55,5 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun viewConfig() {
         b.sLast.isChecked = settings.startFromLast
-        b.sThemeIsGlobal.isChecked = G.theme.isGlobal
     }
 }

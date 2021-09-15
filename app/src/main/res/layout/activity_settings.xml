@@ -115,54 +115,6 @@
                     android:layout_height="50dp"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:tag="colorB"
-                            android:text="Use globally:"
-                            android:textColor="@color/gray150"
-                            android:textSize="15sp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="OFF"
-                                android:textColor="@color/gray150"
-                                android:textSize="12sp"
-                                tools:ignore="HardcodedText" />
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/s_theme_is_global"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="ON"
-                                android:textColor="@color/gray150"
-                                android:textSize="12sp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

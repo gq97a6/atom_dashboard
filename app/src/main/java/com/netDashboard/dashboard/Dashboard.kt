@@ -4,11 +4,11 @@ import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.globals.G.theme
+import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.theme.Theme
 import com.netDashboard.tile.Tile
-import java.lang.Math.abs
 import java.util.*
 import kotlin.random.Random
 
@@ -27,6 +27,8 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
         }
 
     var spanCount = 3
+
+    var theme = Theme()
 
     var mqttEnabled = false
 
@@ -62,7 +64,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
 
     private fun applyTheme() {
         val button = holder?.itemView?.findViewById<Button>(R.id.dle_button)
-        button?.backgroundTintList = ColorStateList.valueOf(theme.colorB)
-        button?.setTextColor(theme.color)
+        button?.backgroundTintList = ColorStateList.valueOf(G.theme.colorB)
+        button?.setTextColor(G.theme.color)
     }
 }

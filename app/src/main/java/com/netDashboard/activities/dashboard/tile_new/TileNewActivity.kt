@@ -22,18 +22,20 @@ class TileNewActivity : AppCompatActivity() {
 
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
+    val theme
+        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppOn.create(this)
 
-        b = ActivityTileNewBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
-        setContentView(b.root)
-
         dashboardId = intent.getLongExtra("dashboardId", 0)
         dashboard = dashboards.byId(dashboardId)
+
+        b = ActivityTileNewBinding.inflate(layoutInflater)
+        theme.apply(this, b.root)
+        setContentView(b.root)
 
         b.tnButtonLayout.setOnClickListener {
             addTile(ButtonTile())

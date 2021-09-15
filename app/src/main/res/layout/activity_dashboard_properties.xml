@@ -6,7 +6,8 @@
     android:gravity="center"
     android:orientation="vertical"
     android:tag="background"
-    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity">
+    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity"
+    android:paddingTop="30dp">
 
 
     <LinearLayout
@@ -122,6 +123,105 @@
                     android:tag="basic"
                     android:valueFrom="1"
                     android:valueTo="6" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="3dp"
+                android:paddingBottom="3dp"
+                android:tag="colorA"
+                android:text="Theme"
+                android:textColor="@color/gray150"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_frame"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:tag="frame">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorB"
+                            android:text="Use over main:"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/dp_theme_use_over"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/dp_theme_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/button_text"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center"
+                            android:tag="button"
+                            android:text="EDIT COLOR"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 

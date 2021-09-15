@@ -350,6 +350,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/dp_mqtt_copy"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_gravity="center"

@@ -1,5 +1,6 @@
 package com.netDashboard.tile
 
+import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
@@ -46,7 +47,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     abstract var typeTag: String
 
     @Transient
-    var dashboardId: Long = 0
+    var dashboard: Dashboard = Dashboard("err")
 
     class MqttTopics {
         val subs = TopicList()
@@ -89,7 +90,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
-        dashboards.byId(dashboardId).daemonGroup?.mqttd?.let {
+        dashboard.daemonGroup?.mqttd?.let {
             it.publish(topic, msg, qos, retained)
             return true
         }

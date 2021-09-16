@@ -41,6 +41,8 @@ class ButtonTile : Tile() {
     override fun applyTheme() {
         super.applyTheme()
 
+        val theme = if (dashboard.theme.useOver) dashboard.theme else theme
+
         val button = holder?.itemView?.findViewById<Button>(R.id.tb_button)
         button?.backgroundTintList = ColorStateList.valueOf(theme.colorB)
         button?.setTextColor(theme.color)

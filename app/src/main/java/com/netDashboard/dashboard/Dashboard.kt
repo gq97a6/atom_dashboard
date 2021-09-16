@@ -22,7 +22,7 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
-            for (t in value) t.dashboardId = id
+            for (t in value) t.dashboard = this
             field = value
         }
 

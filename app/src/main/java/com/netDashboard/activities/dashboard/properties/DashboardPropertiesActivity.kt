@@ -2,14 +2,17 @@ package com.netDashboard.activities.dashboard.properties
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
@@ -22,6 +25,8 @@ import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
+import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewItem
 import java.util.*
 import kotlin.random.Random
 
@@ -186,11 +191,24 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttCopy.setOnClickListener {
             val dialog = Dialog(this)
+            val adapter = RecyclerViewAdapter(this)
+            val list = MutableList(dashboards.size) { RecyclerViewItem(R.layout.item_copy_broker) }
 
             dialog.setContentView(R.layout.popup_copy_broker)
             val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))
-            theme.apply(this, binding.root)
 
+            adapter.onBindViewHolder = { _, holder, pos ->
+                val button = holder.itemView.findViewById<Button>(R.id.cb_button)
+                button.text = dashboards[pos].name
+                button.backgroundTintList = ColorStateList.valueOf(theme.colorB)
+                button.setTextColor(theme.color)
+            }
+
+            binding.cbRecyclerView.layoutManager = GridLayoutManager(this, 1)
+            binding.cbRecyclerView.adapter = adapter
+
+            adapter.submitList(list)
+            theme.apply(this, binding.root)
             dialog.show()
         }
     }
@@ -253,9 +271,5 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 .rotation(if (it.isVisible) 0f else 180f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
-    }
-
-    private fun onServiceReady() {
-
     }
 }

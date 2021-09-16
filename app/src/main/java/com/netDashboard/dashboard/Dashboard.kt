@@ -5,17 +5,17 @@ import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.globals.G
-import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.theme.Theme
 import com.netDashboard.tile.Tile
 import java.util.*
 import kotlin.random.Random
 
-class Dashboard(var name: String = "") : RecyclerViewItem() {
+class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
     override val layout
-        get() = R.layout.dashboard_list_item
+        get() = R.layout.item_dashboard
 
     @Transient
     var daemonGroup: DaemonGroup? = null
@@ -49,7 +49,7 @@ class Dashboard(var name: String = "") : RecyclerViewItem() {
             this.find { it.id == id } ?: Dashboard("err")
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         holder.itemView.findViewById<Button>(R.id.dle_button).text =

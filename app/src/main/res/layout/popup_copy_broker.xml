@@ -7,13 +7,11 @@
     android:background="@color/gray65"
     android:tag="background">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cb_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:tag="colorA"
-        android:text="test"
-        android:textColor="@color/black"
-        android:textSize="50sp" />
+        android:paddingHorizontal="@dimen/tile_padding"
+        android:paddingTop="@dimen/tile_padding" />
 
 </LinearLayout>

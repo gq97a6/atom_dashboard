@@ -1,4 +1,4 @@
-package com.netDashboard.recycler_view
+package com.netDashboard.id_generator
 
 import java.util.*
 

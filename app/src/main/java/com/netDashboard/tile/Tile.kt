@@ -2,12 +2,12 @@ package com.netDashboard.tile
 
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.globals.G.dashboards
-import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-abstract class Tile : RecyclerViewItem() {
+abstract class Tile : BaseRecyclerViewItem() {
 
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
@@ -30,7 +30,7 @@ abstract class Tile : RecyclerViewItem() {
             this.find { it.id == id }
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

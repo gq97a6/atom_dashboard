@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -28,7 +28,7 @@ class ButtonTile : Tile() {
             holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = value
         }
 
-    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {

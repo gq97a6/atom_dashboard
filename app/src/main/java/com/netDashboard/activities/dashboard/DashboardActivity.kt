@@ -128,9 +128,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    private fun onServiceReady() {
-    }
-
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {

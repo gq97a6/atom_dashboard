@@ -183,8 +183,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onServiceReady() {}
-
     private fun highlightOnly(button: Button) {
         b.mRemove.alpha = 0.4f
         b.mSwap.alpha = 0.4f

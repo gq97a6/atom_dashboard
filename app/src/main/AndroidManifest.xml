@@ -22,7 +22,8 @@
         <activity
             android:name=".activities.dashboard_new.DashboardNewActivity"
             android:exported="true" />
-        <activity android:name=".activities.SplashScreenActivity"
+        <activity
+            android:name=".activities.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

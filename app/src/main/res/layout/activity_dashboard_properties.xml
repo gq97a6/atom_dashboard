@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:paddingTop="30dp"
     android:tag="background"
-    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity"
-    android:paddingTop="30dp">
+    tools:context=".activities.dashboard.properties.DashboardPropertiesActivity">
 
 
     <LinearLayout

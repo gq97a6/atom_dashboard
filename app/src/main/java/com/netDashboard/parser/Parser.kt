@@ -12,5 +12,7 @@ object Parser {
             Settings()
         }
     }
-    //value, other value, day, month, hour, year
+
+    //value of tile, value of other tiles, second of day, second, minute, hour, day, month, year
+    //to json
 }

@@ -23,7 +23,6 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
@@ -36,8 +35,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     private lateinit var exitActivity: String
     private var dashboardId: Long = 0
     private lateinit var dashboard: Dashboard
-    val theme
-        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +45,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboard = dashboards.byId(dashboardId)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        theme.apply(this, b.root)
+        dashboard.resultTheme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -186,13 +183,19 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpThemeUseOver.setOnCheckedChangeListener { _, state ->
             dashboard.theme.useOver = state
-            theme.apply(this, b.root)
+            dashboard.resultTheme.apply(this, b.root)
         }
 
         b.dpMqttCopy.setOnClickListener {
             val dialog = Dialog(this)
             val adapter = RecyclerViewAdapter(this)
-            val list = MutableList(dashboards.size) { RecyclerViewItem(R.layout.item_copy_broker) }
+            val theme = dashboard.resultTheme
+            val list = MutableList(dashboards.size) {
+                RecyclerViewItem(
+                    R.layout.item_copy_broker,
+                    theme
+                )
+            }
 
             dialog.setContentView(R.layout.popup_copy_broker)
             val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))

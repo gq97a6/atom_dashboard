@@ -41,11 +41,9 @@ class ButtonTile : Tile() {
     override fun applyTheme() {
         super.applyTheme()
 
-        val theme = if (dashboard.theme.useOver) dashboard.theme else theme
-
         val button = holder?.itemView?.findViewById<Button>(R.id.tb_button)
-        button?.backgroundTintList = ColorStateList.valueOf(theme.colorB)
-        button?.setTextColor(theme.color)
+        button?.backgroundTintList = ColorStateList.valueOf(adapterTheme.colorB)
+        button?.setTextColor(adapterTheme.color)
     }
 
 
@@ -54,13 +52,6 @@ class ButtonTile : Tile() {
 
         val topic = mqttTopics.pubs.get("base")
         onSend(topic.topic, mqttPubValue, topic.qos)
-
-        //adapter?.spanCount?.let { sp ->
-        //    holder?.adapterPosition?.let { ap ->
-        //        width = if (width == 1) sp else 1
-        //        adapter?.notifyItemChanged(ap)
-        //    }
-        //}
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

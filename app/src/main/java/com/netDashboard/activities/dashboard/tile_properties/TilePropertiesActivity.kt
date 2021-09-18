@@ -12,7 +12,6 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.dezero
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -24,8 +23,6 @@ class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var dashboard: Dashboard
     private lateinit var tile: Tile
     private var tileIndex = 0
-    val theme
-        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +35,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        theme.apply(this, b.root)
+        dashboard.resultTheme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 

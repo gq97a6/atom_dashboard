@@ -1,14 +1,21 @@
 package com.netDashboard.tile
 
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboard.Companion.byId
-import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
+@Suppress("UNUSED")
 abstract class Tile : BaseRecyclerViewItem() {
+
+    @Transient
+    var dashboard: Dashboard = Dashboard("err")
+    override val adapterTheme
+        get() = dashboard.resultTheme
+
+    val type = this.javaClass.toString()
+    abstract var typeTag: String
 
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
@@ -23,8 +30,6 @@ abstract class Tile : BaseRecyclerViewItem() {
     var bltRequestToGet = ""
     var bltPayloadJSON = false
     var bltOutputJSON = ""
-
-    val type = this.javaClass.toString()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -43,11 +48,6 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         applyTheme()
     }
-
-    abstract var typeTag: String
-
-    @Transient
-    var dashboard: Dashboard = Dashboard("err")
 
     class MqttTopics {
         val subs = TopicList()
@@ -84,9 +84,6 @@ abstract class Tile : BaseRecyclerViewItem() {
                     }
             }
         }
-    }
-
-    open fun applyTheme() {
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {

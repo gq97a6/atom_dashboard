@@ -12,10 +12,17 @@ import com.netDashboard.tile.Tile
 import java.util.*
 import kotlin.random.Random
 
+@Suppress("UNUSED")
 class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
+    override val adapterTheme = G.theme
     override val layout
         get() = R.layout.item_dashboard
+
+    var spanCount = 3
+    var theme = Theme()
+    val resultTheme
+        get() = if (theme.useOver) theme else G.theme
 
     @Transient
     var daemonGroup: DaemonGroup? = null
@@ -25,10 +32,6 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
             for (t in value) t.dashboard = this
             field = value
         }
-
-    var spanCount = 3
-
-    var theme = Theme()
 
     var mqttEnabled = false
 
@@ -62,7 +65,9 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
         applyTheme()
     }
 
-    private fun applyTheme() {
+    override fun applyTheme() {
+        super.applyTheme()
+
         val button = holder?.itemView?.findViewById<Button>(R.id.dle_button)
         button?.backgroundTintList = ColorStateList.valueOf(G.theme.colorB)
         button?.setTextColor(G.theme.color)

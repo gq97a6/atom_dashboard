@@ -17,7 +17,6 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
@@ -29,8 +28,6 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var dashboard: Dashboard
     lateinit var adapter: TilesAdapter
-    val theme
-        get() = if (dashboard.theme.useOver) dashboard.theme else G.theme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +36,7 @@ class DashboardActivity : AppCompatActivity() {
         dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
-        theme.apply(this, b.root)
+        dashboard.resultTheme.apply(this, b.root)
         setContentView(b.root)
 
         setupRecyclerView()

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.globals.G.theme
 import com.netDashboard.id_generator.IdGenerator
+import com.netDashboard.theme.Theme
 
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewItem {
@@ -18,6 +18,7 @@ abstract class BaseRecyclerViewItem {
     var id = IdGenerator.getId()
 
     abstract val layout: Int
+    abstract val adapterTheme: Theme
 
     @Transient
     var holder: BaseRecyclerViewAdapter.ViewHolder? = null
@@ -60,6 +61,8 @@ abstract class BaseRecyclerViewItem {
 
     open fun onEdit(isEdit: Boolean) {}
 
+    open fun applyTheme() {}
+
     inner class Flags {
         private var flag = -1
 
@@ -96,8 +99,8 @@ abstract class BaseRecyclerViewItem {
                     }
                 )
 
-                flagMark?.backgroundTintList = ColorStateList.valueOf(theme.color)
-                flagBackground?.setBackgroundColor(theme.colorD.alpha(190))
+                flagMark?.backgroundTintList = ColorStateList.valueOf(adapterTheme.color)
+                flagBackground?.setBackgroundColor(adapterTheme.colorD.alpha(190))
 
                 flagMark?.visibility = View.VISIBLE
                 flagBackground?.visibility = View.VISIBLE

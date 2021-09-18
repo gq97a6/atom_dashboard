@@ -6,7 +6,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
 import com.netDashboard.*
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.tile.Tile
@@ -109,11 +108,9 @@ class SliderTile : Tile() {
     override fun applyTheme() {
         super.applyTheme()
 
-        val theme = if (dashboard.theme.useOver) dashboard.theme else theme
-
-        holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(theme.colorB)
+        holder?.itemView?.findViewById<View>(R.id.background)?.setBackgroundColor(adapterTheme.colorB)
         holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            ?.setTextColor(theme.color)
+            ?.setTextColor(adapterTheme.color)
     }
 
     override fun onEdit(isEdit: Boolean) {

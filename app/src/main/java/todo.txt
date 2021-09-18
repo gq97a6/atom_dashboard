@@ -1,0 +1,12 @@
+parser
+    value of tile, value of other tiles,
+        second of day, second, minute, hour, day, month, year
+    to json
+
+tile payload json
+publish confirmation
+log
+notifications
+export/import
+new tiles
+mqttQOS

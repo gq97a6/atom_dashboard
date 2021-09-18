@@ -1,3 +1,5 @@
 package com.netDashboard.recycler_view
 
-class RecyclerViewItem(override val layout: Int) : BaseRecyclerViewItem()
+import com.netDashboard.theme.Theme
+
+class RecyclerViewItem(override val layout: Int, override val adapterTheme: Theme) : BaseRecyclerViewItem()

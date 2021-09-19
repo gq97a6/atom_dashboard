@@ -62,7 +62,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         list[position].onBindViewHolder(holder, position)
 
-        theme.apply(context, holder.itemView as ViewGroup)
+        if (editType.isNone) theme.apply(context, holder.itemView as ViewGroup)
 
         fun View.setOnClick() {
             this.setOnTouchListener { v, e ->
@@ -109,7 +109,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             this.setOnClick()
         }
 
-        holder.itemView.iterate()
+        (holder.itemView as ViewGroup).iterate()
     }
 
     private fun markItemRemove(position: Int) {

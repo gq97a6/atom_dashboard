@@ -145,12 +145,14 @@ class Theme {
     }
 
     private fun FrameLayout.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "frameLayout")
-        }
+        //when (this.tag) {
+        //    else -> onUnknownTag(this.tag, "frameLayout")
+        //}
 
-        this.layoutTransition = LayoutTransition()
-        this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        if (this.tag != "tile") {
+            this.layoutTransition = LayoutTransition()
+            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        }
     }
 
     private fun LinearLayout.applyTheme() {

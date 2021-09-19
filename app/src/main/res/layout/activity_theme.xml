@@ -160,8 +160,7 @@
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/t_is_dark"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="colorB" />
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="wrap_content"

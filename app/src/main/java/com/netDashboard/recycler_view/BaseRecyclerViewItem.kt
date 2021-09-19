@@ -102,11 +102,25 @@ abstract class BaseRecyclerViewItem {
                 flagMark?.backgroundTintList = ColorStateList.valueOf(adapter?.theme!!.color)
                 flagBackground?.setBackgroundColor(adapter?.theme!!.colorD.alpha(190))
 
-                flagMark?.visibility = View.VISIBLE
-                flagBackground?.visibility = View.VISIBLE
+                flagMark?.animate()
+                    ?.alpha(1f)
+                    ?.withStartAction { flagMark.visibility = View.VISIBLE }
+                    ?.duration = 150
+
+                flagBackground?.animate()
+                    ?.alpha(1f)
+                    ?.withStartAction { flagBackground.visibility = View.VISIBLE }
+                    ?.duration = 150
             } else {
-                flagMark?.visibility = View.GONE
-                flagBackground?.visibility = View.GONE
+                flagMark?.animate()
+                    ?.alpha(0f)
+                    ?.withEndAction { flagMark.visibility = View.GONE }
+                    ?.duration = 150
+
+                flagBackground?.animate()
+                    ?.alpha(0f)
+                    ?.withEndAction { flagBackground.visibility = View.GONE }
+                    ?.duration = 150
             }
         }
     }

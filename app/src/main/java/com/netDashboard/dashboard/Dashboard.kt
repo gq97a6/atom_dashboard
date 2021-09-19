@@ -1,6 +1,5 @@
 package com.netDashboard.dashboard
 
-import android.content.res.ColorStateList
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup

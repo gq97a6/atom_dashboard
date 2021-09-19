@@ -9,12 +9,12 @@
 
     <View
         android:id="@+id/foreground"
-        android:tag="foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
+        android:tag="foreground"
         tools:ignore="ContentDescription,DuplicateIncludedIds" />
 
     <View
@@ -64,20 +64,5 @@
         app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform"
         tools:ignore="HardcodedText" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/ts_slider"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:stepSize="10.0"
-        android:valueFrom="0.0"
-        android:valueTo="100.0"
-        android:visibility="invisible"
-        app:haloColor="#00000000"
-        app:labelBehavior="gone"
-        app:thumbRadius="0dp"
-        app:tickColor="#00000000"
-        app:trackColor="#00000000" />
 
 </FrameLayout>

@@ -1,16 +1,18 @@
 package com.netDashboard.tile.types.slider
 
-import android.util.Log
 import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_UP
 import android.view.View
-import android.widget.FrameLayout
+import android.view.ViewGroup
 import android.widget.TextView
-import com.google.android.material.slider.Slider
-import com.netDashboard.*
+import com.netDashboard.R
+import com.netDashboard.dezero
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.roundCloser
+import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import kotlin.math.abs
 
 class SliderTile : Tile() {
 
@@ -28,68 +30,34 @@ class SliderTile : Tile() {
     var to = 100f
     var step = 1f
 
-    private var _value = 0f
+    var value: Float = 0f
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()
             field = value
         }
 
-    var value: Float
-        set(value) {
-            val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
-            var v = value
-
-            if (value !in from..to && value !in to..from) {
-                v = if (abs(from - value) < abs(to - value)) from else to
-            }
-
-            v.roundCloser(step).let {
-                slider?.value = it.checkScale()
-                _value = it
-            }
-        }
-        get() = _value
-
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
+        value = value
+    }
 
-        val slider = holder.itemView.findViewById<Slider>(R.id.ts_slider)
-        val background = holder.itemView.findViewById<View>(R.id.background)
+    override fun onTouch(v: View, e: MotionEvent) {
+        super.onTouch(v, e)
 
-        setRange(from, to, step)
+        var p = 100f * (e.rawX - screenWidth * 0.2f) / (screenWidth * (0.8f - 0.2f))
+        if (p < 0) p = 0f
+        else if (p > 100) p = 100f
 
-        background.setOnTouchListener { v, e ->
+        value = (from + p * (to - from) / 100).roundCloser(step)
 
-            when (e.action) {
-                MotionEvent.ACTION_DOWN -> v.performClick()
-                MotionEvent.ACTION_UP -> holder.itemView.callOnClick()
-            }
+        when (e.action) {
+            ACTION_DOWN -> (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(
+                true
+            )
+            ACTION_UP -> {
+                (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(false)
 
-            if ((e.eventTime - e.downTime) > 0) {
-
-                val params = slider.layoutParams as FrameLayout.LayoutParams
-                params.width = screenWidth - 100.toPx()
-                slider.layoutParams = params
-
-                val center = screenWidth / 2
-                val location = IntArray(2)
-                background.getLocationOnScreen(location)
-                val offset = center - location[0] - slider.width / 2
-
-                e.setLocation(e.x - offset, e.y)
-
-                slider.dispatchTouchEvent(e)
-            }
-
-            return@setOnTouchListener true
-        }
-
-        slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-            override fun onStartTrackingTouch(s: Slider) {
-            }
-
-            override fun onStopTrackingTouch(s: Slider) {
                 val topic = mqttTopics.pubs.get("base")
                 onSend(
                     topic.topic,
@@ -97,56 +65,8 @@ class SliderTile : Tile() {
                     topic.qos
                 )
             }
-        })
-
-        slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
-            this._value = value.roundCloser(step).checkScale()
-        })
-    }
-
-    override fun onTouch(v: View, e: MotionEvent) {
-        super.onTouch(v, e)
-
-        val per = 100f * e.x / screenWidth.toFloat()
-        Log.i("OUY", "$per")
-    }
-
-    override fun onEdit(isEdit: Boolean) {
-        super.onEdit(isEdit)
-
-        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider)
-        slider?.isEnabled = !isEdit
-    }
-
-    private fun Float.checkScale(): Float {
-        return if (from < to) this else from - this + to
-    }
-
-    private fun setRange(from: Float, to: Float, step: Float = 1f) {
-        val slider = holder?.itemView?.findViewById<Slider>(R.id.ts_slider) ?: return
-
-        val s = if (step in 0.000001..1000000000.0) step else SliderTile().step
-        var f = from.roundCloser(s)
-        var t = to.roundCloser(s)
-
-        if (f == t) {
-            f = SliderTile().from.roundCloser(s)
-            t = SliderTile().to.roundCloser(s)
         }
 
-        if (f < t) {
-            slider.valueFrom = f
-            slider.valueTo = t
-        } else {
-            slider.valueFrom = t
-            slider.valueTo = f
-        }
-        slider.stepSize = s
-
-        this.from = f
-        this.to = t
-        this.step = s
-        value = _value
     }
 
     override fun onData(data: Pair<String?, MqttMessage?>): Boolean {

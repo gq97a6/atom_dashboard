@@ -25,13 +25,13 @@
             android:paddingBottom="@dimen/tile_padding">
 
             <Button
-                android:tag="color"
                 android:id="@+id/d_touch"
                 style="@style/button"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_touch" />
+                android:background="@drawable/button_touch"
+                android:tag="color" />
 
         </FrameLayout>
 
@@ -74,13 +74,13 @@
             android:paddingBottom="@dimen/tile_padding">
 
             <Button
-                android:tag="color"
                 android:id="@+id/d_properties"
                 style="@style/button"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_more" />
+                android:background="@drawable/button_more"
+                android:tag="color" />
 
         </FrameLayout>
 

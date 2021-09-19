@@ -9,17 +9,16 @@
 
     <View
         android:id="@+id/foreground"
-        android:tag="foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
-        android:elevation="20dp" />
+        android:elevation="20dp"
+        android:tag="foreground" />
 
     <Button
         android:id="@+id/cb_button"
         style="@style/button"
-        android:tag="item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="#000000"
@@ -28,6 +27,7 @@
         android:paddingTop="15dp"
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
+        android:tag="item"
         android:text="@string/tb_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"

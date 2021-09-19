@@ -10,8 +10,7 @@ buttons ripple
     bgShape.color = color
 }
 
-tile onTouch
-tile ripple
+screen rotation
 tile payload json
 publish confirmation
 log

@@ -9,12 +9,12 @@
 
     <View
         android:id="@+id/foreground"
-        android:tag="foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
-        android:elevation="20dp" />
+        android:elevation="20dp"
+        android:tag="foreground" />
 
     <View
         android:id="@+id/flag_mark"
@@ -35,7 +35,6 @@
         android:visibility="gone" />
 
     <Button
-        android:tag="item"
         android:id="@+id/dle_button"
         style="@style/button"
         android:layout_width="match_parent"
@@ -46,6 +45,7 @@
         android:paddingTop="15dp"
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
+        android:tag="item"
         android:text="@string/tb_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"

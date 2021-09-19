@@ -66,7 +66,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         fun View.setOnClick() {
             this.setOnTouchListener { v, e ->
-                list[position].onTouch(v, e)
+                if (editType.isNone) list[position].onTouch(v, e)
 
                 if (e.action == MotionEvent.ACTION_DOWN) {
                     val foreground = holder.itemView.findViewById<View>(R.id.foreground)

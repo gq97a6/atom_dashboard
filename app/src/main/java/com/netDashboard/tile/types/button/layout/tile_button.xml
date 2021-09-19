@@ -10,12 +10,12 @@
 
     <View
         android:id="@+id/foreground"
-        android:tag="foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
+        android:tag="foreground"
         tools:ignore="ContentDescription,DuplicateIncludedIds" />
 
     <View
@@ -43,8 +43,8 @@
         android:layout_height="100dp"
         android:background="@drawable/background_ripple"
         android:clickable="true"
-        android:visibility="gone"
-        android:focusable="true"/>
+        android:focusable="true"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/tb_button"

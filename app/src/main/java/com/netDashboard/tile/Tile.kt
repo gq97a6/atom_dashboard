@@ -11,8 +11,6 @@ abstract class Tile : BaseRecyclerViewItem() {
 
     @Transient
     var dashboard: Dashboard = Dashboard("err")
-    override val adapterTheme
-        get() = dashboard.resultTheme
 
     val type = this.javaClass.toString()
     abstract var typeTag: String
@@ -45,8 +43,6 @@ abstract class Tile : BaseRecyclerViewItem() {
         params.height =
             ((screenWidth - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
         view.layoutParams = params
-
-        applyTheme()
     }
 
     class MqttTopics {

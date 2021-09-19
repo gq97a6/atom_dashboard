@@ -36,10 +36,9 @@ class DashboardActivity : AppCompatActivity() {
         dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
-        dashboard.resultTheme.apply(this, b.root)
         setContentView(b.root)
-
         setupRecyclerView()
+        dashboard.resultTheme.apply(this, b.root)
 
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
@@ -132,6 +131,7 @@ class DashboardActivity : AppCompatActivity() {
 
         adapter = TilesAdapter(this, spanCount)
         adapter.setHasStableIds(true)
+        adapter.theme = dashboard.resultTheme
 
         adapter.onItemRemove = {
             if (adapter.itemCount == 0) {

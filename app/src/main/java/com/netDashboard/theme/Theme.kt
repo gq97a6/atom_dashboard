@@ -8,13 +8,13 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet.INVISIBLE
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -30,7 +30,7 @@ import java.io.File
 import java.io.FileReader
 import kotlin.random.Random
 
-
+@Suppress("UNUSED")
 class Theme {
 
     var useOver = false
@@ -47,7 +47,7 @@ class Theme {
 
     private val colorA
         get() = ColorUtils.blendARGB(color, colorBackground, 0.4f)
-    val colorB
+    private val colorB
         get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
     private val colorC
         get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
@@ -171,14 +171,18 @@ class Theme {
     }
 
     private fun MaterialButton.applyTheme() {
-        this.backgroundTintList = ColorStateList.valueOf(color)
-
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
+            "item" -> {
+                this.backgroundTintList = ColorStateList.valueOf(colorB)
+                this.setTextColor(color)
+                this.rippleColor = ColorStateList.valueOf(Color.RED)
+            }
             "tile_button" -> {
                 this.backgroundTintList = ColorStateList.valueOf(colorB)
                 this.setTextColor(color)
+                this.rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
             }
             else -> onUnknownTag(this.tag, "materialButton")
         }

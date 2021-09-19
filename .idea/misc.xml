@@ -9,8 +9,10 @@
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_bw_slider.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_frame.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_layout.xml" value="0.3356164383561644" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_ripple.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_add.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_edit.xml" value="0.3402777777777778" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_more.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_swap.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_text.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_touch.xml" value="0.3402777777777778" />
@@ -33,6 +35,7 @@
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/dashboard_list_element.xml" value="0.32592592592592595" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/dashboard_list_item.xml" value="0.33" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/dashboard_popup_item.xml" value="0.32592592592592595" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/item_copy_broker.xml" value="0.32146118721461187" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/item_dashboard.xml" value="0.32592592592592595" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/popup_copy_broker.xml" value="0.32592592592592595" />
       </map>

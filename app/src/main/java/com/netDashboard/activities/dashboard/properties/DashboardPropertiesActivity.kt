@@ -2,7 +2,6 @@ package com.netDashboard.activities.dashboard.properties
 
 import android.app.Dialog
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -192,19 +191,17 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             val theme = dashboard.resultTheme
             val list = MutableList(dashboards.size) {
                 RecyclerViewItem(
-                    R.layout.item_copy_broker,
-                    theme
+                    R.layout.item_copy_broker
                 )
             }
 
             dialog.setContentView(R.layout.popup_copy_broker)
             val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))
 
+            adapter.theme = theme
             adapter.onBindViewHolder = { _, holder, pos ->
                 val button = holder.itemView.findViewById<Button>(R.id.cb_button)
                 button.text = dashboards[pos].name
-                button.backgroundTintList = ColorStateList.valueOf(theme.colorB)
-                button.setTextColor(theme.color)
             }
 
             binding.cbRecyclerView.layoutManager = GridLayoutManager(this, 1)

@@ -31,10 +31,9 @@ class MainActivity : AppCompatActivity() {
         AppOn.create(this)
 
         b = ActivityMainBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
         setContentView(b.root)
-
         setupRecyclerView()
+        G.theme.apply(this, b.root)
 
         b.mTouch.setOnClickListener {
             touchOnClick()
@@ -112,7 +111,6 @@ class MainActivity : AppCompatActivity() {
 
         b.mRecyclerView.layoutManager = layoutManager
         b.mRecyclerView.adapter = adapter
-
 
         if (adapter.itemCount == 0) {
             b.mPlaceholder.visibility = View.VISIBLE

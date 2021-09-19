@@ -77,6 +77,7 @@ class TileNewActivity : AppCompatActivity() {
 
         tile.width = 1
         tile.height = 1
+        tile.dashboard = dashboard
 
         dashboard.tiles.add(tile)
 

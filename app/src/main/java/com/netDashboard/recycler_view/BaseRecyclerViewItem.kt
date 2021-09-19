@@ -2,12 +2,12 @@ package com.netDashboard.recycler_view
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.id_generator.IdGenerator
-import com.netDashboard.theme.Theme
 
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewItem {
@@ -18,13 +18,13 @@ abstract class BaseRecyclerViewItem {
     var id = IdGenerator.getId()
 
     abstract val layout: Int
-    abstract val adapterTheme: Theme
 
     @Transient
     var holder: BaseRecyclerViewAdapter.ViewHolder? = null
 
     @Transient
     var adapter: BaseRecyclerViewAdapter<*>? = null
+    //lateinit var adapter: BaseRecyclerViewAdapter<*>
 
     @Transient
     var flag = Flags()
@@ -57,11 +57,16 @@ abstract class BaseRecyclerViewItem {
         return oldItem.id == newItem.id
     }
 
+    open fun dispatchTouchEvent(e: MotionEvent) {
+        val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
+        foreground?.dispatchTouchEvent(e)
+
+        if(e.action == MotionEvent.ACTION_UP) onClick()
+    }
+
     open fun onClick() {}
 
     open fun onEdit(isEdit: Boolean) {}
-
-    open fun applyTheme() {}
 
     inner class Flags {
         private var flag = -1
@@ -99,8 +104,8 @@ abstract class BaseRecyclerViewItem {
                     }
                 )
 
-                flagMark?.backgroundTintList = ColorStateList.valueOf(adapterTheme.color)
-                flagBackground?.setBackgroundColor(adapterTheme.colorD.alpha(190))
+                flagMark?.backgroundTintList = ColorStateList.valueOf(adapter?.theme!!.color)
+                flagBackground?.setBackgroundColor(adapter?.theme!!.colorD.alpha(190))
 
                 flagMark?.visibility = View.VISIBLE
                 flagBackground?.visibility = View.VISIBLE

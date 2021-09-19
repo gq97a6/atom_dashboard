@@ -3,6 +3,8 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
+tile onTouch
+tile ripple
 tile payload json
 publish confirmation
 log
@@ -10,3 +12,7 @@ notifications
 export/import
 new tiles
 mqttQOS
+
+icon
+name
+publish

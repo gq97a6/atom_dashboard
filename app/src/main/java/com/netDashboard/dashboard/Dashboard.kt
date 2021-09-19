@@ -15,7 +15,6 @@ import kotlin.random.Random
 @Suppress("UNUSED")
 class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
-    override val adapterTheme = G.theme
     override val layout
         get() = R.layout.item_dashboard
 
@@ -61,15 +60,5 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
         holder.itemView.findViewById<Button>(R.id.dle_button).setOnClickListener {
             holder.itemView.callOnClick()
         }
-
-        applyTheme()
-    }
-
-    override fun applyTheme() {
-        super.applyTheme()
-
-        val button = holder?.itemView?.findViewById<Button>(R.id.dle_button)
-        button?.backgroundTintList = ColorStateList.valueOf(G.theme.colorB)
-        button?.setTextColor(G.theme.color)
     }
 }

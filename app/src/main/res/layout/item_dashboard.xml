@@ -26,6 +26,7 @@
         android:visibility="gone" />
 
     <Button
+        android:tag="item"
         android:id="@+id/dle_button"
         style="@style/button"
         android:layout_width="match_parent"

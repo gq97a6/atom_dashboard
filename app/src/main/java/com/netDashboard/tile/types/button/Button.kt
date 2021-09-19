@@ -37,15 +37,6 @@ class ButtonTile : Tile() {
         liveText = text
     }
 
-    override fun applyTheme() {
-        super.applyTheme()
-
-        val button = holder?.itemView?.findViewById<Button>(R.id.tb_button)
-        button?.backgroundTintList = ColorStateList.valueOf(adapterTheme.colorB)
-        button?.setTextColor(adapterTheme.color)
-    }
-
-
     override fun onClick() {
         super.onClick()
 

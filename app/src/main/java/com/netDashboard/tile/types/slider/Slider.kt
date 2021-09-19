@@ -104,15 +104,6 @@ class SliderTile : Tile() {
         })
     }
 
-    override fun applyTheme() {
-        super.applyTheme()
-
-        holder?.itemView?.findViewById<View>(R.id.background)
-            ?.setBackgroundColor(adapterTheme.colorB)
-        holder?.itemView?.findViewById<TextView>(R.id.ts_value)
-            ?.setTextColor(adapterTheme.color)
-    }
-
     override fun onEdit(isEdit: Boolean) {
         super.onEdit(isEdit)
 

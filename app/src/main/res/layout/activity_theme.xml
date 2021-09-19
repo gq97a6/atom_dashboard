@@ -26,7 +26,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_touch" />
+                android:background="@drawable/button_touch"
+                android:tag="color" />
 
         </FrameLayout>
 
@@ -52,7 +53,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_more" />
+                android:background="@drawable/button_more"
+                android:tag="color" />
 
         </FrameLayout>
 

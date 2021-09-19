@@ -9,6 +9,17 @@
     android:padding="@dimen/tile_padding">
 
     <View
+        android:id="@+id/foreground"
+        android:tag="foreground"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_ripple"
+        android:elevation="20dp"
+        android:visibility="gone"
+        tools:ignore="ContentDescription,DuplicateIncludedIds" />
+
+    <View
         android:id="@+id/flag_mark"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -28,6 +39,14 @@
         android:visibility="gone"
         tools:ignore="ContentDescription,DuplicateIncludedIds" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/background_ripple"
+        android:clickable="true"
+        android:visibility="gone"
+        android:focusable="true"/>
+
     <Button
         android:id="@+id/tb_button"
         style="@style/button"
@@ -44,7 +63,6 @@
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform"
-        app:rippleColor="#FFFFFF" />
+        app:autoSizeTextType="uniform" />
 
 </FrameLayout>

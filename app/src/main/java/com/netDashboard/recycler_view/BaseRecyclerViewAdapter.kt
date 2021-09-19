@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.globals.G
 import com.netDashboard.toPx
 import java.util.*
 
@@ -21,12 +22,12 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     ListAdapter<item, BaseRecyclerViewAdapter.ViewHolder>(c) {
     var editType = Modes()
 
+    var theme = G.theme
     lateinit var list: MutableList<item>
     private lateinit var currentItem: item
 
     var onItemClick: (item) -> Unit = {}
     var onItemRemove: (item) -> Unit = {}
-    var onBindViewHolder: (item, ViewHolder, Int) -> Unit = { _, _, _ -> }
 
     override fun submitList(list: MutableList<item>?) {
         super.submitList(list)
@@ -57,8 +58,9 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        onBindViewHolder(list[position], holder, position)
         list[position].onBindViewHolder(holder, position)
+
+        theme.apply(context, holder.itemView as ViewGroup)
         holder.itemView.setOnClickListener {
             onItemClick(list[position])
 

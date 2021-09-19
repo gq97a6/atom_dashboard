@@ -25,6 +25,7 @@
             android:paddingBottom="@dimen/tile_padding">
 
             <Button
+                android:tag="color"
                 android:id="@+id/d_touch"
                 style="@style/button"
                 android:layout_width="35dp"
@@ -73,6 +74,7 @@
             android:paddingBottom="@dimen/tile_padding">
 
             <Button
+                android:tag="color"
                 android:id="@+id/d_properties"
                 style="@style/button"
                 android:layout_width="35dp"

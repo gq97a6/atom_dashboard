@@ -1,5 +1,6 @@
 package com.netDashboard.tile.types.slider
 
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
@@ -86,7 +87,6 @@ class SliderTile : Tile() {
 
         slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(s: Slider) {
-                holder.itemView.callOnClick()
             }
 
             override fun onStopTrackingTouch(s: Slider) {
@@ -102,6 +102,13 @@ class SliderTile : Tile() {
         slider.addOnChangeListener(Slider.OnChangeListener { _: Slider, value: Float, _: Boolean ->
             this._value = value.roundCloser(step).checkScale()
         })
+    }
+
+    override fun onTouch(v: View, e: MotionEvent) {
+        super.onTouch(v, e)
+
+        val per = 100f * e.x / screenWidth.toFloat()
+        Log.i("OUY", "$per")
     }
 
     override fun onEdit(isEdit: Boolean) {

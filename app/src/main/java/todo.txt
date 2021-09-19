@@ -3,6 +3,13 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
+buttons ripple
+{
+    val background = constraintLayout.background as RippleDrawable
+    val bgShape = background.findDrawableByLayerId(R.id.fab_shape) as GradientDrawable
+    bgShape.color = color
+}
+
 tile onTouch
 tile ripple
 tile payload json

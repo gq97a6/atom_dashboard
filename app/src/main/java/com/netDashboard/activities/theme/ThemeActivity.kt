@@ -89,11 +89,14 @@ class ThemeActivity : AppCompatActivity() {
             this,
             when (exitActivity) {
                 "SettingsActivity" -> SettingsActivity::class.java
-                "DashboardPropertiesActivity" -> DashboardPropertiesActivity::class.java
+                "DashboardPropertiesActivity" -> {
+                    DashboardPropertiesActivity::class.java
+                }
                 else -> MainActivity::class.java
             }
         ).also {
             it.putExtra("dashboardId", dashboardId)
+            it.putExtra("exitActivity", "DashboardActivity")
             startActivity(it)
         }
     }

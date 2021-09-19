@@ -1,6 +1,7 @@
 package com.netDashboard.tile.types.button
 
-import android.content.res.ColorStateList
+import android.view.MotionEvent
+import android.view.View
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
@@ -29,16 +30,11 @@ class ButtonTile : Tile() {
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-
-        holder.itemView.findViewById<Button>(R.id.tb_button).setOnClickListener {
-            holder.itemView.callOnClick()
-        }
-
         liveText = text
     }
 
-    override fun onClick() {
-        super.onClick()
+    override fun onClick(v: View, e: MotionEvent) {
+        super.onClick(v, e)
 
         val topic = mqttTopics.pubs.get("base")
         onSend(topic.topic, mqttPubValue, topic.qos)

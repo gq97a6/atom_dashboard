@@ -57,14 +57,9 @@ abstract class BaseRecyclerViewItem {
         return oldItem.id == newItem.id
     }
 
-    open fun dispatchTouchEvent(e: MotionEvent) {
-        val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
-        foreground?.dispatchTouchEvent(e)
+    open fun onTouch(v: View, e: MotionEvent) {}
 
-        if(e.action == MotionEvent.ACTION_UP) onClick()
-    }
-
-    open fun onClick() {}
+    open fun onClick(v: View, e: MotionEvent) {}
 
     open fun onEdit(isEdit: Boolean) {}
 

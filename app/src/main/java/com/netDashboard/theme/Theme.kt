@@ -6,15 +6,16 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintSet.INVISIBLE
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -135,6 +136,10 @@ class Theme {
                 drawable?.setStroke(1, color)
             }
             "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
+            "foreground" -> {
+                val background = this.background as RippleDrawable
+                background.setColor(ColorStateList.valueOf(colorBackground))
+            }
             else -> onUnknownTag(this.tag, "view")
         }
     }
@@ -177,12 +182,12 @@ class Theme {
             "item" -> {
                 this.backgroundTintList = ColorStateList.valueOf(colorB)
                 this.setTextColor(color)
-                this.rippleColor = ColorStateList.valueOf(Color.RED)
+                this.rippleColor = ColorStateList.valueOf(colorBackground)
             }
             "tile_button" -> {
                 this.backgroundTintList = ColorStateList.valueOf(colorB)
                 this.setTextColor(color)
-                this.rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
+                this.rippleColor = ColorStateList.valueOf(colorBackground)
             }
             else -> onUnknownTag(this.tag, "materialButton")
         }

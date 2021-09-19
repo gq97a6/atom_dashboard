@@ -13,6 +13,7 @@ import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActiv
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on.AppOn
+import com.netDashboard.click
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
@@ -205,12 +206,4 @@ class MainActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     fun clickEdit(v: View) = b.mEdit.click()
-
-    private fun Button.click() {
-        this.performClick()
-        this.isPressed = true
-        this.invalidate()
-        this.isPressed = false
-        this.invalidate()
-    }
 }

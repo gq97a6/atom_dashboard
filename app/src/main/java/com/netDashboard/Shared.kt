@@ -1,3 +1,4 @@
+@file:Suppress("UNUSED")
 package com.netDashboard
 
 import android.app.NotificationChannel
@@ -164,4 +165,12 @@ fun View.blink(
         it.repeatMode = repeatMode
         it.repeatCount = times
     })
+}
+
+fun View.click() {
+    this.performClick()
+    this.isPressed = true
+    this.invalidate()
+    this.isPressed = false
+    this.invalidate()
 }

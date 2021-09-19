@@ -2,6 +2,7 @@ package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
+import com.netDashboard.click
 import com.netDashboard.globals.G
 import com.netDashboard.toPx
 import java.util.*
@@ -61,24 +63,53 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         list[position].onBindViewHolder(holder, position)
 
         theme.apply(context, holder.itemView as ViewGroup)
-        holder.itemView.setOnClickListener {
-            onItemClick(list[position])
 
-            when {
-                editType.isNone -> {
-                    list[position].onClick()
+        fun View.setOnClick() {
+            this.setOnTouchListener { v, e ->
+                list[position].onTouch(v, e)
+
+                if (e.action == MotionEvent.ACTION_DOWN) {
+                    val foreground = holder.itemView.findViewById<View>(R.id.foreground)
+                    foreground?.click()
                 }
-                editType.isSwap -> {
-                    if (!editType.isLock) {
-                        markItemSwap(position)
-                        swapMarkedItems(position)
+
+                if (e.action == MotionEvent.ACTION_UP) {
+                    this.performClick()
+
+                    onItemClick(list[position])
+
+                    when {
+                        editType.isNone -> {
+                            list[position].onClick(v, e)
+                        }
+                        editType.isSwap -> {
+                            if (!editType.isLock) {
+                                markItemSwap(position)
+                                swapMarkedItems(position)
+                            }
+                        }
+                        editType.isRemove -> {
+                            markItemRemove(position)
+                        }
                     }
                 }
-                editType.isRemove -> {
-                    markItemRemove(position)
-                }
+
+                return@setOnTouchListener true
             }
         }
+
+        fun ViewGroup.iterate() {
+            for (i in 0 until this.childCount) {
+                val v = this.getChildAt(i)
+
+                if (v is ViewGroup) v.iterate()
+                v.setOnClick()
+            }
+
+            this.setOnClick()
+        }
+
+        holder.itemView.iterate()
     }
 
     private fun markItemRemove(position: Int) {

@@ -32,7 +32,6 @@ import java.io.File
 import java.io.FileReader
 import kotlin.random.Random
 
-
 @Suppress("UNUSED")
 class Theme {
 
@@ -140,7 +139,7 @@ class Theme {
             "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "foreground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(contrastColor(!isDark, 100)))
+                background.setColor(ColorStateList.valueOf(colorBackground))
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -182,13 +181,13 @@ class Theme {
     private fun MaterialButton.applyTheme() {
         val background = this.background as LayerDrawable?
         val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
-        ripple?.setColor(ColorStateList.valueOf(contrastColor(!isDark, 100)))
+        ripple?.setColor(ColorStateList.valueOf(contrastColor(!isDark, 70)))
         this.setTextColor(color)
 
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
-            "colorB" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
+            "colorC" -> this.backgroundTintList = ColorStateList.valueOf(colorC)
             "item" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             else -> onUnknownTag(this.tag, "materialButton")

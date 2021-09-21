@@ -198,28 +198,18 @@
 
                     </LinearLayout>
 
-                    <FrameLayout
+                    <Button
+                        android:id="@+id/dp_theme_edit"
+                        style="@style/button"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/dp_theme_edit"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            android:background="@drawable/button_text"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:tag="button"
-                            android:text="EDIT COLOR"
-                            android:textColor="@color/white"
-                            android:textSize="11sp" />
-
-                    </FrameLayout>
+                        android:layout_gravity="center"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/button_text"
+                        android:padding="0dp"
+                        android:tag="colorB"
+                        android:text="EDIT COLOR"
+                        android:textSize="11sp" />
 
                 </LinearLayout>
 
@@ -349,19 +339,17 @@
                         android:gravity="center"
                         android:orientation="horizontal">
 
-                        <TextView
+                        <Button
                             android:id="@+id/dp_mqtt_copy"
+                            style="@style/button"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="40dp"
                             android:background="@drawable/button_text"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center"
-                            android:tag="button"
+                            android:padding="0dp"
+                            android:tag="colorB"
                             android:text="COPY BROKER PROPERTIES"
-                            android:textColor="@color/white"
                             android:textSize="11sp" />
 
                     </LinearLayout>

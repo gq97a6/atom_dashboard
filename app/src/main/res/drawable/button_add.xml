@@ -8,7 +8,8 @@
                 android:height="24dp" />
         </shape>
     </item>
-    <item>
+
+    <item android:id="@+id/ripple">
         <ripple android:color="?colorSecondary">
             <item android:drawable="@drawable/icon_add" />
         </ripple>

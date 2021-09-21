@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
@@ -30,6 +31,7 @@ import com.netDashboard.globals.G.gson
 import java.io.File
 import java.io.FileReader
 import kotlin.random.Random
+
 
 @Suppress("UNUSED")
 class Theme {
@@ -138,7 +140,7 @@ class Theme {
             "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "foreground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(colorBackground))
+                background.setColor(ColorStateList.valueOf(contrastColor(!isDark, 100)))
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -178,19 +180,17 @@ class Theme {
     }
 
     private fun MaterialButton.applyTheme() {
+        val background = this.background as LayerDrawable?
+        val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
+        ripple?.setColor(ColorStateList.valueOf(contrastColor(!isDark, 100)))
+        this.setTextColor(color)
+
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
-            "item" -> {
-                this.backgroundTintList = ColorStateList.valueOf(colorB)
-                this.setTextColor(color)
-                this.rippleColor = ColorStateList.valueOf(colorBackground)
-            }
-            "tile_button" -> {
-                this.backgroundTintList = ColorStateList.valueOf(colorB)
-                this.setTextColor(color)
-                this.rippleColor = ColorStateList.valueOf(colorBackground)
-            }
+            "colorB" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
+            "item" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
+            "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             else -> onUnknownTag(this.tag, "materialButton")
         }
     }

@@ -3,14 +3,14 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
-screen rotation
-tile payload json
-publish confirmation
 log
+publish confirmation
 notifications
 export/import
-new tiles
+tile payload json
 mqttQOS
+new tiles
+screen rotation
 
 icon
 name

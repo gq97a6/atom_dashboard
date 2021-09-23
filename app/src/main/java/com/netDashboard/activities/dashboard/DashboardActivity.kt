@@ -1,13 +1,18 @@
 package com.netDashboard.activities.dashboard
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.ACTION_UP
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
@@ -19,11 +24,14 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.globals.G.dashboards
+import com.netDashboard.log.Log.Companion.LogList
+import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
 
+@SuppressLint("ClickableViewAccessibility")
 class DashboardActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardBinding
 
@@ -39,6 +47,7 @@ class DashboardActivity : AppCompatActivity() {
         b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
         setupRecyclerView()
+        setupLogRecyclerView()
         dashboard.resultTheme.apply(this, b.root)
 
         //Set dashboard name
@@ -88,6 +97,21 @@ class DashboardActivity : AppCompatActivity() {
         b.dAdd.setOnClickListener {
             addOnClick()
         }
+
+
+        b.dTag.setOnTouchListener { v, e ->
+            showLog(v, e)
+
+            return@setOnTouchListener true
+        }
+
+        b.dTagStatus.setOnTouchListener { v, e ->
+            showLog(v, e)
+
+            return@setOnTouchListener true
+        }
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -172,6 +196,23 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupLogRecyclerView() {
+        val adapter = LogAdapter(this)
+        adapter.setHasStableIds(true)
+        adapter.theme = dashboard.resultTheme
+        adapter.submitList(LogList)
+
+        val layoutManager = LinearLayoutManager(this)
+
+        layoutManager.stackFromEnd = true
+        b.dLogRecyclerView.layoutManager = layoutManager
+        b.dLogRecyclerView.adapter = adapter
+
+        if (adapter.itemCount == 0) {
+            b.dLogPlaceholder.visibility = View.VISIBLE
+        }
+    }
+
     //----------------------------------------------------------------------------------------------
 
     private fun touchOnClick() {
@@ -250,6 +291,37 @@ class DashboardActivity : AppCompatActivity() {
         b.dSwap.alpha = 0.4f
         b.dEdit.alpha = 0.4f
         button.alpha = 1f
+    }
+
+    private var showLogStartY = 0f
+    private fun showLog(v: View, e: MotionEvent) {
+        v.performClick()
+
+        if (e.action == ACTION_DOWN) showLogStartY = e.rawY
+
+        if (e.action == ACTION_UP) {
+            val valueAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
+            valueAnimator.duration = 500L
+
+            valueAnimator.addUpdateListener {
+                val animatedValue = valueAnimator.animatedValue as Int
+                val layoutParams = b.dLog.layoutParams
+                layoutParams.height = animatedValue
+                b.dLog.layoutParams = layoutParams
+            }
+            valueAnimator.start()
+        } else {
+            val lp = b.dLog.layoutParams
+            lp.height = (e.rawY - showLogStartY).toInt().let {
+                when {
+                    it <= 0 -> 0
+                    it <= (0.7 * screenHeight) -> it
+                    else -> (0.7 * screenHeight).toInt()
+                }
+            }
+
+            b.dLog.layoutParams = lp
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")

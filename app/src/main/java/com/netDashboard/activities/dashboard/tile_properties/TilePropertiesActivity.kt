@@ -168,9 +168,6 @@ class TilePropertiesActivity : AppCompatActivity() {
         }
     }
 
-    private fun onServiceReady() {
-    }
-
     private fun viewConfig() {
 
         b.tpTileType.text = tile.typeTag

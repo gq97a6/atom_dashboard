@@ -26,6 +26,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.*
+import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.gson
 import java.io.File
@@ -129,9 +130,8 @@ class Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(
-                contrastColor(!isDark, 205)
-            )
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!isDark, 205))
+            "log_bar" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, color)
@@ -150,9 +150,10 @@ class Theme {
         //    else -> onUnknownTag(this.tag, "frameLayout")
         //}
 
-        if (this.tag != "tile") {
+        if (this.tag != "tile" && (context as Activity) !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            this.layoutTransition.setDuration(0)
         }
     }
 
@@ -168,8 +169,11 @@ class Theme {
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
-        this.layoutTransition = LayoutTransition()
-        this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        if ((context as Activity) !is DashboardActivity) {
+            this.layoutTransition = LayoutTransition()
+            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            this.layoutTransition.setDuration(0)
+        }
     }
 
     private fun RecyclerView.applyTheme() {
@@ -204,10 +208,6 @@ class Theme {
                 this.setTextColor(color)
                 this.setBackgroundColor(colorD)
             }
-            "button" -> {
-                this.setTextColor(color)
-                this.backgroundTintList = ColorStateList.valueOf(colorB)
-            }
             "con_warning" -> {
                 this.clearAnimation()
                 this.visibility = if (isDark != isDarkRec) {
@@ -218,6 +218,10 @@ class Theme {
                 } else {
                     GONE
                 }
+            }
+            "log" -> {
+                this.setTextColor(color)
+                this.setBackgroundColor(colorBackground)
             }
             else -> onUnknownTag(this.tag, "textView")
         }

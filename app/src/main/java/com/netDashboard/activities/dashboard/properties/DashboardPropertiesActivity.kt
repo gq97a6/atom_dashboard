@@ -11,13 +11,14 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
+import com.netDashboard.createToast
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
@@ -186,30 +187,37 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         }
 
         b.dpMqttCopy.setOnClickListener {
-            val dialog = Dialog(this)
-            val adapter = RecyclerViewAdapter(this)
-            val theme = dashboard.resultTheme
-            val list = MutableList(dashboards.size) {
-                RecyclerViewItem(
-                    R.layout.item_copy_broker
-                )
+            if (dashboards.size <= 1) {
+                createToast(this, "No dashboards to copy from.")
+            } else {
+                val dialog = Dialog(this)
+                val adapter = RecyclerViewAdapter(this)
+                val theme = dashboard.resultTheme
+
+                val list = MutableList(dashboards.size) {
+                    RecyclerViewItem(
+                        R.layout.item_copy_broker
+                    )
+                }
+                list.removeAt(dashboards.indexOf(dashboard))
+
+                dialog.setContentView(R.layout.popup_copy_broker)
+                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))
+
+                adapter.setHasStableIds(true)
+                adapter.theme = theme
+                adapter.onBindViewHolder = { _, holder, pos ->
+                    val button = holder.itemView.findViewById<Button>(R.id.cb_button)
+                    button.text = dashboards[pos].name
+                }
+
+                binding.cbRecyclerView.layoutManager = LinearLayoutManager(this)
+                binding.cbRecyclerView.adapter = adapter
+
+                adapter.submitList(list)
+                theme.apply(this, binding.root)
+                dialog.show()
             }
-
-            dialog.setContentView(R.layout.popup_copy_broker)
-            val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))
-
-            adapter.theme = theme
-            adapter.onBindViewHolder = { _, holder, pos ->
-                val button = holder.itemView.findViewById<Button>(R.id.cb_button)
-                button.text = dashboards[pos].name
-            }
-
-            binding.cbRecyclerView.layoutManager = GridLayoutManager(this, 1)
-            binding.cbRecyclerView.adapter = adapter
-
-            adapter.submitList(list)
-            theme.apply(this, binding.root)
-            dialog.show()
         }
     }
 

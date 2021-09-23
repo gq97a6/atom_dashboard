@@ -7,6 +7,33 @@
     android:tag="background"
     tools:context=".activities.dashboard.DashboardActivity">
 
+    <FrameLayout
+        android:id="@+id/d_log"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:ignore="Suspicious0dp">
+
+        <TextView
+            android:id="@+id/d_log_placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:tag="colorB"
+            android:text="No logs."
+            android:textColor="#A3A3A3"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/d_log_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/tile_padding"
+            android:paddingTop="@dimen/tile_padding" />
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

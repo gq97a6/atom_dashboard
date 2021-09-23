@@ -12,7 +12,7 @@
         android:tag="colorB"
         android:text="23.09.21 "
         android:textColor="#A3A3A3"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:visibility="visible" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:tag="colorA"
         android:text="07:47: "
         android:textColor="#A3A3A3"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:visibility="visible" />
 
     <TextView
@@ -32,7 +32,7 @@
         android:tag="color"
         android:text="Example log. Test Log."
         android:textColor="#A3A3A3"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:visibility="visible" />
 
 </LinearLayout>

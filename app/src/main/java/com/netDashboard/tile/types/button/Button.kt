@@ -40,7 +40,7 @@ class ButtonTile : Tile() {
         super.onClick(v, e)
 
         //TODO
-        LogList.add(LogEntry("00:20", "01.01.20", kotlin.math.abs(Random.nextInt()).toString()))
+        LogList.add(LogEntry(kotlin.math.abs(Random.nextInt()).toString()))
         val topic = mqttTopics.pubs.get("base")
         onSend(topic.topic, mqttPubValue, topic.qos)
     }

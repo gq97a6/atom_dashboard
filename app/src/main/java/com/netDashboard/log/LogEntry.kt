@@ -1,16 +1,21 @@
 package com.netDashboard.log
 
+import android.annotation.SuppressLint
 import android.widget.TextView
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
+import java.text.SimpleDateFormat
+import java.util.*
 
+@SuppressLint("SimpleDateFormat")
 class LogEntry(
-    private var time: String = "07:47",
-    private var date: String = "23.09.21",
     var text: String = "Example log. Test Log."
 ) : BaseRecyclerViewItem() {
     override val layout = R.layout.item_log
+
+    private val time = SimpleDateFormat("hh:mm:ss").format(Date())
+    private val date = SimpleDateFormat("dd.M.yy").format(Date())
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

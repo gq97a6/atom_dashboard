@@ -168,6 +168,22 @@ fun View.blink(
     })
 }
 
+fun View.flinch(
+    times: Int = Animation.INFINITE,
+    duration: Long = 50,
+    offset: Long = 0,
+    minAlpha: Float = 0.0f,
+    maxAlpha: Float = 1.0f,
+    repeatMode: Int = Animation.REVERSE
+) {
+    startAnimation(AlphaAnimation(maxAlpha, minAlpha).also {
+        it.duration = duration
+        it.startOffset = offset
+        it.repeatMode = repeatMode
+        it.repeatCount = times
+    })
+}
+
 fun View.click() {
     this.performClick()
     this.isPressed = true

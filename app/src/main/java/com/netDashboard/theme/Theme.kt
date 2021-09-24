@@ -153,7 +153,6 @@ class Theme {
         if (this.tag != "tile" && (context as Activity) !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-            this.layoutTransition.setDuration(0)
         }
     }
 
@@ -172,12 +171,15 @@ class Theme {
         if ((context as Activity) !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-            this.layoutTransition.setDuration(0)
         }
     }
 
     private fun RecyclerView.applyTheme() {
         when (this.tag) {
+            "log" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.setStroke(1, color)
+            }
             else -> onUnknownTag(this.tag, "recyclerView")
         }
     }

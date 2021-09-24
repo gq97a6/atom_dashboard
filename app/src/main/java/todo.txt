@@ -3,7 +3,6 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
-log
 publish confirmation
 notifications
 export/import

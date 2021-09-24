@@ -69,8 +69,8 @@ class SliderTile : Tile() {
 
     }
 
-    override fun onData(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!super.onData(data)) return false
+    override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
+        if (!super.onReceive(data)) return false
 
         val value = data.second.toString().toFloatOrNull()
         if (value != null) this.value = value.roundCloser(step)

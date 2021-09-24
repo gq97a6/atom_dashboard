@@ -183,7 +183,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in d.tiles) tile.onData(Pair(t ?: "", m))
+                    for (tile in d.tiles) tile.onReceive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                     data.value = Pair(null, null)
                 }

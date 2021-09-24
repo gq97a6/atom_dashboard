@@ -27,10 +27,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/d_log_recycler_view"
+            android:tag="log"
+            android:background="@drawable/background_frame"
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/tile_padding"
-            android:paddingTop="@dimen/tile_padding" />
+            android:paddingStart="5dp"
+            tools:ignore="RtlSymmetry" />
 
     </FrameLayout>
 

@@ -90,9 +90,16 @@ abstract class Tile : BaseRecyclerViewItem() {
         return false
     }
 
-    open fun onData(data: Pair<String?, MqttMessage?>): Boolean {
+    open fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
         if (!mqttEnabled) return false
         if (!mqttTopics.subs.topicList.contains(data.first)) return false
+
+        holder?.itemView?.animate()
+            ?.scaleY(0.9f)
+            ?.scaleX(0.9f)
+            ?.withEndAction()
+            ?.duration = 100
+
         return true
     }
 }

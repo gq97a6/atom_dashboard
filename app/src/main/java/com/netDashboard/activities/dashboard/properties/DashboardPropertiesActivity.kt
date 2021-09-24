@@ -275,6 +275,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
     private fun switchMqttCred() {
         b.dpMqttCred.let {
             it.visibility = if (it.isVisible) GONE else VISIBLE
+            b.dpMqttPass.requestFocus()
             b.dpMqttCredArrow.animate()
                 .rotation(if (it.isVisible) 0f else 180f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250

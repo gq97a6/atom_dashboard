@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     android:elevation="10dp"
     android:padding="@dimen/tile_padding"
     android:tag="tile">
@@ -61,6 +61,24 @@
         android:text="123"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
+        app:autoSizeMinTextSize="8dp"
+        app:autoSizeStepGranularity="1dp"
+        app:autoSizeTextType="uniform"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/ts_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:tag="colorC"
+        android:text="3 hours"
+        android:textColor="#FFFFFF"
+        app:autoSizeMaxTextSize="15dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform"

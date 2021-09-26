@@ -1,6 +1,8 @@
 package com.netDashboard.recycler_view
 
 import android.content.res.ColorStateList
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.ACTION_UP
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -62,6 +64,40 @@ abstract class BaseRecyclerViewItem {
     open fun onClick(v: View, e: MotionEvent) {}
 
     open fun onEdit(isEdit: Boolean) {}
+
+
+    private var _isMoving = false
+    private var _x = 0f
+    private var _y = 0f
+    private var _offsetX = 0f
+    private var _offsetY = 0f
+
+    fun move(e: MotionEvent) {
+        if (_isMoving) return
+        when (e.action) {
+            ACTION_DOWN -> {
+                _x = holder?.itemView?.x ?: 0f
+                _y = holder?.itemView?.y ?: 0f
+                _offsetX = _x - e.rawX
+                _offsetY = _y - e.rawY
+                holder?.itemView?.parent?.requestDisallowInterceptTouchEvent(true)
+            }
+            ACTION_UP -> {
+                holder?.itemView?.animate()
+                    ?.x(_x)
+                    ?.y(_y)
+                    ?.withEndAction { _isMoving = false }
+                    ?.duration = 500
+                _isMoving = true
+
+                holder?.itemView?.parent?.requestDisallowInterceptTouchEvent(false)
+            }
+            else -> {
+                holder?.itemView?.x = e.rawX + _offsetX
+                holder?.itemView?.y = e.rawY + _offsetY
+            }
+        }
+    }
 
     inner class Flags {
         private var flag = -1

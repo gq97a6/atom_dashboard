@@ -5,6 +5,7 @@ import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.util.*
 
 @Suppress("UNUSED")
 abstract class Tile : BaseRecyclerViewItem() {
@@ -15,6 +16,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     val type = this.javaClass.toString()
     abstract var typeTag: String
 
+    var mqttLastReceive = Date()
     var mqttEnabled = true
     var mqttTopics = MqttTopics()
     abstract val mqttDefaultPubValue: String
@@ -93,12 +95,6 @@ abstract class Tile : BaseRecyclerViewItem() {
     open fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
         if (!mqttEnabled) return false
         if (!mqttTopics.subs.topicList.contains(data.first)) return false
-
-        holder?.itemView?.animate()
-            ?.scaleY(0.9f)
-            ?.scaleX(0.9f)
-            ?.withEndAction()
-            ?.duration = 100
 
         return true
     }

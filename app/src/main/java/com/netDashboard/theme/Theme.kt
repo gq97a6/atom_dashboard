@@ -206,6 +206,8 @@ class Theme {
             "colorA" -> this.setTextColor(colorA)
             "colorB" -> this.setTextColor(colorB)
             "colorC" -> this.setTextColor(colorC)
+            "colorD" -> this.setTextColor(colorD)
+            "colorBackground" -> this.setTextColor(colorBackground)
             "tag" -> {
                 this.setTextColor(color)
                 this.setBackgroundColor(colorD)

@@ -3,6 +3,13 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
+drag&drop
+hold to edit
+
+last dashboard on boot bug
+tiles icons
+receive time
+tile resize
 publish confirmation
 notifications
 export/import

@@ -2,6 +2,8 @@ package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -68,12 +70,14 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             this.setOnTouchListener { v, e ->
                 if (editType.isNone) list[position].onTouch(v, e)
 
-                if (e.action == MotionEvent.ACTION_DOWN) {
+                if (editType.isSwap) moveTile(position, e)
+
+                if (e.action == ACTION_DOWN) {
                     val foreground = holder.itemView.findViewById<View>(R.id.foreground)
                     foreground?.click()
                 }
 
-                if (e.action == MotionEvent.ACTION_UP) {
+                if (e.action == ACTION_UP) {
                     this.performClick()
 
                     onItemClick(list[position])
@@ -83,10 +87,10 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                             list[position].onClick(v, e)
                         }
                         editType.isSwap -> {
-                            if (!editType.isLock) {
-                                markItemSwap(position)
-                                swapMarkedItems(position)
-                            }
+                            //if (!editType.isLock) {
+                            //    markItemSwap(position)
+                            //    swapMarkedItems(position)
+                            //}
                         }
                         editType.isRemove -> {
                             markItemRemove(position)
@@ -110,6 +114,10 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         }
 
         (holder.itemView as ViewGroup).iterate()
+    }
+
+    private fun moveTile(pos: Int, e: MotionEvent) {
+        list[pos].move(e)
     }
 
     private fun markItemRemove(position: Int) {

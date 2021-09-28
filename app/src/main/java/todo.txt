@@ -6,7 +6,6 @@ parser
 drag&drop
 hold to edit
 
-last dashboard on boot bug
 tiles icons
 receive time
 tile resize

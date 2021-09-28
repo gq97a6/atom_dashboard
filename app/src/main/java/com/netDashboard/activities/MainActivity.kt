@@ -7,7 +7,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
@@ -20,7 +20,6 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
-import com.netDashboard.screenHeight
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -108,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         adapter.submitList(dashboards)
 
-        val layoutManager = GridLayoutManager(this, 1)
+        val layoutManager = LinearLayoutManager(this)
 
         b.mRecyclerView.layoutManager = layoutManager
         b.mRecyclerView.adapter = adapter
@@ -123,17 +122,15 @@ class MainActivity : AppCompatActivity() {
             adapter.editType.setEdit()
             highlightOnly(b.mEdit)
 
-            b.mBar.visibility = View.VISIBLE
-            b.mBar.y = screenHeight.toFloat()
             b.mBar.animate()
                 .translationY(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
             adapter.editType.setNone()
 
             b.mBar.animate()
-                ?.y(screenHeight.toFloat())
-                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                .translationY(b.mBar.height.toFloat())
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
     }
 
@@ -170,7 +167,7 @@ class MainActivity : AppCompatActivity() {
         if (!adapter.editType.isRemove) {
             adapter.editType.setRemove()
         } else {
-            adapter.removeMarkedItem()
+            adapter.removeMarkedItems()
         }
     }
 

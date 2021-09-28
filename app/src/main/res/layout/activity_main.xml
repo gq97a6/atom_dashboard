@@ -93,109 +93,117 @@
             android:paddingHorizontal="10dp"
             android:paddingTop="@dimen/tile_padding" />
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/m_bar"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:visibility="gone">
+            android:orientation="vertical"
+            android:translationY="75dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="bottom"
-                android:layout_marginHorizontal="40dp"
-                android:background="@drawable/background_bar"
-                android:tag="bar" />
-
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="20dp">
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="clickAdd">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="40dp"
+                    android:background="@drawable/background_bar"
+                    android:tag="bar" />
 
-                    <Button
-                        android:id="@+id/m_add"
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_add"
-                        android:tag="color" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="30dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="clickAdd">
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="clickRemove">
+                        <Button
+                            android:id="@+id/m_add"
+                            style="@style/button"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_add"
+                            android:tag="colorA" />
 
-                    <Button
-                        android:id="@+id/m_remove"
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_remove"
-                        android:tag="colorA" />
+                    </FrameLayout>
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="clickRemove">
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="clickSwap">
+                        <Button
+                            android:id="@+id/m_remove"
+                            style="@style/button"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_remove"
+                            android:tag="colorA" />
 
-                    <Button
-                        android:id="@+id/m_swap"
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_swap"
-                        android:tag="colorA" />
+                    </FrameLayout>
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="clickSwap">
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="clickEdit">
+                        <Button
+                            android:id="@+id/m_swap"
+                            style="@style/button"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_swap"
+                            android:tag="colorA" />
 
-                    <Button
-                        android:id="@+id/m_edit"
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_edit"
-                        android:tag="colorA" />
+                    </FrameLayout>
 
-                </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="clickEdit">
 
-            </LinearLayout>
+                        <Button
+                            android:id="@+id/m_edit"
+                            style="@style/button"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/button_edit"
+                            android:tag="colorA" />
 
-        </FrameLayout>
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </FrameLayout>
 

@@ -3,8 +3,10 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
-drag&drop
-hold to edit
+
+hold to edit ???
+moving rv items bugs, single axis
+how to remove, edit, enable swap
 
 tiles icons
 receive time

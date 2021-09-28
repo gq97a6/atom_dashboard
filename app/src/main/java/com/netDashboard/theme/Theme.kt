@@ -150,7 +150,7 @@ class Theme {
         //    else -> onUnknownTag(this.tag, "frameLayout")
         //}
 
-        if (this.tag != "tile" && (context as Activity) !is DashboardActivity) {
+        if (this.tag != "tile" && context !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
@@ -168,7 +168,7 @@ class Theme {
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
-        if ((context as Activity) !is DashboardActivity) {
+        if (context !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }

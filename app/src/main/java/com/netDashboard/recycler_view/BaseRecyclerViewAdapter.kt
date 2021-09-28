@@ -4,12 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.click
@@ -22,13 +19,14 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     var context: Context,
     var spanCount: Int,
     c: DiffUtil.ItemCallback<item>
-) :
-    ListAdapter<item, BaseRecyclerViewAdapter.ViewHolder>(c) {
+) : ListAdapter<item, BaseRecyclerViewAdapter.ViewHolder>(c) {
+
     var editType = Modes()
 
     var theme = G.theme
     lateinit var list: MutableList<item>
     private lateinit var currentItem: item
+    private lateinit var touchHelper: ItemTouchHelper
 
     var onItemClick: (item) -> Unit = {}
     var onItemRemove: (item) -> Unit = {}
@@ -59,6 +57,13 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         return currentItem.onCreateViewHolder(parent, viewType)
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        touchHelper = ItemTouchHelper(ItemTouchCallback(this))
+        touchHelper.attachToRecyclerView(recyclerView)
+    }
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -70,11 +75,15 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             this.setOnTouchListener { v, e ->
                 if (editType.isNone) list[position].onTouch(v, e)
 
-                if (editType.isSwap) moveTile(position, e)
-
                 if (e.action == ACTION_DOWN) {
-                    val foreground = holder.itemView.findViewById<View>(R.id.foreground)
-                    foreground?.click()
+                    if (editType.isSwap) {
+                        list[position].holder?.let {
+                            touchHelper.startDrag(it)
+                        }
+                    } else {
+                        val foreground = holder.itemView.findViewById<View>(R.id.foreground)
+                        foreground?.click()
+                    }
                 }
 
                 if (e.action == ACTION_UP) {
@@ -87,10 +96,6 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                             list[position].onClick(v, e)
                         }
                         editType.isSwap -> {
-                            //if (!editType.isLock) {
-                            //    markItemSwap(position)
-                            //    swapMarkedItems(position)
-                            //}
                         }
                         editType.isRemove -> {
                             markItemRemove(position)
@@ -116,37 +121,21 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         (holder.itemView as ViewGroup).iterate()
     }
 
-    private fun moveTile(pos: Int, e: MotionEvent) {
-        list[pos].move(e)
-    }
-
     private fun markItemRemove(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 
         recyclerView.itemAnimator?.changeDuration = 250
 
-        for ((i, t) in list.withIndex()) {
-            if (t.flag.isRemove && list[position].id != t.id) {
-                list[i].flag.setNone()
-            }
+        list[position].flag.let {
+            if (it.isRemove) it.setNone() else it.setRemove()
         }
-
-        list[position].flag.setRemove()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun removeMarkedItem() {
+    fun removeMarkedItems() {
 
-        var removeAt = -1
-        for (e in list) {
-            if (e.flag.isRemove) {
-                removeAt = e.holder?.adapterPosition ?: -1
-                break
-            }
-        }
-
-        if (removeAt == -1 || itemCount == 0) return
+        if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
         @SuppressLint("ShowToast")
         val snackbar = list[0].holder?.itemView?.rootView?.let {
@@ -155,42 +144,17 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                 context.getString(R.string.snackbar_confirmation),
                 Snackbar.LENGTH_LONG
             ).setAction("YES") {
-                if (list[removeAt].flag.isRemove) {
-                    val toRemove = list[removeAt]
-                    list.removeAt(removeAt)
-                    notifyDataSetChanged()
-                    onItemRemove(toRemove)
+                for (i in list) {
+                    if (i.flag.isRemove) onItemRemove(i)
                 }
+                list.removeAll { item: item -> item.flag.isRemove }
+                notifyDataSetChanged()
             }
         }
 
         val snackBarView = snackbar?.view
         snackBarView?.translationY = -60.toPx().toFloat()
         snackbar?.show()
-    }
-
-    private fun markItemSwap(position: Int) {
-        if (!list[position].flag.isLock) {
-            list[position].flag.let {
-                if (!it.isSwap) it.setSwap() else it.setNone()
-            }
-        }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun swapMarkedItems(position: Int) {
-
-        for ((pos, t) in list.withIndex()) {
-
-            if (t.flag.isSwap && list[position].id != t.id) {
-
-                list[pos].flag.setNone()
-                list[position].flag.setNone()
-
-                Collections.swap(list, position, pos)
-                notifyDataSetChanged()
-            }
-        }
     }
 
     open inner class Modes {

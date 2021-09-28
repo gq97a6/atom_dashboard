@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
@@ -162,6 +163,7 @@ class DashboardActivity : AppCompatActivity() {
             if (adapter.itemCount == 0) {
                 b.dPlaceholder.visibility = View.VISIBLE
             }
+            Log.i("OUY", "REMOVED T:$it")
         }
 
         adapter.onItemClick = { item ->
@@ -220,18 +222,33 @@ class DashboardActivity : AppCompatActivity() {
             adapter.editType.setEdit()
             highlightOnly(b.dEdit)
 
-            b.dBar.visibility = View.VISIBLE
-            b.dBar.y = screenHeight.toFloat()
             b.dBar.animate()
                 .translationY(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
             adapter.editType.setNone()
 
             b.dBar.animate()
-                ?.y(screenHeight.toFloat())
-                ?.setInterpolator(AccelerateDecelerateInterpolator())?.duration = 400
+                .translationY(b.dBar.height.toFloat())
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
+
+        //if (adapter.editType.isNone) {
+        //    adapter.editType.setEdit()
+        //    highlightOnly(b.dEdit)
+//
+        //    b.dBar.animate()
+        //        .alpha(1f)
+        //        .withStartAction { b.dBar.visibility = View.VISIBLE }
+        //        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+        //} else {
+        //    adapter.editType.setNone()
+//
+        //    b.dBar.animate()
+        //        .alpha(0f)
+        //        .withEndAction { b.dBar.visibility = View.GONE }
+        //        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+        //}
     }
 
     //----------------------------------------------------------------------------------------------
@@ -271,7 +288,7 @@ class DashboardActivity : AppCompatActivity() {
         if (!adapter.editType.isRemove) {
             adapter.editType.setRemove()
         } else {
-            adapter.removeMarkedItem()
+            adapter.removeMarkedItems()
         }
     }
 

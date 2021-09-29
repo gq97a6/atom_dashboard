@@ -166,13 +166,11 @@ class DashboardActivity : AppCompatActivity() {
             Log.i("OUY", "REMOVED T:$it")
         }
 
-        adapter.onItemClick = { item ->
-            if (adapter.editType.isEdit) {
-                Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("tileIndex", adapter.list.indexOf(item))
-                    it.putExtra("dashboardId", dashboard.id)
-                    startActivity(it)
-                }
+        adapter.onItemEdit = { item ->
+            Intent(this, TilePropertiesActivity::class.java).also {
+                it.putExtra("tileIndex", adapter.list.indexOf(item))
+                it.putExtra("dashboardId", dashboard.id)
+                startActivity(it)
             }
         }
 

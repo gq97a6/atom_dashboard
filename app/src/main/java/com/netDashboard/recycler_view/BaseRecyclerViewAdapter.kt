@@ -30,6 +30,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
     var onItemClick: (item) -> Unit = {}
     var onItemRemove: (item) -> Unit = {}
+    var onItemEdit: (item) -> Unit = {}
 
     override fun submitList(list: MutableList<item>?) {
         super.submitList(list)
@@ -92,14 +93,9 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                     onItemClick(list[position])
 
                     when {
-                        editType.isNone -> {
-                            list[position].onClick(v, e)
-                        }
-                        editType.isSwap -> {
-                        }
-                        editType.isRemove -> {
-                            markItemRemove(position)
-                        }
+                        editType.isNone -> list[position].onClick(v, e)
+                        editType.isRemove -> markItemRemove(position)
+                        editType.isEdit -> onItemEdit(list[position])
                     }
                 }
 

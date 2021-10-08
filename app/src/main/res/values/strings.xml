@@ -21,7 +21,7 @@
     <string name="attachment_summary_on" tools:keep="@string/attachment_summary_on">Automatically download attachments for incoming emails \n</string>
     <string name="attachment_summary_off" tools:keep="@string/attachment_summary_off">Only download attachments when manually requested</string>
 
-    <string name="snackbar_confirmation">Are you sure? Wait to dismiss.</string>
+    <string name="snackbar_confirmation">Remove marked items? Wait to dismiss.</string>
 
     <string name="d_empty">Add new tiles first. \n Use left icon to access edit mode.</string>
     <string name="d_failed">FAILED TO CONNECT</string>

@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         adapter = DashboardAdapter(this)
         adapter.setHasStableIds(true)
 
-        adapter.onItemRemove = {
+        adapter.onItemRemoved = {
             if (adapter.itemCount == 0) {
                 b.mPlaceholder.visibility = View.VISIBLE
             }

@@ -4,7 +4,6 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
@@ -14,20 +13,18 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.netDashboard.R
+import com.netDashboard.*
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on.AppOn
-import com.netDashboard.click
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.log.Log.Companion.LogList
 import com.netDashboard.log.LogAdapter
-import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
 import java.util.*
 
@@ -95,6 +92,12 @@ class DashboardActivity : AppCompatActivity() {
             removeOnClick()
         }
 
+        b.dRemove.setOnLongClickListener {
+            removeOnClick(true)
+
+            return@setOnLongClickListener true
+        }
+
         b.dAdd.setOnClickListener {
             addOnClick()
         }
@@ -159,34 +162,40 @@ class DashboardActivity : AppCompatActivity() {
         adapter.setHasStableIds(true)
         adapter.theme = dashboard.resultTheme
 
-        adapter.onItemRemove = {
-            if (adapter.itemCount == 0) {
-                b.dPlaceholder.visibility = View.VISIBLE
-            }
-            Log.i("OUY", "REMOVED T:$it")
+        adapter.onItemRemoved = {
+            if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
+            setBarHint("")
         }
 
-        adapter.onItemEdit = { item ->
-            Intent(this, TilePropertiesActivity::class.java).also {
-                it.putExtra("tileIndex", adapter.list.indexOf(item))
-                it.putExtra("dashboardId", dashboard.id)
-                startActivity(it)
-            }
+        adapter.onItemMarkedRemove = { count, marked ->
+            if (marked) b.dRemove.attentate()
+            if (marked && count == 1) setBarHint("Hold icon to remove", true)
+            if (count == 0) setBarHint("", hide = true)
         }
+
+        adapter.onItemEdit =
+            { item ->
+                Intent(this, TilePropertiesActivity::class.java).also {
+                    it.putExtra("tileIndex", adapter.list.indexOf(item))
+                    it.putExtra("dashboardId", dashboard.id)
+                    startActivity(it)
+                }
+            }
 
         adapter.submitList(dashboard.tiles.toMutableList())
 
         val layoutManager = GridLayoutManager(this, spanCount)
 
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                val t = adapter.list[position]
-                return when {
-                    t.height != 1 || t.width > spanCount -> spanCount
-                    else -> t.width
+        layoutManager.spanSizeLookup =
+            object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    val t = adapter.list[position]
+                    return when {
+                        t.height != 1 || t.width > spanCount -> spanCount
+                        else -> t.width
+                    }
                 }
             }
-        }
 
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter
@@ -213,13 +222,12 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     private fun touchOnClick() {
         if (adapter.editType.isNone) {
             adapter.editType.setEdit()
-            highlightOnly(b.dEdit)
-
+            editOnClick()
             b.dBar.animate()
                 .translationY(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
@@ -230,26 +238,9 @@ class DashboardActivity : AppCompatActivity() {
                 .translationY(b.dBar.height.toFloat())
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
-
-        //if (adapter.editType.isNone) {
-        //    adapter.editType.setEdit()
-        //    highlightOnly(b.dEdit)
-//
-        //    b.dBar.animate()
-        //        .alpha(1f)
-        //        .withStartAction { b.dBar.visibility = View.VISIBLE }
-        //        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        //} else {
-        //    adapter.editType.setNone()
-//
-        //    b.dBar.animate()
-        //        .alpha(0f)
-        //        .withEndAction { b.dBar.visibility = View.GONE }
-        //        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        //}
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
         Intent(this, DashboardPropertiesActivity::class.java).also {
@@ -259,38 +250,42 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     private fun editOnClick() {
         if (adapter.editType.isNone) return
         highlightOnly(b.dEdit)
+        setBarHint("Tap to edit")
         adapter.editType.setEdit()
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
         if (adapter.editType.isNone) return
         highlightOnly(b.dSwap)
+        setBarHint("Drag to move")
         adapter.editType.setSwap()
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun removeOnClick() {
+    private fun removeOnClick(isLong: Boolean = false) {
         if (adapter.editType.isNone) return
 
-        highlightOnly(b.dRemove)
-
         if (!adapter.editType.isRemove) {
+            highlightOnly(b.dRemove)
+            setBarHint("Tap to mark")
             adapter.editType.setRemove()
-        } else {
+        }
+
+        if (isLong) {
             adapter.removeMarkedItems()
         }
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
     private fun addOnClick() {
         Intent(this, TileNewActivity::class.java).also {
@@ -299,7 +294,37 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+
+    private fun setBarHint(text: String, keep: Boolean = false, hide: Boolean = false) {
+        if (!hide) {
+            b.dBarText.alpha = 0f
+            b.dBarText.text = text
+
+            b.dBarText.animate()
+                .alpha(1f)
+                .withEndAction {
+                    if (!keep) {
+                        b.dBarText.animate()
+                            .alpha(0f)
+                            .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 2000
+                    }
+                }
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+        } else {
+            b.dBarText.animate()
+                .alpha(1f)
+                .withStartAction {
+                    b.dBarText.animate()
+                        .alpha(0f)
+                        .withEndAction {
+                            b.dBarText.text = text
+                        }
+                        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+                }
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 2000
+        }
+    }
 
     private fun highlightOnly(button: Button) {
         b.dRemove.alpha = 0.4f

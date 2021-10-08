@@ -11,6 +11,7 @@ import android.os.*
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
@@ -167,6 +168,10 @@ fun View.blink(
         it.repeatCount = times
     })
 }
+
+fun View.jiggle() = this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.jiggle))
+fun View.attentate() = this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.attentate))
+
 
 fun View.click() {
     this.performClick()

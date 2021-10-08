@@ -7,11 +7,9 @@ import android.view.KeyEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
-import com.google.android.material.snackbar.Snackbar
 import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.globals.G
-import com.netDashboard.toPx
 import java.util.*
 
 @Suppress("UNUSED")
@@ -29,7 +27,8 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     private lateinit var touchHelper: ItemTouchHelper
 
     var onItemClick: (item) -> Unit = {}
-    var onItemRemove: (item) -> Unit = {}
+    var onItemRemoved: (item) -> Unit = {}
+    var onItemMarkedRemove: (Int, Boolean) -> Unit = { _, _ -> }
     var onItemEdit: (item) -> Unit = {}
 
     override fun submitList(list: MutableList<item>?) {
@@ -94,7 +93,10 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
                     when {
                         editType.isNone -> list[position].onClick(v, e)
-                        editType.isRemove -> markItemRemove(position)
+                        editType.isRemove -> {
+                            markItemRemove(position)
+                            //removeMarkedItems()
+                        }
                         editType.isEdit -> onItemEdit(list[position])
                     }
                 }
@@ -125,6 +127,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         list[position].flag.let {
             if (it.isRemove) it.setNone() else it.setRemove()
+            onItemMarkedRemove(list.count { item: item -> item.flag.isRemove }, it.isRemove)
         }
     }
 
@@ -133,24 +136,30 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
-        @SuppressLint("ShowToast")
-        val snackbar = list[0].holder?.itemView?.rootView?.let {
-            Snackbar.make(
-                it,
-                context.getString(R.string.snackbar_confirmation),
-                Snackbar.LENGTH_LONG
-            ).setAction("YES") {
-                for (i in list) {
-                    if (i.flag.isRemove) onItemRemove(i)
-                }
-                list.removeAll { item: item -> item.flag.isRemove }
-                notifyDataSetChanged()
-            }
-        }
+        //@SuppressLint("ShowToast")
+        //val snackbar = list[0].holder?.itemView?.rootView?.let {
+        //    Snackbar.make(
+        //        it,
+        //        context.getString(R.string.snackbar_confirmation),
+        //        Snackbar.LENGTH_LONG
+        //    ).setAction("YES") {
+        //        for (i in list) {
+        //            if (i.flag.isRemove) onItemRemove(i)
+        //        }
+        //        list.removeAll { item: item -> item.flag.isRemove }
+        //        notifyDataSetChanged()
+        //    }
+        //}
+//
+        //val snackBarView = snackbar?.view
+        //snackBarView?.translationY = -90.toPx().toFloat()
+        //snackbar?.show()
 
-        val snackBarView = snackbar?.view
-        snackBarView?.translationY = -60.toPx().toFloat()
-        snackbar?.show()
+        for (i in list) {
+            if (i.flag.isRemove) onItemRemoved(i)
+        }
+        list.removeAll { item: item -> item.flag.isRemove }
+        notifyDataSetChanged()
     }
 
     open inner class Modes {

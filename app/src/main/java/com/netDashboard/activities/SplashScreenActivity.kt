@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
+import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
@@ -26,8 +27,13 @@ class SplashScreenActivity : AppCompatActivity() {
         rootFolder = filesDir.canonicalPath.toString()
         G.initialize()
 
+        var theme = G.theme
+        settings.lastDashboardId?.let {
+            if (settings.startFromLast) theme = dashboards.byId(it).resultTheme
+        }
+
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
+        theme.apply(this, b.root)
 
         setContentView(b.root)
 

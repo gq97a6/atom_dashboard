@@ -1,6 +1,7 @@
 package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.netDashboard.R
 import com.netDashboard.click
+import com.netDashboard.databinding.PopupConfirmRemoveBinding
 import com.netDashboard.globals.G
 import java.util.*
 
@@ -137,19 +139,33 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
-        var i = 0
-        while (i < list.size) {
-            list[i].let {
-                if (it.flag.isRemove) {
-                    list.remove(it)
-                    onItemRemoved(it)
-                    i--
+        val dialog = Dialog(context)
+
+        dialog.setContentView(R.layout.popup_confirm_remove)
+        val binding = PopupConfirmRemoveBinding.bind(dialog.findViewById(R.id.cr_root))
+
+        binding.pcrConfirm.setOnClickListener {
+            var i = 0
+            while (i < list.size) {
+                list[i].let {
+                    if (it.flag.isRemove) {
+                        list.remove(it)
+                        onItemRemoved(it)
+                        i--
+                    }
                 }
+                i++
             }
-            i++
+            notifyDataSetChanged()
+            dialog.hide()
         }
 
-        notifyDataSetChanged()
+        binding.pcrDeny.setOnClickListener {
+            dialog.hide()
+        }
+
+        theme.apply(context, binding.root)
+        dialog.show()
     }
 
     open inner class Modes {

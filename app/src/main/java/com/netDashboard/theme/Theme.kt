@@ -193,6 +193,7 @@ class Theme {
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
+            "colorB" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "colorC" -> this.backgroundTintList = ColorStateList.valueOf(colorC)
             "item" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)

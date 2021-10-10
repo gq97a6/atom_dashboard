@@ -17,7 +17,7 @@
         android:tag="foreground" />
 
     <Button
-        android:id="@+id/cb_button"
+        android:id="@+id/pcb_button"
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

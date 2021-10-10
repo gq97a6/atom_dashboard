@@ -202,17 +202,17 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 list.removeAt(dashboards.indexOf(dashboard))
 
                 dialog.setContentView(R.layout.popup_copy_broker)
-                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.cb_root))
+                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.pcb_root))
 
                 adapter.setHasStableIds(true)
                 adapter.theme = theme
                 adapter.onBindViewHolder = { _, holder, pos ->
-                    val button = holder.itemView.findViewById<Button>(R.id.cb_button)
+                    val button = holder.itemView.findViewById<Button>(R.id.pcb_button)
                     button.text = dashboards[pos].name
                 }
 
-                binding.cbRecyclerView.layoutManager = LinearLayoutManager(this)
-                binding.cbRecyclerView.adapter = adapter
+                binding.pcbRecyclerView.layoutManager = LinearLayoutManager(this)
+                binding.pcbRecyclerView.adapter = adapter
 
                 adapter.submitList(list)
                 theme.apply(this, binding.root)

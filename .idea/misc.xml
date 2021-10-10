@@ -4,7 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/button/layout/tile_button.xml" value="0.31851851851851853" />
-        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/slider/layout/tile_slider.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/slider/layout/tile_slider.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_bar.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_button.xml" value="0.35" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_bw_slider.xml" value="0.3402777777777778" />
@@ -13,27 +13,38 @@
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_ripple.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_add.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_edit.xml" value="0.3402777777777778" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_locked.xml" value="0.2557077625570776" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_manage.xml" value="0.28425925925925927" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_more.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_remove.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_swap.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_text.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_touch.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_trashcan.xml" value="0.275" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/button_unlocked.xml" value="0.28425925925925927" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_add.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_arrow.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_arrow_down.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_arrow_up.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_edit.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_indicator.xml" value="0.3356164383561644" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_lock_flag.xml" value="0.28425925925925927" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_locked.xml" value="0.28425925925925927" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_log.xml" value="0.26481481481481484" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_log2.xml" value="0.26481481481481484" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_main.xml" value="0.28425925925925927" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_more.xml" value="0.26481481481481484" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_remove.xml" value="0.28425925925925927" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_remove_flag.xml" value="0.28425925925925927" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_swap.xml" value="0.2557077625570776" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_swap_flag.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_touch.xml" value="0.3402777777777778" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_trash.xml" value="0.275" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_trashcan.xml" value="0.3356164383561644" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/icon_unlocked.xml" value="0.28425925925925927" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/splash.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_colors.xml" value="0.33" />
-        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_dashboard_new.xml" value="0.32592592592592595" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_dashboard_properties.xml" value="0.33" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/layout/activity_main.xml" value="0.2" />

@@ -25,6 +25,8 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
     @Transient
     var daemonGroup: DaemonGroup? = null
 
+    @Transient
+    var tilesAdapterEditMode: BaseRecyclerViewAdapter<Tile>.Modes? = null
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
             for (t in value) t.dashboard = this

@@ -4,21 +4,23 @@ parser
     to json
 
 
-hold to edit ???
 moving rv items bugs, single axis
-how to remove, edit, enable swap
 
-tiles icons
-receive time
-tile resize
-publish confirmation
-notifications
-export/import
+theme prevention
+delete confirmation
+
 tile payload json
 mqttQOS
+parser
+publish confirmation
+
 new tiles
-screen rotation
+tiles icons
+receive time
+notifications
+export/import
 
 icon
 name
 publish
+

@@ -1,6 +1,5 @@
 package com.netDashboard.recycler_view
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -23,7 +22,6 @@ abstract class BaseRecyclerViewItem {
     var holder: BaseRecyclerViewAdapter.ViewHolder? = null
 
     @Transient
-    //var adapter: BaseRecyclerViewAdapter<*>? = null
     lateinit var adapter: BaseRecyclerViewAdapter<*>
 
     @Transient
@@ -46,7 +44,7 @@ abstract class BaseRecyclerViewItem {
 
     open fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         this.holder = holder
-        onEdit(!(adapter.editType.isNone))
+        onEdit(!(adapter.editMode.isNone))
     }
 
     fun areItemsTheSame(oldItem: BaseRecyclerViewItem, newItem: BaseRecyclerViewItem): Boolean {
@@ -70,13 +68,9 @@ abstract class BaseRecyclerViewItem {
             get() = flag == -1
         val isRemove
             get() = flag == 1
-        val isLock
-            get() = flag == 2
 
         fun setNone() = setFlag(-1)
-        fun setSwap() = setFlag(0)
         fun setRemove() = setFlag(1)
-        fun setLock() = setFlag(2)
 
         private fun setFlag(type: Int) {
             flag = type
@@ -84,39 +78,19 @@ abstract class BaseRecyclerViewItem {
         }
 
         private fun show() {
-            val flagMark = holder?.itemView?.findViewById<View>(R.id.flag_mark)
-            val flagBackground = holder?.itemView?.findViewById<View>(R.id.flag_background)
+            val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
 
             if (!isNone) {
-                flagMark?.setBackgroundResource(
-                    when {
-                        isRemove -> R.drawable.icon_remove_flag
-                        isLock -> R.drawable.icon_lock_flag
-                        else -> R.drawable.icon_lock_flag
-                    }
-                )
+                foreground?.setBackgroundColor(adapter.theme.colorBackground.alpha(190))
 
-                flagMark?.backgroundTintList = ColorStateList.valueOf(adapter.theme.color)
-                flagBackground?.setBackgroundColor(adapter.theme.colorD.alpha(190))
-
-                flagMark?.animate()
+                foreground?.animate()
                     ?.alpha(1f)
-                    ?.withStartAction { flagMark.visibility = View.VISIBLE }
-                    ?.duration = 150
-
-                flagBackground?.animate()
-                    ?.alpha(1f)
-                    ?.withStartAction { flagBackground.visibility = View.VISIBLE }
+                    ?.withStartAction { foreground.visibility = View.VISIBLE }
                     ?.duration = 150
             } else {
-                flagMark?.animate()
+                foreground?.animate()
                     ?.alpha(0f)
-                    ?.withEndAction { flagMark.visibility = View.GONE }
-                    ?.duration = 150
-
-                flagBackground?.animate()
-                    ?.alpha(0f)
-                    ?.withEndAction { flagBackground.visibility = View.GONE }
+                    ?.withEndAction { foreground.visibility = View.GONE }
                     ?.duration = 150
             }
         }

@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!adapter.editType.isNone) {
+        if (!adapter.editMode.isNone) {
             b.mTouch.callOnClick()
         } else super.onBackPressed()
     }
@@ -89,13 +89,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter.onItemClick = { item ->
-            if (adapter.editType.isEdit) {
+            if (adapter.editMode.isEdit) {
                 Intent(this, DashboardPropertiesActivity::class.java).also {
                     it.putExtra("dashboardId", item.id)
                     it.putExtra("exitActivity", "MainActivity")
                     startActivity(it)
                 }
-            } else if (adapter.editType.isNone) {
+            } else if (adapter.editMode.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
                     settings.lastDashboardId = item.id
 
@@ -118,15 +118,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun touchOnClick() {
-        if (adapter.editType.isNone) {
-            adapter.editType.setEdit()
+        if (adapter.editMode.isNone) {
+            adapter.editMode.setEdit()
             highlightOnly(b.mEdit)
 
             b.mBar.animate()
                 .translationY(0f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
-            adapter.editType.setNone()
+            adapter.editMode.setNone()
 
             b.mBar.animate()
                 .translationY(b.mBar.height.toFloat())
@@ -143,29 +143,29 @@ class MainActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun editOnClick() {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
         highlightOnly(b.mEdit)
-        adapter.editType.setEdit()
+        adapter.editMode.setEdit()
     }
 
     //----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
         highlightOnly(b.mSwap)
-        adapter.editType.setSwap()
+        adapter.editMode.setSwap()
     }
 
     //----------------------------------------------------------------------------------------------
 
     @SuppressLint("NotifyDataSetChanged")
     private fun removeOnClick() {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
 
         highlightOnly(b.mRemove)
 
-        if (!adapter.editType.isRemove) {
-            adapter.editType.setRemove()
+        if (!adapter.editMode.isRemove) {
+            adapter.editMode.setRemove()
         } else {
             adapter.removeMarkedItems()
         }

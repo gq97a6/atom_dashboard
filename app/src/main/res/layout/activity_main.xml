@@ -30,7 +30,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:background="@drawable/button_touch"
+                android:background="@drawable/button_locked"
                 android:tag="color" />
 
         </FrameLayout>
@@ -156,7 +156,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            android:background="@drawable/button_remove"
+                            android:background="@drawable/button_trashcan"
                             android:tag="colorA" />
 
                     </FrameLayout>

@@ -43,7 +43,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         val params = view.layoutParams
 
         params.height =
-            ((screenWidth - view.paddingLeft * 2) / (adapter?.spanCount ?: 1)) * height
+            ((screenWidth - view.paddingLeft * 2) / (adapter.spanCount)) * height
         view.layoutParams = params
     }
 

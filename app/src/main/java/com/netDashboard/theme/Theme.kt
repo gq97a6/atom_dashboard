@@ -57,7 +57,7 @@ class Theme {
     val colorD
         get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
 
-    private val colorBackground: Int
+    val colorBackground: Int
         get() = getBackground(!isDark)
 
     private fun getBackground(isDark: Boolean): Int {
@@ -130,14 +130,14 @@ class Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!isDark, 205))
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!isDark, 200))
             "log_bar" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, color)
             }
             "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
-            "foreground" -> {
+            "ripple_foreground" -> {
                 val background = this.background as RippleDrawable
                 background.setColor(ColorStateList.valueOf(colorBackground))
             }

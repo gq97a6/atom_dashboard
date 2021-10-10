@@ -72,6 +72,23 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
+        if (!adapter.editMode.isNone) {
+
+            b.dTouch.setBackgroundResource(R.drawable.button_unlocked)
+            b.dBar.translationY = 0f
+
+            adapter.editMode.let {
+                highlightOnly(
+                    when {
+                        it.isRemove -> b.dRemove
+                        it.isSwap -> b.dSwap
+                        it.isEdit -> b.dEdit
+                        else -> b.dEdit
+                    }
+                )
+            }
+        }
+
         b.dTouch.setOnClickListener {
             touchOnClick()
         }
@@ -92,12 +109,6 @@ class DashboardActivity : AppCompatActivity() {
             removeOnClick()
         }
 
-        b.dRemove.setOnLongClickListener {
-            removeOnClick(true)
-
-            return@setOnLongClickListener true
-        }
-
         b.dAdd.setOnClickListener {
             addOnClick()
         }
@@ -114,17 +125,11 @@ class DashboardActivity : AppCompatActivity() {
 
             return@setOnTouchListener true
         }
-
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
-        if (!adapter.editType.isNone) {
-            b.dEdit.callOnClick()
-        }
 
         adapter.notifyDataSetChanged()
     }
@@ -142,7 +147,7 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!adapter.editType.isNone) {
+        if (!adapter.editMode.isNone) {
             b.dTouch.callOnClick()
         } else {
             super.onBackPressed()
@@ -164,13 +169,12 @@ class DashboardActivity : AppCompatActivity() {
 
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
-            setBarHint("")
+            b.dRemove.clearAnimation()
         }
 
         adapter.onItemMarkedRemove = { count, marked ->
-            if (marked) b.dRemove.attentate()
-            if (marked && count == 1) setBarHint("Hold icon to remove", true)
-            if (count == 0) setBarHint("", hide = true)
+            if (marked && count == 1) b.dRemove.blink(duration = 200, minAlpha = 0.2f)
+            if (!marked && count == 0) b.dRemove.clearAnimation()
         }
 
         adapter.onItemEdit =
@@ -200,9 +204,14 @@ class DashboardActivity : AppCompatActivity() {
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter
 
-        if (adapter.itemCount == 0) {
-            b.dPlaceholder.visibility = View.VISIBLE
+        adapter.editMode.setNone()
+        dashboard.tilesAdapterEditMode?.let {
+            adapter.editMode = it
         }
+
+        dashboard.tilesAdapterEditMode = adapter.editMode
+
+        if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
     }
 
     private fun setupLogRecyclerView() {
@@ -225,17 +234,20 @@ class DashboardActivity : AppCompatActivity() {
 //----------------------------------------------------------------------------------------------
 
     private fun touchOnClick() {
-        if (adapter.editType.isNone) {
-            adapter.editType.setEdit()
+        if (adapter.editMode.isNone) {
+            adapter.editMode.setEdit()
             editOnClick()
+
             b.dBar.animate()
                 .translationY(0f)
+                .withEndAction { b.dTouch.setBackgroundResource(R.drawable.button_unlocked) }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
-            adapter.editType.setNone()
+            adapter.editMode.setNone()
 
             b.dBar.animate()
                 .translationY(b.dBar.height.toFloat())
+                .withEndAction { b.dTouch.setBackgroundResource(R.drawable.button_locked) }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
     }
@@ -253,34 +265,29 @@ class DashboardActivity : AppCompatActivity() {
 //----------------------------------------------------------------------------------------------
 
     private fun editOnClick() {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
         highlightOnly(b.dEdit)
-        setBarHint("Tap to edit")
-        adapter.editType.setEdit()
+        adapter.editMode.setEdit()
     }
 
 //----------------------------------------------------------------------------------------------
 
     private fun swapOnClick() {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
         highlightOnly(b.dSwap)
-        setBarHint("Drag to move")
-        adapter.editType.setSwap()
+        adapter.editMode.setSwap()
     }
 
 //----------------------------------------------------------------------------------------------
 
     @SuppressLint("NotifyDataSetChanged")
     private fun removeOnClick(isLong: Boolean = false) {
-        if (adapter.editType.isNone) return
+        if (adapter.editMode.isNone) return
 
-        if (!adapter.editType.isRemove) {
+        if (!adapter.editMode.isRemove) {
             highlightOnly(b.dRemove)
-            setBarHint("Tap to mark")
-            adapter.editType.setRemove()
-        }
-
-        if (isLong) {
+            adapter.editMode.setRemove()
+        } else {
             adapter.removeMarkedItems()
         }
     }
@@ -295,36 +302,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
 //----------------------------------------------------------------------------------------------
-
-    private fun setBarHint(text: String, keep: Boolean = false, hide: Boolean = false) {
-        if (!hide) {
-            b.dBarText.alpha = 0f
-            b.dBarText.text = text
-
-            b.dBarText.animate()
-                .alpha(1f)
-                .withEndAction {
-                    if (!keep) {
-                        b.dBarText.animate()
-                            .alpha(0f)
-                            .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 2000
-                    }
-                }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        } else {
-            b.dBarText.animate()
-                .alpha(1f)
-                .withStartAction {
-                    b.dBarText.animate()
-                        .alpha(0f)
-                        .withEndAction {
-                            b.dBarText.text = text
-                        }
-                        .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-                }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 2000
-        }
-    }
 
     private fun highlightOnly(button: Button) {
         b.dRemove.alpha = 0.4f

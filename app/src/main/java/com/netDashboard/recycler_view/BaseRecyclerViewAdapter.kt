@@ -19,9 +19,10 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     c: DiffUtil.ItemCallback<item>
 ) : ListAdapter<item, BaseRecyclerViewAdapter.ViewHolder>(c) {
 
-    var editType = Modes()
+    var editMode = Modes()
 
     var theme = G.theme
+
     lateinit var list: MutableList<item>
     private lateinit var currentItem: item
     private lateinit var touchHelper: ItemTouchHelper
@@ -69,20 +70,20 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         list[position].onBindViewHolder(holder, position)
 
-        if (editType.isNone) theme.apply(context, holder.itemView as ViewGroup)
+        theme.apply(context, holder.itemView as ViewGroup)
 
         fun View.setOnClick() {
             this.setOnTouchListener { v, e ->
-                if (editType.isNone) list[position].onTouch(v, e)
+                if (editMode.isNone) list[position].onTouch(v, e)
 
                 if (e.action == ACTION_DOWN) {
-                    if (editType.isSwap) {
+                    if (editMode.isSwap) {
                         list[position].holder?.let {
                             touchHelper.startDrag(it)
                         }
                     } else {
-                        val foreground = holder.itemView.findViewById<View>(R.id.foreground)
-                        foreground?.click()
+                        val ripple = holder.itemView.findViewById<View>(R.id.ripple_foreground)
+                        ripple?.click()
                     }
                 }
 
@@ -92,12 +93,12 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                     onItemClick(list[position])
 
                     when {
-                        editType.isNone -> list[position].onClick(v, e)
-                        editType.isRemove -> {
+                        editMode.isNone -> list[position].onClick(v, e)
+                        editMode.isRemove -> {
                             markItemRemove(position)
                             //removeMarkedItems()
                         }
-                        editType.isEdit -> onItemEdit(list[position])
+                        editMode.isEdit -> onItemEdit(list[position])
                     }
                 }
 
@@ -136,29 +137,18 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
-        //@SuppressLint("ShowToast")
-        //val snackbar = list[0].holder?.itemView?.rootView?.let {
-        //    Snackbar.make(
-        //        it,
-        //        context.getString(R.string.snackbar_confirmation),
-        //        Snackbar.LENGTH_LONG
-        //    ).setAction("YES") {
-        //        for (i in list) {
-        //            if (i.flag.isRemove) onItemRemove(i)
-        //        }
-        //        list.removeAll { item: item -> item.flag.isRemove }
-        //        notifyDataSetChanged()
-        //    }
-        //}
-//
-        //val snackBarView = snackbar?.view
-        //snackBarView?.translationY = -90.toPx().toFloat()
-        //snackbar?.show()
-
-        for (i in list) {
-            if (i.flag.isRemove) onItemRemoved(i)
+        var i = 0
+        while (i < list.size) {
+            list[i].let {
+                if (it.flag.isRemove) {
+                    list.remove(it)
+                    onItemRemoved(it)
+                    i--
+                }
+            }
+            i++
         }
-        list.removeAll { item: item -> item.flag.isRemove }
+
         notifyDataSetChanged()
     }
 
@@ -175,17 +165,11 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             get() = mode == 1
         val isEdit
             get() = mode == 2
-        val isAdd
-            get() = mode == 3
-        val isLock
-            get() = mode == 4
 
         fun setNone() = setMode(-1)
         fun setSwap() = setMode(0)
         fun setRemove() = setMode(1)
         fun setEdit() = setMode(2)
-        fun setAdd() = setMode(3)
-        fun setLock() = setMode(4)
 
         private fun setMode(type: Int) {
             mode = type

@@ -49,7 +49,7 @@ class ForegroundService : LifecycleService() {
             .setContentTitle("Server working in background")
             .setSmallIcon(R.drawable.icon_main)
             .setPriority(PRIORITY_MIN)
-            .addAction(R.drawable.icon_remove_flag, "stop working in background", pendingIntent)
+            .addAction(R.drawable.icon_trashcan, "stop working in background", pendingIntent)
             .setVisibility(VISIBILITY_SECRET)
             .setSilent(true)
 

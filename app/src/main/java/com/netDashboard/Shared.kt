@@ -180,3 +180,22 @@ fun View.click() {
     this.isPressed = false
     this.invalidate()
 }
+
+//@SuppressLint("ShowToast")
+//val snackbar = list[0].holder?.itemView?.rootView?.let {
+//    Snackbar.make(
+//        it,
+//        context.getString(R.string.snackbar_confirmation),
+//        Snackbar.LENGTH_LONG
+//    ).setAction("YES") {
+//        for (i in list) {
+//            if (i.flag.isRemove) onItemRemove(i)
+//        }
+//        list.removeAll { item: item -> item.flag.isRemove }
+//        notifyDataSetChanged()
+//    }
+//}
+//
+//val snackBarView = snackbar?.view
+//snackBarView?.translationY = -90.toPx().toFloat()
+//snackbar?.show()

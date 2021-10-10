@@ -8,7 +8,6 @@ import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -74,7 +73,7 @@ class DashboardActivity : AppCompatActivity() {
 
         if (!adapter.editMode.isNone) {
 
-            b.dTouch.setBackgroundResource(R.drawable.button_unlocked)
+            b.dLock.setBackgroundResource(R.drawable.button_unlocked)
             b.dBar.translationY = 0f
 
             adapter.editMode.let {
@@ -89,30 +88,18 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        b.dTouch.setOnClickListener {
-            touchOnClick()
+        val addOnClick: () -> Unit = {
+            Intent(this, TileNewActivity::class.java).also {
+                it.putExtra("dashboardId", dashboard.id)
+                startActivity(it)
+            }
         }
+
+        toolBarControl(adapter, b.dBar, b.dLock, b.dEdit, b.dSwap, b.dRemove, b.dAdd, addOnClick)
 
         b.dProperties.setOnClickListener {
             propertiesOnClick()
         }
-
-        b.dEdit.setOnClickListener {
-            editOnClick()
-        }
-
-        b.dSwap.setOnClickListener {
-            swapOnClick()
-        }
-
-        b.dRemove.setOnClickListener {
-            removeOnClick()
-        }
-
-        b.dAdd.setOnClickListener {
-            addOnClick()
-        }
-
 
         b.dTag.setOnTouchListener { v, e ->
             showLog(v, e)
@@ -148,7 +135,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (!adapter.editMode.isNone) {
-            b.dTouch.callOnClick()
+            b.dLock.callOnClick()
         } else {
             super.onBackPressed()
 
@@ -233,69 +220,9 @@ class DashboardActivity : AppCompatActivity() {
 
 //----------------------------------------------------------------------------------------------
 
-    private fun touchOnClick() {
-        if (adapter.editMode.isNone) {
-            adapter.editMode.setEdit()
-            editOnClick()
-
-            b.dBar.animate()
-                .translationY(0f)
-                .withEndAction { b.dTouch.setBackgroundResource(R.drawable.button_unlocked) }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        } else {
-            adapter.editMode.setNone()
-
-            b.dBar.animate()
-                .translationY(b.dBar.height.toFloat())
-                .withEndAction { b.dTouch.setBackgroundResource(R.drawable.button_locked) }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        }
-    }
-
-//----------------------------------------------------------------------------------------------
-
     private fun propertiesOnClick() {
         Intent(this, DashboardPropertiesActivity::class.java).also {
             it.putExtra("exitActivity", "DashboardActivity")
-            it.putExtra("dashboardId", dashboard.id)
-            startActivity(it)
-        }
-    }
-
-//----------------------------------------------------------------------------------------------
-
-    private fun editOnClick() {
-        if (adapter.editMode.isNone) return
-        highlightOnly(b.dEdit)
-        adapter.editMode.setEdit()
-    }
-
-//----------------------------------------------------------------------------------------------
-
-    private fun swapOnClick() {
-        if (adapter.editMode.isNone) return
-        highlightOnly(b.dSwap)
-        adapter.editMode.setSwap()
-    }
-
-//----------------------------------------------------------------------------------------------
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun removeOnClick(isLong: Boolean = false) {
-        if (adapter.editMode.isNone) return
-
-        if (!adapter.editMode.isRemove) {
-            highlightOnly(b.dRemove)
-            adapter.editMode.setRemove()
-        } else {
-            adapter.removeMarkedItems()
-        }
-    }
-
-//----------------------------------------------------------------------------------------------
-
-    private fun addOnClick() {
-        Intent(this, TileNewActivity::class.java).also {
             it.putExtra("dashboardId", dashboard.id)
             startActivity(it)
         }
@@ -342,7 +269,7 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun clickTouch(v: View) = b.dTouch.click()
+    fun clickLock(v: View) = b.dLock.click()
 
     @Suppress("UNUSED_PARAMETER")
     fun clickProperties(v: View) = b.dProperties.click()

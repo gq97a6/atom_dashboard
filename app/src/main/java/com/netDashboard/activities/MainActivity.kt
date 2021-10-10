@@ -1,11 +1,8 @@
 package com.netDashboard.activities
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
@@ -20,6 +17,7 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
+import com.netDashboard.toolBarControl
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -35,28 +33,16 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         G.theme.apply(this, b.root)
 
-        b.mTouch.setOnClickListener {
-            touchOnClick()
+        val addOnClick: () -> Unit = {
+            Intent(this, DashboardNewActivity::class.java).also {
+                startActivity(it)
+            }
         }
+
+        toolBarControl(adapter, b.mBar, b.mLock, b.mEdit, b.mSwap, b.mRemove, b.mAdd, addOnClick)
 
         b.mSettings.setOnClickListener {
             settingsOnClick()
-        }
-
-        b.mEdit.setOnClickListener {
-            editOnClick()
-        }
-
-        b.mSwap.setOnClickListener {
-            swapOnClick()
-        }
-
-        b.mRemove.setOnClickListener {
-            removeOnClick()
-        }
-
-        b.mAdd.setOnClickListener {
-            addOnClick()
         }
     }
 
@@ -72,9 +58,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (!adapter.editMode.isNone) {
-            b.mTouch.callOnClick()
+            b.mLock.callOnClick()
         } else super.onBackPressed()
     }
+
+    //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
         adapter = DashboardAdapter(this)
@@ -117,22 +105,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun touchOnClick() {
-        if (adapter.editMode.isNone) {
-            adapter.editMode.setEdit()
-            highlightOnly(b.mEdit)
-
-            b.mBar.animate()
-                .translationY(0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        } else {
-            adapter.editMode.setNone()
-
-            b.mBar.animate()
-                .translationY(b.mBar.height.toFloat())
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
-        }
-    }
+    //----------------------------------------------------------------------------------------------
 
     private fun settingsOnClick() {
         Intent(this, SettingsActivity::class.java).also {
@@ -142,52 +115,8 @@ class MainActivity : AppCompatActivity() {
 
     //----------------------------------------------------------------------------------------------
 
-    private fun editOnClick() {
-        if (adapter.editMode.isNone) return
-        highlightOnly(b.mEdit)
-        adapter.editMode.setEdit()
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    private fun swapOnClick() {
-        if (adapter.editMode.isNone) return
-        highlightOnly(b.mSwap)
-        adapter.editMode.setSwap()
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun removeOnClick() {
-        if (adapter.editMode.isNone) return
-
-        highlightOnly(b.mRemove)
-
-        if (!adapter.editMode.isRemove) {
-            adapter.editMode.setRemove()
-        } else {
-            adapter.removeMarkedItems()
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    private fun addOnClick() {
-        Intent(this, DashboardNewActivity::class.java).also {
-            startActivity(it)
-        }
-    }
-
-    private fun highlightOnly(button: Button) {
-        b.mRemove.alpha = 0.4f
-        b.mSwap.alpha = 0.4f
-        b.mEdit.alpha = 0.4f
-        button.alpha = 1f
-    }
-
     @Suppress("UNUSED_PARAMETER")
-    fun clickTouch(v: View) = b.mTouch.click()
+    fun clickLock(v: View) = b.mLock.click()
 
     @Suppress("UNUSED_PARAMETER")
     fun clickSettings(v: View) = b.mSettings.click()

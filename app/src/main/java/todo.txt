@@ -7,7 +7,6 @@ parser
 moving rv items bugs, single axis
 
 theme prevention
-delete confirmation
 
 tile payload json
 mqttQOS

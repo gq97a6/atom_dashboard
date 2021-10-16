@@ -108,93 +108,39 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="3dp"
-        android:tag="colorA"
-        android:text="Theme color"
-        android:textColor="@color/gray150"
-        android:textSize="20sp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/background_frame"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="15dp"
-        android:tag="frame">
+        android:background="@drawable/background_contrast"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp"
+        android:tag="con_back"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="6dp"
+            android:tag="colorA"
+            android:text="Theme color"
+            android:textColor="@color/gray150"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:tag="colorB"
-                android:text="Dark background: "
-                android:textColor="@color/gray100"
-                android:textSize="12sp" />
+            android:background="@drawable/background_frame"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:tag="frame">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingHorizontal="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="colorC"
-                    android:text="OFF"
-                    android:textColor="@color/gray150"
-                    android:textSize="12sp"
-                    tools:ignore="HardcodedText" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/t_is_dark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:tag="colorC"
-                    android:text="ON"
-                    android:textColor="@color/gray150"
-                    android:textSize="12sp"
-                    tools:ignore="HardcodedText" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:tag="con_warning"
-                android:text="SWITCH RECOMMENDED"
-                android:textColor="@color/gray100"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:orientation="horizontal">
 
                 <TextView
@@ -202,105 +148,169 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:tag="colorB"
-                    android:text="Contrast:"
+                    android:text="Dark background: "
                     android:textColor="@color/gray100"
                     android:textSize="12sp" />
 
-                <com.google.android.material.slider.Slider
-                    style="@style/slider"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="14dp"
-                    android:tag="basic;contrast"
-                    android:value="50"
-                    android:valueFrom="0"
-                    android:valueTo="100"
-                    app:thumbRadius="0dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="10dp">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="colorC"
+                        android:text="OFF"
+                        android:textColor="@color/gray150"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/t_is_dark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="colorC"
+                        android:text="ON"
+                        android:textColor="@color/gray150"
+                        android:textSize="12sp"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:tag="colorB"
-                    android:text="@string/tp_design_hue"
+                    android:tag="con_warning"
+                    android:text="SWITCH RECOMMENDED"
                     android:textColor="@color/gray100"
                     android:textSize="12sp" />
-
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/t_hue"
-                    style="@style/slider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="15dp"
-                    android:tag="basic"
-                    android:value="180"
-                    android:valueFrom="0"
-                    android:valueTo="360" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_gravity="bottom"
+                android:orientation="vertical">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:tag="colorB"
-                    android:text="@string/tp_design_saturation"
-                    android:textColor="@color/gray100"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
 
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/t_saturation"
-                    style="@style/slider"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="15dp"
-                    android:tag="basic"
-                    android:value="0.01"
-                    android:valueFrom="0"
-                    android:valueTo="1" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:tag="colorB"
+                        android:text="Contrast:"
+                        android:textColor="@color/gray100"
+                        android:textSize="12sp" />
 
-            </LinearLayout>
+                    <com.google.android.material.slider.Slider
+                        style="@style/slider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="14dp"
+                        android:tag="basic;contrast"
+                        android:value="50"
+                        android:valueFrom="0"
+                        android:valueTo="100"
+                        app:thumbRadius="0dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                </LinearLayout>
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:tag="colorB"
-                    android:text="@string/tp_design_value"
-                    android:textColor="@color/gray100"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
 
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/t_value"
-                    style="@style/slider"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:tag="colorB"
+                        android:text="@string/tp_design_hue"
+                        android:textColor="@color/gray100"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/t_hue"
+                        style="@style/slider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15dp"
+                        android:tag="basic"
+                        android:value="180"
+                        android:valueFrom="0"
+                        android:valueTo="360" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginVertical="15dp"
-                    android:tag="basic"
-                    android:value="0.01"
-                    android:valueFrom="0"
-                    android:valueTo="1" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:tag="colorB"
+                        android:text="@string/tp_design_saturation"
+                        android:textColor="@color/gray100"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/t_saturation"
+                        style="@style/slider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15dp"
+                        android:tag="basic"
+                        android:value="0.01"
+                        android:valueFrom="0"
+                        android:valueTo="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:tag="colorB"
+                        android:text="@string/tp_design_value"
+                        android:textColor="@color/gray100"
+                        android:textSize="12sp" />
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/t_value"
+                        style="@style/slider"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginVertical="15dp"
+                        android:tag="basic"
+                        android:value="0.01"
+                        android:valueFrom="0"
+                        android:valueTo="1" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

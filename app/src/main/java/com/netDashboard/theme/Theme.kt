@@ -10,8 +10,6 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -25,13 +23,15 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.*
+import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.contrast
+import com.netDashboard.contrastColor
 import com.netDashboard.folder_tree.FolderTree
+import com.netDashboard.getRandomColor
 import com.netDashboard.globals.G.gson
 import java.io.File
 import java.io.FileReader
-import kotlin.random.Random
 
 @Suppress("UNUSED")
 class Theme {
@@ -40,15 +40,7 @@ class Theme {
     var isDark = false
     var color = Color.parseColor("#00469c")
     private val contrast
-        get() = 21 - ColorUtils.calculateContrast(color, getBackground(isDark))
-
-    private val isDarkRec: Boolean
-        get() {
-            val lConCheck = ColorUtils.calculateContrast(color, getBackground(false)) > 2.45
-            val dConCheck = ColorUtils.calculateContrast(color, getBackground(true)) > 1.4
-
-            return if (lConCheck && dConCheck) isDark else lConCheck
-        }
+        get() = ColorUtils.calculateContrast(color, colorBackground)
 
     private val colorA
         get() = ColorUtils.blendARGB(color, colorBackground, 0.4f)
@@ -60,19 +52,18 @@ class Theme {
         get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
 
     val colorBackground: Int
-        get() = getBackground(!isDark)
+        get() {
+            val hsv = floatArrayOf(0f, 0f, 0f)
+            Color.colorToHSV(color, hsv)
+            hsv[1] = hsv[1] * 0.3f
 
-    private fun getBackground(isDark: Boolean): Int {
-        val hsv = floatArrayOf(0f, 0f, 0f)
-        Color.colorToHSV(color, hsv)
-        hsv[1] = hsv[1] * 0.3f
+            val dark = Color.HSVToColor(hsv).contrast(false, 0.6f)
+            val light = Color.HSVToColor(hsv).contrast(true, 0.6f)
 
-        return Color.HSVToColor(hsv).contrast(isDark, 0.6f)
-    }
+            return ColorUtils.blendARGB(dark, light, 0.5f)
+        }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
-        //setRandomTheme()
-
         context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         try {
@@ -87,13 +78,6 @@ class Theme {
         }
 
         viewGroup.applyTheme()
-    }
-
-    private fun setRandomTheme() {
-        color = getRandomColor()
-        isDark = Random.nextBoolean()
-
-        if (isDark != isDarkRec) setRandomTheme()
     }
 
     private fun ViewGroup.applyTheme() {
@@ -167,6 +151,22 @@ class Theme {
             }
             "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.3f))
             "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.1f))
+            "con_back" -> {
+                val background = this.background as LayerDrawable?
+                val back =
+                    background?.findDrawableByLayerId(R.id.bc_background) as GradientDrawable?
+                val top = background?.findDrawableByLayerId(R.id.bc_top) as GradientDrawable?
+                val bottom = background?.findDrawableByLayerId(R.id.bc_bottom) as GradientDrawable?
+                background?.mutate()
+
+                //back?.colors = intArrayOf(
+                //    getBackground(!isDarkRec),
+                //    getBackground(!isDarkRec)
+                //)
+
+                top?.colors = intArrayOf(Color.TRANSPARENT, colorBackground)
+                bottom?.colors = intArrayOf(colorBackground, Color.TRANSPARENT)
+            }
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
@@ -216,15 +216,15 @@ class Theme {
                 this.setBackgroundColor(colorD)
             }
             "con_warning" -> {
-                this.clearAnimation()
-                this.visibility = if (isDark != isDarkRec) {
-                    this.setTextColor(color.contrast(isDark, 0.6f))
-                    this.blink(-1, 20, 500)
-                    Log.i("OUY", contrast.toString())
-                    VISIBLE
-                } else {
-                    GONE
-                }
+                //this.clearAnimation()
+                //this.visibility = if (isDark != isDarkRec) {
+                //    this.setTextColor(color.contrast(isDark, 0.6f))
+                //    this.blink(-1, 20, 500)
+                //    Log.i("OUY", contrast.toString())
+                //    VISIBLE
+                //} else {
+                //    GONE
+                //}
             }
             "log" -> {
                 this.setTextColor(color)

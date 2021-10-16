@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -124,7 +125,8 @@
         android:background="@drawable/background_frame"
         android:gravity="bottom"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp"
         android:tag="frame">
 
         <LinearLayout
@@ -200,6 +202,34 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:tag="colorB"
+                    android:text="Contrast:"
+                    android:textColor="@color/gray100"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.slider.Slider
+                    style="@style/slider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginVertical="14dp"
+                    android:tag="basic;contrast"
+                    android:value="50"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    app:thumbRadius="0dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:tag="colorB"
                     android:text="@string/tp_design_hue"
                     android:textColor="@color/gray100"
                     android:textSize="12sp" />
@@ -210,7 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="15dp"
+                    android:layout_marginVertical="15dp"
                     android:tag="basic"
                     android:value="180"
                     android:valueFrom="0"
@@ -238,7 +268,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="15dp"
+                    android:layout_marginVertical="15dp"
                     android:tag="basic"
                     android:value="0.01"
                     android:valueFrom="0"
@@ -266,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="15dp"
+                    android:layout_marginVertical="15dp"
                     android:tag="basic"
                     android:value="0.01"
                     android:valueFrom="0"

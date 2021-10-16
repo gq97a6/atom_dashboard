@@ -39,11 +39,13 @@ class Theme {
     var useOver = false
     var isDark = false
     var color = Color.parseColor("#00469c")
+    private val contrast
+        get() = 21 - ColorUtils.calculateContrast(color, getBackground(isDark))
 
     private val isDarkRec: Boolean
         get() {
-            val lConCheck = (ColorUtils.calculateContrast(color, getBackground(false)) > 2.45)
-            val dConCheck = (ColorUtils.calculateContrast(color, getBackground(true)) > 1.4)
+            val lConCheck = ColorUtils.calculateContrast(color, getBackground(false)) > 2.45
+            val dConCheck = ColorUtils.calculateContrast(color, getBackground(true)) > 1.4
 
             return if (lConCheck && dConCheck) isDark else lConCheck
         }
@@ -54,7 +56,7 @@ class Theme {
         get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
     private val colorC
         get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
-    val colorD
+    private val colorD
         get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
 
     val colorBackground: Int
@@ -218,7 +220,7 @@ class Theme {
                 this.visibility = if (isDark != isDarkRec) {
                     this.setTextColor(color.contrast(isDark, 0.6f))
                     this.blink(-1, 20, 500)
-
+                    Log.i("OUY", contrast.toString())
                     VISIBLE
                 } else {
                     GONE
@@ -267,13 +269,20 @@ class Theme {
     }
 
     private fun Slider.applyTheme() {
+
+        fun applyBasic() {
+            this.trackActiveTintList = ColorStateList.valueOf(colorB)
+            this.tickActiveTintList = ColorStateList.valueOf(colorB)
+            this.trackInactiveTintList = ColorStateList.valueOf(colorC)
+            this.tickInactiveTintList = ColorStateList.valueOf(colorC)
+            this.thumbTintList = ColorStateList.valueOf(color)
+        }
+
         when (this.tag) {
-            "basic" -> {
-                this.trackActiveTintList = ColorStateList.valueOf(colorB)
-                this.tickActiveTintList = ColorStateList.valueOf(colorB)
-                this.trackInactiveTintList = ColorStateList.valueOf(colorC)
-                this.tickInactiveTintList = ColorStateList.valueOf(colorC)
-                this.thumbTintList = ColorStateList.valueOf(color)
+            "basic" -> applyBasic()
+            "basic;contrast" -> {
+                applyBasic()
+                this.value = maxOf(minOf(contrast.toFloat() * 100 / 27, 100f), 0f)
             }
             else -> onUnknownTag(this.tag, "slider")
         }

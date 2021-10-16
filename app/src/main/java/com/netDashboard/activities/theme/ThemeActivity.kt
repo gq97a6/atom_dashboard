@@ -34,35 +34,17 @@ class ThemeActivity : AppCompatActivity() {
         setContentView(b.root)
 
         b.tHue.addOnChangeListener { _, _, _ ->
-            theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tHue.value,
-                    1 - b.tSaturation.value,
-                    1 - b.tValue.value
-                )
-            )
+            theme.color = getColor()
             theme.apply(this, b.root)
         }
 
         b.tSaturation.addOnChangeListener { _, _, _ ->
-            theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tHue.value,
-                    1 - b.tSaturation.value,
-                    1 - b.tValue.value
-                )
-            )
+            theme.color = getColor()
             theme.apply(this, b.root)
         }
 
         b.tValue.addOnChangeListener { _, _, _ ->
-            theme.color = Color.HSVToColor(
-                floatArrayOf(
-                    b.tHue.value,
-                    1 - b.tSaturation.value,
-                    1 - b.tValue.value
-                )
-            )
+            theme.color = getColor()
             theme.apply(this, b.root)
         }
 
@@ -110,5 +92,15 @@ class ThemeActivity : AppCompatActivity() {
         b.tValue.value = 1 - hsv[2]
 
         b.tIsDark.isChecked = theme.isDark
+    }
+
+    private fun getColor(): Int {
+        return Color.HSVToColor(
+            floatArrayOf(
+                b.tHue.value,
+                1 - b.tSaturation.value,
+                1 - b.tValue.value
+            )
+        )
     }
 }

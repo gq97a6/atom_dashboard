@@ -15,6 +15,7 @@ publish confirmation
 
 new tiles
 tiles icons
+copy broker
 receive time
 notifications
 export/import

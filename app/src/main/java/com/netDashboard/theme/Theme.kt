@@ -10,12 +10,16 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.ColorUtils.blendARGB
+import androidx.core.graphics.ColorUtils.calculateContrast
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -23,12 +27,9 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.R
+import com.netDashboard.*
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.contrast
-import com.netDashboard.contrastColor
 import com.netDashboard.folder_tree.FolderTree
-import com.netDashboard.getRandomColor
 import com.netDashboard.globals.G.gson
 import java.io.File
 import java.io.FileReader
@@ -38,30 +39,28 @@ class Theme {
 
     var useOver = false
     var isDark = false
+    var isAutoAdjust = true
     var color = Color.parseColor("#00469c")
-    private val contrast
-        get() = ColorUtils.calculateContrast(color, colorBackground)
 
     private val colorA
-        get() = ColorUtils.blendARGB(color, colorBackground, 0.4f)
+        get() = blendARGB(color, colorBackground, 0.4f)
     private val colorB
-        get() = ColorUtils.blendARGB(color, colorBackground, 0.6f)
+        get() = blendARGB(color, colorBackground, 0.6f)
     private val colorC
-        get() = ColorUtils.blendARGB(color, colorBackground, 0.8f)
+        get() = blendARGB(color, colorBackground, 0.8f)
     private val colorD
-        get() = ColorUtils.blendARGB(color, colorBackground, 0.9f)
+        get() = blendARGB(color, colorBackground, 0.9f)
 
     val colorBackground: Int
-        get() {
-            val hsv = floatArrayOf(0f, 0f, 0f)
-            Color.colorToHSV(color, hsv)
-            hsv[1] = hsv[1] * 0.3f
+        get() = getBackground(!isDark)
 
-            val dark = Color.HSVToColor(hsv).contrast(false, 0.6f)
-            val light = Color.HSVToColor(hsv).contrast(true, 0.6f)
+    private fun getBackground(isDark: Boolean): Int {
+        val hsv = floatArrayOf(0f, 0f, 0f)
+        Color.colorToHSV(color, hsv)
+        hsv[1] = hsv[1] * 0.3f
 
-            return ColorUtils.blendARGB(dark, light, 0.5f)
-        }
+        return Color.HSVToColor(hsv).contrast(isDark, 0.6f)
+    }
 
     fun apply(context: Context, viewGroup: ViewGroup) {
         context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
@@ -151,22 +150,6 @@ class Theme {
             }
             "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.3f))
             "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.1f))
-            "con_back" -> {
-                val background = this.background as LayerDrawable?
-                val back =
-                    background?.findDrawableByLayerId(R.id.bc_background) as GradientDrawable?
-                val top = background?.findDrawableByLayerId(R.id.bc_top) as GradientDrawable?
-                val bottom = background?.findDrawableByLayerId(R.id.bc_bottom) as GradientDrawable?
-                background?.mutate()
-
-                //back?.colors = intArrayOf(
-                //    getBackground(!isDarkRec),
-                //    getBackground(!isDarkRec)
-                //)
-
-                top?.colors = intArrayOf(Color.TRANSPARENT, colorBackground)
-                bottom?.colors = intArrayOf(colorBackground, Color.TRANSPARENT)
-            }
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
@@ -215,17 +198,6 @@ class Theme {
                 this.setTextColor(color)
                 this.setBackgroundColor(colorD)
             }
-            "con_warning" -> {
-                //this.clearAnimation()
-                //this.visibility = if (isDark != isDarkRec) {
-                //    this.setTextColor(color.contrast(isDark, 0.6f))
-                //    this.blink(-1, 20, 500)
-                //    Log.i("OUY", contrast.toString())
-                //    VISIBLE
-                //} else {
-                //    GONE
-                //}
-            }
             "log" -> {
                 this.setTextColor(color)
                 this.setBackgroundColor(colorBackground)
@@ -269,20 +241,13 @@ class Theme {
     }
 
     private fun Slider.applyTheme() {
-
-        fun applyBasic() {
-            this.trackActiveTintList = ColorStateList.valueOf(colorB)
-            this.tickActiveTintList = ColorStateList.valueOf(colorB)
-            this.trackInactiveTintList = ColorStateList.valueOf(colorC)
-            this.tickInactiveTintList = ColorStateList.valueOf(colorC)
-            this.thumbTintList = ColorStateList.valueOf(color)
-        }
-
         when (this.tag) {
-            "basic" -> applyBasic()
-            "basic;contrast" -> {
-                applyBasic()
-                this.value = maxOf(minOf(contrast.toFloat() * 100 / 27, 100f), 0f)
+            "basic" -> {
+                this.trackActiveTintList = ColorStateList.valueOf(colorB)
+                this.tickActiveTintList = ColorStateList.valueOf(colorB)
+                this.trackInactiveTintList = ColorStateList.valueOf(colorC)
+                this.tickInactiveTintList = ColorStateList.valueOf(colorC)
+                this.thumbTintList = ColorStateList.valueOf(color)
             }
             else -> onUnknownTag(this.tag, "slider")
         }

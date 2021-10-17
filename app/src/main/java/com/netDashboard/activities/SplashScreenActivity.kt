@@ -75,6 +75,7 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
+                finish()
             }
 
             if (settings.lastDashboardId != null && settings.startFromLast) {
@@ -83,6 +84,7 @@ class SplashScreenActivity : AppCompatActivity() {
                     it.putExtra("dashboardId", settings.lastDashboardId)
                     overridePendingTransition(0, 0)
                     startActivity(it)
+                    finish()
                 }
             }
         }, 500)

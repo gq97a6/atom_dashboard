@@ -5,7 +5,17 @@
     android:layout_height="500dp"
     android:layout_gravity="center"
     android:background="@color/gray65"
+    android:orientation="vertical"
     android:tag="background">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:tag="color"
+        android:text="Pick dashboard \nto copy from"
+        android:textSize="25sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/pcb_recycler_view"

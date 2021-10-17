@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (!adapter.editMode.isNone) {
             b.mLock.callOnClick()
-        } else super.onBackPressed()
+        } else finishAffinity()
     }
 
     //----------------------------------------------------------------------------------------------

@@ -5,7 +5,8 @@
     android:layout_height="60dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/tile_padding">
+    android:padding="@dimen/tile_padding"
+    android:tag="item">
 
     <View
         android:id="@+id/foreground"
@@ -13,45 +14,21 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
-        android:elevation="20dp"
-        android:tag="foreground" />
-
-    <View
-        android:id="@+id/flag_mark"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:backgroundTint="#FFFFFF"
-        android:elevation="10dp"
-        android:visibility="gone" />
-
-    <View
-        android:id="@+id/flag_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#80000000"
-        android:elevation="5dp"
-        android:visibility="gone" />
+        android:elevation="20dp" />
 
     <Button
         android:id="@+id/dle_button"
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="#000000"
-        android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingTop="15dp"
-        android:paddingRight="6dp"
-        android:paddingBottom="15dp"
-        android:tag="item"
+        android:background="@drawable/button_text"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="15dp"
+        android:tag="colorB"
         android:text="@string/tb_default_text"
-        android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform"
-        app:rippleColor="#FFFFFF" />
+        app:autoSizeTextType="uniform" />
 
 </FrameLayout>

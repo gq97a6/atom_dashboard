@@ -135,7 +135,7 @@ class Theme {
         //    else -> onUnknownTag(this.tag, "frameLayout")
         //}
 
-        if (this.tag != "tile" && context !is DashboardActivity) {
+        if (this.tag != "item" && context !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
             this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         }
@@ -180,7 +180,6 @@ class Theme {
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
             "colorB" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "colorC" -> this.backgroundTintList = ColorStateList.valueOf(colorC)
-            "item" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             else -> onUnknownTag(this.tag, "materialButton")
         }

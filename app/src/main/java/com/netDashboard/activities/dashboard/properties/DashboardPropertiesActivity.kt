@@ -208,15 +208,28 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 adapter.theme = theme
                 adapter.onBindViewHolder = { _, holder, pos ->
                     val button = holder.itemView.findViewById<Button>(R.id.pcb_button)
-                    button.text = dashboards[pos].name
+
+                    val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
+
+                    button.setOnClickListener {
+                        dashboard.mqttAddress = dashboards[p].mqttAddress
+                        dashboard.mqttPort = dashboards[p].mqttPort
+                        dashboard.mqttUserName = dashboards[p].mqttUserName
+                        dashboard.mqttPass = dashboards[p].mqttPass
+
+                        viewConfig()
+                        dialog.hide()
+                    }
+
+                    button.text = dashboards[p].name
                 }
 
                 binding.pcbRecyclerView.layoutManager = LinearLayoutManager(this)
                 binding.pcbRecyclerView.adapter = adapter
 
                 adapter.submitList(list)
-                theme.apply(this, binding.root)
                 dialog.show()
+                theme.apply(this, binding.root)
             }
         }
     }

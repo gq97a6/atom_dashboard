@@ -1,6 +1,7 @@
 package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*

@@ -6,7 +6,7 @@
     android:layout_height="120dp"
     android:elevation="10dp"
     android:padding="@dimen/tile_padding"
-    android:tag="tile">
+    android:tag="item">
 
     <View
         android:id="@+id/ripple_foreground"

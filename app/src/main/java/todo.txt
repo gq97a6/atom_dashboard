@@ -3,10 +3,7 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
-
-moving rv items bugs, single axis
-
-theme prevention
+fix popup/rec_view items ripple
 
 tile payload json
 mqttQOS
@@ -15,7 +12,6 @@ publish confirmation
 
 new tiles
 tiles icons
-copy broker
 receive time
 notifications
 export/import

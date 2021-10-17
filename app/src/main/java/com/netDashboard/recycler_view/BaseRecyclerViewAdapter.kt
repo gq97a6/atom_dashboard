@@ -104,7 +104,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                     }
                 }
 
-                return@setOnTouchListener true
+                return@setOnTouchListener false
             }
         }
 

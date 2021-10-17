@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">\?NetDashboard</string>
+    <string name="app_name">NetDashboard</string>
 
     <!--
     This string is used for square devices and overridden by hello_world in

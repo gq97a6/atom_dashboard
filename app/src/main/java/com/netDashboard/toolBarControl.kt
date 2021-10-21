@@ -1,5 +1,6 @@
 package com.netDashboard
 
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
@@ -13,7 +14,8 @@ fun toolBarControl(
     swap: Button,
     remove: Button,
     add: Button,
-    onAdd: () -> Unit
+    onAdd: () -> Unit,
+    onUiChange: (vg: ViewGroup) -> Unit
 ) {
     fun highlightOnly(button: Button) {
         remove.alpha = 0.4f
@@ -40,6 +42,8 @@ fun toolBarControl(
                 .withEndAction { lock.setBackgroundResource(R.drawable.button_locked) }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
+
+        onUiChange(lock.rootView as ViewGroup)
     }
 
     edit.setOnClickListener {

@@ -10,16 +10,12 @@ import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.ColorUtils.blendARGB
-import androidx.core.graphics.ColorUtils.calculateContrast
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -124,7 +120,7 @@ class Theme {
             "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "ripple_foreground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(colorBackground))
+                background.setColor(ColorStateList.valueOf(colorBackground.alpha(50)))
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -172,8 +168,30 @@ class Theme {
     private fun MaterialButton.applyTheme() {
         val background = this.background as LayerDrawable?
         val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
-        ripple?.setColor(ColorStateList.valueOf(contrastColor(!isDark, 70)))
-        this.setTextColor(color)
+
+        ripple?.setColor(
+            ColorStateList.valueOf(
+                when (this.tag) {
+                    "color" -> contrastColor(!isDark, 80)
+                    "colorA" -> contrastColor(!isDark, 70)
+                    "colorB" -> contrastColor(!isDark, 60)
+                    "colorC" -> contrastColor(!isDark, 50)
+                    "tile_button" -> contrastColor(!isDark, 70)
+                    else -> contrastColor(!isDark, 70)
+                }
+            )
+        )
+
+        this.setTextColor(
+            when (this.tag) {
+                "color" -> colorBackground
+                "colorA" -> blendARGB(color, colorBackground, 0.9f)
+                "colorB" -> blendARGB(color, colorBackground, 0.1f)
+                "colorC" -> color
+                "tile_button" -> color
+                else -> color
+            }
+        )
 
         when (this.tag) {
             "color" -> this.backgroundTintList = ColorStateList.valueOf(color)

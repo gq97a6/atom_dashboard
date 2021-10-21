@@ -221,7 +221,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                         dialog.hide()
                     }
 
-                    button.text = dashboards[p].name
+                    button.text = dashboards[p].name.uppercase(Locale.getDefault())
                 }
 
                 binding.pcbRecyclerView.layoutManager = LinearLayoutManager(this)

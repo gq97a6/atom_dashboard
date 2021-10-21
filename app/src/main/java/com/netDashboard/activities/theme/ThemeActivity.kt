@@ -209,8 +209,8 @@ class ThemeActivity : AppCompatActivity() {
         if (theme.isDark) {
             for (i in 100 downTo 0) {
 
-                if (con > 2.75) {
-                    b.tSaturation.value = i / 100f
+                if (con > 2.6) {
+                    b.tSaturation.value = i * 0.008f
                     break
                 }
 
@@ -225,8 +225,8 @@ class ThemeActivity : AppCompatActivity() {
         } else {
             for (i in 100 downTo 0) {
 
-                if (con > 2.3) {
-                    b.tValue.value = i / 100f
+                if (con > 2.6) {
+                    b.tValue.value = i * 0.007f
                     break
                 }
 

@@ -3,6 +3,7 @@ package com.netDashboard.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.activities.dashboard.DashboardActivity
@@ -10,6 +11,7 @@ import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActiv
 import com.netDashboard.activities.dashboard_new.DashboardNewActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on.AppOn
+import com.netDashboard.blink
 import com.netDashboard.click
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.ActivityMainBinding
@@ -39,7 +41,21 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        toolBarControl(adapter, b.mBar, b.mLock, b.mEdit, b.mSwap, b.mRemove, b.mAdd, addOnClick)
+        val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
+            G.theme.apply(this, vg)
+        }
+
+        toolBarControl(
+            adapter,
+            b.mBar,
+            b.mLock,
+            b.mEdit,
+            b.mSwap,
+            b.mRemove,
+            b.mAdd,
+            addOnClick,
+            onUiChange
+        )
 
         b.mSettings.setOnClickListener {
             settingsOnClick()
@@ -69,11 +85,15 @@ class MainActivity : AppCompatActivity() {
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {
-            if (adapter.itemCount == 0) {
-                b.mPlaceholder.visibility = View.VISIBLE
-            }
+            if (adapter.itemCount == 0) b.mPlaceholder.visibility = View.VISIBLE
+            b.mRemove.clearAnimation()
 
             service?.dgc?.notifyDashboardRemoved(it)
+        }
+
+        adapter.onItemMarkedRemove = { count, marked ->
+            if (marked && count == 1) b.mRemove.blink(duration = 200, minAlpha = 0.2f)
+            if (!marked && count == 0) b.mRemove.clearAnimation()
         }
 
         adapter.onItemClick = { item ->

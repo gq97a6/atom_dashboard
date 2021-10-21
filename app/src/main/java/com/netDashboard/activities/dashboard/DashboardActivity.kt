@@ -8,6 +8,7 @@ import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -95,7 +96,21 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        toolBarControl(adapter, b.dBar, b.dLock, b.dEdit, b.dSwap, b.dRemove, b.dAdd, addOnClick)
+        val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
+            dashboard.resultTheme.apply(this, vg)
+        }
+
+        toolBarControl(
+            adapter,
+            b.dBar,
+            b.dLock,
+            b.dEdit,
+            b.dSwap,
+            b.dRemove,
+            b.dAdd,
+            addOnClick,
+            onUiChange
+        )
 
         b.dProperties.setOnClickListener {
             propertiesOnClick()

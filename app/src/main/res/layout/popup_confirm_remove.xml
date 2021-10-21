@@ -15,14 +15,14 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:tag="colorA"
-        android:text="Are you sure you want to remove marked tiles?"
+        android:text="Are you sure you want to remove marked items?"
         android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="5dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button

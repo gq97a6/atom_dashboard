@@ -3,11 +3,8 @@ parser
         second of day, second, minute, hour, day, month, year
     to json
 
-fix popup/rec_view items ripple
-
 tile payload json
 mqttQOS
-parser
 publish confirmation
 
 new tiles

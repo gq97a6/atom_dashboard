@@ -15,7 +15,8 @@
         android:layout_gravity="center"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
-        android:tag="ripple_foreground"/>
+        android:tag="ripple_foreground"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/foreground"

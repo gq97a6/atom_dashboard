@@ -170,7 +170,8 @@ fun View.blink(
 }
 
 fun View.jiggle() = this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.jiggle))
-fun View.attentate() = this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.attentate))
+fun View.attentate() =
+    this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.attentate))
 
 
 fun View.click() {

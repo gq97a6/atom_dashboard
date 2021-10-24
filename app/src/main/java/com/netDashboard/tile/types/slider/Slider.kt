@@ -19,9 +19,7 @@ class SliderTile : Tile() {
     @Transient
     override val layout = R.layout.tile_slider
 
-    @Transient
-    override val mqttDefaultPubValue = "@value"
-    override var mqttPubValue = mqttDefaultPubValue
+    override val mqtt = Mqtt("@value")
 
     @Transient
     override var typeTag = "slider"
@@ -58,12 +56,8 @@ class SliderTile : Tile() {
             ACTION_UP -> {
                 (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(false)
 
-                val topic = mqttTopics.pubs.get("base")
-                onSend(
-                    topic.topic,
-                    mqttPubValue.replace("@value", value.dezero()),
-                    topic.qos
-                )
+                val topic = mqtt.pubs["base"] ?: "err"
+                onSend(topic, mqtt.pubValue.replace("@value", value.dezero()), mqtt.qos)
             }
         }
 

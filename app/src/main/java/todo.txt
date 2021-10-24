@@ -1,18 +1,26 @@
+//develop
 parser
     value of tile, value of other tiles,
         second of day, second, minute, hour, day, month, year
     to json
 
+tile receive timers
+dashboard item
 tile payload json
 mqttQOS
 publish confirmation
-
-new tiles
-tiles icons
-receive time
 notifications
+
+//expand
+new tiles
+receive time
 export/import
 
+//improve
+tiles icons
+app background
+
+//post development
 icon
 name
 publish

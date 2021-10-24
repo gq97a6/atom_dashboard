@@ -16,20 +16,13 @@ abstract class Tile : BaseRecyclerViewItem() {
     val type = this.javaClass.toString()
     abstract var typeTag: String
 
-    var mqttLastReceive = Date()
-    var mqttEnabled = true
-    var mqttTopics = MqttTopics()
-    abstract val mqttDefaultPubValue: String
-    abstract var mqttPubValue: String
-    var mqttQoS = 0
-    var mqttPubConfirm = false
-    var mqttPayloadIsJSON = false
+    abstract val mqtt: Mqtt
 
-    var bltPattern = ""
-    var bltDelimiter = ""
-    var bltRequestToGet = ""
-    var bltPayloadJSON = false
-    var bltOutputJSON = ""
+    //var bltPattern = ""
+    //var bltDelimiter = ""
+    //var bltRequestToGet = ""
+    //var bltPayloadJSON = false
+    //var bltOutputJSON = ""
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -47,41 +40,21 @@ abstract class Tile : BaseRecyclerViewItem() {
         view.layoutParams = params
     }
 
-    class MqttTopics {
-        val subs = TopicList()
-        val pubs = TopicList()
+    class Mqtt(defaultPubValue: String) {
+        var isEnabled = true
+        var lastReceive = Date()
 
-        class TopicList {
+        val subs: MutableMap<String, String> = mutableMapOf()
+        val pubs: MutableMap<String, String> = mutableMapOf()
 
-            val topics: MutableList<Topic>
-                get() = topicMap.values.toMutableList()
-
-            val topicList: MutableList<String>
-                get() = topicListMap.values.toMutableList()
-
-            private val topicMap: MutableMap<String, Topic> = mutableMapOf()
-            private val topicListMap: MutableMap<String, String> = mutableMapOf()
-
-            fun get(name: String): Topic = topicMap[name] ?: Topic("", 0, false)
-
-            fun set(topic: String?, qos: Int?, retained: Boolean?, name: String) {
-                val t = topicMap[name] ?: Topic("", 0, false)
-
-                if (retained != null) t.retained = retained
-                if (qos != null) t.qos = qos
-                if (topic != null) t.topic = topic
-
-                topicMap[name] = t
-                topicListMap[name] = t.topic
+        var qos = 0
+            set(value) {
+                field = minOf(3, maxOf(0, value))
             }
 
-            data class Topic(var topic: String, private val _qos: Int, var retained: Boolean) {
-                var qos = _qos
-                    set(value) {
-                        if (value in 0..3) field = value
-                    }
-            }
-        }
+        var pubValue = defaultPubValue
+        var confirmPub = false
+        var payloadIsJSON = false
     }
 
     open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
@@ -93,9 +66,8 @@ abstract class Tile : BaseRecyclerViewItem() {
     }
 
     open fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!mqttEnabled) return false
-        if (!mqttTopics.subs.topicList.contains(data.first)) return false
-
+        if (!mqtt.isEnabled) return false
+        if (!mqtt.subs.containsValue(data.first)) return false
         return true
     }
 }

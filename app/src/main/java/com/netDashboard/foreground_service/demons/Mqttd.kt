@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.tile.Tile.MqttTopics.TopicList.Topic
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
@@ -52,12 +51,12 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         }
     }
 
-    private fun subscribe(topic: Topic) {
+    private fun subscribe(topic: String, qos: Int) {
 
         if (!client.isConnected) return
 
         try {
-            client.subscribe(topic.topic, topic.qos, null, object : IMqttActionListener {
+            client.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -69,12 +68,12 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         }
     }
 
-    private fun unsubscribe(topic: Topic) {
+    private fun unsubscribe(topic: String) {
 
         if (!client.isConnected) return
 
         try {
-            client.unsubscribe(topic.topic, null, object : IMqttActionListener {
+            client.unsubscribe(topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                 }
 
@@ -88,11 +87,13 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
     fun topicCheck() {
 
-        val topics: MutableList<Topic> = mutableListOf()
+        val topics: MutableList<Pair<String, Int>> = mutableListOf()
         for (tile in d.tiles) {
-            for (t in tile.mqttTopics.subs.topics) {
-                if (!topics.contains(t) && t.topic.isNotBlank()) {
-                    topics.add(t.copy())
+            for (t in tile.mqtt.subs) {
+                Pair(t.value, tile.mqtt.qos).let {
+                    if (!topics.contains(it) && t.value.isNotBlank()) {
+                        topics.add(it)
+                    }
                 }
             }
         }
@@ -100,8 +101,8 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         val unsubTopics = client.topics - topics
         val subTopics = topics - client.topics
 
-        for (t in unsubTopics) unsubscribe(t)
-        for (t in subTopics) subscribe(t)
+        for (t in unsubTopics) unsubscribe(t.first)
+        for (t in subTopics) subscribe(t.first, t.second)
 
         client.topics = topics
     }
@@ -162,7 +163,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
         private var isBusy = false
         var isClosed = false
-        var topics: MutableList<Topic> = mutableListOf()
+        var topics: MutableList<Pair<String, Int>> = mutableListOf()
         var options = MqttConnectOptions()
 
         override fun isConnected(): Boolean {

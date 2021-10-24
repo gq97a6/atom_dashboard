@@ -64,7 +64,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.pubs.set(cs.toString(), null, null, "base")
+                tile.mqtt.pubs["base"] = cs.toString()
             }
         })
 
@@ -72,7 +72,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttTopics.subs.set(cs.toString(), null, null, "base")
+                tile.mqtt.subs["base"] = cs.toString()
             }
         })
 
@@ -80,16 +80,21 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttPubValue = cs.toString()
+                tile.mqtt.pubValue = cs.toString()
             }
         })
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttPayloadIsJSON = state
+            tile.mqtt.payloadIsJSON = state
         }
 
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttPubConfirm = state
+            tile.mqtt.confirmPub = state
+        }
+
+        b.tpQos.addOnChangeListener { _, value, _ ->
+            tile.mqtt.qos = value.toInt()
+            b.tpQosText.text = value.dezero()
         }
 
         if (tile is SliderTile) {
@@ -178,12 +183,15 @@ class TilePropertiesActivity : AppCompatActivity() {
         dimenOnChangeListener(tile.width.toFloat(), tile.height.toFloat())
 
         //MQTT
-        b.tpMqttSwitch.isChecked = tile.mqttEnabled
-        b.tpMqttPub.setText(tile.mqttTopics.pubs.get("base").topic)
-        b.tpMqttSub.setText(tile.mqttTopics.subs.get("base").topic)
-        b.tpMqttPubValue.setText(tile.mqttPubValue)
-        b.tpMqttJsonSwitch.isChecked = tile.mqttPayloadIsJSON
-        b.tpMqttConfirmSwitch.isChecked = tile.mqttPubConfirm
+        b.tpMqttSwitch.isChecked = tile.mqtt.isEnabled
+        b.tpMqttPub.setText(tile.mqtt.pubs["base"])
+        b.tpMqttSub.setText(tile.mqtt.subs["base"])
+        b.tpMqttPubValue.setText(tile.mqtt.pubValue)
+        b.tpMqttJsonSwitch.isChecked = tile.mqtt.payloadIsJSON
+        b.tpMqttConfirmSwitch.isChecked = tile.mqtt.confirmPub
+        b.tpQos.value = tile.mqtt.qos.toFloat()
+        b.tpQosText.text = tile.mqtt.qos.toString()
+
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
         when (tile) {
@@ -218,6 +226,6 @@ class TilePropertiesActivity : AppCompatActivity() {
             View.GONE
         }
 
-        tile.mqttEnabled = state
+        tile.mqtt.isEnabled = state
     }
 }

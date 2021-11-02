@@ -23,7 +23,4 @@ class LogAdapter(context: Context, spanCount: Int = 1) :
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
-    }
 }

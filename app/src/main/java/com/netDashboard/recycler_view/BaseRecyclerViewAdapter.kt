@@ -119,7 +119,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             this.setOnClick()
         }
 
-        (holder.itemView as ViewGroup).iterate()
+        holder.itemView.iterate()
     }
 
     private fun markItemRemove(position: Int) {

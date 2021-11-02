@@ -35,8 +35,8 @@ class Theme {
 
     var useOver = false
     var isDark = false
-    var isAutoAdjust = true
     var color = Color.parseColor("#00469c")
+    var hsv = floatArrayOf(1f, 1f, 1f) //for ThemeActivity only
 
     private val colorA
         get() = blendARGB(color, colorBackground, 0.4f)
@@ -259,12 +259,19 @@ class Theme {
 
     private fun Slider.applyTheme() {
         when (this.tag) {
-            "basic" -> {
+            "enabled" -> {
                 this.trackActiveTintList = ColorStateList.valueOf(colorB)
                 this.tickActiveTintList = ColorStateList.valueOf(colorB)
                 this.trackInactiveTintList = ColorStateList.valueOf(colorC)
                 this.tickInactiveTintList = ColorStateList.valueOf(colorC)
                 this.thumbTintList = ColorStateList.valueOf(color)
+            }
+            "disabled" -> {
+                this.trackActiveTintList = ColorStateList.valueOf(colorC)
+                this.tickActiveTintList = ColorStateList.valueOf(colorC)
+                this.trackInactiveTintList = ColorStateList.valueOf(colorD)
+                this.tickInactiveTintList = ColorStateList.valueOf(colorD)
+                this.thumbTintList = ColorStateList.valueOf(colorB)
             }
             else -> onUnknownTag(this.tag, "slider")
         }

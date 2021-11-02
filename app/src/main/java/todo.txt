@@ -1,27 +1,44 @@
-//develop
+//develop ------------------------------
 parser
     value of tile, value of other tiles,
         second of day, second, minute, hour, day, month, year
     to json
 
-tile receive timers
-dashboard item
 tile payload json
-mqttQOS
 publish confirmation
 notifications
 
-//expand
+//improve ------------------------------
+tile receive timers
+dashboard item
+save button
+blank dashboard name on create
+
+//expand ------------------------------
 new tiles
 receive time
 export/import
 
-//improve
+//improve ------------------------------
 tiles icons
 app background
 
-//post development
+//post development ------------------------------
 icon
 name
 publish
 
+LIGHT
+    MAX SATURATION 1
+    MIN SATURATION 0
+
+    MAX VALUE 0-x
+        set x with current sat
+        change x onSat change
+        x depends on sat and hue
+
+    MIN VALUE 0
+
+DARK
+    SATURATION
+    VALUE

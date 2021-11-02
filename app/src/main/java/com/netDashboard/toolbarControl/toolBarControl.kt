@@ -1,9 +1,10 @@
-package com.netDashboard
+package com.netDashboard.toolbarControl
 
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.LinearLayout
+import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
 fun toolBarControl(

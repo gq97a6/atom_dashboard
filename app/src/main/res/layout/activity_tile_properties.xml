@@ -417,7 +417,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:stepSize="1"
-                            android:tag="basic"
+                            android:tag="enabled"
                             android:valueFrom="0"
                             android:valueTo="3" />
 

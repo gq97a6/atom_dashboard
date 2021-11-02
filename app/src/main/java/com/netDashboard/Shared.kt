@@ -173,7 +173,6 @@ fun View.jiggle() = this.startAnimation(AnimationUtils.loadAnimation(this.contex
 fun View.attentate() =
     this.startAnimation(AnimationUtils.loadAnimation(this.context, R.anim.attentate))
 
-
 fun View.click() {
     this.performClick()
     this.isPressed = true

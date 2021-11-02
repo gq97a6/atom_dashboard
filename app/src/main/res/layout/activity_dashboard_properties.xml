@@ -115,7 +115,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="2"
                     android:stepSize="1"
-                    android:tag="basic"
+                    android:tag="enabled"
                     android:valueFrom="1"
                     android:valueTo="6" />
 

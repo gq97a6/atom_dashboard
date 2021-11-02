@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.ColorUtils.calculateContrast
 import androidx.core.view.isVisible
@@ -30,9 +27,8 @@ class ThemeActivity : AppCompatActivity() {
     private var dashboardId: Long = 0
     private lateinit var theme: Theme
 
-    private var h = 0f
-    private var s = 0f
-    private var v = 0f
+    private val color
+        get() = color()
 
     private val con
         get() = calculateContrast(theme.color, theme.colorBackground)
@@ -47,71 +43,39 @@ class ThemeActivity : AppCompatActivity() {
         theme = if (dashboardId != 0L) G.dashboards.byId(dashboardId).theme else G.theme
 
         b = ActivityThemeBinding.inflate(layoutInflater)
-        viewConfig()
         theme.apply(this, b.root)
+        viewConfig()
         setContentView(b.root)
 
         b.tHue.setOnTouchListener { _, e ->
-            if (e.action == ACTION_DOWN) h = b.tHue.value
-
-            if (theme.isAutoAdjust) setAdjustedColor()
-
-            theme.color = getColor()
-            theme.apply(this, b.root)
+            computeRanges()
+            onColorChange()
 
             return@setOnTouchListener e.action == ACTION_UP
         }
 
         b.tSaturation.setOnTouchListener { _, e ->
-            if (e.action == ACTION_DOWN) s = b.tSaturation.value
-
-            if (e.action == ACTION_UP && con < 1.3) {
-                b.tSaturation.value = s
-                runConAlert()
-            }
-
-            theme.color = getColor()
-            theme.apply(this, b.root)
+            computeRanges()
+            onColorChange()
 
             return@setOnTouchListener e.action == ACTION_UP
         }
 
         b.tValue.setOnTouchListener { _, e ->
-            if (e.action == ACTION_DOWN) v = b.tValue.value
-
-            if (e.action == ACTION_UP && con < 1.3) {
-                b.tValue.value = v
-                runConAlert()
-            }
-
-            theme.color = getColor()
-            theme.apply(this, b.root)
-
+            onColorChange()
             return@setOnTouchListener e.action == ACTION_UP
         }
 
         b.tIsDark.setOnCheckedChangeListener { _, state ->
             theme.isDark = state
 
-            if (theme.isAutoAdjust) setAdjustedColor()
-            else theme.color = getColor()
+            b.tValText.tag = if (state) "colorC" else "colorB"
+            b.tValue.tag = if (state) "disabled" else "enabled"
+            b.tValue.isEnabled = !state
+            if (state) b.tValue.value = 1f
 
-            if (con < 1.4) {
-                setAdjustedColor()
-                theme.apply(this, b.root)
-                runConAlert()
-            }
-
-            theme.apply(this, b.root)
-        }
-
-        b.tAuto.setOnCheckedChangeListener { _, state ->
-            theme.isAutoAdjust = state
-
-            if (theme.isAutoAdjust) setAdjustedColor()
-            else theme.color = getColor()
-
-            theme.apply(this, b.root)
+            computeRanges()
+            onColorChange()
         }
 
         b.tAdvancedArrow.setOnClickListener {
@@ -148,14 +112,18 @@ class ThemeActivity : AppCompatActivity() {
         }
     }
 
-    private fun viewConfig() {
-        val hsv = floatArrayOf(0f, 0f, 0f)
-        Color.colorToHSV(theme.color, hsv)
+    private fun onColorChange() {
+        theme.color = color
+        theme.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
+        theme.apply(this, b.root)
+    }
 
-        b.tHue.value = hsv[0]
-        b.tSaturation.value = hsv[1]
-        b.tValue.value = hsv[2]
-        b.tAuto.isChecked = theme.isAutoAdjust
+    private fun viewConfig() {
+        b.tHue.value = theme.hsv[0]
+        b.tSaturation.value = theme.hsv[1]
+        b.tValue.value = theme.hsv[2]
+        computeRanges()
+
         b.tIsDark.isChecked = theme.isDark
     }
 
@@ -166,67 +134,53 @@ class ThemeActivity : AppCompatActivity() {
                 .rotation(if (it.isVisible) 0f else 180f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
+
+        b.tSaturation.value = 1f
+        b.tValue.value = 1f
+        onColorChange()
     }
 
-    private fun getColor(): Int {
+    private var maxS: Float = 1f
+    private var maxV: Float = 1f
+    private var minV: Float = 0f
+
+    private fun color(): Int {
         return Color.HSVToColor(
             floatArrayOf(
                 b.tHue.value,
-                b.tSaturation.value,
-                b.tValue.value
+                maxS * b.tSaturation.value,
+                minV + (maxV - minV) * b.tValue.value
             )
         )
     }
 
-    private fun runConAlert() {
-        b.tConWarning.clearAnimation()
-        b.tConWarning.startAnimation(AlphaAnimation(1f, 0f).also {
-            it.duration = 200
-            it.startOffset = 50
-            it.repeatMode = Animation.REVERSE
-            it.repeatCount = 6
-            it.setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(a: Animation?) {
-                    b.tConWarning.visibility = VISIBLE
-                }
+    private fun computeRanges() {
 
-                override fun onAnimationEnd(a: Animation?) {
-                    b.tConWarning.visibility = GONE
-                }
-
-                override fun onAnimationRepeat(a: Animation?) {}
-            })
-        })
-    }
-
-    private fun setAdjustedColor() {
-
-        b.tValue.value = 1f
-        b.tSaturation.value = 1f
-
-        theme.color = getColor()
-
-        if (theme.isDark) {
-            for (i in 100 downTo 0) {
-
-                if (con > 2.6) {
-                    b.tSaturation.value = i * 0.008f
-                    break
-                }
-
-                theme.color = Color.HSVToColor(
-                    floatArrayOf(
-                        b.tHue.value,
-                        i / 100f,
-                        b.tValue.value
-                    )
+        //Compute maximal saturation/value
+        for (i in 100 downTo 0) {
+            theme.color = Color.HSVToColor(
+                floatArrayOf(
+                    b.tHue.value,
+                    if (theme.isDark) i / 100f else b.tSaturation.value,
+                    if (theme.isDark) 1f else i / 100f
                 )
-            }
-        } else {
-            for (i in 100 downTo 0) {
+            )
 
-                if (con > 2.6) {
-                    b.tValue.value = i * 0.007f
+            if (con > 2.6) {
+                (i * 0.008f).let {
+                    maxS = if (theme.isDark) it else 1f
+                    maxV = if (theme.isDark) 1f else it
+                }
+                break
+            }
+        }
+
+        //Compute minimal value
+        if (!theme.isDark) minV = 0f
+        else {
+            for (i in 100 downTo 0) {
+                if (con < 3.6) {
+                    minV = i / 100f
                     break
                 }
 
@@ -234,7 +188,7 @@ class ThemeActivity : AppCompatActivity() {
                     floatArrayOf(
                         b.tHue.value,
                         b.tSaturation.value,
-                        i / 100f,
+                        i / 100f
                     )
                 )
             }

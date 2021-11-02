@@ -19,7 +19,7 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
-import com.netDashboard.toolBarControl
+import com.netDashboard.toolbarControl.toolBarControl
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding

@@ -263,7 +263,7 @@
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 android:tag="group"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

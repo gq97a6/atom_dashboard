@@ -124,6 +124,11 @@ class ThemeActivity : AppCompatActivity() {
         b.tValue.value = theme.hsv[2]
         computeRanges()
 
+        b.tValText.tag = if (theme.isDark) "colorC" else "colorB"
+        b.tValue.tag = if (theme.isDark) "disabled" else "enabled"
+        b.tValue.isEnabled = !theme.isDark
+        if (theme.isDark) b.tValue.value = 1f
+
         b.tIsDark.isChecked = theme.isDark
     }
 
@@ -134,10 +139,6 @@ class ThemeActivity : AppCompatActivity() {
                 .rotation(if (it.isVisible) 0f else 180f)
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
-
-        b.tSaturation.value = 1f
-        b.tValue.value = 1f
-        onColorChange()
     }
 
     private var maxS: Float = 1f

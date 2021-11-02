@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent.ACTION_UP
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -116,6 +117,7 @@ class ThemeActivity : AppCompatActivity() {
         theme.color = color
         theme.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
         theme.apply(this, b.root)
+        Log.i("OUY", "c:$color H:${b.tHue.value} S:${b.tSaturation.value} V:${b.tValue.value}")
     }
 
     private fun viewConfig() {

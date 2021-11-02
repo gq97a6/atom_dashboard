@@ -35,8 +35,8 @@ class Theme {
 
     var useOver = false
     var isDark = false
-    var color = Color.parseColor("#00469c")
-    var hsv = floatArrayOf(1f, 1f, 1f) //for ThemeActivity only
+    var color = -16748443
+    var hsv = floatArrayOf(174f, 1f, 1f) //for ThemeActivity only
 
     private val colorA
         get() = blendARGB(color, colorBackground, 0.4f)

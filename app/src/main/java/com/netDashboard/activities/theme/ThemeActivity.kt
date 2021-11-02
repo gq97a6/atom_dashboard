@@ -43,8 +43,8 @@ class ThemeActivity : AppCompatActivity() {
         theme = if (dashboardId != 0L) G.dashboards.byId(dashboardId).theme else G.theme
 
         b = ActivityThemeBinding.inflate(layoutInflater)
-        theme.apply(this, b.root)
         viewConfig()
+        theme.apply(this, b.root)
         setContentView(b.root)
 
         b.tHue.setOnTouchListener { _, e ->
@@ -128,6 +128,11 @@ class ThemeActivity : AppCompatActivity() {
         b.tValue.tag = if (theme.isDark) "disabled" else "enabled"
         b.tValue.isEnabled = !theme.isDark
         if (theme.isDark) b.tValue.value = 1f
+
+        if(b.tSaturation.value + b.tValue.value < 2) {
+            b.tAdvancedArrow.rotation = 0f
+            b.tAdvanced.visibility = VISIBLE
+        }
 
         b.tIsDark.isChecked = theme.isDark
     }

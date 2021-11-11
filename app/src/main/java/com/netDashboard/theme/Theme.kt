@@ -244,7 +244,7 @@ class Theme {
     private fun EditText.applyTheme() {
         when (this.tag) {
             "basic" -> {
-                this.setTextColor(colorA)
+                this.setTextColor(colorB)
                 this.setHintTextColor(colorC)
                 this.setBackgroundColor(colorBackground.contrast(!isDark, 0.2f))
             }

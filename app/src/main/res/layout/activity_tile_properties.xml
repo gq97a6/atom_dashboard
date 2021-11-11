@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:stepSize="1"
-                        android:tag="basic"
+                        android:tag="enabled"
                         android:valueFrom="1"
                         android:valueTo="10" />
 
@@ -147,7 +147,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:stepSize="1"
-                        android:tag="basic"
+                        android:tag="enabled"
                         android:valueFrom="1"
                         android:valueTo="10" />
 
@@ -230,7 +230,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:tag="colorB"
+                        android:tag="colorA"
                         android:text="@string/p_switch"
                         android:textColor="@color/gray150"
                         android:textSize="15sp" />
@@ -285,7 +285,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/tp_publish_topic"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -321,7 +321,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/tp_subscribe_topic"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -357,7 +357,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/tp_publish_value"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -392,36 +392,44 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:tag="colorB"
-                            android:text="Quality of Service:"
+                            android:tag="colorA"
+                            android:text="Quality of Service (MQTT protocol):"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
-
-                        <TextView
-                            android:id="@+id/tp_qos_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
-                            android:gravity="center"
-                            android:tag="colorA"
-                            android:text="1"
-                            android:textColor="@color/gray100"
-                            android:textSize="15sp"
-                            tools:ignore="HardcodedText" />
-
-                        <com.google.android.material.slider.Slider
-                            android:id="@+id/tp_qos"
-                            style="@style/slider"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:stepSize="1"
-                            android:tag="enabled"
-                            android:valueFrom="0"
-                            android:valueTo="3" />
-
                     </LinearLayout>
+
+                    <RadioGroup
+                        android:id="@+id/tp_qos"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="-5dp"
+                        android:checkedButton="@id/tp_qos1">
+
+                        <RadioButton
+                            android:id="@+id/tp_qos0"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="QoS 0: At most once. No guarantee."
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/tp_qos1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="QoS 1: At least once. (Recommended)"
+                            android:textSize="15sp" />
+
+                        <RadioButton
+                            android:id="@+id/tp_qos2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="QoS 2: Delivery exactly once."
+                            android:textSize="15sp" />
+
+                    </RadioGroup>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -433,7 +441,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/tp_json_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -481,7 +489,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/tp_conf_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />

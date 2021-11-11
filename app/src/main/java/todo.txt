@@ -1,6 +1,6 @@
 //develop ------------------------------
 parser
-    value of tile, value of other tiles,
+    value of tile,
         second of day, second, minute, hour, day, month, year
     to json
 
@@ -13,32 +13,22 @@ tile receive timers
 dashboard item
 save button
 blank dashboard name on create
+tiles icons
+app background
+show log hint
 
 //expand ------------------------------
 new tiles
+    alert on change, on stop receiving, on receive
+    terminal
+    switch
+    indicator
+
 receive time
 export/import
-
-//improve ------------------------------
-tiles icons
-app background
+password protected dashboard
 
 //post development ------------------------------
 icon
 name
 publish
-
-LIGHT
-    MAX SATURATION 1
-    MIN SATURATION 0
-
-    MAX VALUE 0-x
-        set x with current sat
-        change x onSat change
-        x depends on sat and hue
-
-    MIN VALUE 0
-
-DARK
-    SATURATION
-    VALUE

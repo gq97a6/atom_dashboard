@@ -1,5 +1,6 @@
 package com.netDashboard.tile
 
+import androidx.annotation.IntRange
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
@@ -16,7 +17,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     val type = this.javaClass.toString()
     abstract var typeTag: String
 
-    abstract val mqtt: Mqtt
+    abstract val mqttData: MqttData
 
     //var bltPattern = ""
     //var bltDelimiter = ""
@@ -40,7 +41,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         view.layoutParams = params
     }
 
-    class Mqtt(defaultPubValue: String) {
+    class MqttData(defaultPubValue: String) {
         var isEnabled = true
         var lastReceive = Date()
 
@@ -49,7 +50,7 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         var qos = 0
             set(value) {
-                field = minOf(3, maxOf(0, value))
+                field = minOf(2, maxOf(0, value))
             }
 
         var pubValue = defaultPubValue
@@ -57,17 +58,32 @@ abstract class Tile : BaseRecyclerViewItem() {
         var payloadIsJSON = false
     }
 
-    open fun onSend(topic: String, msg: String, qos: Int, retained: Boolean = false): Boolean {
+    open fun onSend(
+        topic: String?,
+        msg: String,
+        @IntRange(from = 0, to = 2) qos: Int,
+        retained: Boolean = false
+    ): Boolean {
+        if (topic.isNullOrEmpty()) return false
+
         dashboard.daemonGroup?.mqttd?.let {
             it.publish(topic, msg, qos, retained)
             return true
         }
+
         return false
     }
 
+    open fun onSend(
+        msg: String,
+        @IntRange(from = 0, to = 2) qos: Int,
+        retained: Boolean = false
+    ): Boolean = onSend(mqttData.pubs["base"], msg, qos, retained)
+
     open fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!mqtt.isEnabled) return false
-        if (!mqtt.subs.containsValue(data.first)) return false
+        if (!mqttData.isEnabled) return false
+        if (!mqttData.subs.containsValue(data.first)) return false
+
         return true
     }
 }

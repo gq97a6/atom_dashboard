@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:tag="colorB"
+                    android:tag="colorA"
                     android:text="@string/p_span"
                     android:textColor="@color/gray150"
                     android:textSize="15sp" />
@@ -155,7 +155,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="Use over main:"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -260,7 +260,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/p_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -359,7 +359,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/p_mqtt_address"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -423,7 +423,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="@string/p_port"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -460,7 +460,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:tag="colorB"
+                            android:tag="colorA"
                             android:text="Unique client ID:"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -538,7 +538,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:tag="colorB"
+                                android:tag="colorA"
                                 android:text="User name:"
                                 android:textColor="@color/gray150"
                                 android:textSize="15sp" />
@@ -573,7 +573,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:tag="colorB"
+                                android:tag="colorA"
                                 android:text="Password:"
                                 android:textColor="@color/gray150"
                                 android:textSize="15sp" />

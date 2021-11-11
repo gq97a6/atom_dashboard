@@ -13,7 +13,7 @@ class ButtonTile : Tile() {
     @Transient
     override val layout = R.layout.tile_button
 
-    override val mqtt = Mqtt("1")
+    override val mqttData = MqttData("1")
 
     @Transient
     override var typeTag = "button"
@@ -33,9 +33,7 @@ class ButtonTile : Tile() {
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-
-        val topic = mqtt.pubs["base"] ?: "err"
-        onSend(topic, mqtt.pubValue, mqtt.qos)
+        onSend(mqttData.pubValue, mqttData.qos)
     }
 
     override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {

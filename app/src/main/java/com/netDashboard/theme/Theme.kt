@@ -11,10 +11,7 @@ import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -88,6 +85,7 @@ class Theme {
 
     private fun View.defineType() {
         when (this) {
+            is RadioButton -> this.applyTheme()
             is MaterialButton -> this.applyTheme()
             is SwitchMaterial -> this.applyTheme()
             is EditText -> this.applyTheme()
@@ -200,6 +198,26 @@ class Theme {
             "colorC" -> this.backgroundTintList = ColorStateList.valueOf(colorC)
             "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             else -> onUnknownTag(this.tag, "materialButton")
+        }
+    }
+
+    private fun RadioButton.applyTheme() {
+
+        val colorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_checked),
+                intArrayOf(android.R.attr.state_checked)
+            ), intArrayOf(
+                colorC, colorB
+            )
+        )
+
+        when (this.tag) {
+            "default" -> {
+                this.setTextColor(colorStateList)
+                this.buttonTintList = colorStateList
+            }
+            else -> onUnknownTag(this.tag, "radioButton")
         }
     }
 

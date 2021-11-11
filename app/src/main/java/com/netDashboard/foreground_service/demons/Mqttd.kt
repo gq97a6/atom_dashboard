@@ -86,11 +86,10 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
     }
 
     fun topicCheck() {
-
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
         for (tile in d.tiles) {
-            for (t in tile.mqtt.subs) {
-                Pair(t.value, tile.mqtt.qos).let {
+            for (t in tile.mqttData.subs) {
+                Pair(t.value, tile.mqttData.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
                         topics.add(it)
                     }

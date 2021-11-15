@@ -2,9 +2,10 @@ package com.netDashboard.tile.types.button
 
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
+import android.widget.TextView
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.tile.MqttData
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -18,27 +19,25 @@ class ButtonTile : Tile() {
     @Transient
     override var typeTag = "button"
 
-    var text = "Default value"
-    private var liveText: String
-        get() = holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text.toString()
+    var value = "Default value"
         set(value) {
-            text = value
-            holder?.itemView?.findViewById<Button>(R.id.tb_button)?.text = value
+            field = value
+            holder?.itemView?.findViewById<TextView>(R.id.tb_value)?.text = value
         }
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        liveText = text
+        value = value
     }
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-        onSend(mqttData.pubValue, mqttData.qos)
+        onPublish(mqttData.pubPayload, mqttData.qos)
     }
 
     override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onReceive(data)) return false
-        liveText = data.second.toString()
+        value = data.second.toString()
         return true
     }
 }

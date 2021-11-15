@@ -32,7 +32,7 @@
             android:tag="colorA"
             android:text="type:"
             android:textColor="@color/gray150"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tp_tile_type"
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:tag="colorB"
             android:textColor="@color/gray100"
-            android:textSize="25sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -358,12 +358,12 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:tag="colorA"
-                            android:text="@string/tp_publish_value"
+                            android:text="Publish payload"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
                         <EditText
-                            android:id="@+id/tp_mqtt_pub_value"
+                            android:id="@+id/tp_mqtt_pub_payload"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
@@ -442,6 +442,54 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="colorA"
+                            android:text="@string/tp_conf_switch"
+                            android:textColor="@color/gray150"
+                            android:textSize="15sp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_mqtt_confirm_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textColor="@color/gray150"
+                                android:textSize="12sp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorA"
                             android:text="@string/tp_json_switch"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
@@ -480,50 +528,39 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/tp_mqtt_json_payload"
+                        android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:tag="colorA"
-                            android:text="@string/tp_conf_switch"
+                            android:text="Payload JSON path:"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="OFF"
-                                android:textColor="@color/gray150"
-                                android:textSize="12sp"
-                                tools:ignore="HardcodedText" />
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/tp_mqtt_confirm_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="ON"
-                                android:textColor="@color/gray150"
-                                android:textSize="12sp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
+                        <EditText
+                            android:id="@+id/tp_mqtt_json_payload_path"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:background="#19000000"
+                            android:ems="100"
+                            android:hint="empty"
+                            android:importantForAutofill="no"
+                            android:inputType="text"
+                            android:maxLength="25"
+                            android:paddingHorizontal="10dp"
+                            android:tag="basic"
+                            android:textColor="@color/gray100"
+                            android:textColorHint="@color/gray65"
+                            android:textCursorDrawable="@null"
+                            tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
 
@@ -599,7 +636,7 @@
                             android:hint="0"
                             android:importantForAutofill="no"
                             android:inputType="numberDecimal"
-                            android:maxLength="25"
+                            android:maxLength="9"
                             android:paddingHorizontal="10dp"
                             android:tag="basic"
                             android:textColor="@color/gray100"
@@ -635,7 +672,7 @@
                             android:hint="100"
                             android:importantForAutofill="no"
                             android:inputType="numberDecimal"
-                            android:maxLength="25"
+                            android:maxLength="9"
                             android:paddingHorizontal="10dp"
                             android:tag="basic"
                             android:textColor="@color/gray100"
@@ -671,7 +708,7 @@
                             android:hint="1"
                             android:importantForAutofill="no"
                             android:inputType="numberDecimal"
-                            android:maxLength="25"
+                            android:maxLength="9"
                             android:paddingHorizontal="10dp"
                             android:tag="basic"
                             android:textColor="@color/gray100"

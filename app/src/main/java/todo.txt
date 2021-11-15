@@ -1,32 +1,40 @@
 //develop ------------------------------
+
+tile payload json
+text resize
+SWITCH TO SERIALIZATION
+
+//improve ------------------------------
+app background
+show log hint
+export/import data
+password protected dashboard
+slider improve
+slider percentage instead of value
+
+//expand ------------------------------
+notifications
+log
+tiles icons
+tile receive timers
+tile tag
+dashboard item
+new tiles
+    alert on change, on stop receiving, on receive
+    text
+    terminal
+    date
+    graph
+    thermostat
+    dimmer
+    select
+    switch
+    color
+    indicator
 parser
     value of tile,
         second of day, second, minute, hour, day, month, year
     to json
-
-tile payload json
-publish confirmation
-notifications
-
-//improve ------------------------------
-tile receive timers
-dashboard item
-save button
-blank dashboard name on create
-tiles icons
-app background
-show log hint
-
-//expand ------------------------------
-new tiles
-    alert on change, on stop receiving, on receive
-    terminal
-    switch
-    indicator
-
-receive time
-export/import
-password protected dashboard
 
 //post development ------------------------------
 icon

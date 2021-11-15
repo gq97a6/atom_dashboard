@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.R
@@ -13,7 +15,6 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
-import com.netDashboard.dezero
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -78,17 +79,26 @@ class TilePropertiesActivity : AppCompatActivity() {
             }
         })
 
-        b.tpMqttPubValue.addTextChangedListener(object : TextWatcher {
+        b.tpMqttPubPayload.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.pubValue = cs.toString()
+                tile.mqttData.pubPayload = cs.toString()
             }
         })
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.payloadIsJSON = state
+            tile.mqttData.payloadIsJson = state
+            b.tpMqttJsonPayload.visibility = if(state) VISIBLE else GONE
         }
+
+        b.tpMqttJsonPayloadPath.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                tile.mqttData.jsonPaths["path"] = cs.toString()
+            }
+        })
 
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.confirmPub = state
@@ -116,7 +126,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).from = it.toFloatOrNull() ?: SliderTile().from
+                        (tile as SliderTile).from = it.toIntOrNull() ?: SliderTile().from
                     }
                 }
             })
@@ -133,7 +143,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).to = it.toFloatOrNull() ?: SliderTile().to
+                        (tile as SliderTile).to = it.toIntOrNull() ?: SliderTile().to
                     }
                 }
             })
@@ -150,7 +160,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                     cs.toString().let {
-                        (tile as SliderTile).step = it.toFloatOrNull() ?: SliderTile().step
+                        (tile as SliderTile).step = it.toIntOrNull() ?: SliderTile().step
                     }
                 }
             })
@@ -192,8 +202,13 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
         b.tpMqttPub.setText(tile.mqttData.pubs["base"])
         b.tpMqttSub.setText(tile.mqttData.subs["base"])
-        b.tpMqttPubValue.setText(tile.mqttData.pubValue)
-        b.tpMqttJsonSwitch.isChecked = tile.mqttData.payloadIsJSON
+        b.tpMqttPubPayload.setText(tile.mqttData.pubPayload)
+        tile.mqttData.payloadIsJson.let {
+            b.tpMqttJsonSwitch.isChecked = it
+            b.tpMqttJsonPayload.visibility = if(it) VISIBLE else GONE
+        }
+        val t = tile.mqttData.jsonPaths["path"] ?: ""
+        b.tpMqttJsonPayloadPath.setText("")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
         b.tpQos.check(
             when (tile.mqttData.qos) {
@@ -210,9 +225,9 @@ class TilePropertiesActivity : AppCompatActivity() {
             is SliderTile -> {
                 b.tpSlider.visibility = View.VISIBLE
 
-                b.tpSliderFrom.setText((tile as SliderTile).from.dezero())
-                b.tpSliderTo.setText((tile as SliderTile).to.dezero())
-                b.tpSliderStep.setText((tile as SliderTile).step.dezero())
+                b.tpSliderFrom.setText((tile as SliderTile).from.toString())
+                b.tpSliderTo.setText((tile as SliderTile).to.toString())
+                b.tpSliderStep.setText((tile as SliderTile).step.toString())
             }
         }
     }

@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
+import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -84,8 +85,8 @@ fun Float.dezero(): String {
     }.toString()
 }
 
-fun Float.roundCloser(step: Float): Float {
-    return (this / step).toInt() / (1 / step)
+fun Int.roundCloser(step: Int): Int {
+    return this / step * step
 }
 
 fun createNotification(

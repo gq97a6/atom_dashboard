@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.netDashboard.R
-import com.netDashboard.dezero
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.roundCloser
 import com.netDashboard.screenWidth
+import com.netDashboard.tile.MqttData
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -24,11 +24,11 @@ class SliderTile : Tile() {
     @Transient
     override var typeTag = "slider"
 
-    var from = 0f
-    var to = 100f
-    var step = 1f
+    var from = 0
+    var to = 100
+    var step = 1
 
-    var value: Float = 0f
+    var value: Int = 0
         set(value) {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()
@@ -37,6 +37,7 @@ class SliderTile : Tile() {
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
+        if(step == 0) step = 1
         value = value
     }
 
@@ -47,7 +48,7 @@ class SliderTile : Tile() {
         if (p < 0) p = 0f
         else if (p > 100) p = 100f
 
-        value = (from + p * (to - from) / 100).roundCloser(step)
+        value = (from + p * (to - from) / 100).toInt().roundCloser(step)
 
         when (e.action) {
             ACTION_DOWN -> (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(
@@ -55,7 +56,7 @@ class SliderTile : Tile() {
             )
             ACTION_UP -> {
                 (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(false)
-                onSend(mqttData.pubValue.replace("@value", value.dezero()), mqttData.qos)
+                onPublish(mqttData.pubPayload.replace("@value", value.toString()), mqttData.qos)
             }
         }
 
@@ -64,7 +65,7 @@ class SliderTile : Tile() {
     override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
         if (!super.onReceive(data)) return false
 
-        val value = data.second.toString().toFloatOrNull()
+        val value = data.second.toString().toIntOrNull()
         if (value != null) this.value = value.roundCloser(step)
 
         return true

@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cr_root"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pc_root"
     android:layout_width="280dp"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@color/gray65"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="20dp"
     android:tag="background">
 
     <TextView
+        android:id="@+id/pc_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:tag="colorA"
-        android:text="Are you sure you want to remove marked items?"
-        android:textSize="20sp" />
+        android:text="Confirm publishing."
+        android:textSize="20dp"
+        app:autoSizeTextType="uniform"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pcr_deny"
+            android:id="@+id/pc_deny"
             style="@style/button"
             android:layout_width="100dp"
             android:layout_height="match_parent"
@@ -39,7 +42,7 @@
             android:textSize="11sp" />
 
         <Button
-            android:id="@+id/pcr_confirm"
+            android:id="@+id/pc_confirm"
             style="@style/button"
             android:layout_width="100dp"
             android:layout_height="match_parent"

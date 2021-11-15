@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import com.netDashboard.R
 import com.netDashboard.click
-import com.netDashboard.databinding.PopupConfirmRemoveBinding
+import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G
 import java.util.*
 
@@ -136,15 +136,14 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
     @SuppressLint("NotifyDataSetChanged")
     fun removeMarkedItems() {
-
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
         val dialog = Dialog(context)
 
-        dialog.setContentView(R.layout.popup_confirm_remove)
-        val binding = PopupConfirmRemoveBinding.bind(dialog.findViewById(R.id.cr_root))
+        dialog.setContentView(R.layout.popup_confirm)
+        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.pc_root))
 
-        binding.pcrConfirm.setOnClickListener {
+        binding.pcConfirm.setOnClickListener {
             var i = 0
             while (i < list.size) {
                 list[i].let {
@@ -160,7 +159,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             dialog.hide()
         }
 
-        binding.pcrDeny.setOnClickListener {
+        binding.pcDeny.setOnClickListener {
             dialog.hide()
         }
 

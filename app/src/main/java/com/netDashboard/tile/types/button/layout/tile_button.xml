@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="#00000000"
-        android:elevation="20dp"/>
+        android:elevation="20dp" />
 
     <Button
         android:id="@+id/tb_button"
@@ -37,11 +37,35 @@
         android:paddingRight="6dp"
         android:paddingBottom="15dp"
         android:tag="tile_button"
-        android:text="@string/tb_default_text"
         android:textColor="#FFFFFF"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"
         app:autoSizeTextType="uniform" />
+
+    <TextView
+        android:id="@+id/tb_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:tag="color"
+        android:text="test"
+        android:textColor="@color/white"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/tb_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:elevation="10dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:tag="color"
+        android:text="15 seconds ago"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
 </FrameLayout>

@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.TextView
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-import com.netDashboard.tile.MqttData
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 

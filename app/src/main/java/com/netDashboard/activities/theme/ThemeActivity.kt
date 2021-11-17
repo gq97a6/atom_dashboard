@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent.ACTION_UP
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -117,7 +116,6 @@ class ThemeActivity : AppCompatActivity() {
         theme.color = color
         theme.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
         theme.apply(this, b.root)
-        Log.i("OUY", "c:$color H:${b.tHue.value} S:${b.tSaturation.value} V:${b.tValue.value}")
     }
 
     private fun viewConfig() {
@@ -125,13 +123,14 @@ class ThemeActivity : AppCompatActivity() {
         b.tSaturation.value = theme.hsv[1]
         b.tValue.value = theme.hsv[2]
         computeRanges()
+        theme.color = color
 
         b.tValText.tag = if (theme.isDark) "colorC" else "colorB"
         b.tValue.tag = if (theme.isDark) "disabled" else "enabled"
         b.tValue.isEnabled = !theme.isDark
         if (theme.isDark) b.tValue.value = 1f
 
-        if(b.tSaturation.value + b.tValue.value < 2) {
+        if (b.tSaturation.value + b.tValue.value < 2) {
             b.tAdvancedArrow.rotation = 0f
             b.tAdvanced.visibility = VISIBLE
         }

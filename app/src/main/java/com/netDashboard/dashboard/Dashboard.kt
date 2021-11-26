@@ -3,10 +3,8 @@ package com.netDashboard.dashboard
 import android.widget.Button
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
-import com.netDashboard.theme.Theme
 import com.netDashboard.tile.Tile
 import java.util.*
 import kotlin.random.Random
@@ -18,9 +16,6 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
         get() = R.layout.item_dashboard
 
     var spanCount = 3
-    var theme = Theme()
-    val resultTheme
-        get() = if (theme.useOver) theme else G.theme
 
     @Transient
     var daemonGroup: DaemonGroup? = null

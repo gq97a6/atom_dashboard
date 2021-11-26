@@ -98,7 +98,7 @@
                 android:layout_marginBottom="3dp"
                 android:paddingBottom="3dp"
                 android:tag="colorA"
-                android:text="Main theme"
+                android:text="Theme"
                 android:textColor="@color/gray150"
                 android:textSize="20sp" />
 

@@ -1,5 +1,6 @@
 package com.netDashboard.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,7 +8,6 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
-import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
@@ -16,6 +16,7 @@ import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
 
+@SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
 
@@ -26,14 +27,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
         rootFolder = filesDir.canonicalPath.toString()
         G.initialize()
-
-        var theme = G.theme
-        settings.lastDashboardId?.let {
-            if (settings.startFromLast) theme = dashboards.byId(it).resultTheme
-        }
-
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        theme.apply(this, b.root)
+        G.theme.apply(this, b.root)
 
         setContentView(b.root)
 

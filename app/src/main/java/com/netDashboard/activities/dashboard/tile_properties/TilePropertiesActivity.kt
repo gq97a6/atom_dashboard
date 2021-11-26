@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.RadioGroup
@@ -15,6 +14,7 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -38,7 +38,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         tile = dashboard.tiles[tileIndex]
 
         b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        dashboard.resultTheme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -89,7 +89,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
-            b.tpMqttJsonPayload.visibility = if(state) VISIBLE else GONE
+            b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
         }
 
         b.tpMqttJsonPayloadPath.addTextChangedListener(object : TextWatcher {
@@ -205,10 +205,9 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttPubPayload.setText(tile.mqttData.pubPayload)
         tile.mqttData.payloadIsJson.let {
             b.tpMqttJsonSwitch.isChecked = it
-            b.tpMqttJsonPayload.visibility = if(it) VISIBLE else GONE
+            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
         }
-        val t = tile.mqttData.jsonPaths["path"] ?: ""
-        b.tpMqttJsonPayloadPath.setText("")
+        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["path"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
         b.tpQos.check(
             when (tile.mqttData.qos) {
@@ -223,7 +222,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         when (tile) {
             is SliderTile -> {
-                b.tpSlider.visibility = View.VISIBLE
+                b.tpSlider.visibility = VISIBLE
 
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
@@ -248,9 +247,9 @@ class TilePropertiesActivity : AppCompatActivity() {
 
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {
         b.tpMqtt.visibility = if (state) {
-            View.VISIBLE
+            VISIBLE
         } else {
-            View.GONE
+            GONE
         }
 
         tile.mqttData.isEnabled = state

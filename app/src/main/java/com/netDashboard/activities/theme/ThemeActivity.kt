@@ -15,7 +15,6 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
 import com.netDashboard.activities.settings.SettingsActivity
 import com.netDashboard.app_on.AppOn
-import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityThemeBinding
 import com.netDashboard.globals.G
 import com.netDashboard.theme.Theme
@@ -39,8 +38,7 @@ class ThemeActivity : AppCompatActivity() {
         AppOn.create(this)
 
         exitActivity = intent.getStringExtra("exitActivity") ?: ""
-        dashboardId = intent.getLongExtra("dashboardId", 0)
-        theme = if (dashboardId != 0L) G.dashboards.byId(dashboardId).theme else G.theme
+        theme = G.theme
 
         b = ActivityThemeBinding.inflate(layoutInflater)
         viewConfig()

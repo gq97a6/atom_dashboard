@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
-import com.netDashboard.activities.theme.ThemeActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
 import com.netDashboard.createToast
@@ -23,6 +22,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
+import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
@@ -45,7 +45,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         dashboard = dashboards.byId(dashboardId)
 
         b = ActivityDashboardPropertiesBinding.inflate(layoutInflater)
-        dashboard.resultTheme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         viewConfig()
         setContentView(b.root)
 
@@ -173,26 +173,13 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             }
         })
 
-        b.dpThemeEdit.setOnClickListener {
-            Intent(this, ThemeActivity::class.java).also {
-                it.putExtra("exitActivity", "DashboardPropertiesActivity")
-                it.putExtra("dashboardId", dashboard.id)
-                startActivity(it)
-            }
-        }
-
-        b.dpThemeUseOver.setOnCheckedChangeListener { _, state ->
-            dashboard.theme.useOver = state
-            dashboard.resultTheme.apply(this, b.root)
-        }
-
         b.dpMqttCopy.setOnClickListener {
             if (dashboards.size <= 1) {
                 createToast(this, "No dashboards to copy from.")
             } else {
                 val dialog = Dialog(this)
                 val adapter = RecyclerViewAdapter(this)
-                val theme = dashboard.resultTheme
+                val theme = G.theme
 
                 val list = MutableList(dashboards.size) {
                     RecyclerViewItem(
@@ -255,8 +242,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         b.dpMqttCred.visibility = GONE
 
         b.dpMqttClientId.setText(dashboard.mqttClientId)
-
-        b.dpThemeUseOver.isChecked = dashboard.theme.useOver
     }
 
     override fun onDestroy() {

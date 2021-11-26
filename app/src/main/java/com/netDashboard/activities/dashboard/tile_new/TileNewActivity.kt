@@ -10,6 +10,7 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTileNewBinding
+import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
@@ -31,7 +32,7 @@ class TileNewActivity : AppCompatActivity() {
         dashboard = dashboards.byId(dashboardId)
 
         b = ActivityTileNewBinding.inflate(layoutInflater)
-        dashboard.resultTheme.apply(this, b.root)
+        G.theme.apply(this, b.root)
         setContentView(b.root)
 
         b.tnButtonLayout.setOnClickListener {

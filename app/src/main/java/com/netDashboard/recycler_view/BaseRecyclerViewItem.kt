@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.id_generator.IdGenerator
@@ -18,13 +19,13 @@ abstract class BaseRecyclerViewItem {
 
     abstract val layout: Int
 
-    @Transient
+    @JsonIgnore
     var holder: BaseRecyclerViewAdapter.ViewHolder? = null
 
-    @Transient
+    @JsonIgnore
     lateinit var adapter: BaseRecyclerViewAdapter<*>
 
-    @Transient
+    @JsonIgnore
     var flag = Flags()
 
     fun <a : BaseRecyclerViewItem> getItemViewType(adapter: BaseRecyclerViewAdapter<a>): Int {

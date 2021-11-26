@@ -6,6 +6,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.roundCloser
@@ -15,12 +16,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SliderTile : Tile() {
 
-    @Transient
+    @JsonIgnore
     override val layout = R.layout.tile_slider
 
     override val mqttData = MqttData("@value")
 
-    @Transient
+    @JsonIgnore
     override var typeTag = "slider"
 
     var from = 0
@@ -36,7 +37,7 @@ class SliderTile : Tile() {
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        if(step == 0) step = 1
+        if (step == 0) step = 1
         value = value
     }
 

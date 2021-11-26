@@ -53,15 +53,15 @@
         android:tag="color"
         android:text="test"
         android:textColor="@color/white"
-        android:textSize="30sp"/>
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tb_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:elevation="10dp"
         android:layout_marginBottom="5dp"
+        android:elevation="10dp"
         android:gravity="center"
         android:tag="color"
         android:text="15 seconds ago"

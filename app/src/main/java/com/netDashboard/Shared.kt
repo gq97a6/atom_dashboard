@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
-import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation

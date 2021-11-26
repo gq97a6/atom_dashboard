@@ -2,7 +2,6 @@
 
 tile payload json
 text resize
-SWITCH TO SERIALIZATION
 
 //improve ------------------------------
 app background

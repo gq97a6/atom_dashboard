@@ -1,6 +1,7 @@
 package com.netDashboard.dashboard
 
 import android.widget.Button
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
@@ -17,10 +18,10 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
     var spanCount = 3
 
-    @Transient
+    @JsonIgnore
     var daemonGroup: DaemonGroup? = null
 
-    @Transient
+    @JsonIgnore
     var tilesAdapterEditMode: BaseRecyclerViewAdapter<Tile>.Modes? = null
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {

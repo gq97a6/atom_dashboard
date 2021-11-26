@@ -23,7 +23,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.*
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.folder_tree.FolderTree
-import com.netDashboard.globals.G.gson
+import com.netDashboard.globals.G.mapper
 import java.io.File
 import java.io.FileReader
 
@@ -320,7 +320,7 @@ class Theme {
     companion object {
         fun getSaved(): Theme =
             try {
-                gson.fromJson(FileReader(FolderTree.themeFile), Theme::class.java)
+                mapper.readValue(FileReader(FolderTree.themeFile), Theme::class.java)
             } catch (e: Exception) {
                 Theme()
             }
@@ -328,9 +328,9 @@ class Theme {
 
     fun save() {
         try {
-            File(FolderTree.themeFile).writeText(gson.toJson(this))
+            File(FolderTree.themeFile).writeText(mapper.writeValueAsString(this))
         } catch (e: Exception) {
-            throw e
+            run { }
         }
     }
 }

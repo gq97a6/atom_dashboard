@@ -3,6 +3,7 @@ package com.netDashboard.tile.types.button
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.tile.Tile
@@ -10,12 +11,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ButtonTile : Tile() {
 
-    @Transient
+    @JsonIgnore
     override val layout = R.layout.tile_button
 
     override val mqttData = MqttData("1")
 
-    @Transient
+    @JsonIgnore
     override var typeTag = "button"
 
     var value = "Default value"

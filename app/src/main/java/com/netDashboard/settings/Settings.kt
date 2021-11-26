@@ -1,7 +1,7 @@
 package com.netDashboard.settings
 
 import com.netDashboard.folder_tree.FolderTree
-import com.netDashboard.globals.G.gson
+import com.netDashboard.globals.G.mapper
 import java.io.File
 import java.io.FileReader
 
@@ -13,7 +13,7 @@ class Settings {
     companion object {
         fun getSaved(): Settings =
             try {
-                gson.fromJson(FileReader(FolderTree.settingsFile), Settings::class.java)
+                mapper.readValue(FileReader(FolderTree.settingsFile), Settings::class.java)
             } catch (e: Exception) {
                 Settings()
             }
@@ -21,9 +21,9 @@ class Settings {
 
     fun save() {
         try {
-            File(FolderTree.settingsFile).writeText(gson.toJson(this))
+            File(FolderTree.settingsFile).writeText(mapper.writeValueAsString(this))
         } catch (e: Exception) {
-            throw e
+            run { }
         }
     }
 }

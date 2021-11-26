@@ -2,6 +2,8 @@ package com.netDashboard.tile
 
 import android.app.Dialog
 import androidx.annotation.IntRange
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
@@ -12,13 +14,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 @Suppress("UNUSED")
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 abstract class Tile : BaseRecyclerViewItem() {
 
-    @Transient
+    @JsonIgnore
     var dashboard: Dashboard = Dashboard("err")
 
     val tag = "name"
-    val type = this.javaClass.toString()
     abstract var typeTag: String
 
     abstract val mqttData: MqttData
@@ -39,7 +41,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         view.layoutParams = params
     }
 
-    open class MqttData(defaultPubValue: String) {
+    open class MqttData(defaultPubValue: String = "") {
         var isEnabled = true
         var lastReceive = Date()
 

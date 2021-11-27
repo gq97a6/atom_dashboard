@@ -96,7 +96,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.jsonPaths["path"] = cs.toString()
+                tile.mqttData.jsonPaths["value"] = cs.toString()
             }
         })
 
@@ -207,7 +207,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             b.tpMqttJsonSwitch.isChecked = it
             b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
         }
-        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["path"] ?: "")
+        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["value"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
         b.tpQos.check(
             when (tile.mqttData.qos) {

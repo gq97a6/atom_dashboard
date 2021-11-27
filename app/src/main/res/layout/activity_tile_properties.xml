@@ -540,7 +540,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:tag="colorA"
-                            android:text="Payload JSON path:"
+                            android:text="Payload XPath:"
                             android:textColor="@color/gray150"
                             android:textSize="15sp" />
 

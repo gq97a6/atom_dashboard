@@ -32,12 +32,15 @@ class ButtonTile : Tile() {
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-        onPublish(mqttData.pubPayload, mqttData.qos)
+        send(mqttData.pubPayload, mqttData.qos)
     }
 
-    override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!super.onReceive(data)) return false
-        value = data.second.toString()
-        return true
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
+    ) {
+        jsonResult["value"]?.let {
+            value = it
+        }
     }
 }

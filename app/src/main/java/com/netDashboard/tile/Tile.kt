@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
+import com.netDashboard.parser.Parser.byJSONPath
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -59,41 +60,33 @@ abstract class Tile : BaseRecyclerViewItem() {
         var payloadIsJson = false
     }
 
-    open fun onSend(
+    fun send(
+        msg: String,
+        @IntRange(from = 0, to = 2) qos: Int,
+        retained: Boolean = false,
+        raw: Boolean = false
+    ) = send(mqttData.pubs["base"], msg, qos, retained, raw)
+
+    @JvmOverloads
+    fun send(
         topic: String?,
         msg: String,
         @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false
-    ): Boolean {
-        if (topic.isNullOrEmpty()) return false
-
-        dashboard.daemonGroup?.mqttd?.let {
-            it.publish(topic, msg, qos, retained)
-            return true
-        }
-
-        return false
-    }
-
-    open fun onSend(
-        msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false
-    ): Boolean = onSend(mqttData.pubs["base"], msg, qos, retained)
-
-    open fun onPublish(
-        topic: String?,
-        msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false
+        retained: Boolean = false,
+        raw: Boolean = false
     ) {
-        if (!mqttData.confirmPub) {
-            onSend(topic, msg, qos, retained)
-            return
-        }
-
         if (topic.isNullOrEmpty()) return
         if (dashboard.daemonGroup?.mqttd == null) return
+
+        fun send() {
+            dashboard.daemonGroup?.mqttd?.publish(topic, msg, qos, retained)
+            onSend(topic, msg, qos, retained)
+        }
+
+        if (!mqttData.confirmPub || raw) {
+            send()
+            return
+        }
 
         val dialog = Dialog(adapter.context)
 
@@ -101,7 +94,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.pc_root))
 
         binding.pcConfirm.setOnClickListener {
-            onSend(topic, msg, qos, retained)
+            send()
             dialog.hide()
         }
 
@@ -116,16 +109,31 @@ abstract class Tile : BaseRecyclerViewItem() {
         dialog.show()
     }
 
-    open fun onPublish(
+    open fun onSend(
+        topic: String?,
         msg: String,
         @IntRange(from = 0, to = 2) qos: Int,
         retained: Boolean = false
-    ) = onPublish(mqttData.pubs["base"], msg, qos, retained)
+    ) {
+    }
 
-    open fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!mqttData.isEnabled) return false
-        if (!mqttData.subs.containsValue(data.first)) return false
+    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
+    }
 
-        return true
+    fun receive(data: Pair<String?, MqttMessage?>) {
+        if (!mqttData.isEnabled) return
+        if (!mqttData.subs.containsValue(data.first)) return
+
+        //Build map of jsonPath key and value of at it. Null on absence or fail.
+        val jsonResult = mutableMapOf<String, String>()
+        if (mqttData.payloadIsJson) {
+            for (p in mqttData.jsonPaths) {
+                data.second.toString().byJSONPath(p.value)?.let {
+                    jsonResult[p.key] = it
+                }
+            }
+        }
+
+        onReceive(data, jsonResult)
     }
 }

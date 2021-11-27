@@ -97,8 +97,8 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
             }
         }
 
-        val unsubTopics = client.topics - topics
-        val subTopics = topics - client.topics
+        val unsubTopics = client.topics - topics.toSet()
+        val subTopics = topics - client.topics.toSet()
 
         for (t in unsubTopics) unsubscribe(t.first)
         for (t in subTopics) subscribe(t.first, t.second)
@@ -183,7 +183,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in d.tiles) tile.onReceive(Pair(t ?: "", m))
+                    for (tile in d.tiles) tile.receive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                     data.value = Pair(null, null)
                 }

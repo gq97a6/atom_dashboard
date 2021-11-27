@@ -1,17 +1,14 @@
 package com.netDashboard.parser
 
-import com.google.gson.JsonArray
-import com.netDashboard.globals.G.gson
-import com.netDashboard.settings.Settings
+import com.netDashboard.globals.G.mapper
 
 object Parser {
-    fun String.parse() {
+    fun String.byJSONPath(path: String): String? =
         try {
-            gson.fromJson(this, JsonArray::class.java)
+            mapper.readTree(this).at(path).asText()
         } catch (e: Exception) {
-            Settings()
+            null
         }
-    }
 
     //value of tile, value of other tiles, second of day, second, minute, hour, day, month, year
     //to json

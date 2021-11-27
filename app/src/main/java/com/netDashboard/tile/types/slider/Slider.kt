@@ -56,19 +56,17 @@ class SliderTile : Tile() {
             )
             ACTION_UP -> {
                 (holder?.itemView as ViewGroup).requestDisallowInterceptTouchEvent(false)
-                onPublish(mqttData.pubPayload.replace("@value", value.toString()), mqttData.qos)
+                send(mqttData.pubPayload.replace("@value", value.toString()), mqttData.qos)
             }
         }
-
     }
 
-    override fun onReceive(data: Pair<String?, MqttMessage?>): Boolean {
-        if (!super.onReceive(data)) return false
-
-        val value = data.second.toString().toIntOrNull()
-        if (value != null) this.value = value.roundCloser(step)
-
-        return true
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
+    ) {
+        jsonResult["value"]?.toIntOrNull()?.let {
+            this.value = it.roundCloser(step)
+        }
     }
-
 }

@@ -14,6 +14,7 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
@@ -125,8 +126,13 @@ class TilePropertiesActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                    cs.toString().let {
-                        (tile as SliderTile).from = it.toIntOrNull() ?: SliderTile().from
+                    cs.toString().let { raw ->
+                        cs.toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderFrom.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                (tile as SliderTile).from = it
+                            }
+                        }
                     }
                 }
             })
@@ -142,14 +148,21 @@ class TilePropertiesActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                    cs.toString().let {
-                        (tile as SliderTile).to = it.toIntOrNull() ?: SliderTile().to
+                    cs.toString().let { raw ->
+                        cs.toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderTo.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                (tile as SliderTile).to = it
+                            }
+                        }
                     }
                 }
             })
 
             b.tpSliderStep.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(cs: Editable) {}
+                override fun afterTextChanged(cs: Editable) {
+                }
+
                 override fun beforeTextChanged(
                     cs: CharSequence,
                     start: Int,
@@ -159,8 +172,13 @@ class TilePropertiesActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                    cs.toString().let {
-                        (tile as SliderTile).step = it.toIntOrNull() ?: SliderTile().step
+                    cs.toString().let { raw ->
+                        cs.toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderStep.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                (tile as SliderTile).step = it
+                            }
+                        }
                     }
                 }
             })

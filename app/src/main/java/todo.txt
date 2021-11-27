@@ -1,6 +1,4 @@
 //develop ------------------------------
-
-tile payload json
 text resize
 
 //improve ------------------------------

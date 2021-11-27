@@ -181,6 +181,8 @@ fun View.click() {
     this.invalidate()
 }
 
+fun String.digitsOnly(): String = Regex("[^0-9]").replace(this, "")
+
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {
 //    Snackbar.make(

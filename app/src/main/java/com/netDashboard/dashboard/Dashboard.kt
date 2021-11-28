@@ -16,8 +16,6 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
     override val layout
         get() = R.layout.item_dashboard
 
-    var spanCount = 3
-
     @JsonIgnore
     var daemonGroup: DaemonGroup? = null
 

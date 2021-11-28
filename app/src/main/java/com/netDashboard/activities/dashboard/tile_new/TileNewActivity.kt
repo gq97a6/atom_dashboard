@@ -76,10 +76,7 @@ class TileNewActivity : AppCompatActivity() {
         if (isDone) return
         isDone = true
 
-        tile.width = 1
-        tile.height = 1
         tile.dashboard = dashboard
-
         dashboard.tiles.add(tile)
 
         Intent(this, TilePropertiesActivity::class.java).also {

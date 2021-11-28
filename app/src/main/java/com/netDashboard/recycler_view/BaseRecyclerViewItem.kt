@@ -12,9 +12,6 @@ import com.netDashboard.id_generator.IdGenerator
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewItem {
 
-    var width = 1
-    var height = 1
-
     var id = IdGenerator.getId()
 
     abstract val layout: Int

@@ -21,6 +21,9 @@ abstract class Tile : BaseRecyclerViewItem() {
     @JsonIgnore
     var dashboard: Dashboard = Dashboard("err")
 
+    var height = 1
+    var width = 1
+
     val tag = "name"
     abstract var typeTag: String
 
@@ -37,8 +40,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height =
-            ((screenWidth - view.paddingLeft * 2) / (adapter.spanCount)) * height
+        params.height = ((screenWidth - view.paddingLeft * 2) / 3.236 * height).toInt()
         view.layoutParams = params
     }
 

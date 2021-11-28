@@ -1,11 +1,8 @@
 package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.ItemTouchHelper.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 class ItemTouchCallback(private val adapter: BaseRecyclerViewAdapter<*>) :
@@ -26,6 +23,7 @@ class ItemTouchCallback(private val adapter: BaseRecyclerViewAdapter<*>) :
         val dragFlags = recyclerView.layoutManager.let {
             when (it) {
                 is GridLayoutManager -> UP or DOWN or LEFT or RIGHT
+                is StaggeredGridLayoutManager -> UP or DOWN or LEFT or RIGHT
                 is LinearLayoutManager -> UP or DOWN
                 else -> UP or DOWN
             }

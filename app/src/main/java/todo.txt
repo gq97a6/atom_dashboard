@@ -1,5 +1,10 @@
 //develop ------------------------------
-text resize
+tile design
+    icons/visual
+    update on receive
+    time
+    name
+    value
 
 //improve ------------------------------
 app background

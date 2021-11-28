@@ -14,6 +14,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.*
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.dashboard.properties.DashboardPropertiesActivity
@@ -165,7 +166,7 @@ class DashboardActivity : AppCompatActivity() {
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
-        val spanCount = dashboard.spanCount
+        val spanCount = 2
 
         adapter = TilesAdapter(this, spanCount)
         adapter.setHasStableIds(true)
@@ -192,18 +193,14 @@ class DashboardActivity : AppCompatActivity() {
 
         adapter.submitList(dashboard.tiles.toMutableList())
 
-        val layoutManager = GridLayoutManager(this, spanCount)
+        val layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
 
-        layoutManager.spanSizeLookup =
-            object : GridLayoutManager.SpanSizeLookup() {
-                override fun getSpanSize(position: Int): Int {
-                    val t = adapter.list[position]
-                    return when {
-                        t.height != 1 || t.width > spanCount -> spanCount
-                        else -> t.width
-                    }
-                }
-            }
+        //layoutManager.spanSizeLookup =
+        //    object : GridLayoutManager.SpanSizeLookup() {
+        //        override fun getSpanSize(position: Int): Int {
+        //            return adapter.list[position].width
+        //        }
+        //    }
 
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter

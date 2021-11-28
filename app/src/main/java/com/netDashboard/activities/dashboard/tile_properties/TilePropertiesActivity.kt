@@ -43,14 +43,8 @@ class TilePropertiesActivity : AppCompatActivity() {
         viewConfig()
         setContentView(b.root)
 
-        if (dashboard.spanCount.toFloat() > 1f) {
-            b.tpDimenWidth.valueFrom = 1f
-            b.tpDimenWidth.valueTo = dashboard.spanCount.toFloat()
-        } else {
-            b.tpDimenWidth.valueFrom = 0f
-            b.tpDimenWidth.valueTo = 1f
-            b.tpDimenWidth.isEnabled = false
-        }
+        b.tpDimenWidth.valueFrom = 1f
+        b.tpDimenWidth.valueTo = 20f
 
         b.tpDimenWidth.addOnChangeListener { _, value, _ ->
             dimenOnChangeListener(value, b.tpDimenHeight.value)
@@ -250,15 +244,6 @@ class TilePropertiesActivity : AppCompatActivity() {
     }
 
     private fun dimenOnChangeListener(w: Float, h: Float) {
-        //Validate
-        if (w != dashboard.spanCount.toFloat()) b.tpDimenHeight.value = 1f
-        if (dashboard.spanCount.toFloat() > 1f && h != 1f) {
-            b.tpDimenWidth.value = dashboard.spanCount.toFloat()
-        }
-
-        b.tpDimenWidthText.text = b.tpDimenWidth.value.toInt().toString()
-        b.tpDimenHeightText.text = b.tpDimenHeight.value.toInt().toString()
-
         tile.width = b.tpDimenWidth.value.toInt()
         tile.height = b.tpDimenHeight.value.toInt()
     }

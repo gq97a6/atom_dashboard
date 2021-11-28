@@ -70,11 +70,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
             }
         }
 
-        b.dpSpan.addOnChangeListener { _, value, _ ->
-            b.dpSpanValue.text = value.toInt().toString()
-            dashboard.spanCount = value.toInt()
-        }
-
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
             dashboard.mqttEnabled = state
             dashboard.daemonGroup?.mqttd?.reinit()
@@ -223,10 +218,6 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
     private fun viewConfig() {
         b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
-
-        b.dpSpan.value = dashboard.spanCount.toFloat()
-        b.dpSpan.callOnClick()
-        b.dpSpanValue.text = dashboard.spanCount.toString()
 
         b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
 

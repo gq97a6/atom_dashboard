@@ -8,11 +8,11 @@ android {
     buildToolsVersion '30.0.3'
 
     defaultConfig {
-        applicationId "com.netDashboard.dev"
+        applicationId "com.netDashboard"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 21
-        versionName "5.0"
+        versionCode 22
+        versionName "5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.netDashboard.dev"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 31
         versionCode 21
         versionName "5.0"
@@ -58,7 +58,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
-    implementation 'com.google.android.gms:play-services-maps:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:18.0.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.0"
     implementation 'androidx.wear:wear:1.2.0'

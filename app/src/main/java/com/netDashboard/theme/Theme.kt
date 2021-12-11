@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -50,7 +51,7 @@ class Theme {
     private fun getBackground(isDark: Boolean): Int {
         val hsv = floatArrayOf(0f, 0f, 0f)
         Color.colorToHSV(color, hsv)
-        hsv[1] = hsv[1] * 0.3f
+        hsv[1] = hsv[1] * 0.1f
 
         return Color.HSVToColor(hsv).contrast(isDark, 0.6f)
     }
@@ -94,6 +95,7 @@ class Theme {
             is Slider -> this.applyTheme()
             is LinearLayout -> this.applyTheme()
             is FrameLayout -> this.applyTheme()
+            is ConstraintLayout -> this.applyTheme()
             is RecyclerView -> this.applyTheme()
             is ChipGroup -> this.applyTheme()
             else -> {
@@ -109,16 +111,24 @@ class Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
+            "sliderBackground" -> {
+                val drawable = GradientDrawable()
+                drawable.mutate()
+                drawable.setColor(colorD)
+                drawable.cornerRadius = 15f
+                this.background = drawable
+            }
+            "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(color)
+            "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!isDark, 200))
-            "log_bar" -> this.backgroundTintList = ColorStateList.valueOf(color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
                 drawable?.setStroke(1, color)
             }
-            "group_arrow" -> this.backgroundTintList = ColorStateList.valueOf(color)
-            "ripple_foreground" -> {
+            "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(colorBackground.alpha(50)))
+                background.setColor(ColorStateList.valueOf(colorBackground.alpha(150)))
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -135,14 +145,32 @@ class Theme {
         }
     }
 
+    private fun ConstraintLayout.applyTheme() {
+        when (this.tag) {
+            "frame" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
+                drawable?.setStroke(6, color)
+                drawable?.cornerRadius = 15f
+            }
+            else -> onUnknownTag(this.tag, "frameLayout")
+        }
+
+        if (this.tag != "item" && context !is DashboardActivity) {
+            this.layoutTransition = LayoutTransition()
+            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        }
+    }
+
     private fun LinearLayout.applyTheme() {
         when (this.tag) {
             "background" -> this.setBackgroundColor(colorBackground)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
                 drawable?.setStroke(1, color)
             }
-            "group_bar" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.3f))
+            "groupBar" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.3f))
             "group" -> this.setBackgroundColor(colorBackground.contrast(!isDark, 0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
@@ -174,7 +202,6 @@ class Theme {
                     "colorA" -> contrastColor(!isDark, 70)
                     "colorB" -> contrastColor(!isDark, 60)
                     "colorC" -> contrastColor(!isDark, 50)
-                    "tile_button" -> contrastColor(!isDark, 70)
                     else -> contrastColor(!isDark, 70)
                 }
             )
@@ -186,7 +213,6 @@ class Theme {
                 "colorA" -> blendARGB(color, colorBackground, 0.9f)
                 "colorB" -> blendARGB(color, colorBackground, 0.1f)
                 "colorC" -> color
-                "tile_button" -> color
                 else -> color
             }
         )
@@ -196,7 +222,6 @@ class Theme {
             "colorA" -> this.backgroundTintList = ColorStateList.valueOf(colorA)
             "colorB" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             "colorC" -> this.backgroundTintList = ColorStateList.valueOf(colorC)
-            "tile_button" -> this.backgroundTintList = ColorStateList.valueOf(colorB)
             else -> onUnknownTag(this.tag, "materialButton")
         }
     }
@@ -222,6 +247,7 @@ class Theme {
     }
 
     private fun TextView.applyTheme() {
+        val test = this.height
         when (this.tag) {
             "color" -> this.setTextColor(color)
             "colorA" -> this.setTextColor(colorA)
@@ -309,6 +335,10 @@ class Theme {
         when (this.tag) {
             else -> onUnknownTag(this.tag, "chipGroup")
         }
+    }
+
+    private fun enableTransitions() {
+
     }
 
     private fun onUnknownTag(tag: Any?, type: String) {

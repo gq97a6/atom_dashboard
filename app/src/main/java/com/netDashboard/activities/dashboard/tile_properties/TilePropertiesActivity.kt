@@ -1,6 +1,7 @@
 package com.netDashboard.activities.dashboard.tile_properties
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,7 @@ import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.slider.SliderTile
+import com.netDashboard.toPx
 
 class TilePropertiesActivity : AppCompatActivity() {
     private lateinit var b: ActivityTilePropertiesBinding
@@ -43,16 +45,23 @@ class TilePropertiesActivity : AppCompatActivity() {
         viewConfig()
         setContentView(b.root)
 
-        b.tpDimenWidth.valueFrom = 1f
-        b.tpDimenWidth.valueTo = 20f
+        b.tpTag.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(cs: Editable) {}
+            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                var raw = cs.toString()
 
-        b.tpDimenWidth.addOnChangeListener { _, value, _ ->
-            dimenOnChangeListener(value, b.tpDimenHeight.value)
-        }
+                val paint = Paint()
+                paint.typeface = b.tpTag.typeface
+                paint.textSize = b.tpTag.textSize
 
-        b.tpDimenHeight.addOnChangeListener { _, value, _ ->
-            dimenOnChangeListener(b.tpDimenWidth.value, value)
-        }
+                val bound = 143f.toPx()
+                while (paint.measureText(raw, 0, raw.length) > bound) raw = raw.dropLast(1)
+
+                tile.tag = raw
+                b.tpTagWarning.visibility = if (raw.length != cs.length) VISIBLE else GONE
+            }
+        })
 
         b.tpMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchOnCheckedChangeListener(state)
@@ -204,11 +213,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     private fun viewConfig() {
 
         b.tpTileType.text = tile.typeTag
-
-        //Dimensions
-        b.tpDimenWidth.value = tile.width.toFloat()
-        b.tpDimenHeight.value = tile.height.toFloat()
-        dimenOnChangeListener(tile.width.toFloat(), tile.height.toFloat())
+        b.tpTag.setText(tile.tag)
 
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
@@ -241,11 +246,6 @@ class TilePropertiesActivity : AppCompatActivity() {
                 b.tpSliderStep.setText((tile as SliderTile).step.toString())
             }
         }
-    }
-
-    private fun dimenOnChangeListener(w: Float, h: Float) {
-        tile.width = b.tpDimenWidth.value.toInt()
-        tile.height = b.tpDimenHeight.value.toInt()
     }
 
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {

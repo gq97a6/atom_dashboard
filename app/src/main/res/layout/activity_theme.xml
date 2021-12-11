@@ -225,7 +225,7 @@
                 android:background="#19000000"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:tag="group_bar">
+                android:tag="groupBar">
 
                 <TextView
                     android:id="@+id/dp_mqtt_cred_bar"
@@ -249,7 +249,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:rotation="180"
-                    android:tag="group_arrow" />
+                    android:tag="colorIcon" />
 
             </LinearLayout>
 

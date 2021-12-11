@@ -19,7 +19,7 @@
         android:tag="colorA"
         android:text="Confirm publishing."
         android:textSize="20dp"
-        app:autoSizeTextType="uniform"/>
+        app:autoSizeTextType="uniform" />
 
     <LinearLayout
         android:layout_width="match_parent"

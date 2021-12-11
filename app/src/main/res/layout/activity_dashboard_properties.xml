@@ -21,8 +21,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginBottom="10dp"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
@@ -43,7 +43,7 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:maxLength="15"
-            android:paddingHorizontal="5dp"
+            android:paddingHorizontal="10dp"
             android:tag="basic"
             android:textColor="@color/gray100"
             android:textColorHint="@color/gray65"
@@ -348,7 +348,7 @@
                         android:background="#19000000"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:tag="group_bar">
+                        android:tag="groupBar">
 
                         <TextView
                             android:id="@+id/dp_mqtt_cred_bar"
@@ -371,7 +371,7 @@
                             android:background="@drawable/icon_arrow"
                             android:clickable="true"
                             android:focusable="true"
-                            android:tag="group_arrow" />
+                            android:tag="groupArrow" />
 
                     </LinearLayout>
 

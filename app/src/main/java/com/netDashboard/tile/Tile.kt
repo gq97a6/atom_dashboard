@@ -19,12 +19,12 @@ import java.util.*
 abstract class Tile : BaseRecyclerViewItem() {
 
     @JsonIgnore
-    var dashboard: Dashboard = Dashboard("err")
+    var dashboard: Dashboard = Dashboard(isInvalid = true)
 
     var height = 1
     var width = 1
 
-    val tag = "name"
+    var tag = ""
     abstract var typeTag: String
 
     abstract val mqttData: MqttData
@@ -40,7 +40,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((screenWidth - view.paddingLeft * 2) / 3.236 * height).toInt()
+        params.height = ((screenWidth - view.paddingLeft * 2) * height / 3.236).toInt()
         view.layoutParams = params
     }
 
@@ -60,6 +60,10 @@ abstract class Tile : BaseRecyclerViewItem() {
         var pubPayload = defaultPubValue
         var confirmPub = false
         var payloadIsJson = false
+
+        init {
+            lastReceive.time = 0
+        }
     }
 
     fun send(
@@ -135,6 +139,7 @@ abstract class Tile : BaseRecyclerViewItem() {
                 }
             }
         }
+        mqttData.lastReceive = Date()
 
         onReceive(data, jsonResult)
     }

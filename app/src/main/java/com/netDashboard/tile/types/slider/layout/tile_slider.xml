@@ -1,60 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:elevation="10dp"
-    android:padding="@dimen/tile_padding"
-    android:tag="item">
-
-    <View
-        android:id="@+id/ripple_foreground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@drawable/background_ripple"
-        android:elevation="20dp"
-        android:tag="ripple_foreground"
-        tools:ignore="ContentDescription,DuplicateIncludedIds" />
-
-    <View
-        android:id="@+id/foreground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#00000000"
-        android:elevation="20dp"
-        android:tag="foreground"
-        tools:ignore="ContentDescription,DuplicateIncludedIds" />
-
-    <View
-        android:id="@+id/background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="@color/black"
-        android:clickable="true"
-        android:focusable="true"
-        android:tag="colorB"
-        tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/ts_value"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingStart="10dp"
-        android:paddingTop="15dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="15dp"
-        android:tag="color"
-        android:text="123"
-        android:textColor="#FFFFFF"
-        app:autoSizeMaxTextSize="25dp"
-        app:autoSizeMinTextSize="8dp"
-        app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform"
-        tools:ignore="HardcodedText" />
-
-</FrameLayout>
+<?xml version="1.0" encoding="utf-8"?><FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"    xmlns:app="http://schemas.android.com/apk/res-auto"    android:layout_width="match_parent"    android:layout_height="180dp"    android:gravity="center"    android:orientation="vertical"    android:padding="@dimen/tile_padding"    android:tag="item">    <View        android:id="@+id/ripple_foreground"        android:layout_width="match_parent"        android:layout_height="match_parent"        android:background="@drawable/background_ripple"        android:elevation="20dp"        android:tag="rippleForeground" />    <View        android:id="@+id/foreground"        android:layout_width="match_parent"        android:layout_height="match_parent"        android:layout_gravity="center"        android:background="#00000000"        android:elevation="20dp" />    <androidx.constraintlayout.widget.ConstraintLayout        android:layout_width="match_parent"        android:layout_height="match_parent"        android:background="@drawable/background_frame"        android:elevation="10dp"        android:tag="frame">        <View            android:id="@+id/marginTopStart"            android:layout_width="0dp"            android:layout_height="0dp"            app:layout_constraintBottom_toTopOf="@+id/ts_icon"            app:layout_constraintDimensionRatio="1"            app:layout_constraintHeight_percent="0.15"            app:layout_constraintStart_toStartOf="parent"            app:layout_constraintTop_toTopOf="parent" />        <View            android:id="@+id/ts_icon"            android:layout_width="0dp"            android:layout_height="0dp"            android:background="@drawable/icon_swap"            android:tag="colorIcon"            app:layout_constraintDimensionRatio="1"            app:layout_constraintHeight_percent="0.3"            app:layout_constraintStart_toEndOf="@+id/marginTopStart"            app:layout_constraintTop_toBottomOf="@id/marginTopStart" />        <View            android:id="@+id/marginText"            android:layout_width="0dp"            android:layout_height="0dp"            app:layout_constraintBottom_toBottomOf="@+id/ts_icon"            app:layout_constraintDimensionRatio="1"            app:layout_constraintHeight_percent="0.1"            app:layout_constraintStart_toEndOf="@+id/ts_icon"            app:layout_constraintTop_toTopOf="@id/ts_icon" />        <LinearLayout            android:id="@+id/text"            android:layout_width="wrap_content"            android:layout_height="wrap_content"            android:orientation="vertical"            app:layout_constraintBottom_toBottomOf="@+id/ts_icon"            app:layout_constraintStart_toEndOf="@+id/marginText"            app:layout_constraintTop_toTopOf="@+id/ts_icon">            <TextView                android:id="@+id/ts_tag"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:tag="color"                android:text="Empty"                android:textSize="15dp" />            <TextView                android:id="@+id/t_status"                android:layout_width="wrap_content"                android:layout_height="wrap_content"                android:tag="color"                android:text="∞ seconds ago"                android:textSize="10dp" />        </LinearLayout>        <View            android:id="@+id/marginValue"            android:layout_width="match_parent"            android:layout_height="0dp"            app:layout_constraintHeight_percent="0.1"            app:layout_constraintTop_toBottomOf="@+id/ts_icon" />        <TextView            android:id="@+id/ts_value"            android:layout_width="match_parent"            android:layout_height="0dp"            android:gravity="center"            android:tag="color"            android:text="123"            android:textSize="20dp"            app:layout_constraintHeight_percent="0.3"            app:layout_constraintTop_toBottomOf="@+id/marginValue" />        <View            android:id="@+id/marginBottom"            android:layout_width="match_parent"            android:layout_height="0dp"            app:layout_constraintHeight_percent="0.15"            app:layout_constraintTop_toBottomOf="@+id/ts_value" />    </androidx.constraintlayout.widget.ConstraintLayout>    <androidx.constraintlayout.widget.ConstraintLayout        android:layout_width="match_parent"        android:layout_height="match_parent">        <View            android:id="@+id/ts_background"            android:layout_width="0dp"            android:layout_height="match_parent"            android:background="@color/black"            android:tag="sliderBackground"            app:layout_constraintBottom_toBottomOf="parent"            app:layout_constraintStart_toStartOf="parent"            app:layout_constraintTop_toTopOf="parent"            app:layout_constraintWidth_percent="0.0" />    </androidx.constraintlayout.widget.ConstraintLayout></FrameLayout>

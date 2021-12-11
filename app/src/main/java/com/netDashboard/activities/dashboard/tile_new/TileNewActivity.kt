@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.activities.dashboard.tile_properties.TilePropertiesActivity
 import com.netDashboard.app_on.AppOn
+import com.netDashboard.click
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTileNewBinding
@@ -14,8 +15,8 @@ import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
+import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
-
 
 class TileNewActivity : AppCompatActivity() {
     private lateinit var b: ActivityTileNewBinding
@@ -35,20 +36,19 @@ class TileNewActivity : AppCompatActivity() {
         G.theme.apply(this, b.root)
         setContentView(b.root)
 
-        b.tnButtonLayout.setOnClickListener {
+        b.tnButton.setOnClickListener {
+            b.tnButtonRipple.click()
             addTile(ButtonTile())
         }
 
-        b.tnButton.tbButton.setOnClickListener {
-            addTile(ButtonTile())
-        }
-
-        b.tnSliderLayout.setOnClickListener {
+        b.tnSlider.setOnClickListener {
+            b.tnSliderRipple.click()
             addTile(SliderTile())
         }
 
-        b.tnSlider.background.setOnClickListener {
-            addTile(SliderTile())
+        b.tnText.setOnClickListener {
+            b.tnTextRipple.click()
+            addTile(TextTile())
         }
     }
 

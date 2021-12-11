@@ -1,10 +1,22 @@
 //develop ------------------------------
 tile design
-    icons/visual
-    update on receive
-    time
+    icon
+    date
+    name
+
+    button
+    name
+    date
+    icon
+
+    slider
     name
     value
+    date
+    icon
+
+resize font
+fix adding tile
 
 //improve ------------------------------
 app background

@@ -31,9 +31,7 @@ class ForegroundService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel()
-        }
+        createNotificationChannel()
 
         val intent = Intent(this, ForegroundService::class.java)
         intent.action = "STOP"
@@ -132,11 +130,7 @@ class ForegroundServiceHandler(var context: Context) {
 
     fun start() {
         Intent(context, ForegroundService::class.java).also {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(it)
-            } else {
-                context.startService(it)
-            }
+            context.startForegroundService(it)
         }
     }
 

@@ -17,7 +17,7 @@
         android:elevation="20dp" />
 
     <Button
-        android:id="@+id/dle_button"
+        android:id="@+id/id_button"
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

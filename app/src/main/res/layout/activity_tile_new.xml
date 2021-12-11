@@ -44,23 +44,26 @@
             android:padding="10dp"
             android:tag="frame">
 
-            <LinearLayout
-                android:id="@+id/tn_button_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <include
-                    android:id="@+id/tn_button"
-                    layout="@layout/tile_button"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
-
-                <LinearLayout
+                <View
+                    android:id="@+id/tn_button_ripple"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:tag="frame">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -80,27 +83,29 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/tn_slider_layout"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
-                <include
-                    android:id="@+id/tn_slider"
-                    layout="@layout/tile_slider"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    tools:ignore="DuplicateIncludedIds" />
-
-                <LinearLayout
+                <View
+                    android:id="@+id/tn_slider_ripple"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:tag="frame">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -120,7 +125,51 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:id="@+id/tn_text_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:tag="frame">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorA"
+                        android:text="Text"
+                        android:textColor="@color/gray230"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:text="Send or receive text."
+                        android:textColor="@color/gray100"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 

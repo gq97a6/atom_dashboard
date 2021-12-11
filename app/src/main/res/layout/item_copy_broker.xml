@@ -17,7 +17,7 @@
         android:elevation="20dp" />
 
     <Button
-        android:id="@+id/pcb_button"
+        android:id="@+id/icb_button"
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

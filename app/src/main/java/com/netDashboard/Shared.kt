@@ -95,7 +95,7 @@ fun createNotification(
     isSilent: Boolean = false,
     id: Int = Random().nextInt()
 ) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(context)
+    createNotificationChannel(context)
 
     val notification = NotificationCompat.Builder(context, "notification_id")
         .setAutoCancel(true)
@@ -132,16 +132,12 @@ fun createVibration(context: Context, ms: Long = 500) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     if (vibrator.hasVibrator()) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(
-                VibrationEffect.createOneShot(
-                    ms,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
+        vibrator.vibrate(
+            VibrationEffect.createOneShot(
+                ms,
+                VibrationEffect.DEFAULT_AMPLITUDE
             )
-        } else {
-            vibrator.vibrate(ms)
-        }
+        )
     }
 }
 
@@ -182,6 +178,17 @@ fun View.click() {
 }
 
 fun String.digitsOnly(): String = Regex("[^0-9]").replace(this, "")
+
+infix fun Int.rangedIn(r: kotlin.ranges.IntRange): Int =
+    minOf(r.first, maxOf(r.last, this))
+
+infix fun Double.rangedIn(r: ClosedFloatingPointRange<Double>): Double =
+    minOf(r.start, maxOf(r.endInclusive, this))
+
+infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
+    minOf(r.start, maxOf(r.endInclusive, this))
+
+infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
 
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {

@@ -9,25 +9,30 @@ import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class ButtonTile : Tile() {
+class TextTile : Tile() {
 
     @JsonIgnore
-    override val layout = R.layout.tile_button
+    override val layout = R.layout.tile_text
 
     override val mqttData = MqttData("1")
 
     @JsonIgnore
-    override var typeTag = "button"
+    override var typeTag = "text"
 
-    var value = "Default value"
+    var value = ""
         set(value) {
             field = value
-            holder?.itemView?.findViewById<TextView>(R.id.tb_value)?.text = value
+            holder?.itemView?.findViewById<TextView>(R.id.tt_value)?.text = value
         }
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         value = value
+
+        holder.itemView.findViewById<TextView>(R.id.tt_tag)?.let {
+            if (tag.isBlank()) it.visibility = View.GONE
+            else it.text = tag
+        }
     }
 
     override fun onClick(v: View, e: MotionEvent) {
@@ -39,8 +44,6 @@ class ButtonTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
-        jsonResult["value"]?.let {
-            value = it
-        }
+        value = jsonResult["value"] ?: data.second.toString()
     }
 }

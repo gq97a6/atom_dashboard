@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="180dp"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/tile_padding"
@@ -12,11 +12,9 @@
         android:id="@+id/ripple_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
-        android:tag="ripple_foreground"
-        android:visibility="gone" />
+        android:tag="rippleForeground" />
 
     <View
         android:id="@+id/foreground"
@@ -26,46 +24,54 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
-    <Button
-        android:id="@+id/tb_button"
-        style="@style/button"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:paddingLeft="6dp"
-        android:paddingTop="15dp"
-        android:paddingRight="6dp"
-        android:paddingBottom="15dp"
-        android:tag="tile_button"
-        android:textColor="#FFFFFF"
-        app:autoSizeMaxTextSize="25dp"
-        app:autoSizeMinTextSize="8dp"
-        app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform" />
-
-    <TextView
-        android:id="@+id/tb_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:background="@drawable/background_frame"
         android:elevation="10dp"
-        android:gravity="center"
-        android:tag="color"
-        android:text="test"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
+        android:tag="frame">
 
-    <TextView
-        android:id="@+id/tb_status"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="5dp"
-        android:elevation="10dp"
-        android:gravity="center"
-        android:tag="color"
-        android:text="15 seconds ago"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
+        <View
+            android:id="@+id/marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="3" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/icon_swap"
+            android:tag="colorIcon"
+            app:layout_constraintBottom_toTopOf="@+id/tb_tag"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/marginTop"
+            app:layout_constraintVertical_weight="15" />
+
+        <TextView
+            android:id="@+id/tb_tag"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:tag="color"
+            android:text="Empty"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/marginBottom"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintVertical_weight="10" />
+
+        <View
+            android:id="@+id/marginBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tb_tag"
+            app:layout_constraintVertical_weight="3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -189,7 +189,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 adapter.setHasStableIds(true)
                 adapter.theme = theme
                 adapter.onBindViewHolder = { _, holder, pos ->
-                    val button = holder.itemView.findViewById<Button>(R.id.pcb_button)
+                    val button = holder.itemView.findViewById<Button>(R.id.icb_button)
 
                     val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 

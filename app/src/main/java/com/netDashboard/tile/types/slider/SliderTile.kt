@@ -6,6 +6,7 @@ import android.view.MotionEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
@@ -13,6 +14,7 @@ import com.netDashboard.roundCloser
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import kotlin.math.abs
 
 class SliderTile : Tile() {
 
@@ -33,12 +35,22 @@ class SliderTile : Tile() {
             val displayValue = holder?.itemView?.findViewById<TextView>(R.id.ts_value)
             displayValue?.text = value.toString()
             field = value
+
+            val background = holder?.itemView?.findViewById<View>(R.id.ts_background)
+            val params = background?.layoutParams as ConstraintLayout.LayoutParams
+            params.matchConstraintPercentWidth = abs((((from - value).toFloat() / (to - from))))
+            background.requestLayout()
         }
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (step == 0) step = 1
         value = value
+
+        holder.itemView.findViewById<TextView>(R.id.ts_tag)?.let {
+            if (tag.isBlank()) it.visibility = View.GONE
+            else it.text = tag
+        }
     }
 
     override fun onTouch(v: View, e: MotionEvent) {
@@ -65,8 +77,7 @@ class SliderTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
-        jsonResult["value"]?.toIntOrNull()?.let {
-            this.value = it.roundCloser(step)
-        }
+        (jsonResult["value"] ?: data.second.toString()).toIntOrNull()
+            ?.let { this.value = it.roundCloser(step) }
     }
 }

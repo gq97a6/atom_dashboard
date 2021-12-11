@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.random.Random
 
 @Suppress("UNUSED")
-class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
+class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRecyclerViewItem() {
 
     override val layout
         get() = R.layout.item_dashboard
@@ -27,7 +27,7 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
             field = value
         }
 
-    var mqttEnabled = false
+    var mqttEnabled = true
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
@@ -43,16 +43,16 @@ class Dashboard(var name: String = "") : BaseRecyclerViewItem() {
 
     companion object {
         fun MutableList<Dashboard>.byId(id: Long): Dashboard =
-            this.find { it.id == id } ?: Dashboard("err")
+            this.find { it.id == id } ?: Dashboard(isInvalid = true)
     }
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<Button>(R.id.dle_button).text =
+        holder.itemView.findViewById<Button>(R.id.id_button).text =
             name.uppercase(Locale.getDefault())
 
-        holder.itemView.findViewById<Button>(R.id.dle_button).setOnClickListener {
+        holder.itemView.findViewById<Button>(R.id.id_button).setOnClickListener {
             holder.itemView.callOnClick()
         }
     }

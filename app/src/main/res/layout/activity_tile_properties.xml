@@ -21,7 +21,54 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:tag="colorA"
+            android:text="tag:"
+            android:textColor="@color/gray150"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/tp_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:background="#19000000"
+            android:hint="empty"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="100"
+            android:paddingHorizontal="10dp"
+            android:tag="basic"
+            android:textColor="@color/gray100"
+            android:textColorHint="@color/gray65"
+            android:textCursorDrawable="@null"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText,TextFields" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tp_tag_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:tag="color"
+        android:text="Too long, will be truncated"
+        android:textColor="@color/gray150"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -32,7 +79,7 @@
             android:tag="colorA"
             android:text="type:"
             android:textColor="@color/gray150"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tp_tile_type"
@@ -40,7 +87,7 @@
             android:layout_height="wrap_content"
             android:tag="colorB"
             android:textColor="@color/gray100"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 
@@ -55,114 +102,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:tag="colorA"
-                android:text="@string/tp_dimensions"
-                android:textColor="@color/gray150"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:tag="frame">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:tag="colorA"
-                        android:text="@string/tp_slider_width"
-                        android:textColor="@color/gray150"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tp_dimen_width_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:gravity="center"
-                        android:tag="colorB"
-                        android:text="1"
-                        android:textColor="@color/gray100"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/tp_dimen_width"
-                        style="@style/slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:stepSize="1"
-                        android:tag="enabled"
-                        android:valueFrom="1"
-                        android:valueTo="10" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:tag="colorA"
-                        android:text="@string/tp_slider_height"
-                        android:textColor="@color/gray150"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tp_dimen_height_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        android:gravity="center"
-                        android:tag="colorB"
-                        android:text="1"
-                        android:textColor="@color/gray100"
-                        android:textSize="15sp"
-                        tools:ignore="HardcodedText" />
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/tp_dimen_height"
-                        style="@style/slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:stepSize="1"
-                        android:tag="enabled"
-                        android:valueFrom="1"
-                        android:valueTo="10" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:tag="colorC"
-                    android:text="@string/tp_dimensions_info"
-                    android:textColor="@color/gray100"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

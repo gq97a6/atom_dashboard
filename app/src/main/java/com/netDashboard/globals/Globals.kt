@@ -10,7 +10,6 @@ import com.netDashboard.settings.Settings
 import com.netDashboard.theme.Theme
 
 object G {
-    val gson = Gson()
     val mapper: ObjectMapper =
         jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 

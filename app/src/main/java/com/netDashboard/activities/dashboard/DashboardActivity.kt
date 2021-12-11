@@ -5,14 +5,16 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color.*
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.*
@@ -37,13 +39,16 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var b: ActivityDashboardBinding
 
     private lateinit var dashboard: Dashboard
-    lateinit var adapter: TilesAdapter
+    private lateinit var adapter: TilesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppOn.create(this)
 
         dashboard = dashboards.byId(intent.getLongExtra("dashboardId", 0))
+        if (dashboard.isInvalid) Intent(this, MainActivity::class.java).also {
+            startActivity(it)
+        }
 
         b = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(b.root)
@@ -76,7 +81,6 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         if (!adapter.editMode.isNone) {
-
             b.dLock.setBackgroundResource(R.drawable.button_unlocked)
             b.dBar.translationY = 0f
 
@@ -91,6 +95,36 @@ class DashboardActivity : AppCompatActivity() {
                 )
             }
         }
+
+        fun updateTilesStatus() {
+            for (tile in adapter.list) {
+                tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
+                    tile.mqttData.lastReceive.time.let { lr ->
+                        val t = Date().time - lr
+                        if (lr != 0L) it.text = (t / 1000).let { s ->
+                            if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
+                            else (t / 60000).let { m ->
+                                if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
+                                else (t / 3600000).let { h ->
+                                    if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
+                                    else (t / 86400000).let { d ->
+                                        if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
+                                        else (t / 31536000000).let { y ->
+                                            if (y == 1L) "$y year ago" else "$y years ago"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                updateTilesStatus()
+            }, 500)
+        }
+        updateTilesStatus()
 
         val addOnClick: () -> Unit = {
             Intent(this, TileNewActivity::class.java).also {
@@ -193,7 +227,8 @@ class DashboardActivity : AppCompatActivity() {
 
         adapter.submitList(dashboard.tiles.toMutableList())
 
-        val layoutManager = StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager =
+            StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
 
         //layoutManager.spanSizeLookup =
         //    object : GridLayoutManager.SpanSizeLookup() {

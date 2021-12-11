@@ -75,6 +75,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         theme.apply(context, holder.itemView as ViewGroup)
 
         fun View.setOnClick() {
+            this.isClickable = true
             this.setOnTouchListener { v, e ->
                 if (editMode.isNone) list[position].onTouch(v, e)
 

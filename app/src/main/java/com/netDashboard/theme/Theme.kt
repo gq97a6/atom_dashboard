@@ -111,6 +111,8 @@ class Theme {
             "colorA" -> this.setBackgroundColor(colorA)
             "colorB" -> this.setBackgroundColor(colorB)
             "colorC" -> this.setBackgroundColor(colorC)
+            "colorD" -> this.setBackgroundColor(colorD)
+            "background" -> this.setBackgroundColor(colorBackground)
             "sliderBackground" -> {
                 val drawable = GradientDrawable()
                 drawable.mutate()
@@ -125,6 +127,12 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
                 drawable?.setStroke(1, color)
+            }
+            "sliderPopupFrame" -> {
+                val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
+                drawable?.setStroke(10, color)
+                drawable?.cornerRadius = 25f
             }
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable

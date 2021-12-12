@@ -16,7 +16,6 @@ tile design
     icon
 
 resize font
-fix adding tile
 
 //improve ------------------------------
 app background

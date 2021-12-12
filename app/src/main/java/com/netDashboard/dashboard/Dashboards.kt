@@ -11,7 +11,6 @@ class Dashboards {
     companion object {
         fun getSaved(): MutableList<Dashboard> =
             try {
-                Log.i("OUY", "get ok")
                 mapper.readerForListOf(Dashboard::class.java).readValue(FileReader(dashboardsFile))
             } catch (e: Exception) {
                 Log.i("OUY", "$e")
@@ -20,10 +19,8 @@ class Dashboards {
 
         fun MutableList<Dashboard>.save() {
             try {
-                Log.i("OUY", "save ok")
                 File(dashboardsFile).writeText(mapper.writeValueAsString(this))
             } catch (e: Exception) {
-                Log.i("OUY", "$e")
                 run { }
             }
         }

@@ -185,6 +185,10 @@ class TilePropertiesActivity : AppCompatActivity() {
                     }
                 }
             })
+
+            b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
+                (tile as SliderTile).dragCon = state
+            }
         }
     }
 
@@ -239,12 +243,12 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         when (tile) {
             is SliderTile -> {
-                b.tpSlider.visibility = VISIBLE
-
+                b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
                 b.tpSliderStep.setText((tile as SliderTile).step.toString())
             }
+            else -> b.tpSlider.visibility = GONE
         }
     }
 

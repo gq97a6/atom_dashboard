@@ -1,8 +1,8 @@
 //develop ------------------------------
 resize font
-log
 tiles icons
 dashboard item
+export/import data
 
 //improve ------------------------------
 app background
@@ -20,11 +20,6 @@ new tiles
     select
     switch
     color
-parser
-    value of tile,
-        second of day, second, minute, hour, day, month, year
-    to json
-export/import data
 
 //post development ------------------------------
 icon

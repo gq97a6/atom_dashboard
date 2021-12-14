@@ -1,14 +1,10 @@
 package com.netDashboard.tile
 
 import android.app.Dialog
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.View
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.R
-import com.netDashboard.click
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.parser.Parser.byJSONPath

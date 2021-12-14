@@ -111,7 +111,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
                 var t = 500
 
-                if(e.eventTime - e.downTime > t && !isLongPressed) { // onLongClick
+                if (e.eventTime - e.downTime > t && !isLongPressed) { // onLongClick
                     isLongPressed = true
                     onItemLongClick(list[position])
                 }

@@ -310,8 +310,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:tag="colorA"
                             android:gravity="center_vertical"
+                            android:tag="colorA"
                             android:text="Payload setting type:"
                             android:textColor="@color/gray150"
                             android:textSize="15dp" />

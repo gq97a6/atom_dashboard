@@ -28,10 +28,9 @@ import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
-import com.netDashboard.log.Log.Companion.LogList
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.tile.TilesAdapter
-import com.netDashboard.toolbarControl.toolBarControl
+import com.netDashboard.toolbarControl.ToolBarController
 import java.util.*
 
 @SuppressLint("ClickableViewAccessibility")
@@ -40,6 +39,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private lateinit var dashboard: Dashboard
     private lateinit var adapter: TilesAdapter
+    private lateinit var toolBarController: ToolBarController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,7 +137,7 @@ class DashboardActivity : AppCompatActivity() {
             G.theme.apply(this, vg)
         }
 
-        toolBarControl(
+        toolBarController = ToolBarController(
             adapter,
             b.dBar,
             b.dLock,
@@ -225,6 +225,10 @@ class DashboardActivity : AppCompatActivity() {
                 }
             }
 
+        adapter.onItemLongClick = {
+            toolBarController.toggleTools()
+        }
+
         adapter.submitList(dashboard.tiles.toMutableList())
 
         val layoutManager =
@@ -254,7 +258,7 @@ class DashboardActivity : AppCompatActivity() {
         val adapter = LogAdapter(this)
         adapter.setHasStableIds(true)
         adapter.theme = G.theme
-        adapter.submitList(LogList)
+        adapter.submitList(dashboard.log.list)
 
         val layoutManager = LinearLayoutManager(this)
 
@@ -308,8 +312,11 @@ class DashboardActivity : AppCompatActivity() {
             lp.height = (e.rawY - showLogStartY).toInt().let {
                 when {
                     it <= 0 -> 0
-                    it <= (0.7 * screenHeight) -> it
-                    else -> (0.7 * screenHeight).toInt()
+                    it <= (0.9 * screenHeight) -> it
+                    else -> {
+                        dashboard.log.flush()
+                        (0.9 * screenHeight).toInt()
+                    }
                 }
             }
 

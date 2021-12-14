@@ -7,25 +7,25 @@ import android.widget.LinearLayout
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
-fun toolBarControl(
-    adapter: BaseRecyclerViewAdapter<*>,
-    bar: LinearLayout,
-    lock: Button,
-    edit: Button,
-    swap: Button,
-    remove: Button,
+class ToolBarController(
+    private val adapter: BaseRecyclerViewAdapter<*>,
+    private val bar: LinearLayout,
+    private val lock: Button,
+    private val edit: Button,
+    private val swap: Button,
+    private val remove: Button,
     add: Button,
-    onAdd: () -> Unit,
-    onUiChange: (vg: ViewGroup) -> Unit
+    private val onAdd: () -> Unit,
+    private val onUiChange: (vg: ViewGroup) -> Unit
 ) {
-    fun highlightOnly(button: Button) {
+    private fun highlightOnly(button: Button) {
         remove.alpha = 0.4f
         swap.alpha = 0.4f
         edit.alpha = 0.4f
         button.alpha = 1f
     }
 
-    lock.setOnClickListener {
+    fun toggleTools() {
         if (adapter.editMode.isNone) {
             adapter.editMode.setEdit()
             highlightOnly(edit)
@@ -47,26 +47,32 @@ fun toolBarControl(
         onUiChange(lock.rootView as ViewGroup)
     }
 
-    edit.setOnClickListener {
-        highlightOnly(edit)
-        adapter.editMode.setEdit()
-    }
-
-    swap.setOnClickListener {
-        highlightOnly(swap)
-        adapter.editMode.setSwap()
-    }
-
-    remove.setOnClickListener {
-        if (!adapter.editMode.isRemove) {
-            highlightOnly(remove)
-            adapter.editMode.setRemove()
-        } else {
-            adapter.removeMarkedItems()
+    init {
+        lock.setOnClickListener {
+            toggleTools()
         }
-    }
 
-    add.setOnClickListener {
-        onAdd()
+        edit.setOnClickListener {
+            highlightOnly(edit)
+            adapter.editMode.setEdit()
+        }
+
+        swap.setOnClickListener {
+            highlightOnly(swap)
+            adapter.editMode.setSwap()
+        }
+
+        remove.setOnClickListener {
+            if (!adapter.editMode.isRemove) {
+                highlightOnly(remove)
+                adapter.editMode.setRemove()
+            } else {
+                adapter.removeMarkedItems()
+            }
+        }
+
+        add.setOnClickListener {
+            onAdd()
+        }
     }
 }

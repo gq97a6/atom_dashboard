@@ -19,6 +19,7 @@ import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.tile.Tile
+import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.toPx
 
@@ -83,7 +84,7 @@ class TilePropertiesActivity : AppCompatActivity() {
             }
         })
 
-        b.tpMqttPubPayload.addTextChangedListener(object : TextWatcher {
+        b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
@@ -114,6 +115,22 @@ class TilePropertiesActivity : AppCompatActivity() {
                 R.id.tp_qos1 -> 1
                 R.id.tp_qos2 -> 2
                 else -> 1
+            }
+        }
+
+        if (tile is TextTile) {
+            b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                tile.mqttData.varPayload = when (id) {
+                    R.id.tp_mqtt_payload_val -> {
+                        b.tpMqttPayloadBox.visibility = VISIBLE
+                        false
+                    }
+                    R.id.tp_mqtt_payload_var -> {
+                        b.tpMqttPayloadBox.visibility = GONE
+                        true
+                    }
+                    else -> true
+                }
             }
         }
 
@@ -195,7 +212,7 @@ class TilePropertiesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
-        dashboard.dg?.mqttd?.reinit()
+        dashboard.dg?.mqttd?.notifyOptionsChanged()
 
         AppOn.pause()
     }
@@ -223,7 +240,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
         b.tpMqttPub.setText(tile.mqttData.pubs["base"])
         b.tpMqttSub.setText(tile.mqttData.subs["base"])
-        b.tpMqttPubPayload.setText(tile.mqttData.pubPayload)
+        b.tpMqttPayload.setText(tile.mqttData.pubPayload)
         tile.mqttData.payloadIsJson.let {
             b.tpMqttJsonSwitch.isChecked = it
             b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
@@ -241,14 +258,29 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
+        b.tpText.visibility = GONE
+        b.tpSlider.visibility = GONE
+        b.tpButton.visibility = GONE
+        b.tpMqttPayloadTypeBox.visibility = GONE
+
         when (tile) {
             is SliderTile -> {
+                b.tpSlider.visibility = VISIBLE
                 b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
                 b.tpSliderStep.setText((tile as SliderTile).step.toString())
             }
-            else -> b.tpSlider.visibility = GONE
+            is TextTile -> {
+                //b.tpText.visibility = VISIBLE
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpPayloadType.check(
+                    if (tile.mqttData.varPayload) {
+                        b.tpMqttPayloadBox.visibility = GONE
+                        R.id.tp_mqtt_payload_var
+                    } else R.id.tp_mqtt_payload_val
+                )
+            }
         }
     }
 

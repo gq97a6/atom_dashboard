@@ -20,7 +20,7 @@ class DaemonGroupsManager(val context: Context) {
             list.find { it.dashboard.id == d.id }?.let {
                 d.dg = it
                 it.mqttd.d = d
-                it.mqttd.reinit("assign")
+                it.mqttd.notifyNewAssignment()
             }
         }
     }

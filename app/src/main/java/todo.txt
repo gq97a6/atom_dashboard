@@ -1,19 +1,17 @@
 //develop ------------------------------
 resize font
 log
-export/import data
 tiles icons
 dashboard item
-send text in tile text
 
 //improve ------------------------------
 app background
 show log hint
 
 //expand ------------------------------
-notifications
+notifications, alerts
 new tiles
-    alert on change, on stop receiving, on receive
+    indicator, diode, alert on change, on stop receiving, on receive
     terminal
     date
     graph
@@ -22,11 +20,11 @@ new tiles
     select
     switch
     color
-    indicator
 parser
     value of tile,
         second of day, second, minute, hour, day, month, year
     to json
+export/import data
 
 //post development ------------------------------
 icon

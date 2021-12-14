@@ -72,7 +72,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
             dashboard.mqttEnabled = state
-            dashboard.dg?.mqttd?.reinit()
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
         b.dpName.addTextChangedListener(object : TextWatcher {
@@ -93,7 +93,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttAddress != it) {
                         dashboard.mqttAddress = it
-                        dashboard.dg?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
                 }
             }
@@ -106,7 +106,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 val port = cs.toString().trim().toIntOrNull() ?: (-1)
                 if (dashboard.mqttPort != port) {
                     dashboard.mqttPort = port
-                    dashboard.dg?.mqttd?.reinit()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
             }
         })
@@ -126,7 +126,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttUserName != it) {
                         dashboard.mqttUserName = it
-                        dashboard.dg?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
                 }
             }
@@ -139,7 +139,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttPass != it) {
                         dashboard.mqttPass = it
-                        dashboard.dg?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
                 }
             }
@@ -154,11 +154,11 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                         it.isBlank() -> {
                             dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
                             b.dpMqttClientId.setText(dashboard.mqttClientId)
-                            dashboard.dg?.mqttd?.reinit()
+                            dashboard.dg?.mqttd?.notifyOptionsChanged()
                         }
                         dashboard.mqttClientId != it -> {
                             dashboard.mqttClientId = it
-                            dashboard.dg?.mqttd?.reinit()
+                            dashboard.dg?.mqttd?.notifyOptionsChanged()
                         }
                         else -> {
                             return

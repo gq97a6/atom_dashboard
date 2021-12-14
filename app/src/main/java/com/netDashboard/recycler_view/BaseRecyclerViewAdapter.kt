@@ -30,6 +30,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     private lateinit var touchHelper: ItemTouchHelper
 
     var onItemClick: (item) -> Unit = {}
+    var onItemLongClick: (item) -> Unit = {}
     var onItemRemoved: (item) -> Unit = {}
     var onItemMarkedRemove: (Int, Boolean) -> Unit = { _, _ -> }
     var onItemEdit: (item) -> Unit = {}
@@ -75,11 +76,14 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         theme.apply(context, holder.itemView as ViewGroup)
 
         fun View.setOnClick() {
+            var isLongPressed = false
+
             this.isClickable = true
             this.setOnTouchListener { v, e ->
                 if (editMode.isNone) list[position].onTouch(v, e)
 
                 if (e.action == ACTION_DOWN) {
+                    isLongPressed = false
                     if (editMode.isSwap) {
                         list[position].holder?.let {
                             touchHelper.startDrag(it)
@@ -90,7 +94,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                     }
                 }
 
-                if (e.action == ACTION_UP) {
+                if (e.action == ACTION_UP && !isLongPressed) { // onClick
                     this.performClick()
 
                     onItemClick(list[position])
@@ -103,6 +107,13 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                         }
                         editMode.isEdit -> onItemEdit(list[position])
                     }
+                }
+
+                var t = 500
+
+                if(e.eventTime - e.downTime > t && !isLongPressed) { // onLongClick
+                    isLongPressed = true
+                    onItemLongClick(list[position])
                 }
 
                 return@setOnTouchListener false

@@ -23,9 +23,14 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         conHandler.dispatch("init")
     }
 
-    fun reinit(reason: String = "opt_change") {
+    fun notifyOptionsChanged() {
         if (client.isConnected && isEnabled) topicCheck()
-        conHandler.dispatch(reason)
+        conHandler.dispatch("opt_change")
+    }
+
+    fun notifyNewAssignment() {
+        client.topics = mutableListOf()
+        notifyOptionsChanged()
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
@@ -190,6 +195,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
                 override fun connectionLost(cause: Throwable?) {
                     conHandler.dispatch("con_lost")
+                    d.log.newEntry("MQTTD lost connection")
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -200,6 +206,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
+                        d.log.newEntry("MQTTD connected")
                     }
 
                     override fun onFailure(
@@ -231,12 +238,15 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                             close()
                             isClosed = true
                         }
+
+                        d.log.newEntry("MQTTD disconnected")
                     }
 
                     override fun onFailure(
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
+                        d.log.newEntry("MQTTD failed to disconnect")
                     }
                 })
             } catch (e: MqttException) {

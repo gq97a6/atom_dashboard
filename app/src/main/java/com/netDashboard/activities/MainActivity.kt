@@ -19,7 +19,7 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
-import com.netDashboard.toolbarControl.toolBarControl
+import com.netDashboard.toolbarControl.ToolBarController
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             G.theme.apply(this, vg)
         }
 
-        toolBarControl(
+        ToolBarController(
             adapter,
             b.mBar,
             b.mLock,

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:tag="color"
         android:text="NetDashboard"
-        android:textSize="35sp"
+        android:textSize="35dp"
         tools:ignore="HardcodedText" />
 
 </LinearLayout>

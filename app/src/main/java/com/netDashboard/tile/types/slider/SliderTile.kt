@@ -57,8 +57,7 @@ class SliderTile : Tile() {
         displayValue = value
 
         holder.itemView.findViewById<TextView>(R.id.ts_tag)?.let {
-            if (tag.isBlank()) it.visibility = View.GONE
-            else it.text = tag
+            it.text = if (tag.isBlank()) "???" else tag
         }
     }
 

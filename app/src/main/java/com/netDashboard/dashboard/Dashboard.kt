@@ -4,7 +4,7 @@ import android.widget.Button
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.id_generator.IdGenerator
+import com.netDashboard.log.Log
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.tile.Tile
@@ -16,6 +16,8 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
 
     override val layout
         get() = R.layout.item_dashboard
+
+    var log = Log()
 
     @JsonIgnore
     var dg: DaemonGroup? = null

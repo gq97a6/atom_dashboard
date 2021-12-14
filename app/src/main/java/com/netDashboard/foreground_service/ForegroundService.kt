@@ -22,7 +22,7 @@ class ForegroundService : LifecycleService() {
 
     var finishFlag = MutableLiveData(false)
     private var isRunning = false
-    lateinit var dgc: DaemonGroups
+    lateinit var dgManager: DaemonGroupsManager
 
     companion object {
         var service: ForegroundService? = null
@@ -57,14 +57,14 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            dgc.deprecate()
+            dgManager.deprecateAll()
 
             stopSelf()
             stopForeground(true)
             finishFlag.postValue(true)
         } else {
             if (!isRunning) {
-                dgc = DaemonGroups(this)
+                dgManager = DaemonGroupsManager(this)
                 isRunning = true
             }
         }

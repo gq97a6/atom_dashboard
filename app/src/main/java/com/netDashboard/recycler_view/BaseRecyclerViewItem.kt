@@ -25,6 +25,10 @@ abstract class BaseRecyclerViewItem {
     @JsonIgnore
     var flag = Flags()
 
+    init {
+        IdGenerator.reportTakenId(id)
+    }
+
     fun <a : BaseRecyclerViewItem> getItemViewType(adapter: BaseRecyclerViewAdapter<a>): Int {
         this.adapter = adapter
 

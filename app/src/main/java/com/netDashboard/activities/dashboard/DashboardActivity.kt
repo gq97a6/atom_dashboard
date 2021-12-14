@@ -60,7 +60,7 @@ class DashboardActivity : AppCompatActivity() {
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
         //Set dashboard status
-        dashboard.daemonGroup?.mqttd?.let {
+        dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
                 b.dTagStatus.text = getString(
                     if (!dashboard.mqttEnabled) {

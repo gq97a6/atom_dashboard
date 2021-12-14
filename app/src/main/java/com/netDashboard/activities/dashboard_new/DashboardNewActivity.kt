@@ -30,7 +30,7 @@ class DashboardNewActivity : AppCompatActivity() {
         dashboards.add(dashboard)
         dashboards.save()
 
-        service?.dgc?.notifyDashboardAdded(dashboard)
+        service?.dgManager?.notifyDashboardAdded(dashboard)
 
         Intent(this, DashboardPropertiesActivity::class.java).also {
             it.putExtra("dashboardId", dashboard.id)

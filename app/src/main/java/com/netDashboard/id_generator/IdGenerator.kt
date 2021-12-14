@@ -16,6 +16,8 @@ object IdGenerator {
             }
         }
     }
+
+    fun reportTakenId(id: Long) = takenIds.add(id)
 }
 
 

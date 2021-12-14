@@ -82,10 +82,10 @@ abstract class Tile : BaseRecyclerViewItem() {
         raw: Boolean = false
     ) {
         if (topic.isNullOrEmpty()) return
-        if (dashboard.daemonGroup?.mqttd == null) return
+        if (dashboard.dg?.mqttd == null) return
 
         fun send() {
-            dashboard.daemonGroup?.mqttd?.publish(topic, msg, qos, retained)
+            dashboard.dg?.mqttd?.publish(topic, msg, qos, retained)
             onSend(topic, msg, qos, retained)
         }
 

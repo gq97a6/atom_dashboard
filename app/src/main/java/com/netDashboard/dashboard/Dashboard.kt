@@ -4,6 +4,7 @@ import android.widget.Button
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.id_generator.IdGenerator
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.tile.Tile
@@ -17,7 +18,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
         get() = R.layout.item_dashboard
 
     @JsonIgnore
-    var daemonGroup: DaemonGroup? = null
+    var dg: DaemonGroup? = null
 
     @JsonIgnore
     var tilesAdapterEditMode: BaseRecyclerViewAdapter<Tile>.Modes? = null

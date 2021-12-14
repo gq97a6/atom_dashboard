@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             if (adapter.itemCount == 0) b.mPlaceholder.visibility = View.VISIBLE
             b.mRemove.clearAnimation()
 
-            service?.dgc?.notifyDashboardRemoved(it)
+            service?.dgManager?.notifyDashboardRemoved(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

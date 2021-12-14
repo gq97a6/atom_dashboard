@@ -13,7 +13,6 @@ import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings
 
 @SuppressLint("CustomSplashScreen")
@@ -62,10 +61,7 @@ class SplashScreenActivity : AppCompatActivity() {
         }
 
         ForegroundService.service = service
-
-        for (d in dashboards) {
-            d.daemonGroup = service.dgc.get(d.name)
-        }
+        service.dgManager.assign()
 
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(this, MainActivity::class.java).also {

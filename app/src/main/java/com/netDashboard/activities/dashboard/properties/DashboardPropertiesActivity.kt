@@ -49,7 +49,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
         viewConfig()
         setContentView(b.root)
 
-        dashboard.daemonGroup?.mqttd?.let {
+        dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(this) { isDone ->
                 val v = b.dpMqttStatus
                 v.text = if (dashboard.mqttEnabled) {
@@ -72,7 +72,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
 
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
             dashboard.mqttEnabled = state
-            dashboard.daemonGroup?.mqttd?.reinit()
+            dashboard.dg?.mqttd?.reinit()
         }
 
         b.dpName.addTextChangedListener(object : TextWatcher {
@@ -93,7 +93,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttAddress != it) {
                         dashboard.mqttAddress = it
-                        dashboard.daemonGroup?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.reinit()
                     }
                 }
             }
@@ -106,7 +106,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 val port = cs.toString().trim().toIntOrNull() ?: (-1)
                 if (dashboard.mqttPort != port) {
                     dashboard.mqttPort = port
-                    dashboard.daemonGroup?.mqttd?.reinit()
+                    dashboard.dg?.mqttd?.reinit()
                 }
             }
         })
@@ -126,7 +126,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttUserName != it) {
                         dashboard.mqttUserName = it
-                        dashboard.daemonGroup?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.reinit()
                     }
                 }
             }
@@ -139,7 +139,7 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                 cs.toString().trim().let {
                     if (dashboard.mqttPass != it) {
                         dashboard.mqttPass = it
-                        dashboard.daemonGroup?.mqttd?.reinit()
+                        dashboard.dg?.mqttd?.reinit()
                     }
                 }
             }
@@ -154,11 +154,11 @@ class DashboardPropertiesActivity : AppCompatActivity() {
                         it.isBlank() -> {
                             dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
                             b.dpMqttClientId.setText(dashboard.mqttClientId)
-                            dashboard.daemonGroup?.mqttd?.reinit()
+                            dashboard.dg?.mqttd?.reinit()
                         }
                         dashboard.mqttClientId != it -> {
                             dashboard.mqttClientId = it
-                            dashboard.daemonGroup?.mqttd?.reinit()
+                            dashboard.dg?.mqttd?.reinit()
                         }
                         else -> {
                             return

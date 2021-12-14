@@ -1,40 +1,19 @@
 //develop ------------------------------
-tile design
-    icon
-    date
-    name
-
-    button
-    name
-    date
-    icon
-
-    slider
-    name
-    value
-    date
-    icon
-
 resize font
+log
+export/import data
+tiles icons
+dashboard item
+send text in tile text
 
 //improve ------------------------------
 app background
 show log hint
-export/import data
-password protected dashboard
-slider improve
-slider percentage instead of value
 
 //expand ------------------------------
 notifications
-log
-tiles icons
-tile receive timers
-tile tag
-dashboard item
 new tiles
     alert on change, on stop receiving, on receive
-    text
     terminal
     date
     graph

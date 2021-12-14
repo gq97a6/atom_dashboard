@@ -8,13 +8,13 @@ import com.netDashboard.dashboard.Dashboard
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 
-class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
+class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     var isEnabled = true
         get() = d.mqttEnabled && field
 
     var client = MqttAndroidClientExtended(context, d.mqttURI, d.mqttClientId)
-    var conHandler = ConnectionHandler()
+    var conHandler = MqttdConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
@@ -23,9 +23,9 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         conHandler.dispatch("init")
     }
 
-    fun reinit() {
+    fun reinit(reason: String = "opt_change") {
         if (client.isConnected && isEnabled) topicCheck()
-        conHandler.dispatch("reinit")
+        conHandler.dispatch(reason)
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
@@ -106,7 +106,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
         client.topics = topics
     }
 
-    inner class ConnectionHandler {
+    inner class MqttdConnectionHandler {
 
         var isDone = MutableLiveData(false)
 
@@ -225,6 +225,7 @@ class Mqttd(private val context: Context, private val d: Dashboard) : Daemon() {
 
                         unregisterResources()
                         setCallback(null)
+                        topics = mutableListOf()
 
                         if (toClose) {
                             close()

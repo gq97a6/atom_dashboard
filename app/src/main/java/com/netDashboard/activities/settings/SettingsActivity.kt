@@ -35,8 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         b.sThemeIsDark.setOnCheckedChangeListener { _, state ->
-            G.theme.isDark = state
-            G.theme.a.compute()
+            G.theme.a.isDark = state
             G.theme.apply(this, b.root)
         }
     }
@@ -61,5 +60,6 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun viewConfig() {
         b.sLast.isChecked = settings.startFromLast
+        b.sThemeIsDark.isChecked = G.theme.a.isDark
     }
 }

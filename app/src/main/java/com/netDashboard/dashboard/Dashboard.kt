@@ -1,6 +1,7 @@
 package com.netDashboard.dashboard
 
 import android.widget.Button
+import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
@@ -52,11 +53,6 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<Button>(R.id.id_button).text =
-            name.uppercase(Locale.getDefault())
-
-        holder.itemView.findViewById<Button>(R.id.id_button).setOnClickListener {
-            holder.itemView.callOnClick()
-        }
+        holder.itemView.findViewById<TextView>(R.id.id_tag).text = name.uppercase(Locale.getDefault())
     }
 }

@@ -58,7 +58,7 @@ class ThemeActivity : AppCompatActivity() {
         }
 
         b.tIsDark.setOnCheckedChangeListener { _, state ->
-            theme.isDark = state
+            theme.a.isDark = state
 
             b.tValText.tag = if (state) "colorC" else "colorB"
             b.tValue.tag = if (state) "disabled" else "enabled"
@@ -108,17 +108,17 @@ class ThemeActivity : AppCompatActivity() {
         b.tSaturation.value = theme.a.hsv[1]
         b.tValue.value = theme.a.hsv[2]
 
-        b.tValText.tag = if (theme.isDark) "colorC" else "colorB"
-        b.tValue.tag = if (theme.isDark) "disabled" else "enabled"
-        b.tValue.isEnabled = !theme.isDark
-        if (theme.isDark) b.tValue.value = 1f
+        b.tValText.tag = if (theme.a.isDark) "colorC" else "colorB"
+        b.tValue.tag = if (theme.a.isDark) "disabled" else "enabled"
+        b.tValue.isEnabled = !theme.a.isDark
+        if (theme.a.isDark) b.tValue.value = 1f
 
         if (b.tSaturation.value + b.tValue.value < 2) {
             b.tAdvancedArrow.rotation = 0f
             b.tAdvanced.visibility = VISIBLE
         }
 
-        b.tIsDark.isChecked = theme.isDark
+        b.tIsDark.isChecked = theme.a.isDark
     }
 
     private fun switchAdvancedTab() {

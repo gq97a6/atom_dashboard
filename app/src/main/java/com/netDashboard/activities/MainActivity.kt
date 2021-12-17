@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
 
     private lateinit var adapter: DashboardAdapter
+    private lateinit var toolBarController: ToolBarController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             G.theme.apply(this, vg)
         }
 
-        ToolBarController(
+        toolBarController = ToolBarController(
             adapter,
             b.mBar,
             b.mLock,
@@ -96,14 +97,16 @@ class MainActivity : AppCompatActivity() {
             if (!marked && count == 0) b.mRemove.clearAnimation()
         }
 
+        adapter.onItemEdit = { item ->
+            Intent(this, DashboardPropertiesActivity::class.java).also {
+                it.putExtra("dashboardId", item.id)
+                it.putExtra("exitActivity", "MainActivity")
+                startActivity(it)
+            }
+        }
+
         adapter.onItemClick = { item ->
-            if (adapter.editMode.isEdit) {
-                Intent(this, DashboardPropertiesActivity::class.java).also {
-                    it.putExtra("dashboardId", item.id)
-                    it.putExtra("exitActivity", "MainActivity")
-                    startActivity(it)
-                }
-            } else if (adapter.editMode.isNone) {
+            if (adapter.editMode.isNone) {
                 Intent(this, DashboardActivity::class.java).also {
                     settings.lastDashboardId = item.id
 
@@ -111,6 +114,10 @@ class MainActivity : AppCompatActivity() {
                     startActivity(it)
                 }
             }
+        }
+
+        adapter.onItemLongClick = {
+            toolBarController.toggleTools()
         }
 
         adapter.submitList(dashboards)

@@ -216,14 +216,13 @@ class DashboardActivity : AppCompatActivity() {
             if (!marked && count == 0) b.dRemove.clearAnimation()
         }
 
-        adapter.onItemEdit =
-            { item ->
-                Intent(this, TilePropertiesActivity::class.java).also {
-                    it.putExtra("tileIndex", adapter.list.indexOf(item))
-                    it.putExtra("dashboardId", dashboard.id)
-                    startActivity(it)
-                }
+        adapter.onItemEdit = { item ->
+            Intent(this, TilePropertiesActivity::class.java).also {
+                it.putExtra("tileIndex", adapter.list.indexOf(item))
+                it.putExtra("dashboardId", dashboard.id)
+                startActivity(it)
             }
+        }
 
         adapter.onItemLongClick = {
             toolBarController.toggleTools()

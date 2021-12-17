@@ -32,18 +32,16 @@ import java.io.FileReader
 @Suppress("UNUSED")
 class Theme {
 
-    var useOver = false
-    var isDark = false
     val a = Artist()
 
     fun apply(context: Context, viewGroup: ViewGroup) {
-        context.setTheme(if (!isDark) R.style.Theme_Dark else R.style.Theme_Light)
+        context.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         try {
             WindowInsetsControllerCompat(
                 (context as Activity).window,
                 viewGroup
-            ).isAppearanceLightStatusBars = !isDark
+            ).isAppearanceLightStatusBars = !a.isDark
 
             context.window.statusBarColor = a.colorBackground
         } catch (e: Exception) {
@@ -102,7 +100,7 @@ class Theme {
             }
             "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!isDark, 200))
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
@@ -158,8 +156,8 @@ class Theme {
                 drawable?.mutate()
                 drawable?.setStroke(1, a.color)
             }
-            "groupBar" -> this.setBackgroundColor(a.colorBackground.contrast(!isDark, 0.3f))
-            "group" -> this.setBackgroundColor(a.colorBackground.contrast(!isDark, 0.1f))
+            "groupBar" -> this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.3f))
+            "group" -> this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
@@ -186,11 +184,11 @@ class Theme {
         ripple?.setColor(
             ColorStateList.valueOf(
                 when (this.tag) {
-                    "color" -> contrastColor(!isDark, 80)
-                    "colorA" -> contrastColor(!isDark, 70)
-                    "colorB" -> contrastColor(!isDark, 60)
-                    "colorC" -> contrastColor(!isDark, 50)
-                    else -> contrastColor(!isDark, 70)
+                    "color" -> contrastColor(!a.isDark, 80)
+                    "colorA" -> contrastColor(!a.isDark, 70)
+                    "colorB" -> contrastColor(!a.isDark, 60)
+                    "colorC" -> contrastColor(!a.isDark, 50)
+                    else -> contrastColor(!a.isDark, 70)
                 }
             )
         )
@@ -259,7 +257,7 @@ class Theme {
             "basic" -> {
                 this.setTextColor(a.colorB)
                 this.setHintTextColor(a.colorC)
-                this.setBackgroundColor(a.colorBackground.contrast(!isDark, 0.2f))
+                this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.2f))
             }
             else -> onUnknownTag(this.tag, "editText")
         }
@@ -352,6 +350,12 @@ class Theme {
     }
 
     inner class Artist {
+
+        var isDark = false
+            set(value) {
+                field = value
+                compute()
+            }
 
         var color = 0
             private set

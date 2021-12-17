@@ -14,6 +14,7 @@ import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.settings
+import com.netDashboard.theme.Theme
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -25,6 +26,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         rootFolder = filesDir.canonicalPath.toString()
+
         G.initialize()
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         G.theme.apply(this, b.root)

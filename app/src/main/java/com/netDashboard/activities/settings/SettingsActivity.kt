@@ -33,6 +33,12 @@ class SettingsActivity : AppCompatActivity() {
                 startActivity(it)
             }
         }
+
+        b.sThemeIsDark.setOnCheckedChangeListener { _, state ->
+            G.theme.isDark = state
+            G.theme.a.compute()
+            G.theme.apply(this, b.root)
+        }
     }
 
     override fun onDestroy() {

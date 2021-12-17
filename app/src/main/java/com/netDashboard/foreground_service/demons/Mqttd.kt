@@ -194,6 +194,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 }
 
                 override fun connectionLost(cause: Throwable?) {
+                    topics = mutableListOf()
                     conHandler.dispatch("con_lost")
                     d.log.newEntry("MQTTD lost connection")
                 }

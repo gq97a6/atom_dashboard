@@ -1,10 +1,13 @@
 package com.netDashboard.activities.dashboard.tile_properties
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.AttributeSet
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.RadioGroup
@@ -16,7 +19,6 @@ import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
-import com.netDashboard.databinding.FragmentIconEditBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
@@ -212,7 +214,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         b.tpEditIcon.setOnClickListener {
             b.tpFragment.let {
-                it.visibility = if(it.isVisible) GONE else VISIBLE
+                it.visibility = if (it.isVisible) GONE else VISIBLE
             }
         }
     }

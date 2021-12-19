@@ -1,4 +1,4 @@
-package com.netDashboard.activities.dashboard.tile_properties
+package com.netDashboard.activities.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
+import com.netDashboard.databinding.ActivityTilePropertiesBinding
 import com.netDashboard.databinding.FragmentDashboardBinding
 import com.netDashboard.databinding.FragmentTileNewBinding
-import com.netDashboard.databinding.FragmentTilePropertiesBinding
 
-class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
-    private lateinit var b: FragmentTilePropertiesBinding
+class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
+    private lateinit var b: FragmentTileNewBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        b = FragmentTilePropertiesBinding.inflate(inflater, container, false)
+        b = FragmentTileNewBinding.inflate(inflater, container, false)
         return b.root
     }
 

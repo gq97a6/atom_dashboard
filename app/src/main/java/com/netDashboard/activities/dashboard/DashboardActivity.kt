@@ -224,8 +224,12 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        adapter.onItemLongClick = {
-            toolBarController.toggleTools()
+        adapter.onItemLongClick = { item ->
+            Intent(this, TilePropertiesActivity::class.java).also {
+                it.putExtra("tileIndex", adapter.list.indexOf(item))
+                it.putExtra("dashboardId", dashboard.id)
+                startActivity(it)
+            }
         }
 
         adapter.submitList(dashboard.tiles.toMutableList())
@@ -264,10 +268,6 @@ class DashboardActivity : AppCompatActivity() {
         layoutManager.stackFromEnd = true
         b.dLogRecyclerView.layoutManager = layoutManager
         b.dLogRecyclerView.adapter = adapter
-
-        if (adapter.itemCount == 0) {
-            b.dLogPlaceholder.visibility = View.VISIBLE
-        }
     }
 
 //----------------------------------------------------------------------------------------------

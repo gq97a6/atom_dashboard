@@ -27,8 +27,8 @@ class ToolBarController(
 
     fun toggleTools() {
         if (adapter.editMode.isNone) {
-            adapter.editMode.setEdit()
-            highlightOnly(edit)
+            adapter.editMode.setSwap()
+            highlightOnly(swap)
 
             bar.animate()
                 .translationY(0f)

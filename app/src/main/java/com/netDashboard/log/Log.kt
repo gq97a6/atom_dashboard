@@ -2,7 +2,7 @@ package com.netDashboard.log
 
 
 class Log {
-    val list = mutableListOf(LogEntry(), LogEntry(), LogEntry())
+    val list: MutableList<LogEntry> = mutableListOf()
 
     fun newEntry(text: String) {
         list.add(LogEntry(text))

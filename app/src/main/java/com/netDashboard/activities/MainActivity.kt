@@ -116,8 +116,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        adapter.onItemLongClick = {
-            toolBarController.toggleTools()
+        adapter.onItemLongClick = { item ->
+            Intent(this, DashboardPropertiesActivity::class.java).also {
+                it.putExtra("dashboardId", item.id)
+                it.putExtra("exitActivity", "MainActivity")
+                startActivity(it)
+            }
         }
 
         adapter.submitList(dashboards)

@@ -9,12 +9,14 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.netDashboard.R
 import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.byId
 import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.databinding.FragmentIconEditBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
@@ -207,6 +209,12 @@ class TilePropertiesActivity : AppCompatActivity() {
                 (tile as SliderTile).dragCon = state
             }
         }
+
+        b.tpEditIcon.setOnClickListener {
+            b.tpFragment.let {
+                it.visibility = if(it.isVisible) GONE else VISIBLE
+            }
+        }
     }
 
     override fun onPause() {
@@ -281,6 +289,12 @@ class TilePropertiesActivity : AppCompatActivity() {
                     } else R.id.tp_mqtt_payload_val
                 )
             }
+        }
+
+        val frag = IconEditFragment()
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.tp_fragment, frag)
+            commit()
         }
     }
 

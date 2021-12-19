@@ -121,9 +121,10 @@ class Theme {
     }
 
     private fun FrameLayout.applyTheme() {
-        //when (this.tag) {
-        //    else -> onUnknownTag(this.tag, "frameLayout")
-        //}
+        when (this.tag) {
+            "background" -> this.setBackgroundColor(a.colorBackground)
+            else -> onUnknownTag(this.tag, "frameLayout")
+        }
 
         if (this.tag != "item" && context !is DashboardActivity) {
             this.layoutTransition = LayoutTransition()
@@ -139,7 +140,7 @@ class Theme {
                 drawable?.setStroke(6, a.color)
                 drawable?.cornerRadius = 15f
             }
-            else -> onUnknownTag(this.tag, "frameLayout")
+            else -> onUnknownTag(this.tag, "constraintLayout")
         }
 
         if (this.tag != "item" && context !is DashboardActivity) {
@@ -203,12 +204,12 @@ class Theme {
             }
         )
 
-        when (this.tag) {
-            "color" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
-            "colorA" -> this.backgroundTintList = ColorStateList.valueOf(a.colorA)
-            "colorB" -> this.backgroundTintList = ColorStateList.valueOf(a.colorB)
-            "colorC" -> this.backgroundTintList = ColorStateList.valueOf(a.colorC)
-            else -> onUnknownTag(this.tag, "materialButton")
+        this.backgroundTintList = when (this.tag) {
+            "color" -> ColorStateList.valueOf(a.color)
+            "colorA" -> ColorStateList.valueOf(a.colorA)
+            "colorB" -> ColorStateList.valueOf(a.colorB)
+            "colorC" -> ColorStateList.valueOf(a.colorC)
+            else -> ColorStateList.valueOf(a.colorC)
         }
     }
 

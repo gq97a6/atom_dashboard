@@ -196,7 +196,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 override fun connectionLost(cause: Throwable?) {
                     topics = mutableListOf()
                     conHandler.dispatch("con_lost")
-                    d.log.newEntry("MQTTD lost connection")
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -207,7 +206,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
-                        d.log.newEntry("MQTTD connected")
                     }
 
                     override fun onFailure(
@@ -239,15 +237,12 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                             close()
                             isClosed = true
                         }
-
-                        d.log.newEntry("MQTTD disconnected")
                     }
 
                     override fun onFailure(
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
-                        d.log.newEntry("MQTTD failed to disconnect")
                     }
                 })
             } catch (e: MqttException) {

@@ -13,18 +13,6 @@
         android:layout_height="0dp"
         tools:ignore="Suspicious0dp">
 
-        <TextView
-            android:id="@+id/d_log_placeholder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="1dp"
-            android:gravity="center"
-            android:tag="colorB"
-            android:text="No logs."
-            android:textColor="#A3A3A3"
-            android:textSize="20dp"
-            android:visibility="gone" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

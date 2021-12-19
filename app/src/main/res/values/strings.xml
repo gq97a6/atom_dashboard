@@ -54,4 +54,6 @@
     <string name="tp_json_switch">Payload is JSON:</string>
     <string name="tp_conf_switch">Confirm publishing:</string>
     <string name="tp_tile_specific">Type specific:</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

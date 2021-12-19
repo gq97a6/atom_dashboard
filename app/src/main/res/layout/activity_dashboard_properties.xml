@@ -49,7 +49,7 @@
             android:textColorHint="@color/gray65"
             android:textCursorDrawable="@null"
             android:textSize="15dp"
-            tools:ignore="HardcodedText,TextFields" />
+            tools:ignore="HardcodedText,TextFields,TouchTargetSizeCheck" />
 
     </LinearLayout>
 
@@ -201,7 +201,8 @@
                             android:padding="0dp"
                             android:tag="colorC"
                             android:text="COPY BROKER PROPERTIES"
-                            android:textSize="11dp" />
+                            android:textSize="11dp"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                     </LinearLayout>
 
@@ -223,6 +224,7 @@
                         <EditText
                             android:id="@+id/dp_mqtt_address"
                             android:layout_width="match_parent"
+                            android:textSize="17dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
                             android:background="#19000000"
@@ -289,6 +291,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
+                            android:textSize="17dp"
                             android:background="#19000000"
                             android:ems="100"
                             android:hint="1883"
@@ -330,6 +333,7 @@
                             android:ems="100"
                             android:hint="random"
                             android:importantForAutofill="no"
+                            android:textSize="17dp"
                             android:inputType="text"
                             android:maxLength="15"
                             android:paddingHorizontal="10dp"
@@ -371,7 +375,8 @@
                             android:background="@drawable/icon_arrow"
                             android:clickable="true"
                             android:focusable="true"
-                            android:tag="groupArrow" />
+                            android:tag="groupArrow"
+                            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
                     </LinearLayout>
 
@@ -414,7 +419,8 @@
                                 android:textColor="@color/gray100"
                                 android:textColorHint="@color/gray65"
                                 android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
+                                android:textSize="17dp"
+                                tools:ignore="HardcodedText,TextFields,SpeakableTextPresentCheck" />
 
                         </LinearLayout>
 
@@ -449,7 +455,8 @@
                                 android:textColor="@color/gray100"
                                 android:textColorHint="@color/gray65"
                                 android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
+                                android:textSize="17dp"
+                                tools:ignore="HardcodedText,TextFields,SpeakableTextPresentCheck" />
 
                         </LinearLayout>
 

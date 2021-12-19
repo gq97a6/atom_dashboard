@@ -1,21 +1,15 @@
 //develop ------------------------------
 resize font
 tiles icons
-dashboard item
-    name
-    tiles number
-    address
-
 
 export/import data
 export/import MQTT
 
 //improve ------------------------------
 app background
-show log hint
-random color
-dark background
-log clear
+buttons
+popups
+corners
 
 //expand ------------------------------
 notifications, alerts

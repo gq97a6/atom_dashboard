@@ -1,6 +1,5 @@
 package com.netDashboard.theme
 
-import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -23,7 +22,6 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.*
-import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.mapper
 import java.io.File
@@ -126,10 +124,10 @@ class Theme {
             else -> onUnknownTag(this.tag, "frameLayout")
         }
 
-        if (this.tag != "item" && context !is DashboardActivity) {
-            this.layoutTransition = LayoutTransition()
-            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        }
+        //if (this.tag != "item" && context !is DashboardActivity) {
+        //    this.layoutTransition = LayoutTransition()
+        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        //}
     }
 
     private fun ConstraintLayout.applyTheme() {
@@ -143,10 +141,10 @@ class Theme {
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
 
-        if (this.tag != "item" && context !is DashboardActivity) {
-            this.layoutTransition = LayoutTransition()
-            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        }
+        //if (this.tag != "item" && context !is DashboardActivity) {
+        //    this.layoutTransition = LayoutTransition()
+        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        //}
     }
 
     private fun LinearLayout.applyTheme() {
@@ -162,10 +160,10 @@ class Theme {
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
-        if (context !is DashboardActivity) {
-            this.layoutTransition = LayoutTransition()
-            this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        }
+        //if (context !is DashboardActivity) {
+        //    this.layoutTransition = LayoutTransition()
+        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        //}
     }
 
     private fun RecyclerView.applyTheme() {

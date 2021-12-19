@@ -33,10 +33,10 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.settings.SettingsActivity" />
-        <activity android:name=".activities.dashboard.DashboardActivity" />
-        <activity android:name=".activities.dashboard.tile_new.TileNewActivity" />
-        <activity android:name=".activities.dashboard.tile_properties.TilePropertiesActivity" />
-        <activity android:name=".activities.dashboard.properties.DashboardPropertiesActivity" />
+        <activity android:name="com.netDashboard.activities.fragments.dashboard.DashboardActivity" />
+        <activity android:name="com.netDashboard.activities.fragments.dashboard.tile_new.TileNewActivity" />
+        <activity android:name="com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesActivity" />
+        <activity android:name="com.netDashboard.activities.fragments.dashboard.properties.DashboardPropertiesActivity" />
 
         <service
             android:name=".foreground_service.ForegroundService"

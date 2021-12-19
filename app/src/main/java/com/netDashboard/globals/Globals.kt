@@ -15,6 +15,14 @@ object G {
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
+    lateinit var dashboard: Dashboard
+
+    fun MutableList<Dashboard>.getById(id: Long): Dashboard =
+        this.find { it.id == id } ?: Dashboard(isInvalid = true)
+
+    fun setCurrentDashboard(id: Long) {
+        dashboard = dashboards.find { it.id == id } ?: Dashboard(isInvalid = true)
+    }
 
     fun initialize() {
         settings = Settings.getSaved()

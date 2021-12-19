@@ -1,6 +1,5 @@
 package com.netDashboard.dashboard
 
-import android.widget.Button
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
@@ -45,14 +44,10 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
 
     var bluetoothEnabled = false
 
-    companion object {
-        fun MutableList<Dashboard>.byId(id: Long): Dashboard =
-            this.find { it.id == id } ?: Dashboard(isInvalid = true)
-    }
-
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<TextView>(R.id.id_tag).text = name.uppercase(Locale.getDefault())
+        holder.itemView.findViewById<TextView>(R.id.id_tag).text =
+            name.uppercase(Locale.getDefault())
     }
 }

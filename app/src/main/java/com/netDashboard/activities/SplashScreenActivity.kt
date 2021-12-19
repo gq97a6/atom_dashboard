@@ -6,15 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.activities.dashboard.DashboardActivity
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
-import com.netDashboard.globals.G.settings
-import com.netDashboard.theme.Theme
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -71,15 +68,16 @@ class SplashScreenActivity : AppCompatActivity() {
                 finish()
             }
 
-            if (settings.lastDashboardId != null && settings.startFromLast) {
-
-                Intent(this, DashboardActivity::class.java).also {
-                    it.putExtra("dashboardId", settings.lastDashboardId)
-                    overridePendingTransition(0, 0)
-                    startActivity(it)
-                    finish()
-                }
-            }
+            //if (settings.startFromLast) {
+            //    settings.lastDashboardId?.let {
+            //        setCurrentDashboard(it)
+            //        Intent(this, DashboardActivity::class.java).also {
+            //            overridePendingTransition(0, 0)
+            //            startActivity(it)
+            //            finish()
+            //        }
+            //    }
+            //}
         }, 500)
     }
 }

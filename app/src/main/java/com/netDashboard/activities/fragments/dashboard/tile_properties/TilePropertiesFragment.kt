@@ -1,51 +1,48 @@
-package com.netDashboard.activities.dashboard.tile_properties
+package com.netDashboard.activities.fragments.dashboard.tile_properties
 
-import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.activities.dashboard.DashboardActivity
+import com.netDashboard.activities.fragments.TileIconFragment
 import com.netDashboard.app_on.AppOn
-import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboard.Companion.byId
-import com.netDashboard.databinding.ActivityTilePropertiesBinding
+import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboards
+import com.netDashboard.globals.G.dashboard
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.toPx
 
-class TilePropertiesActivity : AppCompatActivity() {
-    private lateinit var b: ActivityTilePropertiesBinding
+class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
+    private lateinit var b: FragmentTilePropertiesBinding
 
-    private var dashboardId: Long = 0
-    private lateinit var dashboard: Dashboard
     private lateinit var tile: Tile
-    private var tileIndex = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AppOn.create(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        b = FragmentTilePropertiesBinding.inflate(inflater, container, false)
+        return b.root
+    }
 
-        dashboardId = intent.getLongExtra("dashboardId", 0)
-        dashboard = dashboards.byId(dashboardId)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        AppOn.create(requireActivity())
 
-        tileIndex = intent.getIntExtra("tileIndex", 0)
-        tile = dashboard.tiles[tileIndex]
+        tile = dashboard.tiles[0]
 
-        b = ActivityTilePropertiesBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
+        G.theme.apply(requireActivity(), b.root)
         viewConfig()
-        setContentView(b.root)
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
@@ -61,7 +58,7 @@ class TilePropertiesActivity : AppCompatActivity() {
                 while (paint.measureText(raw, 0, raw.length) > bound) raw = raw.dropLast(1)
 
                 tile.tag = raw
-                b.tpTagWarning.visibility = if (raw.length != cs.length) VISIBLE else GONE
+                b.tpTagWarning.visibility = if (raw.length != cs.length) View.VISIBLE else View.GONE
             }
         })
 
@@ -95,7 +92,7 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
-            b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
+            b.tpMqttJsonPayload.visibility = if (state) View.VISIBLE else View.GONE
         }
 
         b.tpMqttJsonPayloadPath.addTextChangedListener(object : TextWatcher {
@@ -123,11 +120,11 @@ class TilePropertiesActivity : AppCompatActivity() {
             b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                 tile.mqttData.varPayload = when (id) {
                     R.id.tp_mqtt_payload_val -> {
-                        b.tpMqttPayloadBox.visibility = VISIBLE
+                        b.tpMqttPayloadBox.visibility = View.VISIBLE
                         false
                     }
                     R.id.tp_mqtt_payload_var -> {
-                        b.tpMqttPayloadBox.visibility = GONE
+                        b.tpMqttPayloadBox.visibility = View.GONE
                         true
                     }
                     else -> true
@@ -207,35 +204,26 @@ class TilePropertiesActivity : AppCompatActivity() {
             b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
                 (tile as SliderTile).dragCon = state
             }
-        }
 
-        b.tpEditIcon.setOnClickListener {
-            b.tpFragment.let {
-                it.visibility = if (it.isVisible) GONE else VISIBLE
+            b.tpEditIcon.setOnClickListener {
+                parentFragmentManager.beginTransaction().apply {
+                    replace(R.id.m_fragment, TileIconFragment())
+                    addToBackStack(null)
+                    commit()
+                }
             }
         }
     }
 
     override fun onPause() {
         super.onPause()
-
         dashboard.dg?.mqttd?.notifyOptionsChanged()
-
         AppOn.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         AppOn.destroy()
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-
-        Intent(this, DashboardActivity::class.java).also {
-            it.putExtra("dashboardId", dashboardId)
-            startActivity(it)
-        }
     }
 
     private fun viewConfig() {
@@ -250,7 +238,7 @@ class TilePropertiesActivity : AppCompatActivity() {
         b.tpMqttPayload.setText(tile.mqttData.pubPayload)
         tile.mqttData.payloadIsJson.let {
             b.tpMqttJsonSwitch.isChecked = it
-            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
+            b.tpMqttJsonPayload.visibility = if (it) View.VISIBLE else View.GONE
         }
         b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["value"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
@@ -265,14 +253,14 @@ class TilePropertiesActivity : AppCompatActivity() {
 
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
-        b.tpText.visibility = GONE
-        b.tpSlider.visibility = GONE
-        b.tpButton.visibility = GONE
-        b.tpMqttPayloadTypeBox.visibility = GONE
+        b.tpText.visibility = View.GONE
+        b.tpSlider.visibility = View.GONE
+        b.tpButton.visibility = View.GONE
+        b.tpMqttPayloadTypeBox.visibility = View.GONE
 
         when (tile) {
             is SliderTile -> {
-                b.tpSlider.visibility = VISIBLE
+                b.tpSlider.visibility = View.VISIBLE
                 b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
@@ -280,28 +268,22 @@ class TilePropertiesActivity : AppCompatActivity() {
             }
             is TextTile -> {
                 //b.tpText.visibility = VISIBLE
-                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpMqttPayloadTypeBox.visibility = View.VISIBLE
                 b.tpPayloadType.check(
                     if (tile.mqttData.varPayload) {
-                        b.tpMqttPayloadBox.visibility = GONE
+                        b.tpMqttPayloadBox.visibility = View.GONE
                         R.id.tp_mqtt_payload_var
                     } else R.id.tp_mqtt_payload_val
                 )
             }
         }
-
-        val frag = IconEditFragment()
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.tp_fragment, frag)
-            commit()
-        }
     }
 
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {
         b.tpMqtt.visibility = if (state) {
-            VISIBLE
+            View.VISIBLE
         } else {
-            GONE
+            View.GONE
         }
 
         tile.mqttData.isEnabled = state

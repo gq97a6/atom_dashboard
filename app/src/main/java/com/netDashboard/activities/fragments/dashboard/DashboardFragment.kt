@@ -1,4 +1,4 @@
-package com.netDashboard.activities.dashboard
+package com.netDashboard.activities.fragments.dashboard
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -14,16 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
-import com.netDashboard.activities.dashboard.tile_new.TileNewActivity
+import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
 import com.netDashboard.app_on.AppOn
 import com.netDashboard.blink
-import com.netDashboard.click
-import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboard.Companion.byId
-import com.netDashboard.databinding.ActivityDashboardBinding
 import com.netDashboard.databinding.FragmentDashboardBinding
 import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboards
+import com.netDashboard.globals.G.dashboard
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
@@ -33,7 +29,6 @@ import java.util.*
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
-    private lateinit var dashboard: Dashboard
     private lateinit var adapter: TilesAdapter
     private lateinit var toolBarController: ToolBarController
 
@@ -51,8 +46,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         AppOn.create(requireActivity())
 
-        //dashboard = G.dashboards.byId(intent.getLongExtra("dashboardId", 0))
-        dashboard = dashboards[0]
         if (dashboard.isInvalid) Intent(context, MainActivity::class.java).also {
             startActivity(it)
         }
@@ -132,10 +125,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            //Intent(this, TileNewActivity::class.java).also {
-            //    it.putExtra("dashboardId", dashboard.id)
-            //    startActivity(it)
-            //}
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.m_fragment, TileNewFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
 
         val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
@@ -221,19 +215,19 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemEdit = { item ->
-            //Intent(this, TilePropertiesActivity::class.java).also {
-            //    it.putExtra("tileIndex", adapter.list.indexOf(item))
-            //    it.putExtra("dashboardId", dashboard.id)
-            //    startActivity(it)
-            //}
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.m_fragment, TilePropertiesFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
 
         adapter.onItemLongClick = { item ->
-            //Intent(this, TilePropertiesActivity::class.java).also {
-            //    it.putExtra("tileIndex", adapter.list.indexOf(item))
-            //    it.putExtra("dashboardId", dashboard.id)
-            //    startActivity(it)
-            //}
+            parentFragmentManager.beginTransaction().apply {
+                replace(R.id.m_fragment, TilePropertiesFragment())
+                addToBackStack(null)
+                commit()
+            }
         }
 
         adapter.submitList(dashboard.tiles.toMutableList())
@@ -277,11 +271,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 //----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
-        //Intent(this, DashboardPropertiesActivity::class.java).also {
-        //    it.putExtra("exitActivity", "DashboardActivity")
-        //    it.putExtra("dashboardId", dashboard.id)
-        //    startActivity(it)
-        //}
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.m_fragment, DashboardPropertiesFragment())
+            addToBackStack(null)
+            commit()
+        }
     }
 
 //----------------------------------------------------------------------------------------------

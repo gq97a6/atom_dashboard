@@ -1,9 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#26FFFFFF"
-    tools:context=".activities.dashboard.tile_properties.IconEditFragment">
+    android:gravity="center"
+    android:orientation="vertical"
+    android:tag="background"
+    tools:context=".activities.fragments.dashboard.TileNewFragment">
 
-</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:tag="color"
+        android:text="Pick new tile"
+        android:textColor="@color/black"
+        android:textSize="45dp" />
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-5dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:tag="colorC"
+        android:text="You will be redirected to its properties afterwards."
+        android:textColor="@color/gray100"
+        android:textSize="17dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_frame"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:tag="frame">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:id="@+id/tn_button_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:tag="frame">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorA"
+                        android:text="Button"
+                        android:textColor="@color/gray230"
+                        android:textSize="25dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:text="Simplest tile. Tap to send predefined value."
+                        android:textColor="@color/gray100"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:id="@+id/tn_slider_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:tag="frame">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorA"
+                        android:text="Slider"
+                        android:textColor="@color/gray230"
+                        android:textSize="25dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:text="Easy to control. Send or receive numbers."
+                        android:textColor="@color/gray100"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:id="@+id/tn_text_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:tag="frame">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorA"
+                        android:text="Text"
+                        android:textColor="@color/gray230"
+                        android:textSize="25dp" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:text="Send or receive text."
+                        android:textColor="@color/gray100"
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="bottom"
+    android:orientation="vertical"
     android:tag="background"
     tools:context=".activities.dashboard.tile_properties.TilePropertiesActivity">
 
@@ -875,5 +877,12 @@
         </ScrollView>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/tp_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:layout="@layout/fragment_icon_edit" />
 
 </FrameLayout>

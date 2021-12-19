@@ -15,12 +15,12 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 
 
 class ForegroundService : LifecycleService() {
 
-    var finishFlag = MutableLiveData(false)
+    var finishAffinity: () -> Unit = {}
     private var isRunning = false
     lateinit var dgManager: DaemonGroupsManager
 
@@ -36,8 +36,7 @@ class ForegroundService : LifecycleService() {
         val intent = Intent(this, ForegroundService::class.java)
         intent.action = "STOP"
 
-        val pendingIntent = PendingIntent
-            .getService(
+        val pendingIntent = PendingIntent.getService(
                 this, 0, intent, PendingIntent.FLAG_IMMUTABLE
             )
 
@@ -59,9 +58,10 @@ class ForegroundService : LifecycleService() {
             isRunning = false
             dgManager.deprecateAll()
 
-            stopSelf()
             stopForeground(true)
-            finishFlag.postValue(true)
+            stopSelf()
+
+            finishAffinity()
         } else {
             if (!isRunning) {
                 dgManager = DaemonGroupsManager(this)
@@ -73,7 +73,7 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        AppOn.destroy()
+        Activity.onDestroy()
 
         if (isRunning) {
             val foregroundServiceHandler = ForegroundServiceHandler(this)

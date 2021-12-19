@@ -9,9 +9,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentThemeBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
 
 class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
@@ -28,9 +27,6 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppOn.create(requireActivity())
-
-        theme = theme
 
         viewConfig()
         theme.apply(requireContext(), b.root)
@@ -70,16 +66,6 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         b.tAdvancedArrow.setOnClickListener {
             switchAdvancedTab()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
     }
 
     private fun viewConfig() {

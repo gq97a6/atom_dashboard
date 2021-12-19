@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.fragments.dashboard.DashboardPropertiesFragment
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.FragmentDashboardNewBinding
@@ -31,7 +31,6 @@ class DashboardNewFragment : Fragment(R.layout.fragment_tile_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppOn.create(requireActivity())
 
         theme.apply(requireContext(), b.root)
 
@@ -48,15 +47,5 @@ class DashboardNewFragment : Fragment(R.layout.fragment_tile_new) {
             addToBackStack(null)
             commit()
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
     }
 }

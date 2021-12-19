@@ -13,7 +13,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
@@ -227,16 +227,6 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         b.dpMqttCred.visibility = View.GONE
 
         b.dpMqttClientId.setText(dashboard.mqttClientId)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
     }
 
     private fun switchMqttCred() {

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentTileIconBinding
 
 class TileIconFragment : Fragment(R.layout.fragment_tile_new) {
@@ -23,15 +23,5 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
     }
 }

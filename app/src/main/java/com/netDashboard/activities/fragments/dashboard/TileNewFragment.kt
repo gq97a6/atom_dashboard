@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.click
 import com.netDashboard.databinding.FragmentTileNewBinding
 import com.netDashboard.globals.G
@@ -31,7 +31,6 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppOn.create(requireActivity())
 
         G.theme.apply(requireActivity(), b.root)
 
@@ -49,16 +48,6 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             b.tnTextRipple.click()
             addTile(TextTile())
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
     }
 
     private var isDone = false

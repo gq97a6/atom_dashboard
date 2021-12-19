@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.folder_tree.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
+import com.netDashboard.globals.G.setCurrentDashboard
+import com.netDashboard.globals.G.settings
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -21,6 +23,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Activity.onCreate(this)
 
         rootFolder = filesDir.canonicalPath.toString()
 
@@ -44,40 +47,32 @@ class SplashScreenActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        AppOn.destroy()
+        Activity.onDestroy()
     }
 
     override fun onPause() {
         super.onPause()
-
-        AppOn.pause()
+        Activity.onPause()
         finish()
     }
 
     private fun onServiceReady() {
-        service.finishFlag.observe(this) { flag ->
-            if (flag) finishAffinity()
-        }
+        service.finishAffinity = { finishAffinity() }
 
         ForegroundService.service = service
         service.dgManager.assign()
+
+        if (settings.startFromLast) {
+            settings.lastDashboardId?.let {
+                setCurrentDashboard(it)
+            }
+        }
 
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)
                 finish()
             }
-
-            //if (settings.startFromLast) {
-            //    settings.lastDashboardId?.let {
-            //        setCurrentDashboard(it)
-            //        Intent(this, DashboardActivity::class.java).also {
-            //            overridePendingTransition(0, 0)
-            //            startActivity(it)
-            //            finish()
-            //        }
-            //    }
-            //}
         }, 500)
     }
 }

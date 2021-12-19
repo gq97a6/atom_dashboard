@@ -1,5 +1,6 @@
 package com.netDashboard.theme
 
+import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -124,7 +125,7 @@ class Theme {
             else -> onUnknownTag(this.tag, "frameLayout")
         }
 
-        //if (this.tag != "item" && context !is DashboardActivity) {
+        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
         //    this.layoutTransition = LayoutTransition()
         //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         //}
@@ -141,7 +142,7 @@ class Theme {
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
 
-        //if (this.tag != "item" && context !is DashboardActivity) {
+        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
         //    this.layoutTransition = LayoutTransition()
         //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         //}
@@ -150,6 +151,7 @@ class Theme {
     private fun LinearLayout.applyTheme() {
         when (this.tag) {
             "background" -> this.setBackgroundColor(a.colorBackground)
+            "background_no_anim" -> this.setBackgroundColor(a.colorBackground)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
@@ -160,7 +162,7 @@ class Theme {
             else -> onUnknownTag(this.tag, "linearLayout")
         }
 
-        //if (context !is DashboardActivity) {
+        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
         //    this.layoutTransition = LayoutTransition()
         //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         //}

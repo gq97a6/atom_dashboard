@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.fragments.dashboard.DashboardFragment
 import com.netDashboard.activities.fragments.dashboard.DashboardPropertiesFragment
-import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
-import com.netDashboard.click
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
@@ -37,7 +35,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppOn.create(requireActivity())
 
         setupRecyclerView()
         G.theme.apply(requireContext(), b.root)
@@ -75,16 +72,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        AppOn.pause()
-    }
-
     //override fun onBackPressed() {
     //    if (!adapter.editMode.isNone) {
     //        b.mLock.callOnClick()
@@ -111,7 +98,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
 
         adapter.onItemEdit = { item ->
             parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, TilePropertiesFragment())
+                replace(R.id.m_fragment, DashboardPropertiesFragment())
                 addToBackStack(null)
                 commit()
             }

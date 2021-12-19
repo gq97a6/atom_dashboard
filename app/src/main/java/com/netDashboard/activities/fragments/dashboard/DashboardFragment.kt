@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
 import com.netDashboard.globals.G
@@ -43,8 +43,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        AppOn.create(requireActivity())
 
         if (dashboard.isInvalid) Intent(context, MainActivity::class.java).also {
             startActivity(it)
@@ -169,18 +167,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        dashboard.tiles = adapter.list
-        AppOn.pause()
     }
 
     //override fun onBackPressed() {

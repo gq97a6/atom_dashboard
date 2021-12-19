@@ -11,7 +11,7 @@ import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.fragments.TileIconFragment
-import com.netDashboard.app_on.AppOn
+import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
@@ -37,7 +37,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AppOn.create(requireActivity())
 
         tile = dashboard.tiles[0]
 
@@ -213,17 +212,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
             }
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        dashboard.dg?.mqttd?.notifyOptionsChanged()
-        AppOn.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        AppOn.destroy()
     }
 
     private fun viewConfig() {

@@ -326,24 +326,4 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             b.dLog.layoutParams = lp
         }
     }
-
-//----------------------------------------------------------------------------------------------
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickLock(v: View) = b.dLock.click()
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickProperties(v: View) = b.dProperties.click()
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickAdd(v: View) = b.dAdd.click()
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickRemove(v: View) = b.dRemove.click()
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickSwap(v: View) = b.dSwap.click()
-
-    @Suppress("UNUSED_PARAMETER")
-    fun clickEdit(v: View) = b.dEdit.click()
 }

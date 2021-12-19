@@ -5,7 +5,7 @@
     android:gravity="top"
     android:orientation="vertical"
     android:tag="background"
-    tools:context=".activities.dashboard.DashboardActivity">
+    tools:context=".activities.dashboard.DashboardFragment">
 
     <FrameLayout
         android:id="@+id/d_log"
@@ -55,7 +55,6 @@
             android:layout_weight="3"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="clickLock"
             android:paddingTop="10dp"
             android:paddingBottom="@dimen/tile_padding">
 
@@ -104,7 +103,6 @@
             android:layout_weight="3"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="clickProperties"
             android:paddingTop="10dp"
             android:paddingBottom="@dimen/tile_padding">
 
@@ -180,8 +178,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="clickAdd">
+                        android:focusable="true">
 
                         <Button
                             android:id="@+id/d_add"
@@ -199,8 +196,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="clickRemove">
+                        android:focusable="true">
 
                         <Button
                             android:id="@+id/d_remove"
@@ -218,8 +214,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="clickSwap">
+                        android:focusable="true">
 
                         <Button
                             android:id="@+id/d_swap"
@@ -237,8 +232,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="clickEdit">
+                        android:focusable="true">
 
                         <Button
                             android:id="@+id/d_edit"

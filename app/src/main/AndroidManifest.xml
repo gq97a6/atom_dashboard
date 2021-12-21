@@ -16,27 +16,20 @@
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/Theme.Light">
-        <activity
-            android:name=".activities.theme.ThemeActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activities.dashboard_new.DashboardNewActivity"
-            android:exported="true" />
+
         <activity
             android:name=".activities.SplashScreenActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainActivity" />
-        <activity android:name=".activities.settings.SettingsActivity" />
-        <activity android:name="com.netDashboard.activities.fragments.dashboard.DashboardActivity" />
-        <activity android:name="com.netDashboard.activities.fragments.dashboard.tile_new.TileNewActivity" />
-        <activity android:name="com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesActivity" />
-        <activity android:name="com.netDashboard.activities.fragments.dashboard.properties.DashboardPropertiesActivity" />
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
         <service
             android:name=".foreground_service.ForegroundService"

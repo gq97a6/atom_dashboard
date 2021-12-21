@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G
 

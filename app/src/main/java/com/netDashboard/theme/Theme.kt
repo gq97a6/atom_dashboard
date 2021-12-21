@@ -1,6 +1,5 @@
 package com.netDashboard.theme
 
-import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -99,7 +98,6 @@ class Theme {
             }
             "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
@@ -133,11 +131,29 @@ class Theme {
 
     private fun ConstraintLayout.applyTheme() {
         when (this.tag) {
+            "background" -> this.setBackgroundColor(a.colorBackground)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
                 drawable?.setStroke(6, a.color)
                 drawable?.cornerRadius = 15f
+            }
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
+            "left_icon" -> {
+                val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+
+                val m = minOf(screenHeight * 0.06f, screenWidth * 0.04f).toInt()
+                layoutParams.setMargins(m, m, 0, 0)
+
+                this.layoutParams = layoutParams
+            }
+            "right_icon" -> {
+                val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
+
+                val m = minOf(screenHeight * 0.06f, screenWidth * 0.04f).toInt()
+                layoutParams.setMargins(0, m, m, 0)
+
+                this.layoutParams = layoutParams
             }
             else -> onUnknownTag(this.tag, "constraintLayout")
         }

@@ -1,4 +1,4 @@
-package com.netDashboard.activities.fragments.dashboard
+package com.netDashboard.activities.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
-import com.netDashboard.app_on.Activity
 import com.netDashboard.click
 import com.netDashboard.databinding.FragmentTileNewBinding
 import com.netDashboard.globals.G

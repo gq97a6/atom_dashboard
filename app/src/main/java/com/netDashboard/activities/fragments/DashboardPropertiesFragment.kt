@@ -1,4 +1,4 @@
-package com.netDashboard.activities.fragments.dashboard
+package com.netDashboard.activities.fragments
 
 import android.app.Dialog
 import android.os.Bundle
@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
-import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
@@ -105,7 +104,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             }
         })
 
-        b.dpMqttCredBar.setOnClickListener {
+        b.dpMqttCred.setOnClickListener {
             switchMqttCred()
         }
 

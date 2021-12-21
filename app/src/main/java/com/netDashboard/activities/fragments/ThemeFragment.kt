@@ -9,7 +9,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentThemeBinding
 import com.netDashboard.globals.G.theme
 

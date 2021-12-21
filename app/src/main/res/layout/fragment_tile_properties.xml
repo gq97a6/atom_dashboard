@@ -7,7 +7,7 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:tag="background"
-    tools:context=".activities.fragments.dashboard.tile_properties.TilePropertiesFragment">
+    tools:context=".activities.fragments.TilePropertiesFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <View
-                android:id="@+id/view"
+                android:id="@+id/tp_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/background_frame"
@@ -69,13 +69,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/tp_linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintStart_toEndOf="@+id/tp_view"
                 app:layout_constraintWidth="match_constraint">
 
                 <TextView

@@ -37,8 +37,8 @@ class ForegroundService : LifecycleService() {
         intent.action = "STOP"
 
         val pendingIntent = PendingIntent.getService(
-                this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-            )
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
 
         val notification = NotificationCompat.Builder(this, "foreground_service_id")
             .setAutoCancel(false)

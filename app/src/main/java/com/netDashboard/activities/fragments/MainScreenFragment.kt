@@ -7,18 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
-import com.netDashboard.activities.fragments.dashboard.DashboardFragment
-import com.netDashboard.activities.fragments.dashboard.DashboardPropertiesFragment
-import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.globals.G
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.setCurrentDashboard
+import com.netDashboard.globals.G.theme
 import com.netDashboard.toolbarControl.ToolBarController
 
-class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
+class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
 
     private lateinit var adapter: DashboardAdapter
@@ -37,7 +35,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        G.theme.apply(requireContext(), b.root)
+        theme.apply(requireContext(), b.root)
 
         val addOnClick: () -> Unit = {
             parentFragmentManager.beginTransaction().apply {
@@ -48,22 +46,22 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
         }
 
         val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
-            G.theme.apply(requireContext(), vg)
+            theme.apply(requireContext(), vg)
         }
 
         toolBarController = ToolBarController(
             adapter,
-            b.mBar,
-            b.mLock,
-            b.mEdit,
-            b.mSwap,
-            b.mRemove,
-            b.mAdd,
+            b.msBar,
+            b.msLock,
+            b.msEdit,
+            b.msSwap,
+            b.msRemove,
+            b.msAdd,
             addOnClick,
             onUiChange
         )
 
-        b.mSettings.setOnClickListener {
+        b.msSettings.setOnClickListener {
             parentFragmentManager.beginTransaction().apply {
                 replace(R.id.m_fragment, SettingsFragment())
                 addToBackStack(null)
@@ -72,12 +70,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
         }
     }
 
-    //override fun onBackPressed() {
-    //    if (!adapter.editMode.isNone) {
-    //        b.mLock.callOnClick()
-    //    } else finishAffinity()
-    //}
-
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
@@ -85,15 +77,15 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {
-            if (adapter.itemCount == 0) b.mPlaceholder.visibility = View.VISIBLE
-            b.mRemove.clearAnimation()
+            if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
+            b.msRemove.clearAnimation()
 
             ForegroundService.service?.dgManager?.notifyDashboardRemoved(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->
-            if (marked && count == 1) b.mRemove.blink(duration = 200, minAlpha = 0.2f)
-            if (!marked && count == 0) b.mRemove.clearAnimation()
+            if (marked && count == 1) b.msRemove.blink(duration = 200, minAlpha = 0.2f)
+            if (!marked && count == 0) b.msRemove.clearAnimation()
         }
 
         adapter.onItemEdit = { item ->
@@ -124,15 +116,15 @@ class MainScreenFragment : Fragment(R.layout.fragment_tile_new) {
             }
         }
 
-        adapter.submitList(G.dashboards)
+        adapter.submitList(dashboards)
 
         val layoutManager = LinearLayoutManager(requireContext())
 
-        b.mRecyclerView.layoutManager = layoutManager
-        b.mRecyclerView.adapter = adapter
+        b.msRecyclerView.layoutManager = layoutManager
+        b.msRecyclerView.adapter = adapter
 
         if (adapter.itemCount == 0) {
-            b.mPlaceholder.visibility = View.VISIBLE
+            b.msPlaceholder.visibility = View.VISIBLE
         }
     }
 }

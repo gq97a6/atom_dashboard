@@ -228,7 +228,7 @@
                 android:tag="groupBar">
 
                 <TextView
-                    android:id="@+id/dp_mqtt_cred_bar"
+                    android:id="@+id/t_mqtt_cred_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"

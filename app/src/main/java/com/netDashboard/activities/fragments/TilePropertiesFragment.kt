@@ -1,4 +1,4 @@
-package com.netDashboard.activities.fragments.dashboard.tile_properties
+package com.netDashboard.activities.fragments
 
 import android.graphics.Paint
 import android.os.Bundle
@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.activities.fragments.TileIconFragment
-import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G

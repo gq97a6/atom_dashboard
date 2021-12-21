@@ -1,10 +1,6 @@
 package com.netDashboard.app_on
 
 import android.app.Activity
-import android.os.Process.killProcess
-import android.os.Process.myPid
-import androidx.core.app.ActivityCompat.finishAffinity
-import androidx.lifecycle.LifecycleOwner
 import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G.dashboards

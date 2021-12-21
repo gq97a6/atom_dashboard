@@ -1,4 +1,4 @@
-package com.netDashboard.activities.fragments.dashboard
+package com.netDashboard.activities.fragments
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -14,12 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
-import com.netDashboard.activities.fragments.dashboard.tile_properties.TilePropertiesFragment
-import com.netDashboard.app_on.Activity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.globals.G.theme
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
 import com.netDashboard.tile.TilesAdapter
@@ -50,7 +48,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         setupRecyclerView()
         setupLogRecyclerView()
-        G.theme.apply(requireContext(), b.root)
+        theme.apply(requireContext(), b.root)
 
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
@@ -58,7 +56,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         //Set dashboard status
         dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
-                b.dTagStatus.text = getString(
+                b.dStatus.text = getString(
                     if (!dashboard.mqttEnabled) {
                         R.string.d_disconnected
                     } else {
@@ -81,7 +79,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             b.dBar.translationY = 0f
 
             adapter.editMode.let {
-                highlightOnly(
+                highlitOnly(
                     when {
                         it.isRemove -> b.dRemove
                         it.isSwap -> b.dSwap
@@ -131,7 +129,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
-            G.theme.apply(requireContext(), vg)
+            theme.apply(requireContext(), vg)
         }
 
         toolBarController = ToolBarController(
@@ -156,7 +154,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             return@setOnTouchListener true
         }
 
-        b.dTagStatus.setOnTouchListener { v, e ->
+        b.dStatus.setOnTouchListener { v, e ->
             showLog(v, e)
 
             return@setOnTouchListener true
@@ -169,18 +167,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         adapter.notifyDataSetChanged()
     }
 
-    //override fun onBackPressed() {
-    //    if (!adapter.editMode.isNone) {
-    //        b.dLock.callOnClick()
-    //    } else {
-    //        super.onBackPressed()
-//
-    //        Intent(this, MainActivity::class.java).also {
-    //            startActivity(it)
-    //        }
-    //    }
-    //}
-
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
@@ -188,7 +174,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         adapter = TilesAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
-        adapter.theme = G.theme
+        adapter.theme = theme
 
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
@@ -223,7 +209,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         //layoutManager.spanSizeLookup =
         //    object : GridLayoutManager.SpanSizeLookup() {
-        //        override fun getSpanSize(position: Int): Int {
+        //        override fun tSpanSize(position: Int): Int {
         //            return adapter.list[position].width
         //        }
         //    }
@@ -244,7 +230,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun setupLogRecyclerView() {
         val adapter = LogAdapter(requireContext())
         adapter.setHasStableIds(true)
-        adapter.theme = G.theme
+        adapter.theme = theme
         adapter.submitList(dashboard.log.list)
 
         val layoutManager = LinearLayoutManager(context)
@@ -266,18 +252,18 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
 //----------------------------------------------------------------------------------------------
 
-    private fun highlightOnly(button: Button) {
+    private fun highlitOnly(button: Button) {
         b.dRemove.alpha = 0.4f
         b.dSwap.alpha = 0.4f
         b.dEdit.alpha = 0.4f
         button.alpha = 1f
     }
 
-    private var showLogStartY = 0f
+    private var showLotartY = 0f
     private fun showLog(v: View, e: MotionEvent) {
         v.performClick()
 
-        if (e.action == KeyEvent.ACTION_DOWN) showLogStartY = e.rawY
+        if (e.action == KeyEvent.ACTION_DOWN) showLotartY = e.rawY
 
         if (e.action == KeyEvent.ACTION_UP) {
             val valueAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
@@ -292,7 +278,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             valueAnimator.start()
         } else {
             val lp = b.dLog.layoutParams
-            lp.height = (e.rawY - showLogStartY).toInt().let {
+            lp.height = (e.rawY - showLotartY).toInt().let {
                 when {
                     it <= 0 -> 0
                     it <= (0.9 * screenHeight) -> it

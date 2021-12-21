@@ -3,13 +3,14 @@ package com.netDashboard.toolbarControl
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.get
 import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
 class ToolBarController(
     private val adapter: BaseRecyclerViewAdapter<*>,
-    private val bar: LinearLayout,
+    private val bar: ConstraintLayout,
     private val lock: Button,
     private val edit: Button,
     private val swap: Button,
@@ -31,7 +32,7 @@ class ToolBarController(
             highlightOnly(swap)
 
             bar.animate()
-                .translationY(0f)
+                .translationY(-1.5f * bar.get(0).height.toFloat())
                 .withEndAction { lock.setBackgroundResource(R.drawable.button_unlocked) }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
@@ -39,7 +40,7 @@ class ToolBarController(
 
             remove.clearAnimation()
             bar.animate()
-                .translationY(bar.height.toFloat())
+                .translationY(0f)
                 .withEndAction { lock.setBackgroundResource(R.drawable.button_locked) }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }

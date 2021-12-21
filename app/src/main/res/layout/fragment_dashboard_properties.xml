@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:paddingTop="30dp"
     android:tag="background"
-    tools:context=".activities.fragments.dashboard.DashboardPropertiesFragment">
+    tools:context=".activities.fragments.DashboardPropertiesFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -224,7 +224,6 @@
                         <EditText
                             android:id="@+id/dp_mqtt_address"
                             android:layout_width="match_parent"
-                            android:textSize="17dp"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
                             android:background="#19000000"
@@ -239,6 +238,7 @@
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
                             android:textCursorDrawable="@null"
+                            android:textSize="17dp"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -291,7 +291,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="5dp"
-                            android:textSize="17dp"
                             android:background="#19000000"
                             android:ems="100"
                             android:hint="1883"
@@ -304,6 +303,7 @@
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
                             android:textCursorDrawable="@null"
+                            android:textSize="17dp"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -333,7 +333,6 @@
                             android:ems="100"
                             android:hint="random"
                             android:importantForAutofill="no"
-                            android:textSize="17dp"
                             android:inputType="text"
                             android:maxLength="15"
                             android:paddingHorizontal="10dp"
@@ -341,6 +340,7 @@
                             android:textColor="@color/gray100"
                             android:textColorHint="@color/gray65"
                             android:textCursorDrawable="@null"
+                            android:textSize="17dp"
                             tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
@@ -355,7 +355,7 @@
                         android:tag="groupBar">
 
                         <TextView
-                            android:id="@+id/dp_mqtt_cred_bar"
+                            android:id="@+id/t_mqtt_cred_bar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="10dp"

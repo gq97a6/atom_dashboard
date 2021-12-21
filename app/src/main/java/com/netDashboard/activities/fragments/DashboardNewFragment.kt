@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.activities.fragments.dashboard.DashboardPropertiesFragment
-import com.netDashboard.app_on.Activity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.FragmentDashboardNewBinding

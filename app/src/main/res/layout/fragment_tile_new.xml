@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:tag="background"
-    tools:context=".activities.fragments.dashboard.TileNewFragment">
+    tools:context=".activities.fragments.TileNewFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -150,7 +150,7 @@
                     android:tag="frame">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/tn_textView0"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:tag="colorA"
@@ -159,7 +159,7 @@
                         android:textSize="25dp" />
 
                     <TextView
-                        android:id="@+id/textView"
+                        android:id="@+id/tn_textView1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:tag="colorB"

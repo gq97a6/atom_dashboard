@@ -6,61 +6,49 @@
     android:tag="background"
     tools:context=".activities.MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ms_log"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/ms_toolbar"
+        android:layout_width="100dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0"
+        app:layout_constraintBottom_toTopOf="@id/ms_recycler_view"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ms_log_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/background_frame"
-            android:paddingStart="5dp"
-            android:tag="log"
-            app:layout_constraintBottom_toTopOf="@+id/ms_view"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="RtlSymmetry" />
+        <Button
+            android:id="@+id/ms_toolbar_icon"
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/button_locked"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:tag="color" />
 
-        <TextView
-            android:id="@+id/ms_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:tag="colorB"
-            android:text="Pull down to clear"
-            android:textColor="#A3A3A3"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+    </FrameLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/ms_lock"
-        style="@style/button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginVertical="10dp"
-        android:background="@drawable/button_locked"
-        android:tag="color"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ms_log" />
-
-    <Button
-        android:id="@+id/ms_settings"
-        style="@style/button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginVertical="10dp"
-        android:background="@drawable/button_more"
-        android:tag="color"
+    <FrameLayout
+        android:id="@+id/ms_more"
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ms_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ms_log" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginVertical="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/button_more"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:tag="color" />
+
+    </FrameLayout>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"

@@ -9,6 +9,7 @@ import android.os.Looper
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -20,6 +21,7 @@ import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.theme
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
+import com.netDashboard.switchTo
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toolbarControl.ToolBarController
 import java.util.*
@@ -50,6 +52,18 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupLogRecyclerView()
         theme.apply(requireContext(), b.root)
 
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!adapter.editMode.isNone) toolBarController.toggleTools()
+                    else {
+                        isEnabled = false
+                        activity?.onBackPressed()
+                    }
+                }
+            })
+
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
@@ -69,22 +83,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                                 R.string.d_attempting
                             }
                         }
-                    }
-                )
-            }
-        }
-
-        if (!adapter.editMode.isNone) {
-            b.dLock.setBackgroundResource(R.drawable.button_unlocked)
-            b.dBar.translationY = 0f
-
-            adapter.editMode.let {
-                highlitOnly(
-                    when {
-                        it.isRemove -> b.dRemove
-                        it.isSwap -> b.dSwap
-                        it.isEdit -> b.dEdit
-                        else -> b.dEdit
                     }
                 )
             }
@@ -121,21 +119,18 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, TileNewFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(TileNewFragment(), true)
         }
 
-        val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
-            theme.apply(requireContext(), vg)
+        val onUiChange: () -> Unit = {
+            theme.apply(requireContext(), b.root)
         }
 
         toolBarController = ToolBarController(
             adapter,
             b.dBar,
-            b.dLock,
+            b.dToolbar,
+            b.dToolbarIcon,
             b.dEdit,
             b.dSwap,
             b.dRemove,
@@ -144,7 +139,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             onUiChange
         )
 
-        b.dProperties.setOnClickListener {
+        b.dMore.setOnClickListener {
             propertiesOnClick()
         }
 
@@ -187,19 +182,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemEdit = { item ->
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, TilePropertiesFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(TilePropertiesFragment())
         }
 
         adapter.onItemLongClick = { item ->
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, TilePropertiesFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(TilePropertiesFragment())
         }
 
         adapter.submitList(dashboard.tiles.toMutableList())
@@ -243,11 +230,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 //----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.m_fragment, DashboardPropertiesFragment())
-            addToBackStack(null)
-            commit()
-        }
+        parentFragmentManager.switchTo(DashboardPropertiesFragment())
     }
 
 //----------------------------------------------------------------------------------------------

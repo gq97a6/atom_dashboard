@@ -22,6 +22,9 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import java.util.*
 
 const val A = 255 //100%
@@ -190,6 +193,18 @@ infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
 
 infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
 
+fun FragmentManager.switchTo(fragment: Fragment, add: Boolean = true) {
+    this.commit {
+        setCustomAnimations(
+            R.anim.fragment_in,
+            R.anim.fragment_out,
+            R.anim.fragment_in,
+            R.anim.fragment_out
+        )
+        replace(R.id.m_fragment, fragment)
+        if (add) addToBackStack(null)
+    }
+}
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {
 //    Snackbar.make(

@@ -1,7 +1,6 @@
 //develop ------------------------------
 resize font
 tiles icons
-fragment animation
 
 export/import data
 export/import MQTT

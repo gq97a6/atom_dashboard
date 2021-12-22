@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
@@ -14,6 +15,7 @@ import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.setCurrentDashboard
 import com.netDashboard.globals.G.theme
+import com.netDashboard.switchTo
 import com.netDashboard.toolbarControl.ToolBarController
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
@@ -37,22 +39,31 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         setupRecyclerView()
         theme.apply(requireContext(), b.root)
 
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!adapter.editMode.isNone) toolBarController.toggleTools()
+                    else {
+                        isEnabled = false
+                        activity?.onBackPressed()
+                    }
+                }
+            })
+
         val addOnClick: () -> Unit = {
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, DashboardNewFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(DashboardNewFragment())
         }
 
-        val onUiChange: (vg: ViewGroup) -> Unit = { vg ->
-            theme.apply(requireContext(), vg)
+        val onUiChange: () -> Unit = {
+            theme.apply(requireContext(), b.root)
         }
 
         toolBarController = ToolBarController(
             adapter,
             b.msBar,
-            b.msLock,
+            b.msToolbar,
+            b.msToolbarIcon,
             b.msEdit,
             b.msSwap,
             b.msRemove,
@@ -61,12 +72,8 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             onUiChange
         )
 
-        b.msSettings.setOnClickListener {
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, SettingsFragment())
-                addToBackStack(null)
-                commit()
-            }
+        b.msMore.setOnClickListener {
+            parentFragmentManager.switchTo(SettingsFragment())
         }
     }
 
@@ -89,31 +96,18 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemEdit = { item ->
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, DashboardPropertiesFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(DashboardPropertiesFragment())
         }
 
         adapter.onItemClick = { item ->
             if (adapter.editMode.isNone) {
-                setCurrentDashboard(item.id)
-                parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.m_fragment, DashboardFragment())
-                    addToBackStack(null)
-                    commit()
-                }
+                parentFragmentManager.switchTo(DashboardFragment(), true)
             }
         }
 
         adapter.onItemLongClick = { item ->
             setCurrentDashboard(item.id)
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, DashboardPropertiesFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(DashboardPropertiesFragment(), true)
         }
 
         adapter.submitList(dashboards)

@@ -1,8 +1,8 @@
 package com.netDashboard.toolbarControl
 
-import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
+import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.netDashboard.R
@@ -11,13 +11,14 @@ import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 class ToolBarController(
     private val adapter: BaseRecyclerViewAdapter<*>,
     private val bar: ConstraintLayout,
-    private val lock: Button,
+    private val toolbar: FrameLayout,
+    private val toolbarIcon: Button,
     private val edit: Button,
     private val swap: Button,
     private val remove: Button,
     add: Button,
     private val onAdd: () -> Unit,
-    private val onUiChange: (vg: ViewGroup) -> Unit
+    private val onUiChange: () -> Unit
 ) {
     private fun highlightOnly(button: Button) {
         remove.alpha = 0.4f
@@ -33,7 +34,10 @@ class ToolBarController(
 
             bar.animate()
                 .translationY(-1.5f * bar.get(0).height.toFloat())
-                .withEndAction { lock.setBackgroundResource(R.drawable.button_unlocked) }
+                .withEndAction {
+                    toolbarIcon.setBackgroundResource(R.drawable.button_unlocked)
+                    onUiChange()
+                }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         } else {
             adapter.editMode.setNone()
@@ -41,15 +45,16 @@ class ToolBarController(
             remove.clearAnimation()
             bar.animate()
                 .translationY(0f)
-                .withEndAction { lock.setBackgroundResource(R.drawable.button_locked) }
+                .withEndAction {
+                    toolbarIcon.setBackgroundResource(R.drawable.button_locked)
+                    onUiChange()
+                }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
         }
-
-        onUiChange(lock.rootView as ViewGroup)
     }
 
     init {
-        lock.setOnClickListener {
+        toolbar.setOnClickListener {
             toggleTools()
         }
 

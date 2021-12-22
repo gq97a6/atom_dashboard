@@ -197,6 +197,7 @@ class Theme {
     private fun MaterialButton.applyTheme() {
         val background = this.background as LayerDrawable?
         val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
+        background?.mutate()
 
         ripple?.setColor(
             ColorStateList.valueOf(

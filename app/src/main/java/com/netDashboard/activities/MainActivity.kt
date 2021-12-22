@@ -2,10 +2,11 @@ package com.netDashboard.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.R
 import com.netDashboard.activities.fragments.MainScreenFragment
 import com.netDashboard.app_on.Activity
 import com.netDashboard.databinding.ActivityMainBinding
+import com.netDashboard.globals.G
+import com.netDashboard.switchTo
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
@@ -16,11 +17,9 @@ class MainActivity : AppCompatActivity() {
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
+        G.theme.apply(this, b.root)
 
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.m_fragment, MainScreenFragment())
-            commit()
-        }
+        supportFragmentManager.switchTo(MainScreenFragment(), false)
     }
 
     override fun onDestroy() {

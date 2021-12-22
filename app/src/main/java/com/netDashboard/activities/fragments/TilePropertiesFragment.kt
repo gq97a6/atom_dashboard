@@ -14,6 +14,7 @@ import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.switchTo
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
@@ -203,11 +204,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
 
             b.tpEditIcon.setOnClickListener {
-                parentFragmentManager.beginTransaction().apply {
-                    replace(R.id.m_fragment, TileIconFragment())
-                    addToBackStack(null)
-                    commit()
-                }
+                parentFragmentManager.switchTo(TileIconFragment())
             }
         }
     }

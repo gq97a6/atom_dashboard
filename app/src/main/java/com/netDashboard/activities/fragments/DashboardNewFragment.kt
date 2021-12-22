@@ -13,6 +13,7 @@ import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.setCurrentDashboard
 import com.netDashboard.globals.G.theme
+import com.netDashboard.switchTo
 import kotlin.random.Random
 
 class DashboardNewFragment : Fragment(R.layout.fragment_tile_new) {
@@ -40,10 +41,6 @@ class DashboardNewFragment : Fragment(R.layout.fragment_tile_new) {
         ForegroundService.service?.dgManager?.notifyDashboardAdded(dashboard)
 
         setCurrentDashboard(dashboard.id)
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.m_fragment, DashboardPropertiesFragment())
-            addToBackStack(null)
-            commit()
-        }
+        parentFragmentManager.switchTo(DashboardPropertiesFragment())
     }
 }

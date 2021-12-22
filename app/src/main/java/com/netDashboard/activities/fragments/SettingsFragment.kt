@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G
+import com.netDashboard.switchTo
 
 class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
     private lateinit var b: FragmentSettingsBinding
@@ -32,11 +33,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         }
 
         b.sThemeEdit.setOnClickListener {
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.m_fragment, ThemeFragment())
-                addToBackStack(null)
-                commit()
-            }
+            parentFragmentManager.switchTo(ThemeFragment())
         }
 
         b.sThemeIsDark.setOnCheckedChangeListener { _, state ->

@@ -28,7 +28,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        theme.apply(requireContext(), b.root)
+        theme.apply(requireContext(), b.root, true)
 
         fun onColorChange() {
             theme.a.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)

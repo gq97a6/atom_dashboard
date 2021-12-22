@@ -1,4 +1,4 @@
-package com.netDashboard.folder_tree
+package com.netDashboard
 
 object FolderTree {
     var rootFolder: String = ""

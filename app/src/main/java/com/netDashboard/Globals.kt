@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.settings.Settings
-import com.netDashboard.theme.Theme
+import com.netDashboard.Settings
+import com.netDashboard.Theme
 
 object G {
     val mapper: ObjectMapper =

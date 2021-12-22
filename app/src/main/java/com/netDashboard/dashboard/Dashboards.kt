@@ -1,7 +1,7 @@
 package com.netDashboard.dashboard
 
 import android.util.Log
-import com.netDashboard.folder_tree.FolderTree.dashboardsFile
+import com.netDashboard.FolderTree.dashboardsFile
 import com.netDashboard.globals.G.mapper
 import java.io.File
 import java.io.FileReader

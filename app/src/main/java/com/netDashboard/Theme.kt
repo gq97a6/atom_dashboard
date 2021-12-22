@@ -1,5 +1,6 @@
-package com.netDashboard.theme
+package com.netDashboard
 
+import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -21,8 +22,6 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.*
-import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.mapper
 import java.io.File
 import java.io.FileReader
@@ -32,7 +31,7 @@ class Theme {
 
     val a = Artist()
 
-    fun apply(context: Context, viewGroup: ViewGroup) {
+    fun apply(context: Context, viewGroup: ViewGroup, anim: Boolean = false) {
         context.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         try {
@@ -47,6 +46,7 @@ class Theme {
         }
 
         viewGroup.applyTheme()
+        if (anim) viewGroup.applyAnimations()
     }
 
     private fun ViewGroup.applyTheme() {
@@ -58,6 +58,25 @@ class Theme {
         }
 
         this.defineType()
+    }
+
+    private fun ViewGroup.applyAnimations() {
+        fun ViewGroup.apply() {
+            if (this is ConstraintLayout || this is LinearLayout || this is FrameLayout) {
+                this.layoutTransition = LayoutTransition()
+                this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+            }
+        }
+
+        for (i in 0 until this.childCount) {
+            val v = this.getChildAt(i)
+            if (v is ViewGroup){
+                v.applyAnimations()
+                v.apply()
+            }
+        }
+
+        this.apply()
     }
 
     private fun View.defineType() {
@@ -122,11 +141,6 @@ class Theme {
             "background" -> this.setBackgroundColor(a.colorBackground)
             else -> onUnknownTag(this.tag, "frameLayout")
         }
-
-        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
-        //    this.layoutTransition = LayoutTransition()
-        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        //}
     }
 
     private fun ConstraintLayout.applyTheme() {
@@ -139,35 +153,13 @@ class Theme {
                 drawable?.cornerRadius = 15f
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
-            "left_icon" -> {
-                val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
-
-                val m = minOf(screenHeight * 0.06f, screenWidth * 0.04f).toInt()
-                layoutParams.setMargins(m, m, 0, 0)
-
-                this.layoutParams = layoutParams
-            }
-            "right_icon" -> {
-                val layoutParams = this.layoutParams as ConstraintLayout.LayoutParams
-
-                val m = minOf(screenHeight * 0.06f, screenWidth * 0.04f).toInt()
-                layoutParams.setMargins(0, m, m, 0)
-
-                this.layoutParams = layoutParams
-            }
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
-
-        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
-        //    this.layoutTransition = LayoutTransition()
-        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        //}
     }
 
     private fun LinearLayout.applyTheme() {
         when (this.tag) {
             "background" -> this.setBackgroundColor(a.colorBackground)
-            "background_no_anim" -> this.setBackgroundColor(a.colorBackground)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
@@ -177,11 +169,6 @@ class Theme {
             "group" -> this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
-
-        //if (this.rootView.tag != "item" && this.rootView.tag != "background_no_anim") {
-        //    this.layoutTransition = LayoutTransition()
-        //    this.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-        //}
     }
 
     private fun RecyclerView.applyTheme() {

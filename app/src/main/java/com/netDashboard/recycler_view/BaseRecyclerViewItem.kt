@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.id_generator.IdGenerator
+import com.netDashboard.IdGenerator
 
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewItem {

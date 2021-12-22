@@ -1,4 +1,4 @@
-package com.netDashboard.id_generator
+package com.netDashboard
 
 import java.util.*
 

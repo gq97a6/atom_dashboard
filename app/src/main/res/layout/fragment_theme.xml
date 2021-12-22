@@ -263,6 +263,7 @@
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 android:tag="group"
+                android:animateLayoutChanges="true"
                 android:visibility="gone">
 
                 <LinearLayout

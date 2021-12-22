@@ -26,7 +26,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        G.theme.apply(requireContext(), b.root)
+        G.theme.apply(requireContext(), b.root, true)
 
         b.sLast.setOnCheckedChangeListener { _, state ->
             G.settings.startFromLast = state

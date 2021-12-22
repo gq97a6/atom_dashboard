@@ -381,6 +381,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:animateLayoutChanges="true"
                         android:id="@+id/dp_mqtt_cred"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

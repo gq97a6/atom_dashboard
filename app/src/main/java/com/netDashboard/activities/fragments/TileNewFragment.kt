@@ -31,7 +31,7 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        G.theme.apply(requireActivity(), b.root)
+        G.theme.apply(requireActivity(), b.root, true)
 
         b.tnButton.setOnClickListener {
             b.tnButtonRipple.click()

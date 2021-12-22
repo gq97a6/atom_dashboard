@@ -9,7 +9,6 @@ export/import MQTT
 app background
 buttons
 popups
-corners
 
 //expand ------------------------------
 notifications, alerts

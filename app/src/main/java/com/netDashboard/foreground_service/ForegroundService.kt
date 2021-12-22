@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.netDashboard.R
-import com.netDashboard.app_on.Activity
+import com.netDashboard.Activity
 
 
 class ForegroundService : LifecycleService() {

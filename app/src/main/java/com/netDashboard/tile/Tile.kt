@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
-import com.netDashboard.parser.Parser.byJSONPath
+import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -25,6 +25,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     var width = 1
 
     var tag = ""
+    var icon = -1
     abstract var typeTag: String
 
     abstract val mqttData: MqttData

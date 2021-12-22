@@ -3,7 +3,7 @@ package com.netDashboard.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.activities.fragments.MainScreenFragment
-import com.netDashboard.app_on.Activity
+import com.netDashboard.Activity
 import com.netDashboard.databinding.ActivityMainBinding
 import com.netDashboard.globals.G
 import com.netDashboard.switchTo

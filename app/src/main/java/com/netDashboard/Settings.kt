@@ -1,6 +1,5 @@
-package com.netDashboard.settings
+package com.netDashboard
 
-import com.netDashboard.folder_tree.FolderTree
 import com.netDashboard.globals.G.mapper
 import java.io.File
 import java.io.FileReader

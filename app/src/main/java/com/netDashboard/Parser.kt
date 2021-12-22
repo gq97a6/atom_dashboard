@@ -1,4 +1,4 @@
-package com.netDashboard.parser
+package com.netDashboard
 
 import com.netDashboard.globals.G.mapper
 

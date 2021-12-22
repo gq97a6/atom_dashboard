@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.netDashboard.app_on.Activity
+import com.netDashboard.Activity
 import com.netDashboard.databinding.ActivitySplashScreenBinding
-import com.netDashboard.folder_tree.FolderTree.rootFolder
+import com.netDashboard.FolderTree.rootFolder
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G

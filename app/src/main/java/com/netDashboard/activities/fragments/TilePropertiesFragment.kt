@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
+import com.netDashboard.databinding.FragmentIconEditBinding
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
@@ -39,7 +40,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         tile = dashboard.tiles[0]
 
-        G.theme.apply(requireActivity(), b.root)
+        G.theme.apply(requireActivity(), b.root, true)
         viewConfig()
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
@@ -112,6 +113,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 R.id.tp_qos2 -> 2
                 else -> 1
             }
+        }
+
+        b.tpEditIcon.setOnClickListener {
+            parentFragmentManager.switchTo(TileIconFragment())
         }
 
         if (tile is TextTile) {
@@ -213,6 +218,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpTileType.text = tile.typeTag
         b.tpTag.setText(tile.tag)
+        //icon set
 
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled

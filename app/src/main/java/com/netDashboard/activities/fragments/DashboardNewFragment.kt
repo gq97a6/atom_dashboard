@@ -31,7 +31,7 @@ class DashboardNewFragment : Fragment(R.layout.fragment_tile_new) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theme.apply(requireContext(), b.root)
+        theme.apply(requireContext(), b.root, true)
 
         val name = kotlin.math.abs(Random.nextInt()).toString()
         val dashboard = Dashboard(name)

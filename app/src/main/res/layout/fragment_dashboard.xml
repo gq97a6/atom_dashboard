@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="background"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.fragments.DashboardFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/d_log"
+        android:tag="no_anim"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0"
@@ -42,6 +43,7 @@
         android:id="@+id/d_toolbar"
         android:layout_width="100dp"
         android:layout_height="0dp"
+        android:tag="no_anim"
         app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/d_log">

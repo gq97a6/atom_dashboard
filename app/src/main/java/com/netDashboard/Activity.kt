@@ -1,4 +1,4 @@
-package com.netDashboard.app_on
+package com.netDashboard
 
 import android.app.Activity
 import com.netDashboard.dashboard.Dashboards.Companion.save

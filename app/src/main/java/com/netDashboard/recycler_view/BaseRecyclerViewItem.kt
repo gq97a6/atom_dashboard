@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.alpha
 import com.netDashboard.IdGenerator
+import com.netDashboard.globals.G.theme
 
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewItem {
@@ -83,7 +84,7 @@ abstract class BaseRecyclerViewItem {
             val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
 
             if (!isNone) {
-                foreground?.setBackgroundColor(adapter.theme.a.colorBackground.alpha(190))
+                foreground?.setBackgroundColor(theme.a.colorBackground.alpha(190))
 
                 foreground?.animate()
                     ?.alpha(1f)

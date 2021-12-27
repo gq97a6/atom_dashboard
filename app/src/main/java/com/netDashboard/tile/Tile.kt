@@ -8,6 +8,7 @@ import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.Parser.byJSONPath
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -113,7 +114,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         binding.pcConfirm.text = "PUBLISH"
         binding.pcText.text = "Confirm publishing"
 
-        adapter.theme.apply(adapter.context, binding.root)
+        theme.apply(adapter.context, binding.root)
         dialog.show()
     }
 

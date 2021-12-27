@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.blink
+import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.DashboardAdapter
+import com.netDashboard.dashboard.Dashboards.Companion.save
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G.dashboards
@@ -17,6 +19,7 @@ import com.netDashboard.globals.G.setCurrentDashboard
 import com.netDashboard.globals.G.theme
 import com.netDashboard.switchTo
 import com.netDashboard.toolbarControl.ToolBarController
+import kotlin.random.Random
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
@@ -52,7 +55,15 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             })
 
         val addOnClick: () -> Unit = {
-            parentFragmentManager.switchTo(DashboardNewFragment())
+            val name = kotlin.math.abs(Random.nextInt()).toString()
+            val dashboard = Dashboard(name)
+            dashboards.add(dashboard)
+            dashboards.save()
+
+            ForegroundService.service?.dgManager?.notifyDashboardAdded(dashboard)
+
+            setCurrentDashboard(dashboard.id)
+            parentFragmentManager.switchTo(DashboardPropertiesFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -96,18 +107,20 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemEdit = { item ->
+            setCurrentDashboard(item.id)
             parentFragmentManager.switchTo(DashboardPropertiesFragment())
         }
 
         adapter.onItemClick = { item ->
             if (adapter.editMode.isNone) {
-                parentFragmentManager.switchTo(DashboardFragment(), true)
+                setCurrentDashboard(item.id)
+                parentFragmentManager.switchTo(DashboardFragment())
             }
         }
 
         adapter.onItemLongClick = { item ->
             setCurrentDashboard(item.id)
-            parentFragmentManager.switchTo(DashboardPropertiesFragment(), true)
+            parentFragmentManager.switchTo(DashboardPropertiesFragment())
         }
 
         adapter.submitList(dashboards)
@@ -117,8 +130,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         b.msRecyclerView.layoutManager = layoutManager
         b.msRecyclerView.adapter = adapter
 
-        if (adapter.itemCount == 0) {
-            b.msPlaceholder.visibility = View.VISIBLE
-        }
+        if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
     }
 }

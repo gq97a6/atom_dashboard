@@ -22,8 +22,6 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
     @JsonIgnore
     var dg: DaemonGroup? = null
 
-    @JsonIgnore
-    var tilesAdapterEditMode: BaseRecyclerViewAdapter<Tile>.Modes? = null
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
             for (t in value) t.dashboard = this

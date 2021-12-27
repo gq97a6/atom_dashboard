@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -17,7 +16,9 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
+import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
@@ -51,6 +52,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupRecyclerView()
         setupLogRecyclerView()
         theme.apply(requireContext(), b.root)
+        settings.lastDashboardId = dashboard.id
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -119,7 +121,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            parentFragmentManager.switchTo(TileNewFragment(), true)
+            parentFragmentManager.switchTo(TileNewFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -169,7 +171,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         adapter = TilesAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
-        adapter.theme = theme
 
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
@@ -182,11 +183,23 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemEdit = { item ->
-            parentFragmentManager.switchTo(TilePropertiesFragment())
+            val fragment = TilePropertiesFragment()
+            fragment.apply {
+                arguments = Bundle().apply {
+                    putInt("index", dashboard.tiles.indexOf(item))
+                }
+            }
+            parentFragmentManager.switchTo(fragment)
         }
 
         adapter.onItemLongClick = { item ->
-            parentFragmentManager.switchTo(TilePropertiesFragment())
+            val fragment = TilePropertiesFragment()
+            fragment.apply {
+                arguments = Bundle().apply {
+                    putInt("index", dashboard.tiles.indexOf(item))
+                }
+            }
+            parentFragmentManager.switchTo(fragment)
         }
 
         adapter.submitList(dashboard.tiles.toMutableList())
@@ -204,20 +217,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter
 
-        adapter.editMode.setNone()
-        dashboard.tilesAdapterEditMode?.let {
-            adapter.editMode = it
-        }
-
-        dashboard.tilesAdapterEditMode = adapter.editMode
-
         if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
     }
 
     private fun setupLogRecyclerView() {
         val adapter = LogAdapter(requireContext())
         adapter.setHasStableIds(true)
-        adapter.theme = theme
         adapter.submitList(dashboard.log.list)
 
         val layoutManager = LinearLayoutManager(context)
@@ -235,18 +240,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
 //----------------------------------------------------------------------------------------------
 
-    private fun highlitOnly(button: Button) {
-        b.dRemove.alpha = 0.4f
-        b.dSwap.alpha = 0.4f
-        b.dEdit.alpha = 0.4f
-        button.alpha = 1f
-    }
-
-    private var showLotartY = 0f
+    private var showLogStartY = 0f
     private fun showLog(v: View, e: MotionEvent) {
         v.performClick()
 
-        if (e.action == KeyEvent.ACTION_DOWN) showLotartY = e.rawY
+        if (e.action == KeyEvent.ACTION_DOWN) showLogStartY = e.rawY
 
         if (e.action == KeyEvent.ACTION_UP) {
             val valueAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
@@ -261,7 +259,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             valueAnimator.start()
         } else {
             val lp = b.dLog.layoutParams
-            lp.height = (e.rawY - showLotartY).toInt().let {
+            lp.height = (e.rawY - showLogStartY).toInt().let {
                 when {
                     it <= 0 -> 0
                     it <= (0.9 * screenHeight) -> it

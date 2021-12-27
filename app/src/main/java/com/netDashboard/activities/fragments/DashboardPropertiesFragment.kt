@@ -1,6 +1,7 @@
 package com.netDashboard.activities.fragments
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,6 +20,8 @@ import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.globals.G.dashboards
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import java.util.*
@@ -39,7 +42,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        G.theme.apply(requireContext(), b.root, true)
+        theme.apply(requireContext(), b.root, true)
         viewConfig()
 
         dashboard.dg?.mqttd?.let {
@@ -167,20 +170,18 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             } else {
                 val dialog = Dialog(requireContext())
                 val adapter = RecyclerViewAdapter(requireContext())
-                val theme = G.theme
 
                 val list = MutableList(G.dashboards.size) {
                     RecyclerViewItem(
                         R.layout.item_copy_broker
                     )
                 }
-                list.removeAt(G.dashboards.indexOf(dashboard))
+                list.removeAt(dashboards.indexOf(dashboard))
 
                 dialog.setContentView(R.layout.popup_copy_broker)
                 val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.pcb_root))
 
                 adapter.setHasStableIds(true)
-                adapter.theme = theme
                 adapter.onBindViewHolder = { _, holder, pos ->
                     val button = holder.itemView.findViewById<Button>(R.id.icb_button)
 

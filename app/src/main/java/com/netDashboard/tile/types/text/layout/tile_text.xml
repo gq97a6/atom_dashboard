@@ -64,20 +64,26 @@
 
         <LinearLayout
             android:id="@+id/text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/tt_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/marginText"
             app:layout_constraintTop_toTopOf="@+id/tt_icon">
 
             <TextView
                 android:id="@+id/tt_tag"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="15dp"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:gravity="bottom"
+                android:maxLines="1"
                 android:tag="color"
-                android:text="Empty"
-                android:textSize="15dp" />
+                android:text="Empty" />
 
             <TextView
                 android:id="@+id/t_status"
@@ -101,10 +107,15 @@
             android:id="@+id/tt_value"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="10dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
             android:gravity="center"
+            android:maxLines="4"
             android:tag="color"
             android:text="empty"
-            android:textSize="20dp"
             app:layout_constraintHeight_percent="0.3"
             app:layout_constraintTop_toBottomOf="@+id/marginValue" />
 

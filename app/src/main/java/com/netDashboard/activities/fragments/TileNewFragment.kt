@@ -57,6 +57,12 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
         tile.dashboard = dashboard
         dashboard.tiles.add(tile)
 
-        parentFragmentManager.switchTo(TilePropertiesFragment(), false)
+        val fragment = TilePropertiesFragment()
+        fragment.apply {
+            arguments = Bundle().apply {
+                putInt("index", dashboard.tiles.indexOf(tile))
+            }
+        }
+        parentFragmentManager.switchTo(fragment, false)
     }
 }

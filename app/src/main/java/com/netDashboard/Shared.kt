@@ -193,7 +193,7 @@ infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
 
 infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
 
-fun FragmentManager.switchTo(fragment: Fragment, add: Boolean = true) {
+fun FragmentManager.switchTo(fragment: Fragment, backstack: Boolean = true) {
     this.commit {
         setCustomAnimations(
             R.anim.fragment_in,
@@ -202,7 +202,8 @@ fun FragmentManager.switchTo(fragment: Fragment, add: Boolean = true) {
             R.anim.fragment_out
         )
         replace(R.id.m_fragment, fragment)
-        if (add) addToBackStack(null)
+
+        if (backstack) addToBackStack(null)
     }
 }
 //@SuppressLint("ShowToast")

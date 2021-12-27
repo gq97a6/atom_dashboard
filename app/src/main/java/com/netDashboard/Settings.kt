@@ -6,7 +6,7 @@ import java.io.FileReader
 
 class Settings {
 
-    var lastDashboardId: Long? = null
+    var lastDashboardId: Long = 0
     var startFromLast: Boolean = false
 
     companion object {

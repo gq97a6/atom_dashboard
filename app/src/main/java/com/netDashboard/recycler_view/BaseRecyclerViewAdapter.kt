@@ -12,6 +12,7 @@ import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G
+import com.netDashboard.globals.G.theme
 import java.util.*
 
 @Suppress("UNUSED")
@@ -22,8 +23,6 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 ) : ListAdapter<item, BaseRecyclerViewAdapter.ViewHolder>(c) {
 
     var editMode = Modes()
-
-    var theme = G.theme
 
     lateinit var list: MutableList<item>
     private lateinit var currentItem: item
@@ -152,6 +151,8 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
         dialog.setContentView(R.layout.popup_confirm)
         val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.pc_root))
+
+        binding.pcText.text = "Confirm removing"
 
         binding.pcConfirm.setOnClickListener {
             var i = 0

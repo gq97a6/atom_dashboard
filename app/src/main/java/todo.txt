@@ -1,5 +1,4 @@
 //develop ------------------------------
-resize font
 tiles icons
 
 export/import data

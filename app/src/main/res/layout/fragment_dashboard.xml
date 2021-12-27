@@ -8,9 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/d_log"
-        android:tag="no_anim"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:tag="no_anim"
         app:layout_constraintHeight_percent="0"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -86,29 +86,36 @@
 
     <TextView
         android:id="@+id/d_tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeMaxTextSize="18dp"
+        android:autoSizeMinTextSize="15dp"
+        android:autoSizeStepGranularity="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom|center"
+        android:maxLines="1"
         android:tag="colorA"
-        android:text="EXAMPLE"
+        android:text="EMPTY"
         android:textColor="#000000"
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@id/d_status"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/d_more"
+        app:layout_constraintStart_toEndOf="@+id/d_toolbar"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/d_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:paddingBottom="10dp"
         android:tag="colorB"
         android:text="@string/d_disconnected"
         android:textColor="@color/gray65"
         android:textSize="12dp"
         app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/d_more"
+        app:layout_constraintStart_toEndOf="@+id/d_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/d_recycler_view"

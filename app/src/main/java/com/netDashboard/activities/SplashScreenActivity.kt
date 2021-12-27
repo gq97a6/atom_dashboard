@@ -62,12 +62,6 @@ class SplashScreenActivity : AppCompatActivity() {
         ForegroundService.service = service
         service.dgManager.assign()
 
-        if (settings.startFromLast) {
-            settings.lastDashboardId?.let {
-                setCurrentDashboard(it)
-            }
-        }
-
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)

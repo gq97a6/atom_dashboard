@@ -1,6 +1,5 @@
 package com.netDashboard.activities.fragments
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.databinding.FragmentIconEditBinding
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
@@ -19,7 +17,6 @@ import com.netDashboard.switchTo
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
-import com.netDashboard.toPx
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -38,7 +35,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tile = dashboard.tiles[0]
+        tile = dashboard.tiles[arguments?.getInt("index", 0) ?: 0]
 
         G.theme.apply(requireActivity(), b.root, true)
         viewConfig()
@@ -47,17 +44,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                var raw = cs.toString()
-
-                val paint = Paint()
-                paint.typeface = b.tpTag.typeface
-                paint.textSize = b.tpTag.textSize
-
-                val bound = 143f.toPx()
-                while (paint.measureText(raw, 0, raw.length) > bound) raw = raw.dropLast(1)
-
-                tile.tag = raw
-                b.tpTagWarning.visibility = if (raw.length != cs.length) View.VISIBLE else View.GONE
+                tile.tag = cs.toString()
             }
         })
 
@@ -206,10 +193,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
             b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
                 (tile as SliderTile).dragCon = state
-            }
-
-            b.tpEditIcon.setOnClickListener {
-                parentFragmentManager.switchTo(TileIconFragment())
             }
         }
     }

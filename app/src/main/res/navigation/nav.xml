@@ -2,8 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav"
-    app:startDestination="@id/controlFragment">
+    android:id="@+id/nav">
 
     <activity
         android:id="@+id/splashScreenActivity"
@@ -13,7 +12,6 @@
     <activity
         android:id="@+id/mainActivity"
         android:name="com.netDashboard.activities.MainActivity"
-        android:label="fragment_control"
         tools:layout="@layout/fragment_toolbar" />
     <fragment
         android:id="@+id/dashboardFragment"
@@ -26,6 +24,11 @@
         <action
             android:id="@+id/action_dashboardFragment_to_tilePropertiesFragment"
             app:destination="@id/tilePropertiesFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_pop"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/dashboardFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -33,8 +36,9 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
         <action
-            android:id="@+id/action_settingsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_settingsFragment_pop"
+            app:popUpTo="@id/settingsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/dashboardNewFragment"
@@ -42,8 +46,9 @@
         android:label="fragment_dashboard_new"
         tools:layout="@layout/fragment_dashboard_new">
         <action
-            android:id="@+id/action_dashboardNewFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_dashboardNewFragment_pop"
+            app:popUpTo="@id/dashboardNewFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/dashboardPropertiesFragment"
@@ -51,8 +56,9 @@
         android:label="fragment_dashboard_properties"
         tools:layout="@layout/fragment_dashboard_properties">
         <action
-            android:id="@+id/action_dashboardPropertiesFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_dashboardPropertiesFragment_pop"
+            app:popUpTo="@id/dashboardPropertiesFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/tilePropertiesFragment"
@@ -60,19 +66,26 @@
         android:label="fragment_tile_properties"
         tools:layout="@layout/fragment_tile_properties">
         <action
-            android:id="@+id/action_tilePropertiesFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
-        <action
             android:id="@+id/action_tilePropertiesFragment_to_tileIconFragment"
             app:destination="@id/tileIconFragment" />
+        <action
+            android:id="@+id/action_tilePropertiesFragment_pop2"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/tilePropertiesFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="index"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/tileIconFragment"
         android:name="com.netDashboard.activities.fragments.TileIconFragment"
         android:label="TileIconFragment">
         <action
-            android:id="@+id/action_tileIconFragment_to_tilePropertiesFragment"
-            app:destination="@id/tilePropertiesFragment" />
+            android:id="@+id/action_tileIconFragment_pop"
+            app:popUpTo="@id/tileIconFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/tileNewFragment"
@@ -83,8 +96,9 @@
             android:id="@+id/action_tileNewFragment_to_tilePropertiesFragment"
             app:destination="@id/tilePropertiesFragment" />
         <action
-            android:id="@+id/action_tileNewFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_tileNewFragment_pop"
+            app:popUpTo="@id/tileNewFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/themeFragment"
@@ -92,8 +106,9 @@
         android:label="fragment_theme"
         tools:layout="@layout/fragment_theme">
         <action
-            android:id="@+id/action_themeFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_themeFragment_pop"
+            app:popUpTo="@id/themeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -115,17 +130,6 @@
         <action
             android:id="@+id/action_mainFragment_to_dashboardNewFragment"
             app:destination="@id/dashboardNewFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/controlFragment"
-        android:name="com.netDashboard.activities.fragments.ToolbarFragment"
-        android:label="ControlFragment">
-        <action
-            android:id="@+id/action_controlFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_controlFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
     </fragment>
 
 

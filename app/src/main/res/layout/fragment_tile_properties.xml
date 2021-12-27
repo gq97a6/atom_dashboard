@@ -107,19 +107,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/tp_tag_warning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:tag="color"
-            android:text="Too long, will be truncated"
-            android:textColor="@color/gray150"
-            android:textSize="15dp"
-            android:visibility="gone" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

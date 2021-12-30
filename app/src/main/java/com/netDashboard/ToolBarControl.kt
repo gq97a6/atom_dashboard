@@ -27,6 +27,14 @@ class ToolBarController(
         button.alpha = 1f
     }
 
+    fun redo() {
+        bar.post {
+            bar.translationY =
+                if (adapter.editMode.isNone) -1.5f * bar.get(0).height.toFloat()
+                else 0f
+        }
+    }
+
     fun toggleTools() {
         if (adapter.editMode.isNone) {
             adapter.editMode.setSwap()

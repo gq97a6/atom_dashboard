@@ -5,9 +5,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.IdGenerator
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.IdGenerator
 import com.netDashboard.globals.G.theme
 
 @Suppress("UNUSED")

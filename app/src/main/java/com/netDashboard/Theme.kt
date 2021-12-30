@@ -70,7 +70,7 @@ class Theme {
 
         for (i in 0 until this.childCount) {
             val v = this.getChildAt(i)
-            if (v is ViewGroup){
+            if (v is ViewGroup) {
                 v.applyAnimations()
                 v.apply()
             }
@@ -434,10 +434,10 @@ class Theme {
 
             colorBackground = getBackgroundColor(color)
 
-            colorA = blendARGB(color, colorBackground, 0.4f)
-            colorB = blendARGB(color, colorBackground, 0.6f)
-            colorC = blendARGB(color, colorBackground, 0.8f)
-            colorD = blendARGB(color, colorBackground, 0.9f)
+            colorA = blendARGB(color, colorBackground, 0.35f)
+            colorB = blendARGB(color, colorBackground, 0.55f)
+            colorC = blendARGB(color, colorBackground, 0.75f)
+            colorD = blendARGB(color, colorBackground, 0.85f)
         }
 
         private fun getBackgroundColor(color: Int): Int {

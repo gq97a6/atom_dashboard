@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.*
 import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.PopupConfirmBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
 import java.util.*
 

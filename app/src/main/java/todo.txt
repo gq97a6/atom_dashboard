@@ -1,6 +1,8 @@
 //develop ------------------------------
 tiles icons
+tile colors
 
+notifications, alerts
 export/import data
 export/import MQTT
 
@@ -10,7 +12,6 @@ buttons
 popups
 
 //expand ------------------------------
-notifications, alerts
 new tiles
     indicator, diode, alert on change, on stop receiving, on receive
     terminal

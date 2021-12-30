@@ -16,7 +16,6 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme

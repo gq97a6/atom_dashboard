@@ -121,7 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:tag="colorB"
-                        android:text="Dark background: "
+                        android:text="Dark background:"
                         android:textColor="@color/gray100"
                         android:textSize="12dp" />
 

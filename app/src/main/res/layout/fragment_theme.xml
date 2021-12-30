@@ -1,70 +1,74 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:tag="background"
-    tools:context=".activities.fragments.ThemeFragment">
+    tools:context=".activities.MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:gravity="center"
-        android:orientation="horizontal">
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:paddingTop="10dp"
-            android:paddingBottom="@dimen/tile_padding">
+        <Button
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/button_unlocked"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:tag="color" />
 
-            <Button
-                style="@style/button"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:background="@drawable/button_locked"
-                android:tag="color" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <FrameLayout
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="10"
-            android:gravity="center"
-            android:tag="colorA"
-            android:text="Dashboards"
-            android:textColor="#000000"
-            android:textSize="30dp" />
+        <Button
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right"
+            android:layout_marginVertical="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/button_more"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:tag="color" />
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:paddingTop="10dp"
-            android:paddingBottom="@dimen/tile_padding">
+    </FrameLayout>
 
-            <Button
-                style="@style/button"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:background="@drawable/button_more"
-                android:tag="color" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="10"
+        android:gravity="center|bottom"
+        android:tag="colorA"
+        android:text="Dashboards"
+        android:textColor="#000000"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"
@@ -112,7 +116,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="20dp"
-        android:paddingBottom="20dp">
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toBottomOf="@id/text">
 
         <TextView
             android:layout_width="match_parent"
@@ -257,13 +262,13 @@
                 android:id="@+id/t_advanced"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:background="#0C000000"
                 android:gravity="bottom"
                 android:orientation="vertical"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 android:tag="group"
-                android:animateLayoutChanges="true"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -337,106 +342,92 @@
 
     </LinearLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/t_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:translationY="-100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".13"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintWidth_percent=".8">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="20dp"
-            android:visibility="visible"
-            tools:ignore="UselessParent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/background_bar"
+            android:tag="bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="5:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="bottom"
-                android:layout_marginHorizontal="40dp"
-                android:background="@drawable/background_bar"
-                android:tag="bar" />
+            <Button
+                android:id="@+id/b0"
+                style="@style/button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/button_add"
+                android:tag="colorA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/b1"
+                app:layout_constraintHeight_percent=".55"
+                app:layout_constraintHorizontal_bias=".5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="30dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/b1"
+                style="@style/button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/button_trashcan"
+                android:tag="colorA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/b2"
+                app:layout_constraintHeight_percent=".55"
+                app:layout_constraintHorizontal_bias=".5"
+                app:layout_constraintStart_toEndOf="@+id/b0"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
+            <Button
+                android:id="@+id/b2"
+                style="@style/button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/button_swap"
+                android:tag="colorA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/b3"
+                app:layout_constraintHeight_percent=".55"
+                app:layout_constraintHorizontal_bias=".5"
+                app:layout_constraintStart_toEndOf="@+id/b1"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                    <Button
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_add"
-                        android:tag="color" />
+            <Button
+                android:id="@+id/b3"
+                style="@style/button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/button_edit"
+                android:tag="colorA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent=".55"
+                app:layout_constraintHorizontal_bias=".5"
+                app:layout_constraintStart_toEndOf="@+id/b2"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <Button
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_trashcan"
-                        android:tag="colorA" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <Button
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_swap"
-                        android:tag="colorA" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <Button
-                        style="@style/button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/button_edit"
-                        android:tag="colorA" />
-
-                </FrameLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
-
-    </FrameLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

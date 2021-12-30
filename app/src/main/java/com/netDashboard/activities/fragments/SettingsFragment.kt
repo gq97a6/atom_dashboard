@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.databinding.FragmentSettingsBinding
-import com.netDashboard.globals.G
+import com.netDashboard.globals.G.settings
+import com.netDashboard.globals.G.theme
 import com.netDashboard.switchTo
 
 class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
@@ -26,10 +27,10 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        G.theme.apply(requireContext(), b.root, true)
+        theme.apply(requireContext(), b.root, true)
 
         b.sLast.setOnCheckedChangeListener { _, state ->
-            G.settings.startFromLast = state
+            settings.startFromLast = state
         }
 
         b.sThemeEdit.setOnClickListener {
@@ -37,13 +38,13 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         }
 
         b.sThemeIsDark.setOnCheckedChangeListener { _, state ->
-            G.theme.a.isDark = state
-            G.theme.apply(requireContext(), b.root)
+            theme.a.isDark = state
+            theme.apply(requireContext(), b.root)
         }
     }
 
     private fun viewConfig() {
-        b.sLast.isChecked = G.settings.startFromLast
-        b.sThemeIsDark.isChecked = G.theme.a.isDark
+        b.sLast.isChecked = settings.startFromLast
+        b.sThemeIsDark.isChecked = theme.a.isDark
     }
 }

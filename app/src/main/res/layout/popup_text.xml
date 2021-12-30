@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pt_root"
     android:layout_width="280dp"
     android:layout_height="wrap_content"
@@ -10,36 +11,36 @@
     android:padding="20dp"
     android:tag="background">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:orientation="horizontal">
+        android:tag="colorA"
+        android:text="Topic:"
+        android:textColor="@color/gray150"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".2" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
-            android:tag="colorA"
-            android:text="Topic:"
-            android:textColor="@color/gray150"
-            android:textSize="15dp" />
-
-        <TextView
-            android:id="@+id/pt_topic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="colorB"
-            android:text="test"
-            android:textColor="@color/gray100"
-            android:textSize="15dp" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/pt_topic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:tag="colorB"
+        android:text="test"
+        android:textColor="@color/gray100"
+        android:textSize="15dp"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/pt_payload"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
         android:background="#19000000"
         android:ems="100"
         android:hint="empty"
@@ -48,39 +49,35 @@
         android:maxLength="50"
         android:paddingHorizontal="10dp"
         android:tag="basic"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null"
+        app:layout_constraintBottom_toTopOf="@+id/pt_deny"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/pt_deny"
+        style="@style/button"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_gravity="left"
+        android:background="@drawable/button_text"
+        android:tag="colorC"
+        android:text="CANCEL"
+        android:textSize="11dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/pt_payload"
+        app:layout_constraintTop_toBottomOf="@+id/pt_payload" />
 
-        <Button
-            android:id="@+id/pt_deny"
-            style="@style/button"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/button_text"
-            android:tag="colorC"
-            android:text="CANCEL"
-            android:textSize="11dp" />
+    <Button
+        android:id="@+id/pt_confirm"
+        style="@style/button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@drawable/button_text"
+        android:tag="colorB"
+        android:text="SEND"
+        android:textSize="11dp"
+        app:layout_constraintEnd_toEndOf="@+id/pt_payload"
+        app:layout_constraintTop_toTopOf="@+id/pt_deny" />
 
-        <Button
-            android:id="@+id/pt_confirm"
-            style="@style/button"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/button_text"
-            android:tag="colorB"
-            android:text="SEND"
-            android:textSize="11dp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

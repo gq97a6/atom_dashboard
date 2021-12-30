@@ -4,10 +4,10 @@ import android.app.Dialog
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
-import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
@@ -52,6 +52,7 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         val subs: MutableMap<String, String> = mutableMapOf()
         val pubs: MutableMap<String, String> = mutableMapOf()
+        val colors: MutableMap<String, Int> = mutableMapOf()
         val jsonPaths: MutableMap<String, String> = mutableMapOf()
 
         var qos = 0

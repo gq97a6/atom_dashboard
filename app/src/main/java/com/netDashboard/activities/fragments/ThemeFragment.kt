@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
@@ -83,6 +84,10 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         }
 
         b.tIsDark.isChecked = theme.a.isDark
+
+        b.tBar.post {
+            b.tBar.translationY = -1.5f * b.tBar.get(0).height.toFloat()
+        }
     }
 
     private fun switchAdvancedTab() {

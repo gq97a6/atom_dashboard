@@ -8,6 +8,7 @@ class Settings {
 
     var lastDashboardId: Long = 0
     var startFromLast: Boolean = false
+    var randomColor: Boolean = false
 
     companion object {
         fun getSaved(): Settings =

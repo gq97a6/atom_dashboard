@@ -202,7 +202,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             parentFragmentManager.switchTo(fragment)
         }
 
-        adapter.submitList(dashboard.tiles.toMutableList())
+        adapter.submitList(dashboard.tiles)
 
         val layoutManager =
             StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)

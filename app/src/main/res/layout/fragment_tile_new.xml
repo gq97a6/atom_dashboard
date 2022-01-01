@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="#00000000"
     android:tag="background"
     tools:context=".activities.fragments.TileNewFragment">
 

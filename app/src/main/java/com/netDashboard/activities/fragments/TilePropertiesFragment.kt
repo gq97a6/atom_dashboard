@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.fragment.app.Fragment
@@ -37,8 +38,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         tile = dashboard.tiles[arguments?.getInt("index", 0) ?: 0]
 
-        G.theme.apply(requireActivity(), b.root, true)
         viewConfig()
+        G.theme.apply(requireActivity(), b.root, true)
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
@@ -155,7 +156,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 ) {
                 }
 
-                override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                override fun onTextChanged(
+                    cs: CharSequence,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
                     cs.toString().let { raw ->
                         cs.toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderTo.setText(parsed)
@@ -179,7 +185,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 ) {
                 }
 
-                override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                override fun onTextChanged(
+                    cs: CharSequence,
+                    start: Int,
+                    before: Int,
+                    count: Int
+                ) {
                     cs.toString().let { raw ->
                         cs.toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderStep.setText(parsed)
@@ -199,7 +210,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
     private fun viewConfig() {
 
-        b.tpTileType.text = tile.typeTag
+        //b.tpTileType.text = tile.typeTag
         b.tpTag.setText(tile.tag)
         //icon set
 
@@ -232,7 +243,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         when (tile) {
             is SliderTile -> {
-                b.tpSlider.visibility = View.VISIBLE
                 b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
@@ -240,7 +250,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
             is TextTile -> {
                 //b.tpText.visibility = VISIBLE
-                b.tpMqttPayloadTypeBox.visibility = View.VISIBLE
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
                 b.tpPayloadType.check(
                     if (tile.mqttData.varPayload) {
                         b.tpMqttPayloadBox.visibility = View.GONE

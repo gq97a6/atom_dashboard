@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:tag="background"
+    android:background="#00000000"
     tools:context=".activities.fragments.DashboardFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

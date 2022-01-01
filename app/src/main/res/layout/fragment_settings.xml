@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:tag="background"
+    android:background="#00000000"
     tools:context=".activities.fragments.SettingsFragment">
 
     <TextView

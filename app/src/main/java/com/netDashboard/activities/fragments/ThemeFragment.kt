@@ -10,6 +10,7 @@ import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
+import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentThemeBinding
 import com.netDashboard.globals.G.theme
 
@@ -33,7 +34,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
 
         fun onColorChange() {
             theme.a.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
-            theme.apply(requireContext(), b.root)
+            theme.apply(requireContext(), (activity as MainActivity).b.root)
         }
 
         b.tHue.setOnTouchListener { _, e ->
@@ -60,7 +61,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
             if (state) b.tValue.value = 1f
 
             theme.a.compute()
-            theme.apply(requireContext(), b.root)
+            theme.apply(requireContext(), (activity as MainActivity).b.root)
         }
 
         b.tAdvancedArrow.setOnClickListener {

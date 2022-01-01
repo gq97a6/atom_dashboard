@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    android:tag="background"
+    android:background="#00000000"
     tools:context=".activities.fragments.DashboardPropertiesFragment">
 
     <TextView

@@ -12,7 +12,7 @@ import com.netDashboard.globals.G.settings
 import com.netDashboard.switchTo
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var b: ActivityMainBinding
+    lateinit var b: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

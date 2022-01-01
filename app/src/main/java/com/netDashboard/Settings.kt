@@ -7,8 +7,7 @@ import java.io.FileReader
 class Settings {
 
     var lastDashboardId: Long = 0
-    var startFromLast: Boolean = false
-    var randomColor: Boolean = false
+    var startFromLast: Boolean = true
 
     companion object {
         fun getSaved(): Settings =

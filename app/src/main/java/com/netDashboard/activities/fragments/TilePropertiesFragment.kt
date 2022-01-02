@@ -247,6 +247,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpSliderFrom.setText((tile as SliderTile).from.toString())
                 b.tpSliderTo.setText((tile as SliderTile).to.toString())
                 b.tpSliderStep.setText((tile as SliderTile).step.toString())
+                b.tpPayloadHint.visibility = VISIBLE
             }
             is TextTile -> {
                 //b.tpText.visibility = VISIBLE

@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00000000"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    android:background="#00000000"
     tools:context=".activities.fragments.DashboardPropertiesFragment">
 
     <TextView

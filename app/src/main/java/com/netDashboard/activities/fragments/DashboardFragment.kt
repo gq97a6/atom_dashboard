@@ -92,9 +92,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         fun updateTilesStatus() {
             for (tile in adapter.list) {
                 tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
-                    tile.mqttData.lastReceive.time.let { lr ->
-                        val t = Date().time - lr
-                        if (lr != 0L) it.text = (t / 1000).let { s ->
+                    tile.mqttData.lastReceive?.time.let { lr ->
+                        val t = Date().time - (lr ?: 0)
+                        if (lr != null) it.text = (t / 1000).let { s ->
                             if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
                             else (t / 60000).let { m ->
                                 if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"

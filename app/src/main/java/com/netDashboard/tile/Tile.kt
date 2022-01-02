@@ -48,7 +48,8 @@ abstract class Tile : BaseRecyclerViewItem() {
 
     open class MqttData(defaultPubValue: String = "") {
         var isEnabled = true
-        var lastReceive = Date()
+        var doNotify = false
+        var lastReceive: Date? = null
 
         val subs: MutableMap<String, String> = mutableMapOf()
         val pubs: MutableMap<String, String> = mutableMapOf()
@@ -64,10 +65,6 @@ abstract class Tile : BaseRecyclerViewItem() {
         var pubPayload = defaultPubValue
         var confirmPub = false
         var payloadIsJson = false
-
-        init {
-            lastReceive.time = 0
-        }
     }
 
     fun send(

@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/view1"
+        android:id="@+id/view11"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/background_frame"
@@ -29,23 +29,20 @@
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintHeight="match_constraint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view2"
-        app:layout_constraintVertical_bias="0.147" />
+        app:layout_constraintTop_toTopOf="@+id/view2" />
 
     <Button
         android:id="@+id/tp_edit_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="13dp"
         android:background="@drawable/background_ripple"
         android:tag="color"
-        app:layout_constraintBottom_toBottomOf="@+id/view1"
+        app:layout_constraintBottom_toBottomOf="@+id/view11"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="@+id/view1"
+        app:layout_constraintEnd_toEndOf="@+id/view11"
         app:layout_constraintHeight="match_constraint"
-        app:layout_constraintStart_toStartOf="@+id/view1"
-        app:layout_constraintTop_toTopOf="@+id/view1"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/view11"
+        app:layout_constraintTop_toTopOf="@+id/view11"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <View
@@ -54,11 +51,12 @@
         android:layout_height="0dp"
         android:background="@drawable/icon_swap"
         android:tag="colorIcon"
-        app:layout_constraintBottom_toBottomOf="@+id/tp_edit_icon"
+        android:layout_margin="13dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view11"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toEndOf="@+id/tp_edit_icon"
-        app:layout_constraintStart_toStartOf="@+id/tp_edit_icon"
-        app:layout_constraintTop_toTopOf="@+id/tp_edit_icon" />
+        app:layout_constraintEnd_toEndOf="@+id/view11"
+        app:layout_constraintStart_toStartOf="@+id/view11"
+        app:layout_constraintTop_toTopOf="@+id/view11" />
 
     <TextView
         android:id="@+id/view2"
@@ -70,7 +68,7 @@
         android:text="Tag"
         android:textColor="@color/gray150"
         android:textSize="15dp"
-        app:layout_constraintStart_toEndOf="@+id/view1"
+        app:layout_constraintStart_toEndOf="@+id/view11"
         app:layout_constraintTop_toBottomOf="@+id/view0" />
 
     <EditText

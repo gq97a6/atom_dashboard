@@ -327,10 +327,6 @@ class Theme {
         }
     }
 
-    private fun enableTransitions() {
-
-    }
-
     private fun onUnknownTag(tag: Any?, type: String) {
         tag?.toString()?.let {
             if (it.isNotBlank()) Log.i("OUY", "Unknown $type tag: $it")

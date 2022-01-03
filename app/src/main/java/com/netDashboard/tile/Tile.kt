@@ -9,6 +9,7 @@ import com.netDashboard.R
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
+import com.netDashboard.icon.Icon
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -26,7 +27,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     var width = 1
 
     var tag = ""
-    var icon = -1
+    var icon = Icon(R.drawable.il_interface_question, "interface", "l")
     abstract var typeTag: String
 
     abstract val mqttData: MqttData

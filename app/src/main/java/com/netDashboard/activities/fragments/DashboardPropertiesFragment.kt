@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -182,22 +183,23 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                 adapter.setHasStableIds(true)
                 adapter.onBindViewHolder = { _, holder, pos ->
-                    val button = holder.itemView.findViewById<Button>(R.id.icb_button)
+                    val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 
-                    val p = pos + if (pos >= G.dashboards.indexOf(dashboard)) 1 else 0
-
-                    button.setOnClickListener {
-                        dashboard.mqttAddress = G.dashboards[p].mqttAddress
-                        dashboard.mqttPort = G.dashboards[p].mqttPort
-                        dashboard.mqttUserName = G.dashboards[p].mqttUserName
-                        dashboard.mqttPass = G.dashboards[p].mqttPass
+                    adapter.onItemClick = {
+                        dashboard.mqttAddress = dashboards[p].mqttAddress
+                        dashboard.mqttPort = dashboards[p].mqttPort
+                        dashboard.mqttUserName = dashboards[p].mqttUserName
+                        dashboard.mqttPass = dashboards[p].mqttPass
 
                         viewConfig()
                         dialog.hide()
                     }
 
-                    button.text = G.dashboards[p].name.uppercase(Locale.getDefault())
+                    val text = holder.itemView.findViewById<TextView>(R.id.icb_text)
+                    text.text = dashboards[p].name.uppercase(Locale.getDefault())
                 }
+
+
 
                 binding.pcbRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.pcbRecyclerView.adapter = adapter

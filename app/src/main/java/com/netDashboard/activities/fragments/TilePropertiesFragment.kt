@@ -104,7 +104,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         b.tpEditIcon.setOnClickListener {
-            parentFragmentManager.switchTo(TileIconFragment())
+            val fragment = TileIconFragment()
+            fragment.apply {
+                arguments = Bundle().apply {
+                    putInt("index", dashboard.tiles.indexOf(tile))
+                }
+            }
+            parentFragmentManager.switchTo(fragment)
         }
 
         if (tile is TextTile) {
@@ -210,9 +216,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
     private fun viewConfig() {
 
-        //b.tpTileType.text = tile.typeTag
         b.tpTag.setText(tile.tag)
-        //icon set
+        b.tpIcon.setBackgroundResource(tile.icon.res)
 
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled

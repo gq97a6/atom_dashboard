@@ -63,6 +63,6 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
                 putInt("index", dashboard.tiles.indexOf(tile))
             }
         }
-        parentFragmentManager.switchTo(fragment, false)
+        parentFragmentManager.switchTo(DashboardFragment(), false)
     }
 }

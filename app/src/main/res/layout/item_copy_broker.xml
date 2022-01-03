@@ -24,15 +24,19 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="colorD" />
+
     <TextView
         android:id="@+id/icb_text"
         style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/button_text"
         android:gravity="center"
         android:padding="12dp"
-        android:tag="colorB"
+        android:tag="color"
         android:text="@string/tb_default_text"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"

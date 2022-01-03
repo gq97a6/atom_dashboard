@@ -58,6 +58,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                 tile.mqttData.pubs["base"] = cs.toString()
+                dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
         })
 
@@ -66,6 +67,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
                 tile.mqttData.subs["base"] = cs.toString()
+                dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
         })
 
@@ -101,6 +103,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 R.id.tp_qos2 -> 2
                 else -> 1
             }
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
         b.tpEditIcon.setOnClickListener {

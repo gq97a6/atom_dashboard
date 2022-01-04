@@ -5,8 +5,7 @@
     android:layout_height="60dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/tile_padding"
-    android:tag="item">
+    android:padding="@dimen/tile_padding">
 
     <View
         android:id="@+id/ripple_foreground"

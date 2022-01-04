@@ -17,7 +17,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
     override val layout
         get() = R.layout.item_dashboard
 
-    var log = Log()
+    var log = Log() //check
 
     @JsonIgnore
     var dg: DaemonGroup? = null

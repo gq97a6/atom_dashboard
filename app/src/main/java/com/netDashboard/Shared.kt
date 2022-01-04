@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import java.util.*
 
+
 const val A = 255 //100%
 const val B = 150 //60%
 const val C = 75 //30%
@@ -193,7 +194,7 @@ infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
 
 infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
 
-fun FragmentManager.switchTo(fragment: Fragment, backstack: Boolean = true) {
+fun FragmentManager.replaceWith(fragment: Fragment, backstack: Boolean = true) {
     this.commit {
         setCustomAnimations(
             R.anim.fragment_in,
@@ -202,7 +203,6 @@ fun FragmentManager.switchTo(fragment: Fragment, backstack: Boolean = true) {
             R.anim.fragment_out
         )
         replace(R.id.m_fragment, fragment)
-
         if (backstack) addToBackStack(null)
     }
 }

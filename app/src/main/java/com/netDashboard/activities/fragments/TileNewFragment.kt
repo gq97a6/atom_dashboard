@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
+import com.netDashboard.activities.MainActivity
 import com.netDashboard.click
 import com.netDashboard.databinding.FragmentTileNewBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
-import com.netDashboard.switchTo
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile
@@ -63,6 +63,7 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
                 putInt("index", dashboard.tiles.indexOf(tile))
             }
         }
-        parentFragmentManager.switchTo(DashboardFragment(), false)
+
+        (activity as MainActivity).fm.replaceWith(fragment, false)
     }
 }

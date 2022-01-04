@@ -28,7 +28,11 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_swap.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_unlocked.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/il_arrow_align_center_h.xml" value="0.1782051282051282" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/il_interface_question.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/im_business_bag.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/im_logo_docker.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/is_interface_battery_bolt.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/is_medical_head_side.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout-land/fragment_dashboard.xml" value="0.6477477477477478" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/activity_dashboard.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/activity_dashboard_new.xml" value="0.32222222222222224" />
@@ -56,7 +60,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_settings.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme2.xml" value="0.29444444444444445" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.33287037037037037" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.25" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_new.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties2.xml" value="0.3072649572649573" />

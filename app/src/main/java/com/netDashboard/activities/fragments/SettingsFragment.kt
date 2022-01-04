@@ -10,7 +10,6 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
-import com.netDashboard.switchTo
 
 class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
     private lateinit var b: FragmentSettingsBinding
@@ -35,7 +34,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         }
 
         b.sThemeEdit.setOnClickListener {
-            parentFragmentManager.switchTo(ThemeFragment())
+            (activity as MainActivity).fm.replaceWith(ThemeFragment())
         }
 
         b.sThemeIsDark.setOnCheckedChangeListener { _, state ->

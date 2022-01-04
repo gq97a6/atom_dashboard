@@ -27,7 +27,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     var width = 1
 
     var tag = ""
-    var icon = Icon(R.drawable.il_interface_question, "interface", "l")
+    var icon = Icon(R.drawable.il_interface_plus, "interface", "l")
     abstract var typeTag: String
 
     abstract val mqttData: MqttData

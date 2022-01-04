@@ -49,9 +49,9 @@
         android:id="@+id/tp_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_margin="13dp"
         android:background="@drawable/icon_swap"
         android:tag="colorIcon"
-        android:layout_margin="13dp"
         app:layout_constraintBottom_toBottomOf="@+id/view11"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="@+id/view11"
@@ -297,14 +297,14 @@
                             tools:ignore="HardcodedText,TextFields" />
 
                         <TextView
-                            android:visibility="gone"
                             android:id="@+id/tp_payload_hint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="colorB"
                             android:text="Use @value to insert current value"
                             android:textColor="@color/gray150"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

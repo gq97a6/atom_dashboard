@@ -8,6 +8,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
+import com.netDashboard.activities.MainActivity
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.DashboardAdapter
@@ -17,7 +18,6 @@ import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.setCurrentDashboard
 import com.netDashboard.globals.G.theme
-import com.netDashboard.switchTo
 import com.netDashboard.toolbarControl.ToolBarController
 import kotlin.random.Random
 
@@ -63,7 +63,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             ForegroundService.service?.dgManager?.notifyDashboardAdded(dashboard)
 
             setCurrentDashboard(dashboard.id)
-            parentFragmentManager.switchTo(DashboardPropertiesFragment())
+            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -84,7 +84,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         )
 
         b.msMore.setOnClickListener {
-            parentFragmentManager.switchTo(SettingsFragment())
+            (activity as MainActivity).fm.replaceWith(SettingsFragment())
         }
     }
 
@@ -108,19 +108,19 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         adapter.onItemEdit = { item ->
             setCurrentDashboard(item.id)
-            parentFragmentManager.switchTo(DashboardPropertiesFragment())
+            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.onItemClick = { item ->
             if (adapter.editMode.isNone) {
                 setCurrentDashboard(item.id)
-                parentFragmentManager.switchTo(DashboardFragment())
+                (activity as MainActivity).fm.replaceWith(DashboardFragment())
             }
         }
 
         adapter.onItemLongClick = { item ->
             setCurrentDashboard(item.id)
-            parentFragmentManager.switchTo(DashboardPropertiesFragment())
+            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.submitList(dashboards)

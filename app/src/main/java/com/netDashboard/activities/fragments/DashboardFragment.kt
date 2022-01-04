@@ -21,7 +21,6 @@ import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
-import com.netDashboard.switchTo
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toolbarControl.ToolBarController
 import java.util.*
@@ -120,7 +119,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            parentFragmentManager.switchTo(TileNewFragment())
+            (activity as MainActivity).fm.replaceWith(TileNewFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -188,7 +187,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                     putInt("index", dashboard.tiles.indexOf(item))
                 }
             }
-            parentFragmentManager.switchTo(fragment)
+            (activity as MainActivity).fm.replaceWith(fragment)
         }
 
         adapter.onItemLongClick = { item ->
@@ -198,7 +197,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                     putInt("index", dashboard.tiles.indexOf(item))
                 }
             }
-            parentFragmentManager.switchTo(fragment)
+            (activity as MainActivity).fm.replaceWith(fragment)
         }
 
         adapter.submitList(dashboard.tiles)
@@ -234,7 +233,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 //----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
-        parentFragmentManager.switchTo(DashboardPropertiesFragment())
+        (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
     }
 
 //----------------------------------------------------------------------------------------------

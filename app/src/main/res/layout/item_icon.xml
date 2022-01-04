@@ -4,8 +4,7 @@
     android:layout_height="100dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/tile_padding"
-    android:tag="item">
+    android:padding="@dimen/tile_padding">
 
     <View
         android:id="@+id/ripple_foreground"
@@ -28,7 +27,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:tag="colorIcon" />
+        android:tag="colorAIcon" />
+
+    <TextView
+        android:id="@+id/ic_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:autoSizeMaxTextSize="40dp"
+        android:autoSizeMinTextSize="10dp"
+        android:autoSizeStepGranularity="1dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center|left"
+        android:tag="color"
+        android:text="Category" />
 
     <View
         android:layout_width="match_parent"

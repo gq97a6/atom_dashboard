@@ -85,8 +85,8 @@ class Theme {
             is MaterialButton -> this.applyTheme()
             is SwitchMaterial -> this.applyTheme()
             is EditText -> this.applyTheme()
-            is TextView -> this.applyTheme()
             is Chip -> this.applyTheme()
+            is TextView -> this.applyTheme()
             is Slider -> this.applyTheme()
             is LinearLayout -> this.applyTheme()
             is FrameLayout -> this.applyTheme()
@@ -116,6 +116,7 @@ class Theme {
                 this.background = drawable
             }
             "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
+            "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
@@ -223,9 +224,7 @@ class Theme {
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked),
                 intArrayOf(android.R.attr.state_checked)
-            ), intArrayOf(
-                a.colorC, a.colorB
-            )
+            ), intArrayOf(a.colorC, a.colorB)
         )
 
         when (this.tag) {
@@ -313,12 +312,26 @@ class Theme {
 
     private fun Chip.applyTheme() {
         when (this.tag) {
+            "colorA" -> {
+                val colorStateListBackground = ColorStateList(
+                    arrayOf(
+                        intArrayOf(-android.R.attr.state_checked),
+                        intArrayOf(android.R.attr.state_checked)
+                    ), intArrayOf(a.colorC, a.colorB)
+                )
+
+                val colorStateListText = ColorStateList(
+                    arrayOf(
+                        intArrayOf(-android.R.attr.state_checked),
+                        intArrayOf(android.R.attr.state_checked)
+                    ), intArrayOf(a.color, a.color)
+                )
+
+                this.chipBackgroundColor = colorStateListBackground
+                this.setTextColor(colorStateListText)
+            }
             else -> onUnknownTag(this.tag, "chip")
         }
-        this.backgroundTintList =
-            ColorStateList.valueOf(
-                getRandomColor()
-            )
     }
 
     private fun ChipGroup.applyTheme() {
@@ -352,7 +365,7 @@ class Theme {
 
     inner class Artist {
 
-        var isDark = false
+        var isDark = true
             set(value) {
                 field = value
                 compute()

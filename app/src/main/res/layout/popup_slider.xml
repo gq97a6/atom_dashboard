@@ -4,8 +4,7 @@
     android:id="@+id/ps_root"
     android:layout_width="280dp"
     android:layout_height="125dp"
-    android:layout_gravity="center"
-    android:tag="item">
+    android:layout_gravity="center">
 
     <View
         android:layout_width="match_parent"

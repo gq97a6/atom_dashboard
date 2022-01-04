@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,8 +10,67 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/d_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:paddingHorizontal="@dimen/tile_padding"
-        android:paddingTop="@dimen/tile_padding" />
+        android:paddingTop="@dimen/tile_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ti_icon_type" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingHorizontal="10dp"
+        android:tag="color"
+        android:text="Icons type:"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ti_icon_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/ti_icon_type"
+        android:layout_width="0dp"
+        app:selectionRequired="true"
+        android:layout_height="wrap_content"
+        app:checkedChip="@id/ti_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/ti_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:state_checked="true"
+            android:tag="colorA"
+            android:text="line"
+            android:textSize="20dp"
+            app:checkedIcon="@null" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/ti_thin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="colorA"
+            android:text="thin"
+            android:textSize="20dp"
+            app:checkedIcon="@null" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/ti_solid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:tag="colorA"
+            android:text="solid"
+            android:textSize="20dp"
+            app:checkedIcon="@null" />
+
+    </com.google.android.material.chip.ChipGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

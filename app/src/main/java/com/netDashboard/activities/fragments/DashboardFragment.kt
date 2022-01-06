@@ -74,7 +74,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                     if (!dashboard.mqttEnabled) {
                         R.string.d_disconnected
                     } else {
-                        if (it.client.isConnected) {
+                        if (it.client.isConnected()) {
                             R.string.d_connected
                         } else {
                             if (isDone) {

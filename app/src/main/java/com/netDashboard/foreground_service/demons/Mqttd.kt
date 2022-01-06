@@ -35,7 +35,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
 
-        if (!client.isConnected) return
+        if (!client.isConnected()) return
 
         try {
             val message = MqttMessage()

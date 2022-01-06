@@ -48,7 +48,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
                 v.text = if (dashboard.mqttEnabled) {
-                    if (it.client.isConnected) {
+                    if (it.client.isConnected()) {
                         v.clearAnimation()
                         "CONNECTED"
                     } else if (!isDone) {

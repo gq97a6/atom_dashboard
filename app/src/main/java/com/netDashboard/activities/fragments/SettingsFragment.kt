@@ -29,16 +29,16 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         viewConfig()
         theme.apply(requireContext(), b.root, true)
 
-        b.sLast.setOnCheckedChangeListener { _, state ->
-            settings.startFromLast = state
+        b.sLast.setOnClickListener {
+            settings.startFromLast = b.sLast.isChecked
         }
 
         b.sThemeEdit.setOnClickListener {
             (activity as MainActivity).fm.replaceWith(ThemeFragment())
         }
 
-        b.sThemeIsDark.setOnCheckedChangeListener { _, state ->
-            theme.a.isDark = state
+        b.sThemeIsDark.setOnClickListener {
+            theme.a.isDark = b.sThemeIsDark.isChecked
             theme.apply(requireContext(), (activity as MainActivity).b.root)
         }
     }

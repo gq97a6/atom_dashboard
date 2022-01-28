@@ -1,5 +1,7 @@
 package com.netDashboard.activities.fragments
 
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,14 +17,13 @@ import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.globals.G.tile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
-
-    private lateinit var tile: Tile
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +41,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         viewConfig()
         G.theme.apply(requireActivity(), b.root, true)
+        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.a)
+
+        val drawable = b.tpIconFrame.background as? GradientDrawable
+        drawable?.mutate()
+        drawable?.setStroke(1, tile.colorPallet.a)
+        drawable?.cornerRadius = 15f
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
@@ -220,7 +227,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private fun viewConfig() {
 
         b.tpTag.setText(tile.tag)
-        b.tpIcon.setBackgroundResource(tile.icon.res)
+        b.tpIcon.setBackgroundResource(tile.iconRes)
 
         //MQTT
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled

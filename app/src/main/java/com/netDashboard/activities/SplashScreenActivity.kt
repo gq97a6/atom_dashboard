@@ -27,9 +27,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
         G.initialize()
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        G.theme.apply(this, b.root)
-
         setContentView(b.root)
+        G.theme.apply(this, b.root)
 
         val foregroundServiceHandler = ForegroundServiceHandler(this)
         foregroundServiceHandler.start()

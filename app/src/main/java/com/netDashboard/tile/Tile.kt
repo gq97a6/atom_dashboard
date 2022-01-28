@@ -1,15 +1,17 @@
 package com.netDashboard.tile
 
 import android.app.Dialog
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.R
+import com.netDashboard.Theme
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
-import com.netDashboard.icon.Icon
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -27,7 +29,9 @@ abstract class Tile : BaseRecyclerViewItem() {
     var width = 1
 
     var tag = ""
-    var icon = Icon(R.drawable.il_interface_plus, "interface", "l")
+    var iconRes = R.drawable.il_interface_plus
+    var colorPallet: Theme.ColorPallet = theme.a.colorPallet
+
     abstract var typeTag: String
 
     abstract val mqttData: MqttData
@@ -45,6 +49,8 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         params.height = ((screenWidth - view.paddingLeft * 2) * height / 3.236).toInt()
         view.layoutParams = params
+
+        holder.itemView.findViewById<TileView>(R.id.tile_root).colorPallet = colorPallet
     }
 
     open class MqttData(defaultPubValue: String = "") {

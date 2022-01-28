@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Activity.onPause()
-        finish()
     }
 
     override fun onBackPressed() {

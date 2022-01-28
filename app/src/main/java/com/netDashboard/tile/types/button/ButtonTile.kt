@@ -27,7 +27,7 @@ class ButtonTile : Tile() {
             else it.text = tag
         }
 
-        holder.itemView.findViewById<View>(R.id.view11)?.setBackgroundResource(icon.res)
+        holder.itemView.findViewById<View>(R.id.tp_icon_frame)?.setBackgroundResource(iconRes)
     }
 
     override fun onClick(v: View, e: MotionEvent) {

@@ -7,19 +7,54 @@
     android:background="#00000000"
     tools:context=".activities.fragments.TileIconFragment">
 
+    <View
+        android:id="@+id/ti_icon_frame"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/background_frame"
+        android:tag="frame"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/ti_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="13dp"
+        android:background="@drawable/icon_swap"
+        android:tag="colorIcon"
+        app:layout_constraintBottom_toBottomOf="@+id/ti_icon_frame"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="@+id/ti_icon_frame"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="@+id/ti_icon_frame"
+        app:layout_constraintTop_toTopOf="@+id/ti_icon_frame"
+        app:layout_constraintVertical_bias="0.538" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/d_recycler_view"
+        android:id="@+id/ti_recycler_view_colors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/tile_padding"
+        android:paddingTop="@dimen/tile_padding"
+        app:layout_constraintTop_toBottomOf="@+id/ti_icon_frame" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ti_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingHorizontal="@dimen/tile_padding"
         android:paddingTop="@dimen/tile_padding"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ti_icon_type" />
+        app:layout_constraintTop_toBottomOf="@id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
         android:gravity="center"
         android:paddingHorizontal="10dp"
         android:tag="color"
@@ -27,17 +62,18 @@
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/ti_icon_type"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ti_recycler_view_colors" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/ti_icon_type"
         android:layout_width="0dp"
-        app:selectionRequired="true"
         android:layout_height="wrap_content"
         app:checkedChip="@id/ti_line"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ti_recycler_view_colors"
+        app:selectionRequired="true"
         app:singleSelection="true">
 
         <com.google.android.material.chip.Chip

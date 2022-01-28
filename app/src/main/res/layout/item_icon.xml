@@ -24,10 +24,10 @@
 
     <View
         android:id="@+id/ic_icon"
+        android:background="@drawable/background_round"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:tag="colorAIcon" />
+        android:layout_margin="8dp" />
 
     <TextView
         android:id="@+id/ic_text"
@@ -43,6 +43,7 @@
         android:text="Category" />
 
     <View
+        android:id="@+id/ic_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/background_frame"

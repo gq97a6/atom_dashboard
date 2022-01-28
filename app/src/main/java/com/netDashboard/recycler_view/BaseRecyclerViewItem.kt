@@ -84,7 +84,7 @@ abstract class BaseRecyclerViewItem {
             val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
 
             if (!isNone) {
-                foreground?.setBackgroundColor(theme.a.colorBackground.alpha(190))
+                foreground?.setBackgroundColor(theme.a.colorPallet.background.alpha(190))
 
                 foreground?.animate()
                     ?.alpha(1f)

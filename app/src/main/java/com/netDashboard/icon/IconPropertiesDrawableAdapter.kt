@@ -4,20 +4,20 @@ import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
-class IconsAdapter(context: Context, spanCount: Int) :
-    BaseRecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
+class IconPropertiesDrawableAdapter(context: Context, spanCount: Int) :
+    BaseRecyclerViewAdapter<IconPropertiesDrawable>(context, spanCount, DiffCallback) {
 
-    object DiffCallback : DiffUtil.ItemCallback<Icon>() {
+    object DiffCallback : DiffUtil.ItemCallback<IconPropertiesDrawable>() {
         override fun areItemsTheSame(
-            oldItem: Icon,
-            newItem: Icon
+            oldItem: IconPropertiesDrawable,
+            newItem: IconPropertiesDrawable
         ): Boolean {
             return oldItem.areItemsTheSame(oldItem, newItem)
         }
 
         override fun areContentsTheSame(
-            oldItem: Icon,
-            newItem: Icon
+            oldItem: IconPropertiesDrawable,
+            newItem: IconPropertiesDrawable
         ): Boolean {
             return oldItem.areContentsTheSame(oldItem, newItem)
         }

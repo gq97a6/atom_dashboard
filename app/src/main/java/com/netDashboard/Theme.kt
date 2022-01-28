@@ -23,6 +23,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.globals.G.mapper
+import com.netDashboard.tile.TileView
 import java.io.File
 import java.io.FileReader
 
@@ -31,7 +32,12 @@ class Theme {
 
     val a = Artist()
 
-    fun apply(context: Context, viewGroup: ViewGroup, anim: Boolean = false) {
+    fun apply(
+        context: Context,
+        viewGroup: ViewGroup,
+        anim: Boolean = false,
+        colorPallet: ColorPallet = a.colorPallet
+    ) {
         context.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
         try {
@@ -40,24 +46,24 @@ class Theme {
                 viewGroup
             ).isAppearanceLightStatusBars = !a.isDark
 
-            context.window.statusBarColor = a.colorBackground
+            context.window.statusBarColor = colorPallet.background
         } catch (e: Exception) {
 
         }
 
-        viewGroup.applyTheme()
+        viewGroup.applyTheme(colorPallet)
         if (anim) viewGroup.applyAnimations()
     }
 
-    private fun ViewGroup.applyTheme() {
+    private fun ViewGroup.applyTheme(p: ColorPallet) {
         for (i in 0 until this.childCount) {
             val v = this.getChildAt(i)
 
-            if (v is ViewGroup) v.applyTheme()
-            v.defineType()
+            if (v is ViewGroup) v.applyTheme(if (v is TileView) v.colorPallet else p)
+            v.defineType(if (v is TileView) v.colorPallet else p)
         }
 
-        this.defineType()
+        this.defineType(p)
     }
 
     private fun ViewGroup.applyAnimations() {
@@ -79,78 +85,78 @@ class Theme {
         this.apply()
     }
 
-    private fun View.defineType() {
+    private fun View.defineType(p: ColorPallet) {
         when (this) {
-            is RadioButton -> this.applyTheme()
-            is MaterialButton -> this.applyTheme()
-            is SwitchMaterial -> this.applyTheme()
-            is EditText -> this.applyTheme()
-            is Chip -> this.applyTheme()
-            is TextView -> this.applyTheme()
-            is Slider -> this.applyTheme()
-            is LinearLayout -> this.applyTheme()
-            is FrameLayout -> this.applyTheme()
-            is ConstraintLayout -> this.applyTheme()
-            is RecyclerView -> this.applyTheme()
-            is ChipGroup -> this.applyTheme()
+            is RadioButton -> this.applyTheme(p)
+            is MaterialButton -> this.applyTheme(p)
+            is SwitchMaterial -> this.applyTheme(p)
+            is EditText -> this.applyTheme(p)
+            is Chip -> this.applyTheme(p)
+            is TextView -> this.applyTheme(p)
+            is Slider -> this.applyTheme(p)
+            is LinearLayout -> this.applyTheme(p)
+            is FrameLayout -> this.applyTheme(p)
+            is ConstraintLayout -> this.applyTheme(p)
+            is RecyclerView -> this.applyTheme(p)
+            is ChipGroup -> this.applyTheme(p)
             else -> {
-                if (this.javaClass == View::class.java) this.applyTheme()
+                if (this.javaClass == View::class.java) this.applyTheme(p)
                 else Log.i("OUY", "View type not specified: ${this.javaClass}")
             }
         }
     }
 
-    private fun View.applyTheme() {
+    private fun View.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "color" -> this.setBackgroundColor(a.color)
-            "colorA" -> this.setBackgroundColor(a.colorA)
-            "colorB" -> this.setBackgroundColor(a.colorB)
-            "colorC" -> this.setBackgroundColor(a.colorC)
-            "colorD" -> this.setBackgroundColor(a.colorD)
-            "background" -> this.setBackgroundColor(a.colorBackground)
+            "color" -> this.setBackgroundColor(p.color)
+            "colorA" -> this.setBackgroundColor(p.a)
+            "colorB" -> this.setBackgroundColor(p.b)
+            "colorC" -> this.setBackgroundColor(p.c)
+            "colorD" -> this.setBackgroundColor(p.d)
+            "background" -> this.setBackgroundColor(p.background)
             "sliderBackground" -> {
                 val drawable = GradientDrawable()
                 drawable.mutate()
-                drawable.setColor(a.colorD)
+                drawable.setColor(p.d)
                 drawable.cornerRadius = 15f
                 this.background = drawable
             }
-            "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
-            "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
-            "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(a.color)
+            "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
+            "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
+            "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(1, a.color)
+                drawable?.setStroke(1, p.color)
             }
             "sliderPopupFrame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(10, a.color)
+                drawable?.setStroke(10, p.color)
                 drawable?.cornerRadius = 25f
             }
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(a.colorBackground.alpha(150)))
+                background.setColor(ColorStateList.valueOf(p.background.alpha(150)))
             }
             else -> onUnknownTag(this.tag, "view")
         }
     }
 
-    private fun FrameLayout.applyTheme() {
+    private fun FrameLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "background" -> this.setBackgroundColor(a.colorBackground)
+            "background" -> this.setBackgroundColor(p.background)
             else -> onUnknownTag(this.tag, "frameLayout")
         }
     }
 
-    private fun ConstraintLayout.applyTheme() {
+    private fun ConstraintLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "background" -> this.setBackgroundColor(a.colorBackground)
+            "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(6, a.color)
+                drawable?.setStroke(6, p.color)
                 drawable?.cornerRadius = 15f
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
@@ -158,31 +164,31 @@ class Theme {
         }
     }
 
-    private fun LinearLayout.applyTheme() {
+    private fun LinearLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "background" -> this.setBackgroundColor(a.colorBackground)
+            "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(1, a.color)
+                drawable?.setStroke(1, p.color)
             }
-            "groupBar" -> this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.3f))
-            "group" -> this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.1f))
+            "groupBar" -> this.setBackgroundColor(p.background.contrast(!a.isDark, 0.3f))
+            "group" -> this.setBackgroundColor(p.background.contrast(!a.isDark, 0.1f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
     }
 
-    private fun RecyclerView.applyTheme() {
+    private fun RecyclerView.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "log" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, a.color)
+                drawable?.setStroke(1, p.color)
             }
             else -> onUnknownTag(this.tag, "recyclerView")
         }
     }
 
-    private fun MaterialButton.applyTheme() {
+    private fun MaterialButton.applyTheme(p: ColorPallet) {
         val background = this.background as LayerDrawable?
         val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
         background?.mutate()
@@ -201,30 +207,30 @@ class Theme {
 
         this.setTextColor(
             when (this.tag) {
-                "color" -> a.colorBackground
-                "colorA" -> blendARGB(a.color, a.colorBackground, 0.9f)
-                "colorB" -> blendARGB(a.color, a.colorBackground, 0.1f)
-                "colorC" -> a.color
-                else -> a.color
+                "color" -> p.background
+                "colorA" -> blendARGB(p.color, p.background, 0.9f)
+                "colorB" -> blendARGB(p.color, p.background, 0.1f)
+                "colorC" -> p.color
+                else -> p.color
             }
         )
 
         this.backgroundTintList = when (this.tag) {
-            "color" -> ColorStateList.valueOf(a.color)
-            "colorA" -> ColorStateList.valueOf(a.colorA)
-            "colorB" -> ColorStateList.valueOf(a.colorB)
-            "colorC" -> ColorStateList.valueOf(a.colorC)
-            else -> ColorStateList.valueOf(a.colorC)
+            "color" -> ColorStateList.valueOf(p.color)
+            "colorA" -> ColorStateList.valueOf(p.a)
+            "colorB" -> ColorStateList.valueOf(p.b)
+            "colorC" -> ColorStateList.valueOf(p.c)
+            else -> ColorStateList.valueOf(p.c)
         }
     }
 
-    private fun RadioButton.applyTheme() {
+    private fun RadioButton.applyTheme(p: ColorPallet) {
 
         val colorStateList = ColorStateList(
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked),
                 intArrayOf(android.R.attr.state_checked)
-            ), intArrayOf(a.colorC, a.colorB)
+            ), intArrayOf(p.c, p.b)
         )
 
         when (this.tag) {
@@ -236,38 +242,38 @@ class Theme {
         }
     }
 
-    private fun TextView.applyTheme() {
+    private fun TextView.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "color" -> this.setTextColor(a.color)
-            "colorA" -> this.setTextColor(a.colorA)
-            "colorB" -> this.setTextColor(a.colorB)
-            "colorC" -> this.setTextColor(a.colorC)
-            "colorD" -> this.setTextColor(a.colorD)
-            "colorBackground" -> this.setTextColor(a.colorBackground)
+            "color" -> this.setTextColor(p.color)
+            "colorA" -> this.setTextColor(p.a)
+            "colorB" -> this.setTextColor(p.b)
+            "colorC" -> this.setTextColor(p.c)
+            "colorD" -> this.setTextColor(p.d)
+            "colorBackground" -> this.setTextColor(p.background)
             "tag" -> {
-                this.setTextColor(a.color)
-                this.setBackgroundColor(a.colorD)
+                this.setTextColor(p.color)
+                this.setBackgroundColor(p.d)
             }
             "log" -> {
-                this.setTextColor(a.color)
-                this.setBackgroundColor(a.colorBackground)
+                this.setTextColor(p.color)
+                this.setBackgroundColor(p.background)
             }
             else -> onUnknownTag(this.tag, "textView")
         }
     }
 
-    private fun EditText.applyTheme() {
+    private fun EditText.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "basic" -> {
-                this.setTextColor(a.colorB)
-                this.setHintTextColor(a.colorC)
-                this.setBackgroundColor(a.colorBackground.contrast(!a.isDark, 0.2f))
+                this.setTextColor(p.b)
+                this.setHintTextColor(p.c)
+                this.setBackgroundColor(p.background.contrast(!a.isDark, 0.2f))
             }
             else -> onUnknownTag(this.tag, "editText")
         }
     }
 
-    private fun SwitchMaterial.applyTheme() {
+    private fun SwitchMaterial.applyTheme(p: ColorPallet) {
         when (this.tag) {
             else -> onUnknownTag(this.tag, "switchMaterial")
         }
@@ -277,54 +283,51 @@ class Theme {
             intArrayOf(android.R.attr.state_checked)
         )
 
-        val colors = intArrayOf(
-            a.colorC,
-            a.colorB
-        )
+        val colors = intArrayOf(p.c, p.b)
 
         val list = ColorStateList(states, colors)
         this.trackTintList = list
         this.thumbTintList =
             ColorStateList.valueOf(
-                a.color
+                p.c
             )
     }
 
-    private fun Slider.applyTheme() {
+    private fun Slider.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "enabled" -> {
-                this.trackActiveTintList = ColorStateList.valueOf(a.colorB)
-                this.tickActiveTintList = ColorStateList.valueOf(a.colorB)
-                this.trackInactiveTintList = ColorStateList.valueOf(a.colorC)
-                this.tickInactiveTintList = ColorStateList.valueOf(a.colorC)
-                this.thumbTintList = ColorStateList.valueOf(a.color)
+                this.trackActiveTintList = ColorStateList.valueOf(p.b)
+                this.tickActiveTintList = ColorStateList.valueOf(p.b)
+                this.trackInactiveTintList = ColorStateList.valueOf(p.c)
+                this.tickInactiveTintList = ColorStateList.valueOf(p.c)
+                this.thumbTintList = ColorStateList.valueOf(p.color)
             }
             "disabled" -> {
-                this.trackActiveTintList = ColorStateList.valueOf(a.colorC)
-                this.tickActiveTintList = ColorStateList.valueOf(a.colorC)
-                this.trackInactiveTintList = ColorStateList.valueOf(a.colorD)
-                this.tickInactiveTintList = ColorStateList.valueOf(a.colorD)
-                this.thumbTintList = ColorStateList.valueOf(a.colorB)
+                this.trackActiveTintList = ColorStateList.valueOf(p.c)
+                this.tickActiveTintList = ColorStateList.valueOf(p.c)
+                this.trackInactiveTintList = ColorStateList.valueOf(p.d)
+                this.tickInactiveTintList = ColorStateList.valueOf(p.d)
+                this.thumbTintList = ColorStateList.valueOf(p.b)
             }
             else -> onUnknownTag(this.tag, "slider")
         }
     }
 
-    private fun Chip.applyTheme() {
+    private fun Chip.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "colorA" -> {
                 val colorStateListBackground = ColorStateList(
                     arrayOf(
                         intArrayOf(-android.R.attr.state_checked),
                         intArrayOf(android.R.attr.state_checked)
-                    ), intArrayOf(a.colorC, a.colorB)
+                    ), intArrayOf(p.c, p.b)
                 )
 
                 val colorStateListText = ColorStateList(
                     arrayOf(
                         intArrayOf(-android.R.attr.state_checked),
                         intArrayOf(android.R.attr.state_checked)
-                    ), intArrayOf(a.color, a.color)
+                    ), intArrayOf(p.color, p.color)
                 )
 
                 this.chipBackgroundColor = colorStateListBackground
@@ -334,7 +337,7 @@ class Theme {
         }
     }
 
-    private fun ChipGroup.applyTheme() {
+    private fun ChipGroup.applyTheme(p: ColorPallet) {
         when (this.tag) {
             else -> onUnknownTag(this.tag, "chipGroup")
         }
@@ -368,38 +371,29 @@ class Theme {
         var isDark = true
             set(value) {
                 field = value
-                compute()
+                colorPallet = getColorPallet(hsv)
             }
 
-        var color = 0
-            private set
-        var colorA = 0
-            private set
-        var colorB = 0
-            private set
-        var colorC = 0
-            private set
-        var colorD = 0
-            private set
-        var colorBackground = 0
-            private set
-
-        private var maxS: Float = 1f
-        private var maxV: Float = 1f
-        private var minV: Float = 0f
+        var colorPallet: ColorPallet
 
         var hsv: FloatArray = floatArrayOf(174f, 1f, 1f)
             set(value) {
                 field = value
-                compute()
+                colorPallet = getColorPallet(hsv)
             }
 
         init {
-            compute()
+            colorPallet = getColorPallet(hsv)
         }
 
-        fun compute() {
+        fun getColorPallet(hsv: FloatArray, isAltCon: Boolean = false): ColorPallet {
             var c = 0
+            var maxS: Float = 1f
+            var maxV: Float = 1f
+            var minV: Float = 0f
+
+            val colorBackground = if (isDark) Color.rgb(90, 90, 90)
+            else Color.rgb(200, 200, 200)
 
             //Compute maximal saturation/value
             for (i in 100 downTo 0) {
@@ -411,11 +405,9 @@ class Theme {
                     )
                 )
 
-                if (ColorUtils.calculateContrast(c, getBackgroundColor(c)) > 2.6) {
-                    (i * 0.008f).let {
-                        maxS = if (isDark) it else 1f
-                        maxV = if (isDark) 1f else it
-                    }
+                if (ColorUtils.calculateContrast(c, colorBackground) > if (isAltCon) 1.7 else 2.7) {
+                    maxS = if (isDark) i / 100f else 1f
+                    maxV = if (isDark) 1f else i / 100f
                     break
                 }
             }
@@ -424,7 +416,7 @@ class Theme {
             if (!isDark) minV = 0f
             else {
                 for (i in 100 downTo 0) {
-                    if (ColorUtils.calculateContrast(c, getBackgroundColor(c)) < 3.6) {
+                    if (ColorUtils.calculateContrast(c, colorBackground) < 3.6) {
                         minV = i / 100f
                         break
                     }
@@ -433,7 +425,7 @@ class Theme {
                 }
             }
 
-            color = Color.HSVToColor(
+            val color = Color.HSVToColor(
                 floatArrayOf(
                     hsv[0],
                     maxS * hsv[1],
@@ -441,20 +433,23 @@ class Theme {
                 )
             )
 
-            colorBackground = getBackgroundColor(color)
-
-            colorA = blendARGB(color, colorBackground, 0.35f)
-            colorB = blendARGB(color, colorBackground, 0.55f)
-            colorC = blendARGB(color, colorBackground, 0.75f)
-            colorD = blendARGB(color, colorBackground, 0.85f)
-        }
-
-        private fun getBackgroundColor(color: Int): Int {
-            val hsv = floatArrayOf(0f, 0f, 0f)
-            Color.colorToHSV(color, hsv)
-            hsv[1] = hsv[1] * 0.1f
-
-            return Color.HSVToColor(hsv).contrast(!isDark, 0.6f)
+            return ColorPallet(
+                color,
+                colorBackground,
+                blendARGB(color, colorBackground, 0.35f),
+                blendARGB(color, colorBackground, 0.55f),
+                blendARGB(color, colorBackground, 0.75f),
+                blendARGB(color, colorBackground, 0.85f)
+            )
         }
     }
+
+    class ColorPallet(
+        val color: Int,
+        val background: Int,
+        val a: Int,
+        val b: Int,
+        val c: Int,
+        val d: Int
+    )
 }

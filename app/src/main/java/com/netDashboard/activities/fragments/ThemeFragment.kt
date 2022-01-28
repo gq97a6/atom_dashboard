@@ -59,8 +59,8 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
             b.tValue.tag = if (state) "disabled" else "enabled"
             b.tValue.isEnabled = !state
             if (state) b.tValue.value = 1f
+            else b.tValue.value = theme.a.hsv[2]
 
-            theme.a.compute()
             theme.apply(requireContext(), (activity as MainActivity).b.root)
         }
 

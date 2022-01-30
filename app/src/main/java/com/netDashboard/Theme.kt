@@ -404,7 +404,7 @@ class Theme {
                     )
                 )
 
-                if (ColorUtils.calculateContrast(c, colorBackground) > if (isAltCon) 1.7 else 2.7) {
+                if (ColorUtils.calculateContrast(c, colorBackground) > if (isAltCon) 1.7 else 5.0) {
                     maxS = if (isDark) i / 100f else 1f
                     maxV = if (isDark) 1f else i / 100f
                     break
@@ -428,7 +428,7 @@ class Theme {
                 floatArrayOf(
                     hsv[0],
                     maxS * hsv[1],
-                    minV + (maxV - minV) * hsv[2]
+                    minV + (maxV - minV) * if(isDark) 1f else hsv[2]
                 )
             )
 

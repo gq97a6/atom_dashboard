@@ -1,7 +1,10 @@
 package com.netDashboard.tile
 
 import android.content.Context
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import com.netDashboard.globals.G
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
 class TilesAdapter(context: Context, spanCount: Int) :
@@ -21,6 +24,14 @@ class TilesAdapter(context: Context, spanCount: Int) :
         ): Boolean {
             return oldItem.areContentsTheSame(oldItem, newItem)
         }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        theme.apply(
+            holder.itemView as ViewGroup,
+            colorPallet = currentItem.colorPallet
+        )
     }
 }
 

@@ -40,7 +40,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        theme.apply(requireContext(), b.root, true)
+        theme.apply(b.root, requireContext(), true)
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -67,7 +67,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(requireContext(), b.root)
+            theme.apply(b.root, requireContext())
         }
 
         toolBarController = ToolBarController(

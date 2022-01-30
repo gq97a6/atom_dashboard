@@ -1,8 +1,6 @@
 package com.netDashboard.tile
 
 import android.app.Dialog
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -30,7 +28,7 @@ abstract class Tile : BaseRecyclerViewItem() {
 
     var tag = ""
     var iconRes = R.drawable.il_interface_plus
-    var colorPallet: Theme.ColorPallet = theme.a.colorPallet
+    var colorPallet = theme.a.colorPallet
 
     abstract var typeTag: String
 
@@ -49,8 +47,6 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         params.height = ((screenWidth - view.paddingLeft * 2) * height / 3.236).toInt()
         view.layoutParams = params
-
-        holder.itemView.findViewById<TileView>(R.id.tile_root).colorPallet = colorPallet
     }
 
     open class MqttData(defaultPubValue: String = "") {
@@ -119,7 +115,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         binding.pcConfirm.text = "PUBLISH"
         binding.pcText.text = "Confirm publishing"
 
-        theme.apply(adapter.context, binding.root)
+        theme.apply(binding.root, adapter.context)
         dialog.show()
     }
 

@@ -49,7 +49,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         setupRecyclerView()
         setupLogRecyclerView()
-        theme.apply(requireContext(), b.root)
+        theme.apply(b.root, requireContext())
         settings.lastDashboardId = dashboard.id
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -123,7 +123,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(requireContext(), b.root)
+            theme.apply(b.root, requireContext())
+            adapter.notifyDataSetChanged()
         }
 
         toolBarController = ToolBarController(

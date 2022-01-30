@@ -1,7 +1,4 @@
 //develop ------------------------------
-tiles icons
-tile colors
-
 notifications, alerts
 export/import data
 export/import MQTT

@@ -88,7 +88,7 @@ class SliderTile : Tile() {
                 }
             }
 
-            theme.apply(adapter.context, binding.root)
+            theme.apply(binding.root, adapter.context)
             dialog.show()
         }
     }

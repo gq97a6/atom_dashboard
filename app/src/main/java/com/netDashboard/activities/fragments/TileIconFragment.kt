@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.ChipGroup
 import com.netDashboard.R
 import com.netDashboard.databinding.FragmentTileIconBinding
-import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.theme
 import com.netDashboard.globals.G.tile
 import com.netDashboard.icon.IconPropertiesDrawable
@@ -43,7 +42,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theme.apply(requireContext(), b.root, true)
+        theme.apply(b.root, requireContext(), true)
         //tile = dashboard.tiles[arguments?.getInt("index", 0) ?: 0]
         setupIconsRecyclerView()
         setupColorsRecyclerView()

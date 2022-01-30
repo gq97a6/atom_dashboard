@@ -62,7 +62,7 @@ class TextTile : Tile() {
                 dialog.hide()
             }
 
-            G.theme.apply(adapter.context, binding.root)
+            G.theme.apply(binding.root, adapter.context)
             dialog.show()
         } else send(mqttData.pubPayload, mqttData.qos)
     }

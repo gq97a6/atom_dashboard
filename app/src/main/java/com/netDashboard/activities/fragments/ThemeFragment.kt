@@ -30,11 +30,11 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        theme.apply(requireContext(), b.root, true)
+        theme.apply(b.root, requireContext(), true)
 
         fun onColorChange() {
             theme.a.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
-            theme.apply(requireContext(), (activity as MainActivity).b.root)
+            theme.apply((activity as MainActivity).b.root, requireContext())
         }
 
         b.tHue.setOnTouchListener { _, e ->
@@ -61,7 +61,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
             if (state) b.tValue.value = 1f
             else b.tValue.value = theme.a.hsv[2]
 
-            theme.apply(requireContext(), (activity as MainActivity).b.root)
+            theme.apply((activity as MainActivity).b.root, requireContext())
         }
 
         b.tAdvancedArrow.setOnClickListener {

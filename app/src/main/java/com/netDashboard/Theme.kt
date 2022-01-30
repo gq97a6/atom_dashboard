@@ -23,7 +23,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.globals.G.mapper
-import com.netDashboard.tile.TileView
+import com.netDashboard.globals.G.theme
 import java.io.File
 import java.io.FileReader
 
@@ -33,22 +33,24 @@ class Theme {
     val a = Artist()
 
     fun apply(
-        context: Context,
         viewGroup: ViewGroup,
+        context: Context? = null,
         anim: Boolean = false,
         colorPallet: ColorPallet = a.colorPallet
     ) {
-        context.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
+        context?.let {
+            it.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
 
-        try {
-            WindowInsetsControllerCompat(
-                (context as Activity).window,
-                viewGroup
-            ).isAppearanceLightStatusBars = !a.isDark
+            try {
+                WindowInsetsControllerCompat(
+                    (it as Activity).window,
+                    viewGroup
+                ).isAppearanceLightStatusBars = !a.isDark
 
-            context.window.statusBarColor = colorPallet.background
-        } catch (e: Exception) {
+                it.window.statusBarColor = colorPallet.background
+            } catch (e: Exception) {
 
+            }
         }
 
         viewGroup.applyTheme(colorPallet)
@@ -59,8 +61,8 @@ class Theme {
         for (i in 0 until this.childCount) {
             val v = this.getChildAt(i)
 
-            if (v is ViewGroup) v.applyTheme(if (v is TileView) v.colorPallet else p)
-            v.defineType(if (v is TileView) v.colorPallet else p)
+            if (v is ViewGroup) v.applyTheme(p)
+            v.defineType(p)
         }
 
         this.defineType(p)
@@ -137,7 +139,8 @@ class Theme {
             }
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(p.background.alpha(150)))
+                background?.mutate()
+                background?.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -282,15 +285,11 @@ class Theme {
             intArrayOf(-android.R.attr.state_checked),
             intArrayOf(android.R.attr.state_checked)
         )
-
-        val colors = intArrayOf(p.c, p.b)
-
+        val colors = intArrayOf(p.c, p.a)
         val list = ColorStateList(states, colors)
+
         this.trackTintList = list
-        this.thumbTintList =
-            ColorStateList.valueOf(
-                p.c
-            )
+        this.thumbTintList = ColorStateList.valueOf(p.color)
     }
 
     private fun Slider.applyTheme(p: ColorPallet) {
@@ -392,8 +391,8 @@ class Theme {
             var maxV: Float = 1f
             var minV: Float = 0f
 
-            val colorBackground = if (isDark) Color.rgb(90, 90, 90)
-            else Color.rgb(200, 200, 200)
+            val colorBackground = if (isDark) Color.rgb(20, 20, 20)
+            else Color.rgb(240, 240, 240)
 
             //Compute maximal saturation/value
             for (i in 100 downTo 0) {

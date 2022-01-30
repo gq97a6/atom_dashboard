@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
-        G.theme.apply(this, b.root)
+        G.theme.apply(b.root, this)
 
         fm.replaceWith(MainScreenFragment(), false)
         if (settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {

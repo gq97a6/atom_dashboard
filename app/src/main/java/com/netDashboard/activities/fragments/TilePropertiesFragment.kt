@@ -18,7 +18,6 @@ import com.netDashboard.digitsOnly
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.tile
-import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.slider.SliderTile
 
@@ -40,12 +39,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         tile = dashboard.tiles[arguments?.getInt("index", 0) ?: 0]
 
         viewConfig()
-        G.theme.apply(requireActivity(), b.root, true)
-        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.a)
+        G.theme.apply(b.root, requireActivity(), true)
+        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet!!.a)
 
         val drawable = b.tpIconFrame.background as? GradientDrawable
         drawable?.mutate()
-        drawable?.setStroke(1, tile.colorPallet.a)
+        drawable?.setStroke(1, tile.colorPallet!!.a)
         drawable?.cornerRadius = 15f
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
@@ -116,9 +115,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         b.tpEditIcon.setOnClickListener {
             val fragment = TileIconFragment()
             fragment.apply {
-                arguments = Bundle().apply {
-                    putInt("index", dashboard.tiles.indexOf(tile))
-                }
+                //arguments = Bundle().apply {
+                //    putInt("index", dashboard.tiles.indexOf(tile))
+                //}
             }
             (activity as MainActivity).fm.replaceWith(fragment)
         }

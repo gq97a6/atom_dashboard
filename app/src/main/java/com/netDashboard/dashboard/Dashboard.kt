@@ -7,6 +7,7 @@ import com.netDashboard.foreground_service.DaemonGroup
 import com.netDashboard.log.Log
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
+import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
 import java.util.*
 import kotlin.random.Random
@@ -44,6 +45,12 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
+
+        val view = holder.itemView
+        val params = view.layoutParams
+
+        params.height = ((screenWidth - view.paddingLeft * 2) * 1 / 3.236).toInt()
+        view.layoutParams = params
 
         holder.itemView.findViewById<TextView>(R.id.id_tag).text =
             name.uppercase(Locale.getDefault())

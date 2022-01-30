@@ -27,7 +27,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        theme.apply(requireContext(), b.root, true)
+        theme.apply(b.root, requireContext(), true)
 
         b.sLast.setOnClickListener {
             settings.startFromLast = b.sLast.isChecked
@@ -39,7 +39,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
 
         b.sThemeIsDark.setOnClickListener {
             theme.a.isDark = b.sThemeIsDark.isChecked
-            theme.apply(requireContext(), (activity as MainActivity).b.root)
+            theme.apply((activity as MainActivity).b.root, requireContext())
         }
     }
 

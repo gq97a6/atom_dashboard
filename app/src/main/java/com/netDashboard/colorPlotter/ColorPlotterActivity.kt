@@ -28,7 +28,7 @@ class ColorPlotterActivity : AppCompatActivity() {
 
         b = ActivityColorPlotterBinding.inflate(layoutInflater)
         setContentView(b.root)
-        G.theme.apply(this, b.root)
+        G.theme.apply(b.root, this)
 
         b.tHue.setOnTouchListener { _, e ->
             hue = b.tHue.value

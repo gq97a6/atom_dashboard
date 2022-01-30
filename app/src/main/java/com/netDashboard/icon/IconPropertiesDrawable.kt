@@ -45,7 +45,7 @@ class IconPropertiesDrawable(
             icon.visibility = GONE
             frame.visibility = VISIBLE
         } else if (isColor) {
-            icon.backgroundTintList = ColorStateList.valueOf(colorPallet.color)
+            icon.backgroundTintList = ColorStateList.valueOf(colorPallet!!.color)
             icon.visibility = VISIBLE
             text.visibility = GONE
             frame.visibility = GONE

@@ -7,12 +7,14 @@ import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
-import java.util.*
 
 @Suppress("UNUSED")
 abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
@@ -24,7 +26,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     var editMode = Modes()
 
     lateinit var list: MutableList<item>
-    private lateinit var currentItem: item
+    lateinit var currentItem: item
     private lateinit var touchHelper: ItemTouchHelper
 
     var onItemClick: (item) -> Unit = {}
@@ -50,28 +52,36 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
         return list[position].id
     }
 
-    override fun getItemViewType(position: Int): Int {
-        currentItem = list[position]
-        return list[position].getItemViewType(this)
-    }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return currentItem.onCreateViewHolder(parent, viewType)
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) { //0 (order of execution)
         super.onAttachedToRecyclerView(recyclerView)
 
         touchHelper = ItemTouchHelper(ItemTouchCallback(this))
         touchHelper.attachToRecyclerView(recyclerView)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    override fun getItemViewType(position: Int): Int { //1 (order of execution)
+        currentItem = list[position]
+        return list[position].getItemViewType(this)
+    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        list[position].onBindViewHolder(holder, position)
+    override fun onCreateViewHolder( //2 (order of execution)
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        return currentItem.onCreateViewHolder(parent, viewType)
+    }
 
-        theme.apply(context, holder.itemView as ViewGroup)
+    override fun onViewAttachedToWindow(holder: ViewHolder) { //4 (order of execution)
+        super.onViewAttachedToWindow(holder)
+        currentItem.onViewAttachedToWindow(holder)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) { //3 (order of execution)
+        currentItem.onBindViewHolder(holder, position)
+
+        theme.apply(holder.itemView as ViewGroup)
 
         fun View.setOnClick() {
             var isLongPressed = false
@@ -173,7 +183,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             dialog.hide()
         }
 
-        theme.apply(context, binding.root)
+        theme.apply(binding.root, context)
         dialog.show()
     }
 

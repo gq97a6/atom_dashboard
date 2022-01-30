@@ -41,7 +41,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theme.apply(requireContext(), b.root, true)
+        theme.apply(b.root, requireContext(), true)
         viewConfig()
 
         dashboard.dg?.mqttd?.let {
@@ -205,7 +205,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                 adapter.submitList(list)
                 dialog.show()
-                theme.apply(requireContext(), binding.root)
+                theme.apply(binding.root, requireContext())
             }
         }
     }

@@ -163,13 +163,13 @@
                         <TextView
                             android:id="@+id/dp_mqtt_status"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="35dp"
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="8dp"
-                            android:layout_marginVertical="10dp"
-                            android:background="#27000000"
+                            android:textStyle="bold"
+                            android:background="@drawable/background_frame"
                             android:gravity="center"
-                            android:tag="tag"
+                            android:tag="frame"
                             android:text="DISCONNECTED"
                             android:textColor="@color/gray150"
                             android:textSize="11dp" />

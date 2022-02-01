@@ -1,12 +1,15 @@
 package com.netDashboard.activities.fragments
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -26,6 +29,7 @@ import com.netDashboard.recycler_view.RecyclerViewItem
 import java.util.*
 import kotlin.random.Random
 
+
 class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_properties) {
     private lateinit var b: FragmentDashboardPropertiesBinding
 
@@ -41,7 +45,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        theme.apply(b.root, requireContext(), true)
+        theme.apply(b.root, requireContext())
         viewConfig()
 
         dashboard.dg?.mqttd?.let {
@@ -164,7 +168,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         })
 
         b.dpMqttCopy.setOnClickListener {
-            if (G.dashboards.size <= 1) {
+            if (dashboards.size <= 1) {
                 createToast(requireContext(), "No dashboards to copy from.")
             } else {
                 val dialog = Dialog(requireContext())
@@ -205,7 +209,14 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                 adapter.submitList(list)
                 dialog.show()
-                theme.apply(binding.root, requireContext())
+
+                val a = dialog.window?.attributes
+
+                a?.dimAmount = 0.9f
+                dialog.window?.setAttributes(a)
+                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+                theme.apply(binding.root)
             }
         }
     }

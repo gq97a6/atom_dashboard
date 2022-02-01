@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentThemeBinding
+import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme
 
 class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
@@ -30,10 +31,11 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        theme.apply(b.root, requireContext(), true)
+        theme.apply(b.root, requireContext())
 
         fun onColorChange() {
             theme.a.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
+
             theme.apply((activity as MainActivity).b.root, requireContext())
         }
 

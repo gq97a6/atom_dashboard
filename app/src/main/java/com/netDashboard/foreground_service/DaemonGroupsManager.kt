@@ -41,7 +41,7 @@ class DaemonGroupsManager(val context: Context) {
     }
 }
 
-class DaemonGroup(context: Context, val dashboard: Dashboard) {
+class DaemonGroup(val context: Context, val dashboard: Dashboard) {
     private var isDeprecated = false
     val mqttd = Mqttd(context, dashboard)
 

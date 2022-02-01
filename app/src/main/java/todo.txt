@@ -2,6 +2,10 @@
 notifications, alerts
 export/import data
 export/import MQTT
+save crash protection
+long notification bug
+more colors
+theme
 
 //improve ------------------------------
 app background

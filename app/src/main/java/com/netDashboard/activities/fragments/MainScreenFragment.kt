@@ -40,7 +40,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        theme.apply(b.root, requireContext(), true)
+        theme.apply(b.root, requireContext())
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,

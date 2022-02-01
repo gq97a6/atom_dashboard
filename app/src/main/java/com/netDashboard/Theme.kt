@@ -35,7 +35,7 @@ class Theme {
     fun apply(
         viewGroup: ViewGroup,
         context: Context? = null,
-        anim: Boolean = false,
+        anim: Boolean = true,
         colorPallet: ColorPallet = a.colorPallet
     ) {
         context?.let {
@@ -142,6 +142,17 @@ class Theme {
                 background?.mutate()
                 background?.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
             }
+            "rippleForegroundDim" -> {
+                val background = this.background as RippleDrawable
+                background?.mutate()
+                background?.setColor(
+                    ColorStateList.valueOf(
+                        theme.a.colorPallet.background.darkened(
+                            0.9f
+                        ).alpha(150)
+                    )
+                )
+            }
             else -> onUnknownTag(this.tag, "view")
         }
     }
@@ -212,7 +223,7 @@ class Theme {
             when (this.tag) {
                 "color" -> p.background
                 "colorA" -> blendARGB(p.color, p.background, 0.9f)
-                "colorB" -> blendARGB(p.color, p.background, 0.1f)
+                "colorB" -> blendARGB(p.color, p.background, 0.2f)
                 "colorC" -> p.color
                 else -> p.color
             }
@@ -253,9 +264,11 @@ class Theme {
             "colorC" -> this.setTextColor(p.c)
             "colorD" -> this.setTextColor(p.d)
             "colorBackground" -> this.setTextColor(p.background)
-            "tag" -> {
+            "frame" -> {
                 this.setTextColor(p.color)
-                this.setBackgroundColor(p.d)
+                val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
+                drawable?.setStroke(1, p.color)
             }
             "log" -> {
                 this.setTextColor(p.color)
@@ -375,7 +388,7 @@ class Theme {
 
         var colorPallet: ColorPallet
 
-        var hsv: FloatArray = floatArrayOf(174f, 1f, 1f)
+        var hsv: FloatArray = floatArrayOf(0f, 0f, 0f)
             set(value) {
                 field = value
                 colorPallet = getColorPallet(hsv)
@@ -383,6 +396,13 @@ class Theme {
 
         init {
             colorPallet = getColorPallet(hsv)
+        }
+
+        fun parseColor(color: Int, isAltCon: Boolean = false): Int {
+            val hsv = floatArrayOf()
+            Color.colorToHSV(color, hsv)
+
+            return getColorPallet(hsv, isAltCon).color
         }
 
         fun getColorPallet(hsv: FloatArray, isAltCon: Boolean = false): ColorPallet {
@@ -428,7 +448,7 @@ class Theme {
                 floatArrayOf(
                     hsv[0],
                     maxS * hsv[1],
-                    minV + (maxV - minV) * if(isDark) 1f else hsv[2]
+                    minV + (maxV - minV) * if (isDark) 1f else hsv[2]
                 )
             )
 

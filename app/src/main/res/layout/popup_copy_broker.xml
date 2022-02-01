@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pcb_root"
-    android:layout_width="300dp"
-    android:layout_height="500dp"
-    android:layout_gravity="center"
-    android:background="@color/gray65"
-    android:orientation="vertical"
-    android:tag="background">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:tag="color"
-        android:text="Pick dashboard \nto copy from"
-        android:textSize="25dp" />
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="500dp"
+        android:background="@drawable/background_frame"
+        android:layout_margin="50dp"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pcb_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/tile_padding"
-        android:paddingTop="@dimen/tile_padding" />
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:tag="color"
+            android:text="Pick dashboard \nto copy from"
+            android:textSize="25dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pcb_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/tile_padding"
+            android:paddingTop="@dimen/tile_padding" />
+
+    </LinearLayout>
+
+</FrameLayout>

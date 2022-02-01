@@ -27,7 +27,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         super.onViewCreated(view, savedInstanceState)
 
         viewConfig()
-        theme.apply(b.root, requireContext(), true)
+        theme.apply(b.root, requireContext())
 
         b.sLast.setOnClickListener {
             settings.startFromLast = b.sLast.isChecked

@@ -1,7 +1,6 @@
 package com.netDashboard.icon
 
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -9,7 +8,6 @@ import android.widget.TextView
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.globals.G.theme
-import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
@@ -19,6 +17,7 @@ class IconPropertiesDrawable(
     val type: String = "",
     val cat: String = "",
     val isCategory: Boolean = false,
+    var hsv: FloatArray = floatArrayOf(),
     var colorPallet: ColorPallet = ColorPallet(0, 0, 0, 0, 0, 0),
     val isColor: Boolean = false
 ) :

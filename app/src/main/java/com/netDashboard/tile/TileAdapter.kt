@@ -30,6 +30,7 @@ class TilesAdapter(context: Context, spanCount: Int) :
         super.onBindViewHolder(holder, position)
         theme.apply(
             holder.itemView as ViewGroup,
+            anim = false,
             colorPallet = currentItem.colorPallet
         )
     }

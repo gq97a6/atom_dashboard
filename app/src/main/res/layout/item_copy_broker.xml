@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
-        android:tag="rippleForeground" />
+        android:tag="rippleForegroundDim" />
 
     <View
         android:id="@+id/foreground"
@@ -23,19 +23,14 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="colorD" />
-
     <TextView
         android:id="@+id/icb_text"
-        style="@style/button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:padding="12dp"
-        android:tag="color"
+        android:background="@drawable/background_frame"
+        android:tag="frame"
         android:text="@string/tb_default_text"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"

@@ -3,6 +3,8 @@ package com.netDashboard.recycler_view
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.View
@@ -81,7 +83,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { //3 (order of execution)
         currentItem.onBindViewHolder(holder, position)
 
-        theme.apply(holder.itemView as ViewGroup)
+        theme.apply(holder.itemView as ViewGroup, anim = false)
 
         fun View.setOnClick() {
             var isLongPressed = false
@@ -183,8 +185,15 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
             dialog.hide()
         }
 
-        theme.apply(binding.root, context)
         dialog.show()
+
+        val a = dialog.window?.attributes
+
+        a?.dimAmount = 0.9f
+        dialog.window?.setAttributes(a)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        theme.apply(binding.root)
     }
 
     open inner class Modes {

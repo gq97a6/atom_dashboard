@@ -47,11 +47,11 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         setupIconsRecyclerView()
         setupColorsRecyclerView()
 
-        b.tiIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.a)
+        b.tiIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
         b.tiIcon.setBackgroundResource(tile.iconRes)
         val drawable = b.tiIconFrame.background as? GradientDrawable
         drawable?.mutate()
-        drawable?.setStroke(1, tile.colorPallet.a)
+        drawable?.setStroke(1, tile.colorPallet.color)
         drawable?.cornerRadius = 15f
 
         b.tiIconType.setOnCheckedChangeListener { group, checkedId ->
@@ -71,27 +71,40 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         adapterColors.setHasStableIds(true)
 
         adapterColors.onItemClick = { item ->
-            tile.colorPallet = item.colorPallet
-            b.tiIcon.backgroundTintList = ColorStateList.valueOf(item.colorPallet.a)
+            tile.hsv = item.hsv
+            b.tiIcon.backgroundTintList = ColorStateList.valueOf(item.colorPallet.color)
 
             val drawable = b.tiIconFrame.background as? GradientDrawable
             drawable?.mutate()
-            drawable?.setStroke(1, tile.colorPallet.a)
+            drawable?.setStroke(1, item.colorPallet.color)
             drawable?.cornerRadius = 15f
         }
 
         val list = mutableListOf<IconPropertiesDrawable>()
         adapterColors.submitList(list)
 
-        for (i in 0..300 step 60) {
-            val l = theme.a.getColorPallet(floatArrayOf(i.toFloat(), 1f, 1f), true)
+        fun addToList(hsv: FloatArray) {
+            val colorPallet = theme.a.getColorPallet(hsv, true)
+
             list.add(
                 IconPropertiesDrawable(
-                    colorPallet = l,
+                    colorPallet = colorPallet,
+                    hsv = hsv,
                     isColor = true
                 )
             )
         }
+
+        for (i in 40..100 step 20) {
+            for (ii in 0..300 step 60) {
+                addToList(
+                    if (theme.a.isDark) floatArrayOf(ii.toFloat(), i.toFloat() / 100, 1f)
+                    else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
+                )
+            }
+        }
+
+        addToList(floatArrayOf(0f, 0f, 0f))
 
         val layoutManager = GridLayoutManager(requireContext(), spanCount)
 

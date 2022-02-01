@@ -49,7 +49,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         setupRecyclerView()
         setupLogRecyclerView()
-        theme.apply(b.root, requireContext())
+        theme.apply(b.root, requireContext(), false)
         settings.lastDashboardId = dashboard.id
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -123,7 +123,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.root, requireContext())
+            theme.apply(b.root, requireContext(), false)
             adapter.notifyDataSetChanged()
         }
 

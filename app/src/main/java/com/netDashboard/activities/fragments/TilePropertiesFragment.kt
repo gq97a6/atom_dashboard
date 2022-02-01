@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.RadioGroup
@@ -39,12 +40,15 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         tile = dashboard.tiles[arguments?.getInt("index", 0) ?: 0]
 
         viewConfig()
-        G.theme.apply(b.root, requireActivity(), true)
-        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet!!.a)
+        G.theme.apply(b.root, requireActivity())
+
+        val tileColorPallet = G.theme.a.getColorPallet(tile.hsv, true)
+
+        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tileColorPallet.color)
 
         val drawable = b.tpIconFrame.background as? GradientDrawable
         drawable?.mutate()
-        drawable?.setStroke(1, tile.colorPallet!!.a)
+        drawable?.setStroke(1, tileColorPallet.color)
         drawable?.cornerRadius = 15f
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
@@ -120,6 +124,15 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 //}
             }
             (activity as MainActivity).fm.replaceWith(fragment)
+        }
+
+        b.tpNotSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.doNotify = state
+            b.tpNotSilent.visibility = if (state) VISIBLE else GONE
+        }
+
+        b.tpNotSilentSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.silentNotify = state
         }
 
         if (tile is TextTile) {
@@ -255,6 +268,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         b.tpButton.visibility = View.GONE
         b.tpMqttPayloadTypeBox.visibility = View.GONE
 
+        b.tpNotSwitch.isChecked = tile.mqttData.doNotify
+        b.tpNotSilentSwitch.isChecked = tile.mqttData.silentNotify
+
         when (tile) {
             is SliderTile -> {
                 b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
@@ -278,9 +294,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {
         b.tpMqtt.visibility = if (state) {
-            View.VISIBLE
+            VISIBLE
         } else {
-            View.GONE
+            GONE
         }
 
         tile.mqttData.isEnabled = state

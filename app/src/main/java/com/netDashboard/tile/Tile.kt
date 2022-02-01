@@ -1,12 +1,15 @@
 package com.netDashboard.tile
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.R
-import com.netDashboard.Theme
+import com.netDashboard.Theme.ColorPallet
+import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
@@ -28,7 +31,10 @@ abstract class Tile : BaseRecyclerViewItem() {
 
     var tag = ""
     var iconRes = R.drawable.il_interface_plus
-    var colorPallet = theme.a.colorPallet
+
+    var hsv = floatArrayOf(0f, 0f, 0f)
+    val colorPallet: ColorPallet
+        get() = theme.a.getColorPallet(hsv, true)
 
     abstract var typeTag: String
 
@@ -52,6 +58,7 @@ abstract class Tile : BaseRecyclerViewItem() {
     open class MqttData(defaultPubValue: String = "") {
         var isEnabled = true
         var doNotify = false
+        var silentNotify = false
         var lastReceive: Date? = null
 
         val subs: MutableMap<String, String> = mutableMapOf()
@@ -115,8 +122,15 @@ abstract class Tile : BaseRecyclerViewItem() {
         binding.pcConfirm.text = "PUBLISH"
         binding.pcText.text = "Confirm publishing"
 
-        theme.apply(binding.root, adapter.context)
         dialog.show()
+
+        val a = dialog.window?.attributes
+
+        a?.dimAmount = 0.9f
+        dialog.window?.setAttributes(a)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        theme.apply(binding.root)
     }
 
     open fun onSend(
@@ -144,6 +158,18 @@ abstract class Tile : BaseRecyclerViewItem() {
             }
         }
         mqttData.lastReceive = Date()
+
+        if (mqttData.doNotify) {
+            dashboard.dg?.context?.let {
+                createNotification(
+                    it,
+                    dashboard.name.uppercase(Locale.getDefault()),
+                    "$tag: ${data.second.toString()}",
+                    mqttData.silentNotify,
+                    dashboard.id.toInt()
+                )
+            }
+        }
 
         onReceive(data, jsonResult)
     }

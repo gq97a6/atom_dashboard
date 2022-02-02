@@ -5,12 +5,9 @@ export/import MQTT
 save crash protection
 long notification bug
 more colors
-theme
 
 //improve ------------------------------
 app background
-buttons
-popups
 
 //expand ------------------------------
 new tiles

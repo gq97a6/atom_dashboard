@@ -19,7 +19,8 @@ class IconPropertiesDrawable(
     val isCategory: Boolean = false,
     var hsv: FloatArray = floatArrayOf(),
     var colorPallet: ColorPallet = ColorPallet(0, 0, 0, 0, 0, 0),
-    val isColor: Boolean = false
+    val isColor: Boolean = false,
+    val isColorAny: Boolean = false
 ) :
     BaseRecyclerViewItem() {
 
@@ -37,6 +38,8 @@ class IconPropertiesDrawable(
         val icon = view.findViewById<View>(R.id.ic_icon)
         val text = view.findViewById<TextView>(R.id.ic_text)
         val frame = view.findViewById<View>(R.id.ic_frame)
+
+        view.findViewById<View>(R.id.ic_frame_small).visibility = if (isColorAny) VISIBLE else GONE
 
         if (isCategory) {
             text.text = cat

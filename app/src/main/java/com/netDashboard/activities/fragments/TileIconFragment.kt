@@ -1,11 +1,13 @@
 package com.netDashboard.activities.fragments
 
+import android.app.ActionBar
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.ChipGroup
@@ -71,13 +73,17 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         adapterColors.setHasStableIds(true)
 
         adapterColors.onItemClick = { item ->
-            tile.hsv = item.hsv
-            b.tiIcon.backgroundTintList = ColorStateList.valueOf(item.colorPallet.color)
+            if (item.isColorAny) {
 
-            val drawable = b.tiIconFrame.background as? GradientDrawable
-            drawable?.mutate()
-            drawable?.setStroke(1, item.colorPallet.color)
-            drawable?.cornerRadius = 15f
+            } else {
+                tile.hsv = item.hsv
+                b.tiIcon.backgroundTintList = ColorStateList.valueOf(item.colorPallet.color)
+
+                val drawable = b.tiIconFrame.background as? GradientDrawable
+                drawable?.mutate()
+                drawable?.setStroke(1, item.colorPallet.color)
+                drawable?.cornerRadius = 15f
+            }
         }
 
         val list = mutableListOf<IconPropertiesDrawable>()
@@ -105,6 +111,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         }
 
         addToList(floatArrayOf(0f, 0f, 0f))
+        list.add(IconPropertiesDrawable(R.drawable.il_interface_question, isColorAny = true))
 
         val layoutManager = GridLayoutManager(requireContext(), spanCount)
 

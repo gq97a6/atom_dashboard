@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewTreeObserver.OnScrollChangedListener
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +26,7 @@ import com.netDashboard.icon.Icons.solidIcons
 import com.netDashboard.icon.Icons.thinCats
 import com.netDashboard.icon.Icons.thinIcons
 import java.util.*
+
 
 class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     private lateinit var b: FragmentTileIconBinding
@@ -87,8 +89,6 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
 
         if (theme.a.isDark) b.tiValue.value = 1f
         else b.tiValue.value = theme.a.hsv[2]
-        b.tiHue.value = tile.hsv[0]
-        b.tiSaturation.value = tile.hsv[1]
     }
 
     private fun onHSVChange(e: MotionEvent) {
@@ -111,6 +111,10 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         drawable?.mutate()
         drawable?.setStroke(1, colorPallet.color)
         drawable?.cornerRadius = 15f
+
+        b.tiHue.value = hsv[0]
+        b.tiSaturation.value = hsv[1]
+        b.tiValue.value = hsv[2]
     }
 
     private fun setupColorsRecyclerView() {
@@ -158,6 +162,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
 
         b.tiRecyclerViewColors.layoutManager = layoutManager
         b.tiRecyclerViewColors.adapter = adapterColors
+        b.tiRecyclerViewColors.setHasFixedSize(true)
     }
 
     private fun setupIconsRecyclerView() {

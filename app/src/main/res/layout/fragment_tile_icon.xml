@@ -192,8 +192,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ti_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:paddingHorizontal="@dimen/tile_padding"
+                android:nestedScrollingEnabled="false"
                 android:paddingTop="@dimen/tile_padding"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

@@ -1,6 +1,4 @@
 //develop ------------------------------
-notifications, alerts
-
 export/import data
 export/import MQTT
 
@@ -8,6 +6,7 @@ export/import MQTT
 app background
 save crash protection
 long notification bug
+notifications, alerts
 
 //expand ------------------------------
 new tiles

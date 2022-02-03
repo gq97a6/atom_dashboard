@@ -12,7 +12,7 @@ import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 import com.netDashboard.recycler_view.BaseRecyclerViewItem
 import com.netDashboard.screenWidth
 
-class IconPropertiesDrawable(
+class IconCompound(
     val res: Int = 0,
     val type: String = "",
     val cat: String = "",

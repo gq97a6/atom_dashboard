@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pt_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="280dp"
+        android:layout_height="600dp"
+        android:layout_gravity="center"
+        android:layout_margin="50dp"
+        android:background="@drawable/background_frame"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:tag="color"
+            android:text="Transfer"
+            android:textSize="25dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:tag="color"
+            android:text="Transfer dashboards to any devices \nin export mode. All devices need to be connected to same broker."
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:tag="colorA"
+            android:text="Transfer topic"
+            android:textColor="@color/gray150"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/pt_transfer_topic"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="#19000000"
+            android:hint="empty"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="100"
+            android:paddingHorizontal="10dp"
+            android:tag="basic"
+            android:text="mqtt_transfer"
+            android:textColor="@color/gray100"
+            android:textColorHint="@color/gray65"
+            android:textCursorDrawable="@null" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:tag="colorA"
+                android:text="During transfer pick:"
+                android:textColor="@color/gray150"
+                android:textSize="15dp" />
+
+            <RadioGroup
+                android:id="@+id/pt_transfer_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:checkedButton="@id/pt_transfer_only">
+
+                <RadioButton
+                    android:id="@+id/pt_transfer_only"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="default"
+                    android:text="Only this dashboard"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/pt_transfer_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="default"
+                    android:text="All dashboards"
+                    android:textSize="12dp" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:tag="colorA"
+                android:text="Upon receiving:"
+                android:textColor="@color/gray150"
+                android:textSize="15dp" />
+
+            <RadioGroup
+                android:id="@+id/pt_receive_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:checkedButton="@id/pt_receive_append">
+
+                <RadioButton
+                    android:id="@+id/pt_receive_override"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="default"
+                    android:text="Override"
+                    android:textSize="12dp" />
+
+                <RadioButton
+                    android:id="@+id/pt_receive_append"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:tag="default"
+                    android:text="Append"
+                    android:textSize="12dp" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp">
+
+            <FrameLayout
+                android:id="@+id/pt_transfer_box"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toStartOf="@+id/view1"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <View
+                    android:id="@+id/pt_transfer_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:tag="frame" />
+
+                <View
+                    android:id="@+id/pt_transfer_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="13dp"
+                    android:background="@drawable/il_arrow_export"
+                    android:tag="colorIcon" />
+
+                <View
+                    android:id="@+id/pt_transfer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:tag="rippleForegroundDim" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/view1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/pt_transfer_box"
+                tools:layout_editor_absoluteY="10dp">
+
+                <View
+                    android:id="@+id/pt_receive_frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:tag="frame" />
+
+                <View
+                    android:id="@+id/pt_receive_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="13dp"
+                    android:background="@drawable/il_arrow_import"
+                    android:tag="colorIcon" />
+
+                <View
+                    android:id="@+id/pt_receive"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:tag="rippleForegroundDim" />
+
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,12 +1,12 @@
 //develop ------------------------------
-export/import data
-export/import MQTT
+export/import data 7
+export/import MQTT 5
 
 //improve ------------------------------
-app background
-save crash protection
-long notification bug
-notifications, alerts
+save crash protection 7
+long notification bug 5
+log
+design
 
 //expand ------------------------------
 new tiles

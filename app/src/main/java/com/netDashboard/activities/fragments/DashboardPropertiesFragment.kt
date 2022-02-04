@@ -8,8 +8,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -20,6 +21,7 @@ import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
+import com.netDashboard.databinding.PopupTransferBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
@@ -218,6 +220,39 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                 theme.apply(binding.root)
             }
+        }
+
+        b.dpTransfer.setOnClickListener {
+            val dialog = Dialog(requireContext())
+
+            dialog.setContentView(R.layout.popup_transfer)
+            val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.pt_root))
+            dialog.show()
+
+            binding.ptReceive.setOnClickListener {
+                binding.ptTransferBox.visibility =
+                    if (binding.ptTransferBox.isVisible) GONE else VISIBLE
+
+                binding.ptReceiveIcon.setBackgroundResource(
+                    if (binding.ptTransferBox.isVisible) R.drawable.il_arrow_import
+                    else R.drawable.il_multimedia_pause
+                )
+
+                if (binding.ptTransferBox.isVisible) {
+                    binding.ptReceiveFrame.clearAnimation()
+                } else binding.ptReceiveFrame.blink(-1, 200)
+            }
+
+            binding.ptTransfer.setOnClickListener {
+                createToast(requireContext(), "Transferred successfully.")
+            }
+
+            val a = dialog.window?.attributes
+            a?.dimAmount = 0.9f
+            dialog.window?.setAttributes(a)
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            theme.apply(binding.root)
         }
     }
 

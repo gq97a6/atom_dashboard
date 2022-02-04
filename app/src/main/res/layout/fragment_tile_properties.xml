@@ -10,7 +10,7 @@
     tools:context=".activities.fragments.TilePropertiesFragment">
 
     <TextView
-        android:id="@+id/view0"
+        android:id="@+id/pt_transfer_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="color"
@@ -69,7 +69,7 @@
         android:textColor="@color/gray150"
         android:textSize="15dp"
         app:layout_constraintStart_toEndOf="@+id/tp_icon_frame"
-        app:layout_constraintTop_toBottomOf="@+id/view0" />
+        app:layout_constraintTop_toBottomOf="@+id/pt_transfer_box" />
 
     <EditText
         android:id="@+id/tp_tag"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="100dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="8dp">
 
     <View
         android:id="@+id/ripple_foreground"
@@ -13,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/background_ripple"
         android:elevation="20dp"
-        android:tag="rippleForegroundDim" />
+        android:tag="rippleForeground" />
 
     <View
         android:id="@+id/foreground"
@@ -23,18 +22,9 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
-    <TextView
-        android:id="@+id/icb_text"
+    <View
+        android:id="@+id/iii_icon"
+        android:background="@drawable/background_round"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="12dp"
-        android:background="@drawable/background_frame"
-        android:tag="frame"
-        android:text="@string/tb_default_text"
-        app:autoSizeMaxTextSize="25dp"
-        app:autoSizeMinTextSize="8dp"
-        app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform" />
-
+        android:layout_height="match_parent" />
 </FrameLayout>

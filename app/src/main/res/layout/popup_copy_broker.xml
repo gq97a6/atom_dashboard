@@ -25,8 +25,8 @@
             android:id="@+id/pcb_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="@dimen/tile_padding"
-            android:paddingTop="@dimen/tile_padding" />
+            android:paddingHorizontal="5dp"
+            android:paddingTop="5dp" />
 
     </LinearLayout>
 

@@ -63,7 +63,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme2.xml" value="0.29444444444444445" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.25" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_new.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties2.xml" value="0.3072649572649573" />
@@ -76,6 +76,14 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_copy_broker.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_dashboard.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_bar.xml" value="0.5" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_category.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_categoryr.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_color.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_color_any.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_color_picker.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_gap.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_icon_icon.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/item_log.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_confirm.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_confirm_remove.xml" value="0.32222222222222224" />

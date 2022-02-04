@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/tile_padding">
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/il_date"

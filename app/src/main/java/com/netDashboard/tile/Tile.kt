@@ -26,7 +26,9 @@ abstract class Tile : BaseRecyclerViewItem() {
     @JsonIgnore
     var dashboard: Dashboard = Dashboard(isInvalid = true)
 
-    var height = 1
+    @JsonIgnore
+    open var height = 1
+    @JsonIgnore
     var width = 1
 
     var tag = ""

@@ -27,7 +27,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
 
     var editMode = Modes()
 
-    lateinit var list: MutableList<item>
+    var list: MutableList<item> = mutableListOf()
     lateinit var currentItem: item
     private lateinit var touchHelper: ItemTouchHelper
 

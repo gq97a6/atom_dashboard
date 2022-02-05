@@ -14,8 +14,8 @@ class LogEntry(
 ) : BaseRecyclerViewItem() {
     override val layout = R.layout.item_log
 
-    val time = SimpleDateFormat("hh:mm:ss").format(Date())
-    val date = SimpleDateFormat("dd.M.yy").format(Date())
+    private val time = SimpleDateFormat("hh:mm:ss").format(Date())
+    private val date = SimpleDateFormat("dd.M.yy").format(Date())
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

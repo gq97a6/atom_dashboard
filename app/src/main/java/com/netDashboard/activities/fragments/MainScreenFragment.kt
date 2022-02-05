@@ -31,7 +31,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentMainScreenBinding.inflate(inflater, container, false)
         return b.root
     }

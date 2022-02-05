@@ -7,11 +7,10 @@ import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-import com.netDashboard.recycler_view.BaseRecyclerViewItem
 
 class IconColor(
-    var hsv: FloatArray = floatArrayOf(),
-    var colorPallet: ColorPallet = ColorPallet(0, 0, 0, 0, 0, 0)
+    private var hsv: FloatArray = floatArrayOf(),
+    private var colorPallet: ColorPallet = ColorPallet(0, 0, 0, 0, 0, 0)
 ) : Icon() {
 
     override val layout = R.layout.item_icon_color

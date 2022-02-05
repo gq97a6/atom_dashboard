@@ -4,12 +4,9 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.IdGenerator
 import com.netDashboard.R
-import com.netDashboard.Theme
 import com.netDashboard.alpha
 import com.netDashboard.globals.G.theme
 
@@ -50,7 +47,10 @@ abstract class BaseRecyclerViewItem {
     open fun onViewAttachedToWindow(holder: BaseRecyclerViewAdapter.ViewHolder) { //4 (order of execution)
     }
 
-    open fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) { //3 (order of execution)
+    open fun onBindViewHolder(
+        holder: BaseRecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) { //3 (order of execution)
         this.holder = holder
         onEdit(!(adapter.editMode.isNone))
     }

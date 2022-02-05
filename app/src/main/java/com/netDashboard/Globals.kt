@@ -27,9 +27,9 @@ object G {
     }
 
     fun initialize() {
-        settings = Settings.parseSave() ?: Settings()
-        theme = Theme.parseSave() ?: Theme()
         dashboards = Dashboards.parseSave() ?: mutableListOf()
+        theme = Theme.parseSave() ?: Theme()
+        settings = Settings.parseSave() ?: Settings()
     }
 }
 

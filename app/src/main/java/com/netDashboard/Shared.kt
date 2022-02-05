@@ -25,8 +25,6 @@ import androidx.core.graphics.red
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import com.netDashboard.globals.G
 import java.util.*
 
@@ -210,7 +208,7 @@ fun FragmentManager.replaceWith(fragment: Fragment, backstack: Boolean = true) {
     }
 }
 
-fun Any.prepareSave() = G.mapper.writeValueAsString(this)
+fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
 
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {

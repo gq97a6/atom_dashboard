@@ -1,12 +1,9 @@
-//develop ------------------------------
+//develop/improve ------------------------------
 export/import data 7
-export/import MQTT 5
-
-//improve ------------------------------
-save crash protection 7
-long notification bug 5
 log
 design
+long notification bug 7
+save crash protection 8
 
 //expand ------------------------------
 new tiles

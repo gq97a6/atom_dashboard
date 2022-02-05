@@ -13,9 +13,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
 import com.netDashboard.Transfer.showTransferPopup
@@ -23,7 +20,6 @@ import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme
@@ -40,7 +36,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentDashboardPropertiesBinding.inflate(inflater, container, false)
         return b.root
     }
@@ -55,7 +51,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
                 v.text = if (dashboard.mqttEnabled) {
-                    if (it.client.isConnected()) {
+                    if (it.client.isConnected) {
                         v.clearAnimation()
                         "CONNECTED"
                     } else if (!isDone) {
@@ -177,7 +173,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 val dialog = Dialog(requireContext())
                 val adapter = RecyclerViewAdapter(requireContext())
 
-                val list = MutableList(G.dashboards.size) {
+                val list = MutableList(dashboards.size) {
                     RecyclerViewItem(
                         R.layout.item_copy_broker
                     )
@@ -216,25 +212,16 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 val a = dialog.window?.attributes
 
                 a?.dimAmount = 0.9f
-                dialog.window?.setAttributes(a)
+                dialog.window?.attributes = a
                 dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-                theme.apply(binding.root)
+                theme.apply(binding.root as ViewGroup)
             }
         }
 
         b.dpTransfer.setOnClickListener {
             showTransferPopup(this)
         }
-    }
-
-    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-        observe(lifecycleOwner, object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
     }
 
     private fun viewConfig() {

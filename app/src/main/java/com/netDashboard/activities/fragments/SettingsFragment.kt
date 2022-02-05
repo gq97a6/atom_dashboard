@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
-import com.netDashboard.Transfer.showTransferPopup
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G.settings
@@ -19,7 +18,7 @@ class SettingsFragment : Fragment(R.layout.fragment_tile_new) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentSettingsBinding.inflate(inflater, container, false)
         return b.root
     }

@@ -18,7 +18,11 @@ class Settings {
             }
         }
 
-        fun getSaveFromFile() = FileReader(FolderTree.settingsFile).readText()
+        private fun getSaveFromFile() = try {
+            FileReader(FolderTree.settingsFile).readText()
+        } catch (e: Exception) {
+            ""
+        }
 
         fun parseSave(save: String = getSaveFromFile()): Settings? =
             try {

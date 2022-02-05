@@ -1,5 +1,6 @@
 package com.netDashboard.colorPlotter
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
@@ -13,22 +14,21 @@ import com.netDashboard.globals.G
 
 class ColorPlotterActivity : AppCompatActivity() {
     private lateinit var b: ActivityColorPlotterBinding
-    var hue = 0f
+    private var hue = 0f
 
     companion object {
         var con = 1.7f
 
-        var valueRange = floatArrayOf(1f, 0f)
-        var saturationRange = floatArrayOf(1f, 0f)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Activity.onCreate(this)
 
         b = ActivityColorPlotterBinding.inflate(layoutInflater)
         setContentView(b.root)
-        G.theme.apply(b.root,this)
+        G.theme.apply(b.root, this)
 
         b.tHue.setOnTouchListener { _, e ->
             hue = b.tHue.value
@@ -57,7 +57,7 @@ class ColorPlotterActivity : AppCompatActivity() {
         }
     }
 
-    fun getList(isDark: Boolean, hue: Float): List<DataPoint> {
+    private fun getList(isDark: Boolean, hue: Float): List<DataPoint> {
         val list = mutableListOf<DataPoint>()
         var x = 0
         var c = 0

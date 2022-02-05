@@ -29,7 +29,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentTilePropertiesBinding.inflate(inflater, container, false)
         return b.root
     }
@@ -91,7 +91,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
-            b.tpMqttJsonPayload.visibility = if (state) View.VISIBLE else View.GONE
+            b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
         }
 
         b.tpMqttJsonPayloadPath.addTextChangedListener(object : TextWatcher {
@@ -139,11 +139,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                 tile.mqttData.varPayload = when (id) {
                     R.id.tp_mqtt_payload_val -> {
-                        b.tpMqttPayloadBox.visibility = View.VISIBLE
+                        b.tpMqttPayloadBox.visibility = VISIBLE
                         false
                     }
                     R.id.tp_mqtt_payload_var -> {
-                        b.tpMqttPayloadBox.visibility = View.GONE
+                        b.tpMqttPayloadBox.visibility = GONE
                         true
                     }
                     else -> true
@@ -248,7 +248,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         b.tpMqttPayload.setText(tile.mqttData.pubPayload)
         tile.mqttData.payloadIsJson.let {
             b.tpMqttJsonSwitch.isChecked = it
-            b.tpMqttJsonPayload.visibility = if (it) View.VISIBLE else View.GONE
+            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
         }
         b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["value"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
@@ -263,10 +263,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         mqttSwitchOnCheckedChangeListener(b.tpMqttSwitch.isChecked)
 
-        b.tpText.visibility = View.GONE
-        b.tpSlider.visibility = View.GONE
-        b.tpButton.visibility = View.GONE
-        b.tpMqttPayloadTypeBox.visibility = View.GONE
+        b.tpText.visibility = GONE
+        b.tpSlider.visibility = GONE
+        b.tpButton.visibility = GONE
+        b.tpMqttPayloadTypeBox.visibility = GONE
 
         b.tpNotSwitch.isChecked = tile.mqttData.doNotify
         b.tpNotSilentSwitch.isChecked = tile.mqttData.silentNotify
@@ -284,7 +284,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadTypeBox.visibility = VISIBLE
                 b.tpPayloadType.check(
                     if (tile.mqttData.varPayload) {
-                        b.tpMqttPayloadBox.visibility = View.GONE
+                        b.tpMqttPayloadBox.visibility = GONE
                         R.id.tp_mqtt_payload_var
                     } else R.id.tp_mqtt_payload_val
                 )

@@ -133,7 +133,7 @@ object Transfer {
             val a = dialog.window?.attributes
             a?.dimAmount = 0.9f
 
-            dialog.window?.setAttributes(a)
+            dialog.window?.attributes = a
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             theme.apply(binding.root)

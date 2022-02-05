@@ -6,7 +6,7 @@ import com.netDashboard.R
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
 class IconCategory(
-    val cat: String = "Test",
+    private val cat: String = "Test",
 ) : Icon() {
 
     override val layout = R.layout.item_icon_category

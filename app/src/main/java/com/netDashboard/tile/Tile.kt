@@ -28,6 +28,7 @@ abstract class Tile : BaseRecyclerViewItem() {
 
     @JsonIgnore
     open var height = 1
+
     @JsonIgnore
     var width = 1
 
@@ -133,7 +134,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         val a = dialog.window?.attributes
 
         a?.dimAmount = 0.9f
-        dialog.window?.setAttributes(a)
+        dialog.window?.attributes = a
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         theme.apply(binding.root)

@@ -3,7 +3,6 @@ package com.netDashboard.tile
 import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 

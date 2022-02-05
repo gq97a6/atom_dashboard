@@ -33,11 +33,9 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
-    var mqttUserName: String? = ""
-        get() = if ((field ?: "").isBlank()) null else field
-    var mqttPass: String? = ""
-        get() = if ((field ?: "").isBlank()) null else field
-    var mqttClientId: String = kotlin.math.abs(Random.nextInt()).toString()
+    var mqttUserName = ""
+    var mqttPass = ""
+    var mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
     val mqttURI
         get() = "$mqttAddress:$mqttPort"
 

@@ -35,7 +35,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
 
-        if (!client.isConnected()) return
+        if (!client.isConnected) return
 
         try {
             val message = MqttMessage()
@@ -178,13 +178,17 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             }
         }
 
+        override fun removeMessage(token: IMqttDeliveryToken?): Boolean = false
+        override fun reconnect() {}
+        override fun getInFlightMessageCount(): Int = 0
+
         fun connectAttempt() {
             if (isBusy) return
             isBusy = true
 
             options.isCleanSession = true
-            options.userName = d.mqttUserName
-            options.password = d.mqttPass?.toCharArray()
+            if (d.mqttUserName.isNotBlank()) options.userName = d.mqttUserName
+            if (d.mqttPass.isNotBlank()) options.password = d.mqttPass.toCharArray()
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {

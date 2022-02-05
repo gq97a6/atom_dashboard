@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.netDashboard.Activity
 import com.netDashboard.R
 import com.netDashboard.activities.fragments.DashboardFragment
@@ -49,8 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     inner class FragmentManager {
-        var backstack = mutableListOf<Fragment>()
-        var currentFragment: Fragment = Fragment()
+        private var backstack = mutableListOf<Fragment>()
+        private var currentFragment: Fragment = Fragment()
 
         fun replaceWith(fragment: Fragment, stack: Boolean = true) {
             supportFragmentManager.commit {

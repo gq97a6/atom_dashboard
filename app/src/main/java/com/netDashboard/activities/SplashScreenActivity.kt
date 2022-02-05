@@ -34,12 +34,12 @@ class SplashScreenActivity : AppCompatActivity() {
         foregroundServiceHandler.start()
         foregroundServiceHandler.bind()
 
-        foregroundServiceHandler.service.observe(this, { s ->
+        foregroundServiceHandler.service.observe(this) { s ->
             if (s != null) {
                 service = s
                 onServiceReady()
             }
-        })
+        }
     }
 
     override fun onDestroy() {

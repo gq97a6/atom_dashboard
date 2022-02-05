@@ -15,7 +15,6 @@ import com.netDashboard.databinding.FragmentTileIconBinding
 import com.netDashboard.globals.G.theme
 import com.netDashboard.globals.G.tile
 import com.netDashboard.icon.IconAdapter
-import com.netDashboard.icon.IconColor
 
 
 class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
@@ -27,7 +26,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentTileIconBinding.inflate(inflater, container, false)
         return b.root
     }

@@ -23,7 +23,7 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentTileNewBinding.inflate(inflater, container, false)
         return b.root
     }

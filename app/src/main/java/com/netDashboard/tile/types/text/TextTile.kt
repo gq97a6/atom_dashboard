@@ -33,7 +33,7 @@ class TextTile : Tile() {
         value = value
 
         holder.itemView.findViewById<TextView>(R.id.tt_tag)?.let {
-            it.text = if (tag.isBlank()) "???" else tag
+            it.text = tag.ifBlank { "???" }
         }
 
         holder.itemView.findViewById<View>(R.id.tt_icon)?.setBackgroundResource(iconRes)

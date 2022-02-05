@@ -16,13 +16,17 @@ class Dashboards {
             }
         }
 
-        fun getSaveFromFile() = FileReader(dashboardsFile).readText()
+        private fun getSaveFromFile() = try {
+            FileReader(dashboardsFile).readText()
+        } catch (e: Exception) {
+            ""
+        }
 
         fun parseSave(save: String = getSaveFromFile()): MutableList<Dashboard>? =
             try {
                 mapper.readerForListOf(Dashboard::class.java).readValue(save)
             } catch (e: Exception) {
-                null
+                mutableListOf()
             }
     }
 }

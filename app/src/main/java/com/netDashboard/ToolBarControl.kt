@@ -11,7 +11,7 @@ import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 class ToolBarController(
     private val adapter: BaseRecyclerViewAdapter<*>,
     private val bar: ConstraintLayout,
-    private val toolbar: FrameLayout,
+    toolbar: FrameLayout,
     private val toolbarIcon: Button,
     private val edit: Button,
     private val swap: Button,
@@ -27,21 +27,13 @@ class ToolBarController(
         button.alpha = 1f
     }
 
-    fun redo() {
-        bar.post {
-            bar.translationY =
-                if (adapter.editMode.isNone) -1.5f * bar.get(0).height.toFloat()
-                else 0f
-        }
-    }
-
     fun toggleTools() {
         if (adapter.editMode.isNone) {
             adapter.editMode.setSwap()
             highlightOnly(swap)
 
             bar.animate()
-                .translationY(-1.5f * bar.get(0).height.toFloat())
+                .translationY(-1.5f * bar[0].height.toFloat())
                 .withEndAction {
                     toolbarIcon.setBackgroundResource(R.drawable.button_unlocked)
                     onUiChange()

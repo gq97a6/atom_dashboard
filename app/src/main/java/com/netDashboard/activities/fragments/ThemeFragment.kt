@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentThemeBinding
-import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme
 
 class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
@@ -22,7 +21,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         b = FragmentThemeBinding.inflate(inflater, container, false)
         return b.root
     }
@@ -89,7 +88,7 @@ class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
         b.tIsDark.isChecked = theme.a.isDark
 
         b.tBar.post {
-            b.tBar.translationY = -1.5f * b.tBar.get(0).height.toFloat()
+            b.tBar.translationY = -1.5f * b.tBar[0].height.toFloat()
         }
     }
 

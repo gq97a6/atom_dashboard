@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.DiffUtil
 import com.google.android.material.slider.Slider
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
 import com.netDashboard.icon.Icons.lineCats
 import com.netDashboard.icon.Icons.lineIcons
@@ -20,7 +19,7 @@ import java.util.*
 class IconAdapter(context: Context, spanCount: Int) :
     BaseRecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
 
-    var iconCount = 0
+    private var iconCount = 0
     var onColorChange: (FloatArray, ColorPallet) -> Unit = { hsv, colorPallet -> }
     var onIconChange: (Int) -> Unit = {}
 
@@ -45,9 +44,9 @@ class IconAdapter(context: Context, spanCount: Int) :
 
         for (i in 40..100 step 20) {
             for (ii in 0..300 step 60) {
-                val hsv = if (G.theme.a.isDark) floatArrayOf(ii.toFloat(), i.toFloat() / 100, 1f)
+                val hsv = if (theme.a.isDark) floatArrayOf(ii.toFloat(), i.toFloat() / 100, 1f)
                 else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
-                val colorPallet = G.theme.a.getColorPallet(hsv, true)
+                val colorPallet = theme.a.getColorPallet(hsv, true)
 
                 list.add(IconColor(hsv, colorPallet))
             }

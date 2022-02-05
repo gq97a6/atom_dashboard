@@ -18,6 +18,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame_text.xml" value="0.231" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_ripple.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_round.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_edit.xml" value="0.2565" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_info.xml" value="0.3319634703196347" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_locked.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_more.xml" value="0.3472222222222222" />
@@ -97,6 +98,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/test.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/test_flex.xml" value="0.23651315789473684" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/tile_text.xml" value="0.33287037037037037" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/xml/root_preferences.xml" value="0.16880341880341881" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/button/layout/tile_button.xml" value="0.31851851851851853" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/slider/layout/tile_slider.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_bar.xml" value="0.3356164383561644" />
@@ -205,7 +207,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

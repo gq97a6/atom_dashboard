@@ -24,9 +24,9 @@
 
     <View
         android:id="@+id/iica_icon"
-        android:background="@drawable/il_interface_question"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/il_interface_question"
         android:tag="colorIcon" />
 
     <View

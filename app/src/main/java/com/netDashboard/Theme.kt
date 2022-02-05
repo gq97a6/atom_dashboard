@@ -41,7 +41,11 @@ class Theme {
             }
         }
 
-        fun getSaveFromFile() = FileReader(FolderTree.themeFile).readText()
+        fun getSaveFromFile() = try {
+            FileReader(FolderTree.themeFile).readText()
+        } catch (e: Exception) {
+            ""
+        }
 
         fun parseSave(save: String = getSaveFromFile()): Theme? =
             try {
@@ -420,7 +424,7 @@ class Theme {
         }
 
         fun parseColor(color: Int, isAltCon: Boolean = false): Int {
-            val hsv = floatArrayOf()
+            val hsv = floatArrayOf(0f, 0f, 0f)
             Color.colorToHSV(color, hsv)
 
             return getColorPallet(hsv, isAltCon).color

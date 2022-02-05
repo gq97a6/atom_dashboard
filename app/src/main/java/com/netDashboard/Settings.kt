@@ -10,19 +10,21 @@ class Settings {
     var startFromLast: Boolean = true
 
     companion object {
-        fun getSaved(): Settings =
+        fun Settings.saveToFile(save: String = this.prepareSave()) {
             try {
-                mapper.readValue(FileReader(FolderTree.settingsFile), Settings::class.java)
+                File(FolderTree.settingsFile).writeText(save)
             } catch (e: Exception) {
-                Settings()
+                run { }
             }
-    }
-
-    fun save() {
-        try {
-            File(FolderTree.settingsFile).writeText(mapper.writeValueAsString(this))
-        } catch (e: Exception) {
-            run { }
         }
+
+        fun getSaveFromFile() = FileReader(FolderTree.settingsFile).readText()
+
+        fun parseSave(save: String = getSaveFromFile()): Settings? =
+            try {
+                mapper.readValue(save, Settings::class.java)
+            } catch (e: Exception) {
+                null
+            }
     }
 }

@@ -15,6 +15,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_bar.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_contrast.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame_text.xml" value="0.231" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_ripple.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_round.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_info.xml" value="0.3319634703196347" />
@@ -91,7 +92,8 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_export_import.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_slider.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_text.xml" value="0.5" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_transfer.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_transfer.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/popup_transfer_.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/test.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/test_flex.xml" value="0.23651315789473684" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/tile_text.xml" value="0.33287037037037037" />

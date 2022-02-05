@@ -79,7 +79,7 @@ class SliderTile : Tile() {
 
             binding.psRoot.setOnTouchListener { _, event ->
                 control(event, v.parent as View).let {
-                    if (it.second) dialog.hide()
+                    if (it.second) dialog.dismiss()
                     else {
                         setBackground(it.first, binding.tsBackground)
                         binding.psValue.text = it.first.toString()

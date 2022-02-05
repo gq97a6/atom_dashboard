@@ -9,6 +9,7 @@
         android:layout_height="500dp"
         android:background="@drawable/background_frame"
         android:layout_margin="50dp"
+        android:tag="frame"
         android:layout_gravity="center"
         android:orientation="vertical">
 

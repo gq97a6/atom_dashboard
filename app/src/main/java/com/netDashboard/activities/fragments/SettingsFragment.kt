@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.netDashboard.R
+import com.netDashboard.Transfer.showTransferPopup
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G.settings

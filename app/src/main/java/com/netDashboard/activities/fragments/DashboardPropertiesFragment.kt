@@ -8,20 +8,21 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
+import com.netDashboard.Transfer.showTransferPopup
 import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
-import com.netDashboard.databinding.PopupTransferBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
@@ -197,7 +198,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                         dashboard.mqttPass = dashboards[p].mqttPass
 
                         viewConfig()
-                        dialog.hide()
+                        dialog.dismiss()
                     }
 
                     val text = holder.itemView.findViewById<TextView>(R.id.icb_text)
@@ -223,37 +224,17 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         }
 
         b.dpTransfer.setOnClickListener {
-            val dialog = Dialog(requireContext())
-
-            dialog.setContentView(R.layout.popup_transfer)
-            val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.pt_root))
-            dialog.show()
-
-            binding.ptReceive.setOnClickListener {
-                binding.ptTransferBox.visibility =
-                    if (binding.ptTransferBox.isVisible) GONE else VISIBLE
-
-                binding.ptReceiveIcon.setBackgroundResource(
-                    if (binding.ptTransferBox.isVisible) R.drawable.il_arrow_import
-                    else R.drawable.il_multimedia_pause
-                )
-
-                if (binding.ptTransferBox.isVisible) {
-                    binding.ptReceiveFrame.clearAnimation()
-                } else binding.ptReceiveFrame.blink(-1, 200)
-            }
-
-            binding.ptTransfer.setOnClickListener {
-                createToast(requireContext(), "Transferred successfully.")
-            }
-
-            val a = dialog.window?.attributes
-            a?.dimAmount = 0.9f
-            dialog.window?.setAttributes(a)
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            theme.apply(binding.root)
+            showTransferPopup(this)
         }
+    }
+
+    fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
     private fun viewConfig() {

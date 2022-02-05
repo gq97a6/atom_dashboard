@@ -1,6 +1,5 @@
 package com.netDashboard.icon
 
-import android.view.KeyEvent
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
@@ -10,12 +9,10 @@ import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
 
-class IconColorPicker(
-) : Icon() {
+class IconColorPicker : Icon() {
 
     override val layout = R.layout.item_icon_color_picker
     override val spanCount = -1
-    var measuredHeight = 0
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

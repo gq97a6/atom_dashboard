@@ -56,7 +56,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         }
     }
 
-    private fun subscribe(topic: String, qos: Int) {
+    fun subscribe(topic: String, qos: Int) {
 
         if (!client.isConnected) return
 
@@ -92,7 +92,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in d.tiles) {
+        for (tile in d.tiles.filter { it.mqttData.isEnabled }) {
             for (t in tile.mqttData.subs) {
                 Pair(t.value, tile.mqttData.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
@@ -190,7 +190,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 override fun messageArrived(t: String?, m: MqttMessage) {
                     for (tile in d.tiles) tile.receive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
-                    data.value = Pair(null, null)
                 }
 
                 override fun connectionLost(cause: Throwable?) {

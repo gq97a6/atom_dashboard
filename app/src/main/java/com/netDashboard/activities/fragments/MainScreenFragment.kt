@@ -12,7 +12,7 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.DashboardAdapter
-import com.netDashboard.dashboard.Dashboards.Companion.save
+import com.netDashboard.dashboard.Dashboards.Companion.saveToFile
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G.dashboards
@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             val name = kotlin.math.abs(Random.nextInt()).toString()
             val dashboard = Dashboard(name)
             dashboards.add(dashboard)
-            dashboards.save()
+            dashboards.saveToFile()
 
             ForegroundService.service?.dgManager?.notifyDashboardAdded(dashboard)
 

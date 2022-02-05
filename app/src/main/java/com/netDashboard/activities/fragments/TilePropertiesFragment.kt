@@ -300,5 +300,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         tile.mqttData.isEnabled = state
+        dashboard.dg?.mqttd?.notifyOptionsChanged()
     }
 }

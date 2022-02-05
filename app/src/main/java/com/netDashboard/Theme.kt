@@ -32,6 +32,25 @@ class Theme {
 
     val a = Artist()
 
+    companion object {
+        fun Theme.saveToFile(save: String = this.prepareSave()) {
+            try {
+                File(FolderTree.themeFile).writeText(save)
+            } catch (e: Exception) {
+                run { }
+            }
+        }
+
+        fun getSaveFromFile() = FileReader(FolderTree.themeFile).readText()
+
+        fun parseSave(save: String = getSaveFromFile()): Theme? =
+            try {
+                mapper.readValue(save, Theme::class.java)
+            } catch (e: Exception) {
+                null
+            }
+    }
+
     fun apply(
         viewGroup: ViewGroup,
         context: Context? = null,
@@ -94,6 +113,7 @@ class Theme {
             is SwitchMaterial -> this.applyTheme(p)
             is EditText -> this.applyTheme(p)
             is Chip -> this.applyTheme(p)
+            is CheckBox -> this.applyTheme(p)
             is TextView -> this.applyTheme(p)
             is Slider -> this.applyTheme(p)
             is LinearLayout -> this.applyTheme(p)
@@ -256,6 +276,24 @@ class Theme {
         }
     }
 
+    private fun CheckBox.applyTheme(p: ColorPallet) {
+
+        val colorStateList = ColorStateList(
+            arrayOf(
+                intArrayOf(-android.R.attr.state_checked),
+                intArrayOf(android.R.attr.state_checked)
+            ), intArrayOf(p.c, p.b)
+        )
+
+        when (this.tag) {
+            "default" -> {
+                this.setTextColor(colorStateList)
+                this.buttonTintList = colorStateList
+            }
+            else -> onUnknownTag(this.tag, "radioButton")
+        }
+    }
+
     private fun TextView.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "color" -> this.setTextColor(p.color)
@@ -358,23 +396,6 @@ class Theme {
     private fun onUnknownTag(tag: Any?, type: String) {
         tag?.toString()?.let {
             if (it.isNotBlank()) Log.i("OUY", "Unknown $type tag: $it")
-        }
-    }
-
-    companion object {
-        fun getSaved(): Theme =
-            try {
-                mapper.readValue(FileReader(FolderTree.themeFile), Theme::class.java)
-            } catch (e: Exception) {
-                Theme()
-            }
-    }
-
-    fun save() {
-        try {
-            File(FolderTree.themeFile).writeText(mapper.writeValueAsString(this))
-        } catch (e: Exception) {
-            run { }
         }
     }
 

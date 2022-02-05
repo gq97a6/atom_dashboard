@@ -45,6 +45,10 @@ abstract class Tile : BaseRecyclerViewItem() {
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
             this.find { it.id == id }
+
+        fun send() {
+            TODO("Not yet implemented")
+        }
     }
 
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
@@ -114,11 +118,11 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         binding.pcConfirm.setOnClickListener {
             send()
-            dialog.hide()
+            dialog.dismiss()
         }
 
         binding.pcDeny.setOnClickListener {
-            dialog.hide()
+            dialog.dismiss()
         }
 
         binding.pcConfirm.text = "PUBLISH"

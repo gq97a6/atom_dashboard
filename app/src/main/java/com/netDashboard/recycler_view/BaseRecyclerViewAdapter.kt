@@ -178,11 +178,11 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                 i++
             }
             notifyDataSetChanged()
-            dialog.hide()
+            dialog.dismiss()
         }
 
         binding.pcDeny.setOnClickListener {
-            dialog.hide()
+            dialog.dismiss()
         }
 
         dialog.show()

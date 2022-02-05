@@ -4,9 +4,7 @@ package com.netDashboard
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
@@ -27,7 +25,9 @@ import androidx.core.graphics.red
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import com.netDashboard.activities.SplashScreenActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import com.netDashboard.globals.G
 import java.util.*
 
 
@@ -209,6 +209,9 @@ fun FragmentManager.replaceWith(fragment: Fragment, backstack: Boolean = true) {
         if (backstack) addToBackStack(null)
     }
 }
+
+fun Any.prepareSave() = G.mapper.writeValueAsString(this)
+
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {
 //    Snackbar.make(

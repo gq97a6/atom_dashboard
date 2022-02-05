@@ -55,11 +55,11 @@ class TextTile : Tile() {
 
             binding.ptConfirm.setOnClickListener {
                 send(binding.ptPayload.text.toString(), mqttData.qos)
-                dialog.hide()
+                dialog.dismiss()
             }
 
             binding.ptDeny.setOnClickListener {
-                dialog.hide()
+                dialog.dismiss()
             }
 
             G.theme.apply(binding.root, adapter.context)

@@ -1,7 +1,5 @@
 //develop/improve ------------------------------
-export/import data 7
 long notification bug 7
-save crash protection 8
 
 //expand ------------------------------
 new tiles

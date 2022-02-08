@@ -177,6 +177,7 @@ abstract class Tile : BaseRecyclerViewItem() {
                 )
             }
         }
+
         onReceive(data, jsonResult)
     }
 }

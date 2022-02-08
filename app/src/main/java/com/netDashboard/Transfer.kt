@@ -90,7 +90,6 @@ object Transfer {
                                     createToast(requireContext(), "Transfer failed.")
                                 }
 
-                                createToast(requireContext(), "Transferred successfully.")
                                 receiveMode(false)
                             }
 

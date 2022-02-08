@@ -21,6 +21,7 @@ import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
+import com.netDashboard.screenWidth
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.toolbarControl.ToolBarController
 import java.util.*
@@ -144,17 +145,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             propertiesOnClick()
         }
 
-        b.dTag.setOnTouchListener { v, e ->
-            showLog(v, e)
+        //b.dTag.setOnTouchListener { v, e ->
+        //    showLog(v, e)
+        //    return@setOnTouchListener true
+        //}
 
-            return@setOnTouchListener true
-        }
-
-        b.dStatus.setOnTouchListener { v, e ->
-            showLog(v, e)
-
-            return@setOnTouchListener true
-        }
+        //b.dStatus.setOnTouchListener { v, e ->
+        //    showLog(v, e)
+        //    return@setOnTouchListener true
+        //}
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -246,30 +245,58 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         if (e.action == KeyEvent.ACTION_DOWN) showLogStartY = e.rawY
 
         if (e.action == KeyEvent.ACTION_UP) {
-            val valueAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
-            valueAnimator.duration = 500L
+            val logAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
+            logAnimator.duration = 500L
 
-            valueAnimator.addUpdateListener {
-                val animatedValue = valueAnimator.animatedValue as Int
+            logAnimator.addUpdateListener {
+                val animatedValue = logAnimator.animatedValue as Int
                 val layoutParams = b.dLog.layoutParams
                 layoutParams.height = animatedValue
                 b.dLog.layoutParams = layoutParams
             }
-            valueAnimator.start()
+            logAnimator.start()
+
+            val logBarAnimator = ValueAnimator.ofInt(b.dLogBar.measuredWidth,
+                (.8 * screenWidth).toInt()
+            )
+            logBarAnimator.duration = 500L
+
+            logBarAnimator.addUpdateListener {
+                val animatedValue = logBarAnimator.animatedValue as Int
+                val layoutParams = b.dLogBar.layoutParams
+                layoutParams.width = animatedValue
+                b.dLogBar.layoutParams = layoutParams
+            }
+            logBarAnimator.start()
         } else {
             val lp = b.dLog.layoutParams
+            val ldp = b.dLogBar.layoutParams
+
             lp.height = (e.rawY - showLogStartY).toInt().let {
                 when {
                     it <= 0 -> 0
-                    it <= (0.9 * screenHeight) -> it
+                    it <= (.9 * screenHeight) -> it
                     else -> {
                         dashboard.log.flush()
-                        (0.9 * screenHeight).toInt()
+                        (.9 * screenHeight).toInt()
                     }
                 }
             }
 
+            ldp.width = lp.height.let {
+                when {
+                    it <= 0 -> 0
+                    it <= (.9 * screenHeight) -> {
+                        val max = screenHeight * .9
+                        val per = it / max
+                        (screenWidth * 0.8 - (screenWidth * 0.8 * per)).toInt()
+                    }
+                    else -> 0
+                }
+            }
+
             b.dLog.layoutParams = lp
+            b.dLogBar.layoutParams = ldp
         }
     }
 }

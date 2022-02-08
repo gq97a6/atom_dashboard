@@ -1,7 +1,5 @@
 //develop/improve ------------------------------
 export/import data 7
-log
-design
 long notification bug 7
 save crash protection 8
 

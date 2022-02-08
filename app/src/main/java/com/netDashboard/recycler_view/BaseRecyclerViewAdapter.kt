@@ -100,7 +100,7 @@ abstract class BaseRecyclerViewAdapter<item : BaseRecyclerViewItem>(
                         }
                     } else {
                         val ripple = holder.itemView.findViewById<View>(R.id.ripple_foreground)
-                        ripple.click()
+                        ripple?.click()
                     }
                 }
 

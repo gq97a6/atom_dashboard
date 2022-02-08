@@ -210,8 +210,8 @@ class Theme {
                 drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
-            "groupBar" -> this.setBackgroundColor(p.background.contrast(!a.isDark, 0.3f))
-            "group" -> this.setBackgroundColor(p.background.contrast(!a.isDark, 0.1f))
+            "groupBar" -> this.setBackgroundColor(p.background.contrast(a.isDark, .1f))
+            "group" -> this.setBackgroundColor(p.background.contrast(a.isDark, .02f))
             else -> onUnknownTag(this.tag, "linearLayout")
         }
     }
@@ -325,7 +325,7 @@ class Theme {
             "basic" -> {
                 this.setTextColor(p.b)
                 this.setHintTextColor(p.c)
-                this.setBackgroundColor(p.background.contrast(!a.isDark, 0.2f))
+                this.setBackgroundColor(p.background.contrast(a.isDark, .05f))
             }
             else -> onUnknownTag(this.tag, "editText")
         }

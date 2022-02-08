@@ -210,8 +210,8 @@ class Theme {
                 drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
-            "groupBar" -> this.setBackgroundColor(p.background.contrast(a.isDark, .1f))
-            "group" -> this.setBackgroundColor(p.background.contrast(a.isDark, .02f))
+            "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
+            "group" -> this.setBackgroundColor(Color.TRANSPARENT)
             else -> onUnknownTag(this.tag, "linearLayout")
         }
     }
@@ -325,7 +325,9 @@ class Theme {
             "basic" -> {
                 this.setTextColor(p.b)
                 this.setHintTextColor(p.c)
-                this.setBackgroundColor(p.background.contrast(a.isDark, .05f))
+                val drawable = this.background as? GradientDrawable
+                drawable?.mutate()
+                drawable?.setStroke(1, p.c)
             }
             else -> onUnknownTag(this.tag, "editText")
         }

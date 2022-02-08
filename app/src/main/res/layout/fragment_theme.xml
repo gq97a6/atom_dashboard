@@ -228,7 +228,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                android:background="#19000000"
+                android:background="#00000000"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:tag="groupBar">
@@ -237,7 +237,6 @@
                     android:id="@+id/t_mqtt_cred_bar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:tag="colorB"
@@ -264,10 +263,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
-                android:background="#0C000000"
+                android:background="#00000000"
                 android:gravity="bottom"
                 android:orientation="vertical"
-                android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 android:tag="group"
                 android:visibility="gone">

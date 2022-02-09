@@ -16,12 +16,23 @@ class DaemonGroupsManager(val context: Context) {
     fun get(id: Long): DaemonGroup? = list.find { it.dashboard.id == id }
 
     fun assign() {
+        val assigned = mutableListOf<Int>()
+
+        //Pair dashboards and daemonGroups
         dashboards.forEach { d ->
-            list.find { it.dashboard.id == d.id }?.let {
-                d.dg = it
-                it.mqttd.d = d
-                it.mqttd.notifyNewAssignment()
+            list.find { it.dashboard.id == d.id }.let { dg ->
+                if (dg != null && !dg.isDeprecated) {
+                    d.dg = dg
+                    dg.mqttd.d = d
+                    dg.mqttd.notifyNewAssignment()
+                    assigned.add(list.indexOf(dg))
+                } else notifyDashboardAdded(d)
             }
+        }
+
+        //Deprecate not paired
+        for (i in 0..list.size - 1) {
+            if (i !in assigned) notifyDashboardRemoved(list[i].mqttd.d)
         }
     }
 
@@ -42,7 +53,7 @@ class DaemonGroupsManager(val context: Context) {
 }
 
 class DaemonGroup(val context: Context, val dashboard: Dashboard) {
-    private var isDeprecated = false
+    var isDeprecated = false
     val mqttd = Mqttd(context, dashboard)
 
     fun deprecate() {

@@ -111,9 +111,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             }
                         }
 
-                        createToast(requireContext(), "Backup successful.")
+                        createToast(requireContext(), "Backup successful")
                     } catch (e: java.lang.Exception) {
-                        createToast(requireContext(), "Backup failed.")
+                        createToast(requireContext(), "Backup failed")
                     }
                 }
             }
@@ -161,10 +161,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             activity?.finish()
                             activity?.finishAffinity()
                         } else {
-                            createToast(requireContext(), "Backup restore failed.")
+                            createToast(requireContext(), "Backup restore failed")
                         }
                     } catch (e: java.lang.Exception) {
-                        createToast(requireContext(), "Backup restore failed.")
+                        createToast(requireContext(), "Backup restore failed")
                     }
                 }
             }

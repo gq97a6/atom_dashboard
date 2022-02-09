@@ -33,6 +33,19 @@ object Transfer {
             val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.pt_root))
             dialog.show()
 
+
+            var connectionObserver: (Boolean) -> Unit
+            connectionObserver = {
+                dashboard.dg?.mqttd?.let {
+                    if (!it.client.isConnected) {
+                        dialog.dismiss()
+                        createToast(requireContext(), "Connection required", 1000)
+                    }
+                }
+            }
+
+            dashboard.dg?.mqttd?.conHandler?.isDone?.observe(viewLifecycleOwner, connectionObserver)
+
             binding.ptReceive.setOnClickListener {
                 fun receiveMode(enable: Boolean = binding.ptTransferBox.isVisible) {
                     binding.ptTransferTopic.isEnabled = !enable
@@ -87,7 +100,7 @@ object Transfer {
                                     activity?.finish()
                                     activity?.finishAffinity()
                                 } else {
-                                    createToast(requireContext(), "Transfer failed.")
+                                    createToast(requireContext(), "Transfer failed")
                                 }
 
                                 receiveMode(false)
@@ -121,11 +134,12 @@ object Transfer {
                     saveString,
                     2
                 )
-                createToast(requireContext(), "Transferred.")
+                createToast(requireContext(), "Transferred")
             }
 
             dialog.setOnDismissListener {
                 dashboard.dg?.mqttd?.data?.removeObserver(observer)
+                dashboard.dg?.mqttd?.conHandler?.isDone?.removeObserver(connectionObserver)
                 dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
 

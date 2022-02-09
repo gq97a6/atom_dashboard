@@ -1,6 +1,3 @@
-//develop/improve ------------------------------
-long notification bug 7
-
 //expand ------------------------------
 new tiles
     indicator, diode, alert on change, on stop receiving, on receive

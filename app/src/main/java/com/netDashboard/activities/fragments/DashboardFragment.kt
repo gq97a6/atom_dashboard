@@ -13,8 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
+import com.netDashboard.activities.SplashScreenActivity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
@@ -64,6 +66,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
+
+        //Ensure
+        if (dashboard.dg == null) {
+            if (service == null) {
+                Intent(requireContext(), SplashScreenActivity::class.java).also {
+                    startActivity(it)
+                }
+            } else service?.dgManager?.assign()
+        }
 
         //Set dashboard status
         dashboard.dg?.mqttd?.let {

@@ -168,7 +168,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         b.dpMqttCopy.setOnClickListener {
             if (dashboards.size <= 1) {
-                createToast(requireContext(), "No dashboards to copy from.")
+                createToast(requireContext(), "No dashboards to copy from")
             } else {
                 val dialog = Dialog(requireContext())
                 val adapter = RecyclerViewAdapter(requireContext())
@@ -220,7 +220,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         }
 
         b.dpTransfer.setOnClickListener {
-            showTransferPopup(this)
+            if (dashboard.dg?.mqttd?.client?.isConnected ?: false) showTransferPopup(this)
+            else createToast(requireContext(), "Connection required", 1000)
         }
     }
 

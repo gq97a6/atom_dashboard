@@ -3,6 +3,7 @@ package com.netDashboard.tile
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.View
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -60,6 +61,8 @@ abstract class Tile : BaseRecyclerViewItem() {
 
         params.height = ((screenWidth - view.paddingLeft * 2) * height / 3.236).toInt()
         view.layoutParams = params
+
+        holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)
     }
 
     open class MqttData(defaultPubValue: String = "") {

@@ -204,7 +204,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:tag="colorB"
-                        android:text="@string/tp_design_hue"
+                        android:text="Hue:"
                         android:textColor="@color/gray100"
                         android:textSize="12dp" />
 
@@ -286,7 +286,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:tag="colorB"
-                            android:text="@string/tp_design_saturation"
+                            android:text="Saturation:"
                             android:textColor="@color/gray100"
                             android:textSize="12dp" />
 
@@ -315,7 +315,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:tag="colorB"
-                            android:text="@string/tp_design_value"
+                            android:text="Value:"
                             android:textColor="@color/gray100"
                             android:textSize="12dp" />
 

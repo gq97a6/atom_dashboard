@@ -14,7 +14,15 @@ import com.netDashboard.globals.G.dashboard
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile
+import com.netDashboard.tile.types.color.ColorTile
+import com.netDashboard.tile.types.graph.GraphTile
+import com.netDashboard.tile.types.lights.LightsTile
+import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
+import com.netDashboard.tile.types.switch.SwitchTile
+import com.netDashboard.tile.types.terminal.TerminalTile
+import com.netDashboard.tile.types.thermostat.ThermostatTile
+import com.netDashboard.tile.types.time.TimeTile
 
 class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
     private lateinit var b: FragmentTileNewBinding
@@ -43,9 +51,49 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             addTile(SliderTile())
         }
 
+        b.tnSwitch.setOnClickListener {
+            b.tnSwitchRipple.click()
+            addTile(SwitchTile())
+        }
+
         b.tnText.setOnClickListener {
             b.tnTextRipple.click()
             addTile(TextTile())
+        }
+
+        b.tnSelect.setOnClickListener {
+            b.tnSelectRipple.click()
+            addTile(SelectTile())
+        }
+
+        b.tnTerminal.setOnClickListener {
+            b.tnTerminalRipple.click()
+            addTile(TerminalTile())
+        }
+
+        b.tnTime.setOnClickListener {
+            b.tnTimeRipple.click()
+            addTile(TimeTile())
+        }
+
+        b.tnThermostat.setOnClickListener {
+            b.tnThermostatRipple.click()
+            addTile(ThermostatTile())
+        }
+
+        b.tnColor.setOnClickListener {
+            b.tnColorRipple.click()
+            addTile(ColorTile())
+        }
+
+        b.tnLights.setOnClickListener {
+            b.tnLightsRipple.click()
+            addTile(LightsTile())
+        }
+
+        b.tnGraph.setOnClickListener {
+            b.tnGraphRipple.click()
+            addTile(GraphTile())
         }
     }
 

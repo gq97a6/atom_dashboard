@@ -79,21 +79,19 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         //Set dashboard status
         dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
-                b.dStatus.text = getString(
-                    if (!dashboard.mqttEnabled) {
-                        R.string.d_disconnected
+                b.dStatus.text = if (!dashboard.mqttEnabled) {
+                    "DISCONNECTED"
+                } else {
+                    if (it.client.isConnected) {
+                        "CONNECTED"
                     } else {
-                        if (it.client.isConnected) {
-                            R.string.d_connected
+                        if (isDone) {
+                            "FAILED TO CONNECT"
                         } else {
-                            if (isDone) {
-                                R.string.d_failed
-                            } else {
-                                R.string.d_attempting
-                            }
+                            "ATTEMPTING"
                         }
                     }
-                )
+                }
             }
         }
 

@@ -59,8 +59,6 @@ class SliderTile : Tile() {
         holder.itemView.findViewById<TextView>(R.id.ts_tag)?.let {
             it.text = tag.ifBlank { "???" }
         }
-
-        holder.itemView.findViewById<View>(R.id.ts_icon)?.setBackgroundResource(iconRes)
     }
 
 

@@ -11,8 +11,8 @@ android {
         applicationId "com.netDashboard.dev"
         minSdkVersion 26
         targetSdkVersion 31
-        versionCode 27
-        versionName "6.0"
+        versionCode 29
+        versionName "6.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,7 +23,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

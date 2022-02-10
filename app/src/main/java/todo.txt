@@ -1,14 +1,25 @@
 //expand ------------------------------
+groups
+add icons to tile new
+
 new tiles
-    indicator, diode, alert on change, on stop receiving, on receive
-    terminal
-    date
-    graph
-    thermostat
-    dimmer
-    select
+    button
+    slider
     switch
+    text
+    select
+    terminal
+    time
+    thermostat
     color
+    lights
+    graph
+
+    (indicator,
+    diode,
+    alert on change,
+    on stop receiving,
+    on receive)
 
 //post development ------------------------------
 icon

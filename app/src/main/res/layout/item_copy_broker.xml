@@ -31,7 +31,7 @@
         android:gravity="center"
         android:padding="12dp"
         android:tag="frame"
-        android:text="@string/tb_default_text"
+        android:text="Default value"
         app:autoSizeMaxTextSize="25dp"
         app:autoSizeMinTextSize="8dp"
         app:autoSizeStepGranularity="1dp"

@@ -35,8 +35,6 @@ class TextTile : Tile() {
         holder.itemView.findViewById<TextView>(R.id.tt_tag)?.let {
             it.text = tag.ifBlank { "???" }
         }
-
-        holder.itemView.findViewById<View>(R.id.tt_icon)?.setBackgroundResource(iconRes)
     }
 
     override fun onClick(v: View, e: MotionEvent) {

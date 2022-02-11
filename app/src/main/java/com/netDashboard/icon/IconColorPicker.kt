@@ -4,10 +4,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
 import com.netDashboard.R
+import com.netDashboard.globals.G.getIconHSV
+import com.netDashboard.globals.G.setIconHSV
 import com.netDashboard.globals.G.theme
-import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-
 
 class IconColorPicker : Icon() {
 
@@ -36,14 +36,14 @@ class IconColorPicker : Icon() {
 
         theme.apply(color, anim = false)
 
-        h.value = tile.hsv[0]
-        s.value = tile.hsv[1]
-        v.value = if (theme.a.isDark) 1f else tile.hsv[2]
+        h.value = getIconHSV()[0]
+        s.value = getIconHSV()[1]
+        v.value = if (theme.a.isDark) 1f else getIconHSV()[2]
 
         fun onHSVChange() {
             val hsv = floatArrayOf(h.value, s.value, v.value)
             val p = theme.a.getColorPallet(hsv, true)
-            tile.hsv = hsv
+            setIconHSV(hsv)
             (adapter as IconAdapter).onColorChange(hsv, p)
         }
 

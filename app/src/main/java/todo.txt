@@ -1,12 +1,13 @@
 //expand ------------------------------
 groups
 add icons to tile new
+white space character warning
 
 new tiles
-    button
-    slider
+    button //
+    slider //
     switch
-    text
+    text //
     select
     terminal
     time

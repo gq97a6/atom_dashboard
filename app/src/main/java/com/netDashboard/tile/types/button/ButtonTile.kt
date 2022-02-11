@@ -22,14 +22,11 @@ class ButtonTile : Tile() {
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<TextView>(R.id.tb_tag)?.let {
-            if (tag.isBlank()) it.visibility = GONE
-            else it.text = tag
-        }
+        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE
     }
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-        send(mqttData.pubPayload, mqttData.qos)
+        send(mqttData.payloads["base"] ?: "", mqttData.qos)
     }
 }

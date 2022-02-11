@@ -20,9 +20,11 @@ import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
+import com.netDashboard.globals.G.tile
 import com.netDashboard.screenHeight
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.TilesAdapter
+import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.toolbarControl.ToolBarController
 import java.util.*
 
@@ -52,17 +54,14 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         theme.apply(b.root, requireContext(), false)
         settings.lastDashboardId = dashboard.id
 
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (!adapter.editMode.isNone) toolBarController.toggleTools()
-                    else {
-                        isEnabled = false
-                        activity?.onBackPressed()
-                    }
-                }
-            })
+        (activity as MainActivity).onBackPressedBoolean = {
+            if (!adapter.editMode.isNone) {
+                toolBarController.toggleTools()
+                true
+            } else {
+                false
+            }
+        }
 
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
@@ -187,23 +186,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemEdit = { item ->
-            val fragment = TilePropertiesFragment()
-            fragment.apply {
-                arguments = Bundle().apply {
-                    putInt("index", dashboard.tiles.indexOf(item))
-                }
-            }
-            (activity as MainActivity).fm.replaceWith(fragment)
+            tile = item
+            (activity as MainActivity).fm.replaceWith(TilePropertiesFragment())
         }
 
         adapter.onItemLongClick = { item ->
-            val fragment = TilePropertiesFragment()
-            fragment.apply {
-                arguments = Bundle().apply {
-                    putInt("index", dashboard.tiles.indexOf(item))
-                }
+            if(item is SliderTile && !item.dragCon || item !is SliderTile) {
+                tile = item
+                (activity as MainActivity).fm.replaceWith(TilePropertiesFragment())
             }
-            (activity as MainActivity).fm.replaceWith(fragment)
         }
 
         adapter.submitList(dashboard.tiles)

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.netDashboard.Settings
 import com.netDashboard.Theme
+import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.tile.Tile
@@ -20,6 +21,13 @@ object G {
     //Current
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
+
+    lateinit var setIconHSV: (FloatArray) -> Unit
+    lateinit var setIconRes: (Int) -> Unit
+    lateinit var getIconRes: () -> Int
+    lateinit var getIconHSV: () -> FloatArray
+    lateinit var getIconColorPallet: () -> ColorPallet
+
 
     fun setCurrentDashboard(id: Long): Boolean {
         dashboard = dashboards.find { it.id == id } ?: Dashboard(isInvalid = true)

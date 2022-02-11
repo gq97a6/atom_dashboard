@@ -11,6 +11,7 @@ import com.netDashboard.click
 import com.netDashboard.databinding.FragmentTileNewBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
+import com.netDashboard.globals.G.tile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile
@@ -61,57 +62,51 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             addTile(TextTile())
         }
 
-        b.tnSelect.setOnClickListener {
-            b.tnSelectRipple.click()
-            addTile(SelectTile())
-        }
-
-        b.tnTerminal.setOnClickListener {
-            b.tnTerminalRipple.click()
-            addTile(TerminalTile())
-        }
-
-        b.tnTime.setOnClickListener {
-            b.tnTimeRipple.click()
-            addTile(TimeTile())
-        }
-
-        b.tnThermostat.setOnClickListener {
-            b.tnThermostatRipple.click()
-            addTile(ThermostatTile())
-        }
-
-        b.tnColor.setOnClickListener {
-            b.tnColorRipple.click()
-            addTile(ColorTile())
-        }
-
-        b.tnLights.setOnClickListener {
-            b.tnLightsRipple.click()
-            addTile(LightsTile())
-        }
-
-        b.tnGraph.setOnClickListener {
-            b.tnGraphRipple.click()
-            addTile(GraphTile())
-        }
+        //b.tnSelect.setOnClickListener {
+        //    b.tnSelectRipple.click()
+        //    addTile(SelectTile())
+        //}
+//
+        //b.tnTerminal.setOnClickListener {
+        //    b.tnTerminalRipple.click()
+        //    addTile(TerminalTile())
+        //}
+//
+        //b.tnTime.setOnClickListener {
+        //    b.tnTimeRipple.click()
+        //    addTile(TimeTile())
+        //}
+//
+        //b.tnThermostat.setOnClickListener {
+        //    b.tnThermostatRipple.click()
+        //    addTile(ThermostatTile())
+        //}
+//
+        //b.tnColor.setOnClickListener {
+        //    b.tnColorRipple.click()
+        //    addTile(ColorTile())
+        //}
+//
+        //b.tnLights.setOnClickListener {
+        //    b.tnLightsRipple.click()
+        //    addTile(LightsTile())
+        //}
+//
+        //b.tnGraph.setOnClickListener {
+        //    b.tnGraphRipple.click()
+        //    addTile(GraphTile())
+        //}
     }
 
     private var isDone = false
-    private fun addTile(tile: Tile) {
+    private fun addTile(t: Tile) {
         if (isDone) return
         isDone = true
 
-        tile.dashboard = dashboard
-        dashboard.tiles.add(tile)
+        t.dashboard = dashboard
+        dashboard.tiles.add(t)
 
-        val fragment = TilePropertiesFragment()
-        fragment.apply {
-            arguments = Bundle().apply {
-                putInt("index", dashboard.tiles.indexOf(tile))
-            }
-        }
-
-        (activity as MainActivity).fm.replaceWith(fragment, false)
+        tile = t
+        (activity as MainActivity).fm.replaceWith(TilePropertiesFragment(), false)
     }
 }

@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.databinding.FragmentTileIconBinding
+import com.netDashboard.globals.G.getIconColorPallet
+import com.netDashboard.globals.G.getIconHSV
+import com.netDashboard.globals.G.getIconRes
 import com.netDashboard.globals.G.theme
-import com.netDashboard.globals.G.tile
 import com.netDashboard.icon.IconAdapter
 
 
@@ -41,12 +43,11 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     }
 
     private fun viewConfig() {
-        b.tiIcon.setBackgroundResource(tile.iconRes)
-        val test = tile.hsv
-        onColorChange(tile.hsv, tile.colorPallet)
+        b.tiIcon.setBackgroundResource(getIconRes())
+        onColorChange(getIconColorPallet())
     }
 
-    private fun onColorChange(hsv: FloatArray, colorPallet: Theme.ColorPallet) {
+    private fun onColorChange(colorPallet: Theme.ColorPallet) {
         b.tiIcon.backgroundTintList = ColorStateList.valueOf(colorPallet.color)
         val drawable = b.tiIconFrame.background as? GradientDrawable
         drawable?.mutate()
@@ -62,7 +63,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         adapter.applyIconSet("l")
 
         adapter.onColorChange = { hsv, colorPallet ->
-            onColorChange(hsv, colorPallet)
+            onColorChange(colorPallet)
         }
 
         adapter.onIconChange = {

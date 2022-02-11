@@ -31,10 +31,6 @@ class TextTile : Tile() {
     override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         value = value
-
-        holder.itemView.findViewById<TextView>(R.id.tt_tag)?.let {
-            it.text = tag.ifBlank { "???" }
-        }
     }
 
     override fun onClick(v: View, e: MotionEvent) {
@@ -62,7 +58,7 @@ class TextTile : Tile() {
 
             G.theme.apply(binding.root, adapter.context)
             dialog.show()
-        } else send(mqttData.pubPayload, mqttData.qos)
+        } else send(mqttData.payloads["base"] ?: "", mqttData.qos)
     }
 
     override fun onReceive(

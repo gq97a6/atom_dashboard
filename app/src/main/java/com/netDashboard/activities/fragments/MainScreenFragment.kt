@@ -42,17 +42,14 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         setupRecyclerView()
         theme.apply(b.root, requireContext())
 
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (!adapter.editMode.isNone) toolBarController.toggleTools()
-                    else {
-                        isEnabled = false
-                        activity?.onBackPressed()
-                    }
-                }
-            })
+        (activity as MainActivity).onBackPressedBoolean = {
+            if (!adapter.editMode.isNone) {
+                toolBarController.toggleTools()
+                true
+            } else {
+                false
+            }
+        }
 
         val addOnClick: () -> Unit = {
             val name = kotlin.math.abs(Random.nextInt()).toString()

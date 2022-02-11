@@ -73,7 +73,7 @@
             app:layout_constraintTop_toTopOf="@+id/t_icon">
 
             <TextView
-                android:id="@+id/tt_tag"
+                android:id="@+id/t_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoSizeMaxTextSize="15dp"

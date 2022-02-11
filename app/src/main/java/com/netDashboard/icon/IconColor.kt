@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
+import com.netDashboard.globals.G.setIconHSV
 import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
 
@@ -24,7 +25,7 @@ class IconColor(
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-        tile.hsv = hsv
+        setIconHSV(hsv)
         (adapter as IconAdapter).setColorPicker(hsv)
         (adapter as IconAdapter).onColorChange(hsv, colorPallet)
     }

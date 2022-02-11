@@ -16,6 +16,7 @@ import com.netDashboard.globals.G.settings
 class MainActivity : AppCompatActivity() {
     lateinit var b: ActivityMainBinding
     val fm = FragmentManager()
+    var onBackPressedBoolean: () -> Boolean = { false }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +43,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (!fm.popBackStack()) super.onBackPressed()
+        if(!onBackPressedBoolean()) {
+            if (!fm.popBackStack()) super.onBackPressed()
+        }
     }
 
     inner class FragmentManager {
@@ -61,6 +64,8 @@ class MainActivity : AppCompatActivity() {
                 if (stack) backstack.add(currentFragment)
                 currentFragment = fragment
             }
+
+            onBackPressedBoolean = { false }
         }
 
         fun popBackStack(stack: Boolean = false): Boolean {
@@ -69,6 +74,8 @@ class MainActivity : AppCompatActivity() {
                 replaceWith(backstack.removeLast(), stack)
                 true
             }
+
+            onBackPressedBoolean = { false }
         }
     }
 }

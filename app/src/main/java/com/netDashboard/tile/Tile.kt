@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -63,6 +65,15 @@ abstract class Tile : BaseRecyclerViewItem() {
         view.layoutParams = params
 
         holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)
+        holder.itemView.findViewById<TextView>(R.id.t_tag)?.text = tag.ifBlank { "???" }
+    }
+
+    open fun onSetTheme(holder: BaseRecyclerViewAdapter.ViewHolder) {
+        theme.apply(
+            holder.itemView as ViewGroup,
+            anim = false,
+            colorPallet = colorPallet
+        )
     }
 
     open class MqttData(defaultPubValue: String = "") {
@@ -82,7 +93,8 @@ abstract class Tile : BaseRecyclerViewItem() {
             }
 
         var varPayload = true
-        var pubPayload = defaultPubValue
+        var payloads: MutableMap<String, String> =
+            mutableMapOf("base" to defaultPubValue, "true" to "1", "false" to "0")
         var confirmPub = false
         var payloadIsJson = false
     }
@@ -151,9 +163,6 @@ abstract class Tile : BaseRecyclerViewItem() {
     ) {
     }
 
-    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
-    }
-
     fun receive(data: Pair<String?, MqttMessage?>) {
         if (!mqttData.isEnabled) return
         if (!mqttData.subs.containsValue(data.first)) return
@@ -174,7 +183,11 @@ abstract class Tile : BaseRecyclerViewItem() {
                 createNotification(
                     it,
                     dashboard.name.uppercase(Locale.getDefault()),
-                    "$tag: ${data.second.toString()}",
+                    "${
+                        if (tag.isBlank() || data.second.toString().isBlank())
+                            "New value for: ${data.first}"
+                        else "$tag: ${data.second.toString()}"
+                    }",
                     mqttData.silentNotify,
                     dashboard.id.toInt()
                 )
@@ -182,5 +195,8 @@ abstract class Tile : BaseRecyclerViewItem() {
         }
 
         onReceive(data, jsonResult)
+    }
+
+    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
     }
 }

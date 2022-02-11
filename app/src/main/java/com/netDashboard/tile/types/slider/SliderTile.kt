@@ -55,10 +55,6 @@ class SliderTile : Tile() {
         super.onBindViewHolder(holder, position)
         if (step == 0) step = 1
         displayValue = value
-
-        holder.itemView.findViewById<TextView>(R.id.ts_tag)?.let {
-            it.text = tag.ifBlank { "???" }
-        }
     }
 
 
@@ -86,7 +82,7 @@ class SliderTile : Tile() {
                 }
             }
 
-            theme.apply(binding.root, adapter.context)
+            theme.apply(binding.root, adapter.context, anim = false)
             dialog.show()
         }
     }
@@ -120,7 +116,7 @@ class SliderTile : Tile() {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send(mqttData.pubPayload.replace("@value", value.toString()), mqttData.qos)
+                send((mqttData.payloads["base"] ?: "").replace("@value", value.toString()), mqttData.qos)
                 return Pair(value, true)
             }
         }

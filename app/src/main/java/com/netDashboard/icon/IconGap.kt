@@ -1,7 +1,7 @@
 package com.netDashboard.icon
 
 import com.netDashboard.R
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.toPx
 
 class IconGap : Icon() {
@@ -9,7 +9,7 @@ class IconGap : Icon() {
     override val layout = R.layout.item_icon_gap
     override val spanCount = -1
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

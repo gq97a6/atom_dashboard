@@ -6,7 +6,7 @@ import android.view.View.GONE
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 
 class ButtonTile : Tile() {
@@ -19,7 +19,7 @@ class ButtonTile : Tile() {
     @JsonIgnore
     override var typeTag = "button"
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE

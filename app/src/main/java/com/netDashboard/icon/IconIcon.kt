@@ -6,7 +6,7 @@ import android.view.View
 import com.netDashboard.R
 import com.netDashboard.globals.G.setIconRes
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconIcon(
     val res: Int = 0,
@@ -16,7 +16,7 @@ class IconIcon(
 
     override val layout = R.layout.item_icon_icon
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

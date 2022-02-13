@@ -12,12 +12,12 @@ import com.netDashboard.icon.Icons.solidCats
 import com.netDashboard.icon.Icons.solidIcons
 import com.netDashboard.icon.Icons.thinCats
 import com.netDashboard.icon.Icons.thinIcons
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import java.util.*
 
 
 class IconAdapter(context: Context, spanCount: Int) :
-    BaseRecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
+    RecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
 
     private var iconCount = 0
     var onColorChange: (FloatArray, ColorPallet) -> Unit = { hsv, colorPallet -> }

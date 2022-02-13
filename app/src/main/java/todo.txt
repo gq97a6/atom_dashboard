@@ -1,12 +1,11 @@
 //expand ------------------------------
 groups
-add icons to tile new
-white space character warning
+color that depends on value
 
 new tiles
     button //
     slider //
-    switch
+    switch //
     text //
     select
     terminal

@@ -16,15 +16,15 @@ import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-import com.netDashboard.recycler_view.BaseRecyclerViewItem
+import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-abstract class Tile : BaseRecyclerViewItem() {
+abstract class Tile : RecyclerViewItem() {
 
     @JsonIgnore
     var dashboard: Dashboard = Dashboard(isInvalid = true)
@@ -55,7 +55,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         }
     }
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView
@@ -68,7 +68,7 @@ abstract class Tile : BaseRecyclerViewItem() {
         holder.itemView.findViewById<TextView>(R.id.t_tag)?.text = tag.ifBlank { "???" }
     }
 
-    open fun onSetTheme(holder: BaseRecyclerViewAdapter.ViewHolder) {
+    open fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         theme.apply(
             holder.itemView as ViewGroup,
             anim = false,

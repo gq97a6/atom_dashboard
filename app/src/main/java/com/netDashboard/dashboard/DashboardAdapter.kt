@@ -2,10 +2,10 @@ package com.netDashboard.dashboard
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class DashboardAdapter(context: Context, spanCount: Int = 1) :
-    BaseRecyclerViewAdapter<Dashboard>(context, spanCount, DiffCallback) {
+    RecyclerViewAdapter<Dashboard>(context, spanCount, DiffCallback) {
 
     object DiffCallback : DiffUtil.ItemCallback<Dashboard>() {
         override fun areItemsTheSame(

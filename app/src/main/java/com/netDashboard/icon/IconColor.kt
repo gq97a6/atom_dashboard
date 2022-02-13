@@ -6,8 +6,7 @@ import android.view.View
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.globals.G.setIconHSV
-import com.netDashboard.globals.G.tile
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconColor(
     private var hsv: FloatArray = floatArrayOf(),
@@ -16,7 +15,7 @@ class IconColor(
 
     override val layout = R.layout.item_icon_color
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val color = holder.itemView.findViewById<View>(R.id.iic_color)

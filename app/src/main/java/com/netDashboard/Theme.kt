@@ -194,8 +194,7 @@ class Theme {
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(6, p.color)
-                drawable?.cornerRadius = 15f
+                drawable?.setStroke(2, p.color)
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
             else -> onUnknownTag(this.tag, "constraintLayout")
@@ -208,7 +207,7 @@ class Theme {
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.mutate()
-                drawable?.setStroke(1, p.color)
+                drawable?.setStroke(2, p.color)
             }
             "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
             "group" -> this.setBackgroundColor(Color.TRANSPARENT)
@@ -231,35 +230,25 @@ class Theme {
         val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
         background?.mutate()
 
-        ripple?.setColor(
-            ColorStateList.valueOf(
-                when (this.tag) {
-                    "color" -> contrastColor(!a.isDark, 80)
-                    "colorA" -> contrastColor(!a.isDark, 70)
-                    "colorB" -> contrastColor(!a.isDark, 60)
-                    "colorC" -> contrastColor(!a.isDark, 50)
-                    else -> contrastColor(!a.isDark, 70)
-                }
-            )
-        )
-
-        this.setTextColor(
-            when (this.tag) {
-                "color" -> p.background
-                "colorA" -> blendARGB(p.color, p.background, 0.9f)
-                "colorB" -> blendARGB(p.color, p.background, 0.2f)
-                "colorC" -> p.color
-                else -> p.color
-            }
-        )
+        ripple?.setColor(ColorStateList.valueOf(contrastColor(!a.isDark)))
 
         this.backgroundTintList = when (this.tag) {
             "color" -> ColorStateList.valueOf(p.color)
             "colorA" -> ColorStateList.valueOf(p.a)
-            "colorB" -> ColorStateList.valueOf(p.b)
             "colorC" -> ColorStateList.valueOf(p.c)
+            "colorD" -> ColorStateList.valueOf(p.d)
             else -> ColorStateList.valueOf(p.c)
         }
+
+        this.setTextColor(
+            when (this.tag) {
+                "color" -> p.d
+                "colorA" -> blendARGB(p.d, p.color, .1f)
+                "colorC" -> blendARGB(p.d, p.color, .9f)
+                "colorD" -> p.color
+                else -> blendARGB(p.d, p.color, .9f)
+            }
+        )
     }
 
     private fun RadioButton.applyTheme(p: ColorPallet) {
@@ -433,7 +422,7 @@ class Theme {
         }
 
         fun getColorPallet(hsv: FloatArray, isAltCon: Boolean = false): ColorPallet {
-            var c = 0
+            var col = 0
             var maxS: Float = 1f
             var maxV: Float = 1f
             var minV: Float = 0f
@@ -443,7 +432,7 @@ class Theme {
 
             //Compute maximal saturation/value
             for (i in 100 downTo 0) {
-                c = Color.HSVToColor(
+                col = Color.HSVToColor(
                     floatArrayOf(
                         hsv[0],
                         if (isDark) i / 100f else hsv[1],
@@ -451,7 +440,7 @@ class Theme {
                     )
                 )
 
-                if (ColorUtils.calculateContrast(c, colorBackground) > if (isAltCon) 1.7 else 5.0) {
+                if (ColorUtils.calculateContrast(col, colorBackground) > if (isAltCon) 1.7 else 5.0) {
                     maxS = if (isDark) i / 100f else 1f
                     maxV = if (isDark) 1f else i / 100f
                     break
@@ -462,12 +451,12 @@ class Theme {
             if (!isDark) minV = 0f
             else {
                 for (i in 100 downTo 0) {
-                    if (ColorUtils.calculateContrast(c, colorBackground) < 3.6) {
+                    if (ColorUtils.calculateContrast(col, colorBackground) < 3.6) {
                         minV = i / 100f
                         break
                     }
 
-                    c = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], i / 100f))
+                    col = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], i / 100f))
                 }
             }
 
@@ -479,14 +468,12 @@ class Theme {
                 )
             )
 
-            return ColorPallet(
-                color,
-                colorBackground,
-                blendARGB(color, colorBackground, 0.35f),
-                blendARGB(color, colorBackground, 0.55f),
-                blendARGB(color, colorBackground, 0.75f),
-                blendARGB(color, colorBackground, 0.85f)
-            )
+            val a = blendARGB(color, colorBackground, 0.2f)
+            val b = blendARGB(a, colorBackground, 0.35f)
+            val c = blendARGB(b, colorBackground, 0.45f)
+            val d = blendARGB(c, colorBackground, 0.55f)
+
+            return ColorPallet(color, colorBackground, a, b, c, d)
         }
     }
 

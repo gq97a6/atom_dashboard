@@ -1,13 +1,13 @@
 package com.netDashboard.icon
 
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-import com.netDashboard.recycler_view.BaseRecyclerViewItem
+import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 
-abstract class Icon : BaseRecyclerViewItem() {
+abstract class Icon : RecyclerViewItem() {
     open val spanCount = 1
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

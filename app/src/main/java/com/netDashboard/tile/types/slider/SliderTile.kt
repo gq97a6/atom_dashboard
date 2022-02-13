@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.databinding.PopupSliderBinding
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.roundCloser
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
@@ -51,7 +51,7 @@ class SliderTile : Tile() {
             setBackground(value, holder?.itemView?.findViewById(R.id.ts_background))
         }
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (step == 0) step = 1
         displayValue = value

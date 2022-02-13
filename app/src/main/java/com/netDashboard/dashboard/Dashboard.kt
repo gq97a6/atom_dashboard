@@ -4,15 +4,15 @@ import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
-import com.netDashboard.recycler_view.BaseRecyclerViewItem
+import com.netDashboard.recycler_view.RecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
 import java.util.*
 import kotlin.random.Random
 
 @Suppress("UNUSED")
-class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRecyclerViewItem() {
+class Dashboard(var name: String = "", var isInvalid: Boolean = false) : RecyclerViewItem() {
 
     override val layout
         get() = R.layout.item_dashboard
@@ -38,7 +38,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : BaseRec
 
     var bluetoothEnabled = false
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

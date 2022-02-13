@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.*
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import java.util.*
 
-class ItemTouchCallback(private val adapter: BaseRecyclerViewAdapter<*>) :
+class ItemTouchCallback(private val adapter: RecyclerViewAdapter<*>) :
     ItemTouchHelper.Callback() {
 
     var onMove = {}
@@ -62,7 +62,7 @@ class ItemTouchCallback(private val adapter: BaseRecyclerViewAdapter<*>) :
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         super.onSelectedChanged(viewHolder, actionState)
 
-        if (actionState != ACTION_STATE_IDLE && viewHolder is BaseRecyclerViewAdapter.ViewHolder) {
+        if (actionState != ACTION_STATE_IDLE && viewHolder is RecyclerViewAdapter.ViewHolder) {
             onSelectedChanged()
         }
     }

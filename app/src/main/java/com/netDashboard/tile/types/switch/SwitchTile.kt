@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -49,7 +49,7 @@ class SwitchTile : Tile() {
             null -> iconRes
         }
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
@@ -63,7 +63,7 @@ class SwitchTile : Tile() {
         send(mqttData.payloads[if (state == false) "true" else "false"] ?: "", mqttData.qos)
     }
 
-    override fun onSetTheme(holder: BaseRecyclerViewAdapter.ViewHolder) {
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         theme.apply(
             holder.itemView as ViewGroup,
             anim = false,

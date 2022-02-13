@@ -62,10 +62,10 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             addTile(TextTile())
         }
 
-        //b.tnSelect.setOnClickListener {
-        //    b.tnSelectRipple.click()
-        //    addTile(SelectTile())
-        //}
+        b.tnSelect.setOnClickListener {
+            b.tnSelectRipple.click()
+            addTile(SelectTile())
+        }
 //
         //b.tnTerminal.setOnClickListener {
         //    b.tnTerminalRipple.click()

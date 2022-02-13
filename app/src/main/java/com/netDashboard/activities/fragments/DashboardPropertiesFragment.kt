@@ -23,8 +23,8 @@ import com.netDashboard.databinding.PopupCopyBrokerBinding
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.RecyclerViewAdapter
-import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.recycler_view.GenericAdapter
+import com.netDashboard.recycler_view.GenericItem
 import java.util.*
 import kotlin.random.Random
 
@@ -171,10 +171,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 createToast(requireContext(), "No dashboards to copy from")
             } else {
                 val dialog = Dialog(requireContext())
-                val adapter = RecyclerViewAdapter(requireContext())
+                val adapter = GenericAdapter(requireContext())
 
                 val list = MutableList(dashboards.size) {
-                    RecyclerViewItem(
+                    GenericItem(
                         R.layout.item_copy_broker
                     )
                 }
@@ -186,22 +186,22 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 adapter.setHasStableIds(true)
                 adapter.onBindViewHolder = { _, holder, pos ->
                     val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
-
-                    adapter.onItemClick = {
-                        dashboard.mqttAddress = dashboards[p].mqttAddress
-                        dashboard.mqttPort = dashboards[p].mqttPort
-                        dashboard.mqttUserName = dashboards[p].mqttUserName
-                        dashboard.mqttPass = dashboards[p].mqttPass
-
-                        viewConfig()
-                        dialog.dismiss()
-                    }
-
                     val text = holder.itemView.findViewById<TextView>(R.id.icb_text)
                     text.text = dashboards[p].name.uppercase(Locale.getDefault())
                 }
 
+                adapter.onItemClick = {
+                    val pos = adapter.list.indexOf(it)
+                    val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 
+                    dashboard.mqttAddress = dashboards[p].mqttAddress
+                    dashboard.mqttPort = dashboards[p].mqttPort
+                    dashboard.mqttUserName = dashboards[p].mqttUserName
+                    dashboard.mqttPass = dashboards[p].mqttPass
+
+                    viewConfig()
+                    dialog.dismiss()
+                }
 
                 binding.pcbRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 binding.pcbRecyclerView.adapter = adapter

@@ -1,13 +1,11 @@
 package com.netDashboard.tile
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class TilesAdapter(context: Context, spanCount: Int) :
-    BaseRecyclerViewAdapter<Tile>(context, spanCount, DiffCallback) {
+    RecyclerViewAdapter<Tile>(context, spanCount, DiffCallback) {
 
     object DiffCallback : DiffUtil.ItemCallback<Tile>() {
         override fun areItemsTheSame(

@@ -3,7 +3,7 @@ package com.netDashboard.icon
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.netDashboard.R
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconCategory(
     private val cat: String = "Test",
@@ -12,7 +12,7 @@ class IconCategory(
     override val layout = R.layout.item_icon_category
     override val spanCount = -1
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

@@ -6,10 +6,10 @@ import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.netDashboard.R
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class ToolBarController(
-    private val adapter: BaseRecyclerViewAdapter<*>,
+    private val adapter: RecyclerViewAdapter<*>,
     private val bar: ConstraintLayout,
     toolbar: FrameLayout,
     private val toolbarIcon: Button,

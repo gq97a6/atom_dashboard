@@ -7,14 +7,14 @@ import com.netDashboard.R
 import com.netDashboard.globals.G.getIconHSV
 import com.netDashboard.globals.G.setIconHSV
 import com.netDashboard.globals.G.theme
-import com.netDashboard.recycler_view.BaseRecyclerViewAdapter
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconColorPicker : Icon() {
 
     override val layout = R.layout.item_icon_color_picker
     override val spanCount = -1
 
-    override fun onBindViewHolder(holder: BaseRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val view = holder.itemView

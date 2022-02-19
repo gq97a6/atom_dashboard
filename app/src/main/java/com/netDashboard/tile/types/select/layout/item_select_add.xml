@@ -1,40 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="5dp">
 
-    <View
-        android:id="@+id/ripple_foreground"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_ripple"
-        android:elevation="20dp"
-        android:tag="rippleForegroundDim" />
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
 
-    <View
-        android:id="@+id/foreground"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#00000000"
-        android:elevation="20dp" />
+        <EditText
+            android:id="@+id/isa_alias"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:background="@drawable/background_frame_sharp"
+            android:hint="random"
+            android:importantForAutofill="no"
+            android:layout_marginEnd="2.5dp"
+            android:inputType="text"
+            android:maxLength="15"
+            android:paddingHorizontal="10dp"
+            android:tag="basic"
+            android:textColor="@color/gray100"
+            android:textColorHint="@color/gray65"
+            android:textCursorDrawable="@null"
+            android:textSize="15dp" />
 
-    <TextView
-        android:id="@+id/is_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/background_frame"
-        android:gravity="center"
-        android:padding="12dp"
-        android:tag="frame"
-        android:text="Default value"
-        app:autoSizeMaxTextSize="25dp"
-        app:autoSizeMinTextSize="8dp"
-        app:autoSizeStepGranularity="1dp"
-        app:autoSizeTextType="uniform" />
+        <EditText
+            android:id="@+id/isa_payload"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="2.5dp"
+            android:layout_weight="1"
+            android:background="@drawable/background_frame_sharp"
+            android:hint="random"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLength="15"
+            android:paddingHorizontal="10dp"
+            android:tag="basic"
+            android:textColor="@color/gray100"
+            android:textColorHint="@color/gray65"
+            android:textCursorDrawable="@null"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/isa_remove"
+            style="@style/button"
+            android:layout_width="30dp"
+            android:layout_gravity="center"
+            android:layout_height="30dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/button_trashcan"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:tag="color" />
+
+    </LinearLayout>
 
 </FrameLayout>

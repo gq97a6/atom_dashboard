@@ -10,6 +10,7 @@ import com.netDashboard.Activity
 import com.netDashboard.FolderTree.rootFolder
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
+import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
 
@@ -17,28 +18,31 @@ import com.netDashboard.globals.G
 class SplashScreenActivity : AppCompatActivity() {
     private lateinit var b: ActivitySplashScreenBinding
 
-    private lateinit var service: ForegroundService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Activity.onCreate(this)
 
-        rootFolder = filesDir.canonicalPath.toString()
-
-        G.initialize()
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(b.root)
         G.theme.apply(b.root, this)
 
-        val foregroundServiceHandler = ForegroundServiceHandler(this)
-        foregroundServiceHandler.start()
-        foregroundServiceHandler.bind()
+        rootFolder = filesDir.canonicalPath.toString()
 
-        foregroundServiceHandler.service.observe(this) { s ->
-            if (s != null) {
-                service = s
-                onServiceReady()
+        if (service != null) {
+            onServiceReady()
+        } else {
+            G.initialize()
+
+            val foregroundServiceHandler = ForegroundServiceHandler(this)
+            foregroundServiceHandler.service.observe(this) { s ->
+                if (s != null) {
+                    service?.finishAffinity = { finishAffinity() }
+                    onServiceReady()
+                }
             }
+
+            foregroundServiceHandler.start()
+            foregroundServiceHandler.bind()
         }
     }
 
@@ -54,11 +58,6 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        service.finishAffinity = { finishAffinity() }
-
-        ForegroundService.service = service
-        service.dgManager.assign()
-
         Handler(Looper.getMainLooper()).postDelayed({
             Intent(this, MainActivity::class.java).also {
                 startActivity(it)

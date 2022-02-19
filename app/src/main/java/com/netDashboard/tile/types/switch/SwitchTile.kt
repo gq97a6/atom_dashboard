@@ -23,6 +23,9 @@ class SwitchTile : Tile() {
     override var typeTag = "switch"
 
     var state: Boolean? = false
+        set(value) {
+            field = value
+        }
 
     var iconResTrue = R.drawable.il_interface_plus
     var iconResFalse = R.drawable.il_interface_plus
@@ -44,9 +47,15 @@ class SwitchTile : Tile() {
 
     private val iconResState
         get() = when (state) {
-            true -> iconResTrue
-            false -> iconResFalse
-            null -> iconRes
+            true -> {
+                iconResTrue
+            }
+            false -> {
+                iconResFalse
+            }
+            null -> {
+                iconRes
+            }
         }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -78,8 +87,12 @@ class SwitchTile : Tile() {
         super.onReceive(data, jsonResult)
 
         state = when (data.second.toString()) {
-            mqttData.payloads["true"] -> true
-            mqttData.payloads["false"] -> false
+            mqttData.payloads["true"] -> {
+                true
+            }
+            mqttData.payloads["false"] -> {
+                false
+            }
             else -> null
         }
 

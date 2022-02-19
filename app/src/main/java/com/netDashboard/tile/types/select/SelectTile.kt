@@ -13,10 +13,11 @@ import com.netDashboard.R
 import com.netDashboard.createToast
 import com.netDashboard.databinding.PopupSelectBinding
 import com.netDashboard.globals.G
-import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SelectTile : Tile() {
 
@@ -28,7 +29,8 @@ class SelectTile : Tile() {
     @JsonIgnore
     override var typeTag = "button"
 
-    val list = mutableMapOf<String, String>("0" to "a", "1" to "b", "2" to "c")
+    val list = mutableListOf("0" to "a", "1" to "b", "2" to "c")
+    var showPayload = false
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -43,37 +45,41 @@ class SelectTile : Tile() {
         val dialog = Dialog(adapter.context)
         val adapter = GenericAdapter(adapter.context)
 
-        val list = MutableList(list.size) {
-            GenericItem(R.layout.item_select)
-        }
+        val notEmpty = list.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
+        if (notEmpty.size > 0) {
+            val list = MutableList(notEmpty.size) {
+                GenericItem(R.layout.item_select)
+            }
 
-        dialog.setContentView(R.layout.popup_select)
-        val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.ps_root))
+            dialog.setContentView(R.layout.popup_select)
+            val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.ps_root))
 
-        adapter.setHasStableIds(true)
-        adapter.onBindViewHolder = { _, holder, pos ->
-            val text = holder.itemView.findViewById<TextView>(R.id.is_text)
-            text.text = this.list.keys.toList()[pos]
-        }
+            adapter.setHasStableIds(true)
+            adapter.onBindViewHolder = { _, holder, pos ->
+                val text = holder.itemView.findViewById<TextView>(R.id.is_text)
+                text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
+                else "${notEmpty[pos].first}"
+            }
 
-        adapter.onItemClick = {
-            val pos = adapter.list.indexOf(it)
-            createToast(adapter.context, "${this.list.values.toList()[pos]}")
-            dialog.dismiss()
-        }
+            adapter.onItemClick = {
+                val pos = adapter.list.indexOf(it)
+                send("${this.list[pos].second}", mqttData.qos)
+                dialog.dismiss()
+            }
 
-        binding.psRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
-        binding.psRecyclerView.adapter = adapter
+            binding.psRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
+            binding.psRecyclerView.adapter = adapter
 
-        adapter.submitList(list)
-        dialog.show()
+            adapter.submitList(list)
+            dialog.show()
 
-        val a = dialog.window?.attributes
+            val a = dialog.window?.attributes
 
-        a?.dimAmount = 0.9f
-        dialog.window?.attributes = a
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            a?.dimAmount = 0.9f
+            dialog.window?.attributes = a
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        G.theme.apply(binding.root as ViewGroup)
+            G.theme.apply(binding.root as ViewGroup)
+        } else createToast(adapter.context, "Add options first")
     }
 }

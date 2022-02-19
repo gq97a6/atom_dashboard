@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -209,6 +210,17 @@ fun FragmentManager.replaceWith(fragment: Fragment, backstack: Boolean = true) {
 }
 
 fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
+
+fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
+    for (i in 0 until this.childCount) {
+        val v = this.getChildAt(i)
+
+        if (v is ViewGroup) v.iterate(setOnClick)
+        setOnClick(v)
+    }
+
+    setOnClick(this)
+}
 
 //@SuppressLint("ShowToast")
 //val snackbar = list[0].holder?.itemView?.rootView?.let {

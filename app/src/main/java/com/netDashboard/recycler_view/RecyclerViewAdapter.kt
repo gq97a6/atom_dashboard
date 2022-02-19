@@ -17,6 +17,7 @@ import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.theme
+import com.netDashboard.iterate
 
 @Suppress("UNUSED")
 abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
@@ -85,11 +86,11 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
 
         theme.apply(holder.itemView as ViewGroup, anim = false)
 
-        fun View.setOnClick() {
+        val callback = { v: View ->
             var isLongPressed = false
 
-            this.isClickable = true
-            this.setOnTouchListener { v, e ->
+            v.isClickable = true
+            v.setOnTouchListener { v, e ->
                 if (editMode.isNone) list[position].onTouch(v, e)
 
                 if (e.action == ACTION_DOWN) {
@@ -105,8 +106,6 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
                 }
 
                 if (e.action == ACTION_UP && !isLongPressed) { // onClick
-                    this.performClick()
-
                     onItemClick(list[position])
 
                     when {
@@ -128,21 +127,10 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
             }
         }
 
-        fun ViewGroup.iterate() {
-            for (i in 0 until this.childCount) {
-                val v = this.getChildAt(i)
-
-                if (v is ViewGroup) v.iterate()
-                v.setOnClick()
-            }
-
-            this.setOnClick()
-        }
-
-        holder.itemView.iterate()
+        holder.itemView.iterate(callback)
     }
 
-    private fun markItemRemove(position: Int) {
+    fun markItemRemove(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 
@@ -170,7 +158,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
             while (i < list.size) {
                 list[i].let {
                     if (it.flag.isRemove) {
-                        list.remove(it)
+                        removeItemAt(i, false)
                         onItemRemoved(it)
                         i--
                     }
@@ -194,6 +182,20 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         theme.apply(binding.root)
+    }
+
+    fun removeItemAt(pos: Int, notify: Boolean = true) {
+        val callback = { v: View ->
+            v.setOnTouchListener(null)
+            v.setOnClickListener(null)
+        }
+
+        (list[pos].holder?.itemView as? ViewGroup)?.let {
+            it.iterate(callback)
+            list.removeAt(pos)
+
+            if (notify) notifyDataSetChanged()
+        }
     }
 
     open inner class Modes {

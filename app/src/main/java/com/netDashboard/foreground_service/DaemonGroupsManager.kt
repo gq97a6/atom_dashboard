@@ -11,6 +11,7 @@ class DaemonGroupsManager(val context: Context) {
 
     init {
         dashboards.forEach { list.add(DaemonGroup(context, it)) }
+        assign()
     }
 
     fun get(id: Long): DaemonGroup? = list.find { it.dashboard.id == id }

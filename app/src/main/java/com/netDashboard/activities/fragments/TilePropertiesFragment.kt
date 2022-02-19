@@ -11,11 +11,13 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.Button
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
-import com.netDashboard.Settings
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
@@ -28,7 +30,10 @@ import com.netDashboard.globals.G.setIconHSV
 import com.netDashboard.globals.G.setIconRes
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.tile
+import com.netDashboard.recycler_view.GenericAdapter
+import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.tile.types.button.TextTile
+import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 
@@ -165,6 +170,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
 
             is SliderTile -> {
+                val tile = tile as SliderTile
+
                 b.tpSliderFrom.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(cs: Editable) {}
                     override fun beforeTextChanged(
@@ -185,7 +192,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                             cs.toString().digitsOnly().let { parsed ->
                                 if (raw != parsed) b.tpSliderFrom.setText(parsed)
                                 else parsed.toIntOrNull()?.let {
-                                    (tile as SliderTile).from = it
+                                    tile.from = it
                                 }
                             }
                         }
@@ -212,7 +219,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                             cs.toString().digitsOnly().let { parsed ->
                                 if (raw != parsed) b.tpSliderTo.setText(parsed)
                                 else parsed.toIntOrNull()?.let {
-                                    (tile as SliderTile).to = it
+                                    tile.to = it
                                 }
                             }
                         }
@@ -241,7 +248,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                             cs.toString().digitsOnly().let { parsed ->
                                 if (raw != parsed) b.tpSliderStep.setText(parsed)
                                 else parsed.toIntOrNull()?.let {
-                                    (tile as SliderTile).step = it
+                                    tile.step = it
                                 }
                             }
                         }
@@ -249,48 +256,156 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 })
 
                 b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
-                    (tile as SliderTile).dragCon = state
+                    tile.dragCon = state
                 }
             }
 
             is SwitchTile -> {
+                val tile = tile as SwitchTile
                 b.tpMqttPayloadTrueEditIcon.setOnClickListener {
-                    getIconHSV = { (tile as SwitchTile).hsvTrue }
-                    getIconRes = { (tile as SwitchTile).iconResTrue }
-                    getIconColorPallet = { (tile as SwitchTile).colorPalletTrue }
+                    getIconHSV = { tile.hsvTrue }
+                    getIconRes = { tile.iconResTrue }
+                    getIconColorPallet = { tile.colorPalletTrue }
 
-                    setIconHSV = { hsv -> (tile as SwitchTile).hsvTrue = hsv }
-                    setIconRes = { res -> (tile as SwitchTile).iconResTrue = res }
+                    setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                    setIconRes = { res -> tile.iconResTrue = res }
 
                     (activity as MainActivity).fm.replaceWith(TileIconFragment())
                 }
 
                 b.tpMqttPayloadFalseEditIcon.setOnClickListener {
-                    getIconHSV = { (tile as SwitchTile).hsvFalse }
-                    getIconRes = { (tile as SwitchTile).iconResFalse }
-                    getIconColorPallet = { (tile as SwitchTile).colorPalletFalse }
+                    getIconHSV = { tile.hsvFalse }
+                    getIconRes = { tile.iconResFalse }
+                    getIconColorPallet = { tile.colorPalletFalse }
 
-                    setIconHSV = { hsv -> (tile as SwitchTile).hsvFalse = hsv }
-                    setIconRes = { res -> (tile as SwitchTile).iconResFalse = res }
+                    setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                    setIconRes = { res -> tile.iconResFalse = res }
 
                     (activity as MainActivity).fm.replaceWith(TileIconFragment())
                 }
 
                 b.tpMqttPayloadTrue.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
                         tile.mqttData.payloads["true"] = cs.toString()
                     }
                 })
 
                 b.tpMqttPayloadFalse.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
                         tile.mqttData.payloads["false"] = cs.toString()
                     }
                 })
+            }
+
+            is SelectTile -> {
+                val tile = tile as SelectTile
+                val adapter = GenericAdapter(requireContext())
+
+                val list = MutableList(tile.list.size) {
+                    GenericItem(R.layout.item_select_add)
+                }
+
+                adapter.setHasStableIds(true)
+                adapter.onBindViewHolder = { item, holder, pos ->
+                    val a = holder.itemView.findViewById<TextView>(R.id.isa_alias)
+                    val p = holder.itemView.findViewById<TextView>(R.id.isa_payload)
+                    val r = holder.itemView.findViewById<Button>(R.id.isa_remove)
+
+                    a.text = tile.list[pos].first
+                    p.text = tile.list[pos].second
+
+                    a.addTextChangedListener(object : TextWatcher {
+                        override fun afterTextChanged(cs: Editable) {}
+                        override fun beforeTextChanged(
+                            cs: CharSequence,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+                        }
+
+                        override fun onTextChanged(
+                            cs: CharSequence,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            tile.list[pos] = Pair(cs.toString(), tile.list[pos].second)
+                        }
+                    })
+
+                    p.addTextChangedListener(object : TextWatcher {
+                        override fun afterTextChanged(cs: Editable) {}
+                        override fun beforeTextChanged(
+                            cs: CharSequence,
+                            start: Int,
+                            count: Int,
+                            after: Int
+                        ) {
+                        }
+
+                        override fun onTextChanged(
+                            cs: CharSequence,
+                            start: Int,
+                            before: Int,
+                            count: Int
+                        ) {
+                            tile.list[pos] = Pair(tile.list[pos].first, cs.toString())
+                        }
+                    })
+
+                    r.setOnClickListener {
+                        adapter.list.indexOf(item).let {
+                            if (it >= 0) {
+                                tile.list.removeAt(it)
+                                adapter.removeItemAt(it)
+                            }
+                        }
+                    }
+                }
+
+                b.tpSelectList.layoutManager = LinearLayoutManager(requireContext())
+                b.tpSelectList.adapter = adapter
+
+                adapter.submitList(list)
+
+                b.tpSelectAdd.setOnClickListener {
+                    tile.list.add(Pair("", ""))
+                    list.add(GenericItem(R.layout.item_select_add))
+                    adapter.notifyItemInserted(list.size - 1)
+                }
+
+                b.tpSelectShowPayload.setOnCheckedChangeListener { _, state ->
+                    tile.showPayload = state
+                }
             }
         }
     }
@@ -335,13 +450,16 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         when (tile) {
             is SliderTile -> {
+                val tile = tile as SliderTile
+
                 b.tpSlider.visibility = VISIBLE
-                b.tpSliderDrag.isChecked = (tile as SliderTile).dragCon
-                b.tpSliderFrom.setText((tile as SliderTile).from.toString())
-                b.tpSliderTo.setText((tile as SliderTile).to.toString())
-                b.tpSliderStep.setText((tile as SliderTile).step.toString())
+                b.tpSliderDrag.isChecked = tile.dragCon
+                b.tpSliderFrom.setText(tile.from.toString())
+                b.tpSliderTo.setText(tile.to.toString())
+                b.tpSliderStep.setText(tile.step.toString())
                 b.tpPayloadHint.visibility = VISIBLE
             }
+
             is TextTile -> {
                 //b.tpText.visibility = VISIBLE
                 b.tpMqttPayloadTypeBox.visibility = VISIBLE
@@ -354,29 +472,37 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
 
             is SwitchTile -> {
+                val tile = tile as SwitchTile
+
                 b.tpMqttPayloadBox.visibility = GONE
                 b.tpMqttPayloadsBox.visibility = VISIBLE
 
                 b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
-                b.tpMqttPayloadTrueIcon.setBackgroundResource((tile as SwitchTile).iconResTrue)
+                b.tpMqttPayloadTrueIcon.setBackgroundResource(tile.iconResTrue)
                 b.tpMqttPayloadTrueIcon.backgroundTintList =
-                    ColorStateList.valueOf((tile as SwitchTile).colorPalletTrue.color)
+                    ColorStateList.valueOf(tile.colorPalletTrue.color)
 
                 val drawableTrue = b.tpMqttPayloadTrueIconFrame.background as? GradientDrawable
                 drawableTrue?.mutate()
-                drawableTrue?.setStroke(1, (tile as SwitchTile).colorPalletTrue.color)
+                drawableTrue?.setStroke(1, tile.colorPalletTrue.color)
                 drawableTrue?.cornerRadius = 15f
 
 
                 b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
-                b.tpMqttPayloadFalseIcon.setBackgroundResource((tile as SwitchTile).iconResFalse)
+                b.tpMqttPayloadFalseIcon.setBackgroundResource(tile.iconResFalse)
                 b.tpMqttPayloadFalseIcon.backgroundTintList =
-                    ColorStateList.valueOf((tile as SwitchTile).colorPalletFalse.color)
+                    ColorStateList.valueOf(tile.colorPalletFalse.color)
 
                 val drawableFalse = b.tpMqttPayloadFalseIconFrame.background as? GradientDrawable
                 drawableFalse?.mutate()
-                drawableFalse?.setStroke(1, (tile as SwitchTile).colorPalletFalse.color)
+                drawableFalse?.setStroke(1, tile.colorPalletFalse.color)
                 drawableFalse?.cornerRadius = 15f
+            }
+
+            is SelectTile -> {
+                val tile = tile as SelectTile
+
+                b.tpSelectShowPayload.isChecked = tile.showPayload
             }
         }
     }

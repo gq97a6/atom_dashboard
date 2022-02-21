@@ -1,16 +1,106 @@
 package com.netDashboard.tile.types.terminal
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.view.MotionEvent
+import android.view.View
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
+import com.netDashboard.databinding.PopupTextBinding
+import com.netDashboard.globals.G
+import com.netDashboard.recycler_view.GenericAdapter
+import com.netDashboard.recycler_view.GenericItem
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
+import kotlinx.coroutines.awaitAll
+import org.eclipse.paho.client.mqttv3.MqttMessage
+
 
 class TerminalTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_terminal
 
-    override val mqttData = MqttData("")
+    override val mqttData = MqttData("1")
 
     @JsonIgnore
-    override var typeTag = "button"
+    override var typeTag = "terminal"
+
+    @JsonIgnore
+    override var height = 2
+
+    var log = mutableListOf<String>()
+
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        layoutParams.isFullSpan = true
+
+        val a = GenericAdapter(adapter.context)
+        a.setHasStableIds(true)
+
+        a.onBindViewHolder = { _, holder, pos ->
+            val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
+            text.text = log[pos]
+        }
+
+        a.submitList(MutableList(log.size) { GenericItem(R.layout.item_terminal_entry) })
+
+        val layoutManager = LinearLayoutManager(adapter.context)
+        layoutManager.stackFromEnd = true
+
+        val rv = holder.itemView.findViewById<RecyclerView>(R.id.tt_recycler_view)
+        rv?.layoutManager = layoutManager
+        rv?.adapter = a
+    }
+
+    override fun onClick(v: View, e: MotionEvent) {
+        super.onClick(v, e)
+
+        if (mqttData.pubs["base"].isNullOrEmpty()) return
+        if (dashboard.dg?.mqttd == null) return
+
+        if (mqttData.varPayload) {
+            val dialog = Dialog(adapter.context)
+
+            dialog.setContentView(R.layout.popup_text)
+            val binding = PopupTextBinding.bind(dialog.findViewById(R.id.pt_root))
+
+            binding.ptTopic.text = mqttData.pubs["base"].toString()
+
+            binding.ptConfirm.setOnClickListener {
+                send(binding.ptPayload.text.toString(), mqttData.qos)
+                dialog.dismiss()
+            }
+
+            binding.ptDeny.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+
+            val a = dialog.window?.attributes
+
+            a?.dimAmount = 0.9f
+            dialog.window?.attributes = a
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            G.theme.apply(binding.root)
+        } else send(mqttData.payloads["base"] ?: "", mqttData.qos)
+    }
+
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
+    ) {
+        val entry = jsonResult["value"] ?: data.second.toString()
+        log.add(entry)
+        if (log.size > 5) log.removeFirst()
+    }
 }

@@ -10,6 +10,8 @@ import android.view.*
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
@@ -21,6 +23,7 @@ import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.globals.G.tile
+import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.TilesAdapter
@@ -51,6 +54,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         setupRecyclerView()
+        setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
         settings.lastDashboardId = dashboard.id
 
@@ -202,17 +206,22 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         val layoutManager =
             StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
 
-        //layoutManager.spanSizeLookup =
-        //    object : GridLayoutManager.SpanSizeLookup() {
-        //        override fun tSpanSize(position: Int): Int {
-        //            return adapter.list[position].width
-        //        }
-        //    }
-
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter
 
         if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
+    }
+
+    private fun setupLogRecyclerView() {
+        val adapter = LogAdapter(requireContext())
+        adapter.setHasStableIds(true)
+        adapter.submitList(dashboard.log.list)
+
+        val layoutManager = LinearLayoutManager(context)
+
+        layoutManager.stackFromEnd = true
+        b.dLogRecyclerView.layoutManager = layoutManager
+        b.dLogRecyclerView.adapter = adapter
     }
 
 //----------------------------------------------------------------------------------------------
@@ -262,7 +271,10 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 when {
                     it <= 0 -> 0
                     it <= (.9 * screenHeight) -> it
-                    else -> (.9 * screenHeight).toInt()
+                    else -> {
+                        dashboard.log.flush()
+                        (.9 * screenHeight).toInt()
+                    }
                 }
             }
 

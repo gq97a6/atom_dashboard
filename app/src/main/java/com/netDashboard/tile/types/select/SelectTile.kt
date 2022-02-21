@@ -42,19 +42,19 @@ class SelectTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        val dialog = Dialog(adapter.context)
-        val adapter = GenericAdapter(adapter.context)
-
         val notEmpty = list.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.size > 0) {
-            val list = MutableList(notEmpty.size) {
-                GenericItem(R.layout.item_select)
-            }
+            val dialog = Dialog(adapter.context)
+            val adapter = GenericAdapter(adapter.context)
 
             dialog.setContentView(R.layout.popup_select)
             val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.ps_root))
 
-            adapter.setHasStableIds(true)
+            val a = dialog.window?.attributes
+            a?.dimAmount = 0.9f
+            dialog.window?.attributes = a
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
             adapter.onBindViewHolder = { _, holder, pos ->
                 val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                 text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
@@ -67,18 +67,13 @@ class SelectTile : Tile() {
                 dialog.dismiss()
             }
 
+            adapter.setHasStableIds(true)
+            adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
+
             binding.psRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
             binding.psRecyclerView.adapter = adapter
 
-            adapter.submitList(list)
             dialog.show()
-
-            val a = dialog.window?.attributes
-
-            a?.dimAmount = 0.9f
-            dialog.window?.attributes = a
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
             G.theme.apply(binding.root as ViewGroup)
         } else createToast(adapter.context, "Add options first")
     }

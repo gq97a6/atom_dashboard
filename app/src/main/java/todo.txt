@@ -1,13 +1,15 @@
 //expand ------------------------------
 groups
 color that depends on value
+bugs
+log error on transfer
 
 new tiles
     button //
     slider //
     switch //
     text //
-    select
+    select //
     terminal
     time
     thermostat

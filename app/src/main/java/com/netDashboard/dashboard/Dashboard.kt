@@ -4,6 +4,7 @@ import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.log.Log
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
@@ -16,6 +17,8 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : Recycle
 
     override val layout
         get() = R.layout.item_dashboard
+
+    var log = Log() //check
 
     @JsonIgnore
     var dg: DaemonGroup? = null

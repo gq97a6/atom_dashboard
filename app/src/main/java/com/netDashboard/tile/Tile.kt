@@ -32,9 +32,6 @@ abstract class Tile : RecyclerViewItem() {
     @JsonIgnore
     open var height = 1
 
-    @JsonIgnore
-    var width = 1
-
     var tag = ""
     var iconRes = R.drawable.il_interface_plus
 

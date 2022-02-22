@@ -17,7 +17,6 @@ import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
-import kotlinx.coroutines.awaitAll
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
@@ -36,28 +35,31 @@ class TerminalTile : Tile() {
 
     var log = mutableListOf<String>()
 
+    @JsonIgnore
+    var terminalAdapter: GenericAdapter? = null
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
         layoutParams.isFullSpan = true
 
-        val a = GenericAdapter(adapter.context)
-        a.setHasStableIds(true)
+        terminalAdapter = GenericAdapter(adapter.context)
+        terminalAdapter?.setHasStableIds(true)
 
-        a.onBindViewHolder = { _, holder, pos ->
+        terminalAdapter?.onBindViewHolder = { _, holder, pos ->
             val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
-            text.text = log[pos]
+            text.text = "${log[pos]}"
         }
 
-        a.submitList(MutableList(log.size) { GenericItem(R.layout.item_terminal_entry) })
+        terminalAdapter?.submitList(MutableList(log.size) { GenericItem(R.layout.item_terminal_entry) })
 
         val layoutManager = LinearLayoutManager(adapter.context)
-        layoutManager.stackFromEnd = true
+        layoutManager.reverseLayout = true
 
         val rv = holder.itemView.findViewById<RecyclerView>(R.id.tt_recycler_view)
         rv?.layoutManager = layoutManager
-        rv?.adapter = a
+        rv?.adapter = terminalAdapter
     }
 
     override fun onClick(v: View, e: MotionEvent) {
@@ -100,7 +102,17 @@ class TerminalTile : Tile() {
         jsonResult: MutableMap<String, String>
     ) {
         val entry = jsonResult["value"] ?: data.second.toString()
-        log.add(entry)
-        if (log.size > 5) log.removeFirst()
+        log.add(0, entry)
+
+        terminalAdapter?.let {
+            it.list.add(GenericItem(R.layout.item_terminal_entry))
+
+            if (log.size > 10) {
+                log.removeLast()
+                it.removeItemAt(it.list.lastIndex, false)
+            }
+
+            it.notifyDataSetChanged()
+        }
     }
 }

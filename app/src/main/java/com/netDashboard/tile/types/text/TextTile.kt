@@ -13,6 +13,7 @@ import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import kotlin.random.Random
 
 class TextTile : Tile() {
 
@@ -67,7 +68,7 @@ class TextTile : Tile() {
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             G.theme.apply(binding.root)
-        } else send(mqttData.payloads["base"] ?: "", mqttData.qos)
+        } else send(Random.nextInt().toString(), mqttData.qos)
     }
 
     override fun onReceive(

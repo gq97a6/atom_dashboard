@@ -36,6 +36,7 @@ import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
+import com.netDashboard.tile.types.terminal.TerminalTile
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -407,6 +408,22 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.showPayload = state
                 }
             }
+
+            is TerminalTile -> {
+                b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.mqttData.varPayload = when (id) {
+                        R.id.tp_mqtt_payload_val -> {
+                            b.tpMqttPayloadBox.visibility = VISIBLE
+                            false
+                        }
+                        R.id.tp_mqtt_payload_var -> {
+                            b.tpMqttPayloadBox.visibility = GONE
+                            true
+                        }
+                        else -> true
+                    }
+                }
+            }
         }
     }
 
@@ -503,6 +520,18 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 val tile = tile as SelectTile
 
                 b.tpSelectShowPayload.isChecked = tile.showPayload
+            }
+
+            is TerminalTile -> {
+                val tile = tile as TerminalTile
+
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpPayloadType.check(
+                    if (tile.mqttData.varPayload) {
+                        b.tpMqttPayloadBox.visibility = GONE
+                        R.id.tp_mqtt_payload_var
+                    } else R.id.tp_mqtt_payload_val
+                )
             }
         }
     }

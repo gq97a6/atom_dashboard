@@ -1138,7 +1138,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView

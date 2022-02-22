@@ -26,7 +26,7 @@ class Dashboards {
             try {
                 mapper.readerForListOf(Dashboard::class.java).readValue(save)
             } catch (e: Exception) {
-                mutableListOf()
+                null
             }
     }
 }

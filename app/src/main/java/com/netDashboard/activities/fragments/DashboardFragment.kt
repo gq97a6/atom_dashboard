@@ -219,7 +219,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         val layoutManager = LinearLayoutManager(context)
 
-        layoutManager.stackFromEnd = true
+        layoutManager.reverseLayout = true
+
         b.dLogRecyclerView.layoutManager = layoutManager
         b.dLogRecyclerView.adapter = adapter
     }

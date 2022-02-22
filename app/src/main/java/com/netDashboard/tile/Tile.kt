@@ -21,6 +21,7 @@ import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
+import kotlin.math.log
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
@@ -42,6 +43,10 @@ abstract class Tile : RecyclerViewItem() {
     abstract var typeTag: String
 
     abstract val mqttData: MqttData
+
+    var doLog = false
+    var doNotify = false
+    var silentNotify = false
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -75,8 +80,6 @@ abstract class Tile : RecyclerViewItem() {
 
     open class MqttData(defaultPubValue: String = "") {
         var isEnabled = true
-        var doNotify = false
-        var silentNotify = false
         var lastReceive: Date? = null
 
         val subs: MutableMap<String, String> = mutableMapOf()
@@ -175,7 +178,7 @@ abstract class Tile : RecyclerViewItem() {
         }
         mqttData.lastReceive = Date()
 
-        if (mqttData.doNotify) {
+        if (doNotify) {
             dashboard.dg?.context?.let {
                 createNotification(
                     it,
@@ -185,11 +188,13 @@ abstract class Tile : RecyclerViewItem() {
                             "New value for: ${data.first}"
                         else "$tag: ${data.second.toString()}"
                     }",
-                    mqttData.silentNotify,
+                    silentNotify,
                     dashboard.id.toInt()
                 )
             }
         }
+
+        if(doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
 
         onReceive(data, jsonResult)
     }

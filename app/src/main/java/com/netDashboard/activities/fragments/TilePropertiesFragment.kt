@@ -144,13 +144,17 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             (activity as MainActivity).fm.replaceWith(TileIconFragment())
         }
 
+        b.tpLogSwitch.setOnCheckedChangeListener { _, state ->
+            tile.doLog = state
+        }
+
         b.tpNotSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.doNotify = state
+            tile.doNotify = state
             b.tpNotSilent.visibility = if (state) VISIBLE else GONE
         }
 
         b.tpNotSilentSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.silentNotify = state
+            tile.silentNotify = state
         }
 
         when (tile) {
@@ -462,8 +466,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         switchMqttTab(settings.mqttTabShow, 0)
 
-        b.tpNotSwitch.isChecked = tile.mqttData.doNotify
-        b.tpNotSilentSwitch.isChecked = tile.mqttData.silentNotify
+        b.tpNotSilentSwitch.isChecked = tile.doLog
+        b.tpNotSwitch.isChecked = tile.doNotify
+        b.tpNotSilentSwitch.isChecked = tile.silentNotify
 
         when (tile) {
             is SliderTile -> {

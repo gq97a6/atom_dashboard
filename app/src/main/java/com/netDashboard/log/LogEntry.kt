@@ -18,13 +18,11 @@ class LogEntry(
     override val layout = R.layout.item_log
 
     private val time = SimpleDateFormat("hh:mm:ss").format(Date())
-    private val date = SimpleDateFormat("dd.M.yy").format(Date())
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        holder.itemView.findViewById<TextView>(R.id.il_date).text = date
-        " $time: ".let {
+        " $time ".let {
             holder.itemView.findViewById<TextView>(R.id.il_time).text = it
         }
         holder.itemView.findViewById<TextView>(R.id.il_text).text = text

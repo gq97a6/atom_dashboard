@@ -718,7 +718,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:tag="colorA"
-                    android:text="Notifications"
+                    android:text="Notifications and log"
                     android:textColor="@color/gray150"
                     android:textSize="20dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -744,7 +744,54 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="colorA"
-                            android:text="Enable:"
+                            android:text="Log new values:"
+                            android:textColor="@color/gray150"
+                            android:textSize="15dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textColor="@color/gray150"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_log_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textColor="@color/gray150"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorA"
+                            android:text="Notify on receive:"
                             android:textColor="@color/gray150"
                             android:textSize="15dp" />
 

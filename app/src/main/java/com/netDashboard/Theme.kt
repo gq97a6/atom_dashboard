@@ -440,7 +440,11 @@ class Theme {
                     )
                 )
 
-                if (ColorUtils.calculateContrast(col, colorBackground) > if (isAltCon) 1.7 else 5.0) {
+                if (ColorUtils.calculateContrast(
+                        col,
+                        colorBackground
+                    ) > if (isAltCon) 1.7 else 5.0
+                ) {
                     maxS = if (isDark) i / 100f else 1f
                     maxV = if (isDark) 1f else i / 100f
                     break

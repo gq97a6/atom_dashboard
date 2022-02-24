@@ -9,8 +9,6 @@ class LightsTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_lights
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
     override var typeTag = "button"
 }

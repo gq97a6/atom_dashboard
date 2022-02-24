@@ -3,8 +3,6 @@ package com.netDashboard.recycler_view
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
 import android.view.View
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.PopupConfirmBinding
+import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.iterate
 
@@ -149,7 +148,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         val dialog = Dialog(context)
 
         dialog.setContentView(R.layout.popup_confirm)
-        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.pc_root))
+        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.root))
 
         binding.pcText.text = "Confirm removing"
 
@@ -173,15 +172,13 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
             dialog.dismiss()
         }
 
-        dialog.show()
+        binding.padding.setOnClickListener {
+            dialog.dismiss()
+        }
 
-        val a = dialog.window?.attributes
-
-        a?.dimAmount = 0.9f
-        dialog.window?.attributes = a
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+        dialog.dialogSetup()
         theme.apply(binding.root)
+        dialog.show()
     }
 
     fun removeItemAt(pos: Int, notify: Boolean = true) {

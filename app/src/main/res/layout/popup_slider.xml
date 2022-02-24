@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ps_root"
+    android:id="@+id/root"
     android:layout_width="280dp"
-    android:layout_height="125dp"
-    android:layout_gravity="center">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="125dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:tag="background" />
+
+        <View
+            android:id="@+id/ts_background"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray65"
+            android:tag="colorD"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.0" />
+
+        <TextView
+            android:id="@+id/ps_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:tag="colorA"
+            android:text="1233"
+            android:textSize="50dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
+        android:id="@+id/padding"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="background" />
+        android:layout_height="120dp" />
 
-    <View
-        android:id="@+id/ts_background"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@color/gray65"
-        android:tag="colorD"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.0" />
-
-    <TextView
-        android:id="@+id/ps_value"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:tag="colorA"
-        android:text="1233"
-        android:textSize="50dp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

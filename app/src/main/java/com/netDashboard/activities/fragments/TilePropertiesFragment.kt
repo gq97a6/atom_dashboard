@@ -37,6 +37,7 @@ import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 import com.netDashboard.tile.types.terminal.TerminalTile
+import com.netDashboard.tile.types.time.TimeTile
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -54,7 +55,42 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         super.onViewCreated(view, savedInstanceState)
 
         G.theme.apply(b.root, requireActivity())
-        viewConfig()
+
+        b.tpTag.setText(tile.tag)
+        b.tpIcon.setBackgroundResource(tile.iconRes)
+
+        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
+        val drawable = b.tpIconFrame.background as? GradientDrawable
+        drawable?.mutate()
+        drawable?.setStroke(1, tile.colorPallet.color)
+        drawable?.cornerRadius = 15f
+
+        b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
+        b.tpMqttPub.setText(tile.mqttData.pubs["base"])
+        b.tpMqttSub.setText(tile.mqttData.subs["base"])
+        b.tpMqttPayload.setText(tile.mqttData.payloads["base"] ?: "")
+
+        tile.mqttData.payloadIsJson.let {
+            b.tpMqttJsonSwitch.isChecked = it
+            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
+        }
+
+        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["base"] ?: "")
+        b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
+        b.tpQos.check(
+            when (tile.mqttData.qos) {
+                0 -> R.id.tp_qos0
+                1 -> R.id.tp_qos1
+                2 -> R.id.tp_qos2
+                else -> R.id.tp_qos1
+            }
+        )
+
+        switchMqttTab(settings.mqttTabShow, 0)
+
+        b.tpNotSilentSwitch.isChecked = tile.doLog
+        b.tpNotSwitch.isChecked = tile.doNotify
+        b.tpNotSilentSwitch.isChecked = tile.silentNotify
 
         b.tpTag.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(cs: Editable) {}
@@ -90,14 +126,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
         })
 
-        b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.payloads["base"] = cs.toString()
-            }
-        })
-
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
             b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
@@ -107,7 +135,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             override fun afterTextChanged(cs: Editable) {}
             override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.jsonPaths["value"] = cs.toString()
+                tile.mqttData.jsonPaths["base"] = cs.toString()
             }
         })
 
@@ -124,14 +152,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
-
-        //val fragment = TileIconFragment()
-        //fragment.apply {
-        //    arguments = Bundle().apply {
-        //        putInt("index", dashboard.tiles.indexOf(tile))
-        //    }
-        //}
-        //(activity as MainActivity).fm.replaceWith(fragment)
 
         b.tpEditIcon.setOnClickListener {
             getIconHSV = { tile.hsv }
@@ -159,6 +179,14 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         when (tile) {
             is TextTile -> {
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpPayloadType.check(
+                    if (tile.mqttData.varPayload) R.id.tp_mqtt_payload_var
+                    else {
+                        b.tpMqttPayload.visibility = VISIBLE
+                        R.id.tp_mqtt_payload_val
+                    }
+                )
                 b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                     tile.mqttData.varPayload = when (id) {
                         R.id.tp_mqtt_payload_val -> {
@@ -172,10 +200,41 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         else -> true
                     }
                 }
-            }
 
+                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(cs: Editable) {}
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        tile.mqttData.payloads["base"] = cs.toString()
+                    }
+                })
+            }
+//--------------------------------------------------------------------------------------------------
             is SliderTile -> {
                 val tile = tile as SliderTile
+
+                b.tpSlider.visibility = VISIBLE
+                b.tpMqttPayloadBox.visibility = VISIBLE
+                b.tpPayloadHint.visibility = VISIBLE
+
+                b.tpSliderDrag.isChecked = tile.dragCon
+
+                b.tpPayloadHint.text = "Use @value to insert current value"
+                b.tpSliderFrom.setText(tile.from.toString())
+                b.tpSliderTo.setText(tile.to.toString())
+                b.tpSliderStep.setText(tile.step.toString())
 
                 b.tpSliderFrom.addTextChangedListener(object : TextWatcher {
                     override fun afterTextChanged(cs: Editable) {}
@@ -263,10 +322,54 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
                     tile.dragCon = state
                 }
-            }
 
+                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(cs: Editable) {}
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        tile.mqttData.payloads["base"] = cs.toString()
+                    }
+                })
+            }
+//--------------------------------------------------------------------------------------------------
             is SwitchTile -> {
                 val tile = tile as SwitchTile
+
+                b.tpMqttPayloadsBox.visibility = VISIBLE
+
+                b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
+                b.tpMqttPayloadTrueIcon.setBackgroundResource(tile.iconResTrue)
+                b.tpMqttPayloadTrueIcon.backgroundTintList =
+                    ColorStateList.valueOf(tile.colorPalletTrue.color)
+
+                val drawableTrue = b.tpMqttPayloadTrueIconFrame.background as? GradientDrawable
+                drawableTrue?.mutate()
+                drawableTrue?.setStroke(1, tile.colorPalletTrue.color)
+                drawableTrue?.cornerRadius = 15f
+
+
+                b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
+                b.tpMqttPayloadFalseIcon.setBackgroundResource(tile.iconResFalse)
+                b.tpMqttPayloadFalseIcon.backgroundTintList =
+                    ColorStateList.valueOf(tile.colorPalletFalse.color)
+
+                val drawableFalse = b.tpMqttPayloadFalseIconFrame.background as? GradientDrawable
+                drawableFalse?.mutate()
+                drawableFalse?.setStroke(1, tile.colorPalletFalse.color)
+                drawableFalse?.cornerRadius = 15f
+
                 b.tpMqttPayloadTrueEditIcon.setOnClickListener {
                     getIconHSV = { tile.hsvTrue }
                     getIconRes = { tile.iconResTrue }
@@ -329,9 +432,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 })
             }
-
+//--------------------------------------------------------------------------------------------------
             is SelectTile -> {
                 val tile = tile as SelectTile
+
+                b.tpSelect.visibility = VISIBLE
+                b.tpSelectShowPayload.isChecked = tile.showPayload
+
                 val adapter = GenericAdapter(requireContext())
 
                 val list = MutableList(tile.list.size) {
@@ -412,8 +519,17 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.showPayload = state
                 }
             }
-
+//--------------------------------------------------------------------------------------------------
             is TerminalTile -> {
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpPayloadType.check(
+                    if (tile.mqttData.varPayload) R.id.tp_mqtt_payload_var
+                    else {
+                        b.tpMqttPayload.visibility = VISIBLE
+                        R.id.tp_mqtt_payload_val
+                    }
+                )
+
                 b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                     tile.mqttData.varPayload = when (id) {
                         R.id.tp_mqtt_payload_val -> {
@@ -427,116 +543,95 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         else -> true
                     }
                 }
+
+                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(cs: Editable) {}
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        tile.mqttData.payloads["base"] = cs.toString()
+                    }
+                })
             }
-        }
-    }
+//--------------------------------------------------------------------------------------------------
+            is TimeTile -> {
+                val tile = tile as TimeTile
 
-    private fun viewConfig() {
-
-        b.tpTag.setText(tile.tag)
-        b.tpIcon.setBackgroundResource(tile.iconRes)
-
-        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
-        val drawable = b.tpIconFrame.background as? GradientDrawable
-        drawable?.mutate()
-        drawable?.setStroke(1, tile.colorPallet.color)
-        drawable?.cornerRadius = 15f
-
-        //MQTT
-        b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
-        b.tpMqttPub.setText(tile.mqttData.pubs["base"])
-        b.tpMqttSub.setText(tile.mqttData.subs["base"])
-        b.tpMqttPayload.setText(tile.mqttData.payloads["base"] ?: "")
-
-        tile.mqttData.payloadIsJson.let {
-            b.tpMqttJsonSwitch.isChecked = it
-            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
-        }
-
-        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["value"] ?: "")
-        b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
-        b.tpQos.check(
-            when (tile.mqttData.qos) {
-                0 -> R.id.tp_qos0
-                1 -> R.id.tp_qos1
-                2 -> R.id.tp_qos2
-                else -> R.id.tp_qos1
-            }
-        )
-
-        switchMqttTab(settings.mqttTabShow, 0)
-
-        b.tpNotSilentSwitch.isChecked = tile.doLog
-        b.tpNotSwitch.isChecked = tile.doNotify
-        b.tpNotSilentSwitch.isChecked = tile.silentNotify
-
-        when (tile) {
-            is SliderTile -> {
-                val tile = tile as SliderTile
-
-                b.tpSlider.visibility = VISIBLE
-                b.tpSliderDrag.isChecked = tile.dragCon
-                b.tpSliderFrom.setText(tile.from.toString())
-                b.tpSliderTo.setText(tile.to.toString())
-                b.tpSliderStep.setText(tile.step.toString())
+                b.tpTime.visibility = VISIBLE
+                b.tpMqttPayloadBox.visibility = VISIBLE
                 b.tpPayloadHint.visibility = VISIBLE
-            }
 
-            is TextTile -> {
-                //b.tpText.visibility = VISIBLE
-                b.tpMqttPayloadTypeBox.visibility = VISIBLE
-                b.tpPayloadType.check(
-                    if (tile.mqttData.varPayload) {
-                        b.tpMqttPayloadBox.visibility = GONE
-                        R.id.tp_mqtt_payload_var
-                    } else R.id.tp_mqtt_payload_val
+                b.tpTimeType.check(
+                    when (tile.isDate) {
+                        false -> {
+                            b.tpMqttPayload.setText(G.tile.mqttData.payloads["time"])
+                            b.tpPayloadHint.text = "Use @hour and @minute to insert current values."
+                            R.id.tp_time_time
+                        }
+                        true -> {
+                            b.tpMqttPayload.setText(G.tile.mqttData.payloads["date"])
+                            b.tpPayloadHint.text =
+                                "Use @day, @month, @year to insert current values."
+                            R.id.tp_time_date
+                        }
+                    }
                 )
-            }
 
-            is SwitchTile -> {
-                val tile = tile as SwitchTile
+                if (!tile.isDate) {
+                    b.tpTimeMilitaryBox.visibility = VISIBLE
+                    b.tpTimeMilitary.isChecked = tile.isMilitary
+                }
 
-                b.tpMqttPayloadBox.visibility = GONE
-                b.tpMqttPayloadsBox.visibility = VISIBLE
+                b.tpTimeType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.isDate = when (id) {
+                        R.id.tp_time_time -> false
+                        R.id.tp_time_date -> true
+                        else -> false
+                    }
 
-                b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
-                b.tpMqttPayloadTrueIcon.setBackgroundResource(tile.iconResTrue)
-                b.tpMqttPayloadTrueIcon.backgroundTintList =
-                    ColorStateList.valueOf(tile.colorPalletTrue.color)
+                    b.tpTimeMilitaryBox.visibility = if (tile.isDate) GONE else VISIBLE
+                    b.tpMqttPayload.setText(G.tile.mqttData.payloads[if (tile.isDate) "date" else "time"])
+                    b.tpPayloadHint.text =
+                        "Use ${if (tile.isDate) "@day, @month, @year" else "@hour and @minute"} to insert current values."
+                }
 
-                val drawableTrue = b.tpMqttPayloadTrueIconFrame.background as? GradientDrawable
-                drawableTrue?.mutate()
-                drawableTrue?.setStroke(1, tile.colorPalletTrue.color)
-                drawableTrue?.cornerRadius = 15f
+                if (!tile.isDate) {
+                    b.tpTimeMilitary.setOnCheckedChangeListener { _, state ->
+                        tile.isMilitary = state
+                    }
+                }
 
+                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(cs: Editable) {}
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
 
-                b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
-                b.tpMqttPayloadFalseIcon.setBackgroundResource(tile.iconResFalse)
-                b.tpMqttPayloadFalseIcon.backgroundTintList =
-                    ColorStateList.valueOf(tile.colorPalletFalse.color)
-
-                val drawableFalse = b.tpMqttPayloadFalseIconFrame.background as? GradientDrawable
-                drawableFalse?.mutate()
-                drawableFalse?.setStroke(1, tile.colorPalletFalse.color)
-                drawableFalse?.cornerRadius = 15f
-            }
-
-            is SelectTile -> {
-                val tile = tile as SelectTile
-
-                b.tpSelectShowPayload.isChecked = tile.showPayload
-            }
-
-            is TerminalTile -> {
-                val tile = tile as TerminalTile
-
-                b.tpMqttPayloadTypeBox.visibility = VISIBLE
-                b.tpPayloadType.check(
-                    if (tile.mqttData.varPayload) {
-                        b.tpMqttPayloadBox.visibility = GONE
-                        R.id.tp_mqtt_payload_var
-                    } else R.id.tp_mqtt_payload_val
-                )
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        tile.mqttData.payloads[if (tile.isDate) "date" else "time"] =
+                            cs.toString()
+                    }
+                })
             }
         }
     }

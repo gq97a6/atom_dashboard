@@ -1,35 +1,30 @@
 package com.netDashboard.tile.types.pick
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.createToast
 import com.netDashboard.databinding.PopupSelectBinding
+import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SelectTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_select
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
-    override var typeTag = "button"
+    override var typeTag = "select"
 
-    val list = mutableListOf("0" to "a", "1" to "b", "2" to "c")
+    val list = mutableListOf<Pair<String, String>>()
     var showPayload = false
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -42,18 +37,16 @@ class SelectTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
+        if (mqttData.pubs["base"].isNullOrEmpty()) return
+        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
+
         val notEmpty = list.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.size > 0) {
             val dialog = Dialog(adapter.context)
             val adapter = GenericAdapter(adapter.context)
 
             dialog.setContentView(R.layout.popup_select)
-            val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.ps_root))
-
-            val a = dialog.window?.attributes
-            a?.dimAmount = 0.9f
-            dialog.window?.attributes = a
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.root))
 
             adapter.onBindViewHolder = { _, holder, pos ->
                 val text = holder.itemView.findViewById<TextView>(R.id.is_text)
@@ -67,14 +60,19 @@ class SelectTile : Tile() {
                 dialog.dismiss()
             }
 
+            binding.padding.setOnClickListener {
+                dialog.dismiss()
+            }
+
             adapter.setHasStableIds(true)
             adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
 
             binding.psRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
             binding.psRecyclerView.adapter = adapter
 
+            dialog.dialogSetup()
+            G.theme.apply(binding.root)
             dialog.show()
-            G.theme.apply(binding.root as ViewGroup)
         } else createToast(adapter.context, "Add options first")
     }
 }

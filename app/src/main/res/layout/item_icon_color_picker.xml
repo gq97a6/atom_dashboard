@@ -37,7 +37,6 @@
                 android:layout_gravity="center"
                 android:tag="colorB"
                 android:text="Hue:"
-                android:textColor="@color/gray100"
                 android:textSize="12dp" />
 
             <com.google.android.material.slider.Slider
@@ -65,7 +64,6 @@
                 android:layout_gravity="center"
                 android:tag="colorB"
                 android:text="Saturation:"
-                android:textColor="@color/gray100"
                 android:textSize="12dp" />
 
             <com.google.android.material.slider.Slider
@@ -94,7 +92,6 @@
                 android:layout_gravity="center"
                 android:tag="colorB"
                 android:text="Value:"
-                android:textColor="@color/gray100"
                 android:textSize="12dp" />
 
             <com.google.android.material.slider.Slider

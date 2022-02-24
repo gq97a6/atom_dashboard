@@ -2,11 +2,13 @@
 
 package com.netDashboard
 
+import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.view.View
 import android.view.ViewGroup
@@ -220,6 +222,13 @@ fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
     }
 
     setOnClick(this)
+}
+
+fun Dialog.dialogSetup() {
+    val a = this.window?.attributes
+    a?.dimAmount = 0.9f
+    this.window?.attributes = a
+    this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }
 
 //@SuppressLint("ShowToast")

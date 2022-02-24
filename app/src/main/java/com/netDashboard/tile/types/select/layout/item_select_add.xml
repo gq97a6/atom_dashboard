@@ -8,24 +8,22 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/isa_alias"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
             android:layout_height="35dp"
+            android:layout_marginEnd="2.5dp"
+            android:layout_weight="1"
             android:background="@drawable/background_frame_sharp"
             android:hint="random"
             android:importantForAutofill="no"
-            android:layout_marginEnd="2.5dp"
             android:inputType="text"
             android:maxLength="15"
             android:paddingHorizontal="10dp"
             android:tag="basic"
-            android:textColor="@color/gray100"
-            android:textColorHint="@color/gray65"
             android:textCursorDrawable="@null"
             android:textSize="15dp" />
 
@@ -42,8 +40,6 @@
             android:maxLength="15"
             android:paddingHorizontal="10dp"
             android:tag="basic"
-            android:textColor="@color/gray100"
-            android:textColorHint="@color/gray65"
             android:textCursorDrawable="@null"
             android:textSize="15dp" />
 
@@ -51,8 +47,8 @@
             android:id="@+id/isa_remove"
             style="@style/button"
             android:layout_width="30dp"
-            android:layout_gravity="center"
             android:layout_height="30dp"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:background="@drawable/button_trashcan"
             android:clickable="false"

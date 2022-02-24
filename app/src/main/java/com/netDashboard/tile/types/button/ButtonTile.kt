@@ -14,8 +14,6 @@ class ButtonTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_button
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
     override var typeTag = "button"
 

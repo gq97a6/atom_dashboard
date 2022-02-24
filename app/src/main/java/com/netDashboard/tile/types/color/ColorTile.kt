@@ -9,8 +9,6 @@ class ColorTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_color
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
     override var typeTag = "button"
 }

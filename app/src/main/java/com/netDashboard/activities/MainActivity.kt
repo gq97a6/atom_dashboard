@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(!onBackPressedBoolean()) {
+        if (!onBackPressedBoolean()) {
             if (!fm.popBackStack()) super.onBackPressed()
         }
     }

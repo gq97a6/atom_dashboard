@@ -1,8 +1,6 @@
 package com.netDashboard.activities.fragments
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +18,7 @@ import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
 import com.netDashboard.databinding.PopupCopyBrokerBinding
+import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme
@@ -181,7 +180,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 list.removeAt(dashboards.indexOf(dashboard))
 
                 dialog.setContentView(R.layout.popup_copy_broker)
-                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.pcb_root))
+                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.root))
 
                 adapter.setHasStableIds(true)
                 adapter.onBindViewHolder = { _, holder, pos ->
@@ -207,15 +206,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 binding.pcbRecyclerView.adapter = adapter
 
                 adapter.submitList(list)
+
+                dialog.dialogSetup()
+                theme.apply(binding.root)
                 dialog.show()
-
-                val a = dialog.window?.attributes
-
-                a?.dimAmount = 0.9f
-                dialog.window?.attributes = a
-                dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-                theme.apply(binding.root as ViewGroup)
             }
         }
 

@@ -35,6 +35,8 @@ class DaemonGroupsManager(val context: Context) {
         for (i in 0..list.size - 1) {
             if (i !in assigned) notifyDashboardRemoved(list[i].mqttd.d)
         }
+
+        run {}
     }
 
     fun notifyDashboardRemoved(dashboard: Dashboard) {

@@ -9,8 +9,6 @@ class ThermostatTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_thermostat
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
     override var typeTag = "button"
 }

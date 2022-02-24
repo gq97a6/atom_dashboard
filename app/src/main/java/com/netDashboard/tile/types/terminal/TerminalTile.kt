@@ -1,8 +1,6 @@
 package com.netDashboard.tile.types.terminal
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -12,7 +10,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.databinding.PopupTextBinding
-import com.netDashboard.globals.G
+import com.netDashboard.dialogSetup
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -24,8 +23,6 @@ class TerminalTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_terminal
-
-    override val mqttData = MqttData("1")
 
     @JsonIgnore
     override var typeTag = "terminal"
@@ -66,13 +63,13 @@ class TerminalTile : Tile() {
         super.onClick(v, e)
 
         if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd == null) return
+        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         if (mqttData.varPayload) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.popup_text)
-            val binding = PopupTextBinding.bind(dialog.findViewById(R.id.pt_root))
+            val binding = PopupTextBinding.bind(dialog.findViewById(R.id.root))
 
             binding.ptTopic.text = mqttData.pubs["base"].toString()
 
@@ -85,15 +82,13 @@ class TerminalTile : Tile() {
                 dialog.dismiss()
             }
 
+            binding.padding.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.dialogSetup()
+            theme.apply(binding.root)
             dialog.show()
-
-            val a = dialog.window?.attributes
-
-            a?.dimAmount = 0.9f
-            dialog.window?.attributes = a
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-            G.theme.apply(binding.root)
         } else send(mqttData.payloads["base"] ?: "", mqttData.qos)
     }
 

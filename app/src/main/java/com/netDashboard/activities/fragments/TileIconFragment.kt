@@ -13,7 +13,6 @@ import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.databinding.FragmentTileIconBinding
 import com.netDashboard.globals.G.getIconColorPallet
-import com.netDashboard.globals.G.getIconHSV
 import com.netDashboard.globals.G.getIconRes
 import com.netDashboard.globals.G.theme
 import com.netDashboard.icon.IconAdapter

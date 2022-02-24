@@ -19,6 +19,7 @@ import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 import com.netDashboard.tile.types.terminal.TerminalTile
+import com.netDashboard.tile.types.time.TimeTile
 
 class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
     private lateinit var b: FragmentTileNewBinding
@@ -66,10 +67,15 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             b.tnTerminalRipple.click()
             addTile(TerminalTile())
         }
+
+        b.tnTime.setOnClickListener {
+            b.tnTimeRipple.click()
+            addTile(TimeTile())
+        }
 //
-        //b.tnTime.setOnClickListener {
-        //    b.tnTimeRipple.click()
-        //    addTile(TimeTile())
+        //b.tnColor.setOnClickListener {
+        //    b.tnColorRipple.click()
+        //    addTile(ColorTile())
         //}
 //
         //b.tnThermostat.setOnClickListener {
@@ -77,19 +83,9 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
         //    addTile(ThermostatTile())
         //}
 //
-        //b.tnColor.setOnClickListener {
-        //    b.tnColorRipple.click()
-        //    addTile(ColorTile())
-        //}
-//
         //b.tnLights.setOnClickListener {
         //    b.tnLightsRipple.click()
         //    addTile(LightsTile())
-        //}
-//
-        //b.tnGraph.setOnClickListener {
-        //    b.tnGraphRipple.click()
-        //    addTile(GraphTile())
         //}
     }
 
@@ -99,6 +95,7 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
         isDone = true
 
         t.dashboard = dashboard
+        t.onCreateTile()
         dashboard.tiles.add(t)
 
         tile = t

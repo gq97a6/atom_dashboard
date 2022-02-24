@@ -11,7 +11,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET

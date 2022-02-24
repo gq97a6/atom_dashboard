@@ -1,8 +1,6 @@
 package com.netDashboard.tile
 
 import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -15,13 +13,13 @@ import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
+import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
-import kotlin.math.log
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
@@ -42,7 +40,7 @@ abstract class Tile : RecyclerViewItem() {
 
     abstract var typeTag: String
 
-    abstract val mqttData: MqttData
+    val mqttData = MqttData()
 
     var doLog = false
     var doNotify = false
@@ -78,7 +76,7 @@ abstract class Tile : RecyclerViewItem() {
         )
     }
 
-    open class MqttData(defaultPubValue: String = "") {
+    open class MqttData() {
         var isEnabled = true
         var lastReceive: Date? = null
 
@@ -94,7 +92,7 @@ abstract class Tile : RecyclerViewItem() {
 
         var varPayload = true
         var payloads: MutableMap<String, String> =
-            mutableMapOf("base" to defaultPubValue, "true" to "1", "false" to "0")
+            mutableMapOf("base" to "", "true" to "1", "false" to "0")
         var confirmPub = false
         var payloadIsJson = false
     }
@@ -130,7 +128,7 @@ abstract class Tile : RecyclerViewItem() {
         val dialog = Dialog(adapter.context)
 
         dialog.setContentView(R.layout.popup_confirm)
-        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.pc_root))
+        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.root))
 
         binding.pcConfirm.setOnClickListener {
             send()
@@ -141,18 +139,16 @@ abstract class Tile : RecyclerViewItem() {
             dialog.dismiss()
         }
 
+        binding.padding.setOnClickListener {
+            dialog.dismiss()
+        }
+
         binding.pcConfirm.text = "PUBLISH"
         binding.pcText.text = "Confirm publishing"
 
-        dialog.show()
-
-        val a = dialog.window?.attributes
-
-        a?.dimAmount = 0.9f
-        dialog.window?.attributes = a
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+        dialog.dialogSetup()
         theme.apply(binding.root)
+        dialog.show()
     }
 
     open fun onSend(
@@ -194,11 +190,13 @@ abstract class Tile : RecyclerViewItem() {
             }
         }
 
-        if(doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
 
         onReceive(data, jsonResult)
     }
 
     open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
     }
+
+    open fun onCreateTile() {}
 }

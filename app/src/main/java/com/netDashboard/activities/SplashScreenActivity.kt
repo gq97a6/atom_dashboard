@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.netDashboard.Activity
 import com.netDashboard.FolderTree.rootFolder
 import com.netDashboard.databinding.ActivitySplashScreenBinding
-import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.foreground_service.ForegroundServiceHandler
 import com.netDashboard.globals.G
@@ -29,6 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
         rootFolder = filesDir.canonicalPath.toString()
 
         if (service != null) {
+            service?.dgManager?.assign()
             onServiceReady()
         } else {
             G.initialize()

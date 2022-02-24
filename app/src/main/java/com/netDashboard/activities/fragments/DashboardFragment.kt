@@ -8,9 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.*
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.netDashboard.R
@@ -76,7 +74,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 Intent(requireContext(), SplashScreenActivity::class.java).also {
                     startActivity(it)
                 }
-            } else service?.dgManager?.assign()
+            } else {
+                service?.dgManager?.assign()
+            }
         }
 
         //Set dashboard status
@@ -195,7 +195,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemLongClick = { item ->
-            if(item is SliderTile && !item.dragCon || item !is SliderTile) {
+            if (item is SliderTile && !item.dragCon || item !is SliderTile) {
                 tile = item
                 (activity as MainActivity).fm.replaceWith(TilePropertiesFragment())
             }

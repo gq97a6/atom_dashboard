@@ -32,12 +32,14 @@
         android:tag="frame">
 
         <View
-            android:id="@+id/marginTop"
-            android:layout_width="match_parent"
+            android:id="@+id/marginTopStart"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/t_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="3" />
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/t_icon"
@@ -45,32 +47,84 @@
             android:layout_height="0dp"
             android:background="@drawable/icon_swap"
             android:tag="colorIcon"
-            app:layout_constraintBottom_toTopOf="@+id/t_tag"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/marginTop"
-            app:layout_constraintVertical_weight="15" />
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintStart_toEndOf="@+id/marginTopStart"
+            app:layout_constraintTop_toBottomOf="@id/marginTopStart" />
 
-        <TextView
-            android:id="@+id/t_tag"
+        <View
+            android:id="@+id/marginText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/t_icon"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toEndOf="@+id/t_icon"
+            app:layout_constraintTop_toTopOf="@id/t_icon" />
+
+        <LinearLayout
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/t_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/marginText"
+            app:layout_constraintTop_toTopOf="@+id/t_icon">
+
+            <TextView
+                android:id="@+id/t_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="15dp"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:gravity="bottom"
+                android:maxLines="1"
+                android:tag="color"
+                android:text="Empty" />
+
+            <TextView
+                android:id="@+id/t_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="color"
+                android:text="∞ seconds ago"
+                android:textSize="10dp" />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/marginValue"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toBottomOf="@+id/t_icon" />
+
+        <TextView
+            android:id="@+id/tt_value"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="10dp"
+            android:autoSizeMaxTextSize="20dp"
+            android:autoSizeMinTextSize="10dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
             android:gravity="center"
+            android:maxLines="4"
             android:tag="color"
-            android:text="time"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/marginBottom"
-            app:layout_constraintTop_toBottomOf="@+id/t_icon"
-            app:layout_constraintVertical_weight="10" />
+            android:text="empty"
+            app:layout_constraintHeight_percent="0.3"
+            app:layout_constraintTop_toBottomOf="@+id/marginValue" />
 
         <View
             android:id="@+id/marginBottom"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/t_tag"
-            app:layout_constraintVertical_weight="3" />
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintTop_toBottomOf="@+id/tt_value" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

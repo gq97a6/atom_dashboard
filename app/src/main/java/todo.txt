@@ -3,6 +3,7 @@ groups
 color that depends on value
 bugs
 log error on transfer
+time onReceive todo
 
 new tiles
     button //
@@ -10,12 +11,12 @@ new tiles
     switch //
     text //
     select //
-    terminal
-    time
-    thermostat
+    terminal //
     color
+    time
+
+    thermostat
     lights
-    graph
 
     (indicator,
     diode,

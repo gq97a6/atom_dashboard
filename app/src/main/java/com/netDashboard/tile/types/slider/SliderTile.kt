@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.databinding.PopupSliderBinding
+import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.roundCloser
@@ -24,8 +25,6 @@ class SliderTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_slider
-
-    override val mqttData = MqttData("@value")
 
     @JsonIgnore
     override var typeTag = "slider"
@@ -62,16 +61,19 @@ class SliderTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
+        if (mqttData.pubs["base"].isNullOrEmpty()) return
+        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
+
         if (!dragCon) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.popup_slider)
-            val binding = PopupSliderBinding.bind(dialog.findViewById(R.id.ps_root))
+            val binding = PopupSliderBinding.bind(dialog.findViewById(R.id.root))
 
             binding.psValue.text = value.toString()
             setBackground(value, binding.tsBackground)
 
-            binding.psRoot.setOnTouchListener { _, event ->
+            binding.root.setOnTouchListener { _, event ->
                 control(event, v.parent as View).let {
                     if (it.second) dialog.dismiss()
                     else {
@@ -82,7 +84,12 @@ class SliderTile : Tile() {
                 }
             }
 
-            theme.apply(binding.root, adapter.context, anim = false)
+            binding.padding.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.dialogSetup()
+            theme.apply(binding.root, anim = false)
             dialog.show()
         }
     }
@@ -116,7 +123,10 @@ class SliderTile : Tile() {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send((mqttData.payloads["base"] ?: "").replace("@value", value.toString()), mqttData.qos)
+                send(
+                    (mqttData.payloads["base"] ?: "").replace("@value", value.toString()),
+                    mqttData.qos
+                )
                 return Pair(value, true)
             }
         }
@@ -128,5 +138,11 @@ class SliderTile : Tile() {
         val params = background?.layoutParams as ConstraintLayout.LayoutParams?
         params?.matchConstraintPercentWidth = abs((((from - value).toFloat() / (to - from))))
         background?.requestLayout()
+    }
+
+    override fun onCreateTile() {
+        super.onCreateTile()
+
+        mqttData.payloads["base"] = "@value"
     }
 }

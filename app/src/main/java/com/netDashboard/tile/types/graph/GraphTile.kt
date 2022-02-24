@@ -9,8 +9,6 @@ class GraphTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_graph
 
-    override val mqttData = MqttData("")
-
     @JsonIgnore
     override var typeTag = "button"
 }

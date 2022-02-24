@@ -2,8 +2,6 @@ package com.netDashboard
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.view.isVisible
@@ -30,9 +28,7 @@ object Transfer {
             var observer: (Pair<String?, MqttMessage?>) -> Unit = {}
 
             dialog.setContentView(R.layout.popup_transfer)
-            val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.pt_root))
-            dialog.show()
-
+            val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.root))
 
             var connectionObserver: (Boolean) -> Unit
             connectionObserver = {
@@ -143,13 +139,9 @@ object Transfer {
                 dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
 
-            val a = dialog.window?.attributes
-            a?.dimAmount = 0.9f
-
-            dialog.window?.attributes = a
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
+            dialog.dialogSetup()
             theme.apply(binding.root)
+            dialog.show()
         }
     }
 }

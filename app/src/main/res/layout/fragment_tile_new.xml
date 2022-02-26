@@ -328,46 +328,6 @@
                 android:layout_marginTop="10dp">
 
                 <View
-                    android:id="@+id/tn_thermostat_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
-
-                <LinearLayout
-                    android:id="@+id/tn_thermostat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Thermostat"
-                        android:textSize="25dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="..."
-                        android:textSize="18dp" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <View
                     android:id="@+id/tn_color_ripple"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -395,7 +355,48 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:tag="colorB"
-                        android:text="..."
+                        android:text="Pick and send color."
+                        android:textSize="18dp" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <View
+                    android:id="@+id/tn_thermostat_ripple"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_ripple"
+                    android:elevation="20dp"
+                    android:tag="rippleForeground" />
+
+                <LinearLayout
+                    android:id="@+id/tn_thermostat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_frame"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:tag="frame">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorA"
+                        android:text="Thermostat"
+                        android:textSize="25dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:textStyle="bold"
+                        android:text="COMING SOON"
                         android:textSize="18dp" />
 
                 </LinearLayout>
@@ -435,7 +436,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:tag="colorB"
-                        android:text="..."
+                        android:textStyle="bold"
+                        android:text="COMING SOON"
                         android:textSize="18dp" />
 
                 </LinearLayout>

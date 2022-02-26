@@ -33,11 +33,13 @@ import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.tile.types.button.TextTile
+import com.netDashboard.tile.types.color.ColorTile
 import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 import com.netDashboard.tile.types.terminal.TerminalTile
 import com.netDashboard.tile.types.time.TimeTile
+import java.util.*
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -58,6 +60,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpTag.setText(tile.tag)
         b.tpIcon.setBackgroundResource(tile.iconRes)
+        b.tpTileType.text = tile.typeTag.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        }
 
         b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
         val drawable = b.tpIconFrame.background as? GradientDrawable
@@ -575,12 +580,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpTimeType.check(
                     when (tile.isDate) {
                         false -> {
-                            b.tpMqttPayload.setText(G.tile.mqttData.payloads["time"])
+                            b.tpMqttPayload.setText(tile.mqttData.payloads["time"])
                             b.tpPayloadHint.text = "Use @hour and @minute to insert current values."
                             R.id.tp_time_time
                         }
                         true -> {
-                            b.tpMqttPayload.setText(G.tile.mqttData.payloads["date"])
+                            b.tpMqttPayload.setText(tile.mqttData.payloads["date"])
                             b.tpPayloadHint.text =
                                 "Use @day, @month, @year to insert current values."
                             R.id.tp_time_date
@@ -601,7 +606,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
 
                     b.tpTimeMilitaryBox.visibility = if (tile.isDate) GONE else VISIBLE
-                    b.tpMqttPayload.setText(G.tile.mqttData.payloads[if (tile.isDate) "date" else "time"])
+                    b.tpMqttPayload.setText(tile.mqttData.payloads[if (tile.isDate) "date" else "time"])
                     b.tpPayloadHint.text =
                         "Use ${if (tile.isDate) "@day, @month, @year" else "@hour and @minute"} to insert current values."
                 }
@@ -630,6 +635,73 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     ) {
                         tile.mqttData.payloads[if (tile.isDate) "date" else "time"] =
                             cs.toString()
+                    }
+                })
+            }
+//--------------------------------------------------------------------------------------------------
+            is ColorTile -> {
+                val tile = tile as ColorTile
+
+                b.tpColor.visibility = VISIBLE
+                b.tpMqttPayloadBox.visibility = VISIBLE
+                b.tpPayloadHint.visibility = VISIBLE
+
+                b.tpColorType.check(
+                    when (tile.colorType) {
+                        "hsv" -> R.id.tp_color_hsv
+                        "hex" -> R.id.tp_color_hex
+                        "rgb" -> R.id.tp_color_rgb
+                        else -> R.id.tp_color_hsv
+                    }
+                )
+
+                b.tpPayloadHint.text =
+                    "Use ${
+                        when (tile.colorType) {
+                            "hsv" -> "@h, @s, @v"
+                            "hex" -> "@hex"
+                            "rgb" -> "@r, @g, @b"
+                            else -> "@hex"
+                        }
+                    } to insert current value."
+
+                b.tpColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.colorType = when (id) {
+                        R.id.tp_color_hsv -> "hsv"
+                        R.id.tp_color_hex -> "hex"
+                        R.id.tp_color_rgb -> "rgb"
+                        else -> "hex"
+                    }
+
+                    b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                    b.tpPayloadHint.text =
+                        "Use ${
+                            when (tile.colorType) {
+                                "hsv" -> "@h, @s, @v"
+                                "hex" -> "@hex"
+                                "rgb" -> "@r, @g, @b"
+                                else -> "@hex"
+                            }
+                        } to insert current value."
+                }
+
+                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
+                    override fun afterTextChanged(cs: Editable) {}
+                    override fun beforeTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    override fun onTextChanged(
+                        cs: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                        tile.mqttData.payloads[tile.colorType] = cs.toString()
                     }
                 })
             }

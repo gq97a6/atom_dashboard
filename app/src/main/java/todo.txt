@@ -1,9 +1,7 @@
 //expand ------------------------------
 groups
 color that depends on value
-bugs
 log error on transfer
-time onReceive todo
 
 new tiles
     button //
@@ -12,8 +10,8 @@ new tiles
     text //
     select //
     terminal //
+    time //
     color
-    time
 
     thermostat
     lights

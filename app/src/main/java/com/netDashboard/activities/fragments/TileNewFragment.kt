@@ -15,6 +15,7 @@ import com.netDashboard.globals.G.tile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile
+import com.netDashboard.tile.types.color.ColorTile
 import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
@@ -72,11 +73,11 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             b.tnTimeRipple.click()
             addTile(TimeTile())
         }
-//
-        //b.tnColor.setOnClickListener {
-        //    b.tnColorRipple.click()
-        //    addTile(ColorTile())
-        //}
+
+        b.tnColor.setOnClickListener {
+            b.tnColorRipple.click()
+            addTile(ColorTile())
+        }
 //
         //b.tnThermostat.setOnClickListener {
         //    b.tnThermostatRipple.click()

@@ -17,7 +17,6 @@ class DaemonGroupsManager(val context: Context) {
     fun get(id: Long): DaemonGroup? = list.find { it.dashboard.id == id }
 
     fun assign() {
-        val assigned = mutableListOf<Int>()
 
         //Pair dashboards and daemonGroups
         dashboards.forEach { d ->
@@ -26,17 +25,19 @@ class DaemonGroupsManager(val context: Context) {
                     d.dg = dg
                     dg.mqttd.d = d
                     dg.mqttd.notifyNewAssignment()
-                    assigned.add(list.indexOf(dg))
-                } else notifyDashboardAdded(d)
+                } else {
+                    notifyDashboardNew(d)
+                }
             }
         }
 
-        //Deprecate not paired
-        for (i in 0..list.size - 1) {
-            if (i !in assigned) notifyDashboardRemoved(list[i].mqttd.d)
-        }
+        val assigned = dashboards.map { it.dg }
 
-        run {}
+        //Deprecate not paired
+        list.forEach { if (it !in assigned) it.deprecate() }
+
+        //Remove not paired
+        list.removeIf { it.isDeprecated }
     }
 
     fun notifyDashboardRemoved(dashboard: Dashboard) {
@@ -44,7 +45,7 @@ class DaemonGroupsManager(val context: Context) {
         list.remove(dashboard.dg)
     }
 
-    fun notifyDashboardAdded(dashboard: Dashboard) {
+    fun notifyDashboardNew(dashboard: Dashboard) {
         val dg = DaemonGroup(context, dashboard)
         list.add(dg)
         dashboard.dg = dg

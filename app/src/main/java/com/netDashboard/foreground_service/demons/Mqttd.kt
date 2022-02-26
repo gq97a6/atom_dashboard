@@ -63,6 +63,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         try {
             client.subscribe(topic, qos, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    client.topics.add(Pair(topic, qos))
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -73,13 +74,14 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         }
     }
 
-    private fun unsubscribe(topic: String) {
+    private fun unsubscribe(topic: String, qos: Int) {
 
         if (!client.isConnected) return
 
         try {
             client.unsubscribe(topic, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    client.topics.remove(Pair(topic, qos))
                 }
 
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
@@ -105,10 +107,8 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         val unsubTopics = client.topics - topics.toSet()
         val subTopics = topics - client.topics.toSet()
 
-        for (t in unsubTopics) unsubscribe(t.first)
+        for (t in unsubTopics) unsubscribe(t.first, t.second)
         for (t in subTopics) subscribe(t.first, t.second)
-
-        client.topics = topics
     }
 
     inner class MqttdConnectionHandler {

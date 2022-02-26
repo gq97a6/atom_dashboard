@@ -30,10 +30,11 @@ object Transfer {
             dialog.setContentView(R.layout.popup_transfer)
             val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.root))
 
+            var transferCaptured = false
             var connectionObserver: (Boolean) -> Unit
             connectionObserver = {
                 dashboard.dg?.mqttd?.let {
-                    if (!it.client.isConnected) {
+                    if (!it.client.isConnected && !transferCaptured) {
                         dialog.dismiss()
                         createToast(requireContext(), "Connection required", 1000)
                     }
@@ -43,9 +44,13 @@ object Transfer {
             dashboard.dg?.mqttd?.conHandler?.isDone?.observe(viewLifecycleOwner, connectionObserver)
 
             binding.ptReceive.setOnClickListener {
+
                 fun receiveMode(enable: Boolean = binding.ptTransferBox.isVisible) {
                     binding.ptTransferTopic.isEnabled = !enable
                     if (!enable) {
+                        dashboard.dg?.mqttd?.data?.removeObserver(observer)
+                        dashboard.dg?.mqttd?.topicCheck()
+
                         binding.ptTransferBox.visibility = VISIBLE
                         binding.ptReceiveIcon.setBackgroundResource(R.drawable.il_arrow_import)
                         binding.ptReceiveFrame.clearAnimation()
@@ -56,9 +61,9 @@ object Transfer {
 
                         var ignoreFirst = false
                         observer = { data ->
-
                             if (data.first == binding.ptTransferTopic.text.toString() && ignoreFirst) {
                                 dashboard.dg?.mqttd?.data?.removeObserver(observer)
+                                transferCaptured = true
 
                                 val save: List<String> = try {
                                     G.mapper.readerForListOf(String::class.java)
@@ -93,6 +98,7 @@ object Transfer {
                                             SplashScreenActivity::class.java
                                         )
                                     )
+
                                     activity?.finish()
                                     activity?.finishAffinity()
                                 } else {
@@ -107,12 +113,11 @@ object Transfer {
 
                         dashboard.dg?.mqttd?.data?.removeObserver(observer)
                         dashboard.dg?.mqttd?.data?.observe(viewLifecycleOwner, observer)
+                        dashboard.dg?.mqttd?.subscribe(binding.ptTransferTopic.text.toString(), 0)
                     }
                 }
 
                 receiveMode()
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
-                dashboard.dg?.mqttd?.subscribe(binding.ptTransferTopic.text.toString(), 0)
             }
 
             binding.ptTransfer.setOnClickListener {

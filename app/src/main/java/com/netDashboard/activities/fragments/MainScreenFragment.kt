@@ -56,7 +56,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             dashboards.add(dashboard)
             dashboards.saveToFile()
 
-            ForegroundService.service?.dgManager?.notifyDashboardAdded(dashboard)
+            ForegroundService.service?.dgManager?.notifyDashboardNew(dashboard)
 
             setCurrentDashboard(dashboard.id)
             (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())

@@ -80,10 +80,10 @@ abstract class Tile : RecyclerViewItem() {
         var isEnabled = true
         var lastReceive: Date? = null
 
-        val subs: MutableMap<String, String> = mutableMapOf()
-        val pubs: MutableMap<String, String> = mutableMapOf()
-        val colors: MutableMap<String, Int> = mutableMapOf()
-        val jsonPaths: MutableMap<String, String> = mutableMapOf()
+        val subs = mutableMapOf<String, String>()
+        val pubs = mutableMapOf<String, String>()
+        val colors = mutableMapOf<String, Int>()
+        val jsonPaths = mutableMapOf<String, String>()
 
         var qos = 0
             set(value) {

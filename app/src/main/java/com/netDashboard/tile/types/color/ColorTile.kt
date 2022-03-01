@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import android.widget.TextView
+import android.view.ViewGroup
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -15,6 +15,7 @@ import com.netDashboard.R
 import com.netDashboard.databinding.PopupColorPickerBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
+import com.netDashboard.globals.G.theme
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -24,16 +25,54 @@ class ColorTile : Tile() {
     override val layout = R.layout.tile_color
 
     var colorType = "rgb"
+        set(value) {
+            field = value
+
+
+            fun build(flag: String, pattern: String, reg: String = flag) {
+
+            }
+
+            mqttData.payloads[colorType]?.let { pattern ->
+                when (colorType) {
+                    "hsv" -> {
+                        toRemoves["hsv"] = Regex("@[hsv]").split(pattern) as MutableList
+                        toRemoves["hsv"]?.removeIf { it.isEmpty() }
+
+                        val indexes = Regex("(?<=@)[hsv]").findAll(pattern).map { it.value }
+                        flagIndexes["h"] = indexes.indexOf("h")
+                        flagIndexes["s"] = indexes.indexOf("s")
+                        flagIndexes["v"] = indexes.indexOf("v")
+                    }
+                    "hex" -> {
+                        toRemoves["hex"] = Regex("@hex").split(pattern) as MutableList
+                        toRemoves["hex"]?.removeIf { it.isEmpty() }
+                    }
+                    "rgb" -> {
+                        toRemoves["rgb"] = Regex("@[rgb]").split(pattern) as MutableList
+                        toRemoves["rgb"]?.removeIf { it.isEmpty() }
+
+                        val indexes = Regex("(?<=@)[rgb]").findAll(pattern).map { it.value }
+                        flagIndexes["r"] = indexes.indexOf("r")
+                        flagIndexes["g"] = indexes.indexOf("g")
+                        flagIndexes["b"] = indexes.indexOf("b")
+                    }
+                    else -> {}
+                }
+            }
+
+            //find flags
+            //flag to index
+            //to remove array
+
+        }
+
     var hsvPicked = floatArrayOf(0f, 1f, 1f)
+    var toRemoves = mutableMapOf<String, MutableList<String>>()
+    var flagIndexes = mutableMapOf<String, Int>()
 
     @JsonIgnore
     override var typeTag = "color"
-
-    var value = ""
-        set(value) {
-            field = value
-            holder?.itemView?.findViewById<TextView>(R.id.tc_value)?.text = value
-        }
 
     override fun onCreateTile() {
         super.onCreateTile()
@@ -136,21 +175,59 @@ class ColorTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        value = jsonResult["value"] ?: data.second.toString()
+        var value = jsonResult["value"] ?: data.second.toString()
 
-        //hsvPicked = when (colorType) {
-        //    "hsv" -> {
-        //        floatArrayOf(0f, 0f, 0f)
-        //    }
-        //    "hex" -> {
-        //        floatArrayOf(0f, 0f, 0f)
-        //    }
-        //    "rgb" -> {
-        //        floatArrayOf(0f, 0f, 0f)
-        //    }
-        //    else -> {
-        //        floatArrayOf(0f, 0f, 0f)
-        //    }
-        //}
+        try {
+
+            when (colorType) {
+                "hsv" -> {
+                    toRemoves["hsv"]?.forEach {
+                        value = value.replace(it, " ")
+                    }
+
+                    val r = value.split(" ") as MutableList
+                    r.removeIf { it.isEmpty() }
+
+                    hsvPicked = floatArrayOf(
+                        r[flagIndexes["h"]!!].toFloat(),
+                        r[flagIndexes["s"]!!].toFloat() / 100,
+                        r[flagIndexes["v"]!!].toFloat() / 100
+                    )
+                }
+                "hex" -> {
+                    toRemoves["hex"]?.forEach {
+                        value = value.replace(it, "")
+                    }
+
+                    Color.colorToHSV(Integer.parseInt(value, 16), hsvPicked)
+                }
+                "rgb" -> {
+                    toRemoves["rgb"]?.forEach {
+                        value = value.replace(it, " ")
+                    }
+
+                    val r = value.split(" ") as MutableList
+                    r.removeIf { it.isEmpty() }
+
+                    Color.colorToHSV(
+                        Color.rgb(
+                            r[flagIndexes["r"]!!].toInt(),
+                            r[flagIndexes["g"]!!].toInt(),
+                            r[flagIndexes["b"]!!].toInt()
+                        ), hsvPicked
+                    )
+                }
+            }
+
+            holder?.itemView?.let {
+                theme.apply(
+                    it as ViewGroup,
+                    anim = false,
+                    colorPallet = theme.a.getColorPallet(hsvPicked)
+                )
+            }
+        } catch (e: Exception) {
+            null
+        }
     }
 }

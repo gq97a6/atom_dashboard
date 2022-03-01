@@ -31,7 +31,6 @@ import androidx.fragment.app.commit
 import com.netDashboard.globals.G
 import java.util.*
 
-
 const val A = 255 //100%
 const val B = 150 //60%
 const val C = 75 //30%
@@ -184,6 +183,7 @@ fun View.click() {
     this.isPressed = false
     this.invalidate()
 }
+
 
 fun String.digitsOnly(): String = Regex("[^0-9]").replace(this, "")
 

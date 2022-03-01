@@ -421,56 +421,64 @@ class Theme {
             return getColorPallet(hsv, isAltCon).color
         }
 
-        fun getColorPallet(hsv: FloatArray, isAltCon: Boolean = false): ColorPallet {
-            var col = 0
-            var maxS: Float = 1f
-            var maxV: Float = 1f
-            var minV: Float = 0f
+        fun getColorPallet(
+            hsv: FloatArray,
+            isAltCon: Boolean = false,
+            isRaw: Boolean = false
+        ): ColorPallet {
 
+            val color: Int
             val colorBackground = if (isDark) Color.rgb(20, 20, 20)
             else Color.rgb(240, 240, 240)
 
-            //Compute maximal saturation/value
-            for (i in 100 downTo 0) {
-                col = Color.HSVToColor(
-                    floatArrayOf(
-                        hsv[0],
-                        if (isDark) i / 100f else hsv[1],
-                        if (isDark) 1f else i / 100f
-                    )
-                )
+            if (!isRaw) {
+                var col = 0
+                var maxS: Float = 1f
+                var maxV: Float = 1f
+                var minV: Float = 0f
 
-                if (ColorUtils.calculateContrast(
-                        col,
-                        colorBackground
-                    ) > if (isAltCon) 1.7 else 5.0
-                ) {
-                    maxS = if (isDark) i / 100f else 1f
-                    maxV = if (isDark) 1f else i / 100f
-                    break
-                }
-            }
-
-            //Compute minimal value
-            if (!isDark) minV = 0f
-            else {
+                //Compute maximal saturation/value
                 for (i in 100 downTo 0) {
-                    if (ColorUtils.calculateContrast(col, colorBackground) < 3.6) {
-                        minV = i / 100f
+                    col = Color.HSVToColor(
+                        floatArrayOf(
+                            hsv[0],
+                            if (isDark) i / 100f else hsv[1],
+                            if (isDark) 1f else i / 100f
+                        )
+                    )
+
+                    if (ColorUtils.calculateContrast(
+                            col,
+                            colorBackground
+                        ) > if (isAltCon) 1.7 else 5.0
+                    ) {
+                        maxS = if (isDark) i / 100f else 1f
+                        maxV = if (isDark) 1f else i / 100f
                         break
                     }
-
-                    col = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], i / 100f))
                 }
-            }
 
-            val color = Color.HSVToColor(
-                floatArrayOf(
-                    hsv[0],
-                    maxS * hsv[1],
-                    minV + (maxV - minV) * if (isDark) 1f else hsv[2]
+                //Compute minimal value
+                if (!isDark) minV = 0f
+                else {
+                    for (i in 100 downTo 0) {
+                        if (ColorUtils.calculateContrast(col, colorBackground) < 3.6) {
+                            minV = i / 100f
+                            break
+                        }
+
+                        col = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], i / 100f))
+                    }
+                }
+
+                color = Color.HSVToColor(
+                    floatArrayOf(
+                        hsv[0],
+                        maxS * hsv[1],
+                        minV + (maxV - minV) * if (isDark) 1f else hsv[2]
+                    )
                 )
-            )
+            } else color = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], hsv[2]))
 
             val a = blendARGB(color, colorBackground, 0.2f)
             val b = blendARGB(a, colorBackground, 0.35f)

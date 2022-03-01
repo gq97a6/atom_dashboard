@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -14,8 +15,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.databinding.PopupColorPickerBinding
 import com.netDashboard.dialogSetup
-import com.netDashboard.globals.G
 import com.netDashboard.globals.G.theme
+import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
@@ -24,14 +25,17 @@ class ColorTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_color
 
+    @JsonIgnore
+    override var typeTag = "color"
+
+    var paintRaw = false
+    var hsvPicked = floatArrayOf(0f, 1f, 1f)
+    var toRemoves = mutableMapOf<String, MutableList<String>>()
+    var flagIndexes = mutableMapOf<String, Int>()
+
     var colorType = "rgb"
         set(value) {
             field = value
-
-
-            fun build(flag: String, pattern: String, reg: String = flag) {
-
-            }
 
             mqttData.payloads[colorType]?.let { pattern ->
                 when (colorType) {
@@ -60,19 +64,14 @@ class ColorTile : Tile() {
                     else -> {}
                 }
             }
-
-            //find flags
-            //flag to index
-            //to remove array
-
         }
 
-    var hsvPicked = floatArrayOf(0f, 1f, 1f)
-    var toRemoves = mutableMapOf<String, MutableList<String>>()
-    var flagIndexes = mutableMapOf<String, Int>()
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
 
-    @JsonIgnore
-    override var typeTag = "color"
+        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
+            View.GONE
+    }
 
     override fun onCreateTile() {
         super.onCreateTile()
@@ -80,6 +79,16 @@ class ColorTile : Tile() {
         mqttData.payloads["hsv"] = "@h;@s;@v"
         mqttData.payloads["hex"] = "#@hex"
         mqttData.payloads["rgb"] = "@r;@g;@b"
+    }
+
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
+        super.onSetTheme(holder)
+
+        theme.apply(
+            holder.itemView as ViewGroup,
+            anim = false,
+            colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+        )
     }
 
     override fun onClick(v: View, e: MotionEvent) {
@@ -165,7 +174,7 @@ class ColorTile : Tile() {
         }
 
         dialog.dialogSetup()
-        G.theme.apply(binding.root)
+        theme.apply(binding.root)
         dialog.show()
     }
 
@@ -223,7 +232,7 @@ class ColorTile : Tile() {
                 theme.apply(
                     it as ViewGroup,
                     anim = false,
-                    colorPallet = theme.a.getColorPallet(hsvPicked)
+                    colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
                 )
             }
         } catch (e: Exception) {

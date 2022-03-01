@@ -646,6 +646,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadBox.visibility = VISIBLE
                 b.tpPayloadHint.visibility = VISIBLE
 
+                b.tpColorPaintRaw.isChecked = tile.paintRaw
+
                 b.tpColorType.check(
                     when (tile.colorType) {
                         "hsv" -> R.id.tp_color_hsv
@@ -664,6 +666,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                             else -> "@hex"
                         }
                     } to insert current value."
+
+                b.tpColorPaintRaw.setOnCheckedChangeListener { _, state ->
+                    tile.paintRaw = state
+                }
 
                 b.tpColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                     tile.colorType = when (id) {

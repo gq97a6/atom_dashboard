@@ -16,8 +16,8 @@ import com.netDashboard.Settings.Companion.saveToFile
 import com.netDashboard.Theme.Companion.saveToFile
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.activities.SplashScreenActivity
-import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.dashboard.Dashboards.Companion.saveToFile
+import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.databinding.FragmentSettingsBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboards
@@ -99,7 +99,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             }
 
                             if (backup.isNotEmpty()) {
-                                val d = Dashboards.parseSave(backup[0])
+                                val d = Dashboard.parseSave(backup[0])
                                 val s = Settings.parseSave(backup[1])
                                 val t = Theme.parseSave(backup[2])
 
@@ -136,6 +136,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         viewConfig()
         theme.apply(b.root, requireContext())
 
+        b.sAnimateUpdate.setOnClickListener {
+            settings.animateUpdate = b.sAnimateUpdate.isChecked
+        }
+
         b.sLast.setOnClickListener {
             settings.startFromLast = b.sLast.isChecked
         }
@@ -159,6 +163,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun viewConfig() {
+        b.sAnimateUpdate.isChecked = settings.animateUpdate
         b.sLast.isChecked = settings.startFromLast
         b.sThemeIsDark.isChecked = theme.a.isDark
     }

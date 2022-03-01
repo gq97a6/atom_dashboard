@@ -19,6 +19,7 @@ import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.util.concurrent.ExecutionException
 
 class ColorTile : Tile() {
 

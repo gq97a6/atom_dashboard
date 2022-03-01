@@ -1,18 +1,6 @@
 //expand ------------------------------
-groups
-color that depends on value
-log error on transfer
 
 new tiles
-    button //
-    slider //
-    switch //
-    text //
-    select //
-    terminal //
-    time //
-    color
-
     thermostat
     lights
 

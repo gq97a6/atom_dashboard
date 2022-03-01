@@ -43,44 +43,96 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_frame"
                 android:gravity="center"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp"
                 android:tag="frame">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:tag="colorB"
-                    android:text="Last dashboard on boot:"
-                    android:textSize="15dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="colorB"
+                        android:text="Animate tile update:"
+                        android:textSize="15dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorC"
+                            android:text="OFF"
+                            android:textSize="12dp"
+                            tools:ignore="HardcodedText" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/s_animateUpdate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorC"
+                            android:text="ON"
+                            android:textSize="12dp"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="10dp">
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:tag="colorC"
-                        android:text="OFF"
-                        android:textSize="12dp"
-                        tools:ignore="HardcodedText" />
+                        android:tag="colorB"
+                        android:text="Last dashboard on boot:"
+                        android:textSize="15dp" />
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/s_last"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:tag="colorC"
-                        android:text="ON"
-                        android:textSize="12dp"
-                        tools:ignore="HardcodedText" />
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorC"
+                            android:text="OFF"
+                            android:textSize="12dp"
+                            tools:ignore="HardcodedText" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/s_last"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorC"
+                            android:text="ON"
+                            android:textSize="12dp"
+                            tools:ignore="HardcodedText" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

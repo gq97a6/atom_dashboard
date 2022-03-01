@@ -7,7 +7,6 @@ import com.netDashboard.Settings
 import com.netDashboard.Theme
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.dashboard.Dashboards
 import com.netDashboard.tile.Tile
 
 object G {
@@ -35,7 +34,7 @@ object G {
     }
 
     fun initialize() {
-        dashboards = Dashboards.parseSave() ?: mutableListOf()
+        dashboards = Dashboard.parseSave() ?: mutableListOf()
         theme = Theme.parseSave() ?: Theme()
         settings = Settings.parseSave() ?: Settings()
     }

@@ -2,13 +2,18 @@ package com.netDashboard.dashboard
 
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.FolderTree
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
+import com.netDashboard.globals.G
 import com.netDashboard.log.Log
+import com.netDashboard.prepareSave
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.Tile
+import java.io.File
+import java.io.FileReader
 import java.util.*
 import kotlin.random.Random
 
@@ -40,6 +45,29 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : Recycle
         get() = "$mqttAddress:$mqttPort"
 
     var bluetoothEnabled = false
+
+    companion object {
+        fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {
+            try {
+                File(FolderTree.dashboardsFile).writeText(save)
+            } catch (e: Exception) {
+                run { }
+            }
+        }
+
+        private fun getSaveFromFile() = try {
+            FileReader(FolderTree.dashboardsFile).readText()
+        } catch (e: Exception) {
+            ""
+        }
+
+        fun parseSave(save: String = getSaveFromFile()): MutableList<Dashboard>? =
+            try {
+                G.mapper.readerForListOf(Dashboard::class.java).readValue(save)
+            } catch (e: Exception) {
+                null
+            }
+    }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

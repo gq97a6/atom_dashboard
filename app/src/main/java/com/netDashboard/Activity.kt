@@ -3,7 +3,7 @@ package com.netDashboard
 import android.app.Activity
 import com.netDashboard.Settings.Companion.saveToFile
 import com.netDashboard.Theme.Companion.saveToFile
-import com.netDashboard.dashboard.Dashboards.Companion.saveToFile
+import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.settings

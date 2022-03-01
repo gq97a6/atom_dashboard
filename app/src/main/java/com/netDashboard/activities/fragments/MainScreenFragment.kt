@@ -10,8 +10,8 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.blink
 import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.dashboard.DashboardAdapter
-import com.netDashboard.dashboard.Dashboards.Companion.saveToFile
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
 import com.netDashboard.globals.G.dashboards

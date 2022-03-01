@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import com.netDashboard.Settings.Companion.saveToFile
 import com.netDashboard.Theme.Companion.saveToFile
 import com.netDashboard.activities.SplashScreenActivity
-import com.netDashboard.dashboard.Dashboards
-import com.netDashboard.dashboard.Dashboards.Companion.saveToFile
+import com.netDashboard.dashboard.Dashboard
+import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.databinding.PopupTransferBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
@@ -73,7 +73,7 @@ object Transfer {
                                 }
 
                                 if (save.isNotEmpty()) {
-                                    val d = Dashboards.parseSave(save[0])
+                                    val d = Dashboard.parseSave(save[0])
                                     val s = Settings.parseSave(save[1])
                                     val t = Theme.parseSave(save[2])
 

@@ -7,17 +7,15 @@ import android.widget.TextView
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.netDashboard.*
 import com.netDashboard.Parser.byJSONPath
-import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
-import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
-import com.netDashboard.dialogSetup
+import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
-import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
@@ -191,6 +189,7 @@ abstract class Tile : RecyclerViewItem() {
         }
 
         if (doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if(settings.animateUpdate) holder?.itemView?.attentate()
 
         onReceive(data, jsonResult)
     }

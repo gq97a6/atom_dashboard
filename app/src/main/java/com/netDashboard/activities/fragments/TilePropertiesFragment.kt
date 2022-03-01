@@ -657,6 +657,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 )
 
+                b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
                 b.tpPayloadHint.text =
                     "Use ${
                         when (tile.colorType) {

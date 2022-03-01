@@ -1,4 +1,6 @@
 //expand ------------------------------
+if it is json it is json
+text tile size
 
 new tiles
     thermostat

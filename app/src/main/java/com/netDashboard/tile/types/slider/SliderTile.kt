@@ -108,7 +108,7 @@ class SliderTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
-        (jsonResult["value"] ?: data.second.toString()).toIntOrNull()
+        (jsonResult["base"] ?: data.second.toString()).toIntOrNull()
             ?.let { this.value = it.roundCloser(step) }
     }
 

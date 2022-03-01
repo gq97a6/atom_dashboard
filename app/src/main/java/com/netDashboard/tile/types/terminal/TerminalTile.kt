@@ -96,7 +96,7 @@ class TerminalTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
-        val entry = jsonResult["value"] ?: data.second.toString()
+        val entry = jsonResult["base"] ?: data.second.toString()
         log.add(0, entry)
 
         terminalAdapter?.let {

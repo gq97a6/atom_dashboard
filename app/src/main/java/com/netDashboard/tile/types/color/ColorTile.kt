@@ -185,7 +185,7 @@ class ColorTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        var value = jsonResult["value"] ?: data.second.toString()
+        var value = jsonResult["base"] ?: data.second.toString()
 
         try {
 

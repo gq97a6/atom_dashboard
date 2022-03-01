@@ -16,10 +16,12 @@ import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.color.ColorTile
+import com.netDashboard.tile.types.lights.LightsTile
 import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 import com.netDashboard.tile.types.terminal.TerminalTile
+import com.netDashboard.tile.types.thermostat.ThermostatTile
 import com.netDashboard.tile.types.time.TimeTile
 
 class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
@@ -78,16 +80,16 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
             b.tnColorRipple.click()
             addTile(ColorTile())
         }
-//
-        //b.tnThermostat.setOnClickListener {
-        //    b.tnThermostatRipple.click()
-        //    addTile(ThermostatTile())
-        //}
-//
-        //b.tnLights.setOnClickListener {
-        //    b.tnLightsRipple.click()
-        //    addTile(LightsTile())
-        //}
+
+        b.tnThermostat.setOnClickListener {
+            b.tnThermostatRipple.click()
+            addTile(ThermostatTile())
+        }
+
+        b.tnLights.setOnClickListener {
+            b.tnLightsRipple.click()
+            addTile(LightsTile())
+        }
     }
 
     private var isDone = false

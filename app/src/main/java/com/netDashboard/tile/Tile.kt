@@ -170,6 +170,7 @@ abstract class Tile : RecyclerViewItem() {
                 }
             }
         }
+
         mqttData.lastReceive = Date()
 
         if (doNotify) {

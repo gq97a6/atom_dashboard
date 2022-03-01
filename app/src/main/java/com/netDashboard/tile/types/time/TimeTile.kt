@@ -94,7 +94,7 @@ class TimeTile : Tile() {
         super.onReceive(data, jsonResult)
 
         //"12+20*/2-4".split(Regex("\\D+"))
-        value = jsonResult["value"] ?: data.second.toString()
+        value = jsonResult["base"] ?: data.second.toString()
     }
 
     override fun onCreateTile() {

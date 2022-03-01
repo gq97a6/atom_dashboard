@@ -9,7 +9,4 @@ object Parser {
         } catch (e: Exception) {
             null
         }
-
-    //value of tile, value of other tiles, second of day, second, minute, hour, day, month, year
-    //to json
 }

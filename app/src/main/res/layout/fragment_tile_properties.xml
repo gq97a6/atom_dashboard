@@ -66,16 +66,16 @@
         android:layout_marginTop="20dp"
         android:tag="colorA"
         android:text="Text"
-        android:textStyle="bold"
         android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/tp_icon_frame"
         app:layout_constraintTop_toBottomOf="@+id/pt_transfer_box" />
 
     <TextView
         android:id="@+id/view20"
         android:layout_width="wrap_content"
-        android:layout_marginStart="3dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="20dp"
         android:tag="colorA"
         android:text="tile tag"
@@ -368,66 +368,339 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/tp_mqtt_topics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="3dp"
-                                android:gravity="center"
-                                android:tag="colorA"
-                                android:text="Subscribe topic"
-                                android:textSize="15dp" />
-
-                            <EditText
-                                android:id="@+id/tp_mqtt_sub"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="disabled"
-                                android:importantForAutofill="no"
-                                android:inputType="text"
-                                android:maxLength="50"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="3dp"
+                                    android:gravity="center"
+                                    android:tag="colorA"
+                                    android:text="Subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_mqtt_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="3dp"
+                                    android:gravity="center"
+                                    android:tag="colorA"
+                                    android:text="Publish topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_mqtt_pub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/tp_mqtt_thermostat_topics"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="3dp"
-                                android:gravity="center"
-                                android:tag="colorA"
-                                android:text="Publish topic"
-                                android:textSize="15dp" />
-
-                            <EditText
-                                android:id="@+id/tp_mqtt_pub"
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="disabled"
-                                android:importantForAutofill="no"
-                                android:inputType="text"
-                                android:maxLength="50"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature publish topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_pub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature setpoint subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_setpoint_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature setpoint publish topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_setpoint_pub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Humidity subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_humidity_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Humidity publish topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_humidity_pub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_mode_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode publish topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_mode_pub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -654,7 +927,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:gravity="center"
                                 android:tag="colorA"
-                                android:text="Payload XPath"
+                                android:text="Payload JSON Pointer"
                                 android:textSize="15dp" />
 
                             <EditText
@@ -671,6 +944,159 @@
                                 android:tag="basic"
                                 android:textCursorDrawable="@null"
                                 tools:ignore="HardcodedText,TextFields" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorB"
+                                android:text="Example: /buttons/1/state"
+                                android:textSize="15dp"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tp_mqtt_thermostat_paths"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Temperature setpoint JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_temperature_setpoint_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Humidity JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_humidity_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_mode_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tag="colorC"
+                                    android:text="Example: /thermostat/1/temperature"
+                                    android:textSize="15dp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -1035,7 +1461,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tp_text"
+                android:id="@+id/tp_thermostat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -1058,7 +1484,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:tag="colorB"
-                    android:text="text"
+                    android:text="thermostat"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/view7"
                     app:layout_constraintTop_toTopOf="parent"
@@ -1080,7 +1506,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tp_button"
+                android:id="@+id/tp_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -1103,7 +1529,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:tag="colorB"
-                    android:text="button"
+                    android:text="light"
                     android:textSize="20dp"
                     app:layout_constraintStart_toEndOf="@id/view8"
                     app:layout_constraintTop_toTopOf="parent"
@@ -1129,7 +1555,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView

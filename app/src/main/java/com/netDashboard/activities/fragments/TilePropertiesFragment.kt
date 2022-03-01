@@ -34,10 +34,12 @@ import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.tile.types.button.TextTile
 import com.netDashboard.tile.types.color.ColorTile
+import com.netDashboard.tile.types.lights.LightsTile
 import com.netDashboard.tile.types.pick.SelectTile
 import com.netDashboard.tile.types.slider.SliderTile
 import com.netDashboard.tile.types.switch.SwitchTile
 import com.netDashboard.tile.types.terminal.TerminalTile
+import com.netDashboard.tile.types.thermostat.ThermostatTile
 import com.netDashboard.tile.types.time.TimeTile
 import java.util.*
 
@@ -711,6 +713,25 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         tile.mqttData.payloads[tile.colorType] = cs.toString()
                     }
                 })
+            }
+//--------------------------------------------------------------------------------------------------
+            is ThermostatTile -> {
+                val tile = tile as ThermostatTile
+
+                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+                    tile.mqttData.payloadIsJson = state
+                    b.tpMqttThermostatPaths.visibility = if (state) VISIBLE else GONE
+                }
+
+                b.tpMqttTopics.visibility = GONE
+                b.tpMqttThermostatTopics.visibility = VISIBLE
+                b.tpMqttJsonPayload.visibility = GONE
+                b.tpMqttThermostatPaths.visibility =
+                    if (tile.mqttData.payloadIsJson) VISIBLE else GONE
+            }
+//--------------------------------------------------------------------------------------------------
+            is LightsTile -> {
+                val tile = tile as LightsTile
             }
         }
     }

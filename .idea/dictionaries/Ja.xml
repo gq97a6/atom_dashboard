@@ -12,6 +12,7 @@
       <w>mqttd</w>
       <w>qoses</w>
       <w>reinit</w>
+      <w>setpoint</w>
       <w>snackbar</w>
       <w>tcpd</w>
       <w>tofik</w>

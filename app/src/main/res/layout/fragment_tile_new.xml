@@ -36,428 +36,459 @@
         android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:background="@drawable/background_frame"
             android:orientation="vertical"
-            android:padding="10dp"
+            android:padding="5dp"
             android:tag="frame">
 
-            <FrameLayout
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_button_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Button"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_arrow_arrow_to_bottom"
+                            android:layout_width="40dp"
+                            android:tag="colorAIcon"
+                            android:layout_height="40dp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_slider_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Slider"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:tag="colorAIcon"
+                            android:background="@drawable/il_arrow_arrows_h_alt"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_switch_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Switch"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_interface_toggle_on"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <View
-                    android:id="@+id/tn_button_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
 
-                <LinearLayout
-                    android:id="@+id/tn_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
-
-                    <TextView
+                    <View
+                        android:id="@+id/tn_text_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Button"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Simplest tile. Tap to send predefined value."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Text"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_design_illustration"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_slider_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_slider"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
 
-                    <TextView
+                    <View
+                        android:id="@+id/tn_select_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Slider"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_select"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Easy to control. Send or receive numbers."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Select"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_business_receipt_alt"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_switch_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
 
-                    <TextView
+                    <View
+                        android:id="@+id/tn_terminal_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Switch"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_terminal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Switch between two values."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Terminal"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_interface_keyboard"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_text_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+            </LinearLayout>
 
-                    <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_color_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Text"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_color"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Send or receive text. Single line."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Color picker"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_design_palette"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_select_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_select"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
 
-                    <TextView
+                    <View
+                        android:id="@+id/tn_thermostat_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Select"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_thermostat"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Pick from the list to send predefined value."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Thermostat"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:tag="colorAIcon"
+                            android:background="@drawable/il_weather_temperature_half"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_terminal_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_terminal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+            </LinearLayout>
 
-                    <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_time_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Terminal"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_time"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Send or receive text. Multiple lines."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Time"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:layout_gravity="center"
+                            android:tag="colorAIcon"
+                            android:background="@drawable/il_time_clock"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_time_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp">
 
-                    <TextView
+                    <View
+                        android:id="@+id/tn_lights_ripple"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Time"
-                        android:textSize="25dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tn_lights"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Send or receive dates or time."
-                        android:textSize="18dp" />
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="Lights"
+                            android:textSize="15dp" />
 
-            </FrameLayout>
+                        <View
+                            android:layout_marginTop="5dp"
+                            android:tag="colorAIcon"
+                            android:layout_gravity="center"
+                            android:background="@drawable/il_business_lightbulb_alt"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                    </LinearLayout>
 
-                <View
-                    android:id="@+id/tn_color_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
+                </FrameLayout>
 
-                <LinearLayout
-                    android:id="@+id/tn_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Color picker"
-                        android:textSize="25dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:text="Pick and send color."
-                        android:textSize="18dp" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <View
-                    android:id="@+id/tn_thermostat_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
-
-                <LinearLayout
-                    android:id="@+id/tn_thermostat"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Thermostat"
-                        android:textSize="25dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:textStyle="bold"
-                        android:text="COMING SOON"
-                        android:textSize="18dp" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <View
-                    android:id="@+id/tn_lights_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
-
-                <LinearLayout
-                    android:id="@+id/tn_lights"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_frame"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:tag="frame">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorA"
-                        android:text="Lights"
-                        android:textSize="25dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:tag="colorB"
-                        android:textStyle="bold"
-                        android:text="COMING SOON"
-                        android:textSize="18dp" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <View
-                    android:id="@+id/tn_graph_ripple"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/background_ripple"
-                    android:elevation="20dp"
-                    android:tag="rippleForeground" />
-
-            </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

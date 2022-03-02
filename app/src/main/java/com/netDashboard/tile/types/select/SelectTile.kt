@@ -24,7 +24,9 @@ class SelectTile : Tile() {
     @JsonIgnore
     override var typeTag = "select"
 
-    val list = mutableListOf<Pair<String, String>>()
+    override var iconRes = R.drawable.il_business_receipt_alt
+
+    val options = mutableListOf("" to "")
     var showPayload = false
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -40,7 +42,7 @@ class SelectTile : Tile() {
         if (mqttData.pubs["base"].isNullOrEmpty()) return
         if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
-        val notEmpty = list.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
+        val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.size > 0) {
             val dialog = Dialog(adapter.context)
             val adapter = GenericAdapter(adapter.context)
@@ -56,7 +58,7 @@ class SelectTile : Tile() {
 
             adapter.onItemClick = {
                 val pos = adapter.list.indexOf(it)
-                send("${this.list[pos].second}", mqttData.qos)
+                send("${this.options[pos].second}", mqttData.qos)
                 dialog.dismiss()
             }
 

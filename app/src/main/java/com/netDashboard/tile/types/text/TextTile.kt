@@ -22,6 +22,8 @@ class TextTile : Tile() {
     @JsonIgnore
     override var typeTag = "text"
 
+    override var iconRes = R.drawable.il_design_illustration
+
     var value = ""
         set(value) {
             field = value

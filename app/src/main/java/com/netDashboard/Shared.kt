@@ -10,11 +10,14 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.*
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
@@ -230,22 +233,3 @@ fun Dialog.dialogSetup() {
     this.window?.attributes = a
     this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }
-
-//@SuppressLint("ShowToast")
-//val snackbar = list[0].holder?.itemView?.rootView?.let {
-//    Snackbar.make(
-//        it,
-//        context.getString(R.string.snackbar_confirmation),
-//        Snackbar.LENGTH_LONG
-//    ).setAction("YES") {
-//        for (i in list) {
-//            if (i.flag.isRemove) onItemRemove(i)
-//        }
-//        list.removeAll { item: item -> item.flag.isRemove }
-//        notifyDataSetChanged()
-//    }
-//}
-//
-//val snackBarView = snackbar?.view
-//snackBarView?.translationY = -90.toPx().toFloat()
-//snackbar?.show()

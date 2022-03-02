@@ -17,6 +17,8 @@ class ButtonTile : Tile() {
     @JsonIgnore
     override var typeTag = "button"
 
+    override var iconRes = R.drawable.il_arrow_arrow_to_bottom
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 

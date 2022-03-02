@@ -29,8 +29,10 @@ class ColorTile : Tile() {
     @JsonIgnore
     override var typeTag = "color"
 
+    override var iconRes = R.drawable.il_design_palette
+
     var paintRaw = false
-    var hsvPicked = floatArrayOf(0f, 1f, 1f)
+    var hsvPicked = theme.a.hsv
     var toRemoves = mutableMapOf<String, MutableList<String>>()
     var flagIndexes = mutableMapOf<String, Int>()
 

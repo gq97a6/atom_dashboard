@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/isa_alias"
+            android:id="@+id/io_alias"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginEnd="2.5dp"
@@ -28,7 +28,7 @@
             android:textSize="15dp" />
 
         <EditText
-            android:id="@+id/isa_payload"
+            android:id="@+id/io_payload"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginStart="2.5dp"
@@ -44,7 +44,7 @@
             android:textSize="15dp" />
 
         <Button
-            android:id="@+id/isa_remove"
+            android:id="@+id/io_remove"
             style="@style/button"
             android:layout_width="30dp"
             android:layout_height="30dp"

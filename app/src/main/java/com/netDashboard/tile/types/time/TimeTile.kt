@@ -19,11 +19,13 @@ class TimeTile : Tile() {
     @JsonIgnore
     override val layout = R.layout.tile_time
 
-    var isDate = false
-    var isMilitary = true
-
     @JsonIgnore
     override var typeTag = "time"
+
+    override var iconRes = R.drawable.il_time_clock
+
+    var isDate = false
+    var isMilitary = true
 
     var value = ""
         set(value) {

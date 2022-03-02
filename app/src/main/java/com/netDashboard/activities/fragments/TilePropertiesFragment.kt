@@ -3,8 +3,6 @@ package com.netDashboard.activities.fragments
 import android.content.res.ColorStateList
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -12,9 +10,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
@@ -99,13 +98,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         b.tpNotSwitch.isChecked = tile.doNotify
         b.tpNotSilentSwitch.isChecked = tile.silentNotify
 
-        b.tpTag.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.tag = cs.toString()
-            }
-        })
+        b.tpTag.addTextChangedListener {
+            tile.tag = (it ?: "").toString()
+        }
 
         b.tpMqttSwitch.setOnCheckedChangeListener { _, state ->
             mqttSwitchOnCheckedChangeListener(state)
@@ -115,36 +110,24 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             switchMqttTab(!b.tpMqtt.isVisible)
         }
 
-        b.tpMqttPub.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.pubs["base"] = cs.toString()
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
-            }
-        })
+        b.tpMqttPub.addTextChangedListener {
+            tile.mqttData.pubs["base"] = (it ?: "").toString()
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
+        }
 
-        b.tpMqttSub.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.subs["base"] = cs.toString()
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
-            }
-        })
+        b.tpMqttSub.addTextChangedListener {
+            tile.mqttData.subs["base"] = (it ?: "").toString()
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
+        }
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
             b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
         }
 
-        b.tpMqttJsonPayloadPath.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                tile.mqttData.jsonPaths["base"] = cs.toString()
-            }
-        })
+        b.tpMqttJsonPayloadPath.addTextChangedListener {
+            tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
+        }
 
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.confirmPub = state
@@ -208,25 +191,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 }
 
-                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
+                b.tpMqttJsonPayloadPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
+                }
 
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads["base"] = cs.toString()
-                    }
-                })
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is SliderTile -> {
@@ -239,116 +210,50 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpSliderDrag.isChecked = tile.dragCon
 
                 b.tpPayloadHint.text = "Use @value to insert current value"
-                b.tpSliderFrom.setText(tile.from.toString())
-                b.tpSliderTo.setText(tile.to.toString())
-                b.tpSliderStep.setText(tile.step.toString())
+                b.tpSliderFrom.setText(tile.range[0].toString())
+                b.tpSliderTo.setText(tile.range[1].toString())
+                b.tpSliderStep.setText(tile.range[2].toString())
 
-                b.tpSliderFrom.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        cs.toString().let { raw ->
-                            cs.toString().digitsOnly().let { parsed ->
-                                if (raw != parsed) b.tpSliderFrom.setText(parsed)
-                                else parsed.toIntOrNull()?.let {
-                                    tile.from = it
-                                }
+                b.tpSliderFrom.addTextChangedListener {
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderFrom.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[0] = it
                             }
                         }
                     }
-                })
+                }
 
-                b.tpSliderTo.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        cs.toString().let { raw ->
-                            cs.toString().digitsOnly().let { parsed ->
-                                if (raw != parsed) b.tpSliderTo.setText(parsed)
-                                else parsed.toIntOrNull()?.let {
-                                    tile.to = it
-                                }
+                b.tpSliderTo.addTextChangedListener {
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderTo.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[2] = it
                             }
                         }
                     }
-                })
+                }
 
-                b.tpSliderStep.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {
-                    }
-
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        cs.toString().let { raw ->
-                            cs.toString().digitsOnly().let { parsed ->
-                                if (raw != parsed) b.tpSliderStep.setText(parsed)
-                                else parsed.toIntOrNull()?.let {
-                                    tile.step = it
-                                }
+                b.tpSliderStep.addTextChangedListener {
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderStep.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[2] = it
                             }
                         }
                     }
-                })
+                }
 
                 b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
                     tile.dragCon = state
                 }
 
-                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads["base"] = cs.toString()
-                    }
-                })
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is SwitchTile -> {
@@ -399,45 +304,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     (activity as MainActivity).fm.replaceWith(TileIconFragment())
                 }
 
-                b.tpMqttPayloadTrue.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
+                b.tpMqttPayloadTrue.addTextChangedListener {
+                    tile.mqttData.payloads["true"] = (it ?: "").toString()
+                }
 
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads["true"] = cs.toString()
-                    }
-                })
-
-                b.tpMqttPayloadFalse.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads["false"] = cs.toString()
-                    }
-                })
+                b.tpMqttPayloadFalse.addTextChangedListener {
+                    tile.mqttData.payloads["false"] = (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is SelectTile -> {
@@ -448,77 +321,57 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 val adapter = GenericAdapter(requireContext())
 
-                val list = MutableList(tile.list.size) {
-                    GenericItem(R.layout.item_select_add)
+                val list = MutableList(tile.options.size) {
+                    GenericItem(R.layout.item_option)
                 }
 
                 adapter.setHasStableIds(true)
-                adapter.onBindViewHolder = { item, holder, pos ->
-                    val a = holder.itemView.findViewById<TextView>(R.id.isa_alias)
-                    val p = holder.itemView.findViewById<TextView>(R.id.isa_payload)
-                    val r = holder.itemView.findViewById<Button>(R.id.isa_remove)
+                adapter.onBindViewHolder = { item, holder, _ ->
+                    adapter.list.indexOf(item).let { pos ->
+                        val a = holder.itemView.findViewById<EditText>(R.id.io_alias)
+                        val p = holder.itemView.findViewById<EditText>(R.id.io_payload)
+                        val r = holder.itemView.findViewById<Button>(R.id.io_remove)
 
-                    a.text = tile.list[pos].first
-                    p.text = tile.list[pos].second
+                        a.setText(tile.options[pos].first)
+                        p.setText(tile.options[pos].second)
 
-                    a.addTextChangedListener(object : TextWatcher {
-                        override fun afterTextChanged(cs: Editable) {}
-                        override fun beforeTextChanged(
-                            cs: CharSequence,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
+                        a.addTextChangedListener {
+                            adapter.list.indexOf(item).let { pos ->
+                                if (pos >= 0)
+                                    tile.options[pos] =
+                                        Pair((it ?: "").toString(), tile.options[pos].second)
+                            }
                         }
 
-                        override fun onTextChanged(
-                            cs: CharSequence,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            tile.list[pos] = Pair(cs.toString(), tile.list[pos].second)
-                        }
-                    })
-
-                    p.addTextChangedListener(object : TextWatcher {
-                        override fun afterTextChanged(cs: Editable) {}
-                        override fun beforeTextChanged(
-                            cs: CharSequence,
-                            start: Int,
-                            count: Int,
-                            after: Int
-                        ) {
+                        p.addTextChangedListener {
+                            adapter.list.indexOf(item).let { pos ->
+                                if (pos >= 0)
+                                    tile.options[pos] =
+                                        Pair(tile.options[pos].first, (it ?: "").toString())
+                            }
                         }
 
-                        override fun onTextChanged(
-                            cs: CharSequence,
-                            start: Int,
-                            before: Int,
-                            count: Int
-                        ) {
-                            tile.list[pos] = Pair(tile.list[pos].first, cs.toString())
-                        }
-                    })
-
-                    r.setOnClickListener {
-                        adapter.list.indexOf(item).let {
-                            if (it >= 0) {
-                                tile.list.removeAt(it)
-                                adapter.removeItemAt(it)
+                        r.setOnClickListener {
+                            if (list.size > 1) {
+                                adapter.list.indexOf(item).let {
+                                    if (it >= 0) {
+                                        tile.options.removeAt(it)
+                                        adapter.removeItemAt(it)
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
-                b.tpSelectList.layoutManager = LinearLayoutManager(requireContext())
-                b.tpSelectList.adapter = adapter
+                b.tpSelectRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                b.tpSelectRecyclerView.adapter = adapter
 
                 adapter.submitList(list)
 
                 b.tpSelectAdd.setOnClickListener {
-                    tile.list.add(Pair("", ""))
-                    list.add(GenericItem(R.layout.item_select_add))
+                    tile.options.add(Pair("", ""))
+                    list.add(GenericItem(R.layout.item_option))
                     adapter.notifyItemInserted(list.size - 1)
                 }
 
@@ -551,25 +404,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 }
 
-                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads["base"] = cs.toString()
-                    }
-                })
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is TimeTile -> {
@@ -619,26 +456,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 }
 
-                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads[if (tile.isDate) "date" else "time"] =
-                            cs.toString()
-                    }
-                })
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads[if (tile.isDate) "date" else "time"] =
+                        (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is ColorTile -> {
@@ -694,25 +515,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         } to insert current value."
                 }
 
-                b.tpMqttPayload.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(cs: Editable) {}
-                    override fun beforeTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    override fun onTextChanged(
-                        cs: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                        tile.mqttData.payloads[tile.colorType] = cs.toString()
-                    }
-                })
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads[tile.colorType] = (it ?: "").toString()
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is ThermostatTile -> {
@@ -724,10 +529,152 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttTopics.visibility = GONE
-                b.tpMqttThermostatTopics.visibility = VISIBLE
                 b.tpMqttJsonPayload.visibility = GONE
+                b.tpMqttThermostatTopics.visibility = VISIBLE
+                b.tpThermostat.visibility = VISIBLE
                 b.tpMqttThermostatPaths.visibility =
                     if (tile.mqttData.payloadIsJson) VISIBLE else GONE
+
+                b.tpThermostatTemperatureSub.setText(tile.mqttData.subs["temp"])
+                b.tpThermostatTemperaturePub.setText(tile.mqttData.pubs["temp"])
+                b.tpThermostatTemperatureSetpointSub.setText(tile.mqttData.subs["temp_set"])
+                b.tpThermostatTemperatureSetpointPub.setText(tile.mqttData.pubs["temp_set"])
+                b.tpThermostatHumiditySub.setText(tile.mqttData.subs["humi"])
+                b.tpThermostatHumidityPub.setText(tile.mqttData.pubs["humi"])
+                b.tpThermostatHumiditySetpointSub.setText(tile.mqttData.subs["humi_set"])
+                b.tpThermostatHumiditySetpointPub.setText(tile.mqttData.pubs["humi_set"])
+                b.tpThermostatModeSub.setText(tile.mqttData.subs["mode"])
+                b.tpThermostatModePub.setText(tile.mqttData.pubs["mode"])
+
+                b.tpThermostatHumidityFrom.setText(tile.humidityRange[0].toString())
+                b.tpThermostatHumidityTo.setText(tile.humidityRange[1].toString())
+                b.tpThermostatHumidityStep.setText(tile.humidityRange[2].toString())
+                b.tpThermostatTemperatureFrom.setText(tile.temperatureRange[0].toString())
+                b.tpThermostatTemperatureTo.setText(tile.temperatureRange[1].toString())
+                b.tpThermostatTemperatureStep.setText(tile.temperatureRange[2].toString())
+
+                tile.humiditySetpoint.let {
+                    b.tpThermostatHumidityRange.visibility = if (it) VISIBLE else GONE
+                    b.tpThermostatHumiditySetpoint.isChecked = it
+                }
+
+                b.tpThermostatShowPayload.isChecked = tile.showPayload
+
+                b.tpThermostatTemperatureSub.addTextChangedListener {
+                    tile.mqttData.subs["temp"] = (it ?: "").toString()
+                }
+                b.tpThermostatTemperaturePub.addTextChangedListener {
+                    tile.mqttData.pubs["temp"] = (it ?: "").toString()
+                }
+                b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
+                    tile.mqttData.subs["temp_set"] = (it ?: "").toString()
+                }
+                b.tpThermostatTemperatureSetpointPub.addTextChangedListener {
+                    tile.mqttData.pubs["temp_set"] = (it ?: "").toString()
+                }
+                b.tpThermostatHumiditySub.addTextChangedListener {
+                    tile.mqttData.subs["humi"] = (it ?: "").toString()
+                }
+                b.tpThermostatHumidityPub.addTextChangedListener {
+                    tile.mqttData.pubs["humi"] = (it ?: "").toString()
+                }
+                b.tpThermostatHumiditySetpointSub.addTextChangedListener {
+                    tile.mqttData.subs["humi_set"] = (it ?: "").toString()
+                }
+                b.tpThermostatHumiditySetpointPub.addTextChangedListener {
+                    tile.mqttData.pubs["humi_set"] = (it ?: "").toString()
+                }
+                b.tpThermostatModeSub.addTextChangedListener {
+                    tile.mqttData.subs["mode"] = (it ?: "").toString()
+                }
+                b.tpThermostatModePub.addTextChangedListener {
+                    tile.mqttData.pubs["mode"] = (it ?: "").toString()
+                }
+
+                b.tpThermostatHumidityFrom.addTextChangedListener {
+                    tile.humidityRange[0] = it.toString().toFloat()
+                }
+                b.tpThermostatHumidityTo.addTextChangedListener {
+                    tile.humidityRange[1] = it.toString().toFloat()
+                }
+                b.tpThermostatHumidityStep.addTextChangedListener {
+                    tile.humidityRange[2] = it.toString().toFloat()
+                }
+
+                b.tpThermostatTemperatureFrom.addTextChangedListener {
+                    tile.temperatureRange[0] = it.toString().toFloat()
+                }
+                b.tpThermostatTemperatureTo.addTextChangedListener {
+                    tile.temperatureRange[1] = it.toString().toFloat()
+                }
+                b.tpThermostatTemperatureStep.addTextChangedListener {
+                    tile.temperatureRange[2] = it.toString().toFloat()
+                }
+
+                b.tpThermostatHumiditySetpoint.setOnCheckedChangeListener { _, state ->
+                    tile.humiditySetpoint = state
+                    b.tpThermostatHumidityRange.visibility = if (state) VISIBLE else GONE
+                }
+
+                b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->
+                    tile.showPayload = state
+                }
+
+                val adapter = GenericAdapter(requireContext())
+
+                val list = MutableList(tile.modes.size) {
+                    GenericItem(R.layout.item_option)
+                }
+
+                adapter.setHasStableIds(true)
+                adapter.onBindViewHolder = { item, holder, _ ->
+                    adapter.list.indexOf(item).let { pos ->
+                        val a = holder.itemView.findViewById<EditText>(R.id.io_alias)
+                        val p = holder.itemView.findViewById<EditText>(R.id.io_payload)
+                        val r = holder.itemView.findViewById<Button>(R.id.io_remove)
+
+                        a.setText(tile.modes[pos].first)
+                        p.setText(tile.modes[pos].second)
+
+                        a.addTextChangedListener {
+                            adapter.list.indexOf(item).let { pos ->
+                                if (pos >= 0)
+                                    tile.modes[pos] =
+                                        Pair((it ?: "").toString(), tile.modes[pos].second)
+                            }
+                        }
+
+                        p.addTextChangedListener {
+                            adapter.list.indexOf(item).let { pos ->
+                                if (pos >= 0)
+                                    tile.modes[pos] =
+                                        Pair(tile.modes[pos].first, (it ?: "").toString())
+                            }
+                        }
+
+                        r.setOnClickListener {
+                            if (list.size > 1) {
+                                adapter.list.indexOf(item).let {
+                                    if (it >= 0) {
+                                        tile.modes.removeAt(it)
+                                        adapter.removeItemAt(it)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                b.tpThermostatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                b.tpThermostatRecyclerView.adapter = adapter
+
+                adapter.submitList(list)
+
+                b.tpThermostatModeAdd.setOnClickListener {
+                    tile.modes.add(Pair("", ""))
+                    list.add(GenericItem(R.layout.item_option))
+                    adapter.notifyItemInserted(list.size - 1)
+                }
             }
 //--------------------------------------------------------------------------------------------------
             is LightsTile -> {

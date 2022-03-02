@@ -30,7 +30,7 @@ abstract class Tile : RecyclerViewItem() {
     open var height = 1
 
     var tag = ""
-    var iconRes = R.drawable.il_interface_plus
+    abstract var iconRes: Int
 
     var hsv = floatArrayOf(0f, 0f, 0f)
     val colorPallet: ColorPallet

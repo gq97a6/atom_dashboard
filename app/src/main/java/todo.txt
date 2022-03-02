@@ -1,9 +1,14 @@
 //expand ------------------------------
 if it is json it is json
 text tile size
+default tile icon
+new tile pick icon
+code clean up
+tests
+topic copy button
 
 new tiles
-    thermostat
+    thermostat /
     lights
 
     (indicator,

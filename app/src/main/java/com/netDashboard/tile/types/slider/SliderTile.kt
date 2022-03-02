@@ -29,9 +29,9 @@ class SliderTile : Tile() {
     @JsonIgnore
     override var typeTag = "slider"
 
-    var from = 0
-    var to = 100
-    var step = 1
+    override var iconRes = R.drawable.il_arrow_arrows_h_alt
+
+    var range = mutableListOf(0, 100, 10)
     var dragCon = false
 
     var value: Int = 0
@@ -52,7 +52,7 @@ class SliderTile : Tile() {
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        if (step == 0) step = 1
+        if (range[2] == 0) range[2] = 1
         displayValue = value
     }
 
@@ -109,7 +109,7 @@ class SliderTile : Tile() {
         jsonResult: MutableMap<String, String>
     ) {
         (jsonResult["base"] ?: data.second.toString()).toIntOrNull()
-            ?.let { this.value = it.roundCloser(step) }
+            ?.let { this.value = it.roundCloser(range[2]) }
     }
 
     private fun control(e: MotionEvent, v: View?): Pair<Int, Boolean> {
@@ -117,7 +117,7 @@ class SliderTile : Tile() {
         if (p < 0) p = 0f
         else if (p > 100) p = 100f
 
-        val value = (from + p * (to - from) / 100).toInt().roundCloser(step)
+        val value = (range[0] + p * (range[1] - range[0]) / 100).toInt().roundCloser(range[2])
 
         when (e.action) {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
@@ -136,7 +136,7 @@ class SliderTile : Tile() {
 
     private fun setBackground(value: Int, background: View?) {
         val params = background?.layoutParams as ConstraintLayout.LayoutParams?
-        params?.matchConstraintPercentWidth = abs((((from - value).toFloat() / (to - from))))
+        params?.matchConstraintPercentWidth = abs((((range[0] - value).toFloat() / (range[1] - range[0]))))
         background?.requestLayout()
     }
 

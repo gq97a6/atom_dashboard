@@ -148,7 +148,7 @@ class Theme {
                 this.background = drawable
             }
             "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
-            "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
+            "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.a)
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable

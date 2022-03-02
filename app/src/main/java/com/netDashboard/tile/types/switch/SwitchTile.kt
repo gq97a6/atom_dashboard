@@ -20,15 +20,17 @@ class SwitchTile : Tile() {
     @JsonIgnore
     override var typeTag = "switch"
 
+    override var iconRes = R.drawable.il_interface_toggle_on
+
     var state: Boolean? = false
         set(value) {
             field = value
         }
 
-    var iconResTrue = R.drawable.il_interface_plus
-    var iconResFalse = R.drawable.il_interface_plus
+    var iconResTrue = R.drawable.il_interface_toggle_on
+    var iconResFalse = R.drawable.il_interface_toggle_off
 
-    var hsvTrue = floatArrayOf(0f, 0f, 0f)
+    var hsvTrue = floatArrayOf(179f, 1f, 1f)
     val colorPalletTrue: Theme.ColorPallet
         get() = theme.a.getColorPallet(hsvTrue, true)
 

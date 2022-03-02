@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.netDashboard.R
@@ -72,41 +73,29 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
-        b.dpName.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().let {
-                    dashboard.name =
-                        if (cs.isBlank()) kotlin.math.abs(Random.nextInt()).toString() else it
-                }
+        b.dpName.addTextChangedListener {
+            (it ?: "").toString().trim().let {
+                dashboard.name =
+                    if (it.isBlank()) kotlin.math.abs(Random.nextInt()).toString() else it
             }
-        })
+        }
 
-        b.dpMqttAddress.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(cs: Editable) {}
-            override fun beforeTextChanged(cs: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().let {
-                    if (dashboard.mqttAddress != it) {
-                        dashboard.mqttAddress = it
-                        dashboard.dg?.mqttd?.notifyOptionsChanged()
-                    }
-                }
-            }
-        })
-
-        b.dpMqttPort.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                val port = cs.toString().trim().toIntOrNull() ?: (-1)
-                if (dashboard.mqttPort != port) {
-                    dashboard.mqttPort = port
+        b.dpMqttAddress.addTextChangedListener {
+            (it ?: "").toString().trim().let {
+                if (dashboard.mqttAddress != it) {
+                    dashboard.mqttAddress = it
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
             }
-        })
+        }
+
+        b.dpMqttPort.addTextChangedListener {
+            val port = (it ?: "").toString().trim().toIntOrNull() ?: (-1)
+            if (dashboard.mqttPort != port) {
+                dashboard.mqttPort = port
+                dashboard.dg?.mqttd?.notifyOptionsChanged()
+            }
+        }
 
         b.dpMqttCred.setOnClickListener {
             switchMqttCred()
@@ -116,54 +105,39 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             switchMqttCred()
         }
 
-        b.dpMqttLogin.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().let {
-                    if (dashboard.mqttUserName != it) {
-                        dashboard.mqttUserName = it
+        b.dpMqttLogin.addTextChangedListener {
+            (it ?: "").toString().trim().let {
+                if (dashboard.mqttUserName != it) {
+                    dashboard.mqttUserName = it
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+            }
+        }
+
+        b.dpMqttPass.addTextChangedListener {
+            (it ?: "").toString().trim().let {
+                if (dashboard.mqttPass != it) {
+                    dashboard.mqttPass = it
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+            }
+        }
+
+        b.dpMqttClientId.addTextChangedListener {
+            (it ?: "").toString().trim().let {
+                when {
+                    it.isBlank() -> {
+                        dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
+                        b.dpMqttClientId.setText(dashboard.mqttClientId)
+                        dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    }
+                    dashboard.mqttClientId != it -> {
+                        dashboard.mqttClientId = it
                         dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
                 }
             }
-        })
-
-        b.dpMqttPass.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().let {
-                    if (dashboard.mqttPass != it) {
-                        dashboard.mqttPass = it
-                        dashboard.dg?.mqttd?.notifyOptionsChanged()
-                    }
-                }
-            }
-        })
-
-        b.dpMqttClientId.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(cs: CharSequence, start: Int, before: Int, count: Int) {
-                cs.toString().trim().let {
-                    when {
-                        it.isBlank() -> {
-                            dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
-                            b.dpMqttClientId.setText(dashboard.mqttClientId)
-                            dashboard.dg?.mqttd?.notifyOptionsChanged()
-                        }
-                        dashboard.mqttClientId != it -> {
-                            dashboard.mqttClientId = it
-                            dashboard.dg?.mqttd?.notifyOptionsChanged()
-                        }
-                        else -> {
-                            return
-                        }
-                    }
-                }
-            }
-        })
+        }
 
         b.dpMqttCopy.setOnClickListener {
             if (dashboards.size <= 1) {

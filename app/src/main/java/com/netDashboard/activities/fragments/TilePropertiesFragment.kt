@@ -120,6 +120,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
+        b.tpMqttPubCopy.setOnClickListener {
+            b.tpMqttPub.setText(b.tpMqttSub.text)
+        }
+
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.payloadIsJson = state
             b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
@@ -525,14 +529,14 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
                     tile.mqttData.payloadIsJson = state
-                    b.tpMqttThermostatPaths.visibility = if (state) VISIBLE else GONE
+                    b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
                 }
 
                 b.tpMqttTopics.visibility = GONE
                 b.tpMqttJsonPayload.visibility = GONE
-                b.tpMqttThermostatTopics.visibility = VISIBLE
                 b.tpThermostat.visibility = VISIBLE
-                b.tpMqttThermostatPaths.visibility =
+                b.tpThermostatTopics.visibility = VISIBLE
+                b.tpThermostatPaths.visibility =
                     if (tile.mqttData.payloadIsJson) VISIBLE else GONE
 
                 b.tpThermostatTemperatureSub.setText(tile.mqttData.subs["temp"])
@@ -618,6 +622,22 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->
                     tile.showPayload = state
+                }
+
+                b.tpThermostatTemperaturePubCopy.setOnClickListener {
+                    b.tpThermostatTemperaturePub.setText(b.tpThermostatTemperatureSub.text)
+                }
+
+                b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
+                    b.tpThermostatTemperatureSetpointPub.setText(b.tpThermostatTemperatureSetpointSub.text)
+                }
+
+                b.tpThermostatHumidityPubCopy.setOnClickListener {
+                    b.tpThermostatHumidityPub.setText(b.tpThermostatHumiditySub.text)
+                }
+
+                b.tpThermostatModePubCopy.setOnClickListener {
+                    b.tpThermostatModePub.setText(b.tpThermostatModeSub.text)
                 }
 
                 val adapter = GenericAdapter(requireContext())

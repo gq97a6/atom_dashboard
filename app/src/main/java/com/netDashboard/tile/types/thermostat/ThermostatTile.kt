@@ -21,8 +21,8 @@ class ThermostatTile : Tile() {
     var humiditySetpoint = false
     var showPayload = false
     val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
-    var humidityRange = mutableListOf(0f, 0f, 0f)
-    var temperatureRange = mutableListOf(0f, 0f, 0f)
+    var humidityRange = mutableListOf(0f, 100f, 5f)
+    var temperatureRange = mutableListOf(0f, 30f, .5f)
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

@@ -102,7 +102,7 @@ class TimeTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["time"] = "@hours:@minutes"
+        mqttData.payloads["time"] = "@hour:@minute"
         mqttData.payloads["date"] = "@day.@month.@year"
     }
 }

@@ -12,10 +12,15 @@
         android:layout_marginHorizontal="20dp"
         android:orientation="vertical">
 
+        <com.netDashboard.picker.HSVColorPicker
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
+
         <View
             android:id="@+id/pcp_color"
             android:layout_width="200dp"
             android:layout_gravity="center"
+            android:visibility="gone"
             android:background="@drawable/background_round"
             android:layout_height="200dp"/>
 

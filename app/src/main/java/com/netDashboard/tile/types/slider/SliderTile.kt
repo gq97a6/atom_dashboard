@@ -29,7 +29,7 @@ class SliderTile : Tile() {
     @JsonIgnore
     override var typeTag = "slider"
 
-    override var iconRes = R.drawable.il_arrow_arrows_h_alt
+    override var iconKey = "il_arrow_arrows_h_alt"
 
     var range = mutableListOf(0, 100, 10)
     var dragCon = false

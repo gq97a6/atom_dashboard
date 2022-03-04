@@ -30,6 +30,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/time/layout/tile_time.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/align_center_h.xml" value="0.3076923076923077" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_bar.xml" value="0.3472222222222222" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_circle.xml" value="0.2815" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_contrast.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_dial.xml" value="0.2815" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_dial_frame.xml" value="0.2815" />
@@ -247,7 +248,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

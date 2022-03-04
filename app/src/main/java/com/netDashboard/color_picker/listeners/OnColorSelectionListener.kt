@@ -1,4 +1,4 @@
-package com.netDashboard.picker.listeners
+package com.netDashboard.color_picker.listeners
 
 interface OnColorSelectionListener {
     fun onColorSelected(color: Int)

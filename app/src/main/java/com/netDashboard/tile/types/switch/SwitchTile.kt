@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.globals.G.theme
+import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -20,15 +21,20 @@ class SwitchTile : Tile() {
     @JsonIgnore
     override var typeTag = "switch"
 
-    override var iconRes = R.drawable.il_interface_toggle_on
+    override var iconKey = "il_interface_toggle_on"
 
     var state: Boolean? = false
         set(value) {
             field = value
         }
 
-    var iconResTrue = R.drawable.il_interface_toggle_on
-    var iconResFalse = R.drawable.il_interface_toggle_off
+    var iconKeyTrue = "il_interface_toggle_on"
+    val iconResTrue: Int
+        get() = Icons.icons[iconKeyTrue]?.res ?: R.drawable.il_interface_toggle_on
+
+    var iconKeyFalse = "il_interface_toggle_off"
+    val iconResFalse: Int
+        get() = Icons.icons[iconKeyFalse]?.res ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
     val colorPalletTrue: Theme.ColorPallet

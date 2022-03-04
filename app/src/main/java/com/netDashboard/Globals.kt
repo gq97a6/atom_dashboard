@@ -22,7 +22,7 @@ object G {
     lateinit var tile: Tile
 
     lateinit var setIconHSV: (FloatArray) -> Unit
-    lateinit var setIconRes: (Int) -> Unit
+    lateinit var setIconKey: (String) -> Unit
     lateinit var getIconRes: () -> Int
     lateinit var getIconHSV: () -> FloatArray
     lateinit var getIconColorPallet: () -> ColorPallet

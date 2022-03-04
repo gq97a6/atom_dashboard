@@ -1,10 +1,9 @@
-package com.madrapps.pikolo.components.hsl
+package com.netDashboard.color_picker.components.hsv
 
 import android.graphics.Color.HSVToColor
-import androidx.core.graphics.ColorUtils
-import com.madrapps.pikolo.components.ArcComponent
-import com.netDashboard.picker.Metrics
-import com.netDashboard.picker.Paints
+import com.netDashboard.color_picker.components.ArcComponent
+import com.netDashboard.color_picker.Metrics
+import com.netDashboard.color_picker.Paints
 
 internal class SaturationComponent(
     metrics: Metrics,

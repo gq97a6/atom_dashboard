@@ -22,7 +22,7 @@ class TimeTile : Tile() {
     @JsonIgnore
     override var typeTag = "time"
 
-    override var iconRes = R.drawable.il_time_clock
+    override var iconKey = "il_time_clock"
 
     var isDate = false
     var isMilitary = true

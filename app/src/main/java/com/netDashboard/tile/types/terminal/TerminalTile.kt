@@ -30,7 +30,7 @@ class TerminalTile : Tile() {
     @JsonIgnore
     override var height = 2
 
-    override var iconRes = R.drawable.il_interface_keyboard
+    override var iconKey = "il_interface_keyboard"
 
     var log = mutableListOf<String>()
 

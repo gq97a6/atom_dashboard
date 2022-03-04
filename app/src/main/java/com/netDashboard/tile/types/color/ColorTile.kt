@@ -3,7 +3,8 @@ package com.netDashboard.tile.types.color
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.view.KeyEvent
+import android.graphics.Color.HSVToColor
+import android.graphics.Color.colorToHSV
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +14,14 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
+import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.netDashboard.databinding.PopupColorPickerBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.util.concurrent.ExecutionException
+
 
 class ColorTile : Tile() {
 
@@ -29,14 +31,14 @@ class ColorTile : Tile() {
     @JsonIgnore
     override var typeTag = "color"
 
-    override var iconRes = R.drawable.il_design_palette
+    override var iconKey = "il_design_palette"
 
-    var paintRaw = false
-    var hsvPicked = theme.a.hsv
+    var paintRaw = true
+    var hsvPicked = floatArrayOf(0f, 0f, 0f)
     var toRemoves = mutableMapOf<String, MutableList<String>>()
     var flagIndexes = mutableMapOf<String, Int>()
 
-    var colorType = "rgb"
+    var colorType = "hex"
         set(value) {
             field = value
 
@@ -82,6 +84,9 @@ class ColorTile : Tile() {
         mqttData.payloads["hsv"] = "@h;@s;@v"
         mqttData.payloads["hex"] = "#@hex"
         mqttData.payloads["rgb"] = "@r;@g;@b"
+
+        colorToHSV(theme.a.colorPallet.color, hsvPicked)
+        colorType = colorType
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
@@ -105,36 +110,19 @@ class ColorTile : Tile() {
         val binding = PopupColorPickerBinding.bind(dialog.findViewById(R.id.root))
 
         fun onColorChange() {
-            hsvPicked = floatArrayOf(
-                binding.pcpHue.value,
-                binding.pcpSaturation.value,
-                binding.pcpValue.value
-            )
-
+            colorToHSV(binding.pcpPicker.color, hsvPicked)
             binding.pcpColor.backgroundTintList =
-                ColorStateList.valueOf(Color.HSVToColor(hsvPicked))
+                ColorStateList.valueOf(binding.pcpPicker.color)
         }
 
-        //var colorPickedNow = floatArrayOf(0f, 0f, 0f)
-        binding.pcpHue.value = hsvPicked[0]
-        binding.pcpSaturation.value = hsvPicked[1]
-        binding.pcpValue.value = hsvPicked[2]
+        binding.pcpPicker.setColor(HSVToColor(hsvPicked))
         onColorChange()
 
-        binding.pcpHue.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
-
-        binding.pcpSaturation.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
-
-        binding.pcpValue.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
+        binding.pcpPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
+            override fun onColorSelected(color: Int) {
+                onColorChange()
+            }
+        })
 
         binding.pcpConfirm.setOnClickListener {
             send(
@@ -146,19 +134,19 @@ class ColorTile : Tile() {
                             .replace("@v", (hsvPicked[2] * 100).toInt().toString())
                     }
                     "hex" -> {
-                        val c = Color.HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPicked)
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                     "rgb" -> {
-                        val c = Color.HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPicked)
                         (mqttData.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
                             .replace("@g", c.green.toString())
                             .replace("@b", c.blue.toString())
                     }
                     else -> {
-                        val c = Color.HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPicked)
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
@@ -211,7 +199,7 @@ class ColorTile : Tile() {
                         value = value.replace(it, "")
                     }
 
-                    Color.colorToHSV(Integer.parseInt(value, 16), hsvPicked)
+                    colorToHSV(Integer.parseInt(value, 16), hsvPicked)
                 }
                 "rgb" -> {
                     toRemoves["rgb"]?.forEach {
@@ -221,7 +209,7 @@ class ColorTile : Tile() {
                     val r = value.split(" ") as MutableList
                     r.removeIf { it.isEmpty() }
 
-                    Color.colorToHSV(
+                    colorToHSV(
                         Color.rgb(
                             r[flagIndexes["r"]!!].toInt(),
                             r[flagIndexes["g"]!!].toInt(),

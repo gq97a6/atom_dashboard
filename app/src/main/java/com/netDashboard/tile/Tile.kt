@@ -14,6 +14,7 @@ import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.databinding.PopupConfirmBinding
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
+import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -30,7 +31,9 @@ abstract class Tile : RecyclerViewItem() {
     open var height = 1
 
     var tag = ""
-    abstract var iconRes: Int
+    abstract var iconKey: String
+    val iconRes: Int
+        get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus
 
     var hsv = floatArrayOf(0f, 0f, 0f)
     val colorPallet: ColorPallet

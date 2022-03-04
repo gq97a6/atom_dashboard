@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.view.MotionEvent
 import android.view.View
 import com.netDashboard.R
-import com.netDashboard.globals.G.setIconRes
+import com.netDashboard.globals.G.setIconKey
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 
@@ -29,7 +29,8 @@ class IconIcon(
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        setIconRes(res)
+        val key = Icons.icons.filterValues { it == this }.keys
+        setIconKey(key.first())
         (adapter as IconAdapter).onIconChange(res)
     }
 }

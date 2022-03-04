@@ -6,12 +6,6 @@ import com.google.android.material.slider.Slider
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.globals.G.theme
-import com.netDashboard.icon.Icons.lineCats
-import com.netDashboard.icon.Icons.lineIcons
-import com.netDashboard.icon.Icons.solidCats
-import com.netDashboard.icon.Icons.solidIcons
-import com.netDashboard.icon.Icons.thinCats
-import com.netDashboard.icon.Icons.thinIcons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import java.util.*
 
@@ -76,24 +70,8 @@ class IconAdapter(context: Context, spanCount: Int) :
     }
 
     fun applyIconSet(type: String) {
-        var icons: List<IconIcon> = listOf()
-        var cats: List<String> = listOf()
-
-        when (type) {
-            "l" -> {
-                icons = lineIcons
-                cats = lineCats
-            }
-            "t" -> {
-                icons = thinIcons
-                cats = thinCats
-            }
-            "s" -> {
-                icons = solidIcons
-                cats = solidCats
-            }
-        }
-
+        var icons = Icons.icons.values.filter { it.type == type }
+        var cats = Icons.cats[type] ?: listOf()
 
         list.subList(list.size - iconCount, list.size).clear()
         val size = list.size

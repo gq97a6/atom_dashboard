@@ -23,8 +23,8 @@ class IconBar : Icon() {
             .setOnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     R.id.iib_line -> (adapter as IconAdapter).applyIconSet("l")
-                    R.id.iib_thin -> (adapter as IconAdapter).applyIconSet("t")
                     R.id.iib_solid -> (adapter as IconAdapter).applyIconSet("s")
+                    R.id.iib_thin -> (adapter as IconAdapter).applyIconSet("t")
                 }
             }
     }

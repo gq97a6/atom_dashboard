@@ -16,7 +16,7 @@ class ThermostatTile : Tile() {
     @JsonIgnore
     override var typeTag = "thermostat"
 
-    override var iconRes = R.drawable.il_weather_temperature_half
+    override var iconKey = "il_weather_temperature_half"
 
     var humiditySetpoint = false
     var showPayload = false

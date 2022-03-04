@@ -1,4 +1,4 @@
-package com.netDashboard.picker
+package com.netDashboard.color_picker
 
 import android.graphics.Color.HSVToColor
 import android.graphics.Paint

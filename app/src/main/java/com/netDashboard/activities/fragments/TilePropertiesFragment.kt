@@ -26,7 +26,7 @@ import com.netDashboard.globals.G.getIconColorPallet
 import com.netDashboard.globals.G.getIconHSV
 import com.netDashboard.globals.G.getIconRes
 import com.netDashboard.globals.G.setIconHSV
-import com.netDashboard.globals.G.setIconRes
+import com.netDashboard.globals.G.setIconKey
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.tile
 import com.netDashboard.recycler_view.GenericAdapter
@@ -153,7 +153,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             getIconColorPallet = { tile.colorPallet }
 
             setIconHSV = { hsv -> tile.hsv = hsv }
-            setIconRes = { res -> tile.iconRes = res }
+            setIconKey = { key -> tile.iconKey = key }
 
             (activity as MainActivity).fm.replaceWith(TileIconFragment())
         }
@@ -292,7 +292,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     getIconColorPallet = { tile.colorPalletTrue }
 
                     setIconHSV = { hsv -> tile.hsvTrue = hsv }
-                    setIconRes = { res -> tile.iconResTrue = res }
+                    setIconKey = { key -> tile.iconKeyTrue = key }
 
                     (activity as MainActivity).fm.replaceWith(TileIconFragment())
                 }
@@ -303,7 +303,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     getIconColorPallet = { tile.colorPalletFalse }
 
                     setIconHSV = { hsv -> tile.hsvFalse = hsv }
-                    setIconRes = { res -> tile.iconResFalse = res }
+                    setIconKey = { key -> tile.iconKeyFalse = key }
 
                     (activity as MainActivity).fm.replaceWith(TileIconFragment())
                 }

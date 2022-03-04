@@ -24,7 +24,7 @@ class SelectTile : Tile() {
     @JsonIgnore
     override var typeTag = "select"
 
-    override var iconRes = R.drawable.il_business_receipt_alt
+    override var iconKey = "il_business_receipt_alt"
 
     val options = mutableListOf("" to "")
     var showPayload = false

@@ -16,7 +16,7 @@ class LightsTile : Tile() {
     @JsonIgnore
     override var typeTag = "lights"
 
-    override var iconRes = R.drawable.il_business_lightbulb_alt
+    override var iconKey = "il_business_lightbulb_alt"
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

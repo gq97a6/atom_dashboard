@@ -1,4 +1,4 @@
-package com.madrapps.pikolo.components
+package com.netDashboard.color_picker.components
 
 import android.graphics.*
 import android.graphics.Color.*
@@ -6,9 +6,9 @@ import android.graphics.Paint.Cap.ROUND
 import android.graphics.Paint.Style.FILL
 import android.graphics.Paint.Style.STROKE
 import android.view.MotionEvent
-import com.netDashboard.picker.Metrics
-import com.netDashboard.picker.Paints
-import com.netDashboard.picker.listeners.OnColorSelectionListener
+import com.netDashboard.color_picker.Metrics
+import com.netDashboard.color_picker.Paints
+import com.netDashboard.color_picker.listeners.OnColorSelectionListener
 
 internal abstract class ArcComponent(
     val metrics: Metrics,
@@ -77,7 +77,7 @@ internal abstract class ArcComponent(
     }
 
     operator fun contains(point: PointF): Boolean {
-        val touchRadius = indicatorRadius + indicatorRadius * 0.2
+        val touchRadius = indicatorRadius * 2
         return point.x in (indicatorX - touchRadius)..(indicatorX + touchRadius) && point.y in (indicatorY - touchRadius)..(indicatorY + touchRadius)
     }
 
@@ -137,8 +137,7 @@ internal abstract class ArcComponent(
         val indicatorPaint = paints.indicatorPaint
         indicatorPaint.style = FILL
 
-        val color = metrics.getColor()
-        indicatorPaint.color = color
+        indicatorPaint.color = WHITE
         canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
     }
 

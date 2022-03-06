@@ -3,6 +3,7 @@ package com.netDashboard.tile.types.thermostat
 import android.app.Dialog
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -133,9 +134,11 @@ class ThermostatTile : Tile() {
                     }
                 }
                 "humi_set" -> {
-                    abs(100 / humidityStep).let {
-                        binding.ptHumi.max = it
-                        binding.ptHumi.progress = humiSetpoint / humidityStep
+                    if(humiditySetpoint) {
+                        abs(100 / humidityStep).let {
+                            binding.ptHumi.max = it
+                            binding.ptHumi.progress = humiSetpoint / humidityStep
+                        }
                     }
                 }
             }
@@ -181,9 +184,17 @@ class ThermostatTile : Tile() {
             override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
         })
 
-        abs(100 / humidityStep).let {
-            binding.ptHumi.max = it
-            binding.ptHumi.progress = humiSetpointTmp / humidityStep
+        if (!humiditySetpoint) {
+            binding.ptHumiCurrent.text = "--%"
+            binding.ptHumi.visibility = INVISIBLE
+        } else {
+            abs(100 / humidityStep).let {
+                binding.ptHumi.max = it
+                binding.ptHumi.progress = humiSetpointTmp / humidityStep
+            }
+
+            binding.ptHumiCurrent.text = "$humi%"
+            binding.ptHumiSetpoint.text = "$humiSetpointTmp%"
         }
 
         abs((temperatureRange[1] - temperatureRange[0]) / temperatureRange[2]).let {
@@ -194,7 +205,7 @@ class ThermostatTile : Tile() {
 
         binding.ptValue.text = "$tempSetpointTmp°C"
         binding.ptTempSetpoint.text = "$tempSetpointTmp°C"
-        binding.ptHumiSetpoint.text = "$humiSetpointTmp%"
+        binding.ptTempCurrent.text = "$temp°C"
 
         binding.ptConfirm.setOnClickListener {
             send(

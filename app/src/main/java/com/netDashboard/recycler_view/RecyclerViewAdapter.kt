@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.R
 import com.netDashboard.click
-import com.netDashboard.databinding.PopupConfirmBinding
+import com.netDashboard.databinding.DialogConfirmBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.iterate
@@ -147,8 +147,8 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
 
         val dialog = Dialog(context)
 
-        dialog.setContentView(R.layout.popup_confirm)
-        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.root))
+        dialog.setContentView(R.layout.dialog_confirm)
+        val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
 
         binding.pcText.text = "Confirm removing"
 
@@ -169,10 +169,6 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         }
 
         binding.pcDeny.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.padding.setOnClickListener {
             dialog.dismiss()
         }
 

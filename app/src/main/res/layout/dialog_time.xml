@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="20dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TimePicker
+        android:id="@+id/pt_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:headerBackground="#00000000"
+        android:numbersBackgroundColor="#00000000"
+        android:timePickerMode="clock"
+        android:visibility="gone" />
+
+    <DatePicker
+        android:id="@+id/pt_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/pt_deny"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorC"
+            android:text="CANCEL"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/pt_confirm"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorA"
+            android:text="CONFIRM"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

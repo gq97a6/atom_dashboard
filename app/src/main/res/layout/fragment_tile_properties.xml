@@ -461,7 +461,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -704,6 +704,79 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/tp_thermostat_humidity_topic_box"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:gravity="center"
+                                        android:tag="colorB"
+                                        android:text="Humidity setpoint subscribe topic"
+                                        android:textSize="15dp" />
+
+                                    <EditText
+                                        android:id="@+id/tp_thermostat_humidity_setpoint_sub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:gravity="center"
+                                        android:tag="colorB"
+                                        android:text="Humidity setpoint publish topic"
+                                        android:textSize="15dp" />
+
+                                    <EditText
+                                        android:id="@+id/tp_thermostat_humidity_setpoint_pub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
@@ -734,6 +807,7 @@
                                     tools:ignore="HardcodedText,TextFields" />
 
                             </LinearLayout>
+
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1124,6 +1198,38 @@
 
                                 <EditText
                                     android:id="@+id/tp_thermostat_humidity_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Humidity setpoint JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_thermostat_humidity_setpoint_path"
                                     android:layout_width="match_parent"
                                     android:layout_height="50dp"
                                     android:background="@drawable/background_frame_sharp"
@@ -1557,7 +1663,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -1636,158 +1742,36 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/tp_thermostat_humidity_range"
+                        android:id="@+id/tp_thermostat_humidity_step_box"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="2dp"
-                                android:gravity="center"
-                                android:tag="colorB"
-                                android:text="Temperature setpoint subscribe topic"
-                                android:textSize="15dp" />
-
-                            <EditText
-                                android:id="@+id/tp_thermostat_humidity_setpoint_sub"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="disabled"
-                                android:importantForAutofill="no"
-                                android:inputType="text"
-                                android:maxLength="50"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="2dp"
-                                android:gravity="center"
-                                android:tag="colorB"
-                                android:text="Temperature setpoint publish topic"
-                                android:textSize="15dp" />
-
-                            <EditText
-                                android:id="@+id/tp_thermostat_humidity_setpoint_pub"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="disabled"
-                                android:importantForAutofill="no"
-                                android:inputType="text"
-                                android:maxLength="50"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
-
-                        </LinearLayout>
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="2dp"
                             android:gravity="center"
                             android:tag="colorB"
-                            android:text="Humidity setpoint range"
+                            android:text="Humidity setpoint step"
                             android:textSize="15dp" />
 
-                        <LinearLayout
+                        <EditText
+                            android:id="@+id/tp_thermostat_humidity_step"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <EditText
-                                android:id="@+id/tp_thermostat_humidity_from"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_marginEnd="5dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="0"
-                                android:importantForAutofill="no"
-                                android:inputType="numberDecimal"
-                                android:maxLength="9"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
-
-                            <EditText
-                                android:id="@+id/tp_thermostat_humidity_to"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:layout_marginStart="5dp"
-                                android:layout_weight="1"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="30"
-                                android:importantForAutofill="no"
-                                android:inputType="numberDecimal"
-                                android:maxLength="9"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="2dp"
-                                android:gravity="center"
-                                android:tag="colorB"
-                                android:text="Humidity stepoint step"
-                                android:textSize="15dp" />
-
-                            <EditText
-                                android:id="@+id/tp_thermostat_humidity_step"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
-                                android:ems="100"
-                                android:hint="0.5"
-                                android:importantForAutofill="no"
-                                android:inputType="numberDecimal"
-                                android:maxLength="9"
-                                android:paddingHorizontal="10dp"
-                                android:tag="basic"
-                                android:textCursorDrawable="@null"
-                                tools:ignore="HardcodedText,TextFields" />
-
-                        </LinearLayout>
+                            android:layout_height="50dp"
+                            android:background="@drawable/background_frame_sharp"
+                            android:ems="100"
+                            android:hint="5"
+                            android:importantForAutofill="no"
+                            android:inputType="numberDecimal"
+                            android:maxLength="9"
+                            android:paddingHorizontal="10dp"
+                            android:tag="basic"
+                            android:textCursorDrawable="@null"
+                            tools:ignore="HardcodedText,TextFields" />
 
                     </LinearLayout>
 
@@ -1819,10 +1803,10 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/background_frame_sharp"
                                 android:ems="100"
-                                android:hint="0"
+                                android:hint="15"
                                 android:importantForAutofill="no"
                                 android:inputType="numberDecimal"
-                                android:maxLength="9"
+                                android:maxLength="4"
                                 android:paddingHorizontal="10dp"
                                 android:tag="basic"
                                 android:textCursorDrawable="@null"
@@ -1839,7 +1823,7 @@
                                 android:hint="30"
                                 android:importantForAutofill="no"
                                 android:inputType="numberDecimal"
-                                android:maxLength="9"
+                                android:maxLength="4"
                                 android:paddingHorizontal="10dp"
                                 android:tag="basic"
                                 android:textCursorDrawable="@null"
@@ -1871,7 +1855,7 @@
                                 android:hint="0.5"
                                 android:importantForAutofill="no"
                                 android:inputType="numberDecimal"
-                                android:maxLength="9"
+                                android:maxLength="3"
                                 android:paddingHorizontal="10dp"
                                 android:tag="basic"
                                 android:textCursorDrawable="@null"

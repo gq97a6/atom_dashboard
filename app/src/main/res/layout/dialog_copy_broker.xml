@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="250dp"
+    android:layout_height="500dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="20dp"
+    android:background="@drawable/background_frame"
+    android:orientation="vertical"
+    android:tag="frame">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:tag="color"
+        android:text="Pick dashboard \nto copy from"
+        android:textSize="25dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/pcb_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="5dp"
+        android:paddingTop="5dp" />
+
+</LinearLayout>

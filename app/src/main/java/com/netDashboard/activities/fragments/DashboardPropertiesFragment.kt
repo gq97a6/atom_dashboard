@@ -2,8 +2,6 @@ package com.netDashboard.activities.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +15,8 @@ import com.netDashboard.R
 import com.netDashboard.Transfer.showTransferPopup
 import com.netDashboard.blink
 import com.netDashboard.createToast
+import com.netDashboard.databinding.DialogCopyBrokerBinding
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
-import com.netDashboard.databinding.PopupCopyBrokerBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
@@ -153,8 +151,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 }
                 list.removeAt(dashboards.indexOf(dashboard))
 
-                dialog.setContentView(R.layout.popup_copy_broker)
-                val binding = PopupCopyBrokerBinding.bind(dialog.findViewById(R.id.root))
+                dialog.setContentView(R.layout.dialog_copy_broker)
+                val binding = DialogCopyBrokerBinding.bind(dialog.findViewById(R.id.root))
 
                 adapter.setHasStableIds(true)
                 adapter.onBindViewHolder = { _, holder, pos ->
@@ -188,7 +186,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         }
 
         b.dpTransfer.setOnClickListener {
-            if (dashboard.dg?.mqttd?.client?.isConnected ?: false) showTransferPopup(this)
+            if (dashboard.dg?.mqttd?.client?.isConnected == true) showTransferPopup(this)
             else createToast(requireContext(), "Connection required", 1000)
         }
     }

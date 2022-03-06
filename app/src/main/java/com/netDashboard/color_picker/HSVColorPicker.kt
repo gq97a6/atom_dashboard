@@ -2,7 +2,6 @@ package com.netDashboard.color_picker
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Color.colorToHSV
 import android.os.Parcel
 import android.os.Parcelable
@@ -10,12 +9,11 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.graphics.ColorUtils
+import com.netDashboard.R
 import com.netDashboard.color_picker.components.ArcComponent
 import com.netDashboard.color_picker.components.hsv.HueComponent
 import com.netDashboard.color_picker.components.hsv.LightnessComponent
 import com.netDashboard.color_picker.components.hsv.SaturationComponent
-import com.netDashboard.R
 import com.netDashboard.color_picker.listeners.OnColorSelectionListener
 
 open class HSVColorPicker @JvmOverloads constructor(

@@ -10,14 +10,12 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.*
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
@@ -232,4 +230,9 @@ fun Dialog.dialogSetup() {
     a?.dimAmount = 0.9f
     this.window?.attributes = a
     this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+    this.window?.setLayout(
+        WindowManager.LayoutParams.MATCH_PARENT,
+        WindowManager.LayoutParams.MATCH_PARENT
+    )
 }

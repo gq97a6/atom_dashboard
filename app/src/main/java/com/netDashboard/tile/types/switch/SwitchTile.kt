@@ -24,9 +24,6 @@ class SwitchTile : Tile() {
     override var iconKey = "il_interface_toggle_on"
 
     var state: Boolean? = false
-        set(value) {
-            field = value
-        }
 
     var iconKeyTrue = "il_interface_toggle_on"
     val iconResTrue: Int
@@ -69,7 +66,7 @@ class SwitchTile : Tile() {
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
             View.GONE
-        holder?.itemView?.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconResState)
+        holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconResState)
     }
 
     override fun onClick(v: View, e: MotionEvent) {

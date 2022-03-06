@@ -550,15 +550,20 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatModeSub.setText(tile.mqttData.subs["mode"])
                 b.tpThermostatModePub.setText(tile.mqttData.pubs["mode"])
 
-                b.tpThermostatHumidityFrom.setText(tile.humidityRange[0].toString())
-                b.tpThermostatHumidityTo.setText(tile.humidityRange[1].toString())
-                b.tpThermostatHumidityStep.setText(tile.humidityRange[2].toString())
+                b.tpThermostatTemperaturePath.setText(tile.mqttData.jsonPaths["temp"])
+                b.tpThermostatTemperatureSetpointPath.setText(tile.mqttData.jsonPaths["temp_set"])
+                b.tpThermostatHumidityPath.setText(tile.mqttData.jsonPaths["humi"])
+                b.tpThermostatHumiditySetpointPath.setText(tile.mqttData.jsonPaths["humi_set"])
+                b.tpThermostatModePath.setText(tile.mqttData.jsonPaths["mode"])
+
+                b.tpThermostatHumidityStep.setText(tile.humidityStep.toString())
                 b.tpThermostatTemperatureFrom.setText(tile.temperatureRange[0].toString())
                 b.tpThermostatTemperatureTo.setText(tile.temperatureRange[1].toString())
                 b.tpThermostatTemperatureStep.setText(tile.temperatureRange[2].toString())
 
                 tile.humiditySetpoint.let {
-                    b.tpThermostatHumidityRange.visibility = if (it) VISIBLE else GONE
+                    b.tpThermostatHumidityTopicBox.visibility = if (it) VISIBLE else GONE
+                    b.tpThermostatHumidityStepBox.visibility = if (it) VISIBLE else GONE
                     b.tpThermostatHumiditySetpoint.isChecked = it
                 }
 
@@ -595,29 +600,40 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.mqttData.pubs["mode"] = (it ?: "").toString()
                 }
 
-                b.tpThermostatHumidityFrom.addTextChangedListener {
-                    tile.humidityRange[0] = it.toString().toFloat()
+                b.tpThermostatTemperaturePath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["temp"] = (it ?: "").toString()
                 }
-                b.tpThermostatHumidityTo.addTextChangedListener {
-                    tile.humidityRange[1] = it.toString().toFloat()
+                b.tpThermostatTemperatureSetpointPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["temp_set"] = (it ?: "").toString()
                 }
+                b.tpThermostatHumidityPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["humi"] = (it ?: "").toString()
+                }
+                b.tpThermostatHumiditySetpointPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["humi_set"] = (it ?: "").toString()
+                }
+                b.tpThermostatModePath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
+                }
+
                 b.tpThermostatHumidityStep.addTextChangedListener {
-                    tile.humidityRange[2] = it.toString().toFloat()
+                    tile.humidityStep = it.toString().toFloatOrNull() ?: 5f
                 }
 
                 b.tpThermostatTemperatureFrom.addTextChangedListener {
-                    tile.temperatureRange[0] = it.toString().toFloat()
+                    tile.temperatureRange[0] = it.toString().toFloatOrNull() ?: 15f
                 }
                 b.tpThermostatTemperatureTo.addTextChangedListener {
-                    tile.temperatureRange[1] = it.toString().toFloat()
+                    tile.temperatureRange[1] = it.toString().toFloatOrNull() ?: 30f
                 }
                 b.tpThermostatTemperatureStep.addTextChangedListener {
-                    tile.temperatureRange[2] = it.toString().toFloat()
+                    tile.temperatureRange[2] = it.toString().toFloatOrNull() ?: .5f
                 }
 
                 b.tpThermostatHumiditySetpoint.setOnCheckedChangeListener { _, state ->
                     tile.humiditySetpoint = state
-                    b.tpThermostatHumidityRange.visibility = if (state) VISIBLE else GONE
+                    b.tpThermostatHumidityStepBox.visibility = if (state) VISIBLE else GONE
+                    b.tpThermostatHumidityTopicBox.visibility = if (state) VISIBLE else GONE
                 }
 
                 b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->

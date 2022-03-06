@@ -24,6 +24,7 @@ import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.netDashboard.globals.G.mapper
 import com.netDashboard.globals.G.theme
+import me.tankery.lib.circularseekbar.CircularSeekBar
 import java.io.File
 import java.io.FileReader
 
@@ -125,6 +126,7 @@ class Theme {
             is ConstraintLayout -> this.applyTheme(p)
             is RecyclerView -> this.applyTheme(p)
             is ChipGroup -> this.applyTheme(p)
+            is CircularSeekBar -> this.applyTheme(p)
             else -> {
                 if (this.javaClass == View::class.java) this.applyTheme(p)
                 else Log.i("OUY", "View type not specified: ${this.javaClass}")
@@ -355,6 +357,16 @@ class Theme {
                 this.thumbTintList = ColorStateList.valueOf(p.b)
             }
             else -> onUnknownTag(this.tag, "slider")
+        }
+    }
+
+    private fun CircularSeekBar.applyTheme(p: ColorPallet) {
+        when (this.tag) {
+            "base" -> {
+                this.circleProgressColor = p.b
+                this.pointerColor = p.color
+            }
+            else -> onUnknownTag(this.tag, "crcularSeekBar")
         }
     }
 

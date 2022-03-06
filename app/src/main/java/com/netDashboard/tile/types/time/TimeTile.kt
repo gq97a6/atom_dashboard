@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
-import com.netDashboard.databinding.PopupTimeBinding
+import com.netDashboard.databinding.DialogTimeBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -46,8 +46,8 @@ class TimeTile : Tile() {
         if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         val dialog = Dialog(adapter.context)
-        dialog.setContentView(R.layout.popup_time)
-        val binding = PopupTimeBinding.bind(dialog.findViewById(R.id.root))
+        dialog.setContentView(R.layout.dialog_time)
+        val binding = DialogTimeBinding.bind(dialog.findViewById(R.id.root))
 
         if (isDate) binding.ptDate.visibility = VISIBLE
         else {
@@ -77,10 +77,6 @@ class TimeTile : Tile() {
         }
 
         binding.ptDeny.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.padding.setOnClickListener {
             dialog.dismiss()
         }
 

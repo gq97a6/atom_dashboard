@@ -11,7 +11,7 @@ import com.netDashboard.Theme.Companion.saveToFile
 import com.netDashboard.activities.SplashScreenActivity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
-import com.netDashboard.databinding.PopupTransferBinding
+import com.netDashboard.databinding.DialogTransferBinding
 import com.netDashboard.globals.G
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
@@ -27,8 +27,8 @@ object Transfer {
             val dialog = Dialog(requireContext())
             var observer: (Pair<String?, MqttMessage?>) -> Unit = {}
 
-            dialog.setContentView(R.layout.popup_transfer)
-            val binding = PopupTransferBinding.bind(dialog.findViewById(R.id.root))
+            dialog.setContentView(R.layout.dialog_transfer)
+            val binding = DialogTransferBinding.bind(dialog.findViewById(R.id.root))
 
             var transferCaptured = false
             var connectionObserver: (Boolean) -> Unit

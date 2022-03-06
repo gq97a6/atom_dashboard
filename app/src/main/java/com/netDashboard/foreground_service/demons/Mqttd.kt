@@ -126,7 +126,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         fun dispatch(reason: String) {
             val sameOptions = client.serverURI == d.mqttURI &&
                     client.options.userName == d.mqttUserName &&
-                    client.options.password.contentEquals(d.mqttPass?.toCharArray())
+                    client.options.password.contentEquals(d.mqttPass.toCharArray())
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
 

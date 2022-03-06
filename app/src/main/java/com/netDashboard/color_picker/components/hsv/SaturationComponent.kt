@@ -1,9 +1,9 @@
 package com.netDashboard.color_picker.components.hsv
 
 import android.graphics.Color.HSVToColor
-import com.netDashboard.color_picker.components.ArcComponent
 import com.netDashboard.color_picker.Metrics
 import com.netDashboard.color_picker.Paints
+import com.netDashboard.color_picker.components.ArcComponent
 
 internal class SaturationComponent(
     metrics: Metrics,

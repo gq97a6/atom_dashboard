@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.createToast
-import com.netDashboard.databinding.PopupSelectBinding
+import com.netDashboard.databinding.DialogSelectBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.GenericAdapter
@@ -47,8 +47,8 @@ class SelectTile : Tile() {
             val dialog = Dialog(adapter.context)
             val adapter = GenericAdapter(adapter.context)
 
-            dialog.setContentView(R.layout.popup_select)
-            val binding = PopupSelectBinding.bind(dialog.findViewById(R.id.root))
+            dialog.setContentView(R.layout.dialog_select)
+            val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
 
             adapter.onBindViewHolder = { _, holder, pos ->
                 val text = holder.itemView.findViewById<TextView>(R.id.is_text)
@@ -59,10 +59,6 @@ class SelectTile : Tile() {
             adapter.onItemClick = {
                 val pos = adapter.list.indexOf(it)
                 send("${this.options[pos].second}", mqttData.qos)
-                dialog.dismiss()
-            }
-
-            binding.padding.setOnClickListener {
                 dialog.dismiss()
             }
 

@@ -1,7 +1,7 @@
 package com.netDashboard.color_picker.components
 
 import android.graphics.*
-import android.graphics.Color.*
+import android.graphics.Color.WHITE
 import android.graphics.Paint.Cap.ROUND
 import android.graphics.Paint.Style.FILL
 import android.graphics.Paint.Style.STROKE

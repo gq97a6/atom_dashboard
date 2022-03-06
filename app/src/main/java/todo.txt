@@ -2,6 +2,8 @@
 start guide
 code clean up
 tests
+circle seekbar pointer halo color
+add white/black accents
 
 new tiles
     thermostat /

@@ -11,7 +11,7 @@ import com.netDashboard.*
 import com.netDashboard.Parser.byJSONPath
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.databinding.PopupConfirmBinding
+import com.netDashboard.databinding.DialogConfirmBinding
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.icon.Icons
@@ -77,7 +77,7 @@ abstract class Tile : RecyclerViewItem() {
         )
     }
 
-    open class MqttData() {
+    open class MqttData {
         var isEnabled = true
         var lastReceive: Date? = null
 
@@ -128,8 +128,8 @@ abstract class Tile : RecyclerViewItem() {
 
         val dialog = Dialog(adapter.context)
 
-        dialog.setContentView(R.layout.popup_confirm)
-        val binding = PopupConfirmBinding.bind(dialog.findViewById(R.id.root))
+        dialog.setContentView(R.layout.dialog_confirm)
+        val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
 
         binding.pcConfirm.setOnClickListener {
             send()
@@ -137,10 +137,6 @@ abstract class Tile : RecyclerViewItem() {
         }
 
         binding.pcDeny.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.padding.setOnClickListener {
             dialog.dismiss()
         }
 
@@ -193,7 +189,7 @@ abstract class Tile : RecyclerViewItem() {
         }
 
         if (doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
-        if(settings.animateUpdate) holder?.itemView?.attentate()
+        if (settings.animateUpdate) holder?.itemView?.attentate()
 
         onReceive(data, jsonResult)
     }

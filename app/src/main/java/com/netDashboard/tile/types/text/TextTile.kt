@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
-import com.netDashboard.databinding.PopupTextBinding
+import com.netDashboard.databinding.DialogTextBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -44,8 +44,8 @@ class TextTile : Tile() {
         if (mqttData.varPayload) {
             val dialog = Dialog(adapter.context)
 
-            dialog.setContentView(R.layout.popup_text)
-            val binding = PopupTextBinding.bind(dialog.findViewById(R.id.root))
+            dialog.setContentView(R.layout.dialog_text)
+            val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
             binding.ptTopic.text = mqttData.pubs["base"].toString()
 
@@ -55,10 +55,6 @@ class TextTile : Tile() {
             }
 
             binding.ptDeny.setOnClickListener {
-                dialog.dismiss()
-            }
-
-            binding.padding.setOnClickListener {
                 dialog.dismiss()
             }
 

@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
-import com.netDashboard.databinding.PopupSliderBinding
+import com.netDashboard.databinding.DialogSliderBinding
 import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -67,8 +67,8 @@ class SliderTile : Tile() {
         if (!dragCon) {
             val dialog = Dialog(adapter.context)
 
-            dialog.setContentView(R.layout.popup_slider)
-            val binding = PopupSliderBinding.bind(dialog.findViewById(R.id.root))
+            dialog.setContentView(R.layout.dialog_slider)
+            val binding = DialogSliderBinding.bind(dialog.findViewById(R.id.root))
 
             binding.psValue.text = value.toString()
             setBackground(value, binding.tsBackground)
@@ -82,10 +82,6 @@ class SliderTile : Tile() {
                     }
                     return@setOnTouchListener true
                 }
-            }
-
-            binding.padding.setOnClickListener {
-                dialog.dismiss()
             }
 
             dialog.dialogSetup()
@@ -136,7 +132,8 @@ class SliderTile : Tile() {
 
     private fun setBackground(value: Int, background: View?) {
         val params = background?.layoutParams as ConstraintLayout.LayoutParams?
-        params?.matchConstraintPercentWidth = abs((((range[0] - value).toFloat() / (range[1] - range[0]))))
+        params?.matchConstraintPercentWidth =
+            abs((((range[0] - value).toFloat() / (range[1] - range[0]))))
         background?.requestLayout()
     }
 

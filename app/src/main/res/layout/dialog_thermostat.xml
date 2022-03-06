@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:tag="frame">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/pt_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <me.tankery.lib.circularseekbar.CircularSeekBar
+            android:id="@+id/pt_temp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:tag="base"
+            app:cs_end_angle="0"
+            app:cs_pointer_stroke_width="20dp"
+            app:cs_start_angle="90"
+            app:layout_constraintBottom_toTopOf="@+id/pt_mode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <me.tankery.lib.circularseekbar.CircularSeekBar
+            android:id="@+id/pt_humi"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:tag="base"
+            app:cs_end_angle="180"
+            app:cs_pointer_stroke_width="20dp"
+            app:cs_pointer_halo_color = "#00000000"
+            app:cs_start_angle="270"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp"
+            app:layout_constraintEnd_toEndOf="@+id/pt_temp"
+            app:layout_constraintStart_toStartOf="@+id/pt_temp"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp" />
+
+        <TextView
+            android:id="@+id/pt_value"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="40dp"
+            android:autoSizeMaxTextSize="50dp"
+            android:autoSizeMinTextSize="10dp"
+            android:autoSizeTextType="uniform"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="24.35°C"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_humi"
+            app:layout_constraintEnd_toEndOf="@+id/pt_humi"
+            app:layout_constraintStart_toStartOf="@+id/pt_humi"
+            app:layout_constraintTop_toTopOf="@+id/pt_humi" />
+
+        <Button
+            android:id="@+id/pt_mode"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="left"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_text"
+            android:tag="colorC"
+            android:text="MODE"
+            android:textSize="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/pt_temp_setpoint"
+            app:layout_constraintEnd_toEndOf="@+id/pt_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/pt_setpoint"
+            app:layout_constraintTop_toBottomOf="@+id/pt_temp" />
+
+        <TextView
+            android:id="@+id/pt_setpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SETPOINT"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_setpoint"
+            app:layout_constraintEnd_toStartOf="@+id/pt_temp_s"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp_setpoint" />
+
+        <TextView
+            android:id="@+id/pt_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CURRENT"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/pt_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/pt_setpoint"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp_current" />
+
+        <TextView
+            android:id="@+id/pt_temp_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TEMPERATURE"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_mode"
+            app:layout_constraintEnd_toStartOf="@+id/pt_humi_s"
+            app:layout_constraintStart_toEndOf="@+id/pt_setpoint"
+            app:layout_constraintTop_toTopOf="@+id/pt_mode" />
+
+        <TextView
+            android:id="@+id/pt_humi_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HUMIDITY"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/pt_temp_s"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp_s" />
+
+        <TextView
+            android:id="@+id/pt_temp_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:tag="colorA"
+            android:text="24.35°C"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/pt_temp_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/pt_temp_setpoint"
+            app:layout_constraintTop_toBottomOf="@+id/pt_temp_setpoint" />
+
+        <TextView
+            android:id="@+id/pt_humi_setpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="colorB"
+            android:text="45%"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_setpoint"
+            app:layout_constraintEnd_toEndOf="@+id/pt_humi_s"
+            app:layout_constraintStart_toStartOf="@+id/pt_humi_s"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp_setpoint" />
+
+        <TextView
+            android:id="@+id/pt_temp_setpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:tag="colorB"
+            android:text="20.55°C"
+            android:textSize="25dp"
+            app:layout_constraintBottom_toTopOf="@+id/pt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/pt_temp_s"
+            app:layout_constraintStart_toStartOf="@+id/pt_temp_s"
+            app:layout_constraintTop_toBottomOf="@+id/pt_mode" />
+
+        <TextView
+            android:id="@+id/pt_humi_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:text="65%"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/pt_humi_s"
+            app:layout_constraintStart_toStartOf="@+id/pt_humi_s"
+            app:layout_constraintTop_toTopOf="@+id/pt_temp_current" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/pt_deny"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorC"
+            android:text="CANCEL"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/pt_confirm"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:background="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorA"
+            android:text="CONFIRM"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

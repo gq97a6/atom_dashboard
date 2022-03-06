@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.ColorUtils.blendARGB
@@ -142,6 +143,7 @@ class Theme {
             "colorC" -> this.setBackgroundColor(p.c)
             "colorD" -> this.setBackgroundColor(p.d)
             "background" -> this.setBackgroundColor(p.background)
+            "background200" -> this.setBackgroundColor(p.background.alpha(200))
             "sliderBackground" -> {
                 val drawable = GradientDrawable()
                 drawable.mutate()
@@ -222,6 +224,9 @@ class Theme {
             "log" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, p.color)
+                val bar = getDrawable(context, R.drawable.background_bar)
+                bar?.setTint(p.b)
+                this.verticalScrollbarThumbDrawable = bar
             }
             else -> onUnknownTag(this.tag, "recyclerView")
         }
@@ -363,8 +368,10 @@ class Theme {
     private fun CircularSeekBar.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "base" -> {
+                //this.circleColor = Color.CYAN
                 this.circleProgressColor = p.b
                 this.pointerColor = p.color
+                //this.pointerHaloColorOnTouch = Color.TRANSPARENT
             }
             else -> onUnknownTag(this.tag, "crcularSeekBar")
         }

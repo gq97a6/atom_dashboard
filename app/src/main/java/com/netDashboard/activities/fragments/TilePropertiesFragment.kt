@@ -540,11 +540,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     if (tile.mqttData.payloadIsJson) VISIBLE else GONE
 
                 b.tpThermostatTemperatureSub.setText(tile.mqttData.subs["temp"])
-                b.tpThermostatTemperaturePub.setText(tile.mqttData.pubs["temp"])
                 b.tpThermostatTemperatureSetpointSub.setText(tile.mqttData.subs["temp_set"])
                 b.tpThermostatTemperatureSetpointPub.setText(tile.mqttData.pubs["temp_set"])
                 b.tpThermostatHumiditySub.setText(tile.mqttData.subs["humi"])
-                b.tpThermostatHumidityPub.setText(tile.mqttData.pubs["humi"])
                 b.tpThermostatHumiditySetpointSub.setText(tile.mqttData.subs["humi_set"])
                 b.tpThermostatHumiditySetpointPub.setText(tile.mqttData.pubs["humi_set"])
                 b.tpThermostatModeSub.setText(tile.mqttData.subs["mode"])
@@ -572,9 +570,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatTemperatureSub.addTextChangedListener {
                     tile.mqttData.subs["temp"] = (it ?: "").toString()
                 }
-                b.tpThermostatTemperaturePub.addTextChangedListener {
-                    tile.mqttData.pubs["temp"] = (it ?: "").toString()
-                }
                 b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
                     tile.mqttData.subs["temp_set"] = (it ?: "").toString()
                 }
@@ -583,9 +578,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
                 b.tpThermostatHumiditySub.addTextChangedListener {
                     tile.mqttData.subs["humi"] = (it ?: "").toString()
-                }
-                b.tpThermostatHumidityPub.addTextChangedListener {
-                    tile.mqttData.pubs["humi"] = (it ?: "").toString()
                 }
                 b.tpThermostatHumiditySetpointSub.addTextChangedListener {
                     tile.mqttData.subs["humi_set"] = (it ?: "").toString()
@@ -640,16 +632,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.showPayload = state
                 }
 
-                b.tpThermostatTemperaturePubCopy.setOnClickListener {
-                    b.tpThermostatTemperaturePub.setText(b.tpThermostatTemperatureSub.text)
-                }
-
                 b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
                     b.tpThermostatTemperatureSetpointPub.setText(b.tpThermostatTemperatureSetpointSub.text)
                 }
 
-                b.tpThermostatHumidityPubCopy.setOnClickListener {
-                    b.tpThermostatHumidityPub.setText(b.tpThermostatHumiditySub.text)
+                b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
+                    b.tpThermostatHumiditySetpointPub.setText(b.tpThermostatHumiditySetpointSub.text)
                 }
 
                 b.tpThermostatModePubCopy.setOnClickListener {

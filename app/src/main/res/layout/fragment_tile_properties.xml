@@ -501,62 +501,34 @@
                                 android:layout_marginTop="10dp"
                                 android:orientation="vertical">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:layout_marginBottom="2dp"
-                                    android:gravity="center"
-                                    android:tag="colorB"
-                                    android:text="Temperature publish topic"
-                                    android:textSize="15dp" />
-
-                                <FrameLayout
-                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
-                                    <EditText
-                                        android:id="@+id/tp_thermostat_temperature_pub"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="50dp"
-                                        android:background="@drawable/background_frame_sharp"
-                                        android:ems="100"
-                                        android:hint="disabled"
-                                        android:importantForAutofill="no"
-                                        android:inputType="text"
-                                        android:maxLength="50"
-                                        android:paddingHorizontal="10dp"
-                                        android:tag="basic"
-                                        android:textCursorDrawable="@null"
-                                        tools:ignore="HardcodedText,TextFields" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:text="Temperature "
+                                        android:textSize="15dp" />
 
-                                    <Button
-                                        android:id="@+id/tp_thermostat_temperature_pub_copy"
-                                        style="@style/button"
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:layout_gravity="center|right"
-                                        android:layout_marginEnd="10dp"
-                                        android:background="@drawable/button_copy"
-                                        android:tag="colorA" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:textStyle="bold"
+                                        android:text="setpoint"
+                                        android:textSize="15dp" />
 
-                                </FrameLayout>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:text=" subscribe topic"
+                                        android:textSize="15dp" />
 
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:gravity="center"
-                                    android:tag="colorB"
-                                    android:text="Temperature setpoint subscribe topic"
-                                    android:textSize="15dp" />
+                                </LinearLayout>
 
                                 <EditText
                                     android:id="@+id/tp_thermostat_temperature_setpoint_sub"
@@ -581,14 +553,34 @@
                                 android:layout_marginTop="10dp"
                                 android:orientation="vertical">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
                                     android:layout_marginBottom="2dp"
-                                    android:gravity="center"
-                                    android:tag="colorB"
-                                    android:text="Temperature setpoint publish topic"
-                                    android:textSize="15dp" />
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:text="Temperature "
+                                        android:textSize="15dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:textStyle="bold"
+                                        android:text="setpoint"
+                                        android:textSize="15dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:tag="colorB"
+                                        android:text=" publish topic"
+                                        android:textSize="15dp" />
+
+                                </LinearLayout>
 
                                 <FrameLayout
                                     android:layout_width="match_parent"
@@ -656,59 +648,11 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:gravity="center"
-                                    android:tag="colorB"
-                                    android:text="Humidity publish topic"
-                                    android:textSize="15dp" />
-
-                                <FrameLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <EditText
-                                        android:id="@+id/tp_thermostat_humidity_pub"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="50dp"
-                                        android:background="@drawable/background_frame_sharp"
-                                        android:ems="100"
-                                        android:hint="disabled"
-                                        android:importantForAutofill="no"
-                                        android:inputType="text"
-                                        android:maxLength="50"
-                                        android:paddingHorizontal="10dp"
-                                        android:tag="basic"
-                                        android:textCursorDrawable="@null"
-                                        tools:ignore="HardcodedText,TextFields" />
-
-                                    <Button
-                                        android:id="@+id/tp_thermostat_humidity_pub_copy"
-                                        style="@style/button"
-                                        android:layout_width="30dp"
-                                        android:layout_height="30dp"
-                                        android:layout_gravity="center|right"
-                                        android:layout_marginEnd="10dp"
-                                        android:background="@drawable/button_copy"
-                                        android:tag="colorA" />
-
-                                </FrameLayout>
-
-                            </LinearLayout>
-
-                            <LinearLayout
                                 android:id="@+id/tp_thermostat_humidity_topic_box"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -716,14 +660,34 @@
                                     android:layout_marginTop="10dp"
                                     android:orientation="vertical">
 
-                                    <TextView
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
                                         android:layout_marginBottom="2dp"
-                                        android:gravity="center"
-                                        android:tag="colorB"
-                                        android:text="Humidity setpoint subscribe topic"
-                                        android:textSize="15dp" />
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:text="Humidity "
+                                            android:textSize="15dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:textStyle="bold"
+                                            android:text="setpoint"
+                                            android:textSize="15dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:text=" subscribe topic"
+                                            android:textSize="15dp" />
+
+                                    </LinearLayout>
 
                                     <EditText
                                         android:id="@+id/tp_thermostat_humidity_setpoint_sub"
@@ -748,29 +712,65 @@
                                     android:layout_marginTop="10dp"
                                     android:orientation="vertical">
 
-                                    <TextView
+                                    <LinearLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
                                         android:layout_marginBottom="2dp"
-                                        android:gravity="center"
-                                        android:tag="colorB"
-                                        android:text="Humidity setpoint publish topic"
-                                        android:textSize="15dp" />
+                                        android:layout_height="wrap_content">
 
-                                    <EditText
-                                        android:id="@+id/tp_thermostat_humidity_setpoint_pub"
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:text="Humidity "
+                                            android:textSize="15dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:textStyle="bold"
+                                            android:text="setpoint"
+                                            android:textSize="15dp" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:tag="colorB"
+                                            android:text=" publish topic"
+                                            android:textSize="15dp" />
+
+                                    </LinearLayout>
+
+                                    <FrameLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="50dp"
-                                        android:background="@drawable/background_frame_sharp"
-                                        android:ems="100"
-                                        android:hint="disabled"
-                                        android:importantForAutofill="no"
-                                        android:inputType="text"
-                                        android:maxLength="50"
-                                        android:paddingHorizontal="10dp"
-                                        android:tag="basic"
-                                        android:textCursorDrawable="@null"
-                                        tools:ignore="HardcodedText,TextFields" />
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:id="@+id/tp_thermostat_humidity_setpoint_pub"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="50dp"
+                                            android:background="@drawable/background_frame_sharp"
+                                            android:ems="100"
+                                            android:hint="disabled"
+                                            android:importantForAutofill="no"
+                                            android:inputType="text"
+                                            android:maxLength="50"
+                                            android:paddingHorizontal="10dp"
+                                            android:tag="basic"
+                                            android:textCursorDrawable="@null"
+                                            tools:ignore="HardcodedText,TextFields" />
+
+                                        <Button
+                                            android:id="@+id/tp_thermostat_humidity_setpoint_pub_copy"
+                                            style="@style/button"
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_gravity="center|right"
+                                            android:layout_marginEnd="10dp"
+                                            android:background="@drawable/button_copy"
+                                            android:tag="colorA" />
+
+                                    </FrameLayout>
 
                                 </LinearLayout>
 

@@ -16,7 +16,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="20dp"
-        android:tag="background"
+        android:tag="background200"
         app:layout_constraintBottom_toBottomOf="@+id/ti_icon_frame"
         app:layout_constraintEnd_toEndOf="@+id/ti_icon_frame"
         app:layout_constraintStart_toStartOf="@+id/ti_icon_frame"

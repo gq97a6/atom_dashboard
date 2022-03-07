@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.netDashboard.globals.G
+import java.math.RoundingMode
 import java.util.*
 
 const val A = 255 //100%
@@ -236,3 +237,5 @@ fun Dialog.dialogSetup() {
         WindowManager.LayoutParams.MATCH_PARENT
     )
 }
+
+fun Float.round(d: Int): Float = this.toBigDecimal().setScale(d, RoundingMode.FLOOR).toFloat()

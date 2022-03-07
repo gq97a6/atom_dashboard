@@ -559,7 +559,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatTemperatureTo.setText(tile.temperatureRange[1].toString())
                 b.tpThermostatTemperatureStep.setText(tile.temperatureRange[2].toString())
 
-                tile.humiditySetpoint.let {
+                tile.includeHumiditySetpoint.let {
                     b.tpThermostatHumidityTopicBox.visibility = if (it) VISIBLE else GONE
                     b.tpThermostatHumidityStepBox.visibility = if (it) VISIBLE else GONE
                     b.tpThermostatHumiditySetpoint.isChecked = it
@@ -569,27 +569,35 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpThermostatTemperatureSub.addTextChangedListener {
                     tile.mqttData.subs["temp"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
                     tile.mqttData.subs["temp_set"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointPub.addTextChangedListener {
                     tile.mqttData.pubs["temp_set"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySub.addTextChangedListener {
                     tile.mqttData.subs["humi"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointSub.addTextChangedListener {
                     tile.mqttData.subs["humi_set"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointPub.addTextChangedListener {
                     tile.mqttData.pubs["humi_set"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModeSub.addTextChangedListener {
                     tile.mqttData.subs["mode"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModePub.addTextChangedListener {
                     tile.mqttData.pubs["mode"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
 
                 b.tpThermostatTemperaturePath.addTextChangedListener {
@@ -607,11 +615,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatModePath.addTextChangedListener {
                     tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
                 }
-
                 b.tpThermostatHumidityStep.addTextChangedListener {
                     tile.humidityStep = it.toString().toFloatOrNull() ?: 5f
                 }
-
                 b.tpThermostatTemperatureFrom.addTextChangedListener {
                     tile.temperatureRange[0] = it.toString().toFloatOrNull() ?: 15f
                 }
@@ -623,7 +629,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpThermostatHumiditySetpoint.setOnCheckedChangeListener { _, state ->
-                    tile.humiditySetpoint = state
+                    tile.includeHumiditySetpoint = state
                     b.tpThermostatHumidityStepBox.visibility = if (state) VISIBLE else GONE
                     b.tpThermostatHumidityTopicBox.visibility = if (state) VISIBLE else GONE
                 }

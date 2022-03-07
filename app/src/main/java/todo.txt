@@ -2,6 +2,8 @@
 start guide
 code clean up
 tests
+trackpad tile
+keyboard tile
 add white/black accents
 
 new tiles

@@ -8,16 +8,15 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.netDashboard.R
-import com.netDashboard.blink
+import com.netDashboard.*
 import com.netDashboard.databinding.DialogThermostatBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class ThermostatTile : Tile() {
@@ -30,18 +29,20 @@ class ThermostatTile : Tile() {
 
     override var iconKey = "il_weather_temperature_half"
 
-    var humi = 0f
-    var humiSetpoint = 0f
-    var temp = 0f
-    var tempSetpoint = 0f
-    var mode = "auto"
     var hasReceived = MutableLiveData("")
 
-    var humiditySetpoint = false
-    var showPayload = false
-    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
+    var mode = "auto"
+    var humi: Float? = null
+    var temp: Float? = null
+    var humiSetpoint: Float? = null
+    var tempSetpoint: Float? = null
+
     var humidityStep = 5f
     var temperatureRange = mutableListOf(15f, 30f, .5f)
+    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
+
+    var includeHumiditySetpoint = false
+    var showPayload = false
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
@@ -107,6 +108,17 @@ class ThermostatTile : Tile() {
         //if (mqttData.pubs["base"].isNullOrEmpty()) return
         //if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
+        if (temperatureRange[0] > temperatureRange[1]) {
+            val tmp = temperatureRange[0]
+            temperatureRange[0] = temperatureRange[1]
+            temperatureRange[1] = tmp
+        }
+        tempSetpoint?.let {
+            if (it !in temperatureRange[0]..temperatureRange[1]) {
+                tempSetpoint = temperatureRange[0]
+            }
+        }
+
         val dialog = Dialog(adapter.context)
         dialog.setContentView(R.layout.dialog_thermostat)
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
@@ -124,20 +136,25 @@ class ThermostatTile : Tile() {
 
         var observer: (String) -> Unit = {
             when (it) {
-                "temp" -> binding.ptTempCurrent.text = "$temp°C"
-                "humi" -> binding.ptHumiCurrent.text = "$humi%"
+                "temp" -> {
+                    temp?.let {
+                        binding.ptTempCurrent.text = "${it.round(3)}°C"
+                    }
+                }
+                "humi" -> {
+                    humi?.let {
+                        binding.ptHumiCurrent.text = "${it.round(3)}%"
+                    }
+                }
                 "temp_set" -> {
-                    abs((temperatureRange[1] - temperatureRange[0]) / temperatureRange[2]).let {
-                        binding.ptTemp.max = it
-                        binding.ptTemp.progress =
-                            (tempSetpoint - temperatureRange[0]) / temperatureRange[2]
+                    tempSetpoint?.let {
+                        binding.ptTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
                     }
                 }
                 "humi_set" -> {
-                    if(humiditySetpoint) {
-                        abs(100 / humidityStep).let {
-                            binding.ptHumi.max = it
-                            binding.ptHumi.progress = humiSetpoint / humidityStep
+                    if (includeHumiditySetpoint) {
+                        humiSetpoint?.let {
+                            binding.ptHumi.progress = it / humidityStep
                         }
                     }
                 }
@@ -157,10 +174,13 @@ class ThermostatTile : Tile() {
                 progress: Float,
                 fromUser: Boolean
             ) {
-                tempSetpointTmp = temperatureRange[0] + progress.roundToInt() * temperatureRange[2]
-                binding.ptValue.text = "$tempSetpointTmp°C"
-                binding.ptTempSetpoint.text = "$tempSetpointTmp°C"
-                valueBlinking()
+                if (fromUser) {
+                    tempSetpointTmp =
+                        temperatureRange[0] + progress.roundToInt() * temperatureRange[2]
+                    binding.ptValue.text = "${tempSetpointTmp!!.round(3)}°C"
+                    binding.ptTempSetpoint.text = "${tempSetpointTmp!!.round(3)}°C"
+                    valueBlinking()
+                }
             }
 
             override fun onStopTrackingTouch(seekBar: CircularSeekBar?) {}
@@ -174,38 +194,43 @@ class ThermostatTile : Tile() {
                 progress: Float,
                 fromUser: Boolean
             ) {
-                humiSetpointTmp = progress.roundToInt() * humidityStep
-                binding.ptValue.text = "$humiSetpointTmp%"
-                binding.ptHumiSetpoint.text = "$humiSetpointTmp%"
-                valueBlinking()
+                if (fromUser) {
+                    humiSetpointTmp = progress.roundToInt() * humidityStep
+                    binding.ptValue.text = "${humiSetpointTmp!!.round(3)}%"
+                    binding.ptHumiSetpoint.text = "${humiSetpointTmp!!.round(3)}%"
+                    valueBlinking()
+                }
             }
 
             override fun onStopTrackingTouch(seekBar: CircularSeekBar?) {}
             override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
         })
 
-        if (!humiditySetpoint) {
+        if (!includeHumiditySetpoint) {
             binding.ptHumiCurrent.text = "--%"
             binding.ptHumi.visibility = INVISIBLE
         } else {
             abs(100 / humidityStep).let {
                 binding.ptHumi.max = it
-                binding.ptHumi.progress = humiSetpointTmp / humidityStep
+            }
+            humiSetpointTmp?.let {
+                binding.ptHumi.progress = it / humidityStep
             }
 
-            binding.ptHumiCurrent.text = "$humi%"
-            binding.ptHumiSetpoint.text = "$humiSetpointTmp%"
+            humi?.let { binding.ptHumiCurrent.text = "${it.round(3)}%" }
+            humiSetpointTmp?.let { binding.ptHumiSetpoint.text = "${it.round(3)}%" }
         }
 
         abs((temperatureRange[1] - temperatureRange[0]) / temperatureRange[2]).let {
             binding.ptTemp.max = it
-            binding.ptTemp.progress =
-                (tempSetpointTmp - temperatureRange[0]) / temperatureRange[2]
+        }
+        tempSetpointTmp?.let {
+            binding.ptTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
         }
 
-        binding.ptValue.text = "$tempSetpointTmp°C"
-        binding.ptTempSetpoint.text = "$tempSetpointTmp°C"
-        binding.ptTempCurrent.text = "$temp°C"
+        tempSetpointTmp?.let { binding.ptValue.text = "${it.round(3)}°C" }
+        tempSetpointTmp?.let { binding.ptTempSetpoint.text = "${it.round(3)}°C" }
+        temp?.let { binding.ptTempCurrent.text = "${it.round(3)}°C" }
 
         binding.ptConfirm.setOnClickListener {
             send(

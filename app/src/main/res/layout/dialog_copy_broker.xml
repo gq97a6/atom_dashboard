@@ -19,7 +19,7 @@
         android:textSize="25dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pcb_recycler_view"
+        android:id="@+id/dcb_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="5dp"

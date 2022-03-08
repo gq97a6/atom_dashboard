@@ -110,21 +110,21 @@ class ColorTile : Tile() {
         val binding = DialogColorPickerBinding.bind(dialog.findViewById(R.id.root))
 
         fun onColorChange() {
-            colorToHSV(binding.pcpPicker.color, hsvPicked)
-            binding.pcpColor.backgroundTintList =
-                ColorStateList.valueOf(binding.pcpPicker.color)
+            colorToHSV(binding.dcpPicker.color, hsvPicked)
+            binding.dcpColor.backgroundTintList =
+                ColorStateList.valueOf(binding.dcpPicker.color)
         }
 
-        binding.pcpPicker.setColor(HSVToColor(hsvPicked))
+        binding.dcpPicker.setColor(HSVToColor(hsvPicked))
         onColorChange()
 
-        binding.pcpPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
+        binding.dcpPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
                 onColorChange()
             }
         })
 
-        binding.pcpConfirm.setOnClickListener {
+        binding.dcpConfirm.setOnClickListener {
             send(
                 when (colorType) {
                     "hsv" -> {
@@ -156,7 +156,7 @@ class ColorTile : Tile() {
             dialog.dismiss()
         }
 
-        binding.pcpDeny.setOnClickListener {
+        binding.dcpDeny.setOnClickListener {
             dialog.dismiss()
         }
 

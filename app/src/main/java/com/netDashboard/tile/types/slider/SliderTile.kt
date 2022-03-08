@@ -70,7 +70,7 @@ class SliderTile : Tile() {
             dialog.setContentView(R.layout.dialog_slider)
             val binding = DialogSliderBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.psValue.text = value.toString()
+            binding.dsValue.text = value.toString()
             setBackground(value, binding.tsBackground)
 
             binding.root.setOnTouchListener { _, event ->
@@ -78,7 +78,7 @@ class SliderTile : Tile() {
                     if (it.second) dialog.dismiss()
                     else {
                         setBackground(it.first, binding.tsBackground)
-                        binding.psValue.text = it.first.toString()
+                        binding.dsValue.text = it.first.toString()
                     }
                     return@setOnTouchListener true
                 }

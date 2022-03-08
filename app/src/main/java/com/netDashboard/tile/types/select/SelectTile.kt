@@ -65,8 +65,8 @@ class SelectTile : Tile() {
             adapter.setHasStableIds(true)
             adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
 
-            binding.psRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
-            binding.psRecyclerView.adapter = adapter
+            binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
+            binding.dsRecyclerView.adapter = adapter
 
             dialog.dialogSetup()
             G.theme.apply(binding.root)

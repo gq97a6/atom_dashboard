@@ -131,17 +131,17 @@ abstract class Tile : RecyclerViewItem() {
         dialog.setContentView(R.layout.dialog_confirm)
         val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
 
-        binding.pcConfirm.setOnClickListener {
+        binding.dcConfirm.setOnClickListener {
             send()
             dialog.dismiss()
         }
 
-        binding.pcDeny.setOnClickListener {
+        binding.dcDeny.setOnClickListener {
             dialog.dismiss()
         }
 
-        binding.pcConfirm.text = "PUBLISH"
-        binding.pcText.text = "Confirm publishing"
+        binding.dcConfirm.text = "PUBLISH"
+        binding.dcText.text = "Confirm publishing"
 
         dialog.dialogSetup()
         theme.apply(binding.root)

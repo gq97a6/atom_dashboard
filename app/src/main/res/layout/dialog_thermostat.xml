@@ -10,12 +10,12 @@
     android:tag="frame">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/pt_parent"
+        android:id="@+id/dt_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <me.tankery.lib.circularseekbar.CircularSeekBar
-            android:id="@+id/pt_temp"
+            android:id="@+id/dt_temp"
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:tag="base"
@@ -23,13 +23,13 @@
             app:cs_pointer_halo_color_ontouch="#00000000"
             app:cs_pointer_stroke_width="20dp"
             app:cs_start_angle="90"
-            app:layout_constraintBottom_toTopOf="@+id/pt_mode"
+            app:layout_constraintBottom_toTopOf="@+id/dt_mode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <me.tankery.lib.circularseekbar.CircularSeekBar
-            android:id="@+id/pt_humi"
+            android:id="@+id/dt_humi"
             android:layout_width="230dp"
             android:layout_height="230dp"
             android:tag="base"
@@ -38,14 +38,14 @@
             app:cs_pointer_halo_color_ontouch="#00000000"
             app:cs_pointer_stroke_width="20dp"
             app:cs_start_angle="270"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp"
-            app:layout_constraintEnd_toEndOf="@+id/pt_temp"
-            app:layout_constraintStart_toStartOf="@+id/pt_temp"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp" />
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
 
 
         <TextView
-            android:id="@+id/pt_value"
+            android:id="@+id/dt_value"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="50dp"
@@ -56,14 +56,14 @@
             android:maxLines="1"
             android:text="-- %"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_humi"
-            app:layout_constraintEnd_toEndOf="@+id/pt_humi"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_humi"
+            app:layout_constraintEnd_toEndOf="@+id/dt_humi"
             app:layout_constraintHeight_percent="0.5"
-            app:layout_constraintStart_toStartOf="@+id/pt_humi"
-            app:layout_constraintTop_toTopOf="@+id/pt_humi" />
+            app:layout_constraintStart_toStartOf="@+id/dt_humi"
+            app:layout_constraintTop_toTopOf="@+id/dt_humi" />
 
         <Button
-            android:id="@+id/pt_mode"
+            android:id="@+id/dt_mode"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
@@ -73,58 +73,58 @@
             android:tag="colorC"
             android:text="MODE"
             android:textSize="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/pt_temp_setpoint"
-            app:layout_constraintEnd_toEndOf="@+id/pt_setpoint"
-            app:layout_constraintStart_toStartOf="@+id/pt_setpoint"
-            app:layout_constraintTop_toBottomOf="@+id/pt_temp" />
+            app:layout_constraintBottom_toTopOf="@+id/dt_temp_setpoint"
+            app:layout_constraintEnd_toEndOf="@+id/dt_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/dt_setpoint"
+            app:layout_constraintTop_toBottomOf="@+id/dt_temp" />
 
         <TextView
-            android:id="@+id/pt_setpoint"
+            android:id="@+id/dt_setpoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SETPOINT"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_setpoint"
-            app:layout_constraintEnd_toStartOf="@+id/pt_temp_s"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp_setpoint"
+            app:layout_constraintEnd_toStartOf="@+id/dt_temp_s"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp_setpoint" />
+            app:layout_constraintTop_toTopOf="@+id/dt_temp_setpoint" />
 
         <TextView
-            android:id="@+id/pt_current"
+            android:id="@+id/dt_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="CURRENT"
             android:textSize="15dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_current"
-            app:layout_constraintEnd_toEndOf="@+id/pt_setpoint"
-            app:layout_constraintStart_toStartOf="@+id/pt_setpoint"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp_current" />
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/dt_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/dt_setpoint"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp_current" />
 
         <TextView
-            android:id="@+id/pt_temp_s"
+            android:id="@+id/dt_temp_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TEMPERATURE"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_mode"
-            app:layout_constraintEnd_toStartOf="@+id/pt_humi_s"
-            app:layout_constraintStart_toEndOf="@+id/pt_setpoint"
-            app:layout_constraintTop_toTopOf="@+id/pt_mode" />
+            app:layout_constraintBottom_toBottomOf="@+id/dt_mode"
+            app:layout_constraintEnd_toStartOf="@+id/dt_humi_s"
+            app:layout_constraintStart_toEndOf="@+id/dt_setpoint"
+            app:layout_constraintTop_toTopOf="@+id/dt_mode" />
 
         <TextView
-            android:id="@+id/pt_humi_s"
+            android:id="@+id/dt_humi_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="HUMIDITY"
             android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_s"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp_s"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/pt_temp_s"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp_s" />
+            app:layout_constraintStart_toEndOf="@+id/dt_temp_s"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp_s" />
 
         <TextView
-            android:id="@+id/pt_temp_current"
+            android:id="@+id/dt_temp_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -133,47 +133,47 @@
             android:textSize="25dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/pt_temp_setpoint"
-            app:layout_constraintStart_toStartOf="@+id/pt_temp_setpoint"
-            app:layout_constraintTop_toBottomOf="@+id/pt_temp_setpoint" />
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp_setpoint"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp_setpoint"
+            app:layout_constraintTop_toBottomOf="@+id/dt_temp_setpoint" />
 
         <TextView
-            android:id="@+id/pt_humi_setpoint"
+            android:id="@+id/dt_humi_setpoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tag="colorB"
             android:text="-- %"
             android:textSize="25dp"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_setpoint"
-            app:layout_constraintEnd_toEndOf="@+id/pt_humi_s"
-            app:layout_constraintStart_toStartOf="@+id/pt_humi_s"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp_setpoint" />
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp_setpoint"
+            app:layout_constraintEnd_toEndOf="@+id/dt_humi_s"
+            app:layout_constraintStart_toStartOf="@+id/dt_humi_s"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp_setpoint" />
 
         <TextView
-            android:id="@+id/pt_temp_setpoint"
+            android:id="@+id/dt_temp_setpoint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:tag="colorB"
             android:text="-- °C"
             android:textSize="25dp"
-            app:layout_constraintBottom_toTopOf="@+id/pt_temp_current"
-            app:layout_constraintEnd_toEndOf="@+id/pt_temp_s"
-            app:layout_constraintStart_toStartOf="@+id/pt_temp_s"
-            app:layout_constraintTop_toBottomOf="@+id/pt_mode" />
+            app:layout_constraintBottom_toTopOf="@+id/dt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp_s"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp_s"
+            app:layout_constraintTop_toBottomOf="@+id/dt_mode" />
 
         <TextView
-            android:id="@+id/pt_humi_current"
+            android:id="@+id/dt_humi_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:text="-- %"
             android:textSize="25dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/pt_temp_current"
-            app:layout_constraintEnd_toEndOf="@+id/pt_humi_s"
-            app:layout_constraintStart_toStartOf="@+id/pt_humi_s"
-            app:layout_constraintTop_toTopOf="@+id/pt_temp_current" />
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp_current"
+            app:layout_constraintEnd_toEndOf="@+id/dt_humi_s"
+            app:layout_constraintStart_toStartOf="@+id/dt_humi_s"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp_current" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -184,7 +184,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pt_deny"
+            android:id="@+id/dt_deny"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
             android:textSize="12dp" />
 
         <Button
-            android:id="@+id/pt_confirm"
+            android:id="@+id/dt_confirm"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

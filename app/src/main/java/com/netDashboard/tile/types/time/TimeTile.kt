@@ -49,15 +49,15 @@ class TimeTile : Tile() {
         dialog.setContentView(R.layout.dialog_time)
         val binding = DialogTimeBinding.bind(dialog.findViewById(R.id.root))
 
-        if (isDate) binding.ptDate.visibility = VISIBLE
+        if (isDate) binding.dtDate.visibility = VISIBLE
         else {
-            binding.ptTime.visibility = VISIBLE
-            if (isMilitary) binding.ptTime.setIs24HourView(isMilitary)
+            binding.dtTime.visibility = VISIBLE
+            if (isMilitary) binding.dtTime.setIs24HourView(isMilitary)
         }
 
-        binding.ptConfirm.setOnClickListener {
+        binding.dtConfirm.setOnClickListener {
             if (isDate) {
-                val d = binding.ptDate
+                val d = binding.dtDate
                 send(
                     (mqttData.payloads["date"] ?: "")
                         .replace("@day", d.dayOfMonth.toString())
@@ -65,7 +65,7 @@ class TimeTile : Tile() {
                         .replace("@year", d.year.toString()), mqttData.qos
                 )
             } else {
-                val t = binding.ptTime
+                val t = binding.dtTime
                 send(
                     (mqttData.payloads["time"] ?: "")
                         .replace("@hour", t.hour.toString())
@@ -76,7 +76,7 @@ class TimeTile : Tile() {
             dialog.dismiss()
         }
 
-        binding.ptDeny.setOnClickListener {
+        binding.dtDeny.setOnClickListener {
             dialog.dismiss()
         }
 

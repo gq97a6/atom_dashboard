@@ -150,9 +150,9 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         dialog.setContentView(R.layout.dialog_confirm)
         val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
 
-        binding.pcText.text = "Confirm removing"
+        binding.dcText.text = "Confirm removing"
 
-        binding.pcConfirm.setOnClickListener {
+        binding.dcConfirm.setOnClickListener {
             var i = 0
             while (i < list.size) {
                 list[i].let {
@@ -168,7 +168,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
             dialog.dismiss()
         }
 
-        binding.pcDeny.setOnClickListener {
+        binding.dcDeny.setOnClickListener {
             dialog.dismiss()
         }
 

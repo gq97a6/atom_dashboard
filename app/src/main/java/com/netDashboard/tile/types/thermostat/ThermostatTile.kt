@@ -1,22 +1,30 @@
 package com.netDashboard.tile.types.thermostat
 
 import android.app.Dialog
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.INVISIBLE
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.*
+import com.netDashboard.activities.MainActivity
+import com.netDashboard.databinding.DialogConfirmBinding
+import com.netDashboard.databinding.DialogSelectBinding
 import com.netDashboard.databinding.DialogThermostatBinding
 import com.netDashboard.globals.G
+import com.netDashboard.recycler_view.GenericAdapter
+import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 class ThermostatTile : Tile() {
@@ -127,34 +135,34 @@ class ThermostatTile : Tile() {
         var humiSetpointTmp = humiSetpoint
 
         fun valueBlinking() {
-            if (tempSetpointTmp != tempSetpoint) binding.ptTempSetpoint.blink(-1, 200, 0, .4f)
-            else binding.ptTempSetpoint.clearAnimation()
+            if (tempSetpointTmp != tempSetpoint) binding.dtTempSetpoint.blink(-1, 200, 0, .4f)
+            else binding.dtTempSetpoint.clearAnimation()
 
-            if (humiSetpointTmp != humiSetpoint) binding.ptHumiSetpoint.blink(-1, 200, 0, .4f)
-            else binding.ptHumiSetpoint.clearAnimation()
+            if (humiSetpointTmp != humiSetpoint) binding.dtHumiSetpoint.blink(-1, 200, 0, .4f)
+            else binding.dtHumiSetpoint.clearAnimation()
         }
 
         var observer: (String) -> Unit = {
             when (it) {
                 "temp" -> {
                     temp?.let {
-                        binding.ptTempCurrent.text = "${it.round(3)}°C"
+                        binding.dtTempCurrent.text = "${it.round(3)}°C"
                     }
                 }
                 "humi" -> {
                     humi?.let {
-                        binding.ptHumiCurrent.text = "${it.round(3)}%"
+                        binding.dtHumiCurrent.text = "${it.round(3)}%"
                     }
                 }
                 "temp_set" -> {
                     tempSetpoint?.let {
-                        binding.ptTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
+                        binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
                     }
                 }
                 "humi_set" -> {
                     if (includeHumiditySetpoint) {
                         humiSetpoint?.let {
-                            binding.ptHumi.progress = it / humidityStep
+                            binding.dtHumi.progress = it / humidityStep
                         }
                     }
                 }
@@ -167,7 +175,7 @@ class ThermostatTile : Tile() {
 
         hasReceived.observe(adapter.context as LifecycleOwner, observer)
 
-        binding.ptTemp.setOnSeekBarChangeListener(object :
+        binding.dtTemp.setOnSeekBarChangeListener(object :
             CircularSeekBar.OnCircularSeekBarChangeListener {
             override fun onProgressChanged(
                 circularSeekBar: CircularSeekBar?,
@@ -177,8 +185,8 @@ class ThermostatTile : Tile() {
                 if (fromUser) {
                     tempSetpointTmp =
                         temperatureRange[0] + progress.roundToInt() * temperatureRange[2]
-                    binding.ptValue.text = "${tempSetpointTmp!!.round(3)}°C"
-                    binding.ptTempSetpoint.text = "${tempSetpointTmp!!.round(3)}°C"
+                    binding.dtValue.text = "${tempSetpointTmp!!.round(3)}°C"
+                    binding.dtTempSetpoint.text = "${tempSetpointTmp!!.round(3)}°C"
                     valueBlinking()
                 }
             }
@@ -187,7 +195,7 @@ class ThermostatTile : Tile() {
             override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
         })
 
-        binding.ptHumi.setOnSeekBarChangeListener(object :
+        binding.dtHumi.setOnSeekBarChangeListener(object :
             CircularSeekBar.OnCircularSeekBarChangeListener {
             override fun onProgressChanged(
                 circularSeekBar: CircularSeekBar?,
@@ -196,8 +204,8 @@ class ThermostatTile : Tile() {
             ) {
                 if (fromUser) {
                     humiSetpointTmp = progress.roundToInt() * humidityStep
-                    binding.ptValue.text = "${humiSetpointTmp!!.round(3)}%"
-                    binding.ptHumiSetpoint.text = "${humiSetpointTmp!!.round(3)}%"
+                    binding.dtValue.text = "${humiSetpointTmp!!.round(3)}%"
+                    binding.dtHumiSetpoint.text = "${humiSetpointTmp!!.round(3)}%"
                     valueBlinking()
                 }
             }
@@ -207,51 +215,115 @@ class ThermostatTile : Tile() {
         })
 
         if (!includeHumiditySetpoint) {
-            binding.ptHumiCurrent.text = "--%"
-            binding.ptHumi.visibility = INVISIBLE
+            binding.dtHumiCurrent.text = "--%"
+            binding.dtHumi.visibility = INVISIBLE
         } else {
             abs(100 / humidityStep).let {
-                binding.ptHumi.max = it
+                binding.dtHumi.max = it
             }
             humiSetpointTmp?.let {
-                binding.ptHumi.progress = it / humidityStep
+                binding.dtHumi.progress = it / humidityStep
             }
 
-            humi?.let { binding.ptHumiCurrent.text = "${it.round(3)}%" }
-            humiSetpointTmp?.let { binding.ptHumiSetpoint.text = "${it.round(3)}%" }
+            humi?.let { binding.dtHumiCurrent.text = "${it.round(3)}%" }
+            humiSetpointTmp?.let { binding.dtHumiSetpoint.text = "${it.round(3)}%" }
         }
 
         abs((temperatureRange[1] - temperatureRange[0]) / temperatureRange[2]).let {
-            binding.ptTemp.max = it
+            binding.dtTemp.max = it
         }
         tempSetpointTmp?.let {
-            binding.ptTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
+            binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
         }
 
-        tempSetpointTmp?.let { binding.ptValue.text = "${it.round(3)}°C" }
-        tempSetpointTmp?.let { binding.ptTempSetpoint.text = "${it.round(3)}°C" }
-        temp?.let { binding.ptTempCurrent.text = "${it.round(3)}°C" }
+        tempSetpointTmp?.let { binding.dtValue.text = "${it.round(3)}°C" }
+        tempSetpointTmp?.let { binding.dtTempSetpoint.text = "${it.round(3)}°C" }
+        temp?.let { binding.dtTempCurrent.text = "${it.round(3)}°C" }
 
-        binding.ptConfirm.setOnClickListener {
-            send(
-                mqttData.pubs["temp_set"],
-                "$tempSetpointTmp",
-                mqttData.qos,
-                false,
-                mqttData.confirmPub
-            )
-            send(
-                mqttData.pubs["humi_set"],
-                "$humiSetpointTmp",
-                mqttData.qos,
-                false,
-                mqttData.confirmPub
-            )
+        binding.dtConfirm.setOnClickListener {
+            val dialogConfirm = Dialog(adapter.context)
+
+            dialogConfirm.setContentView(R.layout.dialog_confirm)
+            val binding = DialogConfirmBinding.bind(dialogConfirm.findViewById(R.id.root))
+
+            binding.dcConfirm.setOnClickListener {
+                send(
+                    mqttData.pubs["temp_set"],
+                    "$tempSetpointTmp",
+                    mqttData.qos,
+                    false,
+                    true
+                )
+                send(
+                    mqttData.pubs["humi_set"],
+                    "$humiSetpointTmp",
+                    mqttData.qos,
+                    false,
+                    true
+                )
+                dialogConfirm.dismiss()
+            }
+
+            binding.dcDeny.setOnClickListener {
+                dialogConfirm.dismiss()
+            }
+
+            binding.dcConfirm.text = "PUBLISH"
+            binding.dcText.text = "Confirm publishing"
+
+            dialogConfirm.dialogSetup()
+            G.theme.apply(binding.root)
+            dialogConfirm.show()
+
             dialog.dismiss()
         }
 
-        binding.ptDeny.setOnClickListener {
+        binding.dtDeny.setOnClickListener {
             dialog.dismiss()
+        }
+
+        binding.dtMode.setOnClickListener {
+            val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
+            if (notEmpty.size > 0) {
+                val dialog = Dialog(adapter.context)
+                val adapter = GenericAdapter(adapter.context)
+
+                dialog.setContentView(R.layout.dialog_select)
+                val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
+
+                adapter.onBindViewHolder = { _, holder, pos ->
+                    val text = holder.itemView.findViewById<TextView>(R.id.is_text)
+                    text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
+                    else "${notEmpty[pos].first}"
+
+                    if(mode == notEmpty[pos].second) text.text = "${text.text} (S)"
+                }
+
+                adapter.onItemClick = {
+                    val pos = adapter.list.indexOf(it)
+
+                    send(
+                        mqttData.pubs["mode"],
+                        "${this.modes[pos].second}",
+                        mqttData.qos,
+                        false
+                    )
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        dialog.dismiss()
+                    }, 50)
+                }
+
+                adapter.setHasStableIds(true)
+                adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
+
+                binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
+                binding.dsRecyclerView.adapter = adapter
+
+                dialog.dialogSetup()
+                G.theme.apply(binding.root)
+                dialog.show()
+            } else createToast(adapter.context, "Add modes first")
         }
 
         dialog.dialogSetup()

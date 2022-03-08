@@ -43,25 +43,25 @@ object Transfer {
 
             dashboard.dg?.mqttd?.conHandler?.isDone?.observe(viewLifecycleOwner, connectionObserver)
 
-            binding.ptReceive.setOnClickListener {
+            binding.dtReceive.setOnClickListener {
 
-                fun receiveMode(enable: Boolean = binding.ptTransferBox.isVisible) {
-                    binding.ptTransferTopic.isEnabled = !enable
+                fun receiveMode(enable: Boolean = binding.dtTransferBox.isVisible) {
+                    binding.dtTransferTopic.isEnabled = !enable
                     if (!enable) {
                         dashboard.dg?.mqttd?.data?.removeObserver(observer)
                         dashboard.dg?.mqttd?.topicCheck()
 
-                        binding.ptTransferBox.visibility = VISIBLE
-                        binding.ptReceiveIcon.setBackgroundResource(R.drawable.il_arrow_import)
-                        binding.ptReceiveFrame.clearAnimation()
+                        binding.dtTransferBox.visibility = VISIBLE
+                        binding.dtReceiveIcon.setBackgroundResource(R.drawable.il_arrow_import)
+                        binding.dtReceiveFrame.clearAnimation()
                     } else {
-                        binding.ptTransferBox.visibility = GONE
-                        binding.ptReceiveIcon.setBackgroundResource(R.drawable.il_multimedia_pause)
-                        binding.ptReceiveFrame.blink(-1, 200)
+                        binding.dtTransferBox.visibility = GONE
+                        binding.dtReceiveIcon.setBackgroundResource(R.drawable.il_multimedia_pause)
+                        binding.dtReceiveFrame.blink(-1, 200)
 
                         var ignoreFirst = false
                         observer = { data ->
-                            if (data.first == binding.ptTransferTopic.text.toString() && ignoreFirst) {
+                            if (data.first == binding.dtTransferTopic.text.toString() && ignoreFirst) {
                                 dashboard.dg?.mqttd?.data?.removeObserver(observer)
                                 transferCaptured = true
 
@@ -113,25 +113,25 @@ object Transfer {
 
                         dashboard.dg?.mqttd?.data?.removeObserver(observer)
                         dashboard.dg?.mqttd?.data?.observe(viewLifecycleOwner, observer)
-                        dashboard.dg?.mqttd?.subscribe(binding.ptTransferTopic.text.toString(), 0)
+                        dashboard.dg?.mqttd?.subscribe(binding.dtTransferTopic.text.toString(), 0)
                     }
                 }
 
                 receiveMode()
             }
 
-            binding.ptTransfer.setOnClickListener {
+            binding.dtTransfer.setOnClickListener {
                 val save =
                     arrayOf(
-                        (if (binding.ptTransferAll.isChecked) dashboards else listOf(dashboard)).prepareSave(),
-                        if (binding.ptTransferSettings.isChecked) settings.prepareSave() else "",
-                        if (binding.ptTransferTheme.isChecked) theme.prepareSave() else ""
+                        (if (binding.dtTransferAll.isChecked) dashboards else listOf(dashboard)).prepareSave(),
+                        if (binding.dtTransferSettings.isChecked) settings.prepareSave() else "",
+                        if (binding.dtTransferTheme.isChecked) theme.prepareSave() else ""
                     )
 
                 val saveString = G.mapper.writeValueAsString(save)
 
                 dashboard.dg?.mqttd?.publish(
-                    binding.ptTransferTopic.text.toString(),
+                    binding.dtTransferTopic.text.toString(),
                     saveString,
                     2
                 )

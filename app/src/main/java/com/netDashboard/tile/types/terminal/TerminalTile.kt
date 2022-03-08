@@ -73,14 +73,14 @@ class TerminalTile : Tile() {
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.ptTopic.text = mqttData.pubs["base"].toString()
+            binding.dtTopic.text = mqttData.pubs["base"].toString()
 
-            binding.ptConfirm.setOnClickListener {
-                send(binding.ptPayload.text.toString(), mqttData.qos)
+            binding.dtConfirm.setOnClickListener {
+                send(binding.dtPayload.text.toString(), mqttData.qos)
                 dialog.dismiss()
             }
 
-            binding.ptDeny.setOnClickListener {
+            binding.dtDeny.setOnClickListener {
                 dialog.dismiss()
             }
 

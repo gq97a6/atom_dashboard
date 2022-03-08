@@ -14,12 +14,12 @@
         android:layout_height="wrap_content">
 
         <com.netDashboard.color_picker.HSVColorPicker
-            android:id="@+id/pcp_picker"
+            android:id="@+id/dcp_picker"
             android:layout_width="300dp"
             android:layout_height="300dp" />
 
         <View
-            android:id="@+id/pcp_color"
+            android:id="@+id/dcp_color"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
@@ -34,7 +34,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pcp_deny"
+            android:id="@+id/dcp_deny"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:textSize="12dp" />
 
         <Button
-            android:id="@+id/pcp_confirm"
+            android:id="@+id/dcp_confirm"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

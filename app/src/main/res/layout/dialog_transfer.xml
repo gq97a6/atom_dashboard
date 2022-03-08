@@ -42,7 +42,7 @@
         android:textSize="15dp" />
 
     <EditText
-        android:id="@+id/pt_transfer_topic"
+        android:id="@+id/dt_transfer_topic"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
@@ -57,7 +57,7 @@
         android:textCursorDrawable="@null" />
 
     <CheckBox
-        android:id="@+id/pt_transfer_settings"
+        android:id="@+id/dt_transfer_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -66,7 +66,7 @@
         android:text="Transfer settings" />
 
     <CheckBox
-        android:id="@+id/pt_transfer_theme"
+        android:id="@+id/dt_transfer_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -74,7 +74,7 @@
         android:text="Transfer theme" />
 
     <LinearLayout
-        android:id="@+id/pt_transfer_range"
+        android:id="@+id/dt_transfer_range"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -92,10 +92,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-5dp"
-            android:checkedButton="@id/pt_transfer_only">
+            android:checkedButton="@id/dt_transfer_only">
 
             <RadioButton
-                android:id="@+id/pt_transfer_only"
+                android:id="@+id/dt_transfer_only"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:tag="default"
@@ -103,7 +103,7 @@
                 android:textSize="12dp" />
 
             <RadioButton
-                android:id="@+id/pt_transfer_all"
+                android:id="@+id/dt_transfer_all"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:tag="default"
@@ -123,7 +123,7 @@
         android:paddingBottom="20dp">
 
         <FrameLayout
-            android:id="@+id/pt_transfer_box"
+            android:id="@+id/dt_transfer_box"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -134,14 +134,14 @@
             app:layout_constraintWidth_percent=".3">
 
             <View
-                android:id="@+id/pt_transfer_frame"
+                android:id="@+id/dt_transfer_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/background_frame"
                 android:tag="frame" />
 
             <View
-                android:id="@+id/pt_transfer_icon"
+                android:id="@+id/dt_transfer_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="13dp"
@@ -149,7 +149,7 @@
                 android:tag="colorIcon" />
 
             <View
-                android:id="@+id/pt_transfer"
+                android:id="@+id/dt_transfer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/background_ripple"
@@ -169,14 +169,14 @@
             app:layout_constraintWidth_percent=".3">
 
             <View
-                android:id="@+id/pt_receive_frame"
+                android:id="@+id/dt_receive_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/background_frame"
                 android:tag="frame" />
 
             <View
-                android:id="@+id/pt_receive_icon"
+                android:id="@+id/dt_receive_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="13dp"
@@ -184,7 +184,7 @@
                 android:tag="colorIcon" />
 
             <View
-                android:id="@+id/pt_receive"
+                android:id="@+id/dt_receive"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/background_ripple"

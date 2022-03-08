@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="280dp"
-    android:layout_height="550dp"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:tag="frame"
     android:background="@drawable/background_frame"
@@ -10,10 +10,9 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ps_recycler_view"
+        android:id="@+id/ds_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="5dp"
-        android:paddingTop="5dp" />
+        android:layout_height="wrap_content"
+        android:padding="5dp" />
 
 </LinearLayout>

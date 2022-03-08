@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <TimePicker
-        android:id="@+id/pt_time"
+        android:id="@+id/dt_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:headerBackground="#00000000"
@@ -18,7 +18,7 @@
         android:visibility="gone" />
 
     <DatePicker
-        android:id="@+id/pt_date"
+        android:id="@+id/dt_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:calendarViewShown="false"
@@ -31,7 +31,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pt_deny"
+            android:id="@+id/dt_deny"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:textSize="12dp" />
 
         <Button
-            android:id="@+id/pt_confirm"
+            android:id="@+id/dt_confirm"
             style="@style/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

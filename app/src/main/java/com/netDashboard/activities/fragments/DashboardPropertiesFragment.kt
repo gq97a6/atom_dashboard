@@ -174,8 +174,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     dialog.dismiss()
                 }
 
-                binding.pcbRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-                binding.pcbRecyclerView.adapter = adapter
+                binding.dcbRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                binding.dcbRecyclerView.adapter = adapter
 
                 adapter.submitList(list)
 

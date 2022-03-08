@@ -24,7 +24,7 @@
             android:textSize="15dp" />
 
         <TextView
-            android:id="@+id/pt_topic"
+            android:id="@+id/dt_topic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
@@ -35,7 +35,7 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/pt_payload"
+        android:id="@+id/dt_payload"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
@@ -56,7 +56,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/pt_deny"
+            android:id="@+id/dt_deny"
             style="@style/button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
             android:textSize="11dp" />
 
         <Button
-            android:id="@+id/pt_confirm"
+            android:id="@+id/dt_confirm"
             style="@style/button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"

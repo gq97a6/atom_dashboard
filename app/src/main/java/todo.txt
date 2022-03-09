@@ -2,7 +2,6 @@
 start guide
 trackpad tile
 keyboard tile
-add white/black accents
 
 new tiles
     thermostat /

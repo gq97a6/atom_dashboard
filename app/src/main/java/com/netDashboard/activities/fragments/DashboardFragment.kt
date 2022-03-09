@@ -237,62 +237,64 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun showLog(v: View, e: MotionEvent) {
         v.performClick()
 
-        if (e.action == KeyEvent.ACTION_DOWN) showLogStartY = e.rawY
+        when (e.action) {
+            0 -> showLogStartY = e.rawY
+            2 -> {
+                val lp = b.dLog.layoutParams
+                val ldp = b.dLogBar.layoutParams
 
-        if (e.action == KeyEvent.ACTION_UP) {
-            val logAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
-            logAnimator.duration = 500L
-
-            logAnimator.addUpdateListener {
-                val animatedValue = logAnimator.animatedValue as Int
-                val layoutParams = b.dLog.layoutParams
-                layoutParams.height = animatedValue
-                b.dLog.layoutParams = layoutParams
-            }
-            logAnimator.start()
-
-            val logBarAnimator = ValueAnimator.ofInt(
-                b.dLogBar.measuredWidth,
-                (.8 * screenWidth).toInt()
-            )
-            logBarAnimator.duration = 500L
-
-            logBarAnimator.addUpdateListener {
-                val animatedValue = logBarAnimator.animatedValue as Int
-                val layoutParams = b.dLogBar.layoutParams
-                layoutParams.width = animatedValue
-                b.dLogBar.layoutParams = layoutParams
-            }
-            logBarAnimator.start()
-        } else {
-            val lp = b.dLog.layoutParams
-            val ldp = b.dLogBar.layoutParams
-
-            lp.height = (e.rawY - showLogStartY).toInt().let {
-                when {
-                    it <= 0 -> 0
-                    it <= (.9 * screenHeight) -> it
-                    else -> {
-                        dashboard.log.flush()
-                        (.9 * screenHeight).toInt()
+                lp.height = (e.rawY - showLogStartY).toInt().let {
+                    when {
+                        it <= 0 -> 0
+                        it <= (.9 * screenHeight) -> it
+                        else -> {
+                            dashboard.log.flush()
+                            (.9 * screenHeight).toInt()
+                        }
                     }
                 }
-            }
 
-            ldp.width = lp.height.let {
-                when {
-                    it <= 0 -> 0
-                    it <= (.9 * screenHeight) -> {
-                        val max = screenHeight * .9
-                        val per = it / max
-                        (screenWidth * 0.8 - (screenWidth * 0.8 * per)).toInt()
+                ldp.width = lp.height.let {
+                    when {
+                        it <= 0 -> 0
+                        it <= (.9 * screenHeight) -> {
+                            val max = screenHeight * .9
+                            val per = it / max
+                            (screenWidth * 0.8 - (screenWidth * 0.8 * per)).toInt()
+                        }
+                        else -> 0
                     }
-                    else -> 0
                 }
-            }
 
-            b.dLog.layoutParams = lp
-            b.dLogBar.layoutParams = ldp
+                b.dLog.layoutParams = lp
+                b.dLogBar.layoutParams = ldp
+            }
+            else -> {
+                val logAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
+                logAnimator.duration = 500L
+
+                logAnimator.addUpdateListener {
+                    val animatedValue = logAnimator.animatedValue as Int
+                    val layoutParams = b.dLog.layoutParams
+                    layoutParams.height = animatedValue
+                    b.dLog.layoutParams = layoutParams
+                }
+                logAnimator.start()
+
+                val logBarAnimator = ValueAnimator.ofInt(
+                    b.dLogBar.measuredWidth,
+                    (.8 * screenWidth).toInt()
+                )
+                logBarAnimator.duration = 500L
+
+                logBarAnimator.addUpdateListener {
+                    val animatedValue = logBarAnimator.animatedValue as Int
+                    val layoutParams = b.dLogBar.layoutParams
+                    layoutParams.width = animatedValue
+                    b.dLogBar.layoutParams = layoutParams
+                }
+                logBarAnimator.start()
+            }
         }
     }
 }

@@ -6,9 +6,9 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogTimeBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
@@ -62,14 +62,14 @@ class TimeTile : Tile() {
                     (mqttData.payloads["date"] ?: "")
                         .replace("@day", d.dayOfMonth.toString())
                         .replace("@month", d.month.toString())
-                        .replace("@year", d.year.toString()), mqttData.qos
+                        .replace("@year", d.year.toString())
                 )
             } else {
                 val t = binding.dtTime
                 send(
                     (mqttData.payloads["time"] ?: "")
                         .replace("@hour", t.hour.toString())
-                        .replace("@minute", t.minute.toString()), mqttData.qos
+                        .replace("@minute", t.minute.toString())
                 )
             }
 

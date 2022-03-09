@@ -461,7 +461,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -503,8 +503,8 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -517,9 +517,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:tag="colorB"
-                                        android:textStyle="bold"
                                         android:text="setpoint"
-                                        android:textSize="15dp" />
+                                        android:textSize="15dp"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -555,8 +555,8 @@
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_marginBottom="2dp"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -569,9 +569,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:tag="colorB"
-                                        android:textStyle="bold"
                                         android:text="setpoint"
-                                        android:textSize="15dp" />
+                                        android:textSize="15dp"
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -652,7 +652,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:visibility="visible">
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -662,8 +662,8 @@
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_marginBottom="2dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -676,9 +676,9 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:tag="colorB"
-                                            android:textStyle="bold"
                                             android:text="setpoint"
-                                            android:textSize="15dp" />
+                                            android:textSize="15dp"
+                                            android:textStyle="bold" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -714,8 +714,8 @@
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
-                                        android:layout_marginBottom="2dp"
-                                        android:layout_height="wrap_content">
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -728,9 +728,9 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:tag="colorB"
-                                            android:textStyle="bold"
                                             android:text="setpoint"
-                                            android:textSize="15dp" />
+                                            android:textSize="15dp"
+                                            android:textStyle="bold" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -986,6 +986,52 @@
                                 android:textSize="15dp" />
 
                         </RadioGroup>
+
+                        <LinearLayout
+                            android:id="@+id/tp_mqtt_retain_box"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorB"
+                                android:text="Retain massages:"
+                                android:textSize="15dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tag="colorC"
+                                    android:text="OFF"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText" />
+
+                                <com.google.android.material.switchmaterial.SwitchMaterial
+                                    android:id="@+id/tp_mqtt_retain_switch"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tag="colorC"
+                                    android:text="ON"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -1663,7 +1709,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -1742,12 +1788,48 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorB"
+                            android:text="Retain massagess:"
+                            android:textSize="15dp" />
+
+                        <CheckBox
+                            android:id="@+id/tp_temp_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="Temperature setpoint" />
+
+                        <CheckBox
+                            android:id="@+id/tp_humi_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="Humidity setpoint" />
+
+                        <CheckBox
+                            android:id="@+id/tp_mode_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="Mode" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/tp_thermostat_humidity_step_box"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1778,12 +1860,12 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="2dp"
                             android:gravity="center"
                             android:tag="colorB"

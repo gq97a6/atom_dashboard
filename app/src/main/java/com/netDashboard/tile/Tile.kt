@@ -1,22 +1,24 @@
 package com.netDashboard.tile
 
-import android.app.Dialog
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.netDashboard.*
+import com.netDashboard.DialogBuilder.buildConfirm
 import com.netDashboard.Parser.byJSONPath
+import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
+import com.netDashboard.attentate
+import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.databinding.DialogConfirmBinding
 import com.netDashboard.globals.G.settings
 import com.netDashboard.globals.G.theme
 import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
+import com.netDashboard.screenWidth
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
@@ -50,10 +52,6 @@ abstract class Tile : RecyclerViewItem() {
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
             this.find { it.id == id }
-
-        fun send() {
-            TODO("Not yet implemented")
-        }
     }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -86,6 +84,7 @@ abstract class Tile : RecyclerViewItem() {
         val colors = mutableMapOf<String, Int>()
         val jsonPaths = mutableMapOf<String, String>()
 
+        var retain = false
         var qos = 0
             set(value) {
                 field = minOf(2, maxOf(0, value))
@@ -98,27 +97,20 @@ abstract class Tile : RecyclerViewItem() {
         var payloadIsJson = false
     }
 
-    fun send(
-        msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false,
-        raw: Boolean = false
-    ) = send(mqttData.pubs["base"], msg, qos, retained, raw)
-
     @JvmOverloads
     fun send(
-        topic: String?,
         msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false,
+        topic: String? = mqttData.pubs["base"],
+        @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
+        retain: Boolean = false,
         raw: Boolean = false
     ) {
         if (topic.isNullOrEmpty()) return
         if (dashboard.dg?.mqttd == null) return
 
         fun send() {
-            dashboard.dg?.mqttd?.publish(topic, msg, qos, retained)
-            onSend(topic, msg, qos, retained)
+            dashboard.dg?.mqttd?.publish(topic, msg, qos, retain)
+            onSend(topic, msg, qos, retain)
         }
 
         if (!mqttData.confirmPub || raw) {
@@ -126,26 +118,11 @@ abstract class Tile : RecyclerViewItem() {
             return
         }
 
-        val dialog = Dialog(adapter.context)
-
-        dialog.setContentView(R.layout.dialog_confirm)
-        val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
-
-        binding.dcConfirm.setOnClickListener {
-            send()
-            dialog.dismiss()
+        with(adapter.context) {
+            buildConfirm("PUBLISH", "Confirm publishing", {
+                send()
+            })
         }
-
-        binding.dcDeny.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.dcConfirm.text = "PUBLISH"
-        binding.dcText.text = "Confirm publishing"
-
-        dialog.dialogSetup()
-        theme.apply(binding.root)
-        dialog.show()
     }
 
     open fun onSend(

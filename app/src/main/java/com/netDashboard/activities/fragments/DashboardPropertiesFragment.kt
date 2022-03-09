@@ -11,13 +11,13 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.Transfer.showTransferPopup
 import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogCopyBrokerBinding
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.dashboard
 import com.netDashboard.globals.G.dashboards
 import com.netDashboard.globals.G.theme

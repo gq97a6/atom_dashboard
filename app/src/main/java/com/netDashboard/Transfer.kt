@@ -6,6 +6,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.Settings.Companion.saveToFile
 import com.netDashboard.Theme.Companion.saveToFile
 import com.netDashboard.activities.SplashScreenActivity

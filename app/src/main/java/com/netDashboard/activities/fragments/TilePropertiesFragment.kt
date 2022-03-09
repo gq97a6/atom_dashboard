@@ -83,6 +83,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["base"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
+        b.tpMqttRetainSwitch.isChecked = tile.mqttData.retain
         b.tpQos.check(
             when (tile.mqttData.qos) {
                 0 -> R.id.tp_qos0
@@ -135,6 +136,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
             tile.mqttData.confirmPub = state
+        }
+
+        b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.retain = state
         }
 
         b.tpQos.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
@@ -532,6 +537,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
                 }
 
+                b.tpMqttRetainBox.visibility = GONE
                 b.tpMqttTopics.visibility = GONE
                 b.tpMqttJsonPayload.visibility = GONE
                 b.tpThermostat.visibility = VISIBLE
@@ -566,6 +572,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpThermostatShowPayload.isChecked = tile.showPayload
+                b.tpTempRetain.isChecked = tile.retain[0]
+                b.tpHumiRetain.isChecked = tile.retain[1]
+                b.tpModeRetain.isChecked = tile.retain[2]
 
                 b.tpThermostatTemperatureSub.addTextChangedListener {
                     tile.mqttData.subs["temp"] = (it ?: "").toString()
@@ -636,6 +645,19 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->
                     tile.showPayload = state
+                }
+                b.tpTempRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[0] = isChecked
+                }
+
+                b.tpHumiRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[1] = isChecked
+
+                }
+
+                b.tpModeRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[2] = isChecked
+
                 }
 
                 b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {

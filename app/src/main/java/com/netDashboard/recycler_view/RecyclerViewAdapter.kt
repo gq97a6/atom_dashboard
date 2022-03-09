@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.netDashboard.DialogBuilder.buildConfirm
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.click
 import com.netDashboard.databinding.DialogConfirmBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.iterate
 
@@ -145,36 +146,22 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
     fun removeMarkedItems() {
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
-        val dialog = Dialog(context)
-
-        dialog.setContentView(R.layout.dialog_confirm)
-        val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
-
-        binding.dcText.text = "Confirm removing"
-
-        binding.dcConfirm.setOnClickListener {
-            var i = 0
-            while (i < list.size) {
-                list[i].let {
-                    if (it.flag.isRemove) {
-                        removeItemAt(i, false)
-                        onItemRemoved(it)
-                        i--
+        with(context) {
+            buildConfirm("CONFIRM", "Confirm removing", {
+                var i = 0
+                while (i < list.size) {
+                    list[i].let {
+                        if (it.flag.isRemove) {
+                            removeItemAt(i, false)
+                            onItemRemoved(it)
+                            i--
+                        }
                     }
+                    i++
                 }
-                i++
-            }
-            notifyDataSetChanged()
-            dialog.dismiss()
+                notifyDataSetChanged()
+            })
         }
-
-        binding.dcDeny.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.dialogSetup()
-        theme.apply(binding.root)
-        dialog.show()
     }
 
     fun removeItemAt(pos: Int, notify: Boolean = true) {

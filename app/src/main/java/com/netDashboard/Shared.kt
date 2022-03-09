@@ -2,17 +2,14 @@
 
 package com.netDashboard
 
-import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.*
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -224,18 +221,6 @@ fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
     }
 
     setOnClick(this)
-}
-
-fun Dialog.dialogSetup() {
-    val a = this.window?.attributes
-    a?.dimAmount = 0.9f
-    this.window?.attributes = a
-    this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-    this.window?.setLayout(
-        WindowManager.LayoutParams.MATCH_PARENT,
-        WindowManager.LayoutParams.MATCH_PARENT
-    )
 }
 
 fun Float.round(d: Int): Float = this.toBigDecimal().setScale(d, RoundingMode.FLOOR).toFloat()

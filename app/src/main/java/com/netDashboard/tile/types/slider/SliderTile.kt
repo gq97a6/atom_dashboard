@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogSliderBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.roundCloser
@@ -119,10 +119,7 @@ class SliderTile : Tile() {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send(
-                    (mqttData.payloads["base"] ?: "").replace("@value", value.toString()),
-                    mqttData.qos
-                )
+                send((mqttData.payloads["base"] ?: "").replace("@value", value.toString()))
                 return Pair(value, true)
             }
         }

@@ -13,10 +13,10 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.netDashboard.databinding.DialogColorPickerBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
@@ -150,7 +150,7 @@ class ColorTile : Tile() {
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
-                }, mqttData.qos
+                }
             )
 
             dialog.dismiss()

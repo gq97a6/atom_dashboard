@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogTextBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
@@ -76,7 +76,7 @@ class TerminalTile : Tile() {
             binding.dtTopic.text = mqttData.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
-                send(binding.dtPayload.text.toString(), mqttData.qos)
+                send(binding.dtPayload.text.toString())
                 dialog.dismiss()
             }
 
@@ -87,7 +87,7 @@ class TerminalTile : Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(mqttData.payloads["base"] ?: "", mqttData.qos)
+        } else send(mqttData.payloads["base"] ?: "")
     }
 
     override fun onReceive(

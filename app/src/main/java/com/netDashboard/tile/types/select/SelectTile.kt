@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogSelectBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
@@ -58,7 +58,7 @@ class SelectTile : Tile() {
 
             adapter.onItemClick = {
                 val pos = adapter.list.indexOf(it)
-                send("${this.options[pos].second}", mqttData.qos)
+                send("${this.options[pos].second}")
                 dialog.dismiss()
             }
 

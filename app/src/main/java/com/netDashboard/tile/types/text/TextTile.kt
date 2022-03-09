@@ -5,9 +5,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogTextBinding
-import com.netDashboard.dialogSetup
 import com.netDashboard.globals.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
@@ -50,7 +50,7 @@ class TextTile : Tile() {
             binding.dtTopic.text = mqttData.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
-                send(binding.dtPayload.text.toString(), mqttData.qos)
+                send(binding.dtPayload.text.toString())
                 dialog.dismiss()
             }
 
@@ -61,7 +61,7 @@ class TextTile : Tile() {
             dialog.dialogSetup()
             G.theme.apply(binding.root)
             dialog.show()
-        } else send(Random.nextInt().toString(), mqttData.qos)
+        } else send(Random.nextInt().toString())
     }
 
     override fun onReceive(

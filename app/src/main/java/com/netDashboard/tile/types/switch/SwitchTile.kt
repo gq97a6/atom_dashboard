@@ -72,7 +72,7 @@ class SwitchTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        send(mqttData.payloads[if (state == false) "true" else "false"] ?: "", mqttData.qos)
+        send(mqttData.payloads[if (state == false) "true" else "false"] ?: "")
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {

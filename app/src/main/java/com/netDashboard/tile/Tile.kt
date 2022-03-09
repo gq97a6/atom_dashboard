@@ -169,7 +169,9 @@ abstract class Tile : RecyclerViewItem() {
         }
 
         if (doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
-        if (settings.animateUpdate) holder?.itemView?.attentate()
+        if (settings.animateUpdate && holder?.itemView?.animation == null) {
+            holder?.itemView?.attentate()
+        }
 
         onReceive(data, jsonResult)
     }

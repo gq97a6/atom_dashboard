@@ -1,6 +1,7 @@
 package com.netDashboard.tile.types.thermostat
 
 import android.app.Dialog
+import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
@@ -19,6 +20,7 @@ import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogSelectBinding
 import com.netDashboard.databinding.DialogThermostatBinding
 import com.netDashboard.globals.G
+import com.netDashboard.globals.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -39,16 +41,57 @@ class ThermostatTile : Tile() {
 
     override var iconKey = "il_weather_temperature_half"
 
+    @JsonIgnore
+    override var height = 2
+
     var hasReceived = MutableLiveData("")
 
     var mode = "auto"
     var temp: Float? = null
+        set(value) {
+            field = value
+            holder?.itemView?.findViewById<TextView>(R.id.th_temp_value)?.text = value.let {
+                "${if (it == null) "--" else it.round(3)} °C"
+            }
+            value?.let {
+                holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp)?.progress =
+                    (it - temperatureRange[0]) / temperatureStep
+            }
+        }
+
     var humi: Float? = null
+        set(value) {
+            field = value
+            holder?.itemView?.findViewById<TextView>(R.id.th_humi_value)?.text = value.let {
+                "${if (it == null) "--" else it.round(3)} %"
+            }
+            value?.let {
+                holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi)?.progress =
+                    it / humidityStep
+            }
+        }
+
     var tempSetpoint: Float? = null
+        set(value) {
+            field = value
+            value?.let {
+                holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp_setpoint)?.progress =
+                    (it - temperatureRange[0]) / temperatureStep
+            }
+        }
+
     var humiSetpoint: Float? = null
+        set(value) {
+            field = value
+            value?.let {
+                holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi_setpoint)?.progress =
+                    it / humidityStep
+            }
+        }
 
     var humidityStep = 5f
-    var temperatureRange = mutableListOf(15f, 30f, .5f)
+    var temperatureStep = 0.5f
+    var temperatureRange = mutableListOf(15, 30)
     val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
     val retain = mutableListOf(false, false, false) //temp, humi, mode
 
@@ -58,8 +101,20 @@ class ThermostatTile : Tile() {
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
-        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
-            View.GONE
+        abs(100 / humidityStep).let {
+            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi).max = it
+            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi_setpoint).max = it
+        }
+        abs((temperatureRange[1] - temperatureRange[0]) / temperatureStep).let {
+            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp).max = it
+            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp_setpoint).max = it
+        }
+
+        temp = temp
+        tempSetpoint = tempSetpoint
+
+        humi = humi
+        humiSetpoint = humiSetpoint
     }
 
     override fun onReceive(
@@ -125,8 +180,8 @@ class ThermostatTile : Tile() {
             temperatureRange[1] = tmp
         }
         tempSetpoint?.let {
-            if (it !in temperatureRange[0]..temperatureRange[1]) {
-                tempSetpoint = temperatureRange[0]
+            if (it < temperatureRange[0] || it > temperatureRange[1]) {
+                tempSetpoint = temperatureRange[0].toFloat()
             }
         }
 
@@ -159,7 +214,7 @@ class ThermostatTile : Tile() {
                 }
                 "temp_set" -> {
                     tempSetpoint?.let {
-                        binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
+                        binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
                     }
                 }
                 "humi_set" -> {
@@ -187,7 +242,7 @@ class ThermostatTile : Tile() {
             ) {
                 if (fromUser) {
                     tempSetpointTmp =
-                        temperatureRange[0] + progress.roundToInt() * temperatureRange[2]
+                        temperatureRange[0] + progress.roundToInt() * temperatureStep
                     binding.dtValue.text = "${tempSetpointTmp!!.round(3)}°C"
                     binding.dtTempSetpoint.text = "${tempSetpointTmp!!.round(3)}°C"
                     valueBlinking()
@@ -232,11 +287,11 @@ class ThermostatTile : Tile() {
             humiSetpointTmp?.let { binding.dtHumiSetpoint.text = "${it.round(3)}%" }
         }
 
-        abs((temperatureRange[1] - temperatureRange[0]) / temperatureRange[2]).let {
+        abs((temperatureRange[1] - temperatureRange[0]) / temperatureStep).let {
             binding.dtTemp.max = it
         }
         tempSetpointTmp?.let {
-            binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureRange[2]
+            binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
         }
 
         tempSetpointTmp?.let { binding.dtValue.text = "${it.round(3)}°C" }
@@ -279,7 +334,12 @@ class ThermostatTile : Tile() {
                     text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
                     else "${notEmpty[pos].first}"
 
-                    if (mode == notEmpty[pos].second) text.text = "${text.text} (S)"
+                    if (mode == notEmpty[pos].second) {
+                        holder?.itemView?.findViewById<View>(R.id.is_background).let{
+                            it.backgroundTintList = ColorStateList.valueOf(theme.a.colorPallet.color)
+                            it.alpha = 0.15f
+                        }
+                    }
                 }
 
                 adapter.onItemClick = {

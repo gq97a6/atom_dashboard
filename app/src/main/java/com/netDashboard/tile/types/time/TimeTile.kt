@@ -30,7 +30,7 @@ class TimeTile : Tile() {
     var value = ""
         set(value) {
             field = value
-            holder?.itemView?.findViewById<TextView>(R.id.tt_value)?.text = value
+            holder?.itemView?.findViewById<TextView>(R.id.tt_values)?.text = value
         }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {

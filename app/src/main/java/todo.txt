@@ -4,7 +4,6 @@ trackpad tile
 keyboard tile
 
 new tiles
-    thermostat /
     lights
 
     (indicator,
@@ -14,5 +13,6 @@ new tiles
     on receive)
 
 //post development ------------------------------
+tests
 name, icon, etc
 publish

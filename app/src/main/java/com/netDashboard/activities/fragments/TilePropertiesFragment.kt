@@ -178,7 +178,17 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         when (tile) {
             is TextTile -> {
+                val tile = tile as TextTile
+
+                b.tpText.visibility = VISIBLE
                 b.tpMqttPayloadTypeBox.visibility = VISIBLE
+
+                b.tpTextBig.isChecked = tile.isBig
+
+                b.tpTextBig.setOnCheckedChangeListener { _, isChecked ->
+                    tile.isBig = isChecked
+                }
+
                 b.tpPayloadType.check(
                     if (tile.mqttData.varPayload) R.id.tp_mqtt_payload_var
                     else {
@@ -563,7 +573,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatHumidityStep.setText(tile.humidityStep.toString())
                 b.tpThermostatTemperatureFrom.setText(tile.temperatureRange[0].toString())
                 b.tpThermostatTemperatureTo.setText(tile.temperatureRange[1].toString())
-                b.tpThermostatTemperatureStep.setText(tile.temperatureRange[2].toString())
+                b.tpThermostatTemperatureStep.setText(tile.temperatureStep.toString())
 
                 tile.includeHumiditySetpoint.let {
                     b.tpThermostatHumidityTopicBox.visibility = if (it) VISIBLE else GONE
@@ -628,13 +638,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.humidityStep = it.toString().toFloatOrNull() ?: 5f
                 }
                 b.tpThermostatTemperatureFrom.addTextChangedListener {
-                    tile.temperatureRange[0] = it.toString().toFloatOrNull() ?: 15f
+                    tile.temperatureRange[0] = it.toString().toIntOrNull() ?: 15
                 }
                 b.tpThermostatTemperatureTo.addTextChangedListener {
-                    tile.temperatureRange[1] = it.toString().toFloatOrNull() ?: 30f
+                    tile.temperatureRange[1] = it.toString().toIntOrNull() ?: 30
                 }
                 b.tpThermostatTemperatureStep.addTextChangedListener {
-                    tile.temperatureRange[2] = it.toString().toFloatOrNull() ?: .5f
+                    tile.temperatureStep = it.toString().toFloatOrNull() ?: .5f
                 }
 
                 b.tpThermostatHumiditySetpoint.setOnCheckedChangeListener { _, state ->

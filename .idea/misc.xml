@@ -14,7 +14,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/pick/layout/tile_.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/pick/layout/tile_pick.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/select/layout/item_option.xml" value="0.3072649572649573" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/select/layout/item_select.xml" value="0.30739632321504917" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/select/layout/item_select.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/select/layout/item_select_add.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/select/layout/tile_select.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/slider/layout/tile_slider.xml" value="0.5" />
@@ -25,7 +25,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_button.xml" value="0.67" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_slider.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_text.xml" value="0.33" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/thermostat/layout/tile_thermostat.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/thermostat/layout/tile_thermostat.xml" value="0.67" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/time/layout/tile_text.xml" value="0.280859375" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/time/layout/tile_time.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/align_center_h.xml" value="0.3076923076923077" />
@@ -109,7 +109,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme2.xml" value="0.29444444444444445" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_new.xml" value="0.5" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.5" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.2671869193608324" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties2.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties_button.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_properties_slider.xml" value="0.3072649572649573" />

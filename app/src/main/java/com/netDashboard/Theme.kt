@@ -368,10 +368,17 @@ class Theme {
     private fun CircularSeekBar.applyTheme(p: ColorPallet) {
         when (this.tag) {
             "base" -> {
-                //this.circleColor = Color.CYAN
                 this.circleProgressColor = p.b
                 this.pointerColor = p.color
-                //this.pointerHaloColorOnTouch = Color.TRANSPARENT
+            }
+            "goal" -> {
+                this.circleProgressColor = p.b
+            }
+            "progress" -> {
+                this.circleProgressColor = p.color
+            }
+            "track" -> {
+                this.circleColor = p.c
             }
             else -> onUnknownTag(this.tag, "crcularSeekBar")
         }

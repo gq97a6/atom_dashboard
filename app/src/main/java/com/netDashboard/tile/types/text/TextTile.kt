@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
@@ -24,14 +25,20 @@ class TextTile : Tile() {
 
     override var iconKey = "il_design_illustration"
 
+    var isBig = false
+
     var value = ""
         set(value) {
             field = value
-            holder?.itemView?.findViewById<TextView>(R.id.tt_value)?.text = value
+            holder?.itemView?.findViewById<TextView>(R.id.tt_values)?.text = value
         }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
+
+        val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
+        layoutParams.isFullSpan = isBig
+
         value = value
     }
 

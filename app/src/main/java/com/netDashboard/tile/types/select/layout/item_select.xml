@@ -23,6 +23,14 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
+    <View
+        android:id="@+id/is_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:layout_gravity="center"
+        android:background="@drawable/background_round" />
+
     <TextView
         android:id="@+id/is_text"
         android:layout_width="match_parent"

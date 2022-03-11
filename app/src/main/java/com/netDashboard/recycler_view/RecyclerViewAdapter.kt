@@ -1,7 +1,6 @@
 package com.netDashboard.recycler_view
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.ACTION_UP
@@ -12,10 +11,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.DialogBuilder.buildConfirm
-import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.click
-import com.netDashboard.databinding.DialogConfirmBinding
 import com.netDashboard.globals.G.theme
 import com.netDashboard.iterate
 

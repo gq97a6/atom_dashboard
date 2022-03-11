@@ -27,8 +27,8 @@
         android:id="@+id/is_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
         android:layout_gravity="center"
+        android:alpha="0"
         android:background="@drawable/background_round" />
 
     <TextView

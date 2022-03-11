@@ -1890,8 +1890,8 @@
                         <CheckBox
                             android:id="@+id/tp_temp_retain"
                             android:layout_width="wrap_content"
-                            android:backgroundTint="#FFFFFF"
                             android:layout_height="wrap_content"
+                            android:backgroundTint="#FFFFFF"
                             android:tag="default"
                             android:text="Temperature setpoint" />
 

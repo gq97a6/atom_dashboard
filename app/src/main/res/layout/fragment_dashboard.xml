@@ -19,13 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
-            android:paddingRight="10dp"
-            android:paddingVertical="10dp"
-            android:scrollbars="vertical"
-            android:fadeScrollbars="false"
             android:layout_weight="1"
             android:background="@drawable/background_frame"
+            android:fadeScrollbars="false"
+            android:paddingVertical="10dp"
             android:paddingStart="5dp"
+            android:paddingRight="10dp"
+            android:scrollbars="vertical"
             android:tag="log"
             app:layout_constraintBottom_toTopOf="@+id/d_view"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,13 +48,13 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:textStyle="bold"
             android:tag="colorA"
             android:text="PULL DOWN TO CLEAR LOG"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -73,9 +73,9 @@
             android:layout_height="40dp"
             android:layout_marginVertical="10dp"
             android:layout_marginLeft="15dp"
-            android:foreground="@drawable/button_unlocked"
             android:clickable="false"
             android:duplicateParentState="true"
+            android:foreground="@drawable/button_unlocked"
             android:tag="color" />
 
     </FrameLayout>
@@ -95,9 +95,9 @@
             android:layout_gravity="right"
             android:layout_marginVertical="10dp"
             android:layout_marginRight="15dp"
-            android:foreground="@drawable/button_more"
             android:clickable="false"
             android:duplicateParentState="true"
+            android:foreground="@drawable/button_more"
             android:tag="color" />
 
     </FrameLayout>

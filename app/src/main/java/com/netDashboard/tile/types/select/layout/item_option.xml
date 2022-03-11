@@ -50,9 +50,9 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:foreground="@drawable/button_trashcan"
             android:clickable="false"
             android:duplicateParentState="true"
+            android:foreground="@drawable/button_trashcan"
             android:tag="color" />
 
     </LinearLayout>

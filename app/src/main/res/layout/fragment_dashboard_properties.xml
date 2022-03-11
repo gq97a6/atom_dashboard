@@ -175,19 +175,19 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
-                        android:gravity="center"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center">
 
                         <Button
                             android:id="@+id/dp_mqtt_copy"
                             style="@style/button"
-                            android:layout_marginHorizontal="10dp"
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_weight="1"
                             android:foreground="@drawable/button_text"
                             android:tag="colorA"
                             android:text="COPY PROPERTIES"
@@ -196,11 +196,11 @@
                         <Button
                             android:id="@+id/dp_transfer"
                             style="@style/button"
-                            android:layout_marginHorizontal="10dp"
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="40dp"
                             android:layout_gravity="center"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_weight="1"
                             android:foreground="@drawable/button_text"
                             android:tag="colorA"
                             android:text="TRANSFER"

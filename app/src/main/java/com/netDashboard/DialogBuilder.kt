@@ -9,7 +9,12 @@ import com.netDashboard.databinding.DialogConfirmBinding
 import com.netDashboard.globals.G
 
 object DialogBuilder {
-    fun Context.buildConfirm(label: String, button: String, onConfirm: () -> Unit, onDeny: () -> Unit = {}) {
+    fun Context.buildConfirm(
+        label: String,
+        button: String,
+        onConfirm: () -> Unit,
+        onDeny: () -> Unit = {}
+    ) {
         val dialog = Dialog(this)
 
         dialog.setContentView(R.layout.dialog_confirm)

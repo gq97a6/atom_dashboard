@@ -374,7 +374,7 @@ class ThermostatTile : Tile() {
         }
 
         dialog.dialogSetup()
-        G.theme.apply(binding.root, anim = false)
+        theme.apply(binding.root, anim = false)
         dialog.show()
     }
 }

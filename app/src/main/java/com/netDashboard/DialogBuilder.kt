@@ -43,6 +43,7 @@ object DialogBuilder {
         a?.dimAmount = 0.9f
         this.window?.attributes = a
         this.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        this.window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
 
         this.window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,

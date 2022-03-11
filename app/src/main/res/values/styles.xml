@@ -1,5 +1,4 @@
 <resources>
-
     <style name="button" parent="Theme.MaterialComponents.NoActionBar">
         <item name="cornerRadius">0dp</item>
         <item name="android:textStyle">bold</item>

@@ -275,7 +275,7 @@ class Theme {
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked),
                 intArrayOf(android.R.attr.state_checked)
-            ), intArrayOf(p.c, p.b)
+            ), intArrayOf(p.c, p.a)
         )
 
         when (this.tag) {
@@ -294,7 +294,7 @@ class Theme {
             arrayOf(
                 intArrayOf(-android.R.attr.state_checked),
                 intArrayOf(android.R.attr.state_checked)
-            ), intArrayOf(p.c, p.b)
+            ), intArrayOf(p.c, p.a)
         )
 
         when (this.tag) {

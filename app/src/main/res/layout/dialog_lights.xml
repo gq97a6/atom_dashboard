@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="20dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:tag="frame">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dl_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <me.tankery.lib.circularseekbar.CircularSeekBar
+            android:id="@+id/dl_humi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:tag="base"
+            app:cs_end_angle="180"
+            app:cs_max="100"
+            app:cs_pointer_halo_color="#00000000"
+            app:cs_pointer_halo_color_ontouch="#00000000"
+            app:cs_pointer_stroke_width="20dp"
+            app:cs_start_angle="0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.netDashboard.color_picker.HSVColorPicker
+            android:id="@+id/dl_picker"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="25dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dl_humi"
+            app:layout_constraintEnd_toEndOf="@+id/dl_humi"
+            app:layout_constraintStart_toStartOf="@+id/dl_humi"
+            app:layout_constraintTop_toTopOf="@+id/dl_humi" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="70dp"
+            android:background="@drawable/background_loop"
+            app:layout_constraintBottom_toBottomOf="@id/dl_picker"
+            app:layout_constraintEnd_toEndOf="@+id/dl_picker"
+            app:layout_constraintStart_toStartOf="@+id/dl_picker"
+            app:layout_constraintTop_toTopOf="@+id/dl_picker" />
+
+        <TextView
+            android:id="@+id/dl_value"
+            android:layout_width="130dp"
+            android:layout_height="0dp"
+            android:autoSizeMaxTextSize="60dp"
+            android:autoSizeMinTextSize="10dp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="100"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/dl_humi"
+            app:layout_constraintEnd_toEndOf="@+id/dl_humi"
+            app:layout_constraintStart_toStartOf="@+id/dl_humi"
+            app:layout_constraintTop_toTopOf="@+id/dl_humi" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <Button
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_text"
+        android:paddingHorizontal="20dp"
+        android:tag="color"
+        android:text="BUTTON"
+        android:textSize="12dp" />
+
+    <Button
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_text"
+        android:paddingHorizontal="20dp"
+        android:tag="colorA"
+        android:text="BUTTON"
+        android:textSize="12dp" />
+
+    <Button
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_text"
+        android:paddingHorizontal="20dp"
+        android:tag="colorB"
+        android:text="BUTTON"
+        android:textSize="12dp" />
+
+    <Button
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_text"
+        android:paddingHorizontal="20dp"
+        android:tag="colorC"
+        android:text="BUTTON"
+        android:textSize="12dp" />
+
+    <Button
+        style="@style/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_text"
+        android:paddingHorizontal="20dp"
+        android:tag="colorD"
+        android:text="BUTTON"
+        android:textSize="12dp" />
+
+    <Button
+        android:id="@+id/d_toolbar_icon"
+        style="@style/button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:foreground="@drawable/button_locked"
+        android:tag="color" />
+
+</LinearLayout>

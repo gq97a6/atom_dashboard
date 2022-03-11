@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.RippleDrawable
 import android.util.Log
 import android.view.View
@@ -18,7 +17,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
@@ -64,7 +62,7 @@ class Theme {
         colorPallet: ColorPallet = a.colorPallet
     ) {
         context?.let {
-            it.setTheme(if (!a.isDark) R.style.Theme_Dark else R.style.Theme_Light)
+            it.setTheme(R.style.theme)
 
             try {
                 WindowInsetsControllerCompat(
@@ -115,11 +113,11 @@ class Theme {
     private fun View.defineType(p: ColorPallet) {
         when (this) {
             is RadioButton -> this.applyTheme(p)
-            is MaterialButton -> this.applyTheme(p)
+            is CheckBox -> this.applyTheme(p)
             is SwitchMaterial -> this.applyTheme(p)
+            is Button -> this.applyTheme(p)
             is EditText -> this.applyTheme(p)
             is Chip -> this.applyTheme(p)
-            is CheckBox -> this.applyTheme(p)
             is TextView -> this.applyTheme(p)
             is Slider -> this.applyTheme(p)
             is LinearLayout -> this.applyTheme(p)
@@ -146,7 +144,7 @@ class Theme {
             "background200" -> this.setBackgroundColor(p.background.alpha(200))
             "sliderBackground" -> {
                 val drawable = GradientDrawable()
-                drawable.mutate()
+                //drawable.mutate()
                 drawable.setColor(p.d)
                 drawable.cornerRadius = 15f
                 this.background = drawable
@@ -156,23 +154,23 @@ class Theme {
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
             "sliderPopupFrame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(10, p.color)
                 drawable?.cornerRadius = 25f
             }
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background?.mutate()
+                //background?.mutate()
                 background?.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
             }
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
-                background?.mutate()
+                //background?.mutate()
                 background?.setColor(
                     ColorStateList.valueOf(
                         theme.a.colorPallet.background.darkened(
@@ -197,7 +195,7 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(2, p.color)
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
@@ -210,7 +208,7 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(2, p.color)
             }
             "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
@@ -232,28 +230,41 @@ class Theme {
         }
     }
 
-    private fun MaterialButton.applyTheme(p: ColorPallet) {
-        val background = this.background as LayerDrawable?
-        val ripple = background?.findDrawableByLayerId(R.id.ripple) as RippleDrawable?
-        background?.mutate()
+    private fun Button.applyTheme(p: ColorPallet) {
+        val ripple = this.foreground as? RippleDrawable?
+        val stroke = ripple?.findDrawableByLayerId(R.id.stroke) as? GradientDrawable?
 
-        ripple?.setColor(ColorStateList.valueOf(contrastColor(!a.isDark)))
+        ripple?.setColor(ColorStateList.valueOf(p.background))
+        stroke?.setStroke(
+            3f.toPx(), when (this.tag) {
+                "color" -> ColorStateList.valueOf(p.color)
+                "colorA" -> ColorStateList.valueOf(p.a)
+                "colorB" -> ColorStateList.valueOf(p.b)
+                "colorC" -> ColorStateList.valueOf(p.c)
+                "colorD" -> ColorStateList.valueOf(p.d)
+                else -> ColorStateList.valueOf(p.d)
+            }
+        )
 
-        this.backgroundTintList = when (this.tag) {
-            "color" -> ColorStateList.valueOf(p.color)
-            "colorA" -> ColorStateList.valueOf(p.a)
-            "colorC" -> ColorStateList.valueOf(p.c)
-            "colorD" -> ColorStateList.valueOf(p.d)
-            else -> ColorStateList.valueOf(p.c)
+        if (this.text.isEmpty()) {
+            this.foregroundTintList = when (this.tag) {
+                "color" -> ColorStateList.valueOf(p.color)
+                "colorA" -> ColorStateList.valueOf(p.a)
+                "colorB" -> ColorStateList.valueOf(p.b)
+                "colorC" -> ColorStateList.valueOf(p.c)
+                "colorD" -> ColorStateList.valueOf(p.d)
+                else -> ColorStateList.valueOf(p.d)
+            }
         }
 
         this.setTextColor(
             when (this.tag) {
-                "color" -> p.d
-                "colorA" -> blendARGB(p.d, p.color, .1f)
-                "colorC" -> blendARGB(p.d, p.color, .9f)
-                "colorD" -> p.color
-                else -> blendARGB(p.d, p.color, .9f)
+                "color" -> p.color
+                "colorA" -> p.a
+                "colorB" -> p.b
+                "colorC" -> p.c
+                "colorD" -> p.d
+                else -> p.d
             }
         )
     }
@@ -271,6 +282,7 @@ class Theme {
             "default" -> {
                 this.setTextColor(colorStateList)
                 this.buttonTintList = colorStateList
+                this.background = null
             }
             else -> onUnknownTag(this.tag, "radioButton")
         }
@@ -289,6 +301,7 @@ class Theme {
             "default" -> {
                 this.setTextColor(colorStateList)
                 this.buttonTintList = colorStateList
+                this.background = null
             }
             else -> onUnknownTag(this.tag, "radioButton")
         }
@@ -305,7 +318,7 @@ class Theme {
             "frame" -> {
                 this.setTextColor(p.color)
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
             "log" -> {
@@ -322,7 +335,7 @@ class Theme {
                 this.setTextColor(p.b)
                 this.setHintTextColor(p.c)
                 val drawable = this.background as? GradientDrawable
-                drawable?.mutate()
+                //drawable?.mutate()
                 drawable?.setStroke(1, p.c)
             }
             else -> onUnknownTag(this.tag, "editText")
@@ -338,11 +351,12 @@ class Theme {
             intArrayOf(-android.R.attr.state_checked),
             intArrayOf(android.R.attr.state_checked)
         )
-        val colors = intArrayOf(p.c, p.a)
+        val colors = intArrayOf(p.d, p.b)
         val list = ColorStateList(states, colors)
 
         this.trackTintList = list
         this.thumbTintList = ColorStateList.valueOf(p.color)
+        this.background = null
     }
 
     private fun Slider.applyTheme(p: ColorPallet) {
@@ -506,10 +520,10 @@ class Theme {
                 )
             } else color = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], hsv[2]))
 
-            val a = blendARGB(color, colorBackground, 0.2f)
-            val b = blendARGB(a, colorBackground, 0.35f)
-            val c = blendARGB(b, colorBackground, 0.45f)
-            val d = blendARGB(c, colorBackground, 0.55f)
+            val a = blendARGB(color, colorBackground, 0.4f)
+            val b = blendARGB(a, colorBackground, 0.4f)
+            val c = blendARGB(b, colorBackground, 0.4f)
+            val d = blendARGB(c, colorBackground, 0.4f)
 
             return ColorPallet(color, colorBackground, a, b, c, d)
         }

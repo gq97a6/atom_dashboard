@@ -214,8 +214,8 @@
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="30dp"
                         android:layout_marginVertical="5dp"
-                        android:background="@drawable/button_text"
-                        android:tag="colorC"
+                        android:foreground="@drawable/button_text"
+                        android:tag="colorA"
                         android:text="EDIT COLOR"
                         android:textSize="11dp" />
 
@@ -260,9 +260,9 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_text"
+                        android:foreground="@drawable/button_text"
                         android:padding="0dp"
-                        android:tag="colorC"
+                        android:tag="colorA"
                         android:text="CREATE"
                         android:textSize="11dp"
                         tools:ignore="TouchTargetSizeCheck" />
@@ -275,9 +275,9 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_text"
+                        android:foreground="@drawable/button_text"
                         android:padding="0dp"
-                        android:tag="colorC"
+                        android:tag="colorA"
                         android:text="RESTORE"
                         android:textSize="11dp"
                         tools:ignore="TouchTargetSizeCheck" />

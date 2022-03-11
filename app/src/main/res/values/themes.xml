@@ -1,56 +1,5 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.Light" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryVariant">#FFFFFF</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">#FFFFFF</item>
-        <item name="colorSecondaryVariant">#FFFFFF</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">#00000000</item>
-        <item name="android:windowBackground">#00000000</item>
-        <item name="android:windowLightStatusBar">true</item>
+    <style name="theme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">#4A4A4A</item>
     </style>
-
-    <style name="Theme.Dark" parent="Theme.MaterialComponents.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryVariant">#000000</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">#FFFFFF</item>
-        <item name="colorSecondaryVariant">#FFFFFF</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <!-- Customize your theme here. -->
-        <item name="android:statusBarColor">#00000000</item>
-        <item name="android:windowBackground">#00000000</item>
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="button" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="cornerRadius">0dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-    </style>
-
-    <style name="slider" parent="@style/Widget.MaterialComponents.Slider">
-        <item name="haloColor">#00000000</item>
-        <item name="labelBehavior">gone</item>
-        <item name="haloRadius">0dp</item>
-        <item name="thumbColor">@color/slider_thumbColor</item>
-        <item name="tickColorActive">@color/slider_tickColorActive</item>
-        <item name="tickColorInactive">@color/slider_tickColorInactive</item>
-        <item name="trackColorActive">@color/slider_trackColorActive</item>
-        <item name="trackColorInactive">@color/slider_trackColorInactive</item>
-    </style>
-
-    <style name="ThemeOverlay.App.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
-    </style>
-
 </resources>

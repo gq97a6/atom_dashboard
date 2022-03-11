@@ -67,7 +67,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
         val drawable = b.tpIconFrame.background as? GradientDrawable
-        drawable?.mutate()
+        //drawable?.mutate()
         drawable?.setStroke(1, tile.colorPallet.color)
         drawable?.cornerRadius = 15f
 
@@ -286,7 +286,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     ColorStateList.valueOf(tile.colorPalletTrue.color)
 
                 val drawableTrue = b.tpMqttPayloadTrueIconFrame.background as? GradientDrawable
-                drawableTrue?.mutate()
+                //drawableTrue?.mutate()
                 drawableTrue?.setStroke(1, tile.colorPalletTrue.color)
                 drawableTrue?.cornerRadius = 15f
 
@@ -297,7 +297,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     ColorStateList.valueOf(tile.colorPalletFalse.color)
 
                 val drawableFalse = b.tpMqttPayloadFalseIconFrame.background as? GradientDrawable
-                drawableFalse?.mutate()
+                //drawableFalse?.mutate()
                 drawableFalse?.setStroke(1, tile.colorPalletFalse.color)
                 drawableFalse?.cornerRadius = 15f
 

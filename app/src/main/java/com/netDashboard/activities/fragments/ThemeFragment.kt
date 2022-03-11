@@ -14,7 +14,7 @@ import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentThemeBinding
 import com.netDashboard.globals.G.theme
 
-class ThemeFragment : Fragment(R.layout.fragment_tile_new) {
+class ThemeFragment : Fragment(R.layout.fragment_theme) {
     private lateinit var b: FragmentThemeBinding
 
     override fun onCreateView(

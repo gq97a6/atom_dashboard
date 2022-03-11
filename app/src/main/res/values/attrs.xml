@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="FullscreenAttrs">
-        <attr name="fullscreenBackgroundColor" format="color" />
-        <attr name="fullscreenTextColor" format="color" />
-    </declare-styleable>
-
     <declare-styleable name="ColorPicker">
         <attr name="arc_width" format="dimension" />
         <attr name="stroke_width" format="dimension" />
@@ -54,4 +49,5 @@
         <attr name="saturation_radius_offset" format="dimension" />
         <attr name="lightness_radius_offset" format="dimension" />
     </declare-styleable>
+
 </resources>

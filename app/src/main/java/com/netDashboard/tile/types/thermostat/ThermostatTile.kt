@@ -171,8 +171,11 @@ class ThermostatTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        //if (mqttData.pubs["base"].isNullOrEmpty()) return
-        //if (dashboard.dg?.mqttd?.client?.isConnected != true) return
+        if (mqttData.pubs["temp_set"].isNullOrEmpty() &&
+            mqttData.pubs["humi_set"].isNullOrEmpty()
+        ) return
+
+        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         if (temperatureRange[0] > temperatureRange[1]) {
             val tmp = temperatureRange[0]
@@ -335,8 +338,9 @@ class ThermostatTile : Tile() {
                     else "${notEmpty[pos].first}"
 
                     if (mode == notEmpty[pos].second) {
-                        holder?.itemView?.findViewById<View>(R.id.is_background).let{
-                            it.backgroundTintList = ColorStateList.valueOf(theme.a.colorPallet.color)
+                        holder?.itemView?.findViewById<View>(R.id.is_background).let {
+                            it.backgroundTintList =
+                                ColorStateList.valueOf(theme.a.colorPallet.color)
                             it.alpha = 0.15f
                         }
                     }

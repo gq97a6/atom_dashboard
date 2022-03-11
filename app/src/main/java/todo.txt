@@ -1,10 +1,22 @@
 //expand ------------------------------
 start guide
-trackpad tile
-keyboard tile
+buttons
+    full
+    frame
+    frame bold text
+    bold frame
+    bold frame bold text
+    semi
 
 new tiles
+    keyboard
+    trackpad
     lights
+        color       | as button, as compound
+        brightness  | as seeker, as compound
+
+        mode        | as button
+        on/off      | as button
 
     (indicator,
     diode,

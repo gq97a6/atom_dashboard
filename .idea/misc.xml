@@ -25,7 +25,7 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_button.xml" value="0.67" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_slider.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/text/layout/tile_text.xml" value="0.33" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/thermostat/layout/tile_thermostat.xml" value="0.67" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/thermostat/layout/tile_thermostat.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/time/layout/tile_text.xml" value="0.280859375" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/java/com/netDashboard/tile/types/time/layout/tile_time.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/align_center_h.xml" value="0.3076923076923077" />
@@ -37,22 +37,28 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame_sharp.xml" value="0.182" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_frame_text.xml" value="0.231" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_loop.xml" value="0.161" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_ripple.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/background_round.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_TEST.xml" value="0.179" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_add.xml" value="0.276" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_copy.xml" value="0.276" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_edit.xml" value="0.2565" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_info.xml" value="0.3319634703196347" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_locked.xml" value="0.3472222222222222" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_locked.xml" value="0.22" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_more.xml" value="0.3472222222222222" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_swap.xml" value="0.3472222222222222" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_text.xml" value="0.2845" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_text.xml" value="0.22" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_textVIEW.xml" value="0.179" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_text_test.xml" value="0.179" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_trashcan.xml" value="0.276" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_unlocked.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/button_unlocked.xml" value="0.25" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_add.xml" value="0.1893162393162393" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_copy.xml" value="0.276" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_edit.xml" value="0.2555" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_info.xml" value="0.3365740740740741" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_locked.xml" value="0.32051282051282054" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_more.xml" value="0.2555" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_swap.xml" value="0.32051282051282054" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/drawable/icon_unlocked.xml" value="0.25" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/icons/drawable/il_arrow_align_center_h.xml" value="0.1782051282051282" />
@@ -81,9 +87,11 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/activity_theme.xml" value="0.1" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/activity_tile_new.xml" value="0.5" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/activity_tile_properties.xml" value="0.33" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_color_picker.xml" value="0.1" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_color_picker.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_confirm.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_copy_broker.xml" value="0.3072649572649573" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_light.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_lights.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_select.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_slider.xml" value="0.3072649572649573" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/dialog_text.xml" value="0.3072649572649573" />
@@ -99,12 +107,12 @@
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard2.xml" value="0.6477477477477478" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard_new.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard_old.xml" value="0.37447916666666664" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard_properties.xml" value="0.25" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard_properties.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_dashboard_save.xml" value="0.6477477477477478" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_fullscreen.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_icon_edit.xml" value="0.33287037037037037" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_main_screen.xml" value="0.25" />
-        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_settings.xml" value="0.5" />
+        <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_settings.xml" value="0.25" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme.xml" value="0.33" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_theme2.xml" value="0.29444444444444445" />
         <entry key="..\:/Users/Ja/AndroidStudioProjects/netDashboard/app/src/main/res/layout/fragment_tile_icon.xml" value="0.33" />

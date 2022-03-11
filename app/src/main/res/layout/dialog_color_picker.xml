@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginHorizontal="20dp"
-    android:gravity="center"
     android:layout_marginBottom="20dp"
+    android:gravity="center"
     android:orientation="vertical">
 
     <FrameLayout
@@ -40,9 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/button_text"
+            android:foreground="@drawable/button_text"
             android:paddingHorizontal="30dp"
-            android:tag="colorC"
+            android:tag="colorB"
             android:text="CANCEL"
             android:textSize="12dp" />
 
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:background="@drawable/button_text"
+            android:foreground="@drawable/button_text"
             android:paddingHorizontal="30dp"
             android:tag="colorA"
             android:text="CONFIRM"

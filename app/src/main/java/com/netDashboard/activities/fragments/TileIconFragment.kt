@@ -49,7 +49,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     private fun onColorChange(colorPallet: Theme.ColorPallet) {
         b.tiIcon.backgroundTintList = ColorStateList.valueOf(colorPallet.color)
         val drawable = b.tiIconFrame.background as? GradientDrawable
-        drawable?.mutate()
+        //drawable?.mutate()
         drawable?.setStroke(1, colorPallet.color)
         drawable?.cornerRadius = 15f
     }

@@ -1,8 +1,10 @@
 package com.netDashboard.toolbarControl
 
+import android.graphics.drawable.RippleDrawable
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.FrameLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.netDashboard.R
@@ -35,7 +37,10 @@ class ToolBarController(
             bar.animate()
                 .translationY(-1.5f * bar[0].height.toFloat())
                 .withEndAction {
-                    toolbarIcon.setBackgroundResource(R.drawable.button_unlocked)
+                    (toolbarIcon.foreground as? RippleDrawable?)?.setDrawableByLayerId(
+                        R.id.icon,
+                        AppCompatResources.getDrawable(adapter.context, R.drawable.icon_unlocked)
+                    )
                     onUiChange()
                 }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
@@ -46,7 +51,10 @@ class ToolBarController(
             bar.animate()
                 .translationY(0f)
                 .withEndAction {
-                    toolbarIcon.setBackgroundResource(R.drawable.button_locked)
+                    (toolbarIcon.foreground as? RippleDrawable?)?.setDrawableByLayerId(
+                        R.id.icon,
+                        AppCompatResources.getDrawable(adapter.context, R.drawable.icon_locked)
+                    )
                     onUiChange()
                 }
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300

@@ -17,7 +17,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Light">
+        android:theme="@style/theme">
         <activity
             android:name=".activities.SplashScreenActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

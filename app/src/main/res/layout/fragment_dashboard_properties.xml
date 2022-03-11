@@ -174,17 +174,40 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/dp_mqtt_copy"
-                        style="@style/button"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginHorizontal="40dp"
+                    <LinearLayout
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/button_text"
-                        android:tag="colorC"
-                        android:text="COPY BROKER PROPERTIES"
-                        android:textSize="11dp" />
+                        android:layout_width="match_parent"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/dp_mqtt_copy"
+                            style="@style/button"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:foreground="@drawable/button_text"
+                            android:tag="colorA"
+                            android:text="COPY PROPERTIES"
+                            android:textSize="11dp" />
+
+                        <Button
+                            android:id="@+id/dp_transfer"
+                            style="@style/button"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:foreground="@drawable/button_text"
+                            android:tag="colorA"
+                            android:text="TRANSFER"
+                            android:textSize="11dp"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -396,46 +419,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="3dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:tag="colorA"
-                    android:text="Transfer using MQTT"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:tag="frame">
-
-                <Button
-                    android:id="@+id/dp_transfer"
-                    style="@style/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/button_text"
-                    android:padding="0dp"
-                    android:tag="colorC"
-                    android:text="TRANSFER"
-                    android:textSize="11dp"
-                    tools:ignore="TouchTargetSizeCheck" />
 
             </LinearLayout>
 

@@ -447,7 +447,7 @@
                                         android:layout_height="30dp"
                                         android:layout_gravity="center|right"
                                         android:layout_marginEnd="10dp"
-                                        android:background="@drawable/button_copy"
+                                        android:foreground="@drawable/button_copy"
                                         android:tag="colorA" />
 
                                 </FrameLayout>
@@ -608,7 +608,7 @@
                                         android:layout_height="30dp"
                                         android:layout_gravity="center|right"
                                         android:layout_marginEnd="10dp"
-                                        android:background="@drawable/button_copy"
+                                        android:foreground="@drawable/button_copy"
                                         android:tag="colorA" />
 
                                 </FrameLayout>
@@ -767,7 +767,7 @@
                                             android:layout_height="30dp"
                                             android:layout_gravity="center|right"
                                             android:layout_marginEnd="10dp"
-                                            android:background="@drawable/button_copy"
+                                            android:foreground="@drawable/button_copy"
                                             android:tag="colorA" />
 
                                     </FrameLayout>
@@ -850,7 +850,7 @@
                                         android:layout_height="30dp"
                                         android:layout_gravity="center|right"
                                         android:layout_marginEnd="10dp"
-                                        android:background="@drawable/button_copy"
+                                        android:foreground="@drawable/button_copy"
                                         android:tag="colorA" />
 
                                 </FrameLayout>
@@ -1884,12 +1884,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="colorB"
-                            android:text="Retain massagess:"
+                            android:text="Retain messages:"
                             android:textSize="15dp" />
 
                         <CheckBox
                             android:id="@+id/tp_temp_retain"
                             android:layout_width="wrap_content"
+                            android:backgroundTint="#FFFFFF"
                             android:layout_height="wrap_content"
                             android:tag="default"
                             android:text="Temperature setpoint" />
@@ -1898,6 +1899,7 @@
                             android:id="@+id/tp_humi_retain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:backgroundTint="#FFFFFF"
                             android:tag="default"
                             android:text="Humidity setpoint" />
 

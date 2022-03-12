@@ -41,6 +41,7 @@
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/iicp_hue"
+                style="@style/slider"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -67,6 +68,7 @@
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/iicp_saturation"
+                style="@style/slider"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -94,6 +96,7 @@
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/iicp_value"
+                style="@style/slider"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"

@@ -46,7 +46,7 @@ class ThermostatTile : Tile() {
 
     var hasReceived = MutableLiveData("")
 
-    var mode = "auto"
+    var mode: String? = null
     var temp: Float? = null
         set(value) {
             field = value

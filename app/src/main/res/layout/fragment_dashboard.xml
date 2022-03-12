@@ -75,7 +75,7 @@
             android:layout_marginLeft="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_unlocked"
+            android:foreground="@drawable/button_locked"
             android:tag="color" />
 
     </FrameLayout>

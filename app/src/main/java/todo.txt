@@ -1,12 +1,7 @@
 //expand ------------------------------
 start guide
-buttons
-    full
-    frame
-    frame bold text
-    bold frame
-    bold frame bold text
-    semi
+turn off paint color tile option
+fix chips theming
 
 new tiles
     keyboard

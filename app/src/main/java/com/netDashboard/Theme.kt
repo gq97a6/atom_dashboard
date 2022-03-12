@@ -113,11 +113,11 @@ class Theme {
     private fun View.defineType(p: ColorPallet) {
         when (this) {
             is RadioButton -> this.applyTheme(p)
+            is Chip -> this.applyTheme(p)
             is CheckBox -> this.applyTheme(p)
             is SwitchMaterial -> this.applyTheme(p)
             is Button -> this.applyTheme(p)
             is EditText -> this.applyTheme(p)
-            is Chip -> this.applyTheme(p)
             is TextView -> this.applyTheme(p)
             is Slider -> this.applyTheme(p)
             is LinearLayout -> this.applyTheme(p)
@@ -405,7 +405,7 @@ class Theme {
                     arrayOf(
                         intArrayOf(-android.R.attr.state_checked),
                         intArrayOf(android.R.attr.state_checked)
-                    ), intArrayOf(p.c, p.b)
+                    ), intArrayOf(p.c, p.a)
                 )
 
                 val colorStateListText = ColorStateList(
@@ -520,10 +520,11 @@ class Theme {
                 )
             } else color = Color.HSVToColor(floatArrayOf(hsv[0], hsv[1], hsv[2]))
 
-            val a = blendARGB(color, colorBackground, 0.4f)
-            val b = blendARGB(a, colorBackground, 0.4f)
-            val c = blendARGB(b, colorBackground, 0.4f)
-            val d = blendARGB(c, colorBackground, 0.4f)
+            val r = if (isDark) .4f else .25f
+            val a = blendARGB(color, colorBackground, r)
+            val b = blendARGB(a, colorBackground, r)
+            val c = blendARGB(b, colorBackground, r)
+            val d = blendARGB(c, colorBackground, r)
 
             return ColorPallet(color, colorBackground, a, b, c, d)
         }

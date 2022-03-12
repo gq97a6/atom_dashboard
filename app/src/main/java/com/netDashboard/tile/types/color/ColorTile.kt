@@ -34,6 +34,7 @@ class ColorTile : Tile() {
     override var iconKey = "il_design_palette"
 
     var paintRaw = true
+    var paintTile = true
     var hsvPicked = floatArrayOf(0f, 0f, 0f)
     var toRemoves = mutableMapOf<String, MutableList<String>>()
     var flagIndexes = mutableMapOf<String, Int>()
@@ -92,11 +93,13 @@ class ColorTile : Tile() {
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
-        theme.apply(
-            holder.itemView as ViewGroup,
-            anim = false,
-            colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
-        )
+        if (paintTile) {
+            theme.apply(
+                holder.itemView as ViewGroup,
+                anim = false,
+                colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+            )
+        }
     }
 
     override fun onClick(v: View, e: MotionEvent) {
@@ -109,13 +112,15 @@ class ColorTile : Tile() {
         dialog.setContentView(R.layout.dialog_color_picker)
         val binding = DialogColorPickerBinding.bind(dialog.findViewById(R.id.root))
 
+        var hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
+
         fun onColorChange() {
-            colorToHSV(binding.dcpPicker.color, hsvPicked)
+            colorToHSV(binding.dcpPicker.color, hsvPickedTmp)
             binding.dcpColor.backgroundTintList =
                 ColorStateList.valueOf(binding.dcpPicker.color)
         }
 
-        binding.dcpPicker.setColor(HSVToColor(hsvPicked))
+        binding.dcpPicker.setColor(HSVToColor(hsvPickedTmp))
         onColorChange()
 
         binding.dcpPicker.setColorSelectionListener(object : SimpleColorSelectionListener() {
@@ -129,24 +134,24 @@ class ColorTile : Tile() {
                 when (colorType) {
                     "hsv" -> {
                         (mqttData.payloads["hsv"] ?: "")
-                            .replace("@h", hsvPicked[0].toInt().toString())
-                            .replace("@s", (hsvPicked[1] * 100).toInt().toString())
-                            .replace("@v", (hsvPicked[2] * 100).toInt().toString())
+                            .replace("@h", hsvPickedTmp[0].toInt().toString())
+                            .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
+                            .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
                     "hex" -> {
-                        val c = HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPickedTmp)
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                     "rgb" -> {
-                        val c = HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPickedTmp)
                         (mqttData.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
                             .replace("@g", c.green.toString())
                             .replace("@b", c.blue.toString())
                     }
                     else -> {
-                        val c = HSVToColor(hsvPicked)
+                        val c = HSVToColor(hsvPickedTmp)
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
@@ -215,12 +220,14 @@ class ColorTile : Tile() {
                 }
             }
 
-            holder?.itemView?.let {
-                theme.apply(
-                    it as ViewGroup,
-                    anim = false,
-                    colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
-                )
+            if (paintTile) {
+                holder?.itemView?.let {
+                    theme.apply(
+                        it as ViewGroup,
+                        anim = false,
+                        colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                    )
+                }
             }
         } catch (e: Exception) {
             null

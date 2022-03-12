@@ -12,11 +12,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dl_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="wrap_content">
 
         <me.tankery.lib.circularseekbar.CircularSeekBar
-            android:id="@+id/dl_humi"
+            android:id="@+id/dl_bright"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -36,12 +35,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="25dp"
-            app:layout_constraintBottom_toBottomOf="@+id/dl_humi"
-            app:layout_constraintEnd_toEndOf="@+id/dl_humi"
-            app:layout_constraintStart_toStartOf="@+id/dl_humi"
-            app:layout_constraintTop_toTopOf="@+id/dl_humi" />
+            app:layout_constraintBottom_toBottomOf="@+id/dl_bright"
+            app:layout_constraintEnd_toEndOf="@+id/dl_bright"
+            app:layout_constraintStart_toStartOf="@+id/dl_bright"
+            app:layout_constraintTop_toTopOf="@+id/dl_bright" />
 
         <View
+            android:id="@+id/dl_color"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="70dp"
@@ -60,83 +60,81 @@
             android:autoSizeTextType="uniform"
             android:gravity="center"
             android:maxLines="1"
-            android:text="100"
+            android:text="--"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/dl_humi"
-            app:layout_constraintEnd_toEndOf="@+id/dl_humi"
-            app:layout_constraintStart_toStartOf="@+id/dl_humi"
-            app:layout_constraintTop_toTopOf="@+id/dl_humi" />
+            app:layout_constraintBottom_toBottomOf="@+id/dl_bright"
+            app:layout_constraintEnd_toEndOf="@+id/dl_bright"
+            app:layout_constraintStart_toStartOf="@+id/dl_bright"
+            app:layout_constraintTop_toTopOf="@+id/dl_bright" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <Button
-        style="@style/button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_text"
-        android:paddingHorizontal="20dp"
-        android:tag="color"
-        android:text="BUTTON"
-        android:textSize="12dp" />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
-    <Button
-        style="@style/button"
+        <Button
+            android:id="@+id/dl_mode"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="40dp"
+            android:foreground="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="color"
+            android:text="MODE"
+            android:textSize="12dp" />
+
+        <Button
+            android:id="@+id/dl_switch"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:foreground="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="color"
+            android:text="OFF"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_text"
-        android:paddingHorizontal="20dp"
-        android:tag="colorA"
-        android:text="BUTTON"
-        android:textSize="12dp" />
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
 
-    <Button
-        style="@style/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_text"
-        android:paddingHorizontal="20dp"
-        android:tag="colorB"
-        android:text="BUTTON"
-        android:textSize="12dp" />
+        <Button
+            android:id="@+id/dl_deny"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:foreground="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorB"
+            android:text="CANCEL"
+            android:textSize="12dp" />
 
-    <Button
-        style="@style/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_text"
-        android:paddingHorizontal="20dp"
-        android:tag="colorC"
-        android:text="BUTTON"
-        android:textSize="12dp" />
+        <Button
+            android:id="@+id/dl_confirm"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:foreground="@drawable/button_text"
+            android:paddingHorizontal="30dp"
+            android:tag="colorA"
+            android:text="CONFIRM"
+            android:textSize="12dp" />
 
-    <Button
-        style="@style/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_text"
-        android:paddingHorizontal="20dp"
-        android:tag="colorD"
-        android:text="BUTTON"
-        android:textSize="12dp" />
-
-    <Button
-        android:id="@+id/d_toolbar_icon"
-        style="@style/button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="5dp"
-        android:foreground="@drawable/button_locked"
-        android:tag="color" />
+    </LinearLayout>
 
 </LinearLayout>

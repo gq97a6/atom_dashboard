@@ -1,7 +1,6 @@
 //expand ------------------------------
 start guide
-turn off paint color tile option
-fix chips theming
+compound single topic for json option
 
 new tiles
     keyboard

@@ -16,6 +16,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
@@ -59,31 +60,27 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         G.theme.apply(b.root, requireActivity())
 
+        setupIcon(tile.iconRes, tile.colorPallet.color, b.tpIconFrame, b.tpIcon)
+
+        b.tpNotSilentSwitch.visibility = if (tile.doNotify) VISIBLE else GONE
+        switchMqttTab(settings.mqttTabShow, 0)
+
         b.tpTag.setText(tile.tag)
-        b.tpIcon.setBackgroundResource(tile.iconRes)
+        b.tpMqttSub.setText(tile.mqttData.subs["base"])
+        b.tpMqttPub.setText(tile.mqttData.pubs["base"])
+        b.tpMqttPayload.setText(tile.mqttData.payloads["base"] ?: "")
+        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["base"] ?: "")
         b.tpTileType.text = tile.typeTag.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
         }
 
-        b.tpIcon.backgroundTintList = ColorStateList.valueOf(tile.colorPallet.color)
-        val drawable = b.tpIconFrame.background as? GradientDrawable
-        //drawable?.mutate()
-        drawable?.setStroke(1, tile.colorPallet.color)
-        drawable?.cornerRadius = 15f
-
         b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
-        b.tpMqttPub.setText(tile.mqttData.pubs["base"])
-        b.tpMqttSub.setText(tile.mqttData.subs["base"])
-        b.tpMqttPayload.setText(tile.mqttData.payloads["base"] ?: "")
-
-        tile.mqttData.payloadIsJson.let {
-            b.tpMqttJsonSwitch.isChecked = it
-            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
-        }
-
-        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["base"] ?: "")
         b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
         b.tpMqttRetainSwitch.isChecked = tile.mqttData.retain
+        b.tpLogSwitch.isChecked = tile.doLog
+        b.tpNotSwitch.isChecked = tile.doNotify
+        b.tpNotSilentSwitch.isChecked = tile.silentNotify
+
         b.tpQos.check(
             when (tile.mqttData.qos) {
                 0 -> R.id.tp_qos0
@@ -93,14 +90,24 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
         )
 
-        switchMqttTab(settings.mqttTabShow, 0)
-
-        b.tpNotSilentSwitch.isChecked = tile.doLog
-        b.tpNotSwitch.isChecked = tile.doNotify
-        b.tpNotSilentSwitch.isChecked = tile.silentNotify
+        tile.mqttData.payloadIsJson.let {
+            b.tpMqttJsonSwitch.isChecked = it
+            b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
+        }
 
         b.tpTag.addTextChangedListener {
             tile.tag = (it ?: "").toString()
+        }
+
+        b.tpEditIcon.setOnClickListener {
+            getIconHSV = { tile.hsv }
+            getIconRes = { tile.iconRes }
+            getIconColorPallet = { tile.colorPallet }
+
+            setIconHSV = { hsv -> tile.hsv = hsv }
+            setIconKey = { key -> tile.iconKey = key }
+
+            (activity as MainActivity).fm.replaceWith(TileIconFragment())
         }
 
         b.tpMqttSwitch.setOnCheckedChangeListener { _, state ->
@@ -125,23 +132,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             b.tpMqttPub.setText(b.tpMqttSub.text)
         }
 
-        b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.payloadIsJson = state
-            b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
-        }
-
-        b.tpMqttJsonPayloadPath.addTextChangedListener {
-            tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
-        }
-
-        b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.confirmPub = state
-        }
-
-        b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.retain = state
-        }
-
         b.tpQos.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
             tile.mqttData.qos = when (id) {
                 R.id.tp_qos0 -> 0
@@ -152,15 +142,21 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
-        b.tpEditIcon.setOnClickListener {
-            getIconHSV = { tile.hsv }
-            getIconRes = { tile.iconRes }
-            getIconColorPallet = { tile.colorPallet }
+        b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.retain = state
+        }
 
-            setIconHSV = { hsv -> tile.hsv = hsv }
-            setIconKey = { key -> tile.iconKey = key }
+        b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.confirmPub = state
+        }
 
-            (activity as MainActivity).fm.replaceWith(TileIconFragment())
+        b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+            tile.mqttData.payloadIsJson = state
+            b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
+        }
+
+        b.tpMqttJsonPayloadPath.addTextChangedListener {
+            tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
         }
 
         b.tpLogSwitch.setOnCheckedChangeListener { _, state ->
@@ -169,7 +165,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpNotSwitch.setOnCheckedChangeListener { _, state ->
             tile.doNotify = state
-            b.tpNotSilent.visibility = if (state) VISIBLE else GONE
+            b.tpNotSilentSwitch.visibility = if (tile.doNotify) VISIBLE else GONE
         }
 
         b.tpNotSilentSwitch.setOnCheckedChangeListener { _, state ->
@@ -224,11 +220,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpSlider.visibility = VISIBLE
                 b.tpMqttPayloadBox.visibility = VISIBLE
-                b.tpPayloadHint.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
 
                 b.tpSliderDrag.isChecked = tile.dragCon
 
-                b.tpPayloadHint.text = "Use @value to insert current value"
+                b.tpMqttPayloadHint.text = "Use @value to insert current value"
                 b.tpSliderFrom.setText(tile.range[0].toString())
                 b.tpSliderTo.setText(tile.range[1].toString())
                 b.tpSliderStep.setText(tile.range[2].toString())
@@ -281,25 +277,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadsBox.visibility = VISIBLE
 
                 b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
-                b.tpMqttPayloadTrueIcon.setBackgroundResource(tile.iconResTrue)
-                b.tpMqttPayloadTrueIcon.backgroundTintList =
-                    ColorStateList.valueOf(tile.colorPalletTrue.color)
-
-                val drawableTrue = b.tpMqttPayloadTrueIconFrame.background as? GradientDrawable
-                //drawableTrue?.mutate()
-                drawableTrue?.setStroke(1, tile.colorPalletTrue.color)
-                drawableTrue?.cornerRadius = 15f
-
-
                 b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
-                b.tpMqttPayloadFalseIcon.setBackgroundResource(tile.iconResFalse)
-                b.tpMqttPayloadFalseIcon.backgroundTintList =
-                    ColorStateList.valueOf(tile.colorPalletFalse.color)
 
-                val drawableFalse = b.tpMqttPayloadFalseIconFrame.background as? GradientDrawable
-                //drawableFalse?.mutate()
-                drawableFalse?.setStroke(1, tile.colorPalletFalse.color)
-                drawableFalse?.cornerRadius = 15f
+                setupIcon(tile.iconResTrue, tile.colorPalletTrue.color, b.tpMqttPayloadTrueIconFrame, b.tpMqttPayloadTrueIcon)
+                setupIcon(tile.iconResFalse, tile.colorPalletFalse.color, b.tpMqttPayloadFalseIconFrame, b.tpMqttPayloadFalseIcon)
 
                 b.tpMqttPayloadTrueEditIcon.setOnClickListener {
                     getIconHSV = { tile.hsvTrue }
@@ -338,65 +319,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpSelect.visibility = VISIBLE
                 b.tpSelectShowPayload.isChecked = tile.showPayload
 
-                val adapter = GenericAdapter(requireContext())
-
-                val list = MutableList(tile.options.size) {
-                    GenericItem(R.layout.item_option)
-                }
-
-                adapter.setHasStableIds(true)
-                adapter.onBindViewHolder = { item, holder, _ ->
-                    adapter.list.indexOf(item).let { pos ->
-                        val a = holder.itemView.findViewById<EditText>(R.id.io_alias)
-                        val p = holder.itemView.findViewById<EditText>(R.id.io_payload)
-                        val r = holder.itemView.findViewById<Button>(R.id.io_remove)
-
-                        a.setText(tile.options[pos].first)
-                        p.setText(tile.options[pos].second)
-
-                        a.addTextChangedListener {
-                            adapter.list.indexOf(item).let { pos ->
-                                if (pos >= 0)
-                                    tile.options[pos] =
-                                        Pair((it ?: "").toString(), tile.options[pos].second)
-                            }
-                        }
-
-                        p.addTextChangedListener {
-                            adapter.list.indexOf(item).let { pos ->
-                                if (pos >= 0)
-                                    tile.options[pos] =
-                                        Pair(tile.options[pos].first, (it ?: "").toString())
-                            }
-                        }
-
-                        r.setOnClickListener {
-                            if (list.size > 1) {
-                                adapter.list.indexOf(item).let {
-                                    if (it >= 0) {
-                                        tile.options.removeAt(it)
-                                        adapter.removeItemAt(it)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                b.tpSelectRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-                b.tpSelectRecyclerView.adapter = adapter
-
-                adapter.submitList(list)
-
-                b.tpSelectAdd.setOnClickListener {
-                    tile.options.add(Pair("", ""))
-                    list.add(GenericItem(R.layout.item_option))
-                    adapter.notifyItemInserted(list.size - 1)
-                }
-
                 b.tpSelectShowPayload.setOnCheckedChangeListener { _, state ->
                     tile.showPayload = state
                 }
+
+                setupOptionsRecyclerView(tile.options, b.tpSelectRecyclerView, b.tpSelectAdd)
             }
 //--------------------------------------------------------------------------------------------------
             is TerminalTile -> {
@@ -433,18 +360,20 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpTime.visibility = VISIBLE
                 b.tpMqttPayloadBox.visibility = VISIBLE
-                b.tpPayloadHint.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
+
 
                 b.tpTimeType.check(
                     when (tile.isDate) {
                         false -> {
                             b.tpMqttPayload.setText(tile.mqttData.payloads["time"])
-                            b.tpPayloadHint.text = "Use @hour and @minute to insert current values."
+                            b.tpMqttPayloadHint.text =
+                                "Use @hour and @minute to insert current values."
                             R.id.tp_time_time
                         }
                         true -> {
                             b.tpMqttPayload.setText(tile.mqttData.payloads["date"])
-                            b.tpPayloadHint.text =
+                            b.tpMqttPayloadHint.text =
                                 "Use @day, @month, @year to insert current values."
                             R.id.tp_time_date
                         }
@@ -465,7 +394,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                     b.tpTimeMilitaryBox.visibility = if (tile.isDate) GONE else VISIBLE
                     b.tpMqttPayload.setText(tile.mqttData.payloads[if (tile.isDate) "date" else "time"])
-                    b.tpPayloadHint.text =
+                    b.tpMqttPayloadHint.text =
                         "Use ${if (tile.isDate) "@day, @month, @year" else "@hour and @minute"} to insert current values."
                 }
 
@@ -486,11 +415,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpColor.visibility = VISIBLE
                 b.tpMqttPayloadBox.visibility = VISIBLE
-                b.tpPayloadHint.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
+                b.tpColorPaintRawBox.visibility = if (tile.paintTile) VISIBLE else GONE
 
+                b.tpColorPaint.isChecked = tile.paintTile
                 b.tpColorPaintRaw.isChecked = tile.paintRaw
 
-                b.tpColorType.check(
+                b.tpColorColorType.check(
                     when (tile.colorType) {
                         "hsv" -> R.id.tp_color_hsv
                         "hex" -> R.id.tp_color_hex
@@ -500,7 +431,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 )
 
                 b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
-                b.tpPayloadHint.text =
+                b.tpMqttPayloadHint.text =
                     "Use ${
                         when (tile.colorType) {
                             "hsv" -> "@h, @s, @v"
@@ -510,11 +441,16 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         }
                     } to insert current value."
 
+                b.tpColorPaint.setOnCheckedChangeListener { _, state ->
+                    tile.paintTile = state
+                    b.tpColorPaintRawBox.visibility = if (tile.paintTile) VISIBLE else GONE
+                }
+
                 b.tpColorPaintRaw.setOnCheckedChangeListener { _, state ->
                     tile.paintRaw = state
                 }
 
-                b.tpColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                b.tpColorColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
                     tile.colorType = when (id) {
                         R.id.tp_color_hsv -> "hsv"
                         R.id.tp_color_hex -> "hex"
@@ -523,7 +459,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
 
                     b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
-                    b.tpPayloadHint.text =
+                    b.tpMqttPayloadHint.text =
                         "Use ${
                             when (tile.colorType) {
                                 "hsv" -> "@h, @s, @v"
@@ -541,11 +477,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 //--------------------------------------------------------------------------------------------------
             is ThermostatTile -> {
                 val tile = tile as ThermostatTile
-
-                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-                    tile.mqttData.payloadIsJson = state
-                    b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
-                }
 
                 b.tpMqttRetainBox.visibility = GONE
                 b.tpMqttTopics.visibility = GONE
@@ -576,15 +507,21 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatTemperatureStep.setText(tile.temperatureStep.toString())
 
                 tile.includeHumiditySetpoint.let {
-                    b.tpThermostatHumidityTopicBox.visibility = if (it) VISIBLE else GONE
+                    b.tpThermostatHumidityTopicsBox.visibility = if (it) VISIBLE else GONE
                     b.tpThermostatHumidityStepBox.visibility = if (it) VISIBLE else GONE
-                    b.tpThermostatHumiditySetpoint.isChecked = it
+                    b.tpThermostatIncludeHumiditySetpoint.isChecked = it
                 }
 
                 b.tpThermostatShowPayload.isChecked = tile.showPayload
-                b.tpTempRetain.isChecked = tile.retain[0]
-                b.tpHumiRetain.isChecked = tile.retain[1]
-                b.tpModeRetain.isChecked = tile.retain[2]
+                b.tpThermostatTempRetain.isChecked = tile.retain[0]
+                b.tpThermostatHumiRetain.isChecked = tile.retain[1]
+                b.tpThermostatModeRetain.isChecked = tile.retain[2]
+
+                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+                    tile.mqttData.payloadIsJson = state
+                    b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
+                }
+
 
                 b.tpThermostatTemperatureSub.addTextChangedListener {
                     tile.mqttData.subs["temp"] = (it ?: "").toString()
@@ -619,6 +556,18 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
 
+
+                b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
+                    b.tpThermostatTemperatureSetpointPub.setText(b.tpThermostatTemperatureSetpointSub.text)
+                }
+                b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
+                    b.tpThermostatHumiditySetpointPub.setText(b.tpThermostatHumiditySetpointSub.text)
+                }
+                b.tpThermostatModePubCopy.setOnClickListener {
+                    b.tpThermostatModePub.setText(b.tpThermostatModeSub.text)
+                }
+
+
                 b.tpThermostatTemperaturePath.addTextChangedListener {
                     tile.mqttData.jsonPaths["temp"] = (it ?: "").toString()
                 }
@@ -634,6 +583,19 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatModePath.addTextChangedListener {
                     tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
                 }
+
+
+                b.tpThermostatTempRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[0] = isChecked
+                }
+                b.tpThermostatHumiRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[1] = isChecked
+                }
+                b.tpThermostatModeRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[2] = isChecked
+                }
+
+
                 b.tpThermostatHumidityStep.addTextChangedListener {
                     tile.humidityStep = it.toString().toFloatOrNull() ?: 5f
                 }
@@ -647,100 +609,239 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.temperatureStep = it.toString().toFloatOrNull() ?: .5f
                 }
 
-                b.tpThermostatHumiditySetpoint.setOnCheckedChangeListener { _, state ->
+
+                b.tpThermostatIncludeHumiditySetpoint.setOnCheckedChangeListener { _, state ->
                     tile.includeHumiditySetpoint = state
                     b.tpThermostatHumidityStepBox.visibility = if (state) VISIBLE else GONE
-                    b.tpThermostatHumidityTopicBox.visibility = if (state) VISIBLE else GONE
+                    b.tpThermostatHumidityTopicsBox.visibility = if (state) VISIBLE else GONE
                 }
-
                 b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->
                     tile.showPayload = state
                 }
-                b.tpTempRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[0] = isChecked
-                }
 
-                b.tpHumiRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[1] = isChecked
-
-                }
-
-                b.tpModeRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[2] = isChecked
-
-                }
-
-                b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
-                    b.tpThermostatTemperatureSetpointPub.setText(b.tpThermostatTemperatureSetpointSub.text)
-                }
-
-                b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
-                    b.tpThermostatHumiditySetpointPub.setText(b.tpThermostatHumiditySetpointSub.text)
-                }
-
-                b.tpThermostatModePubCopy.setOnClickListener {
-                    b.tpThermostatModePub.setText(b.tpThermostatModeSub.text)
-                }
-
-                val adapter = GenericAdapter(requireContext())
-
-                val list = MutableList(tile.modes.size) {
-                    GenericItem(R.layout.item_option)
-                }
-
-                adapter.setHasStableIds(true)
-                adapter.onBindViewHolder = { item, holder, _ ->
-                    adapter.list.indexOf(item).let { pos ->
-                        val a = holder.itemView.findViewById<EditText>(R.id.io_alias)
-                        val p = holder.itemView.findViewById<EditText>(R.id.io_payload)
-                        val r = holder.itemView.findViewById<Button>(R.id.io_remove)
-
-                        a.setText(tile.modes[pos].first)
-                        p.setText(tile.modes[pos].second)
-
-                        a.addTextChangedListener {
-                            adapter.list.indexOf(item).let { pos ->
-                                if (pos >= 0)
-                                    tile.modes[pos] =
-                                        Pair((it ?: "").toString(), tile.modes[pos].second)
-                            }
-                        }
-
-                        p.addTextChangedListener {
-                            adapter.list.indexOf(item).let { pos ->
-                                if (pos >= 0)
-                                    tile.modes[pos] =
-                                        Pair(tile.modes[pos].first, (it ?: "").toString())
-                            }
-                        }
-
-                        r.setOnClickListener {
-                            if (list.size > 1) {
-                                adapter.list.indexOf(item).let {
-                                    if (it >= 0) {
-                                        tile.modes.removeAt(it)
-                                        adapter.removeItemAt(it)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                b.tpThermostatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-                b.tpThermostatRecyclerView.adapter = adapter
-
-                adapter.submitList(list)
-
-                b.tpThermostatModeAdd.setOnClickListener {
-                    tile.modes.add(Pair("", ""))
-                    list.add(GenericItem(R.layout.item_option))
-                    adapter.notifyItemInserted(list.size - 1)
-                }
+                setupOptionsRecyclerView(
+                    tile.modes,
+                    b.tpThermostatRecyclerView,
+                    b.tpThermostatModeAdd
+                )
             }
 //--------------------------------------------------------------------------------------------------
             is LightsTile -> {
                 val tile = tile as LightsTile
+
+                setupIcon(tile.iconResFalse, tile.colorPalletFalse.color, b.tpMqttPayloadFalseIconFrame, b.tpMqttPayloadFalseIcon)
+                setupIcon(tile.iconResTrue, tile.colorPalletTrue.color, b.tpMqttPayloadTrueIconFrame, b.tpMqttPayloadTrueIcon)
+
+                (if (tile.includePicker) VISIBLE else GONE).let {
+                    b.tpLightsColorRetain.visibility = it
+                    b.tpLightsColorTopics.visibility = it
+                    b.tpLightsTypeBox.visibility = it
+                    b.tpMqttPayloadBox.visibility = it
+                    b.tpLightsColorPathBox.visibility = it
+                }
+
+                b.tpMqttRetainBox.visibility = GONE
+                b.tpMqttTopics.visibility = GONE
+                b.tpMqttJsonPayload.visibility = GONE
+                b.tpLights.visibility = VISIBLE
+                b.tpLightsTopics.visibility = VISIBLE
+                b.tpMqttPayloadsBox.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
+                b.tpLightsPaths.visibility =
+                    if (tile.mqttData.payloadIsJson) VISIBLE else GONE
+
+                b.tpLightsStateSub.setText(tile.mqttData.subs["state"])
+                b.tpLightsStatePub.setText(tile.mqttData.pubs["state"])
+                b.tpLightsColorSub.setText(tile.mqttData.subs["color"])
+                b.tpLightsColorPub.setText(tile.mqttData.pubs["color"])
+                b.tpLightsBrightnessSub.setText(tile.mqttData.subs["brightness"])
+                b.tpLightsBrightnessPub.setText(tile.mqttData.pubs["brightness"])
+                b.tpLightsModeSub.setText(tile.mqttData.subs["mode"])
+                b.tpLightsModePub.setText(tile.mqttData.pubs["mode"])
+
+                b.tpLightsStatePath.setText(tile.mqttData.jsonPaths["state"])
+                b.tpLightsColorPath.setText(tile.mqttData.jsonPaths["color"])
+                b.tpLightsBrightnessPath.setText(tile.mqttData.jsonPaths["brightness"])
+                b.tpLightsModePath.setText(tile.mqttData.jsonPaths["mode"])
+
+
+                b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
+                b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
+                b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+
+                b.tpLightsShowPayload.isChecked = tile.showPayload
+                b.tpLightsStateRetain.isChecked = tile.retain[0]
+                b.tpLightsColorRetain.isChecked = tile.retain[1]
+                b.tpLightsBrightnessRetain.isChecked = tile.retain[2]
+                b.tpLightsModeRetain.isChecked = tile.retain[3]
+                b.tpLightsIncludePicker.isChecked = tile.includePicker
+                b.tpMqttPayloadTag.text = "Color publish payload"
+                b.tpMqttPayloadHint.text =
+                    "Use ${
+                        when (tile.colorType) {
+                            "hsv" -> "@h, @s, @v"
+                            "hex" -> "@hex"
+                            "rgb" -> "@r, @g, @b"
+                            else -> "@hex"
+                        }
+                    } to insert current value."
+                b.tpLightsColorType.check(
+                    when (tile.colorType) {
+                        "hsv" -> R.id.tp_lights_hsv
+                        "hex" -> R.id.tp_lights_hex
+                        "rgb" -> R.id.tp_lights_rgb
+                        else -> R.id.tp_lights_hsv
+                    }
+                )
+
+
+                b.tpLightsStateSub.addTextChangedListener {
+                    tile.mqttData.subs["state"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsStatePub.addTextChangedListener {
+                    tile.mqttData.pubs["state"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsColorSub.addTextChangedListener {
+                    tile.mqttData.subs["color"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsColorPub.addTextChangedListener {
+                    tile.mqttData.pubs["color"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsBrightnessSub.addTextChangedListener {
+                    tile.mqttData.subs["brightness"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsBrightnessPub.addTextChangedListener {
+                    tile.mqttData.pubs["brightness"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsModeSub.addTextChangedListener {
+                    tile.mqttData.subs["mode"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+                b.tpLightsModePub.addTextChangedListener {
+                    tile.mqttData.pubs["mode"] = (it ?: "").toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+
+
+                b.tpLightsStatePubCopy.setOnClickListener {
+                    b.tpLightsStatePub.setText(b.tpLightsStateSub.text)
+                }
+                b.tpLightsColorPubCopy.setOnClickListener {
+                    b.tpLightsColorPub.setText(b.tpLightsColorSub.text)
+                }
+                b.tpLightsBrightnessPubCopy.setOnClickListener {
+                    b.tpLightsBrightnessPub.setText(b.tpLightsBrightnessSub.text)
+                }
+                b.tpLightsModePubCopy.setOnClickListener {
+                    b.tpLightsModePub.setText(b.tpLightsModeSub.text)
+                }
+
+
+                b.tpLightsStatePath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["state"] = (it ?: "").toString()
+                }
+                b.tpLightsColorPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["color"] = (it ?: "").toString()
+                }
+                b.tpLightsBrightnessPath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["brightness"] = (it ?: "").toString()
+                }
+                b.tpLightsModePath.addTextChangedListener {
+                    tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
+                }
+
+
+                b.tpLightsStateRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[0] = isChecked
+                }
+                b.tpLightsColorRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[1] = isChecked
+                }
+                b.tpLightsBrightnessRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[2] = isChecked
+                }
+                b.tpLightsModeRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[3] = isChecked
+                }
+
+
+                b.tpMqttPayloadTrue.addTextChangedListener {
+                    tile.mqttData.payloads["true"] = (it ?: "").toString()
+                }
+                b.tpMqttPayloadFalse.addTextChangedListener {
+                    tile.mqttData.payloads["false"] = (it ?: "").toString()
+                }
+                b.tpMqttPayloadTrueEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvTrue }
+                    getIconRes = { tile.iconResTrue }
+                    getIconColorPallet = { tile.colorPalletTrue }
+
+                    setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                    setIconKey = { key -> tile.iconKeyTrue = key }
+
+                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                }
+
+                b.tpMqttPayloadFalseEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvFalse }
+                    getIconRes = { tile.iconResFalse }
+                    getIconColorPallet = { tile.colorPalletFalse }
+
+                    setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                    setIconKey = { key -> tile.iconKeyFalse = key }
+
+                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                }
+
+
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqttData.payloads[tile.colorType] = (it ?: "").toString()
+                }
+                b.tpLightsIncludePicker.setOnCheckedChangeListener { _, state ->
+                    tile.includePicker = state
+                    (if (tile.includePicker) VISIBLE else GONE).let {
+                        b.tpLightsColorRetain.visibility = it
+                        b.tpLightsColorTopics.visibility = it
+                        b.tpLightsTypeBox.visibility = it
+                        b.tpMqttPayloadBox.visibility = it
+                        b.tpLightsColorPathBox.visibility = it
+                    }
+                }
+                b.tpLightsShowPayload.setOnCheckedChangeListener { _, state ->
+                    tile.showPayload = state
+                }
+                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+                    tile.mqttData.payloadIsJson = state
+                    b.tpLightsPaths.visibility = if (state) VISIBLE else GONE
+                }
+                b.tpLightsColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.colorType = when (id) {
+                        R.id.tp_lights_hsv -> "hsv"
+                        R.id.tp_lights_hex -> "hex"
+                        R.id.tp_lights_rgb -> "rgb"
+                        else -> "hex"
+                    }
+
+                    b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                    b.tpMqttPayloadHint.text =
+                        "Use ${
+                            when (tile.colorType) {
+                                "hsv" -> "@h, @s, @v"
+                                "hex" -> "@hex"
+                                "rgb" -> "@r, @g, @b"
+                                else -> "@hex"
+                            }
+                        } to insert current value."
+                }
+
+
+                setupOptionsRecyclerView(tile.modes, b.tpLightsRecyclerView, b.tpLightsAdd)
             }
         }
     }
@@ -761,5 +862,76 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         settings.mqttTabShow = state
+    }
+
+    fun setupIcon(icon: Int, color: Int, frameView: View, iconView: View) {
+        iconView.setBackgroundResource(icon)
+        iconView.backgroundTintList = ColorStateList.valueOf(color)
+
+        val drawable = frameView.background as? GradientDrawable
+        drawable?.setStroke(1, color)
+        drawable?.cornerRadius = 15f
+    }
+
+    private fun setupOptionsRecyclerView(
+        options: MutableList<Pair<String, String>>,
+        rv: RecyclerView,
+        add: View
+    ) {
+        val adapter = GenericAdapter(requireContext())
+
+        val list = MutableList(options.size) {
+            GenericItem(R.layout.item_option)
+        }
+
+        adapter.setHasStableIds(true)
+        adapter.onBindViewHolder = { item, holder, _ ->
+            adapter.list.indexOf(item).let { pos ->
+                val a = holder.itemView.findViewById<EditText>(R.id.io_alias)
+                val p = holder.itemView.findViewById<EditText>(R.id.io_payload)
+                val r = holder.itemView.findViewById<Button>(R.id.io_remove)
+
+                a.setText(options[pos].first)
+                p.setText(options[pos].second)
+
+                a.addTextChangedListener {
+                    adapter.list.indexOf(item).let { pos ->
+                        if (pos >= 0)
+                            options[pos] =
+                                Pair((it ?: "").toString(), options[pos].second)
+                    }
+                }
+
+                p.addTextChangedListener {
+                    adapter.list.indexOf(item).let { pos ->
+                        if (pos >= 0)
+                            options[pos] =
+                                Pair(options[pos].first, (it ?: "").toString())
+                    }
+                }
+
+                r.setOnClickListener {
+                    if (list.size > 1) {
+                        adapter.list.indexOf(item).let {
+                            if (it >= 0) {
+                                options.removeAt(it)
+                                adapter.removeItemAt(it)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        add.setOnClickListener {
+            options.add(Pair("", ""))
+            list.add(GenericItem(R.layout.item_option))
+            adapter.notifyItemInserted(list.size - 1)
+        }
+
+        rv.layoutManager = LinearLayoutManager(requireContext())
+        rv.adapter = adapter
+
+        adapter.submitList(list)
     }
 }

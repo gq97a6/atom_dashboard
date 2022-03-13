@@ -9,9 +9,11 @@ import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
+import com.netDashboard.Theme
 import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.netDashboard.databinding.DialogLightsBinding
 import com.netDashboard.globals.G
+import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import com.netDashboard.toPx
@@ -29,16 +31,33 @@ class LightsTile : Tile() {
 
     override var iconKey = "il_business_lightbulb_alt"
 
+    var state: Boolean? = null
     var mode: String? = null
     var hsvPicked = floatArrayOf(0f, 0f, 0f)
     var brightness: Int? = null
     var toRemoves = mutableMapOf<String, MutableList<String>>()
     var flagIndexes = mutableMapOf<String, Int>()
 
-    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
-    val retain = mutableListOf(false, false, false) //temp, humi, mode
+    val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
+    val retain = mutableListOf(false, false, false, false) //state, color, brightness, mode
 
-    var includeColor = false
+    var iconKeyTrue = "il_interface_toggle_on"
+    val iconResTrue: Int
+        get() = Icons.icons[iconKeyTrue]?.res ?: R.drawable.il_interface_toggle_on
+
+    var iconKeyFalse = "il_interface_toggle_off"
+    val iconResFalse: Int
+        get() = Icons.icons[iconKeyFalse]?.res ?: R.drawable.il_interface_toggle_off
+
+    var hsvTrue = floatArrayOf(179f, 1f, 1f)
+    val colorPalletTrue: Theme.ColorPallet
+        get() = G.theme.a.getColorPallet(hsvTrue, true)
+
+    var hsvFalse = floatArrayOf(0f, 0f, 0f)
+    val colorPalletFalse: Theme.ColorPallet
+        get() = G.theme.a.getColorPallet(hsvFalse, true)
+
+    var includePicker = false
     var showPayload = false
 
     var colorType = "hex"
@@ -77,12 +96,12 @@ class LightsTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        //mqttData.payloads["hsv"] = "@h;@s;@v"
-        //mqttData.payloads["hex"] = "#@hex"
-        //mqttData.payloads["rgb"] = "@r;@g;@b"
+        mqttData.payloads["hsv"] = "@h;@s;@v"
+        mqttData.payloads["hex"] = "#@hex"
+        mqttData.payloads["rgb"] = "@r;@g;@b"
 
         Color.colorToHSV(G.theme.a.colorPallet.color, hsvPicked)
-        //colorType = colorType
+        colorType = colorType
     }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {

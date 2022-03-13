@@ -38,7 +38,7 @@ abstract class Tile : RecyclerViewItem() {
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus
 
     var hsv = theme.a.hsv.let {
-        floatArrayOf(it[0], it[0], it[0])
+        floatArrayOf(it[0], it[1], it[2])
     }
 
     val colorPallet: ColorPallet

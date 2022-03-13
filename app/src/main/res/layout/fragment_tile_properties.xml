@@ -648,7 +648,7 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/tp_thermostat_humidity_topic_box"
+                                android:id="@+id/tp_thermostat_humidity_topics_box"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
@@ -860,19 +860,356 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/tp_lights_topics"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="State subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_state_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="State publish topic"
+                                    android:textSize="15dp" />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/tp_lights_state_pub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                    <Button
+                                        android:id="@+id/tp_lights_state_pub_copy"
+                                        style="@style/button"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_gravity="center|right"
+                                        android:layout_marginEnd="10dp"
+                                        android:foreground="@drawable/button_copy"
+                                        android:tag="colorA" />
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/tp_lights_color_topics"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:gravity="center"
+                                        android:tag="colorB"
+                                        android:text="Color subscribe topic"
+                                        android:textSize="15dp" />
+
+                                    <EditText
+                                        android:id="@+id/tp_lights_color_sub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="2dp"
+                                        android:gravity="center"
+                                        android:tag="colorB"
+                                        android:text="Color publish topic"
+                                        android:textSize="15dp" />
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:id="@+id/tp_lights_color_pub"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="50dp"
+                                            android:background="@drawable/background_frame_sharp"
+                                            android:ems="100"
+                                            android:hint="disabled"
+                                            android:importantForAutofill="no"
+                                            android:inputType="text"
+                                            android:maxLength="50"
+                                            android:paddingHorizontal="10dp"
+                                            android:tag="basic"
+                                            android:textCursorDrawable="@null"
+                                            tools:ignore="HardcodedText,TextFields" />
+
+                                        <Button
+                                            android:id="@+id/tp_lights_color_pub_copy"
+                                            style="@style/button"
+                                            android:layout_width="30dp"
+                                            android:layout_height="30dp"
+                                            android:layout_gravity="center|right"
+                                            android:layout_marginEnd="10dp"
+                                            android:foreground="@drawable/button_copy"
+                                            android:tag="colorA" />
+
+                                    </FrameLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Brightness subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_brightness_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:tag="colorB"
+                                    android:text="Brightness publish topic"
+                                    android:textSize="15dp" />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/tp_lights_brightness_pub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                    <Button
+                                        android:id="@+id/tp_lights_brightness_pub_copy"
+                                        style="@style/button"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_gravity="center|right"
+                                        android:layout_marginEnd="10dp"
+                                        android:foreground="@drawable/button_copy"
+                                        android:tag="colorA" />
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode subscribe topic"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_mode_sub"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode publish topic"
+                                    android:textSize="15dp" />
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/tp_lights_mode_pub"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:background="@drawable/background_frame_sharp"
+                                        android:ems="100"
+                                        android:hint="disabled"
+                                        android:importantForAutofill="no"
+                                        android:inputType="text"
+                                        android:maxLength="50"
+                                        android:paddingHorizontal="10dp"
+                                        android:tag="basic"
+                                        android:textCursorDrawable="@null"
+                                        tools:ignore="HardcodedText,TextFields" />
+
+                                    <Button
+                                        android:id="@+id/tp_lights_mode_pub_copy"
+                                        style="@style/button"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_gravity="center|right"
+                                        android:layout_marginEnd="10dp"
+                                        android:foreground="@drawable/button_copy"
+                                        android:tag="colorA" />
+
+                                </FrameLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:id="@+id/tp_mqtt_payload_box"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
+                                android:id="@+id/tp_mqtt_payload_tag"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="2dp"
                                 android:gravity="center"
-                                android:tag="colorA"
+                                android:tag="colorB"
                                 android:text="Publish payload"
                                 android:textSize="15dp" />
 
@@ -892,13 +1229,13 @@
                                 tools:ignore="HardcodedText,TextFields" />
 
                             <TextView
-                                android:id="@+id/tp_payload_hint"
+                                android:id="@+id/tp_mqtt_payload_hint"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:tag="colorB"
                                 android:text="Payload hint"
                                 android:textSize="15dp"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                         </LinearLayout>
 
@@ -1333,6 +1670,144 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/tp_lights_paths"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="State JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_state_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/tp_lights_color_path_box"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Color JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_color_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Brightness JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_brightness_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="2dp"
+                                    android:gravity="center"
+                                    android:tag="colorB"
+                                    android:text="Mode JSON Pointer"
+                                    android:textSize="15dp" />
+
+                                <EditText
+                                    android:id="@+id/tp_lights_mode_path"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@drawable/background_frame_sharp"
+                                    android:ems="100"
+                                    android:hint="disabled"
+                                    android:importantForAutofill="no"
+                                    android:inputType="text"
+                                    android:maxLength="50"
+                                    android:paddingHorizontal="10dp"
+                                    android:tag="basic"
+                                    android:textCursorDrawable="@null"
+                                    tools:ignore="HardcodedText,TextFields" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
@@ -1453,50 +1928,13 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/tp_not_silent"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:tag="colorB"
-                            android:text="Quiet notifications:"
-                            android:textSize="15dp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="OFF"
-                                android:textSize="12dp"
-                                tools:ignore="HardcodedText" />
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/tp_not_silent_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="ON"
-                                android:textSize="12dp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/tp_not_silent_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#FFFFFF"
+                        android:tag="default"
+                        android:text="Make notifications quiet" />
 
                 </LinearLayout>
 
@@ -1858,7 +2296,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/tp_thermostat_humidity_setpoint"
+                                android:id="@+id/tp_thermostat_include_humidity_setpoint"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
@@ -1888,7 +2326,7 @@
                             android:textSize="15dp" />
 
                         <CheckBox
-                            android:id="@+id/tp_temp_retain"
+                            android:id="@+id/tp_thermostat_temp_retain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="#FFFFFF"
@@ -1896,7 +2334,7 @@
                             android:text="Temperature setpoint" />
 
                         <CheckBox
-                            android:id="@+id/tp_humi_retain"
+                            android:id="@+id/tp_thermostat_humi_retain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:backgroundTint="#FFFFFF"
@@ -1904,7 +2342,7 @@
                             android:text="Humidity setpoint" />
 
                         <CheckBox
-                            android:id="@+id/tp_mode_retain"
+                            android:id="@+id/tp_thermostat_mode_retain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:tag="default"
@@ -2163,12 +2601,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/tp_light"
+                android:id="@+id/tp_lights"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -2201,6 +2639,269 @@
                     android:padding="10dp"
                     android:tag="frame"
                     app:layout_constraintTop_toBottomOf="@id/view8">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorB"
+                            android:text="Show payload on list:"
+                            android:textSize="15dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_lights_show_payload"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorB"
+                            android:text="Include color picker:"
+                            android:textSize="15dp" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="OFF"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/tp_lights_include_picker"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="colorC"
+                                android:text="ON"
+                                android:textSize="12dp"
+                                tools:ignore="HardcodedText" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tp_lights_type_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:gravity="center|left"
+                            android:tag="colorA"
+                            android:text="Type:"
+                            android:textSize="15dp" />
+
+                        <RadioGroup
+                            android:id="@+id/tp_lights_color_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:checkedButton="@id/tp_color_rgb"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/tp_lights_hsv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="default"
+                                android:text="HSV"
+                                android:textSize="15dp" />
+
+                            <RadioButton
+                                android:id="@+id/tp_lights_hex"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:tag="default"
+                                android:text="HEX"
+                                android:textSize="15dp" />
+
+                            <RadioButton
+                                android:id="@+id/tp_lights_rgb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:tag="default"
+                                android:text="RGB"
+                                android:textSize="15dp" />
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorB"
+                            android:text="Retain messages:"
+                            android:textSize="15dp" />
+
+                        <CheckBox
+                            android:id="@+id/tp_lights_state_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFFFFF"
+                            android:tag="default"
+                            android:text="State" />
+
+                        <CheckBox
+                            android:id="@+id/tp_lights_brightness_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFFFFF"
+                            android:tag="default"
+                            android:text="Brightness" />
+
+                        <CheckBox
+                            android:id="@+id/tp_lights_color_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="#FFFFFF"
+                            android:tag="default"
+                            android:text="Color" />
+
+                        <CheckBox
+                            android:id="@+id/tp_lights_mode_retain"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="default"
+                            android:text="Mode" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:tag="colorB"
+                            android:text="Modes list"
+                            android:textSize="20dp"
+                            tools:ignore="HardcodedText" />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <View
+                                android:id="@+id/tp_lights_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/background_ripple"
+                                android:tag="rippleForeground"
+                                app:layout_constraintBottom_toBottomOf="@+id/tp_icon_frame"
+                                app:layout_constraintDimensionRatio="1"
+                                app:layout_constraintEnd_toEndOf="@+id/tp_icon_frame"
+                                app:layout_constraintHeight="match_constraint"
+                                app:layout_constraintStart_toStartOf="@+id/tp_icon_frame"
+                                app:layout_constraintTop_toTopOf="@+id/tp_icon_frame"
+                                tools:ignore="SpeakableTextPresentCheck" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:tag="colorA"
+                                android:text="ADD"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="40dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="alias"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:tag="colorA"
+                            android:text="payload"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/tp_lights_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp" />
 
                 </LinearLayout>
 
@@ -2257,7 +2958,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:tag="colorB"
-                            android:text="\nPaint tile with raw color:\n(Ignore contrast)"
+                            android:text="Paint tile:"
                             android:textSize="15dp" />
 
                         <LinearLayout
@@ -2275,7 +2976,7 @@
                                 tools:ignore="HardcodedText" />
 
                             <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/tp_color_paint_raw"
+                                android:id="@+id/tp_color_paint"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
@@ -2291,49 +2992,73 @@
 
                     </LinearLayout>
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/tp_color_paint_raw_box"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:gravity="center|left"
-                        android:tag="colorA"
-                        android:text="Payload type:"
-                        android:textSize="15dp" />
-
-                    <RadioGroup
-                        android:id="@+id/tp_color_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="-5dp"
-                        android:checkedButton="@id/tp_color_rgb"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/tp_color_hsv"
+                        <CheckBox
+                            android:id="@+id/tp_color_paint_raw"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="-5dp"
                             android:tag="default"
-                            android:text="HSV"
-                            android:textSize="15dp" />
+                            android:text="Paint with raw color (ignore contrast)" />
 
-                        <RadioButton
-                            android:id="@+id/tp_color_hex"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:tag="default"
-                            android:text="HEX"
+                            android:layout_height="50dp"
+                            android:gravity="center|left"
+                            android:tag="colorA"
+                            android:text="Type:"
                             android:textSize="15dp" />
 
-                        <RadioButton
-                            android:id="@+id/tp_color_rgb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:tag="default"
-                            android:text="RGB"
-                            android:textSize="15dp" />
+                        <RadioGroup
+                            android:id="@+id/tp_color_color_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="5dp"
+                            android:checkedButton="@id/tp_color_rgb"
+                            android:orientation="horizontal">
 
-                    </RadioGroup>
+                            <RadioButton
+                                android:id="@+id/tp_color_hsv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:tag="default"
+                                android:text="HSV"
+                                android:textSize="15dp" />
+
+                            <RadioButton
+                                android:id="@+id/tp_color_hex"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:tag="default"
+                                android:text="HEX"
+                                android:textSize="15dp" />
+
+                            <RadioButton
+                                android:id="@+id/tp_color_rgb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:tag="default"
+                                android:text="RGB"
+                                android:textSize="15dp" />
+
+                        </RadioGroup>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -2428,7 +3153,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"

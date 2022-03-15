@@ -1,6 +1,7 @@
 //expand ------------------------------
 start guide
-compound single topic for json option
+else createToast(adapter.context, "Check setup")
+check on receive
 
 new tiles
     keyboard

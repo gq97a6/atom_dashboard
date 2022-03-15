@@ -279,8 +279,18 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
                 b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
 
-                setupIcon(tile.iconResTrue, tile.colorPalletTrue.color, b.tpMqttPayloadTrueIconFrame, b.tpMqttPayloadTrueIcon)
-                setupIcon(tile.iconResFalse, tile.colorPalletFalse.color, b.tpMqttPayloadFalseIconFrame, b.tpMqttPayloadFalseIcon)
+                setupIcon(
+                    tile.iconResTrue,
+                    tile.colorPalletTrue.color,
+                    b.tpMqttPayloadTrueIconFrame,
+                    b.tpMqttPayloadTrueIcon
+                )
+                setupIcon(
+                    tile.iconResFalse,
+                    tile.colorPalletFalse.color,
+                    b.tpMqttPayloadFalseIconFrame,
+                    b.tpMqttPayloadFalseIcon
+                )
 
                 b.tpMqttPayloadTrueEditIcon.setOnClickListener {
                     getIconHSV = { tile.hsvTrue }
@@ -416,9 +426,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpColor.visibility = VISIBLE
                 b.tpMqttPayloadBox.visibility = VISIBLE
                 b.tpMqttPayloadHint.visibility = VISIBLE
-                b.tpColorPaintRawBox.visibility = if (tile.paintTile) VISIBLE else GONE
+                b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
 
-                b.tpColorPaint.isChecked = tile.paintTile
+                b.tpColorDoPaint.isChecked = tile.doPaint
                 b.tpColorPaintRaw.isChecked = tile.paintRaw
 
                 b.tpColorColorType.check(
@@ -441,9 +451,9 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         }
                     } to insert current value."
 
-                b.tpColorPaint.setOnCheckedChangeListener { _, state ->
-                    tile.paintTile = state
-                    b.tpColorPaintRawBox.visibility = if (tile.paintTile) VISIBLE else GONE
+                b.tpColorDoPaint.setOnCheckedChangeListener { _, state ->
+                    tile.doPaint = state
+                    b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
                 }
 
                 b.tpColorPaintRaw.setOnCheckedChangeListener { _, state ->
@@ -629,8 +639,18 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             is LightsTile -> {
                 val tile = tile as LightsTile
 
-                setupIcon(tile.iconResFalse, tile.colorPalletFalse.color, b.tpMqttPayloadFalseIconFrame, b.tpMqttPayloadFalseIcon)
-                setupIcon(tile.iconResTrue, tile.colorPalletTrue.color, b.tpMqttPayloadTrueIconFrame, b.tpMqttPayloadTrueIcon)
+                setupIcon(
+                    tile.iconResFalse,
+                    tile.colorPalletFalse.color,
+                    b.tpMqttPayloadFalseIconFrame,
+                    b.tpMqttPayloadFalseIcon
+                )
+                setupIcon(
+                    tile.iconResTrue,
+                    tile.colorPalletTrue.color,
+                    b.tpMqttPayloadTrueIconFrame,
+                    b.tpMqttPayloadTrueIcon
+                )
 
                 (if (tile.includePicker) VISIBLE else GONE).let {
                     b.tpLightsColorRetain.visibility = it
@@ -647,6 +667,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpLightsTopics.visibility = VISIBLE
                 b.tpMqttPayloadsBox.visibility = VISIBLE
                 b.tpMqttPayloadHint.visibility = VISIBLE
+                b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
                 b.tpLightsPaths.visibility =
                     if (tile.mqttData.payloadIsJson) VISIBLE else GONE
 
@@ -654,14 +675,14 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpLightsStatePub.setText(tile.mqttData.pubs["state"])
                 b.tpLightsColorSub.setText(tile.mqttData.subs["color"])
                 b.tpLightsColorPub.setText(tile.mqttData.pubs["color"])
-                b.tpLightsBrightnessSub.setText(tile.mqttData.subs["brightness"])
-                b.tpLightsBrightnessPub.setText(tile.mqttData.pubs["brightness"])
+                b.tpLightsBrightnessSub.setText(tile.mqttData.subs["bright"])
+                b.tpLightsBrightnessPub.setText(tile.mqttData.pubs["bright"])
                 b.tpLightsModeSub.setText(tile.mqttData.subs["mode"])
                 b.tpLightsModePub.setText(tile.mqttData.pubs["mode"])
 
                 b.tpLightsStatePath.setText(tile.mqttData.jsonPaths["state"])
                 b.tpLightsColorPath.setText(tile.mqttData.jsonPaths["color"])
-                b.tpLightsBrightnessPath.setText(tile.mqttData.jsonPaths["brightness"])
+                b.tpLightsBrightnessPath.setText(tile.mqttData.jsonPaths["bright"])
                 b.tpLightsModePath.setText(tile.mqttData.jsonPaths["mode"])
 
 
@@ -669,6 +690,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
                 b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
 
+                b.tpLightsDoPaint.isChecked = tile.doPaint
+                b.tpLightsPaintRaw.isChecked = tile.paintRaw
                 b.tpLightsShowPayload.isChecked = tile.showPayload
                 b.tpLightsStateRetain.isChecked = tile.retain[0]
                 b.tpLightsColorRetain.isChecked = tile.retain[1]
@@ -812,6 +835,14 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         b.tpMqttPayloadBox.visibility = it
                         b.tpLightsColorPathBox.visibility = it
                     }
+                }
+                b.tpLightsDoPaint.setOnCheckedChangeListener { _, state ->
+                    tile.doPaint = state
+                    b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
+                }
+
+                b.tpLightsPaintRaw.setOnCheckedChangeListener { _, state ->
+                    tile.paintRaw = state
                 }
                 b.tpLightsShowPayload.setOnCheckedChangeListener { _, state ->
                     tile.showPayload = state

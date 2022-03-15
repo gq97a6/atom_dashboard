@@ -34,7 +34,7 @@ class ColorTile : Tile() {
     override var iconKey = "il_design_palette"
 
     var paintRaw = true
-    var paintTile = true
+    var doPaint = true
     var hsvPicked = floatArrayOf(0f, 0f, 0f)
     var toRemoves = mutableMapOf<String, MutableList<String>>()
     var flagIndexes = mutableMapOf<String, Int>()
@@ -93,7 +93,7 @@ class ColorTile : Tile() {
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
-        if (paintTile) {
+        if (doPaint) {
             theme.apply(
                 holder.itemView as ViewGroup,
                 anim = false,
@@ -179,7 +179,6 @@ class ColorTile : Tile() {
         var value = jsonResult["base"] ?: data.second.toString()
 
         try {
-
             when (colorType) {
                 "hsv" -> {
                     toRemoves["hsv"]?.forEach {
@@ -220,7 +219,7 @@ class ColorTile : Tile() {
                 }
             }
 
-            if (paintTile) {
+            if (doPaint) {
                 holder?.itemView?.let {
                     theme.apply(
                         it as ViewGroup,

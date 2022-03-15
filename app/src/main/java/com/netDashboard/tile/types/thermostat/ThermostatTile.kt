@@ -324,7 +324,7 @@ class ThermostatTile : Tile() {
 
         binding.dtMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.size > 0) {
+            if (notEmpty.size > 0 && !mqttData.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
                 val adapter = GenericAdapter(adapter.context)
@@ -368,9 +368,9 @@ class ThermostatTile : Tile() {
                 binding.dsRecyclerView.adapter = adapter
 
                 dialog.dialogSetup()
-                G.theme.apply(binding.root)
+                theme.apply(binding.root)
                 dialog.show()
-            } else createToast(adapter.context, "Add modes first")
+            } else createToast(adapter.context, "Check setup")
         }
 
         dialog.dialogSetup()

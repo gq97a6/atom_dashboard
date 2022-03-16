@@ -64,9 +64,6 @@ class TerminalTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
-
         if (mqttData.varPayload) {
             val dialog = Dialog(adapter.context)
 
@@ -94,6 +91,8 @@ class TerminalTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
+        super.onReceive(data, jsonResult)
+
         val entry = jsonResult["base"] ?: data.second.toString()
         log.add(0, entry)
 

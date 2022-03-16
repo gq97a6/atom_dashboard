@@ -1201,7 +1201,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/tp_mqtt_payload_tag"
@@ -1235,7 +1235,7 @@
                                 android:tag="colorB"
                                 android:text="Payload hint"
                                 android:textSize="15dp"
-                                android:visibility="visible" />
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
@@ -2606,7 +2606,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:context=".activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -2639,68 +2639,6 @@
                     android:padding="10dp"
                     android:tag="frame"
                     app:layout_constraintTop_toBottomOf="@id/view8">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:tag="colorB"
-                            android:text="Paint tile:"
-                            android:textSize="15dp" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="10dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="OFF"
-                                android:textSize="12dp"
-                                tools:ignore="HardcodedText" />
-
-                            <com.google.android.material.switchmaterial.SwitchMaterial
-                                android:id="@+id/tp_lights_do_paint"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:tag="colorC"
-                                android:text="ON"
-                                android:textSize="12dp"
-                                tools:ignore="HardcodedText" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tp_lights_paint_raw_box"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <CheckBox
-                            android:id="@+id/tp_lights_paint_raw"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="-5dp"
-                            android:tag="default"
-                            android:text="Paint with raw color (ignore contrast)" />
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -2839,6 +2777,78 @@
                                 android:textSize="15dp" />
 
                         </RadioGroup>
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/tp_lights_paint_box"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:tag="colorB"
+                                android:text="Paint tile:"
+                                android:textSize="15dp" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tag="colorC"
+                                    android:text="OFF"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText" />
+
+                                <com.google.android.material.switchmaterial.SwitchMaterial
+                                    android:id="@+id/tp_lights_do_paint"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:tag="colorC"
+                                    android:text="ON"
+                                    android:textSize="12dp"
+                                    tools:ignore="HardcodedText" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tp_lights_paint_raw_box"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <CheckBox
+                                android:id="@+id/tp_lights_paint_raw"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="-5dp"
+                                android:tag="default"
+                                android:text="Paint with raw color (ignore contrast)" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

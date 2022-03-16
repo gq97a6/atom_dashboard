@@ -72,13 +72,6 @@ class ColorTile : Tile() {
             }
         }
 
-    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
-
-        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
-            View.GONE
-    }
-
     override fun onCreateTile() {
         super.onCreateTile()
 
@@ -88,6 +81,13 @@ class ColorTile : Tile() {
 
         colorToHSV(theme.a.colorPallet.color, hsvPicked)
         colorType = colorType
+    }
+
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
+            View.GONE
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
@@ -104,9 +104,6 @@ class ColorTile : Tile() {
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         val dialog = Dialog(adapter.context)
         dialog.setContentView(R.layout.dialog_color_picker)
@@ -178,58 +175,41 @@ class ColorTile : Tile() {
 
         var value = jsonResult["base"] ?: data.second.toString()
 
-        try {
-            when (colorType) {
-                "hsv" -> {
-                    toRemoves["hsv"]?.forEach {
-                        value = value.replace(it, " ")
-                    }
+        toRemoves[colorType]?.forEach {
+            value = value.replace(it, " ")
+        }
 
-                    val r = value.split(" ") as MutableList
-                    r.removeIf { it.isEmpty() }
+        val v = value.split(" ") as MutableList
+        v.removeIf { it.isEmpty() }
 
-                    hsvPicked = floatArrayOf(
-                        r[flagIndexes["h"]!!].toFloat(),
-                        r[flagIndexes["s"]!!].toFloat() / 100,
-                        r[flagIndexes["v"]!!].toFloat() / 100
-                    )
-                }
-                "hex" -> {
-                    toRemoves["hex"]?.forEach {
-                        value = value.replace(it, "")
-                    }
-
-                    colorToHSV(Integer.parseInt(value, 16), hsvPicked)
-                }
-                "rgb" -> {
-                    toRemoves["rgb"]?.forEach {
-                        value = value.replace(it, " ")
-                    }
-
-                    val r = value.split(" ") as MutableList
-                    r.removeIf { it.isEmpty() }
-
-                    colorToHSV(
-                        Color.rgb(
-                            r[flagIndexes["r"]!!].toInt(),
-                            r[flagIndexes["g"]!!].toInt(),
-                            r[flagIndexes["b"]!!].toInt()
-                        ), hsvPicked
-                    )
-                }
+        when (colorType) {
+            "hex" -> colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
+            "hsv" -> {
+                hsvPicked = floatArrayOf(
+                    v[flagIndexes["h"]!!].toFloat(),
+                    v[flagIndexes["s"]!!].toFloat() / 100,
+                    v[flagIndexes["v"]!!].toFloat() / 100
+                )
             }
-
-            if (doPaint) {
-                holder?.itemView?.let {
-                    theme.apply(
-                        it as ViewGroup,
-                        anim = false,
-                        colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
-                    )
-                }
+            "rgb" -> {
+                colorToHSV(
+                    Color.rgb(
+                        v[flagIndexes["r"]!!].toInt(),
+                        v[flagIndexes["g"]!!].toInt(),
+                        v[flagIndexes["b"]!!].toInt()
+                    ), hsvPicked
+                )
             }
-        } catch (e: Exception) {
-            null
+        }
+
+        if (doPaint) {
+            holder?.itemView?.let {
+                theme.apply(
+                    it as ViewGroup,
+                    anim = false,
+                    colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                )
+            }
         }
     }
 }

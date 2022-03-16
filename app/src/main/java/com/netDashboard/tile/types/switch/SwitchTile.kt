@@ -61,6 +61,14 @@ class SwitchTile : Tile() {
             }
         }
 
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
+        theme.apply(
+            holder.itemView as ViewGroup,
+            anim = false,
+            colorPallet = colorPalletState
+        )
+    }
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
@@ -75,14 +83,6 @@ class SwitchTile : Tile() {
         send(mqttData.payloads[if (state == false) "true" else "false"] ?: "")
     }
 
-    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
-        theme.apply(
-            holder.itemView as ViewGroup,
-            anim = false,
-            colorPallet = colorPalletState
-        )
-    }
-
     override fun onReceive(
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
@@ -90,12 +90,8 @@ class SwitchTile : Tile() {
         super.onReceive(data, jsonResult)
 
         state = when (data.second.toString()) {
-            mqttData.payloads["true"] -> {
-                true
-            }
-            mqttData.payloads["false"] -> {
-                false
-            }
+            mqttData.payloads["true"] -> true
+            mqttData.payloads["false"] -> false
             else -> null
         }
 

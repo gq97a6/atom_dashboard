@@ -658,6 +658,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     b.tpLightsTypeBox.visibility = it
                     b.tpMqttPayloadBox.visibility = it
                     b.tpLightsColorPathBox.visibility = it
+                    b.tpLightsPaintBox.visibility = it
                 }
 
                 b.tpMqttRetainBox.visibility = GONE
@@ -735,11 +736,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessSub.addTextChangedListener {
-                    tile.mqttData.subs["brightness"] = (it ?: "").toString()
+                    tile.mqttData.subs["bright"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessPub.addTextChangedListener {
-                    tile.mqttData.pubs["brightness"] = (it ?: "").toString()
+                    tile.mqttData.pubs["bright"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsModeSub.addTextChangedListener {
@@ -834,6 +835,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         b.tpLightsTypeBox.visibility = it
                         b.tpMqttPayloadBox.visibility = it
                         b.tpLightsColorPathBox.visibility = it
+                        b.tpLightsPaintBox.visibility = it
                     }
                 }
                 b.tpLightsDoPaint.setOnCheckedChangeListener { _, state ->

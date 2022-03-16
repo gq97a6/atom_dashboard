@@ -117,65 +117,8 @@ class ThermostatTile : Tile() {
         humiSetpoint = humiSetpoint
     }
 
-    override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
-        jsonResult: MutableMap<String, String>
-    ) {
-        if (jsonResult.isEmpty()) {
-            val value = data.second.toString().toFloatOrNull()
-            when (data.first) {
-                mqttData.subs["temp"] -> value?.let {
-                    temp = it
-                    this.hasReceived.postValue("temp")
-                }
-                mqttData.subs["temp_set"] -> value?.let {
-                    tempSetpoint = it
-                    this.hasReceived.postValue("temp_set")
-                }
-                mqttData.subs["humi"] -> value?.let {
-                    humi = it
-                    this.hasReceived.postValue("humi")
-                }
-                mqttData.subs["humi_set"] -> value?.let {
-                    humiSetpoint = it
-                    this.hasReceived.postValue("humi_set")
-                }
-                mqttData.subs["mode"] -> value?.let {
-                    (modes.find { it.second == data.second.toString() })?.let {
-                        mode = it.second
-                        this.hasReceived.postValue("mode")
-                    }
-                }
-            }
-        } else {
-            for (e in jsonResult) {
-                val value = e.value.toFloatOrNull()
-                var hasReceived = true
-                when (e.key) {
-                    "temp" -> value?.let { temp = it }
-                    "temp_set" -> value?.let { tempSetpoint = it }
-                    "humi" -> value?.let { humi = it }
-                    "humi_set" -> value?.let { humiSetpoint = it }
-                    "mode" -> value?.let {
-                        (modes.find { it.second == data.second.toString() })?.let {
-                            mode = it.second
-                        }
-                    }
-                    else -> hasReceived = false
-                }
-                if (hasReceived) this.hasReceived.postValue(e.key)
-            }
-        }
-    }
-
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-
-        if (mqttData.pubs["temp_set"].isNullOrEmpty() &&
-            mqttData.pubs["humi_set"].isNullOrEmpty()
-        ) return
-
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         if (temperatureRange[0] > temperatureRange[1]) {
             val tmp = temperatureRange[0]
@@ -189,8 +132,36 @@ class ThermostatTile : Tile() {
         }
 
         val dialog = Dialog(adapter.context)
+        var modeAdapter = GenericAdapter(adapter.context)
+
         dialog.setContentView(R.layout.dialog_thermostat)
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
+
+        var observer: (String) -> Unit = {
+            when (it) {
+                "temp" -> temp?.let {
+                    binding.dtTempCurrent.text = "${it.round(3)}°C"
+                }
+                "humi" -> humi?.let {
+                    binding.dtHumiCurrent.text = "${it.round(3)}%"
+                }
+                "temp_set" -> tempSetpoint?.let {
+                    binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
+                }
+                "humi_set" -> if (includeHumiditySetpoint) {
+                    humiSetpoint?.let {
+                        binding.dtHumi.progress = it / humidityStep
+                    }
+                }
+                "mode" -> modeAdapter.notifyDataSetChanged()
+            }
+        }
+
+        dialog.setOnDismissListener {
+            hasReceived.removeObserver(observer)
+        }
+
+        hasReceived.observe(adapter.context as LifecycleOwner, observer)
 
         var tempSetpointTmp = tempSetpoint
         var humiSetpointTmp = humiSetpoint
@@ -202,39 +173,6 @@ class ThermostatTile : Tile() {
             if (humiSetpointTmp != humiSetpoint) binding.dtHumiSetpoint.blink(-1, 200, 0, .4f)
             else binding.dtHumiSetpoint.clearAnimation()
         }
-
-        var observer: (String) -> Unit = {
-            when (it) {
-                "temp" -> {
-                    temp?.let {
-                        binding.dtTempCurrent.text = "${it.round(3)}°C"
-                    }
-                }
-                "humi" -> {
-                    humi?.let {
-                        binding.dtHumiCurrent.text = "${it.round(3)}%"
-                    }
-                }
-                "temp_set" -> {
-                    tempSetpoint?.let {
-                        binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
-                    }
-                }
-                "humi_set" -> {
-                    if (includeHumiditySetpoint) {
-                        humiSetpoint?.let {
-                            binding.dtHumi.progress = it / humidityStep
-                        }
-                    }
-                }
-            }
-        }
-
-        dialog.setOnDismissListener {
-            hasReceived.removeObserver(observer)
-        }
-
-        hasReceived.observe(adapter.context as LifecycleOwner, observer)
 
         binding.dtTemp.setOnSeekBarChangeListener(object :
             CircularSeekBar.OnCircularSeekBarChangeListener {
@@ -275,32 +213,6 @@ class ThermostatTile : Tile() {
             override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
         })
 
-        if (!includeHumiditySetpoint) {
-            binding.dtHumiCurrent.text = "--%"
-            binding.dtHumi.visibility = INVISIBLE
-        } else {
-            abs(100 / humidityStep).let {
-                binding.dtHumi.max = it
-            }
-            humiSetpointTmp?.let {
-                binding.dtHumi.progress = it / humidityStep
-            }
-
-            humi?.let { binding.dtHumiCurrent.text = "${it.round(3)}%" }
-            humiSetpointTmp?.let { binding.dtHumiSetpoint.text = "${it.round(3)}%" }
-        }
-
-        abs((temperatureRange[1] - temperatureRange[0]) / temperatureStep).let {
-            binding.dtTemp.max = it
-        }
-        tempSetpointTmp?.let {
-            binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
-        }
-
-        tempSetpointTmp?.let { binding.dtValue.text = "${it.round(3)}°C" }
-        tempSetpointTmp?.let { binding.dtTempSetpoint.text = "${it.round(3)}°C" }
-        temp?.let { binding.dtTempCurrent.text = "${it.round(3)}°C" }
-
         binding.dtConfirm.setOnClickListener {
             fun send() {
                 send("$tempSetpointTmp", mqttData.pubs["temp_set"], mqttData.qos, retain[0], true)
@@ -327,27 +239,25 @@ class ThermostatTile : Tile() {
             if (notEmpty.size > 0 && !mqttData.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
-                val adapter = GenericAdapter(adapter.context)
+                modeAdapter = GenericAdapter(adapter.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
 
-                adapter.onBindViewHolder = { _, holder, pos ->
+                modeAdapter.onBindViewHolder = { _, holder, pos ->
                     val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                     text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
                     else "${notEmpty[pos].first}"
 
-                    if (mode == notEmpty[pos].second) {
-                        holder?.itemView?.findViewById<View>(R.id.is_background).let {
-                            it.backgroundTintList =
-                                ColorStateList.valueOf(theme.a.colorPallet.color)
-                            it.alpha = 0.15f
-                        }
+                    holder?.itemView?.findViewById<View>(R.id.is_background).let {
+                        it.backgroundTintList =
+                            ColorStateList.valueOf(theme.a.colorPallet.color)
+                        it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
 
-                adapter.onItemClick = {
-                    val pos = adapter.list.indexOf(it)
+                modeAdapter.onItemClick = {
+                    val pos = modeAdapter.list.indexOf(it)
 
                     send(
                         "${this.modes[pos].second}",
@@ -361,20 +271,89 @@ class ThermostatTile : Tile() {
                     }, 50)
                 }
 
-                adapter.setHasStableIds(true)
-                adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
+                modeAdapter.setHasStableIds(true)
+                modeAdapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
 
                 binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
-                binding.dsRecyclerView.adapter = adapter
+                binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()
                 theme.apply(binding.root)
                 dialog.show()
-            } else createToast(adapter.context, "Check setup")
+            } else createToast(modeAdapter.context, "Check setup")
         }
+
+        if (!includeHumiditySetpoint) {
+            binding.dtHumiCurrent.text = "--%"
+            binding.dtHumi.visibility = INVISIBLE
+        } else {
+            abs(100 / humidityStep).let {
+                binding.dtHumi.max = it
+            }
+            humiSetpointTmp?.let {
+                binding.dtHumi.progress = it / humidityStep
+            }
+
+            humi?.let { binding.dtHumiCurrent.text = "${it.round(3)}%" }
+            humiSetpointTmp?.let { binding.dtHumiSetpoint.text = "${it.round(3)}%" }
+        }
+
+        abs((temperatureRange[1] - temperatureRange[0]) / temperatureStep).let {
+            binding.dtTemp.max = it
+        }
+        tempSetpointTmp?.let {
+            binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
+        }
+
+        tempSetpointTmp?.let { binding.dtValue.text = "${it.round(3)}°C" }
+        tempSetpointTmp?.let { binding.dtTempSetpoint.text = "${it.round(3)}°C" }
+        temp?.let { binding.dtTempCurrent.text = "${it.round(3)}°C" }
 
         dialog.dialogSetup()
         theme.apply(binding.root, anim = false)
         dialog.show()
+    }
+
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
+    ) {
+        super.onReceive(data, jsonResult)
+
+        fun parse(value: String, field: String?) {
+            var hasReceived = true
+
+            var v = value.toFloatOrNull() ?: return
+            when (field) {
+                "temp" -> temp = v
+                "temp_set" -> tempSetpoint = v
+                "humi" -> humi = v
+                "humi_set" -> humiSetpoint = v
+                "mode" -> (modes.find { it.second == value })?.let {
+                    mode = it.second
+                }
+                else -> hasReceived = false
+            }
+
+            if (hasReceived) this.hasReceived.postValue(field)
+        }
+
+        if (jsonResult.isEmpty()) {
+            var value = data.second.toString()
+            parse(
+                value, when (data.first) {
+                    mqttData.subs["temp"] -> "temp"
+                    mqttData.subs["temp_set"] -> "temp_set"
+                    mqttData.subs["humi"] -> "humi"
+                    mqttData.subs["humi_set"] -> "humi_set"
+                    mqttData.subs["mode"] -> "mode"
+                    else -> null
+                }
+            )
+        } else {
+            for (e in jsonResult) {
+                parse(e.value, e.key)
+            }
+        }
     }
 }

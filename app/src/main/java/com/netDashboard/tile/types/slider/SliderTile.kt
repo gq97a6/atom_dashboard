@@ -50,19 +50,21 @@ class SliderTile : Tile() {
             setBackground(value, holder?.itemView?.findViewById(R.id.ts_background))
         }
 
+    override fun onCreateTile() {
+        super.onCreateTile()
+
+        mqttData.payloads["base"] = "@value"
+    }
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (range[2] == 0) range[2] = 1
         displayValue = value
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
         if (!dragCon) {
             val dialog = Dialog(adapter.context)
@@ -104,6 +106,8 @@ class SliderTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
+        super.onReceive(data, jsonResult)
+
         (jsonResult["base"] ?: data.second.toString()).toIntOrNull()
             ?.let { this.value = it.roundCloser(range[2]) }
     }
@@ -132,11 +136,5 @@ class SliderTile : Tile() {
         params?.matchConstraintPercentWidth =
             abs((((range[0] - value).toFloat() / (range[1] - range[0]))))
         background?.requestLayout()
-    }
-
-    override fun onCreateTile() {
-        super.onCreateTile()
-
-        mqttData.payloads["base"] = "@value"
     }
 }

@@ -16,6 +16,8 @@ import android.widget.TextView
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.buildConfirm
@@ -23,7 +25,6 @@ import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
-import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogLightsBinding
 import com.netDashboard.databinding.DialogSelectBinding
 import com.netDashboard.globals.G
@@ -46,6 +47,8 @@ class LightsTile : Tile() {
     override var typeTag = "lights"
 
     override var iconKey = "il_business_lightbulb_alt"
+
+    var hasReceived = MutableLiveData("")
 
     var state: Boolean? = null
     var mode: String? = null
@@ -80,10 +83,23 @@ class LightsTile : Tile() {
             null -> colorPallet
         }
 
+    private val iconResState
+        get() = when (state) {
+            true -> {
+                iconResTrue
+            }
+            false -> {
+                iconResFalse
+            }
+            null -> {
+                iconRes
+            }
+        }
+
     var includePicker = false
     var showPayload = false
     var paintRaw = true
-    var doPaint = true
+    var doPaint = false
 
     var colorType = "hex"
         set(value) {
@@ -129,6 +145,14 @@ class LightsTile : Tile() {
         colorType = colorType
     }
 
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE
+        holder?.itemView?.findViewById<View>(R.id.t_icon)
+            ?.setBackgroundResource(iconResState)
+    }
+
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
@@ -140,118 +164,31 @@ class LightsTile : Tile() {
         )
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
-
-        if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE
-    }
-
-    override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
-        jsonResult: MutableMap<String, String>
-    ) {
-
-        if (jsonResult.isEmpty()) {
-            val value = data.second.toString().toFloatOrNull()
-            when (data.first) {
-                mqttData.subs["state"] -> value?.let {
-                }
-                mqttData.subs["color"] -> value?.let {
-                }
-                mqttData.subs["bright"] -> value?.let {
-                }
-                mqttData.subs["mode"] -> value?.let {
-                    (modes.find { it.second == data.second.toString() })?.let {
-                        mode = it.second
-                        this.hasReceived.postValue("mode")
-                    }
-                }
-            }
-        } else {
-            for (e in jsonResult) {
-                val value = e.value.toFloatOrNull()
-                var hasReceived = true
-                when (e.key) {
-                    "state" -> value?.let { temp = it }
-                    "color" -> value?.let { tempSetpoint = it }
-                    "bright" -> value?.let { humi = it }
-                    "mode" -> value?.let {
-                        (modes.find { it.second == data.second.toString() })?.let {
-                            mode = it.second
-                        }
-                    }
-                    else -> hasReceived = false
-                }
-                if (hasReceived) this.hasReceived.postValue(e.key)
-            }
-        }
-
-        var value = jsonResult["base"] ?: data.second.toString()
-
-        try {
-            when (colorType) {
-                "hsv" -> {
-                    toRemoves["hsv"]?.forEach {
-                        value = value.replace(it, " ")
-                    }
-
-                    val r = value.split(" ") as MutableList
-                    r.removeIf { it.isEmpty() }
-
-                    hsvPicked = floatArrayOf(
-                        r[flagIndexes["h"]!!].toFloat(),
-                        r[flagIndexes["s"]!!].toFloat() / 100,
-                        r[flagIndexes["v"]!!].toFloat() / 100
-                    )
-                }
-                "hex" -> {
-                    toRemoves["hex"]?.forEach {
-                        value = value.replace(it, "")
-                    }
-
-                    Color.colorToHSV(Integer.parseInt(value, 16), hsvPicked)
-                }
-                "rgb" -> {
-                    toRemoves["rgb"]?.forEach {
-                        value = value.replace(it, " ")
-                    }
-
-                    val r = value.split(" ") as MutableList
-                    r.removeIf { it.isEmpty() }
-
-                    Color.colorToHSV(
-                        Color.rgb(
-                            r[flagIndexes["r"]!!].toInt(),
-                            r[flagIndexes["g"]!!].toInt(),
-                            r[flagIndexes["b"]!!].toInt()
-                        ), hsvPicked
-                    )
-                }
-            }
-
-            if (doPaint) {
-                holder?.itemView?.let {
-                    G.theme.apply(
-                        it as ViewGroup,
-                        anim = false,
-                        colorPallet = G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
-                    )
-                }
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
-
         val dialog = Dialog(adapter.context)
+        var modeAdapter = GenericAdapter(adapter.context)
+
         dialog.setContentView(R.layout.dialog_lights)
         val binding = DialogLightsBinding.bind(dialog.findViewById(R.id.root))
+
+        var observer: (String) -> Unit = {
+            when (it) {
+                "state" -> state?.let {
+                    binding.dlSwitch.text = if (it) "ON" else "OFF"
+                }
+                "color" -> binding.dlPicker.setColor(HSVToColor(hsvPicked))
+                "bright" -> brightness?.let { binding.dlBright.progress = it.toFloat() }
+                "mode" -> modeAdapter.notifyDataSetChanged()
+            }
+        }
+
+        dialog.setOnDismissListener {
+            hasReceived.removeObserver(observer)
+        }
+
+        hasReceived.observe(adapter.context as LifecycleOwner, observer)
 
         binding.dlPicker.visibility = if (includePicker) VISIBLE else GONE
         binding.dlBright.startAngle = if (includePicker) 30f else 150f
@@ -262,7 +199,6 @@ class LightsTile : Tile() {
             param.setMargins(it, it, it, it)
         }
         binding.dlBright.layoutParams = param
-
 
         var hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
         var brightnessTmp = brightness
@@ -297,13 +233,9 @@ class LightsTile : Tile() {
             override fun onStartTrackingTouch(seekBar: CircularSeekBar?) {}
         })
 
-        brightnessTmp?.let { binding.dlBright.progress = it.toFloat() }
-        binding.dlPicker.setColor(Color.HSVToColor(hsvPickedTmp))
-        onColorChange()
-
         binding.dlConfirm.setOnClickListener {
             fun send() {
-                send("$brightnessTmp", mqttData.pubs["bright"], mqttData.qos, retain[1], true)
+                send("$brightnessTmp", mqttData.pubs["bright"], mqttData.qos, retain[2], true)
                 if (includePicker) send(
                     when (colorType) {
                         "hsv" -> {
@@ -335,7 +267,7 @@ class LightsTile : Tile() {
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                    }
+                    }, mqttData.pubs["color"], mqttData.qos, retain[1], true
                 )
             }
 
@@ -356,30 +288,27 @@ class LightsTile : Tile() {
 
         binding.dlMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.size > 0 && !mqttData.pubs["mode"].isNullOrEmpty()) {
-
+            if (notEmpty.size > 0) {
                 val dialog = Dialog(adapter.context)
-                val adapter = GenericAdapter(adapter.context)
+                modeAdapter = GenericAdapter(adapter.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
 
-                adapter.onBindViewHolder = { _, holder, pos ->
+                modeAdapter.onBindViewHolder = { _, holder, pos ->
                     val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                     text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
                     else "${notEmpty[pos].first}"
 
-                    if (mode == notEmpty[pos].second) {
-                        holder?.itemView?.findViewById<View>(R.id.is_background).let {
-                            it.backgroundTintList =
-                                ColorStateList.valueOf(G.theme.a.colorPallet.color)
-                            it.alpha = 0.15f
-                        }
+                    holder?.itemView?.findViewById<View>(R.id.is_background).let {
+                        it.backgroundTintList =
+                            ColorStateList.valueOf(G.theme.a.colorPallet.color)
+                        it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
 
-                adapter.onItemClick = {
-                    val pos = adapter.list.indexOf(it)
+                modeAdapter.onItemClick = {
+                    val pos = modeAdapter.list.indexOf(it)
 
                     send(
                         "${this.modes[pos].second}",
@@ -393,20 +322,138 @@ class LightsTile : Tile() {
                     }, 50)
                 }
 
-                adapter.setHasStableIds(true)
-                adapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
+                modeAdapter.setHasStableIds(true)
+                modeAdapter.submitList(MutableList(notEmpty.size) { GenericItem(R.layout.item_select) })
 
                 binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
-                binding.dsRecyclerView.adapter = adapter
+                binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()
                 G.theme.apply(binding.root)
                 dialog.show()
-            } else createToast(adapter.context, "Check setup")
+            }
         }
+
+        binding.dlSwitch.setOnClickListener {
+            send(
+                mqttData.payloads[if (state == false) "true" else "false"] ?: "",
+                mqttData.pubs["state"],
+                mqttData.qos,
+                retain[0]
+            )
+        }
+
+        state?.let {
+            binding.dlSwitch.text = if (it) "ON" else "OFF"
+        }
+
+        brightnessTmp?.let {
+            binding.dlBright.progress = it.toFloat()
+            binding.dlValue.text = brightnessTmp.toString()
+        }
+
+        binding.dlPicker.setColor(HSVToColor(hsvPickedTmp))
+        onColorChange()
 
         dialog.dialogSetup()
         G.theme.apply(binding.root, anim = false)
         dialog.show()
+    }
+
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
+    ) {
+        super.onReceive(data, jsonResult)
+
+        fun parse(value: String, field: String?) {
+            var hasReceived = true
+
+            when (field) {
+                "state" -> {
+                    state = when (value) {
+                        mqttData.payloads["true"] -> true
+                        mqttData.payloads["false"] -> false
+                        else -> null
+                    }
+
+                    holder?.itemView?.findViewById<View>(R.id.t_icon)
+                        ?.setBackgroundResource(iconResState)
+
+                    holder?.itemView?.let {
+                        G.theme.apply(
+                            it as ViewGroup,
+                            anim = false,
+                            colorPallet = if (!doPaint) colorPalletState
+                            else G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                        )
+                    }
+                }
+                "color" -> {
+                    var value = value
+
+                    toRemoves[colorType]?.forEach {
+                        value = value.replace(it, " ")
+                    }
+
+                    val v = value.split(" ") as MutableList
+                    v.removeIf { it.isEmpty() }
+
+                    when (colorType) {
+                        "hex" -> Color.colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
+                        "hsv" -> {
+                            hsvPicked = floatArrayOf(
+                                v[flagIndexes["h"]!!].toFloat(),
+                                v[flagIndexes["s"]!!].toFloat() / 100,
+                                v[flagIndexes["v"]!!].toFloat() / 100
+                            )
+                        }
+                        "rgb" -> {
+                            Color.colorToHSV(
+                                Color.rgb(
+                                    v[flagIndexes["r"]!!].toInt(),
+                                    v[flagIndexes["g"]!!].toInt(),
+                                    v[flagIndexes["b"]!!].toInt()
+                                ), hsvPicked
+                            )
+                        }
+                    }
+
+                    if (doPaint) {
+                        holder?.itemView?.let {
+                            G.theme.apply(
+                                it as ViewGroup,
+                                anim = false,
+                                colorPallet = G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                            )
+                        }
+                    }
+                }
+                "bright" -> brightness = value.toIntOrNull()
+                "mode" -> (modes.find { it.second == value })?.let {
+                    mode = it.second
+                }
+                else -> hasReceived = false
+            }
+
+            if (hasReceived) this.hasReceived.postValue(field)
+        }
+
+        if (jsonResult.isEmpty()) {
+            var value = data.second.toString()
+            parse(
+                value, when (data.first) {
+                    mqttData.subs["state"] -> "state"
+                    mqttData.subs["color"] -> "color"
+                    mqttData.subs["bright"] -> "bright"
+                    mqttData.subs["mode"] -> "mode"
+                    else -> null
+                }
+            )
+        } else {
+            for (e in jsonResult) {
+                parse(e.value, e.key)
+            }
+        }
     }
 }

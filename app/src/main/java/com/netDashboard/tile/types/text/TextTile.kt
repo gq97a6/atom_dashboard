@@ -75,6 +75,7 @@ class TextTile : Tile() {
         data: Pair<String?, MqttMessage?>,
         jsonResult: MutableMap<String, String>
     ) {
+        super.onReceive(data, jsonResult)
         value = jsonResult["base"] ?: data.second.toString()
     }
 }

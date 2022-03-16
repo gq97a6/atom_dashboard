@@ -57,6 +57,8 @@ abstract class Tile : RecyclerViewItem() {
             this.find { it.id == id }
     }
 
+    open fun onCreateTile() {}
+
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
@@ -78,26 +80,15 @@ abstract class Tile : RecyclerViewItem() {
         )
     }
 
-    open class MqttData {
-        var isEnabled = true
-        var lastReceive: Date? = null
+    open fun onSend(
+        topic: String?,
+        msg: String,
+        @IntRange(from = 0, to = 2) qos: Int,
+        retained: Boolean = false
+    ) {
+    }
 
-        val subs = mutableMapOf<String, String>()
-        val pubs = mutableMapOf<String, String>()
-        val colors = mutableMapOf<String, Int>()
-        val jsonPaths = mutableMapOf<String, String>()
-
-        var retain = false
-        var qos = 0
-            set(value) {
-                field = minOf(2, maxOf(0, value))
-            }
-
-        var varPayload = true
-        var payloads: MutableMap<String, String> =
-            mutableMapOf("base" to "", "true" to "1", "false" to "0")
-        var confirmPub = false
-        var payloadIsJson = false
+    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
     }
 
     @JvmOverloads
@@ -126,14 +117,6 @@ abstract class Tile : RecyclerViewItem() {
                 send()
             })
         }
-    }
-
-    open fun onSend(
-        topic: String?,
-        msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false
-    ) {
     }
 
     fun receive(data: Pair<String?, MqttMessage?>) {
@@ -173,11 +156,32 @@ abstract class Tile : RecyclerViewItem() {
             holder?.itemView?.attentate()
         }
 
-        onReceive(data, jsonResult)
+        try {
+            onReceive(data, jsonResult)
+        } catch (e: Exception) {
+
+        }
     }
 
-    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
-    }
+    open class MqttData {
+        var isEnabled = true
+        var lastReceive: Date? = null
 
-    open fun onCreateTile() {}
+        val subs = mutableMapOf<String, String>()
+        val pubs = mutableMapOf<String, String>()
+        val colors = mutableMapOf<String, Int>()
+        val jsonPaths = mutableMapOf<String, String>()
+
+        var retain = false
+        var qos = 0
+            set(value) {
+                field = minOf(2, maxOf(0, value))
+            }
+
+        var varPayload = true
+        var payloads: MutableMap<String, String> =
+            mutableMapOf("base" to "", "true" to "1", "false" to "0")
+        var confirmPub = false
+        var payloadIsJson = false
+    }
 }

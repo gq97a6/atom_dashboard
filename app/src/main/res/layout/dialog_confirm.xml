@@ -40,7 +40,7 @@
             android:layout_margin="10dp"
             android:foreground="@drawable/button_text"
             android:padding="0dp"
-            android:tag="colorB"
+            android:tag="colorC"
             android:text="CANCEL"
             android:textSize="11dp" />
 

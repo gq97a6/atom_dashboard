@@ -1,7 +1,7 @@
 //expand ------------------------------
 start guide
 else createToast(adapter.context, "Check setup")
-check on receive
+time tile pointer color
 
 new tiles
     keyboard

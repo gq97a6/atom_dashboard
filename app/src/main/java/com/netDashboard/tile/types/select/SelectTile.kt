@@ -39,9 +39,6 @@ class SelectTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
-
         val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.size > 0) {
             val dialog = Dialog(adapter.context)

@@ -2,9 +2,6 @@
 start guide
 
 new tiles
-    keyboard
-    trackpad
-
     (indicator,
     diode,
     alert on change,

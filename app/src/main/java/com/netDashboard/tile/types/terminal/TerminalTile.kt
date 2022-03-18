@@ -30,7 +30,7 @@ class TerminalTile : Tile() {
     @JsonIgnore
     override var height = 2
 
-    override var iconKey = "il_interface_keyboard"
+    override var iconKey = "il_device_desktop"
 
     var log = mutableListOf<String>()
 

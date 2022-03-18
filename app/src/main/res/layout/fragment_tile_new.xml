@@ -300,7 +300,7 @@
                             android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_marginTop="5dp"
-                            android:background="@drawable/il_interface_keyboard"
+                            android:background="@drawable/il_device_desktop"
                             android:tag="colorAIcon" />
 
                     </LinearLayout>
@@ -404,7 +404,7 @@
                 android:layout_height="wrap_content">
 
                 <FrameLayout
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:padding="5dp">
 
@@ -446,7 +446,7 @@
                 </FrameLayout>
 
                 <FrameLayout
-                    android:layout_width="150dp"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:padding="5dp">
@@ -485,6 +485,169 @@
                             android:tag="colorAIcon" />
 
                     </LinearLayout>
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_graph_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_graph"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorC"
+                            android:text="Graph"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/il_business_analysis"
+                            android:tag="colorCIcon" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:tag="colorA"
+                        android:rotation="10"
+                        android:text="COMING\nSOON"
+                        android:textStyle="bold"
+                        android:textSize="13dp" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_keyboard_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_keyboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorC"
+                            android:text="Keyboard"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/il_interface_keyboard"
+                            android:tag="colorCIcon" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:tag="colorA"
+                        android:rotation="-10"
+                        android:text="COMING\nSOON"
+                        android:textStyle="bold"
+                        android:textSize="13dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp">
+
+                    <View
+                        android:id="@+id/tn_touchpad_ripple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_ripple"
+                        android:elevation="20dp"
+                        android:tag="rippleForeground" />
+
+                    <LinearLayout
+                        android:id="@+id/tn_touchpad"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/background_frame"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:tag="frame">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:tag="colorC"
+                            android:text="Touchpad"
+                            android:textSize="15dp" />
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/il_device_mouse_alt"
+                            android:tag="colorCIcon" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:tag="colorA"
+                        android:rotation="20"
+                        android:text="COMING\nSOON"
+                        android:textStyle="bold"
+                        android:textSize="13dp" />
 
                 </FrameLayout>
 

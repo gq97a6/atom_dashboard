@@ -10,10 +10,12 @@
 
     <TimePicker
         android:id="@+id/dt_time"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:headerBackground="#00000000"
         android:numbersBackgroundColor="#00000000"
+        android:numbersSelectorColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
         android:timePickerMode="clock"
         android:visibility="gone" />
 

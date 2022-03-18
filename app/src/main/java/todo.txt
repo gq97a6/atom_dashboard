@@ -1,17 +1,9 @@
 //expand ------------------------------
 start guide
-else createToast(adapter.context, "Check setup")
-time tile pointer color
 
 new tiles
     keyboard
     trackpad
-    lights
-        color       | as button, as compound
-        brightness  | as seeker, as compound
-
-        mode        | as button
-        on/off      | as button
 
     (indicator,
     diode,

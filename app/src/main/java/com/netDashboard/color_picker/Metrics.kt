@@ -18,7 +18,7 @@ internal class Metrics(
 
         if (centerX != other.centerX) return false
         if (centerY != other.centerY) return false
-        if (!Arrays.equals(color, other.color)) return false
+        if (!color.contentEquals(other.color)) return false
         if (density != other.density) return false
 
         return true
@@ -27,14 +27,13 @@ internal class Metrics(
     override fun hashCode(): Int {
         var result = centerX.hashCode()
         result = 31 * result + centerY.hashCode()
-        result = 31 * result + Arrays.hashCode(color)
+        result = 31 * result + color.contentHashCode()
         result = 31 * result + density.hashCode()
         return result
     }
 
     fun getColor() = HSVToColor(color)
 
-    fun hue() = color[0]
 }
 
 data class Paints(

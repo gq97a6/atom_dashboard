@@ -1,10 +1,8 @@
-package com.netDashboard.globals
+package com.netDashboard
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.netDashboard.Settings
-import com.netDashboard.Theme
 import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.tile.Tile

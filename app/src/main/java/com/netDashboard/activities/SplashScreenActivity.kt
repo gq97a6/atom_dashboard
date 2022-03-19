@@ -11,7 +11,7 @@ import com.netDashboard.FolderTree.rootFolder
 import com.netDashboard.databinding.ActivitySplashScreenBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
 import com.netDashboard.foreground_service.ForegroundServiceHandler
-import com.netDashboard.globals.G
+import com.netDashboard.G
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

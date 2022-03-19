@@ -4,9 +4,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.slider.Slider
 import com.netDashboard.R
-import com.netDashboard.globals.G.getIconHSV
-import com.netDashboard.globals.G.setIconHSV
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.getIconHSV
+import com.netDashboard.G.setIconHSV
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconColorPicker : Icon() {
@@ -47,15 +47,15 @@ class IconColorPicker : Icon() {
             (adapter as IconAdapter).onColorChange(hsv, p)
         }
 
-        h.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+        h.addOnChangeListener(Slider.OnChangeListener { _, _, _ ->
             onHSVChange()
         })
 
-        s.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+        s.addOnChangeListener(Slider.OnChangeListener { _, _, _ ->
             onHSVChange()
         })
 
-        v.addOnChangeListener(Slider.OnChangeListener { slider, value, fromUser ->
+        v.addOnChangeListener(Slider.OnChangeListener { _, _, _ ->
             onHSVChange()
         })
     }

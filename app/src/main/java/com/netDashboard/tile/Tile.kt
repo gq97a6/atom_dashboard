@@ -13,8 +13,8 @@ import com.netDashboard.Theme.ColorPallet
 import com.netDashboard.attentate
 import com.netDashboard.createNotification
 import com.netDashboard.dashboard.Dashboard
-import com.netDashboard.globals.G.settings
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.settings
+import com.netDashboard.G.theme
 import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.recycler_view.RecyclerViewItem
@@ -30,7 +30,7 @@ abstract class Tile : RecyclerViewItem() {
     var dashboard: Dashboard = Dashboard(isInvalid = true)
 
     @JsonIgnore
-    open var height = 1
+    open var height = 1f
 
     var tag = ""
     abstract var iconKey: String
@@ -140,11 +140,9 @@ abstract class Tile : RecyclerViewItem() {
                 createNotification(
                     it,
                     dashboard.name.uppercase(Locale.getDefault()),
-                    "${
-                        if (tag.isBlank() || data.second.toString().isBlank())
-                            "New value for: ${data.first}"
-                        else "$tag: ${data.second.toString()}"
-                    }",
+                    if (tag.isBlank() || data.second.toString().isBlank())
+                        "New value for: ${data.first}"
+                    else "$tag: ${data.second.toString()}",
                     silentNotify,
                     dashboard.id.toInt()
                 )

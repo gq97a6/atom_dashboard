@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
-import com.netDashboard.globals.G.setIconHSV
+import com.netDashboard.G.setIconHSV
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconColor(

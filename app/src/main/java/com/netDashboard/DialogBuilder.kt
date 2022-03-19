@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.WindowManager
 import com.netDashboard.databinding.DialogConfirmBinding
-import com.netDashboard.globals.G
 
 object DialogBuilder {
     fun Context.buildConfirm(

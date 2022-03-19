@@ -13,11 +13,10 @@ import com.netDashboard.activities.SplashScreenActivity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.databinding.DialogTransferBinding
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboard
-import com.netDashboard.globals.G.dashboards
-import com.netDashboard.globals.G.settings
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.dashboard
+import com.netDashboard.G.dashboards
+import com.netDashboard.G.settings
+import com.netDashboard.G.theme
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.random.Random
 
@@ -32,8 +31,7 @@ object Transfer {
             val binding = DialogTransferBinding.bind(dialog.findViewById(R.id.root))
 
             var transferCaptured = false
-            var connectionObserver: (Boolean) -> Unit
-            connectionObserver = {
+            val connectionObserver: (Boolean) -> Unit = {
                 dashboard.dg?.mqttd?.let {
                     if (!it.client.isConnected && !transferCaptured) {
                         dialog.dismiss()

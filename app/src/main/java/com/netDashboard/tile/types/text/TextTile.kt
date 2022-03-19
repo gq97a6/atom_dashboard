@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogTextBinding
-import com.netDashboard.globals.G
+import com.netDashboard.G
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage

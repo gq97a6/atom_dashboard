@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.IdGenerator
 import com.netDashboard.R
 import com.netDashboard.alpha
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 
 @Suppress("UNUSED")
 abstract class RecyclerViewItem {

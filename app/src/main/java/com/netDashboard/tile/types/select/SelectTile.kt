@@ -10,7 +10,7 @@ import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogSelectBinding
-import com.netDashboard.globals.G
+import com.netDashboard.G
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -40,7 +40,7 @@ class SelectTile : Tile() {
         super.onClick(v, e)
 
         val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-        if (notEmpty.size > 0) {
+        if (notEmpty.isNotEmpty()) {
             val dialog = Dialog(adapter.context)
             val adapter = GenericAdapter(adapter.context)
 
@@ -50,12 +50,12 @@ class SelectTile : Tile() {
             adapter.onBindViewHolder = { _, holder, pos ->
                 val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                 text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
-                else "${notEmpty[pos].first}"
+                else notEmpty[pos].first
             }
 
             adapter.onItemClick = {
                 val pos = adapter.list.indexOf(it)
-                send("${this.options[pos].second}")
+                send(this.options[pos].second)
                 dialog.dismiss()
             }
 

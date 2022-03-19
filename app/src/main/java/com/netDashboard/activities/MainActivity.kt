@@ -9,9 +9,9 @@ import com.netDashboard.R
 import com.netDashboard.activities.fragments.DashboardFragment
 import com.netDashboard.activities.fragments.MainScreenFragment
 import com.netDashboard.databinding.ActivityMainBinding
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.setCurrentDashboard
-import com.netDashboard.globals.G.settings
+import com.netDashboard.G
+import com.netDashboard.G.setCurrentDashboard
+import com.netDashboard.G.settings
 
 class MainActivity : AppCompatActivity() {
     lateinit var b: ActivityMainBinding
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            onBackPressedBoolean = { false }
+            //onBackPressedBoolean = { false }
         }
     }
 }

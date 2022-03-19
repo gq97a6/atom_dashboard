@@ -21,15 +21,15 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentTilePropertiesBinding
 import com.netDashboard.digitsOnly
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboard
-import com.netDashboard.globals.G.getIconColorPallet
-import com.netDashboard.globals.G.getIconHSV
-import com.netDashboard.globals.G.getIconRes
-import com.netDashboard.globals.G.setIconHSV
-import com.netDashboard.globals.G.setIconKey
-import com.netDashboard.globals.G.settings
-import com.netDashboard.globals.G.tile
+import com.netDashboard.G
+import com.netDashboard.G.dashboard
+import com.netDashboard.G.getIconColorPallet
+import com.netDashboard.G.getIconHSV
+import com.netDashboard.G.getIconRes
+import com.netDashboard.G.setIconHSV
+import com.netDashboard.G.setIconKey
+import com.netDashboard.G.settings
+import com.netDashboard.G.tile
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.tile.types.button.TextTile
@@ -129,7 +129,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         b.tpMqttPubCopy.setOnClickListener {
-            b.tpMqttPub.setText(b.tpMqttSub.text)
+            b.tpMqttPub.text = b.tpMqttSub.text
         }
 
         b.tpQos.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
@@ -173,6 +173,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         when (tile) {
+            //is ButtonTile -> {
+            //    val tile = tile as ButtonTile
+            //    b.tpButton.visibility = VISIBLE
+            //}
+//--------------------------------------------------------------------------------------------------
             is TextTile -> {
                 val tile = tile as TextTile
 
@@ -229,7 +234,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpSliderTo.setText(tile.range[1].toString())
                 b.tpSliderStep.setText(tile.range[2].toString())
 
-                b.tpSliderFrom.addTextChangedListener {
+                b.tpSliderFrom.addTextChangedListener { it ->
                     (it ?: "").toString().let { raw ->
                         (it ?: "").toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderFrom.setText(parsed)
@@ -240,7 +245,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 }
 
-                b.tpSliderTo.addTextChangedListener {
+                b.tpSliderTo.addTextChangedListener { it ->
                     (it ?: "").toString().let { raw ->
                         (it ?: "").toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderTo.setText(parsed)
@@ -251,7 +256,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 }
 
-                b.tpSliderStep.addTextChangedListener {
+                b.tpSliderStep.addTextChangedListener { it ->
                     (it ?: "").toString().let { raw ->
                         (it ?: "").toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderStep.setText(parsed)
@@ -274,6 +279,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             is SwitchTile -> {
                 val tile = tile as SwitchTile
 
+                //b.tpSwitch.visibility = VISIBLE
                 b.tpMqttPayloadsBox.visibility = VISIBLE
 
                 b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
@@ -568,13 +574,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
-                    b.tpThermostatTemperatureSetpointPub.setText(b.tpThermostatTemperatureSetpointSub.text)
+                    b.tpThermostatTemperatureSetpointPub.text = b.tpThermostatTemperatureSetpointSub.text
                 }
                 b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
-                    b.tpThermostatHumiditySetpointPub.setText(b.tpThermostatHumiditySetpointSub.text)
+                    b.tpThermostatHumiditySetpointPub.text = b.tpThermostatHumiditySetpointSub.text
                 }
                 b.tpThermostatModePubCopy.setOnClickListener {
-                    b.tpThermostatModePub.setText(b.tpThermostatModeSub.text)
+                    b.tpThermostatModePub.text = b.tpThermostatModeSub.text
                 }
 
 
@@ -754,16 +760,16 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpLightsStatePubCopy.setOnClickListener {
-                    b.tpLightsStatePub.setText(b.tpLightsStateSub.text)
+                    b.tpLightsStatePub.text = b.tpLightsStateSub.text
                 }
                 b.tpLightsColorPubCopy.setOnClickListener {
-                    b.tpLightsColorPub.setText(b.tpLightsColorSub.text)
+                    b.tpLightsColorPub.text = b.tpLightsColorSub.text
                 }
                 b.tpLightsBrightnessPubCopy.setOnClickListener {
-                    b.tpLightsBrightnessPub.setText(b.tpLightsBrightnessSub.text)
+                    b.tpLightsBrightnessPub.text = b.tpLightsBrightnessSub.text
                 }
                 b.tpLightsModePubCopy.setOnClickListener {
-                    b.tpLightsModePub.setText(b.tpLightsModeSub.text)
+                    b.tpLightsModePub.text = b.tpLightsModeSub.text
                 }
 
 
@@ -897,7 +903,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         settings.mqttTabShow = state
     }
 
-    fun setupIcon(icon: Int, color: Int, frameView: View, iconView: View) {
+    private fun setupIcon(icon: Int, color: Int, frameView: View, iconView: View) {
         iconView.setBackgroundResource(icon)
         iconView.backgroundTintList = ColorStateList.valueOf(color)
 

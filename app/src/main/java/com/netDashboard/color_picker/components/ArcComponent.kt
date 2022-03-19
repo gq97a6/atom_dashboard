@@ -9,15 +9,16 @@ import android.view.MotionEvent
 import com.netDashboard.color_picker.Metrics
 import com.netDashboard.color_picker.Paints
 import com.netDashboard.color_picker.listeners.OnColorSelectionListener
+import kotlin.math.*
 
 internal abstract class ArcComponent(
-    val metrics: Metrics,
-    val paints: Paints,
+    private val metrics: Metrics,
+    private val paints: Paints,
     private val arcLength: Float,
     private val arcStartAngle: Float
 ) {
 
-    var radius: Float = 0f
+    private var radius: Float = 0f
 
     var fillWidth: Float = 0f
     var strokeWidth: Float = 0f
@@ -27,8 +28,8 @@ internal abstract class ArcComponent(
     var indicatorStrokeWidth: Float = 0f
     var indicatorStrokeColor: Int = 0
 
-    var indicatorX: Float = 0f
-    var indicatorY: Float = 0f
+    private var indicatorX: Float = 0f
+    private var indicatorY: Float = 0f
 
     var angle: Double = 0.0
 
@@ -87,7 +88,7 @@ internal abstract class ArcComponent(
 
     internal fun setRadius(outerRadius: Float, offset: Float) {
         radius =
-            outerRadius - (Math.max(indicatorRadius + indicatorStrokeWidth, fillWidth)) - offset
+            outerRadius - (max(indicatorRadius + indicatorStrokeWidth, fillWidth)) - offset
     }
 
     /**
@@ -131,8 +132,8 @@ internal abstract class ArcComponent(
             canvas.drawArc(it, arcStartAngle, arcLength, false, shaderPaint)
         }
 
-        indicatorX = (metrics.centerX + radius * Math.cos(Math.toRadians(angle))).toFloat()
-        indicatorY = (metrics.centerY + radius * Math.sin(Math.toRadians(angle))).toFloat()
+        indicatorX = (metrics.centerX + radius * cos(Math.toRadians(angle))).toFloat()
+        indicatorY = (metrics.centerY + radius * sin(Math.toRadians(angle))).toFloat()
 
         val indicatorPaint = paints.indicatorPaint
         indicatorPaint.style = FILL
@@ -141,7 +142,7 @@ internal abstract class ArcComponent(
         canvas.drawCircle(indicatorX, indicatorY, indicatorRadius, indicatorPaint)
     }
 
-    fun getShader(): Shader {
+    private fun getShader(): Shader {
         with(metrics) {
             updateColorArray(color.copyOf())
 
@@ -160,12 +161,12 @@ internal abstract class ArcComponent(
 
     internal abstract fun updateColorArray(color: FloatArray): IntArray
 
-    fun calculateAngle(x1: Float, y1: Float) {
+    private fun calculateAngle(x1: Float, y1: Float) {
         val x = x1 - metrics.centerX
         val y = y1 - metrics.centerY
-        val c = Math.sqrt((x * x + y * y).toDouble())
+        val c = sqrt((x * x + y * y).toDouble())
 
-        angle = Math.toDegrees(Math.acos(x / c))
+        angle = Math.toDegrees(acos(x / c))
         if (y < 0) {
             angle = 360 - angle
         }

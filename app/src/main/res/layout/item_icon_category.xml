@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:autoSizeTextType="uniform"
-        android:gravity="center|left"
+        android:gravity="center|start"
         android:padding="10dp"
         android:tag="color"
         android:text="Category"

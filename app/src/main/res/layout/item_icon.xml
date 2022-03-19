@@ -38,7 +38,7 @@
         android:autoSizeMinTextSize="10dp"
         android:autoSizeStepGranularity="1dp"
         android:autoSizeTextType="uniform"
-        android:gravity="center|left"
+        android:gravity="center|start"
         android:tag="color"
         android:text="Category" />
 

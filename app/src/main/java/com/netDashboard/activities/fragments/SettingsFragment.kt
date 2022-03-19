@@ -19,10 +19,10 @@ import com.netDashboard.activities.SplashScreenActivity
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.databinding.FragmentSettingsBinding
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboards
-import com.netDashboard.globals.G.settings
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G
+import com.netDashboard.G.dashboards
+import com.netDashboard.G.settings
+import com.netDashboard.G.theme
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -57,7 +57,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         )
 
                         try {
-                            requireContext().contentResolver.openFileDescriptor(uri, "w")?.use {
+                            requireContext().contentResolver.openFileDescriptor(uri, "w")?.use { it ->
                                 FileOutputStream(it.fileDescriptor).use {
                                     it.write(G.mapper.writeValueAsString(backup).toByteArray())
                                 }
@@ -168,7 +168,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         b.sThemeIsDark.isChecked = theme.a.isDark
     }
 
-    fun openFile() {
+    private fun openFile() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "text/plain"

@@ -19,8 +19,7 @@ import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogSelectBinding
 import com.netDashboard.databinding.DialogThermostatBinding
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -42,16 +41,16 @@ class ThermostatTile : Tile() {
     override var iconKey = "il_weather_temperature_half"
 
     @JsonIgnore
-    override var height = 2
+    override var height = 2f
 
-    var hasReceived = MutableLiveData("")
+    private var hasReceived = MutableLiveData("")
 
     var mode: String? = null
-    var temp: Float? = null
+    private var temp: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_temp_value)?.text = value.let {
-                "${if (it == null) "--" else it.round(3)} °C"
+                "${it?.round(3) ?: "--"} °C"
             }
             value?.let {
                 holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp)?.progress =
@@ -59,11 +58,11 @@ class ThermostatTile : Tile() {
             }
         }
 
-    var humi: Float? = null
+    private var humi: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_humi_value)?.text = value.let {
-                "${if (it == null) "--" else it.round(3)} %"
+                "${it?.round(3) ?: "--"} %"
             }
             value?.let {
                 holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi)?.progress =
@@ -71,7 +70,7 @@ class ThermostatTile : Tile() {
             }
         }
 
-    var tempSetpoint: Float? = null
+    private var tempSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {
@@ -80,7 +79,7 @@ class ThermostatTile : Tile() {
             }
         }
 
-    var humiSetpoint: Float? = null
+    private var humiSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {
@@ -102,12 +101,12 @@ class ThermostatTile : Tile() {
         super.onBindViewHolder(holder, position)
 
         abs(100 / humidityStep).let {
-            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi).max = it
-            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_humi_setpoint).max = it
+            holder.itemView.findViewById<CircularSeekBar>(R.id.th_humi).max = it
+            holder.itemView.findViewById<CircularSeekBar>(R.id.th_humi_setpoint).max = it
         }
         abs((temperatureRange[1] - temperatureRange[0]) / temperatureStep).let {
-            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp).max = it
-            holder?.itemView?.findViewById<CircularSeekBar>(R.id.th_temp_setpoint).max = it
+            holder.itemView.findViewById<CircularSeekBar>(R.id.th_temp).max = it
+            holder.itemView.findViewById<CircularSeekBar>(R.id.th_temp_setpoint).max = it
         }
 
         temp = temp
@@ -137,7 +136,7 @@ class ThermostatTile : Tile() {
         dialog.setContentView(R.layout.dialog_thermostat)
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
 
-        var observer: (String) -> Unit = {
+        val observer: (String) -> Unit = { it ->
             when (it) {
                 "temp" -> temp?.let {
                     binding.dtTempCurrent.text = "${it.round(3)}°C"
@@ -236,7 +235,7 @@ class ThermostatTile : Tile() {
 
         binding.dtMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.size > 0 && !mqttData.pubs["mode"].isNullOrEmpty()) {
+            if (notEmpty.isNotEmpty() && !mqttData.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
                 modeAdapter = GenericAdapter(adapter.context)
@@ -247,9 +246,9 @@ class ThermostatTile : Tile() {
                 modeAdapter.onBindViewHolder = { _, holder, pos ->
                     val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                     text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
-                    else "${notEmpty[pos].first}"
+                    else notEmpty[pos].first
 
-                    holder?.itemView?.findViewById<View>(R.id.is_background).let {
+                    holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
                             ColorStateList.valueOf(theme.a.colorPallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
@@ -260,7 +259,7 @@ class ThermostatTile : Tile() {
                     val pos = modeAdapter.list.indexOf(it)
 
                     send(
-                        "${this.modes[pos].second}",
+                        this.modes[pos].second,
                         mqttData.pubs["mode"],
                         mqttData.qos,
                         retain[2]
@@ -323,7 +322,7 @@ class ThermostatTile : Tile() {
         fun parse(value: String, field: String?) {
             var hasReceived = true
 
-            var v = value.toFloatOrNull() ?: return
+            val v = value.toFloatOrNull() ?: return
             when (field) {
                 "temp" -> temp = v
                 "temp_set" -> tempSetpoint = v
@@ -339,7 +338,7 @@ class ThermostatTile : Tile() {
         }
 
         if (jsonResult.isEmpty()) {
-            var value = data.second.toString()
+            val value = data.second.toString()
             parse(
                 value, when (data.first) {
                     mqttData.subs["temp"] -> "temp"

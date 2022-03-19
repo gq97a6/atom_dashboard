@@ -27,7 +27,7 @@ import com.netDashboard.Theme
 import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.netDashboard.databinding.DialogLightsBinding
 import com.netDashboard.databinding.DialogSelectBinding
-import com.netDashboard.globals.G
+import com.netDashboard.G
 import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
@@ -48,14 +48,14 @@ class LightsTile : Tile() {
 
     override var iconKey = "il_business_lightbulb_alt"
 
-    var hasReceived = MutableLiveData("")
+    private var hasReceived = MutableLiveData("")
 
     var state: Boolean? = null
     var mode: String? = null
-    var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    var brightness: Int? = null
-    var toRemoves = mutableMapOf<String, MutableList<String>>()
-    var flagIndexes = mutableMapOf<String, Int>()
+    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    private var brightness: Int? = null
+    private var toRemoves = mutableMapOf<String, MutableList<String>>()
+    private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
     val retain = mutableListOf(false, false, false, false) //state, color, brightness, mode
@@ -149,8 +149,7 @@ class LightsTile : Tile() {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE
-        holder?.itemView?.findViewById<View>(R.id.t_icon)
-            ?.setBackgroundResource(iconResState)
+        holder.itemView.findViewById<View>(R.id.t_icon).setBackgroundResource(iconResState)
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
@@ -173,7 +172,7 @@ class LightsTile : Tile() {
         dialog.setContentView(R.layout.dialog_lights)
         val binding = DialogLightsBinding.bind(dialog.findViewById(R.id.root))
 
-        var observer: (String) -> Unit = {
+        val observer: (String) -> Unit = { it ->
             when (it) {
                 "state" -> state?.let {
                     binding.dlSwitch.text = if (it) "ON" else "OFF"
@@ -200,7 +199,7 @@ class LightsTile : Tile() {
         }
         binding.dlBright.layoutParams = param
 
-        var hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
+        val hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
         var brightnessTmp = brightness
 
         fun onColorChange() {
@@ -288,7 +287,7 @@ class LightsTile : Tile() {
 
         binding.dlMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.size > 0) {
+            if (notEmpty.isNotEmpty()) {
                 val dialog = Dialog(adapter.context)
                 modeAdapter = GenericAdapter(adapter.context)
 
@@ -298,9 +297,9 @@ class LightsTile : Tile() {
                 modeAdapter.onBindViewHolder = { _, holder, pos ->
                     val text = holder.itemView.findViewById<TextView>(R.id.is_text)
                     text.text = if (showPayload) "${notEmpty[pos].first} (${notEmpty[pos].second})"
-                    else "${notEmpty[pos].first}"
+                    else notEmpty[pos].first
 
-                    holder?.itemView?.findViewById<View>(R.id.is_background).let {
+                    holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
                             ColorStateList.valueOf(G.theme.a.colorPallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
@@ -311,7 +310,7 @@ class LightsTile : Tile() {
                     val pos = modeAdapter.list.indexOf(it)
 
                     send(
-                        "${this.modes[pos].second}",
+                        this.modes[pos].second,
                         mqttData.pubs["mode"],
                         mqttData.qos,
                         retain[3]
@@ -440,7 +439,7 @@ class LightsTile : Tile() {
         }
 
         if (jsonResult.isEmpty()) {
-            var value = data.second.toString()
+            val value = data.second.toString()
             parse(
                 value, when (data.first) {
                     mqttData.subs["state"] -> "state"

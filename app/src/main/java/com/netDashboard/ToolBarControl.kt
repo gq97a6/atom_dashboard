@@ -1,4 +1,4 @@
-package com.netDashboard.toolbarControl
+package com.netDashboard
 
 import android.graphics.drawable.RippleDrawable
 import android.view.animation.AccelerateDecelerateInterpolator

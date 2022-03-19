@@ -15,7 +15,6 @@
         android:headerBackground="#00000000"
         android:numbersBackgroundColor="#00000000"
         android:numbersSelectorColor="#FFFFFF"
-        android:layout_centerHorizontal="true"
         android:timePickerMode="clock"
         android:visibility="gone" />
 

@@ -14,10 +14,10 @@ import com.netDashboard.dashboard.Dashboard.Companion.saveToFile
 import com.netDashboard.dashboard.DashboardAdapter
 import com.netDashboard.databinding.FragmentMainScreenBinding
 import com.netDashboard.foreground_service.ForegroundService
-import com.netDashboard.globals.G.dashboards
-import com.netDashboard.globals.G.setCurrentDashboard
-import com.netDashboard.globals.G.theme
-import com.netDashboard.toolbarControl.ToolBarController
+import com.netDashboard.G.dashboards
+import com.netDashboard.G.setCurrentDashboard
+import com.netDashboard.G.theme
+import com.netDashboard.ToolBarController
 import kotlin.random.Random
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {

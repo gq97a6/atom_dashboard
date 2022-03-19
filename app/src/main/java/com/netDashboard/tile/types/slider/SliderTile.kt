@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogSliderBinding
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.roundCloser
 import com.netDashboard.screenWidth

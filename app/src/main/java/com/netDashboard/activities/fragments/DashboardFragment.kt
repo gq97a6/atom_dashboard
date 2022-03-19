@@ -20,16 +20,16 @@ import com.netDashboard.activities.SplashScreenActivity
 import com.netDashboard.blink
 import com.netDashboard.databinding.FragmentDashboardBinding
 import com.netDashboard.foreground_service.ForegroundService.Companion.service
-import com.netDashboard.globals.G.dashboard
-import com.netDashboard.globals.G.settings
-import com.netDashboard.globals.G.theme
-import com.netDashboard.globals.G.tile
+import com.netDashboard.G.dashboard
+import com.netDashboard.G.settings
+import com.netDashboard.G.theme
+import com.netDashboard.G.tile
 import com.netDashboard.log.LogAdapter
 import com.netDashboard.screenHeight
 import com.netDashboard.screenWidth
 import com.netDashboard.tile.TilesAdapter
 import com.netDashboard.tile.types.slider.SliderTile
-import com.netDashboard.toolbarControl.ToolBarController
+import com.netDashboard.ToolBarController
 import java.util.*
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {

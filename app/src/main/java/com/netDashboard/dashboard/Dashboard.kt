@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.FolderTree
 import com.netDashboard.R
 import com.netDashboard.foreground_service.DaemonGroup
-import com.netDashboard.globals.G
+import com.netDashboard.G
 import com.netDashboard.log.Log
 import com.netDashboard.prepareSave
 import com.netDashboard.recycler_view.RecyclerViewAdapter

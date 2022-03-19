@@ -25,7 +25,7 @@ class ItemTouchCallback(private val adapter: RecyclerViewAdapter<*>) :
                 is GridLayoutManager -> UP or DOWN or LEFT or RIGHT
                 is StaggeredGridLayoutManager -> UP or DOWN or LEFT or RIGHT
                 is LinearLayoutManager -> UP or DOWN
-                else -> UP or DOWN
+                else -> UP or DOWN or LEFT or RIGHT
             }
         }
 

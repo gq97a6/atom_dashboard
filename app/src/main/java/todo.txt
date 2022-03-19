@@ -1,13 +1,6 @@
 //expand ------------------------------
 start guide
 
-new tiles
-    (indicator,
-    diode,
-    alert on change,
-    on stop receiving,
-    on receive)
-
 //post development ------------------------------
 tests
 name, icon, etc

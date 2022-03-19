@@ -3,7 +3,7 @@ package com.netDashboard.foreground_service
 import android.content.Context
 import com.netDashboard.dashboard.Dashboard
 import com.netDashboard.foreground_service.demons.Mqttd
-import com.netDashboard.globals.G.dashboards
+import com.netDashboard.G.dashboards
 
 class DaemonGroupsManager(val context: Context) {
 

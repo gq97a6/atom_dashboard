@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.netDashboard.DialogBuilder.buildConfirm
 import com.netDashboard.R
 import com.netDashboard.click
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.iterate
 
 @Suppress("UNUSED")
@@ -127,7 +127,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         holder.itemView.iterate(callback)
     }
 
-    fun markItemRemove(position: Int) {
+    private fun markItemRemove(position: Int) {
         val recyclerView =
             list[position].holder?.itemView?.parent as RecyclerView
 

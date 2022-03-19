@@ -17,7 +17,7 @@ import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.netDashboard.databinding.DialogColorPickerBinding
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -35,9 +35,9 @@ class ColorTile : Tile() {
 
     var paintRaw = true
     var doPaint = true
-    var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    var toRemoves = mutableMapOf<String, MutableList<String>>()
-    var flagIndexes = mutableMapOf<String, Int>()
+    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    private var toRemoves = mutableMapOf<String, MutableList<String>>()
+    private var flagIndexes = mutableMapOf<String, Int>()
 
     var colorType = "hex"
         set(value) {
@@ -109,7 +109,7 @@ class ColorTile : Tile() {
         dialog.setContentView(R.layout.dialog_color_picker)
         val binding = DialogColorPickerBinding.bind(dialog.findViewById(R.id.root))
 
-        var hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
+        val hsvPickedTmp = floatArrayOf(hsvPicked[0], hsvPicked[1], hsvPicked[2])
 
         fun onColorChange() {
             colorToHSV(binding.dcpPicker.color, hsvPickedTmp)

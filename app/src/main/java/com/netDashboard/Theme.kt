@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +22,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.netDashboard.globals.G.mapper
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.mapper
+import com.netDashboard.G.theme
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import java.io.File
 import java.io.FileReader
@@ -167,12 +168,12 @@ class Theme {
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
-                background?.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
+                background.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
             }
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
-                background?.setColor(
+                background.setColor(
                     ColorStateList.valueOf(
                         theme.a.colorPallet.background.darkened(
                             0.9f
@@ -225,7 +226,9 @@ class Theme {
                 drawable?.setStroke(1, p.color)
                 val bar = getDrawable(context, R.drawable.background_bar)
                 bar?.setTint(p.b)
-                this.verticalScrollbarThumbDrawable = bar
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    this.verticalScrollbarThumbDrawable = bar
+                }
             }
             else -> onUnknownTag(this.tag, "recyclerView")
         }
@@ -423,7 +426,7 @@ class Theme {
         }
     }
 
-    private fun ChipGroup.applyTheme(p: ColorPallet) {
+    private fun ChipGroup.applyTheme() {
         when (this.tag) {
             else -> onUnknownTag(this.tag, "chipGroup")
         }

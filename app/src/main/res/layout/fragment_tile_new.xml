@@ -532,11 +532,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:tag="colorA"
                         android:rotation="10"
+                        android:tag="colorA"
                         android:text="COMING\nSOON"
-                        android:textStyle="bold"
-                        android:textSize="13dp" />
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                 </FrameLayout>
 
@@ -590,11 +590,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:tag="colorA"
                         android:rotation="-10"
+                        android:tag="colorA"
                         android:text="COMING\nSOON"
-                        android:textStyle="bold"
-                        android:textSize="13dp" />
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                 </FrameLayout>
 
@@ -643,11 +643,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:tag="colorA"
                         android:rotation="20"
+                        android:tag="colorA"
                         android:text="COMING\nSOON"
-                        android:textStyle="bold"
-                        android:textSize="13dp" />
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                 </FrameLayout>
 

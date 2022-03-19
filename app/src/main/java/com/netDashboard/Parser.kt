@@ -1,6 +1,6 @@
 package com.netDashboard
 
-import com.netDashboard.globals.G.mapper
+import com.netDashboard.G.mapper
 
 object Parser {
     fun String.byJSONPath(path: String): String? =

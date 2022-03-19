@@ -9,9 +9,9 @@ import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.click
 import com.netDashboard.databinding.FragmentTileNewBinding
-import com.netDashboard.globals.G
-import com.netDashboard.globals.G.dashboard
-import com.netDashboard.globals.G.tile
+import com.netDashboard.G
+import com.netDashboard.G.dashboard
+import com.netDashboard.G.tile
 import com.netDashboard.tile.Tile
 import com.netDashboard.tile.types.button.ButtonTile
 import com.netDashboard.tile.types.button.TextTile

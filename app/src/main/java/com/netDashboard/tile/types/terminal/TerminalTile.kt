@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.DialogBuilder.dialogSetup
 import com.netDashboard.R
 import com.netDashboard.databinding.DialogTextBinding
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import com.netDashboard.recycler_view.RecyclerViewAdapter
@@ -28,7 +28,7 @@ class TerminalTile : Tile() {
     override var typeTag = "terminal"
 
     @JsonIgnore
-    override var height = 2
+    override var height = 2f
 
     override var iconKey = "il_device_desktop"
 
@@ -48,7 +48,7 @@ class TerminalTile : Tile() {
 
         terminalAdapter?.onBindViewHolder = { _, holder, pos ->
             val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
-            text.text = "${log[pos]}"
+            text.text = log[pos]
         }
 
         terminalAdapter?.submitList(MutableList(log.size) { GenericItem(R.layout.item_terminal_entry) })

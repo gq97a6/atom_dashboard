@@ -1,6 +1,6 @@
 package com.netDashboard
 
-import com.netDashboard.globals.G.mapper
+import com.netDashboard.G.mapper
 import java.io.File
 import java.io.FileReader
 

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.google.android.material.slider.Slider
 import com.netDashboard.R
 import com.netDashboard.Theme.ColorPallet
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import java.util.*
 
@@ -14,7 +14,7 @@ class IconAdapter(context: Context, spanCount: Int) :
     RecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
 
     private var iconCount = 0
-    var onColorChange: (FloatArray, ColorPallet) -> Unit = { hsv, colorPallet -> }
+    var onColorChange: (FloatArray, ColorPallet) -> Unit = { _, _ -> }
     var onIconChange: (Int) -> Unit = {}
 
     object DiffCallback : DiffUtil.ItemCallback<Icon>() {
@@ -70,8 +70,8 @@ class IconAdapter(context: Context, spanCount: Int) :
     }
 
     fun applyIconSet(type: String) {
-        var icons = Icons.icons.values.filter { it.type == type }
-        var cats = Icons.cats[type] ?: listOf()
+        val icons = Icons.icons.values.filter { it.type == type }
+        val cats = Icons.cats[type] ?: listOf()
 
         list.subList(list.size - iconCount, list.size).clear()
         val size = list.size

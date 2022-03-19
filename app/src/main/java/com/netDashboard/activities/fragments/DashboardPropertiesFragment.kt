@@ -18,9 +18,9 @@ import com.netDashboard.blink
 import com.netDashboard.createToast
 import com.netDashboard.databinding.DialogCopyBrokerBinding
 import com.netDashboard.databinding.FragmentDashboardPropertiesBinding
-import com.netDashboard.globals.G.dashboard
-import com.netDashboard.globals.G.dashboards
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.dashboard
+import com.netDashboard.G.dashboards
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.GenericAdapter
 import com.netDashboard.recycler_view.GenericItem
 import java.util.*
@@ -71,14 +71,14 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
-        b.dpName.addTextChangedListener {
+        b.dpName.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
                 dashboard.name =
-                    if (it.isBlank()) kotlin.math.abs(Random.nextInt()).toString() else it
+                    it.ifBlank { kotlin.math.abs(Random.nextInt()).toString() }
             }
         }
 
-        b.dpMqttAddress.addTextChangedListener {
+        b.dpMqttAddress.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
                 if (dashboard.mqttAddress != it) {
                     dashboard.mqttAddress = it
@@ -103,7 +103,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             switchMqttCred()
         }
 
-        b.dpMqttLogin.addTextChangedListener {
+        b.dpMqttLogin.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
                 if (dashboard.mqttUserName != it) {
                     dashboard.mqttUserName = it
@@ -112,7 +112,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             }
         }
 
-        b.dpMqttPass.addTextChangedListener {
+        b.dpMqttPass.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
                 if (dashboard.mqttPass != it) {
                     dashboard.mqttPass = it
@@ -121,7 +121,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             }
         }
 
-        b.dpMqttClientId.addTextChangedListener {
+        b.dpMqttClientId.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
                 when {
                     it.isBlank() -> {

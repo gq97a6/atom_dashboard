@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.netDashboard.R
 import com.netDashboard.activities.MainActivity
 import com.netDashboard.databinding.FragmentThemeBinding
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 
 class ThemeFragment : Fragment(R.layout.fragment_theme) {
     private lateinit var b: FragmentThemeBinding

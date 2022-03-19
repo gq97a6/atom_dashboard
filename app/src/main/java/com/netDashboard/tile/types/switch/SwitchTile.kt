@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.netDashboard.R
 import com.netDashboard.Theme
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.theme
 import com.netDashboard.icon.Icons
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 import com.netDashboard.tile.Tile

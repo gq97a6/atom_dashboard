@@ -2,5 +2,7 @@
 
     <style name="theme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">#4A4A4A</item>
+        <item name="colorAccent">#808080</item>
     </style>
+
 </resources>

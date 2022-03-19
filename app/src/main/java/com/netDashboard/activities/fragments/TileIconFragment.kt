@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.netDashboard.R
 import com.netDashboard.Theme
 import com.netDashboard.databinding.FragmentTileIconBinding
-import com.netDashboard.globals.G.getIconColorPallet
-import com.netDashboard.globals.G.getIconRes
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.getIconColorPallet
+import com.netDashboard.G.getIconRes
+import com.netDashboard.G.theme
 import com.netDashboard.icon.IconAdapter
 
 
@@ -61,7 +61,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         adapter.setHasStableIds(true)
         adapter.applyIconSet("l")
 
-        adapter.onColorChange = { hsv, colorPallet ->
+        adapter.onColorChange = { _, colorPallet ->
             onColorChange(colorPallet)
         }
 

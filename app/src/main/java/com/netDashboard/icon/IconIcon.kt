@@ -4,8 +4,8 @@ import android.content.res.ColorStateList
 import android.view.MotionEvent
 import android.view.View
 import com.netDashboard.R
-import com.netDashboard.globals.G.setIconKey
-import com.netDashboard.globals.G.theme
+import com.netDashboard.G.setIconKey
+import com.netDashboard.G.theme
 import com.netDashboard.recycler_view.RecyclerViewAdapter
 
 class IconIcon(

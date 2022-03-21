@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.netDashboard.color_picker.HSVColorPicker
+        <com.alteratom.color_picker.HSVColorPicker
             android:id="@+id/dcp_picker"
             android:layout_width="300dp"
             android:layout_height="300dp" />

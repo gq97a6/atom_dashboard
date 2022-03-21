@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tile_root"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <View
+        android:id="@+id/ripple_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_ripple"
+        android:elevation="20dp"
+        android:tag="rippleForeground" />
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#00000000"
+        android:elevation="20dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_frame"
+        android:elevation="10dp"
+        android:tag="frame">
+
+        <View
+            android:id="@+id/marginTop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/t_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="3" />
+
+        <View
+            android:id="@+id/t_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/icon_swap"
+            android:tag="colorIcon"
+            app:layout_constraintBottom_toTopOf="@+id/t_tag"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/marginTop"
+            app:layout_constraintVertical_weight="15" />
+
+        <TextView
+            android:id="@+id/t_tag"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:tag="color"
+            android:text="select"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/marginBottom"
+            app:layout_constraintTop_toBottomOf="@+id/t_icon"
+            app:layout_constraintVertical_weight="10" />
+
+        <View
+            android:id="@+id/marginBottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/t_tag"
+            app:layout_constraintVertical_weight="3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

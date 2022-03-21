@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tag="color"
-        android:text="NetDashboard"
+        android:text="Atom Dashboard"
         android:textSize="35dp"
         tools:ignore="HardcodedText" />
 

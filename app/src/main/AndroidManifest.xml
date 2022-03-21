@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.netDashboard">
+    package="com.alteratom">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -13,14 +13,14 @@
     <application
         android:allowBackup="false"
         android:icon="@drawable/icon_main"
-        android:label="Dashboard"
+        android:label="Atom Dashboard"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/icon_main"
         android:supportsRtl="true"
         android:theme="@style/theme"
         android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="com.alteratom.activities.SplashScreenActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -30,12 +30,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.alteratom.activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name=".foreground_service.ForegroundService"
+            android:name="com.alteratom.foreground_service.ForegroundService"
             android:enabled="true" />
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>

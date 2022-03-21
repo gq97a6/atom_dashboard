@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tile_root"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <View
+        android:id="@+id/ripple_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_ripple"
+        android:elevation="20dp"
+        android:tag="rippleForeground" />
+
+    <View
+        android:id="@+id/foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="#00000000"
+        android:elevation="20dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_frame"
+        android:elevation="10dp"
+        android:tag="frame">
+
+        <View
+            android:id="@+id/marginTopStart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/t_icon"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHeight_percent="0.075"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/t_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/icon_swap"
+            android:tag="colorIcon"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toEndOf="@+id/marginTopStart"
+            app:layout_constraintTop_toBottomOf="@id/marginTopStart" />
+
+        <View
+            android:id="@+id/marginText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/t_icon"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintStart_toEndOf="@+id/t_icon"
+            app:layout_constraintTop_toTopOf="@id/t_icon" />
+
+        <LinearLayout
+            android:id="@+id/text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/t_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/marginText"
+            app:layout_constraintTop_toTopOf="@+id/t_icon">
+
+            <TextView
+                android:id="@+id/t_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeMaxTextSize="15dp"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:gravity="bottom"
+                android:maxLines="1"
+                android:tag="color"
+                android:text="Empty" />
+
+            <TextView
+                android:id="@+id/t_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="color"
+                android:text="∞ seconds ago"
+                android:textSize="10dp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/marginValue"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.075"
+            app:layout_constraintTop_toBottomOf="@+id/t_icon" />
+
+        <FrameLayout
+            android:id="@+id/circularSeekBar2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/marginBottomEnd"
+            app:layout_constraintEnd_toStartOf="@+id/marginBottomEnd"
+            app:layout_constraintStart_toEndOf="@+id/marginTopStart"
+            app:layout_constraintTop_toBottomOf="@+id/marginValue">
+
+            <View
+                android:id="@+id/d_log_bar"
+                android:layout_width="50dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center"
+                android:background="#FFFFFF"
+                android:tag="colorA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/d_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/d_view" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:tag="track"
+                app:cs_circle_stroke_width="1dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="300"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="150" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:tag="track"
+                app:cs_circle_stroke_width="1dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="120"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="330" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/th_temp_setpoint"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:tag="goal"
+                app:cs_circle_color="#00000000"
+                app:cs_circle_stroke_width="3dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="300"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="150" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/th_humi_setpoint"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:tag="goal"
+                app:cs_circle_color="#00000000"
+                app:cs_circle_stroke_width="3dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="120"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="330" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/th_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:tag="progress"
+                app:cs_circle_color="#00000000"
+                app:cs_circle_stroke_width="5dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="300"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="150" />
+
+            <me.tankery.lib.circularseekbar.CircularSeekBar
+                android:id="@+id/th_humi"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:tag="progress"
+                app:cs_circle_color="#00000000"
+                app:cs_circle_stroke_width="5dp"
+                app:cs_disable_pointer="true"
+                app:cs_end_angle="120"
+                app:cs_pointer_halo_color_ontouch="#00000000"
+                app:cs_start_angle="330" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/circularSeekBar2"
+            app:layout_constraintEnd_toEndOf="@+id/circularSeekBar2"
+            app:layout_constraintStart_toStartOf="@+id/circularSeekBar2"
+            app:layout_constraintTop_toTopOf="@+id/circularSeekBar2">
+
+            <TextView
+                android:id="@+id/th_temp_value"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="2.5dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15dp"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:gravity="bottom|center"
+                android:tag="color"
+                android:text="-- °C"
+                android:textSize="10dp" />
+
+            <TextView
+                android:id="@+id/th_humi_value"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="2.5dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15dp"
+                android:autoSizeMinTextSize="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:gravity="top|center"
+                android:tag="color"
+                android:text="-- %"
+                android:textSize="10dp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/marginBottomEnd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.075" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

@@ -12,10 +12,10 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/icon_main"
+        android:icon="@mipmap/ic_generated"
         android:label="Atom Dashboard"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@drawable/icon_main"
+        android:roundIcon="@mipmap/ic_generated_round"
         android:supportsRtl="true"
         android:theme="@style/theme"
         android:dataExtractionRules="@xml/data_extraction_rules">

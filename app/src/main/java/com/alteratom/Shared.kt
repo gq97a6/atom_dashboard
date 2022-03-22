@@ -106,7 +106,7 @@ fun createNotification(
         .setAutoCancel(true)
         .setContentTitle(title)
         .setContentText(text)
-        .setSmallIcon(R.drawable.icon_main)
+        .setSmallIcon(R.mipmap.ic_generated_round)
         .setPriority(NotificationCompat.PRIORITY_MIN)
         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
 

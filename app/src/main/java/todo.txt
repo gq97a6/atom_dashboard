@@ -1,5 +1,9 @@
 //expand ------------------------------
 start guide
+dashboards tool bar
+better icons
+atom hints/theme
+ssl certificates
 
 //post development ------------------------------
 tests

@@ -43,6 +43,25 @@
             app:layout_constraintStart_toStartOf="@+id/dt_temp"
             app:layout_constraintTop_toTopOf="@+id/dt_temp" />
 
+        <com.alteratom.ArcTextView
+            android:layout_width="0dp"
+            android:padding="5dp"
+            android:layout_height="0dp"
+            app:this_is_test="0"
+            app:text="Humidity"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
+
+        <com.alteratom.ArcTextView
+            android:layout_width="0dp"
+            android:padding="55dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
 
         <TextView
             android:id="@+id/dt_value"
@@ -56,6 +75,7 @@
             android:maxLines="1"
             android:text="-- %"
             android:textColor="#FFFFFF"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/dt_humi"
             app:layout_constraintEnd_toEndOf="@+id/dt_humi"
             app:layout_constraintHeight_percent="0.5"

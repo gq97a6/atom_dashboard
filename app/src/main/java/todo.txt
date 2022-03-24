@@ -4,6 +4,8 @@ dashboards tool bar
 better icons
 atom hints/theme
 ssl certificates
+thermostat wrap hint
+thermostat init set values
 
 //post development ------------------------------
 tests

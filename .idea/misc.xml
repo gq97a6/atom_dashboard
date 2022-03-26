@@ -169,9 +169,13 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/icons/drawable/icon_main_new.xml" value="0.22" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/icons/mipmap-anydpi-v26/ic_generated.xml" value="0.1775" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/icons/mipmap-anydpi-v26/ic_generated_round.xml" value="0.1775" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/activity_main.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/activity_splash_screen.xml" value="0.18333333333333332" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/dialog_color_picker.xml" value="0.37447916666666664" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/dialog_slider.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/dialog_thermostat.xml" value="0.33" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_dashboard_properties.xml" value="0.5" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_main_screen.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/button/layout/tile_button.xml" value="0.31851851851851853" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/java/com/netDashboard/tile/types/slider/layout/tile_slider.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/netDashboard/app/src/main/res/drawable/background_bar.xml" value="0.3356164383561644" />
@@ -280,7 +284,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

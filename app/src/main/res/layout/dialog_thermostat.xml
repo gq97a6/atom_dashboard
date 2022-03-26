@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -38,26 +39,6 @@
             app:cs_pointer_halo_color_ontouch="#00000000"
             app:cs_pointer_stroke_width="20dp"
             app:cs_start_angle="270"
-            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
-            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
-            app:layout_constraintStart_toStartOf="@+id/dt_temp"
-            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
-
-        <com.alteratom.ArcTextView
-            android:layout_width="0dp"
-            android:padding="5dp"
-            android:layout_height="0dp"
-            app:this_is_test="0"
-            app:text="Humidity"
-            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
-            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
-            app:layout_constraintStart_toStartOf="@+id/dt_temp"
-            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
-
-        <com.alteratom.ArcTextView
-            android:layout_width="0dp"
-            android:padding="55dp"
-            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
             app:layout_constraintEnd_toEndOf="@+id/dt_temp"
             app:layout_constraintStart_toStartOf="@+id/dt_temp"

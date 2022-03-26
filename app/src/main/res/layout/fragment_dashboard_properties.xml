@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    tools:context=".activities.fragments.DashboardPropertiesFragment">
+    tools:context=".dashboard.activities.fragments.DashboardPropertiesFragment">
 
     <TextView
         android:layout_width="match_parent"

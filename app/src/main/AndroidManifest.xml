@@ -20,7 +20,7 @@
         android:theme="@style/theme"
         android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
-            android:name="com.alteratom.activities.SplashScreenActivity"
+            android:name=".dashboard.activities.SplashScreenActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
             <intent-filter>
@@ -30,12 +30,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.alteratom.activities.MainActivity"
+            android:name=".dashboard.activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name="com.alteratom.foreground_service.ForegroundService"
+            android:name=".dashboard.foreground_service.ForegroundService"
             android:enabled="true" />
         <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>

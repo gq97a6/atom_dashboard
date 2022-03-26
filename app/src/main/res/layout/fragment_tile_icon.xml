@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.fragments.TileIconFragment">
+    tools:context=".dashboard.activities.fragments.TileIconFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ti_recycler_view"

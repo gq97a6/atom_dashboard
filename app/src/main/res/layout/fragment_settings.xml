@@ -6,7 +6,7 @@
     android:background="#00000000"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".activities.fragments.SettingsFragment">
+    tools:context=".dashboard.activities.fragments.SettingsFragment">
 
     <TextView
         android:layout_width="match_parent"

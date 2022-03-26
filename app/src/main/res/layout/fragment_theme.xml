@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#00000000"
     android:tag="background"
-    tools:context=".activities.MainActivity">
+    tools:context=".dashboard.activities.MainActivity">
 
     <FrameLayout
         android:layout_width="100dp"

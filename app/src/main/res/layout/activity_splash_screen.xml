@@ -8,7 +8,7 @@
     android:orientation="horizontal"
     android:paddingBottom="100dp"
     android:tag="background"
-    tools:context=".activities.SplashScreenActivity"
+    tools:context=".dashboard.activities.SplashScreenActivity"
     tools:ignore="UseCompoundDrawables">
 
     <TextView

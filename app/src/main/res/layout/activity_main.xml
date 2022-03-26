@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="background"
-    tools:context=".activities.MainActivity">
+    tools:context=".dashboard.activities.MainActivity">
 
     <FrameLayout
         android:id="@+id/m_fragment"

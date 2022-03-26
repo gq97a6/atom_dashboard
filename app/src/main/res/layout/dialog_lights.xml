@@ -30,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.alteratom.color_picker.HSVColorPicker
+        <com.alteratom.dashboard.color_picker.HSVColorPicker
             android:id="@+id/dl_picker"
             android:layout_width="0dp"
             android:layout_height="0dp"

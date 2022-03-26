@@ -8,7 +8,7 @@ android {
     buildToolsVersion '30.0.3'
 
     defaultConfig {
-        applicationId "com.alteratom"
+        applicationId "com.alteratom.dashboard"
         minSdkVersion 26
         targetSdkVersion 31
         versionCode 1
@@ -45,7 +45,7 @@ android {
         main {
             res {
                 srcDirs 'src\\main\\res',
-                        file('src\\main\\java\\com\\alteratom\\tile\\types').listFiles(),
+                        file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
                         file('src\\main\\res\\icons')
 
             }

@@ -250,7 +250,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         (it ?: "").toString().digitsOnly().let { parsed ->
                             if (raw != parsed) b.tpSliderTo.setText(parsed)
                             else parsed.toIntOrNull()?.let {
-                                tile.range[2] = it
+                                tile.range[1] = it
                             }
                         }
                     }

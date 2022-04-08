@@ -5,6 +5,7 @@ package com.alteratom.dashboard
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
@@ -35,8 +36,12 @@ const val B = 150 //60%
 const val C = 75 //30%
 const val D = 25 //10%
 
-val screenHeight = Resources.getSystem().displayMetrics.heightPixels
-val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+val screenHeight
+    get() = Resources.getSystem().displayMetrics.heightPixels
+val screenWidth
+    get() = Resources.getSystem().displayMetrics.widthPixels
+val screenVertical
+    get() = screenHeight / screenWidth > 1
 
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -196,19 +201,6 @@ infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
     minOf(r.start, maxOf(r.endInclusive, this))
 
 infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
-
-fun FragmentManager.replaceWith(fragment: Fragment, backstack: Boolean = true) {
-    this.commit {
-        setCustomAnimations(
-            R.anim.fragment_in,
-            R.anim.fragment_out,
-            R.anim.fragment_in,
-            R.anim.fragment_out
-        )
-        replace(R.id.m_fragment, fragment)
-        if (backstack) addToBackStack(null)
-    }
-}
 
 fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
 

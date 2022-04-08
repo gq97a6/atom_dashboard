@@ -65,7 +65,9 @@ abstract class Tile : RecyclerViewItem() {
         val view = holder.itemView
         val params = view.layoutParams
 
-        params.height = ((screenWidth - view.paddingLeft * 2) * height / 3.236).toInt()
+        val totalAvail = (screenWidth - view.paddingLeft * 2)
+
+        params.height = ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
         view.layoutParams = params
 
         holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)

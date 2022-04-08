@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.ACTION_UP
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -15,22 +17,23 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.blink
-import com.alteratom.databinding.FragmentDashboardBinding
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.G.dashboardIndex
+import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.SplashScreenActivity
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.log.LogAdapter
-import com.alteratom.dashboard.screenHeight
-import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.TilesAdapter
+import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
-import com.alteratom.dashboard.ToolBarController
 import java.util.*
+import kotlin.math.abs
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
@@ -166,6 +169,49 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             showLog(v, e)
             return@setOnTouchListener true
         }
+
+        fun switchDashboard(slideRight: Boolean) {
+            var index = dashboardIndex - if (slideRight) 1 else -1
+            if (index < 0) index = dashboards.lastIndex
+            if (index > dashboards.lastIndex) index = 0
+
+            if (setCurrentDashboard(index)) (activity as MainActivity).fm.replaceWith(
+                DashboardFragment(), false, true, slideRight
+            )
+        }
+
+        b.dLeft.setOnClickListener {
+            switchDashboard(true)
+        }
+
+        b.dRight.setOnClickListener {
+            switchDashboard(false)
+        }
+
+        var flingTouchdownX = 0f
+        var flingTouchdownY = 0f
+
+        b.dRoot.onInterceptTouch = { e ->
+            if (e != null) {
+                when (e.action) {
+                    ACTION_DOWN -> {
+                        flingTouchdownX = e.x
+                        flingTouchdownY = e.y
+                    }
+                    ACTION_UP -> {
+                        val flingLen = (flingTouchdownX - e.x) / screenWidth
+
+                        if (abs(flingTouchdownY - e.y) < 120 &&
+                            abs(flingLen) > 0.2 &&
+                            e.eventTime - e.downTime in 30..300 &&
+                            adapter.editMode.isNone
+                        ) {
+                            switchDashboard(flingLen < 0)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -177,7 +223,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
-        val spanCount = 2
+        val spanCount = if (screenVertical) 2 else 4
 
         adapter = TilesAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
@@ -236,17 +282,17 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
 //----------------------------------------------------------------------------------------------
 
-    private var showLogStartY = 0f
+    private var showLogTouchdownY = 0f
     private fun showLog(v: View, e: MotionEvent) {
         v.performClick()
 
         when (e.action) {
-            0 -> showLogStartY = e.rawY
+            0 -> showLogTouchdownY = e.rawY
             2 -> {
                 val lp = b.dLog.layoutParams
                 val ldp = b.dLogBar.layoutParams
 
-                lp.height = (e.rawY - showLogStartY).toInt().let {
+                lp.height = (e.rawY - showLogTouchdownY).toInt().let {
                     when {
                         it <= 0 -> 0
                         it <= (.9 * screenHeight) -> it

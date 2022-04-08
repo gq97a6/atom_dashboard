@@ -12,6 +12,7 @@ import com.alteratom.databinding.ActivitySplashScreenBinding
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.G
+import com.alteratom.dashboard.G.dashboards
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -27,7 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         rootFolder = filesDir.canonicalPath.toString()
 
-        if (service != null) {
+        if (service != null && dashboards.isNotEmpty()) {
             service?.dgManager?.assign()
             onServiceReady()
         } else {

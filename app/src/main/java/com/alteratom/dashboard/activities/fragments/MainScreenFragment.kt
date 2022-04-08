@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Dashboard.Companion.saveToFile
 import com.alteratom.dashboard.DashboardAdapter
-import com.alteratom.databinding.FragmentMainScreenBinding
-import com.alteratom.dashboard.foreground_service.ForegroundService
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.ToolBarController
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.foreground_service.ForegroundService
+import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
@@ -58,8 +58,10 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
             ForegroundService.service?.dgManager?.notifyDashboardNew(dashboard)
 
-            setCurrentDashboard(dashboard.id)
-            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
+            if (setCurrentDashboard(dashboard.id)) (activity as MainActivity).fm.replaceWith(
+                DashboardPropertiesFragment()
+            )
+
         }
 
         val onUiChange: () -> Unit = {
@@ -103,8 +105,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemEdit = { item ->
-            setCurrentDashboard(item.id)
-            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
+            if (setCurrentDashboard(item.id)) (activity as MainActivity).fm.replaceWith(
+                DashboardPropertiesFragment()
+            )
         }
 
         adapter.onItemClick = { item ->
@@ -115,8 +118,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemLongClick = { item ->
-            setCurrentDashboard(item.id)
-            (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
+            if (setCurrentDashboard(item.id)) (activity as MainActivity).fm.replaceWith(
+                DashboardPropertiesFragment()
+            )
         }
 
         adapter.submitList(dashboards)

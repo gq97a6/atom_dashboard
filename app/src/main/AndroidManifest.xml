@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".dashboard.activities.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:configChanges="screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 
         <service

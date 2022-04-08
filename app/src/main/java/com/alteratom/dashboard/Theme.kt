@@ -126,7 +126,6 @@ class Theme {
             is FrameLayout -> this.applyTheme(p)
             is ConstraintLayout -> this.applyTheme(p)
             is RecyclerView -> this.applyTheme(p)
-            is ChipGroup -> this.applyTheme(p)
             is CircularSeekBar -> this.applyTheme(p)
             else -> {
                 if (this.javaClass == View::class.java) this.applyTheme(p)
@@ -188,6 +187,7 @@ class Theme {
 
     private fun FrameLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
+            "corners" -> this.backgroundTintList = ColorStateList.valueOf(p.d).withAlpha(100)
             "background" -> this.setBackgroundColor(p.background)
             else -> onUnknownTag(this.tag, "frameLayout")
         }
@@ -424,12 +424,6 @@ class Theme {
                 this.setTextColor(colorStateListText)
             }
             else -> onUnknownTag(this.tag, "chip")
-        }
-    }
-
-    private fun ChipGroup.applyTheme() {
-        when (this.tag) {
-            else -> onUnknownTag(this.tag, "chipGroup")
         }
     }
 

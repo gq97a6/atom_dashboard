@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="20dp"
     android:gravity="center"
+    android:clipChildren="false"
     android:orientation="vertical"
     android:tag="frame">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dt_parent"
         android:layout_width="match_parent"
+        android:clipChildren="false"
         android:layout_height="wrap_content">
 
         <me.tankery.lib.circularseekbar.CircularSeekBar
@@ -44,6 +45,34 @@
             app:layout_constraintStart_toStartOf="@+id/dt_temp"
             app:layout_constraintTop_toTopOf="@+id/dt_temp" />
 
+        <com.arctextview.ArcTextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:textSize="20dp"
+            app:anchorAngle="225"
+            android:padding="0dp"
+            app:textOrientation="outward"
+            app:text="temperature"
+            app:textDirection="clockwise"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
+            app:layout_constraintEnd_toEndOf="@+id/dt_temp"
+            app:layout_constraintStart_toStartOf="@+id/dt_temp"
+            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
+
+        <com.arctextview.ArcTextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:textSize="20dp"
+            app:anchorAngle="45"
+            android:padding="7dp"
+            app:textOrientation="inward"
+            app:text="humidity"
+            app:textDirection="anticlockwise"
+            app:layout_constraintBottom_toBottomOf="@+id/dt_humi"
+            app:layout_constraintEnd_toEndOf="@+id/dt_humi"
+            app:layout_constraintStart_toStartOf="@+id/dt_humi"
+            app:layout_constraintTop_toTopOf="@+id/dt_humi" />
+
         <TextView
             android:id="@+id/dt_value"
             android:layout_width="0dp"
@@ -56,7 +85,6 @@
             android:maxLines="1"
             android:text="-- %"
             android:textColor="#FFFFFF"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/dt_humi"
             app:layout_constraintEnd_toEndOf="@+id/dt_humi"
             app:layout_constraintHeight_percent="0.5"
@@ -175,6 +203,7 @@
             app:layout_constraintEnd_toEndOf="@+id/dt_humi_s"
             app:layout_constraintStart_toStartOf="@+id/dt_humi_s"
             app:layout_constraintTop_toTopOf="@+id/dt_temp_current" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

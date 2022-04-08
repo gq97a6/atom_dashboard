@@ -7,6 +7,13 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.security.KeyStore
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
@@ -19,7 +26,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     init {
-        client.isClosed = true
         conHandler.dispatch("init")
     }
 
@@ -124,10 +130,11 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         private var isDispatchScheduled = false
 
         fun dispatch(reason: String) {
-            val sameOptions = client.serverURI == d.mqttURI &&
-                    (!d.mqttCred ||
-                            client.options.userName == d.mqttUserName &&
-                            client.options.password.contentEquals(d.mqttPass.toCharArray()))
+            val sameCred = !d.mqttCred ||
+                    client.options.userName == d.mqttUserName &&
+                    client.options.password.contentEquals(d.mqttPass.toCharArray())
+
+            val sameOptions = client.serverURI == d.mqttURI && sameCred
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
 
@@ -167,7 +174,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
     ) : MqttAndroidClient(context, serverURI, clientId) {
 
         private var isBusy = false
-        var isClosed = false
         var topics: MutableList<Pair<String, Int>> = mutableListOf()
         var options = MqttConnectOptions()
 
@@ -212,6 +218,38 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 }
             })
 
+            /////SSL ENABLED////
+            val caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+            caKeyStore.load(null, null)
+            val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+            tmf.init(caKeyStore)
+            val context = SSLContext.getInstance("TLS")
+            context.init(null, tmf.trustManagers, null)
+            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return emptyArray()
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkClientTrusted(
+                    chain: Array<X509Certificate>,
+                    authType: String
+                ) {
+                }
+
+                @Throws(CertificateException::class)
+                override fun checkServerTrusted(
+                    chain: Array<X509Certificate>,
+                    authType: String
+                ) {
+                }
+            })
+            val sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+            val sslSocketFactory = sslContext.socketFactory
+            options.socketFactory = sslSocketFactory
+            /////SSL ENABLED////
+
             try {
                 connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
@@ -233,7 +271,8 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         }
 
         fun disconnectAttempt(toClose: Boolean = false) {
-            if (isBusy || isClosed) return
+            run {}
+            if (isBusy) return
             isBusy = true
 
             try {
@@ -243,11 +282,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                         unregisterResources()
                         setCallback(null)
                         topics = mutableListOf()
-
-                        if (toClose) {
-                            close()
-                            isClosed = true
-                        }
+                        if (toClose) close()
                     }
 
                     override fun onFailure(

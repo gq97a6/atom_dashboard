@@ -1,11 +1,10 @@
 //expand ------------------------------
 start guide
-
-atom hints/theme
 ssl certificates
-hardcoded text
+
+mqtt options class for dashbaord
 
 //post development ------------------------------
+hardcoded text
 tests
-name, icon, etc
 publish

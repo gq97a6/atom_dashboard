@@ -125,8 +125,9 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
         fun dispatch(reason: String) {
             val sameOptions = client.serverURI == d.mqttURI &&
-                    client.options.userName == d.mqttUserName &&
-                    client.options.password.contentEquals(d.mqttPass.toCharArray())
+                    (!d.mqttCred ||
+                            client.options.userName == d.mqttUserName &&
+                            client.options.password.contentEquals(d.mqttPass.toCharArray()))
 
             _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
 
@@ -187,8 +188,14 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             isBusy = true
 
             options.isCleanSession = true
-            if (d.mqttUserName.isNotBlank()) options.userName = d.mqttUserName
-            if (d.mqttPass.isNotBlank()) options.password = d.mqttPass.toCharArray()
+
+            if (d.mqttCred) {
+                options.userName = d.mqttUserName
+                options.password = d.mqttPass.toCharArray()
+            } else {
+                options.userName = ""
+                options.password = charArrayOf()
+            }
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
@@ -215,6 +222,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
+                        run {}
                     }
                 })
             } catch (e: MqttException) {

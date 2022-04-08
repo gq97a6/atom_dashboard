@@ -316,18 +316,16 @@
                         android:background="#00000000"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="10dp"
                         android:tag="groupBar">
 
-                        <TextView
-                            android:id="@+id/t_mqtt_cred_bar"
+                        <CheckBox
+                            android:id="@+id/dp_mqtt_cred"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:tag="colorB"
-                            android:text="Broker login credentials"
-                            android:textSize="15dp" />
+                            android:backgroundTint="#FFFFFF"
+                            android:text="Include login credentials"
+                            android:tag="default"/>
 
                         <View
                             android:id="@+id/dp_mqtt_cred_arrow"
@@ -344,7 +342,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/dp_mqtt_cred"
+                        android:id="@+id/dp_mqtt_cred_box"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

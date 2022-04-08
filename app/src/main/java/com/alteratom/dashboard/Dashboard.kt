@@ -38,6 +38,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : com.alt
 
     var mqttAddress = "tcp://"
     var mqttPort = 1883
+    var mqttCred = false
     var mqttUserName = ""
     var mqttPass = ""
     var mqttClientId = kotlin.math.abs(Random.nextInt()).toString()

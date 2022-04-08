@@ -95,8 +95,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             }
         }
 
-        b.dpMqttCred.setOnClickListener {
-            switchMqttCred()
+        b.dpMqttCred.setOnCheckedChangeListener { _, state ->
+            dashboard.mqttCred = state
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            switchMqttCred(!state)
         }
 
         b.dpMqttCredArrow.setOnClickListener {
@@ -201,23 +203,25 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
 
+        b.dpMqttCred.isChecked = dashboard.mqttCred
         b.dpMqttLogin.setText(dashboard.mqttUserName)
         b.dpMqttPass.setText(dashboard.mqttPass)
 
         b.dpMqttCredArrow.rotation = 180f
-        b.dpMqttCred.visibility = View.GONE
+        b.dpMqttCredBox.visibility = View.GONE
 
         b.dpMqttClientId.setText(dashboard.mqttClientId)
     }
 
-    private fun switchMqttCred() {
-        b.dpMqttCred.let {
-            it.visibility = if (it.isVisible) View.GONE else View.VISIBLE
+    private fun switchMqttCred(state: Boolean? = null) {
+        b.dpMqttCredBox.let {
+            b.dpMqttCredArrow.animate()
+                .rotation(if (state ?: it.isVisible) 180f else 0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
+
+            it.visibility = if (state ?: it.isVisible) View.GONE else View.VISIBLE
             b.dpMqttPass.requestFocus()
             b.dpMqttPass.clearFocus()
-            b.dpMqttCredArrow.animate()
-                .rotation(if (it.isVisible) 0f else 180f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
     }
 }

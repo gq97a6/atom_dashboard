@@ -50,21 +50,21 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) : com.alt
     companion object {
         fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {
             try {
-                File(com.alteratom.dashboard.FolderTree.dashboardsFile).writeText(save)
+                File(FolderTree.dashboardsFile).writeText(save)
             } catch (e: Exception) {
                 run { }
             }
         }
 
         private fun getSaveFromFile() = try {
-            FileReader(com.alteratom.dashboard.FolderTree.dashboardsFile).readText()
+            FileReader(FolderTree.dashboardsFile).readText()
         } catch (e: Exception) {
             ""
         }
 
         fun parseSave(save: String = getSaveFromFile()): MutableList<Dashboard>? =
             try {
-                com.alteratom.dashboard.G.mapper.readerForListOf(Dashboard::class.java).readValue(save)
+                G.mapper.readerForListOf(Dashboard::class.java).readValue(save)
             } catch (e: Exception) {
                 null
             }

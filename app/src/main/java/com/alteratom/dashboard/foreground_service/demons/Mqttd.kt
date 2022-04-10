@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.io.BufferedInputStream
 import java.security.KeyStore
 import java.security.cert.CertificateException
+import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -218,15 +220,10 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 }
             })
 
-            /////SSL ENABLED////
-            val caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            caKeyStore.load(null, null)
-            val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-            tmf.init(caKeyStore)
-            val context = SSLContext.getInstance("TLS")
-            context.init(null, tmf.trustManagers, null)
+// SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                 override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    run {}
                     return emptyArray()
                 }
 
@@ -235,6 +232,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                     chain: Array<X509Certificate>,
                     authType: String
                 ) {
+                    run {}
                 }
 
                 @Throws(CertificateException::class)
@@ -242,13 +240,50 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                     chain: Array<X509Certificate>,
                     authType: String
                 ) {
+                    try {
+
+                        //val input: InputStream = context.getAssets().open("ca.crt")
+                        //val cert = input.bufferedReader().use { it.readText() }
+                        //val X509Certificate = certificateFromString(cert)
+
+                        val input = context.getAssets().open("ca.crt")
+                        val bis = BufferedInputStream(input)
+                        val cf = CertificateFactory.getInstance("X.509")
+                        val X509Certificate = cf.generateCertificate(bis) as X509Certificate
+
+                        val c1 = X509Certificate
+                        val c2 = chain[0]
+
+                        val b1 = c1.getEncoded()
+                        val b2 = c2.getEncoded()
+
+                        val result = b1 == b2
+                        val result1 = c1.equals(c2)
+
+                        run {}
+
+                    } catch (e: Exception) {
+                        run {}
+                    }
                 }
             })
+
+            val caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+            caKeyStore.load(null, null)
+
+            val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+            tmf.init(caKeyStore)
+
             val sslContext = SSLContext.getInstance("SSL")
             sslContext.init(null, trustAllCerts, java.security.SecureRandom())
             val sslSocketFactory = sslContext.socketFactory
-            options.socketFactory = sslSocketFactory
-            /////SSL ENABLED////
+
+            val tlsContext = SSLContext.getInstance("TLS")
+            tlsContext.init(null, trustAllCerts, java.security.SecureRandom())
+            val tlsSocketFactory = tlsContext.socketFactory
+
+            options.socketFactory = tlsSocketFactory
+// SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
 
             try {
                 connect(options, null, object : IMqttActionListener {

@@ -17,6 +17,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
+
 class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     var isEnabled = true
@@ -221,18 +222,33 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             })
 
 // SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
+            val caInput = context.getAssets().open("vps.crt")
+            val ca = try {
+                val cf = CertificateFactory.getInstance("X.509")
+                cf.generateCertificate(caInput) as X509Certificate
+            } catch (er: java.lang.Exception) {
+                null
+            } finally {
+                caInput.close()
+            }
+
+            val keyStoreType = KeyStore.getDefaultType()
+            val keyStore = KeyStore.getInstance(keyStoreType)
+            keyStore.load(null, null)
+            keyStore.setCertificateEntry("ca", ca)
+
+            val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+            val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
+            trustManagerFactory.init(keyStore)
+
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    run {}
-                    return emptyArray()
-                }
+                override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
 
                 @Throws(CertificateException::class)
                 override fun checkClientTrusted(
                     chain: Array<X509Certificate>,
                     authType: String
                 ) {
-                    run {}
                 }
 
                 @Throws(CertificateException::class)
@@ -240,46 +256,17 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                     chain: Array<X509Certificate>,
                     authType: String
                 ) {
-                    try {
-
-                        //val input: InputStream = context.getAssets().open("ca.crt")
-                        //val cert = input.bufferedReader().use { it.readText() }
-                        //val X509Certificate = certificateFromString(cert)
-
-                        val input = context.getAssets().open("ca.crt")
-                        val bis = BufferedInputStream(input)
-                        val cf = CertificateFactory.getInstance("X.509")
-                        val X509Certificate = cf.generateCertificate(bis) as X509Certificate
-
-                        val c1 = X509Certificate
-                        val c2 = chain[0]
-
-                        val b1 = c1.getEncoded()
-                        val b2 = c2.getEncoded()
-
-                        val result = b1 == b2
-                        val result1 = c1.equals(c2)
-
-                        run {}
-
-                    } catch (e: Exception) {
-                        run {}
-                    }
                 }
             })
 
-            val caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            caKeyStore.load(null, null)
-
-            val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-            tmf.init(caKeyStore)
-
             val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+            sslContext.init(null, trustManagerFactory.trustManagers, java.security.SecureRandom())
             val sslSocketFactory = sslContext.socketFactory
 
+            // OR
+
             val tlsContext = SSLContext.getInstance("TLS")
-            tlsContext.init(null, trustAllCerts, java.security.SecureRandom())
+            tlsContext.init(null, trustManagerFactory.trustManagers, java.security.SecureRandom())
             val tlsSocketFactory = tlsContext.socketFactory
 
             options.socketFactory = tlsSocketFactory

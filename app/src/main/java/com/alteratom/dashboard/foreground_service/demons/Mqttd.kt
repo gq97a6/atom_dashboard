@@ -5,18 +5,18 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
+import okhttp3.Headers
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.io.BufferedInputStream
+import java.io.IOException
 import java.security.KeyStore
 import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
-
+import javax.net.ssl.*
+import okhttp3.Request.Builder
 
 class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
@@ -222,6 +222,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             })
 
 // SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
+            //GENERATE CERT ---------------------------------
             val caInput = context.getAssets().open("vps.crt")
             val ca = try {
                 val cf = CertificateFactory.getInstance("X.509")
@@ -231,15 +232,15 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             } finally {
                 caInput.close()
             }
+            //GENERATE CERT ---------------------------------
 
-            val keyStoreType = KeyStore.getDefaultType()
-            val keyStore = KeyStore.getInstance(keyStoreType)
+            val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
             keyStore.load(null, null)
             keyStore.setCertificateEntry("ca", ca)
 
             val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
             val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
-            trustManagerFactory.init(keyStore)
+            trustManagerFactory.init(null as KeyStore?)
 
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                 override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
@@ -256,20 +257,47 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                     chain: Array<X509Certificate>,
                     authType: String
                 ) {
+                    try {
+                        var x509TrustManager: X509TrustManager? = null
+                        for (trustManager in trustManagerFactory.trustManagers) {
+                            if (trustManager is X509TrustManager) {
+                                x509TrustManager = trustManager
+                            }
+                        }
+
+                        x509TrustManager!!.checkServerTrusted(chain, authType)
+                    } catch (e: Exception) {
+                        run {}
+                    }
+
+                    //valid cert
+                    //self cert option ignore domain
+                    //trust cert
+
+                    //self_yes host_yes check_yes
+                    //self_yes host_yes check_no
+                    //self_yes host_no check_yes
+                    //self_yes host_no check_no
+
+                    //self_no host_yes check_yes
+                    //self_no host_yes check_no
+                    //self_no host_no check_yes
+                    //self_no host_no check_no
                 }
             })
 
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustManagerFactory.trustManagers, java.security.SecureRandom())
-            val sslSocketFactory = sslContext.socketFactory
-
-            // OR
+            //val keyManagerFactory = KeyManagerFactory.getInstance("X509")
+            //keyManagerFactory.init(keyStore, null)
 
             val tlsContext = SSLContext.getInstance("TLS")
-            tlsContext.init(null, trustManagerFactory.trustManagers, java.security.SecureRandom())
-            val tlsSocketFactory = tlsContext.socketFactory
+            tlsContext.init(
+                null,
+                trustManagerFactory.trustManagers,
+                java.security.SecureRandom()
+            )
 
-            options.socketFactory = tlsSocketFactory
+            options.socketFactory = tlsContext.socketFactory
+
 // SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
 
             try {

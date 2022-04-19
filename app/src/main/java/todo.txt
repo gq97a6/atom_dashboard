@@ -1,8 +1,6 @@
 //expand ------------------------------
 start guide
-ssl certificates
 client certificates
-mqtt options class for dashboard
 
 //post development ------------------------------
 hardcoded text

@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.alteratom.R
 import java.math.RoundingMode
+import java.security.cert.Certificate
 import java.util.*
 
 const val A = 255 //100%
@@ -216,3 +217,14 @@ fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
 }
 
 fun Float.round(d: Int): Float = this.toBigDecimal().setScale(d, RoundingMode.FLOOR).toFloat()
+
+fun Certificate.toPem(): String? {
+    val BEGIN_CERT = "-----BEGIN CERTIFICATE-----"
+    val END_CERT = "-----END CERTIFICATE-----"
+    val LINE_SEPARATOR = System.getProperty("line.separator")
+
+    val encoder: Base64.Encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.toByteArray())
+    val rawCrtText: ByteArray = this.getEncoded()
+    val encodedCertText = String(encoder.encode(rawCrtText))
+    return BEGIN_CERT + LINE_SEPARATOR.toString() + encodedCertText + LINE_SEPARATOR.toString() + END_CERT
+}

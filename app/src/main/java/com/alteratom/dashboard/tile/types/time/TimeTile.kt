@@ -10,8 +10,6 @@ import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
 import com.alteratom.databinding.DialogTimeBinding
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class TimeTile : com.alteratom.dashboard.tile.Tile() {
@@ -56,7 +54,7 @@ class TimeTile : com.alteratom.dashboard.tile.Tile() {
             if (isDate) {
                 val d = binding.dtDate
                 send(
-                    (mqttData.payloads["date"] ?: "")
+                    (mqtt.payloads["date"] ?: "")
                         .replace("@day", d.dayOfMonth.toString())
                         .replace("@month", d.month.toString())
                         .replace("@year", d.year.toString())
@@ -64,7 +62,7 @@ class TimeTile : com.alteratom.dashboard.tile.Tile() {
             } else {
                 val t = binding.dtTime
                 send(
-                    (mqttData.payloads["time"] ?: "")
+                    (mqtt.payloads["time"] ?: "")
                         .replace("@hour", t.hour.toString())
                         .replace("@minute", t.minute.toString())
                 )
@@ -95,7 +93,7 @@ class TimeTile : com.alteratom.dashboard.tile.Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["time"] = "@hour:@minute"
-        mqttData.payloads["date"] = "@day.@month.@year"
+        mqtt.payloads["time"] = "@hour:@minute"
+        mqtt.payloads["date"] = "@day.@month.@year"
     }
 }

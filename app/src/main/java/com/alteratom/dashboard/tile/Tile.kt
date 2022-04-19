@@ -4,21 +4,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.alteratom.R
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
-import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
-import com.alteratom.R
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.screenWidth
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
@@ -46,7 +46,7 @@ abstract class Tile : RecyclerViewItem() {
 
     abstract var typeTag: String
 
-    val mqttData = MqttData()
+    val mqtt = MqttData()
 
     var doLog = false
     var doNotify = false
@@ -67,7 +67,8 @@ abstract class Tile : RecyclerViewItem() {
 
         val totalAvail = (screenWidth - view.paddingLeft * 2)
 
-        params.height = ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
+        params.height =
+            ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
         view.layoutParams = params
 
         holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)
@@ -96,8 +97,8 @@ abstract class Tile : RecyclerViewItem() {
     @JvmOverloads
     fun send(
         msg: String,
-        topic: String? = mqttData.pubs["base"],
-        @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
+        topic: String? = mqtt.pubs["base"],
+        @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
         retain: Boolean = false,
         raw: Boolean = false
     ) {
@@ -109,7 +110,7 @@ abstract class Tile : RecyclerViewItem() {
             onSend(topic, msg, qos, retain)
         }
 
-        if (!mqttData.confirmPub || raw) {
+        if (!mqtt.confirmPub || raw) {
             send()
             return
         }
@@ -122,20 +123,20 @@ abstract class Tile : RecyclerViewItem() {
     }
 
     fun receive(data: Pair<String?, MqttMessage?>) {
-        if (!mqttData.isEnabled) return
-        if (!mqttData.subs.containsValue(data.first)) return
+        if (!mqtt.isEnabled) return
+        if (!mqtt.subs.containsValue(data.first)) return
 
         //Build map of jsonPath key and value of at it. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
-        if (mqttData.payloadIsJson) {
-            for (p in mqttData.jsonPaths) {
+        if (mqtt.payloadIsJson) {
+            for (p in mqtt.jsonPaths) {
                 data.second.toString().byJSONPath(p.value)?.let {
                     jsonResult[p.key] = it
                 }
             }
         }
 
-        mqttData.lastReceive = Date()
+        mqtt.lastReceive = Date()
 
         if (doNotify) {
             dashboard.dg?.context?.let {
@@ -159,12 +160,11 @@ abstract class Tile : RecyclerViewItem() {
         try {
             onReceive(data, jsonResult)
         } catch (e: Exception) {
-
         }
     }
 
-    open class MqttData {
-        var isEnabled = true
+    data class MqttData(var isEnabled: Boolean = true) {
+
         var lastReceive: Date? = null
 
         val subs = mutableMapOf<String, String>()

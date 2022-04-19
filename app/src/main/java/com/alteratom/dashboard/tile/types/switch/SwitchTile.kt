@@ -6,11 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.R
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SwitchTile : com.alteratom.dashboard.tile.Tile() {
@@ -80,7 +76,7 @@ class SwitchTile : com.alteratom.dashboard.tile.Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        send(mqttData.payloads[if (state == false) "true" else "false"] ?: "")
+        send(mqtt.payloads[if (state == false) "true" else "false"] ?: "")
     }
 
     override fun onReceive(
@@ -90,8 +86,8 @@ class SwitchTile : com.alteratom.dashboard.tile.Tile() {
         super.onReceive(data, jsonResult)
 
         state = when (data.second.toString()) {
-            mqttData.payloads["true"] -> true
-            mqttData.payloads["false"] -> false
+            mqtt.payloads["true"] -> true
+            mqtt.payloads["false"] -> false
             else -> null
         }
 

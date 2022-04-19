@@ -23,16 +23,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.alteratom.databinding.DialogLightsBinding
 import com.alteratom.databinding.DialogSelectBinding
-import com.alteratom.dashboard.G
-import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.recycler_view.GenericAdapter
-import com.alteratom.dashboard.recycler_view.GenericItem
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
 import com.alteratom.dashboard.toPx
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -105,7 +97,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
         set(value) {
             field = value
 
-            mqttData.payloads[colorType]?.let { pattern ->
+            mqtt.payloads[colorType]?.let { pattern ->
                 when (colorType) {
                     "hsv" -> {
                         toRemoves["hsv"] = Regex("@[hsv]").split(pattern) as MutableList
@@ -137,9 +129,9 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["hsv"] = "@h;@s;@v"
-        mqttData.payloads["hex"] = "#@hex"
-        mqttData.payloads["rgb"] = "@r;@g;@b"
+        mqtt.payloads["hsv"] = "@h;@s;@v"
+        mqtt.payloads["hex"] = "#@hex"
+        mqtt.payloads["rgb"] = "@r;@g;@b"
 
         Color.colorToHSV(com.alteratom.dashboard.G.theme.a.colorPallet.color, hsvPicked)
         colorType = colorType
@@ -234,18 +226,18 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
         binding.dlConfirm.setOnClickListener {
             fun send() {
-                send("$brightnessTmp", mqttData.pubs["bright"], mqttData.qos, retain[2], true)
+                send("$brightnessTmp", mqtt.pubs["bright"], mqtt.qos, retain[2], true)
                 if (includePicker) send(
                     when (colorType) {
                         "hsv" -> {
-                            (mqttData.payloads["hsv"] ?: "")
+                            (mqtt.payloads["hsv"] ?: "")
                                 .replace("@h", hsvPickedTmp[0].toInt().toString())
                                 .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                                 .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                         }
                         "hex" -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["hex"] ?: "")
+                            (mqtt.payloads["hex"] ?: "")
                                 .replace(
                                     "@hex",
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
@@ -253,24 +245,24 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                         }
                         "rgb" -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["rgb"] ?: "")
+                            (mqtt.payloads["rgb"] ?: "")
                                 .replace("@r", c.red.toString())
                                 .replace("@g", c.green.toString())
                                 .replace("@b", c.blue.toString())
                         }
                         else -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["hex"] ?: "")
+                            (mqtt.payloads["hex"] ?: "")
                                 .replace(
                                     "@hex",
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                    }, mqttData.pubs["color"], mqttData.qos, retain[1], true
+                    }, mqtt.pubs["color"], mqtt.qos, retain[1], true
                 )
             }
 
-            if (mqttData.confirmPub) {
+            if (mqtt.confirmPub) {
                 with(adapter.context) {
                     buildConfirm("PUBLISH", "Confirm publishing", {
                         send()
@@ -311,8 +303,8 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
                     send(
                         this.modes[pos].second,
-                        mqttData.pubs["mode"],
-                        mqttData.qos,
+                        mqtt.pubs["mode"],
+                        mqtt.qos,
                         retain[3]
                     )
 
@@ -339,9 +331,9 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
         binding.dlSwitch.setOnClickListener {
             send(
-                mqttData.payloads[if (state == false) "true" else "false"] ?: "",
-                mqttData.pubs["state"],
-                mqttData.qos,
+                mqtt.payloads[if (state == false) "true" else "false"] ?: "",
+                mqtt.pubs["state"],
+                mqtt.qos,
                 retain[0]
             )
         }
@@ -375,8 +367,8 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
             when (field) {
                 "state" -> {
                     state = when (value) {
-                        mqttData.payloads["true"] -> true
-                        mqttData.payloads["false"] -> false
+                        mqtt.payloads["true"] -> true
+                        mqtt.payloads["false"] -> false
                         else -> null
                     }
 
@@ -446,10 +438,10 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
             val value = data.second.toString()
             parse(
                 value, when (data.first) {
-                    mqttData.subs["state"] -> "state"
-                    mqttData.subs["color"] -> "color"
-                    mqttData.subs["bright"] -> "bright"
-                    mqttData.subs["mode"] -> "mode"
+                    mqtt.subs["state"] -> "state"
+                    mqtt.subs["color"] -> "color"
+                    mqtt.subs["bright"] -> "bright"
+                    mqtt.subs["mode"] -> "mode"
                     else -> null
                 }
             )

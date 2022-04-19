@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
@@ -48,7 +50,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
-                v.text = if (dashboard.mqttEnabled) {
+                v.text = if (dashboard.mqtt.isEnabled) {
                     if (it.client.isConnected) {
                         v.clearAnimation()
                         "CONNECTED"
@@ -67,7 +69,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         }
 
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
-            dashboard.mqttEnabled = state
+            dashboard.mqtt.isEnabled = state
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
@@ -80,8 +82,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         b.dpMqttAddress.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
-                if (dashboard.mqttAddress != it) {
-                    dashboard.mqttAddress = it
+                if (dashboard.mqtt.address != it) {
+                    dashboard.mqtt.address = it
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
             }
@@ -89,14 +91,25 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         b.dpMqttPort.addTextChangedListener {
             val port = (it ?: "").toString().trim().toIntOrNull() ?: (-1)
-            if (dashboard.mqttPort != port) {
-                dashboard.mqttPort = port
+            if (dashboard.mqtt.port != port) {
+                dashboard.mqtt.port = port
                 dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
         }
 
+        b.dpMqttSsl.setOnCheckedChangeListener { _, state ->
+            dashboard.mqtt.ssl = state
+            b.dpMqttSslTrustAll.visibility = if(dashboard.mqtt.ssl) VISIBLE else GONE
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
+        }
+
+        b.dpMqttSslTrustAll.setOnCheckedChangeListener { _, state ->
+            dashboard.mqtt.sslTrustAll = state
+            dashboard.dg?.mqttd?.notifyOptionsChanged()
+        }
+
         b.dpMqttCred.setOnCheckedChangeListener { _, state ->
-            dashboard.mqttCred = state
+            dashboard.mqtt.includeCred = state
             dashboard.dg?.mqttd?.notifyOptionsChanged()
             switchMqttCred(!state)
         }
@@ -107,8 +120,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         b.dpMqttLogin.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
-                if (dashboard.mqttUserName != it) {
-                    dashboard.mqttUserName = it
+                if (dashboard.mqtt.username != it) {
+                    dashboard.mqtt.username = it
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
             }
@@ -116,8 +129,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         b.dpMqttPass.addTextChangedListener { it ->
             (it ?: "").toString().trim().let {
-                if (dashboard.mqttPass != it) {
-                    dashboard.mqttPass = it
+                if (dashboard.mqtt.pass != it) {
+                    dashboard.mqtt.pass = it
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
             }
@@ -127,12 +140,12 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             (it ?: "").toString().trim().let {
                 when {
                     it.isBlank() -> {
-                        dashboard.mqttClientId = kotlin.math.abs(Random.nextInt()).toString()
-                        b.dpMqttClientId.setText(dashboard.mqttClientId)
+                        dashboard.mqtt.clientId = kotlin.math.abs(Random.nextInt()).toString()
+                        b.dpMqttClientId.setText(dashboard.mqtt.clientId)
                         dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
-                    dashboard.mqttClientId != it -> {
-                        dashboard.mqttClientId = it
+                    dashboard.mqtt.clientId != it -> {
+                        dashboard.mqtt.clientId = it
                         dashboard.dg?.mqttd?.notifyOptionsChanged()
                     }
                 }
@@ -167,10 +180,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     val pos = adapter.list.indexOf(it)
                     val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 
-                    dashboard.mqttAddress = dashboards[p].mqttAddress
-                    dashboard.mqttPort = dashboards[p].mqttPort
-                    dashboard.mqttUserName = dashboards[p].mqttUserName
-                    dashboard.mqttPass = dashboards[p].mqttPass
+                    dashboard.mqtt.address = dashboards[p].mqtt.address
+                    dashboard.mqtt.port = dashboards[p].mqtt.port
+                    dashboard.mqtt.username = dashboards[p].mqtt.username
+                    dashboard.mqtt.pass = dashboards[p].mqtt.pass
 
                     viewConfig()
                     dialog.dismiss()
@@ -196,21 +209,25 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
     private fun viewConfig() {
         b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
 
-        b.dpMqttSwitch.isChecked = dashboard.mqttEnabled
+        b.dpMqttSwitch.isChecked = dashboard.mqtt.isEnabled
 
-        b.dpMqttAddress.setText(dashboard.mqttAddress)
-        dashboard.mqttPort.let {
+        b.dpMqttAddress.setText(dashboard.mqtt.address)
+        dashboard.mqtt.port.let {
             b.dpMqttPort.setText(if (it != -1) it.toString() else "")
         }
 
-        b.dpMqttCred.isChecked = dashboard.mqttCred
-        b.dpMqttLogin.setText(dashboard.mqttUserName)
-        b.dpMqttPass.setText(dashboard.mqttPass)
+        b.dpMqttCred.isChecked = dashboard.mqtt.includeCred
+        b.dpMqttLogin.setText(dashboard.mqtt.username)
+        b.dpMqttPass.setText(dashboard.mqtt.pass)
+
+        b.dpMqttSsl.isChecked = dashboard.mqtt.ssl
+        b.dpMqttSslTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+        b.dpMqttSslTrustAll.visibility = if(dashboard.mqtt.ssl) VISIBLE else GONE
 
         b.dpMqttCredArrow.rotation = 180f
         b.dpMqttCredBox.visibility = View.GONE
 
-        b.dpMqttClientId.setText(dashboard.mqttClientId)
+        b.dpMqttClientId.setText(dashboard.mqtt.clientId)
     }
 
     private fun switchMqttCred(state: Boolean? = null) {

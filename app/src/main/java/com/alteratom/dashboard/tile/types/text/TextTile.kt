@@ -9,9 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
 import com.alteratom.databinding.DialogTextBinding
-import com.alteratom.dashboard.G
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.random.Random
 
@@ -45,16 +42,16 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
+        if (mqtt.pubs["base"].isNullOrEmpty()) return
         if (dashboard.dg?.mqttd?.client?.isConnected != true) return
 
-        if (mqttData.varPayload) {
+        if (mqtt.varPayload) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.dtTopic.text = mqttData.pubs["base"].toString()
+            binding.dtTopic.text = mqtt.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
                 send(binding.dtPayload.text.toString())

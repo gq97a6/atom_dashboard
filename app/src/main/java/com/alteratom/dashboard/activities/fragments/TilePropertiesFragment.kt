@@ -66,23 +66,23 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         switchMqttTab(settings.mqttTabShow, 0)
 
         b.tpTag.setText(tile.tag)
-        b.tpMqttSub.setText(tile.mqttData.subs["base"])
-        b.tpMqttPub.setText(tile.mqttData.pubs["base"])
-        b.tpMqttPayload.setText(tile.mqttData.payloads["base"] ?: "")
-        b.tpMqttJsonPayloadPath.setText(tile.mqttData.jsonPaths["base"] ?: "")
+        b.tpMqttSub.setText(tile.mqtt.subs["base"])
+        b.tpMqttPub.setText(tile.mqtt.pubs["base"])
+        b.tpMqttPayload.setText(tile.mqtt.payloads["base"] ?: "")
+        b.tpMqttJsonPayloadPath.setText(tile.mqtt.jsonPaths["base"] ?: "")
         b.tpTileType.text = tile.typeTag.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
         }
 
-        b.tpMqttSwitch.isChecked = tile.mqttData.isEnabled
-        b.tpMqttConfirmSwitch.isChecked = tile.mqttData.confirmPub
-        b.tpMqttRetainSwitch.isChecked = tile.mqttData.retain
+        b.tpMqttSwitch.isChecked = tile.mqtt.isEnabled
+        b.tpMqttConfirmSwitch.isChecked = tile.mqtt.confirmPub
+        b.tpMqttRetainSwitch.isChecked = tile.mqtt.retain
         b.tpLogSwitch.isChecked = tile.doLog
         b.tpNotSwitch.isChecked = tile.doNotify
         b.tpNotSilentSwitch.isChecked = tile.silentNotify
 
         b.tpQos.check(
-            when (tile.mqttData.qos) {
+            when (tile.mqtt.qos) {
                 0 -> R.id.tp_qos0
                 1 -> R.id.tp_qos1
                 2 -> R.id.tp_qos2
@@ -90,7 +90,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             }
         )
 
-        tile.mqttData.payloadIsJson.let {
+        tile.mqtt.payloadIsJson.let {
             b.tpMqttJsonSwitch.isChecked = it
             b.tpMqttJsonPayload.visibility = if (it) VISIBLE else GONE
         }
@@ -119,12 +119,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         b.tpMqttPub.addTextChangedListener {
-            tile.mqttData.pubs["base"] = (it ?: "").toString()
+            tile.mqtt.pubs["base"] = (it ?: "").toString()
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttSub.addTextChangedListener {
-            tile.mqttData.subs["base"] = (it ?: "").toString()
+            tile.mqtt.subs["base"] = (it ?: "").toString()
             dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
@@ -133,7 +133,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         b.tpQos.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-            tile.mqttData.qos = when (id) {
+            tile.mqtt.qos = when (id) {
                 R.id.tp_qos0 -> 0
                 R.id.tp_qos1 -> 1
                 R.id.tp_qos2 -> 2
@@ -143,20 +143,20 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         }
 
         b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.retain = state
+            tile.mqtt.retain = state
         }
 
         b.tpMqttConfirmSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.confirmPub = state
+            tile.mqtt.confirmPub = state
         }
 
         b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-            tile.mqttData.payloadIsJson = state
+            tile.mqtt.payloadIsJson = state
             b.tpMqttJsonPayload.visibility = if (state) VISIBLE else GONE
         }
 
         b.tpMqttJsonPayloadPath.addTextChangedListener {
-            tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
+            tile.mqtt.jsonPaths["base"] = (it ?: "").toString()
         }
 
         b.tpLogSwitch.setOnCheckedChangeListener { _, state ->
@@ -191,14 +191,14 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpPayloadType.check(
-                    if (tile.mqttData.varPayload) R.id.tp_mqtt_payload_var
+                    if (tile.mqtt.varPayload) R.id.tp_mqtt_payload_var
                     else {
                         b.tpMqttPayload.visibility = VISIBLE
                         R.id.tp_mqtt_payload_val
                     }
                 )
                 b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-                    tile.mqttData.varPayload = when (id) {
+                    tile.mqtt.varPayload = when (id) {
                         R.id.tp_mqtt_payload_val -> {
                             b.tpMqttPayloadBox.visibility = VISIBLE
                             false
@@ -212,11 +212,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttJsonPayloadPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["base"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["base"] = (it ?: "").toString()
                 }
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
                 }
             }
 //--------------------------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
                 }
             }
 //--------------------------------------------------------------------------------------------------
@@ -282,8 +282,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 //b.tpSwitch.visibility = VISIBLE
                 b.tpMqttPayloadsBox.visibility = VISIBLE
 
-                b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
-                b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
+                b.tpMqttPayloadTrue.setText(tile.mqtt.payloads["true"] ?: "")
+                b.tpMqttPayloadFalse.setText(tile.mqtt.payloads["false"] ?: "")
 
                 setupIcon(
                     tile.iconResTrue,
@@ -321,11 +321,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttPayloadTrue.addTextChangedListener {
-                    tile.mqttData.payloads["true"] = (it ?: "").toString()
+                    tile.mqtt.payloads["true"] = (it ?: "").toString()
                 }
 
                 b.tpMqttPayloadFalse.addTextChangedListener {
-                    tile.mqttData.payloads["false"] = (it ?: "").toString()
+                    tile.mqtt.payloads["false"] = (it ?: "").toString()
                 }
             }
 //--------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             is TerminalTile -> {
                 b.tpMqttPayloadTypeBox.visibility = VISIBLE
                 b.tpPayloadType.check(
-                    if (tile.mqttData.varPayload) R.id.tp_mqtt_payload_var
+                    if (tile.mqtt.varPayload) R.id.tp_mqtt_payload_var
                     else {
                         b.tpMqttPayload.visibility = VISIBLE
                         R.id.tp_mqtt_payload_val
@@ -353,7 +353,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 )
 
                 b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-                    tile.mqttData.varPayload = when (id) {
+                    tile.mqtt.varPayload = when (id) {
                         R.id.tp_mqtt_payload_val -> {
                             b.tpMqttPayloadBox.visibility = VISIBLE
                             false
@@ -367,7 +367,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads["base"] = (it ?: "").toString()
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
                 }
             }
 //--------------------------------------------------------------------------------------------------
@@ -382,13 +382,13 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpTimeType.check(
                     when (tile.isDate) {
                         false -> {
-                            b.tpMqttPayload.setText(tile.mqttData.payloads["time"])
+                            b.tpMqttPayload.setText(tile.mqtt.payloads["time"])
                             b.tpMqttPayloadHint.text =
                                 "Use @hour and @minute to insert current values."
                             R.id.tp_time_time
                         }
                         true -> {
-                            b.tpMqttPayload.setText(tile.mqttData.payloads["date"])
+                            b.tpMqttPayload.setText(tile.mqtt.payloads["date"])
                             b.tpMqttPayloadHint.text =
                                 "Use @day, @month, @year to insert current values."
                             R.id.tp_time_date
@@ -409,7 +409,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
 
                     b.tpTimeMilitaryBox.visibility = if (tile.isDate) GONE else VISIBLE
-                    b.tpMqttPayload.setText(tile.mqttData.payloads[if (tile.isDate) "date" else "time"])
+                    b.tpMqttPayload.setText(tile.mqtt.payloads[if (tile.isDate) "date" else "time"])
                     b.tpMqttPayloadHint.text =
                         "Use ${if (tile.isDate) "@day, @month, @year" else "@hour and @minute"} to insert current values."
                 }
@@ -421,7 +421,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads[if (tile.isDate) "date" else "time"] =
+                    tile.mqtt.payloads[if (tile.isDate) "date" else "time"] =
                         (it ?: "").toString()
                 }
             }
@@ -446,7 +446,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     }
                 )
 
-                b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
                 b.tpMqttPayloadHint.text =
                     "Use ${
                         when (tile.colorType) {
@@ -474,7 +474,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         else -> "hex"
                     }
 
-                    b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
                     b.tpMqttPayloadHint.text =
                         "Use ${
                             when (tile.colorType) {
@@ -487,7 +487,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads[tile.colorType] = (it ?: "").toString()
+                    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
                 }
             }
 //--------------------------------------------------------------------------------------------------
@@ -500,22 +500,22 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostat.visibility = VISIBLE
                 b.tpThermostatTopics.visibility = VISIBLE
                 b.tpThermostatPaths.visibility =
-                    if (tile.mqttData.payloadIsJson) VISIBLE else GONE
+                    if (tile.mqtt.payloadIsJson) VISIBLE else GONE
 
-                b.tpThermostatTemperatureSub.setText(tile.mqttData.subs["temp"])
-                b.tpThermostatTemperatureSetpointSub.setText(tile.mqttData.subs["temp_set"])
-                b.tpThermostatTemperatureSetpointPub.setText(tile.mqttData.pubs["temp_set"])
-                b.tpThermostatHumiditySub.setText(tile.mqttData.subs["humi"])
-                b.tpThermostatHumiditySetpointSub.setText(tile.mqttData.subs["humi_set"])
-                b.tpThermostatHumiditySetpointPub.setText(tile.mqttData.pubs["humi_set"])
-                b.tpThermostatModeSub.setText(tile.mqttData.subs["mode"])
-                b.tpThermostatModePub.setText(tile.mqttData.pubs["mode"])
+                b.tpThermostatTemperatureSub.setText(tile.mqtt.subs["temp"])
+                b.tpThermostatTemperatureSetpointSub.setText(tile.mqtt.subs["temp_set"])
+                b.tpThermostatTemperatureSetpointPub.setText(tile.mqtt.pubs["temp_set"])
+                b.tpThermostatHumiditySub.setText(tile.mqtt.subs["humi"])
+                b.tpThermostatHumiditySetpointSub.setText(tile.mqtt.subs["humi_set"])
+                b.tpThermostatHumiditySetpointPub.setText(tile.mqtt.pubs["humi_set"])
+                b.tpThermostatModeSub.setText(tile.mqtt.subs["mode"])
+                b.tpThermostatModePub.setText(tile.mqtt.pubs["mode"])
 
-                b.tpThermostatTemperaturePath.setText(tile.mqttData.jsonPaths["temp"])
-                b.tpThermostatTemperatureSetpointPath.setText(tile.mqttData.jsonPaths["temp_set"])
-                b.tpThermostatHumidityPath.setText(tile.mqttData.jsonPaths["humi"])
-                b.tpThermostatHumiditySetpointPath.setText(tile.mqttData.jsonPaths["humi_set"])
-                b.tpThermostatModePath.setText(tile.mqttData.jsonPaths["mode"])
+                b.tpThermostatTemperaturePath.setText(tile.mqtt.jsonPaths["temp"])
+                b.tpThermostatTemperatureSetpointPath.setText(tile.mqtt.jsonPaths["temp_set"])
+                b.tpThermostatHumidityPath.setText(tile.mqtt.jsonPaths["humi"])
+                b.tpThermostatHumiditySetpointPath.setText(tile.mqtt.jsonPaths["humi_set"])
+                b.tpThermostatModePath.setText(tile.mqtt.jsonPaths["mode"])
 
                 b.tpThermostatHumidityStep.setText(tile.humidityStep.toString())
                 b.tpThermostatTemperatureFrom.setText(tile.temperatureRange[0].toString())
@@ -534,41 +534,41 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpThermostatModeRetain.isChecked = tile.retain[2]
 
                 b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-                    tile.mqttData.payloadIsJson = state
+                    tile.mqtt.payloadIsJson = state
                     b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
                 }
 
 
                 b.tpThermostatTemperatureSub.addTextChangedListener {
-                    tile.mqttData.subs["temp"] = (it ?: "").toString()
+                    tile.mqtt.subs["temp"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
-                    tile.mqttData.subs["temp_set"] = (it ?: "").toString()
+                    tile.mqtt.subs["temp_set"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointPub.addTextChangedListener {
-                    tile.mqttData.pubs["temp_set"] = (it ?: "").toString()
+                    tile.mqtt.pubs["temp_set"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySub.addTextChangedListener {
-                    tile.mqttData.subs["humi"] = (it ?: "").toString()
+                    tile.mqtt.subs["humi"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointSub.addTextChangedListener {
-                    tile.mqttData.subs["humi_set"] = (it ?: "").toString()
+                    tile.mqtt.subs["humi_set"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointPub.addTextChangedListener {
-                    tile.mqttData.pubs["humi_set"] = (it ?: "").toString()
+                    tile.mqtt.pubs["humi_set"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModeSub.addTextChangedListener {
-                    tile.mqttData.subs["mode"] = (it ?: "").toString()
+                    tile.mqtt.subs["mode"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModePub.addTextChangedListener {
-                    tile.mqttData.pubs["mode"] = (it ?: "").toString()
+                    tile.mqtt.pubs["mode"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
 
@@ -585,19 +585,19 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpThermostatTemperaturePath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["temp"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["temp"] = (it ?: "").toString()
                 }
                 b.tpThermostatTemperatureSetpointPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["temp_set"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["temp_set"] = (it ?: "").toString()
                 }
                 b.tpThermostatHumidityPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["humi"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["humi"] = (it ?: "").toString()
                 }
                 b.tpThermostatHumiditySetpointPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["humi_set"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["humi_set"] = (it ?: "").toString()
                 }
                 b.tpThermostatModePath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["mode"] = (it ?: "").toString()
                 }
 
 
@@ -676,26 +676,26 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 b.tpMqttPayloadHint.visibility = VISIBLE
                 b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
                 b.tpLightsPaths.visibility =
-                    if (tile.mqttData.payloadIsJson) VISIBLE else GONE
+                    if (tile.mqtt.payloadIsJson) VISIBLE else GONE
 
-                b.tpLightsStateSub.setText(tile.mqttData.subs["state"])
-                b.tpLightsStatePub.setText(tile.mqttData.pubs["state"])
-                b.tpLightsColorSub.setText(tile.mqttData.subs["color"])
-                b.tpLightsColorPub.setText(tile.mqttData.pubs["color"])
-                b.tpLightsBrightnessSub.setText(tile.mqttData.subs["bright"])
-                b.tpLightsBrightnessPub.setText(tile.mqttData.pubs["bright"])
-                b.tpLightsModeSub.setText(tile.mqttData.subs["mode"])
-                b.tpLightsModePub.setText(tile.mqttData.pubs["mode"])
+                b.tpLightsStateSub.setText(tile.mqtt.subs["state"])
+                b.tpLightsStatePub.setText(tile.mqtt.pubs["state"])
+                b.tpLightsColorSub.setText(tile.mqtt.subs["color"])
+                b.tpLightsColorPub.setText(tile.mqtt.pubs["color"])
+                b.tpLightsBrightnessSub.setText(tile.mqtt.subs["bright"])
+                b.tpLightsBrightnessPub.setText(tile.mqtt.pubs["bright"])
+                b.tpLightsModeSub.setText(tile.mqtt.subs["mode"])
+                b.tpLightsModePub.setText(tile.mqtt.pubs["mode"])
 
-                b.tpLightsStatePath.setText(tile.mqttData.jsonPaths["state"])
-                b.tpLightsColorPath.setText(tile.mqttData.jsonPaths["color"])
-                b.tpLightsBrightnessPath.setText(tile.mqttData.jsonPaths["bright"])
-                b.tpLightsModePath.setText(tile.mqttData.jsonPaths["mode"])
+                b.tpLightsStatePath.setText(tile.mqtt.jsonPaths["state"])
+                b.tpLightsColorPath.setText(tile.mqtt.jsonPaths["color"])
+                b.tpLightsBrightnessPath.setText(tile.mqtt.jsonPaths["bright"])
+                b.tpLightsModePath.setText(tile.mqtt.jsonPaths["mode"])
 
 
-                b.tpMqttPayloadFalse.setText(tile.mqttData.payloads["false"] ?: "")
-                b.tpMqttPayloadTrue.setText(tile.mqttData.payloads["true"] ?: "")
-                b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                b.tpMqttPayloadFalse.setText(tile.mqtt.payloads["false"] ?: "")
+                b.tpMqttPayloadTrue.setText(tile.mqtt.payloads["true"] ?: "")
+                b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
 
                 b.tpLightsDoPaint.isChecked = tile.doPaint
                 b.tpLightsPaintRaw.isChecked = tile.paintRaw
@@ -726,35 +726,35 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpLightsStateSub.addTextChangedListener {
-                    tile.mqttData.subs["state"] = (it ?: "").toString()
+                    tile.mqtt.subs["state"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsStatePub.addTextChangedListener {
-                    tile.mqttData.pubs["state"] = (it ?: "").toString()
+                    tile.mqtt.pubs["state"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsColorSub.addTextChangedListener {
-                    tile.mqttData.subs["color"] = (it ?: "").toString()
+                    tile.mqtt.subs["color"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsColorPub.addTextChangedListener {
-                    tile.mqttData.pubs["color"] = (it ?: "").toString()
+                    tile.mqtt.pubs["color"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessSub.addTextChangedListener {
-                    tile.mqttData.subs["bright"] = (it ?: "").toString()
+                    tile.mqtt.subs["bright"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessPub.addTextChangedListener {
-                    tile.mqttData.pubs["bright"] = (it ?: "").toString()
+                    tile.mqtt.pubs["bright"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsModeSub.addTextChangedListener {
-                    tile.mqttData.subs["mode"] = (it ?: "").toString()
+                    tile.mqtt.subs["mode"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsModePub.addTextChangedListener {
-                    tile.mqttData.pubs["mode"] = (it ?: "").toString()
+                    tile.mqtt.pubs["mode"] = (it ?: "").toString()
                     dashboard.dg?.mqttd?.notifyOptionsChanged()
                 }
 
@@ -774,16 +774,16 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpLightsStatePath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["state"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["state"] = (it ?: "").toString()
                 }
                 b.tpLightsColorPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["color"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["color"] = (it ?: "").toString()
                 }
                 b.tpLightsBrightnessPath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["brightness"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["brightness"] = (it ?: "").toString()
                 }
                 b.tpLightsModePath.addTextChangedListener {
-                    tile.mqttData.jsonPaths["mode"] = (it ?: "").toString()
+                    tile.mqtt.jsonPaths["mode"] = (it ?: "").toString()
                 }
 
 
@@ -802,10 +802,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpMqttPayloadTrue.addTextChangedListener {
-                    tile.mqttData.payloads["true"] = (it ?: "").toString()
+                    tile.mqtt.payloads["true"] = (it ?: "").toString()
                 }
                 b.tpMqttPayloadFalse.addTextChangedListener {
-                    tile.mqttData.payloads["false"] = (it ?: "").toString()
+                    tile.mqtt.payloads["false"] = (it ?: "").toString()
                 }
                 b.tpMqttPayloadTrueEditIcon.setOnClickListener {
                     getIconHSV = { tile.hsvTrue }
@@ -831,7 +831,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpMqttPayload.addTextChangedListener {
-                    tile.mqttData.payloads[tile.colorType] = (it ?: "").toString()
+                    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
                 }
                 b.tpLightsIncludePicker.setOnCheckedChangeListener { _, state ->
                     tile.includePicker = state
@@ -856,7 +856,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     tile.showPayload = state
                 }
                 b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-                    tile.mqttData.payloadIsJson = state
+                    tile.mqtt.payloadIsJson = state
                     b.tpLightsPaths.visibility = if (state) VISIBLE else GONE
                 }
                 b.tpLightsColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
@@ -867,7 +867,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         else -> "hex"
                     }
 
-                    b.tpMqttPayload.setText(tile.mqttData.payloads[tile.colorType])
+                    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
                     b.tpMqttPayloadHint.text =
                         "Use ${
                             when (tile.colorType) {
@@ -888,7 +888,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private fun mqttSwitchOnCheckedChangeListener(state: Boolean) {
         switchMqttTab(state)
 
-        tile.mqttData.isEnabled = state
+        tile.mqtt.isEnabled = state
         dashboard.dg?.mqttd?.notifyOptionsChanged()
     }
 

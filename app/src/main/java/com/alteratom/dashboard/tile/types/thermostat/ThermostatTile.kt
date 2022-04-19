@@ -16,15 +16,10 @@ import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
 import com.alteratom.dashboard.blink
-import com.alteratom.dashboard.createToast
 import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.recycler_view.GenericAdapter
-import com.alteratom.dashboard.recycler_view.GenericItem
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.round
-import com.alteratom.dashboard.tile.Tile
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
@@ -214,11 +209,11 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
         binding.dtConfirm.setOnClickListener {
             fun send() {
-                send("$tempSetpointTmp", mqttData.pubs["temp_set"], mqttData.qos, retain[0], true)
-                send("$humiSetpointTmp", mqttData.pubs["humi_set"], mqttData.qos, retain[1], true)
+                send("$tempSetpointTmp", mqtt.pubs["temp_set"], mqtt.qos, retain[0], true)
+                send("$humiSetpointTmp", mqtt.pubs["humi_set"], mqtt.qos, retain[1], true)
             }
 
-            if (mqttData.confirmPub) {
+            if (mqtt.confirmPub) {
                 with(adapter.context) {
                     buildConfirm("PUBLISH", "Confirm publishing", {
                         send()
@@ -235,7 +230,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
         binding.dtMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.isNotEmpty() && !mqttData.pubs["mode"].isNullOrEmpty()) {
+            if (notEmpty.isNotEmpty() && !mqtt.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
                 modeAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
@@ -260,8 +255,8 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
                     send(
                         this.modes[pos].second,
-                        mqttData.pubs["mode"],
-                        mqttData.qos,
+                        mqtt.pubs["mode"],
+                        mqtt.qos,
                         retain[2]
                     )
 
@@ -345,11 +340,11 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
             val value = data.second.toString()
             parse(
                 value, when (data.first) {
-                    mqttData.subs["temp"] -> "temp"
-                    mqttData.subs["temp_set"] -> "temp_set"
-                    mqttData.subs["humi"] -> "humi"
-                    mqttData.subs["humi_set"] -> "humi_set"
-                    mqttData.subs["mode"] -> "mode"
+                    mqtt.subs["temp"] -> "temp"
+                    mqtt.subs["temp_set"] -> "temp_set"
+                    mqtt.subs["humi"] -> "humi"
+                    mqtt.subs["humi_set"] -> "humi_set"
+                    mqtt.subs["mode"] -> "mode"
                     else -> null
                 }
             )

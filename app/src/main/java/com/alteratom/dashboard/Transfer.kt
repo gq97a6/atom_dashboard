@@ -78,7 +78,7 @@ object Transfer {
 
                                     if (d != null) {
                                         for (dashboard in d) {
-                                            dashboard.mqttClientId =
+                                            dashboard.mqtt.clientId =
                                                 kotlin.math.abs(Random.nextInt()).toString()
                                         }
                                     }

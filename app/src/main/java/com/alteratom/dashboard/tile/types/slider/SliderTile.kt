@@ -14,10 +14,7 @@ import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
 import com.alteratom.databinding.DialogSliderBinding
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.roundCloser
-import com.alteratom.dashboard.screenWidth
-import com.alteratom.dashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 
@@ -53,7 +50,7 @@ class SliderTile : com.alteratom.dashboard.tile.Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["base"] = "@value"
+        mqtt.payloads["base"] = "@value"
     }
 
     override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -123,7 +120,7 @@ class SliderTile : com.alteratom.dashboard.tile.Tile() {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send((mqttData.payloads["base"] ?: "").replace("@value", value.toString()))
+                send((mqtt.payloads["base"] ?: "").replace("@value", value.toString()))
                 return Pair(value, true)
             }
         }

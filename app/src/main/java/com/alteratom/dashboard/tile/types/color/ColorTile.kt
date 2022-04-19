@@ -15,11 +15,8 @@ import androidx.core.graphics.red
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener
 import com.alteratom.databinding.DialogColorPickerBinding
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
@@ -43,7 +40,7 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         set(value) {
             field = value
 
-            mqttData.payloads[colorType]?.let { pattern ->
+            mqtt.payloads[colorType]?.let { pattern ->
                 when (colorType) {
                     "hsv" -> {
                         toRemoves["hsv"] = Regex("@[hsv]").split(pattern) as MutableList
@@ -75,9 +72,9 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["hsv"] = "@h;@s;@v"
-        mqttData.payloads["hex"] = "#@hex"
-        mqttData.payloads["rgb"] = "@r;@g;@b"
+        mqtt.payloads["hsv"] = "@h;@s;@v"
+        mqtt.payloads["hex"] = "#@hex"
+        mqtt.payloads["rgb"] = "@r;@g;@b"
 
         colorToHSV(theme.a.colorPallet.color, hsvPicked)
         colorType = colorType
@@ -130,26 +127,26 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
             send(
                 when (colorType) {
                     "hsv" -> {
-                        (mqttData.payloads["hsv"] ?: "")
+                        (mqtt.payloads["hsv"] ?: "")
                             .replace("@h", hsvPickedTmp[0].toInt().toString())
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
                     "hex" -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqttData.payloads["hex"] ?: "")
+                        (mqtt.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                     "rgb" -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqttData.payloads["rgb"] ?: "")
+                        (mqtt.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
                             .replace("@g", c.green.toString())
                             .replace("@b", c.blue.toString())
                     }
                     else -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqttData.payloads["hex"] ?: "")
+                        (mqtt.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                 }

@@ -5,25 +5,22 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
-import okhttp3.Headers
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.io.IOException
 import java.security.KeyStore
-import java.security.cert.CertificateException
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import javax.net.ssl.*
-import okhttp3.Request.Builder
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
+
 
 class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     var isEnabled = true
-        get() = d.mqttEnabled && field
+        get() = d.mqtt.isEnabled && field
 
-    var client = MqttAndroidClientExtended(context, d.mqttURI, d.mqttClientId)
+    var client = MqttAndroidClientExtended(context, d.mqtt.copy())
     var conHandler = MqttdConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
@@ -103,9 +100,9 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in d.tiles.filter { it.mqttData.isEnabled }) {
-            for (t in tile.mqttData.subs) {
-                Pair(t.value, tile.mqttData.qos).let {
+        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
+            for (t in tile.mqtt.subs) {
+                Pair(t.value, tile.mqtt.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
                         topics.add(it)
                     }
@@ -133,29 +130,20 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         private var isDispatchScheduled = false
 
         fun dispatch(reason: String) {
-            val sameCred = !d.mqttCred ||
-                    client.options.userName == d.mqttUserName &&
-                    client.options.password.contentEquals(d.mqttPass.toCharArray())
 
-            val sameOptions = client.serverURI == d.mqttURI && sameCred
-
-            _isDone = client.isConnected == isEnabled && (!isEnabled || sameOptions)
+            _isDone = client.isConnected == isEnabled && (client.mqtt == d.mqtt || !isEnabled)
 
             if (!_isDone && !isDispatchScheduled) {
                 isDone.postValue(_isDone)
                 isDispatchScheduled = true
 
                 if (isEnabled) {
-                    if (client.isConnected) {
-                        client.closeAttempt()
-                    } else if (!sameOptions) {
-                        client = MqttAndroidClientExtended(
-                            context,
-                            d.mqttURI,
-                            d.mqttClientId
-                        )
-                        client.connectAttempt()
-                    } else {
+                    if (client.isConnected) client.closeAttempt()
+                    else {
+                        if (client.mqtt.clientId != d.mqtt.clientId || client.mqtt.URI != d.mqtt.URI)
+                            client = MqttAndroidClientExtended(context, d.mqtt.copy())
+
+                        client.mqtt = d.mqtt.copy()
                         client.connectAttempt()
                     }
                 } else {
@@ -172,13 +160,11 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        serverURI: String,
-        clientId: String
-    ) : MqttAndroidClient(context, serverURI, clientId) {
+        var mqtt: Dashboard.MqttData
+    ) : MqttAndroidClient(context, mqtt.URI, mqtt.clientId) {
 
         private var isBusy = false
         var topics: MutableList<Pair<String, Int>> = mutableListOf()
-        var options = MqttConnectOptions()
 
         override fun isConnected(): Boolean {
             return try {
@@ -196,16 +182,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
             if (isBusy) return
             isBusy = true
 
-            options.isCleanSession = true
-
-            if (d.mqttCred) {
-                options.userName = d.mqttUserName
-                options.password = d.mqttPass.toCharArray()
-            } else {
-                options.userName = ""
-                options.password = charArrayOf()
-            }
-
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
                     for (tile in d.tiles) tile.receive(Pair(t ?: "", m))
@@ -221,84 +197,61 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 }
             })
 
-// SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
-            //GENERATE CERT ---------------------------------
-            val caInput = context.getAssets().open("vps.crt")
-            val ca = try {
-                val cf = CertificateFactory.getInstance("X.509")
-                cf.generateCertificate(caInput) as X509Certificate
-            } catch (er: java.lang.Exception) {
-                null
-            } finally {
-                caInput.close()
+            val options = MqttConnectOptions()
+
+            options.isCleanSession = true
+
+            if (d.mqtt.includeCred) {
+                options.userName = d.mqtt.username
+                options.password = d.mqtt.pass.toCharArray()
+            } else {
+                options.userName = ""
+                options.password = charArrayOf()
             }
+
+            //GENERATE CERT ---------------------------------
+            //val caInput = context.getAssets().open("vps.crt")
+            //val ca = try {
+            //    val cf = CertificateFactory.getInstance("X.509")
+            //    cf.generateCertificate(caInput) as X509Certificate
+            //} catch (er: java.lang.Exception) {
+            //    null
+            //} finally {
+            //    caInput.close()
+            //}
             //GENERATE CERT ---------------------------------
 
-            val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            keyStore.load(null, null)
-            keyStore.setCertificateEntry("ca", ca)
+            if (d.mqtt.ssl) {
 
-            val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-            val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
-            trustManagerFactory.init(null as KeyStore?)
+                val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
+                val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
+                trustManagerFactory.init(null as KeyStore?)
 
-            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+                val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                    override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
 
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(
-                    chain: Array<X509Certificate>,
-                    authType: String
-                ) {
-                }
-
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(
-                    chain: Array<X509Certificate>,
-                    authType: String
-                ) {
-                    try {
-                        var x509TrustManager: X509TrustManager? = null
-                        for (trustManager in trustManagerFactory.trustManagers) {
-                            if (trustManager is X509TrustManager) {
-                                x509TrustManager = trustManager
-                            }
-                        }
-
-                        x509TrustManager!!.checkServerTrusted(chain, authType)
-                    } catch (e: Exception) {
-                        run {}
+                    override fun checkClientTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
                     }
 
-                    //valid cert
-                    //self cert option ignore domain
-                    //trust cert
+                    override fun checkServerTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
+                    }
+                })
 
-                    //self_yes host_yes check_yes
-                    //self_yes host_yes check_no
-                    //self_yes host_no check_yes
-                    //self_yes host_no check_no
+                val tlsContext = SSLContext.getInstance("TLS")
+                tlsContext.init(
+                    null,
+                    if (d.mqtt.sslTrustAll) trustAllCerts else trustManagerFactory.trustManagers,
+                    java.security.SecureRandom()
+                )
 
-                    //self_no host_yes check_yes
-                    //self_no host_yes check_no
-                    //self_no host_no check_yes
-                    //self_no host_no check_no
-                }
-            })
-
-            //val keyManagerFactory = KeyManagerFactory.getInstance("X509")
-            //keyManagerFactory.init(keyStore, null)
-
-            val tlsContext = SSLContext.getInstance("TLS")
-            tlsContext.init(
-                null,
-                trustManagerFactory.trustManagers,
-                java.security.SecureRandom()
-            )
-
-            options.socketFactory = tlsContext.socketFactory
-
-// SSL ENABLED -------------------------------------------------------------------------------------------------------------------------------------------
+                options.socketFactory = tlsContext.socketFactory
+            }
 
             try {
                 connect(options, null, object : IMqttActionListener {
@@ -310,18 +263,17 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
+                        val t = mqtt
                         run {}
                     }
                 })
             } catch (e: MqttException) {
-                e.printStackTrace()
             }
 
             isBusy = false
         }
 
         fun disconnectAttempt(toClose: Boolean = false) {
-            run {}
             if (isBusy) return
             isBusy = true
 
@@ -342,7 +294,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                     }
                 })
             } catch (e: MqttException) {
-                e.printStackTrace()
             }
 
             isBusy = false

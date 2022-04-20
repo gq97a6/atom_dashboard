@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.KeyEvent.ACTION_DOWN
-import android.view.KeyEvent.ACTION_UP
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -20,10 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.DashboardSwitcher.handle
+import com.alteratom.dashboard.DashboardSwitcher.switchDashboard
 import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboardIndex
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
@@ -35,7 +32,6 @@ import com.alteratom.dashboard.tile.TilesAdapter
 import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
 import java.util.*
-import kotlin.math.abs
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
@@ -175,47 +171,16 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             return@setOnTouchListener true
         }
 
-        fun switchDashboard(slideRight: Boolean) {
-            var index = dashboardIndex - if (slideRight) 1 else -1
-            if (index < 0) index = dashboards.lastIndex
-            if (index > dashboards.lastIndex) index = 0
-
-            if (setCurrentDashboard(index)) (activity as MainActivity).fm.replaceWith(
-                DashboardFragment(), false, true, slideRight
-            )
-        }
-
         b.dLeft.setOnClickListener {
-            switchDashboard(true)
+            switchDashboard(true, requireActivity())
         }
 
         b.dRight.setOnClickListener {
-            switchDashboard(false)
+            switchDashboard(false, requireActivity())
         }
 
-        var flingTouchdownX = 0f
-        var flingTouchdownY = 0f
-
         b.dRoot.onInterceptTouch = { e ->
-            if (e != null) {
-                when (e.action) {
-                    ACTION_DOWN -> {
-                        flingTouchdownX = e.x
-                        flingTouchdownY = e.y
-                    }
-                    ACTION_UP -> {
-                        val flingLen = (flingTouchdownX - e.x) / screenWidth
-
-                        if (abs(flingTouchdownY - e.y) < 120 &&
-                            abs(flingLen) > 0.2 &&
-                            e.eventTime - e.downTime in 30..300 &&
-                            adapter.editMode.isNone
-                        ) {
-                            switchDashboard(flingLen < 0)
-                        }
-                    }
-                }
-            }
+            if (adapter.editMode.isNone) handle(e, requireActivity())
         }
     }
 

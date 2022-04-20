@@ -19,6 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
+import com.alteratom.dashboard.DashboardSwitcher
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
@@ -204,6 +205,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             else createToast(requireContext(), "Connection required", 1000)
         }
 
+        b.dpRoot.onInterceptTouch = { e ->
+            DashboardSwitcher.handle(e, requireActivity(), DashboardPropertiesFragment())
+        }
+
         var onOpenCertSuccess: () -> Unit = {}
 
         openCert =
@@ -272,7 +277,6 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 dashboard.mqtt.ssl = state
                 dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
-
 
             binding.dsTrustAll.setOnTouchListener { v, event ->
                 if (event.action != 0) return@setOnTouchListener true

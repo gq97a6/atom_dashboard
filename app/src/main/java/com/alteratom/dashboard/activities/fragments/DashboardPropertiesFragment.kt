@@ -19,7 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.DashboardSwitcher
+import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
@@ -205,8 +205,16 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             else createToast(requireContext(), "Connection required", 1000)
         }
 
+        b.dpLeft.setOnClickListener {
+            FragmentSwitcher.switch(true, DashboardPropertiesFragment())
+        }
+
+        b.dpRight.setOnClickListener {
+            FragmentSwitcher.switch(false, DashboardPropertiesFragment())
+        }
+
         b.dpRoot.onInterceptTouch = { e ->
-            DashboardSwitcher.handle(e, requireActivity(), DashboardPropertiesFragment())
+            FragmentSwitcher.handle(e, DashboardPropertiesFragment())
         }
 
         var onOpenCertSuccess: () -> Unit = {}

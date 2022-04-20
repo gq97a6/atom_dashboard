@@ -18,12 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.DashboardSwitcher.handle
-import com.alteratom.dashboard.DashboardSwitcher.switchDashboard
+import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.SplashScreenActivity
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
@@ -172,15 +172,16 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         b.dLeft.setOnClickListener {
-            switchDashboard(true, requireActivity())
+            FragmentSwitcher.switch(true)
         }
 
         b.dRight.setOnClickListener {
-            switchDashboard(false, requireActivity())
+            FragmentSwitcher.switch(false)
         }
 
         b.dRoot.onInterceptTouch = { e ->
-            if (adapter.editMode.isNone) handle(e, requireActivity())
+            if (adapter.editMode.isNone) FragmentSwitcher.handle(e)
+            else false
         }
     }
 

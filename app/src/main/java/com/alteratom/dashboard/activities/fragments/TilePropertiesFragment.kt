@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
+import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.dashboard.digitsOnly
@@ -30,6 +31,7 @@ import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.recycler_view.GenericAdapter
 import com.alteratom.dashboard.recycler_view.GenericItem
 import com.alteratom.tile.types.button.TextTile
@@ -170,6 +172,18 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpNotSilentSwitch.setOnCheckedChangeListener { _, state ->
             tile.silentNotify = state
+        }
+
+        b.tpLeft.setOnClickListener {
+            TileSwitcher.switch(true)
+        }
+
+        b.tpRight.setOnClickListener {
+            TileSwitcher.switch(false)
+        }
+
+        b.tpRoot.onInterceptTouch = { e ->
+            TileSwitcher.handle(e)
         }
 
         when (tile) {

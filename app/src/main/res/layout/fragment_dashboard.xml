@@ -1,4 +1,4 @@
-<com.alteratom.dashboard.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alteratom.dashboard.TouchLayout.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -135,6 +135,7 @@
         app:layout_constraintStart_toEndOf="@+id/d_toolbar" />
 
     <View
+        android:visibility="gone"
         android:id="@+id/d_ssl_status"
         android:layout_width="11dp"
         android:layout_height="11dp"
@@ -304,4 +305,4 @@
 
     </FrameLayout>
 
-</com.alteratom.dashboard.TouchConstraintLayout>
+</com.alteratom.dashboard.TouchLayout.TouchConstraintLayout>

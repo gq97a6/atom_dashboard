@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.Activity
+import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.activities.fragments.DashboardFragment
 import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 import com.alteratom.databinding.ActivityMainBinding
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
         G.theme.apply(b.root, this, false)
+
+        TileSwitcher.activity = this
+        FragmentSwitcher.activity = this
 
         fm.replaceWith(MainScreenFragment(), false)
         if (settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {

@@ -1,10 +1,9 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.TouchLayout
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.ConstraintLayout
 
 class TouchLinearLayout(
     context: Context,
@@ -13,7 +12,7 @@ class TouchLinearLayout(
     defStyleRes: Int
 ) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    var onInterceptTouch: (ev: MotionEvent?) -> Unit = {}
+    var onInterceptTouch: (ev: MotionEvent?) -> Boolean = { false }
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -25,7 +24,6 @@ class TouchLinearLayout(
     )
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
-        onInterceptTouch(ev)
-        return super.onInterceptTouchEvent(ev)
+        return super.onInterceptTouchEvent(ev) || onInterceptTouch(ev)
     }
 }

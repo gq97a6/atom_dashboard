@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.alteratom.dashboard.TouchLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alteratom.dashboard.TouchLayout.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#00000000"
     android:gravity="center"
     android:orientation="vertical"
@@ -11,17 +12,23 @@
     tools:context=".dashboard.activities.fragments.DashboardPropertiesFragment">
 
     <TextView
+        android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:tag="color"
+        app:layout_constraintTop_toTopOf="parent"
         android:text="Properties"
         android:textSize="45dp" />
 
     <LinearLayout
+        android:id="@+id/tes2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/test"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -51,10 +58,12 @@
     </LinearLayout>
 
     <ScrollView
+        app:layout_constraintTop_toBottomOf="@id/tes2"
         android:id="@+id/dp_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:paddingHorizontal="30dp"
         android:scrollbars="none">
 
@@ -439,4 +448,51 @@
 
     </ScrollView>
 
-</com.alteratom.dashboard.TouchLinearLayout>
+    <FrameLayout
+        android:id="@+id/dp_left"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_right_corner"
+        android:tag="corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/d_left_icon"
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="15dp"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:foreground="@drawable/button_right"
+            android:tag="color" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/dp_right"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/background_left_corner"
+        android:tag="corners"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/d_right_icon"
+            style="@style/button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginVertical="10dp"
+            android:layout_marginEnd="15dp"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:foreground="@drawable/button_left"
+            android:tag="color" />
+
+    </FrameLayout>
+
+</com.alteratom.dashboard.TouchLayout.TouchConstraintLayout>

@@ -189,7 +189,7 @@
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
                             android:foreground="@drawable/button_text"
-                            android:tag="colorA"
+                            android:tag="colorB"
                             android:text="COPY PROPERTIES"
                             android:textSize="11dp" />
 
@@ -202,7 +202,7 @@
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
                             android:foreground="@drawable/button_text"
-                            android:tag="colorA"
+                            android:tag="colorB"
                             android:text="TRANSFER"
                             android:textSize="11dp"
                             tools:ignore="TouchTargetSizeCheck" />
@@ -309,25 +309,19 @@
 
                     </LinearLayout>
 
-                    <CheckBox
+                    <Button
                         android:id="@+id/dp_mqtt_ssl"
+                        style="@style/button"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#FFFFFF"
-                        android:tag="default"
-                        android:text="Enable ssl" />
-
-                    <CheckBox
-                        android:id="@+id/dp_mqtt_ssl_trust_all"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="1"
-                        android:backgroundTint="#FFFFFF"
-                        android:tag="default"
-                        android:text="Trust all certificates" />
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginHorizontal="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:foreground="@drawable/button_text"
+                        android:tag="colorB"
+                        android:text="CONFIGURE SSL"
+                        android:textSize="11dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

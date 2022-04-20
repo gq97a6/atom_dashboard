@@ -8,7 +8,6 @@ import com.alteratom.dashboard.Dashboard
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
 import java.security.KeyStore
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -210,27 +209,19 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 options.password = charArrayOf()
             }
 
-            //GENERATE CERT ---------------------------------
-            val caInput = context.getAssets().open("vps.crt")
-            val ca = try {
-                val cf = CertificateFactory.getInstance("X.509")
-                cf.generateCertificate(caInput) as X509Certificate
-            } catch (er: java.lang.Exception) {
-                null
-            } finally {
-                caInput.close()
-            }
-            //GENERATE CERT ---------------------------------
-
             if (mqtt.ssl) {
-
-                val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-                keyStore.load(null, null)
-                keyStore.setCertificateEntry("ca", ca)
 
                 val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
                 val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
-                trustManagerFactory.init(null as KeyStore?)
+
+                trustManagerFactory.init(
+                    if (mqtt.sslCert != null) {
+                        val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
+                        keyStore.load(null, null)
+                        keyStore.setCertificateEntry("ca", mqtt.sslCert)
+                        keyStore
+                    } else null
+                )
 
                 val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                     override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
@@ -245,7 +236,6 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                         chain: Array<X509Certificate>,
                         authType: String
                     ) {
-                        run {}
                     }
                 })
 

@@ -116,7 +116,7 @@ abstract class Tile : RecyclerViewItem() {
         }
 
         with(adapter.context) {
-            buildConfirm("PUBLISH", "Confirm publishing", {
+            buildConfirm("Confirm publishing", "PUBLISH", {
                 send()
             })
         }

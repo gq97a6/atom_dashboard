@@ -264,7 +264,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
             if (mqtt.confirmPub) {
                 with(adapter.context) {
-                    buildConfirm("PUBLISH", "Confirm publishing", {
+                    buildConfirm("Confirm publishing", "PUBLISH", {
                         send()
                     })
                 }

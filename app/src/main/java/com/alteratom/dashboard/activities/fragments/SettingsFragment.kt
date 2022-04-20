@@ -170,7 +170,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun openFile() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/plain"
+            type = "*/*"
         }
         open.launch(intent)
     }

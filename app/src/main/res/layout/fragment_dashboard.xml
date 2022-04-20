@@ -123,7 +123,7 @@
 
     <TextView
         android:id="@+id/d_status"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="10dp"
@@ -133,6 +133,18 @@
         app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
         app:layout_constraintEnd_toStartOf="@+id/d_more"
         app:layout_constraintStart_toEndOf="@+id/d_toolbar" />
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/d_ssl_status"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:background="@drawable/button_locked"
+        android:tag="colorAIcon"
+        android:layout_marginStart="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/d_tag"
+        app:layout_constraintStart_toEndOf="@+id/d_status"
+        app:layout_constraintTop_toBottomOf="@+id/d_tag" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/d_recycler_view"

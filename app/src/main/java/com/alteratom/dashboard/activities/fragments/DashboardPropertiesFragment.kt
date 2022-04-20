@@ -1,7 +1,10 @@
 package com.alteratom.dashboard.activities.fragments
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -9,28 +12,35 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.dashboard.Transfer.showTransferPopup
-import com.alteratom.dashboard.blink
-import com.alteratom.dashboard.createToast
-import com.alteratom.databinding.DialogCopyBrokerBinding
-import com.alteratom.databinding.FragmentDashboardPropertiesBinding
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Transfer.showTransferPopup
+import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.GenericAdapter
 import com.alteratom.dashboard.recycler_view.GenericItem
+import com.alteratom.dashboard.toPem
+import com.alteratom.databinding.DialogCopyBrokerBinding
+import com.alteratom.databinding.DialogSslBinding
+import com.alteratom.databinding.FragmentDashboardPropertiesBinding
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.random.Random
 
-
 class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_properties) {
     private lateinit var b: FragmentDashboardPropertiesBinding
+    private lateinit var openCert: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,17 +105,6 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 dashboard.mqtt.port = port
                 dashboard.dg?.mqttd?.notifyOptionsChanged()
             }
-        }
-
-        b.dpMqttSsl.setOnCheckedChangeListener { _, state ->
-            dashboard.mqtt.ssl = state
-            b.dpMqttSslTrustAll.visibility = if(dashboard.mqtt.ssl) VISIBLE else GONE
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
-        }
-
-        b.dpMqttSslTrustAll.setOnCheckedChangeListener { _, state ->
-            dashboard.mqtt.sslTrustAll = state
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
         }
 
         b.dpMqttCred.setOnCheckedChangeListener { _, state ->
@@ -204,6 +203,144 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             if (dashboard.dg?.mqttd?.client?.isConnected == true) showTransferPopup(this)
             else createToast(requireContext(), "Connection required", 1000)
         }
+
+        var onOpenCertSuccess: () -> Unit = {}
+
+        openCert =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    result.data?.data?.also { uri ->
+                        try {
+                            requireContext().contentResolver.openInputStream(uri)
+                                ?.use { inputStream ->
+                                    dashboard.mqtt.let { m ->
+
+                                        m.sslCertStr = try {
+                                            val cf = CertificateFactory.getInstance("X.509")
+                                            cf.generateCertificate(inputStream) as X509Certificate
+                                        } catch (e: Exception) {
+                                            null
+                                        }?.toPem()
+
+                                        m.sslFileName =
+                                            if (m.sslCert != null) {
+                                                runCatching {
+                                                    requireContext().contentResolver.query(
+                                                        uri,
+                                                        null,
+                                                        null,
+                                                        null,
+                                                        null
+                                                    )?.use { cursor ->
+                                                        cursor.moveToFirst()
+                                                        return@use cursor.getColumnIndexOrThrow(
+                                                            OpenableColumns.DISPLAY_NAME
+                                                        ).let(cursor::getString)
+                                                    }
+                                                }.getOrNull() ?: "cert.crt"
+                                            } else ""
+
+                                        if (m.sslCert != null) onOpenCertSuccess()
+                                    }
+                                }
+
+                        } catch (e: java.lang.Exception) {
+                            createToast(requireContext(), "Certificate error")
+                        }
+                    }
+                }
+            }
+
+
+
+        b.dpMqttSsl.setOnClickListener {
+            val dialog = Dialog(requireContext())
+
+            dialog.setContentView(R.layout.dialog_ssl)
+            val binding = DialogSslBinding.bind(dialog.findViewById(R.id.root))
+
+            binding.dsSsl.isChecked = dashboard.mqtt.ssl
+            binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+            binding.dsCaCert.setText(dashboard.mqtt.sslFileName)
+            binding.dsTrustAlert.visibility = if (dashboard.mqtt.sslTrustAll) VISIBLE else GONE
+            if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
+
+            if (dashboard.mqtt.sslCert != null) binding.dsCaCertInsert.foreground =
+                requireContext().getDrawable(R.drawable.button_remove)
+
+            binding.dsSsl.setOnCheckedChangeListener { _, state ->
+                dashboard.mqtt.ssl = state
+                dashboard.dg?.mqttd?.notifyOptionsChanged()
+            }
+
+
+            binding.dsTrustAll.setOnTouchListener { v, event ->
+                if (event.action != 0) return@setOnTouchListener true
+
+                fun validate() {
+                    binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+                    binding.dsTrustAlert.visibility =
+                        if (dashboard.mqtt.sslTrustAll) VISIBLE else GONE
+
+                    if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
+                    else binding.dsTrustAlert.clearAnimation()
+
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+
+                if (!dashboard.mqtt.sslTrustAll) {
+                    requireContext().buildConfirm("Confirm override", "CONFIRM",
+                        {
+                            dashboard.mqtt.sslTrustAll = true
+                            validate()
+                        }
+                    )
+                } else {
+                    dashboard.mqtt.sslTrustAll = false
+                    validate()
+                }
+
+                return@setOnTouchListener true
+            }
+
+            onOpenCertSuccess = {
+                binding.dsCaCert.setText(dashboard.mqtt.sslFileName)
+                binding.dsCaCertInsert.foreground =
+                    requireContext().getDrawable(R.drawable.button_remove)
+
+                dashboard.dg?.mqttd?.notifyOptionsChanged()
+            }
+
+            fun openCert() {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "*/*"
+                }
+                openCert.launch(intent)
+            }
+
+            binding.dsCaCert.setOnClickListener {
+                if (dashboard.mqtt.sslCert == null) openCert()
+            }
+
+            binding.dsCaCertInsert.setOnClickListener {
+                if (dashboard.mqtt.sslCert == null) openCert()
+                else {
+                    dashboard.mqtt.sslFileName = ""
+                    dashboard.mqtt.sslCertStr = null
+
+                    binding.dsCaCert.setText("")
+                    binding.dsCaCertInsert.foreground =
+                        requireContext().getDrawable(R.drawable.button_include)
+
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                }
+            }
+
+            dialog.dialogSetup()
+            theme.apply(binding.root)
+            dialog.show()
+        }
     }
 
     private fun viewConfig() {
@@ -219,10 +356,6 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         b.dpMqttCred.isChecked = dashboard.mqtt.includeCred
         b.dpMqttLogin.setText(dashboard.mqtt.username)
         b.dpMqttPass.setText(dashboard.mqtt.pass)
-
-        b.dpMqttSsl.isChecked = dashboard.mqtt.ssl
-        b.dpMqttSslTrustAll.isChecked = dashboard.mqtt.sslTrustAll
-        b.dpMqttSslTrustAll.visibility = if(dashboard.mqtt.ssl) VISIBLE else GONE
 
         b.dpMqttCredArrow.rotation = 180f
         b.dpMqttCredBox.visibility = View.GONE

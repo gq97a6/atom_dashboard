@@ -10,8 +10,8 @@ import com.alteratom.databinding.DialogConfirmBinding
 
 object DialogBuilder {
     fun Context.buildConfirm(
+        message: String,
         label: String,
-        button: String,
         onConfirm: () -> Unit,
         onDeny: () -> Unit = {}
     ) {
@@ -31,7 +31,7 @@ object DialogBuilder {
         }
 
         binding.dcConfirm.text = label
-        binding.dcText.text = button
+        binding.dcText.text = message
 
         dialog.dialogSetup()
         G.theme.apply(binding.root)

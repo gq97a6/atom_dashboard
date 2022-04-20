@@ -144,7 +144,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
         with(context) {
-            buildConfirm("CONFIRM", "Confirm removing", {
+            buildConfirm("Confirm removing", "CONFIRM", {
                 var i = 0
                 while (i < list.size) {
                     list[i].let {

@@ -8,6 +8,8 @@ import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.io.File
 import java.io.FileReader
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.random.Random
 
@@ -30,6 +32,10 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
         }
 
     var mqtt = MqttData()
+       // set(value) {
+       //     field = value
+       //     value.initSSLCert()
+       // }
 
     companion object {
         fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {
@@ -71,9 +77,12 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
     }
 
     data class MqttData(
-        var isEnabled: Boolean = true,
+        var isEnabled: Boolean = true, //il_interface_exclamation_triangle
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
+        @JsonIgnore
+        var sslCert: X509Certificate? = null,
+        var sslFileName: String = "",
         var address: String = "tcp://",
         var port: Int = 1883,
         var includeCred: Boolean = false,
@@ -83,5 +92,16 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
     ) {
         val URI
             get() = "$address:$port"
+
+        var sslCertStr: String? = null
+            set(value) {
+                field = value
+                sslCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(sslCertStr?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    null
+                }
+            }
     }
 }

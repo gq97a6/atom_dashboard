@@ -11,6 +11,8 @@ import android.view.KeyEvent.ACTION_UP
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -88,10 +90,13 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         //Set dashboard status
         dashboard.dg?.mqttd?.let {
             it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
+                b.dSslStatus.visibility = GONE
                 b.dStatus.text = if (!dashboard.mqtt.isEnabled) {
                     "DISCONNECTED"
                 } else {
                     if (it.client.isConnected) {
+                        if (dashboard.mqtt.ssl && !dashboard.mqtt.sslTrustAll)
+                            b.dSslStatus.visibility = VISIBLE
                         "CONNECTED"
                     } else {
                         if (isDone) {

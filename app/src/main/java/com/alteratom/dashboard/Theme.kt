@@ -326,6 +326,12 @@ class Theme {
                 //drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
+            "insert" -> {
+                this.setTextColor(p.b)
+                val drawable = this.background as? GradientDrawable
+                //drawable?.mutate()
+                drawable?.setStroke(1, p.c)
+            }
             "log" -> {
                 this.setTextColor(p.color)
                 this.setBackgroundColor(p.background)

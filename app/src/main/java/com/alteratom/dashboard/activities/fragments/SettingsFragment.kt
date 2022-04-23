@@ -178,8 +178,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun createFile() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TITLE, "backup.txt")
+            type = "*/*"
+            putExtra(Intent.EXTRA_TITLE, "atomDashboard.backup")
         }
         create.launch(intent)
     }

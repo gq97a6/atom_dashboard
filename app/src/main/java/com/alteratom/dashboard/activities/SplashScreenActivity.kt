@@ -2,9 +2,11 @@ package com.alteratom.dashboard.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.Activity
 import com.alteratom.dashboard.FolderTree.rootFolder
@@ -25,6 +27,8 @@ class SplashScreenActivity : AppCompatActivity() {
         b = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(b.root)
         G.theme.apply(b.root, this)
+
+        //if (Build.VERSION.SDK_INT > 30) b.ssBox.visibility = GONE
 
         rootFolder = filesDir.canonicalPath.toString()
 

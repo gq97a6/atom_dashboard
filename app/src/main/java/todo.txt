@@ -1,6 +1,8 @@
 //expand ------------------------------
 start guide
 client certificates
+android 12 splash screen
+backup encryption
 
 //post development ------------------------------
 hardcoded text

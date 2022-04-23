@@ -241,7 +241,7 @@ class Theme {
 
         ripple?.setColor(ColorStateList.valueOf(p.background))
         stroke?.setStroke(
-            3f.toPx(), when (this.tag) {
+            2f.toPx(), when (this.tag) {
                 "color" -> ColorStateList.valueOf(p.color)
                 "colorA" -> ColorStateList.valueOf(p.a)
                 "colorB" -> ColorStateList.valueOf(p.b)

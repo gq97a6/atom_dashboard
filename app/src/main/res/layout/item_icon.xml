@@ -10,7 +10,7 @@
         android:id="@+id/ripple_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_ripple"
+        android:background="@drawable/bg_ripple"
         android:elevation="20dp"
         android:tag="rippleForeground" />
 
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:background="@drawable/background_round" />
+        android:background="@drawable/bg_round" />
 
     <TextView
         android:id="@+id/ic_text"
@@ -46,7 +46,7 @@
         android:id="@+id/ic_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_frame"
+        android:background="@drawable/bg_frame"
         android:tag="frame" />
 
     <View
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
-        android:background="@drawable/background_frame"
+        android:background="@drawable/bg_frame"
         android:tag="frame" />
 
 </FrameLayout>

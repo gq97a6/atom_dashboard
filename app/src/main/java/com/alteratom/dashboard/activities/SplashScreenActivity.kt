@@ -2,19 +2,24 @@ package com.alteratom.dashboard.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
+import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View.GONE
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.get
+import com.alteratom.R
 import com.alteratom.dashboard.Activity
 import com.alteratom.dashboard.FolderTree.rootFolder
-import com.alteratom.databinding.ActivitySplashScreenBinding
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
-import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
+import com.alteratom.dashboard.jiggle
+import com.alteratom.databinding.ActivitySplashScreenBinding
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -29,6 +34,8 @@ class SplashScreenActivity : AppCompatActivity() {
         G.theme.apply(b.root, this)
 
         //if (Build.VERSION.SDK_INT > 30) b.ssBox.visibility = GONE
+
+        b.ssIcon.setBackgroundResource(if (G.theme.a.isDark) R.drawable.ic_icon_light  else R.drawable.ic_icon)
 
         rootFolder = filesDir.canonicalPath.toString()
 
@@ -63,11 +70,10 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun onServiceReady() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            Intent(this, MainActivity::class.java).also {
-                startActivity(it)
-                finish()
-            }
-        }, 500)
+        Intent(this, MainActivity::class.java).also {
+            startActivity(it)
+            overridePendingTransition(0, 0)
+            finish()
+        }
     }
 }

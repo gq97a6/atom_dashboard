@@ -21,7 +21,7 @@
             android:layout_height="0dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
-            android:background="@drawable/background_frame"
+            android:background="@drawable/bg_frame"
             android:fadeScrollbars="false"
             android:paddingVertical="10dp"
             android:paddingStart="5dp"
@@ -76,7 +76,7 @@
             android:layout_marginStart="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_locked"
+            android:foreground="@drawable/bt_locked"
             android:tag="color" />
 
     </FrameLayout>
@@ -98,7 +98,7 @@
             android:layout_marginEnd="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_more"
+            android:foreground="@drawable/bt_more"
             android:tag="color" />
 
     </FrameLayout>
@@ -141,7 +141,7 @@
         android:layout_height="11dp"
         android:layout_marginStart="2.5dp"
         android:layout_marginTop="2.5dp"
-        android:background="@drawable/button_locked"
+        android:background="@drawable/bt_locked"
         android:tag="colorAIcon"
         app:layout_constraintStart_toEndOf="@+id/d_status"
         app:layout_constraintTop_toTopOf="@+id/d_status" />
@@ -183,7 +183,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/background_bar"
+            android:background="@drawable/bg_bar"
             android:tag="bar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="5:1"
@@ -198,7 +198,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_add"
+                android:foreground="@drawable/bt_add"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -214,7 +214,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_trashcan"
+                android:foreground="@drawable/bt_trashcan"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -229,7 +229,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_swap"
+                android:foreground="@drawable/bt_swap"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -244,7 +244,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_edit"
+                android:foreground="@drawable/bt_edit"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -262,7 +262,7 @@
         android:id="@+id/d_left"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/background_right_corner"
+        android:background="@drawable/bg_right_corner"
         android:tag="corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -276,7 +276,7 @@
             android:layout_marginStart="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_right"
+            android:foreground="@drawable/bt_right"
             android:tag="color" />
 
     </FrameLayout>
@@ -285,7 +285,7 @@
         android:id="@+id/d_right"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/background_left_corner"
+        android:background="@drawable/bg_left_corner"
         android:tag="corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -300,7 +300,7 @@
             android:layout_marginEnd="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_left"
+            android:foreground="@drawable/bt_left"
             android:tag="color" />
 
     </FrameLayout>

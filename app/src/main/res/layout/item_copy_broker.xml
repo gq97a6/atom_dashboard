@@ -11,7 +11,7 @@
         android:id="@+id/ripple_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_ripple"
+        android:background="@drawable/bg_ripple"
         android:elevation="20dp"
         android:tag="rippleForegroundDim" />
 
@@ -27,7 +27,7 @@
         android:id="@+id/icb_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_frame"
+        android:background="@drawable/bg_frame"
         android:gravity="center"
         android:padding="12dp"
         android:tag="frame"

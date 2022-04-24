@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/background_frame"
+            android:background="@drawable/bg_frame"
             android:orientation="vertical"
             android:padding="5dp"
             android:tag="frame">
@@ -58,7 +58,7 @@
                         android:id="@+id/tn_button_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -66,7 +66,7 @@
                         android:id="@+id/tn_button"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -100,7 +100,7 @@
                         android:id="@+id/tn_slider_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -108,7 +108,7 @@
                         android:id="@+id/tn_slider"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -142,7 +142,7 @@
                         android:id="@+id/tn_switch_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -150,7 +150,7 @@
                         android:id="@+id/tn_switch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -190,7 +190,7 @@
                         android:id="@+id/tn_text_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -198,7 +198,7 @@
                         android:id="@+id/tn_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -232,7 +232,7 @@
                         android:id="@+id/tn_select_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -240,7 +240,7 @@
                         android:id="@+id/tn_select"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -274,7 +274,7 @@
                         android:id="@+id/tn_terminal_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -282,7 +282,7 @@
                         android:id="@+id/tn_terminal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -322,7 +322,7 @@
                         android:id="@+id/tn_color_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -330,7 +330,7 @@
                         android:id="@+id/tn_color"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -364,7 +364,7 @@
                         android:id="@+id/tn_thermostat_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -372,7 +372,7 @@
                         android:id="@+id/tn_thermostat"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -412,7 +412,7 @@
                         android:id="@+id/tn_time_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -420,7 +420,7 @@
                         android:id="@+id/tn_time"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -455,7 +455,7 @@
                         android:id="@+id/tn_lights_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -463,7 +463,7 @@
                         android:id="@+id/tn_lights"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -497,7 +497,7 @@
                         android:id="@+id/tn_graph_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -505,7 +505,7 @@
                         android:id="@+id/tn_graph"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -555,7 +555,7 @@
                         android:id="@+id/tn_keyboard_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -563,7 +563,7 @@
                         android:id="@+id/tn_keyboard"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">
@@ -608,7 +608,7 @@
                         android:id="@+id/tn_touchpad_ripple"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_ripple"
+                        android:background="@drawable/bg_ripple"
                         android:elevation="20dp"
                         android:tag="rippleForeground" />
 
@@ -616,7 +616,7 @@
                         android:id="@+id/tn_touchpad"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/background_frame"
+                        android:background="@drawable/bg_frame"
                         android:orientation="vertical"
                         android:padding="10dp"
                         android:tag="frame">

@@ -113,7 +113,7 @@ fun createNotification(
         .setAutoCancel(true)
         .setContentTitle(title)
         .setContentText(text)
-        .setSmallIcon(R.mipmap.ic_generated_round)
+        .setSmallIcon(R.mipmap.ic_icon_bold_round)
         .setPriority(NotificationCompat.PRIORITY_MIN)
         .setVisibility(NotificationCompat.VISIBILITY_SECRET)
 

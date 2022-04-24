@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:layout_marginHorizontal="50dp"
     android:layout_marginBottom="20dp"
-    android:background="@drawable/background_frame"
+    android:background="@drawable/bg_frame"
     android:orientation="vertical"
     android:tag="frame">
 
@@ -46,7 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/background_frame_sharp"
+        android:background="@drawable/bg_frame_sharp"
         android:hint="empty"
         android:importantForAutofill="no"
         android:inputType="text"
@@ -137,7 +137,7 @@
                 android:id="@+id/dt_transfer_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:tag="frame" />
 
             <View
@@ -152,7 +152,7 @@
                 android:id="@+id/dt_transfer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background_ripple"
+                android:background="@drawable/bg_ripple"
                 android:tag="rippleForegroundDim" />
 
         </FrameLayout>
@@ -172,7 +172,7 @@
                 android:id="@+id/dt_receive_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:tag="frame" />
 
             <View
@@ -187,7 +187,7 @@
                 android:id="@+id/dt_receive"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/background_ripple"
+                android:background="@drawable/bg_ripple"
                 android:tag="rippleForegroundDim" />
 
         </FrameLayout>

@@ -39,7 +39,7 @@ class ToolBarController(
                 .withEndAction {
                     (toolbarIcon.foreground as? RippleDrawable?)?.setDrawableByLayerId(
                         R.id.icon,
-                        AppCompatResources.getDrawable(adapter.context, R.drawable.icon_unlocked)
+                        AppCompatResources.getDrawable(adapter.context, R.drawable.ic_unlocked)
                     )
                     onUiChange()
                 }
@@ -53,7 +53,7 @@ class ToolBarController(
                 .withEndAction {
                     (toolbarIcon.foreground as? RippleDrawable?)?.setDrawableByLayerId(
                         R.id.icon,
-                        AppCompatResources.getDrawable(adapter.context, R.drawable.icon_locked)
+                        AppCompatResources.getDrawable(adapter.context, R.drawable.ic_locked)
                     )
                     onUiChange()
                 }

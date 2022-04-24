@@ -1,6 +1,9 @@
 package com.alteratom.dashboard.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -13,6 +16,7 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.activities.fragments.DashboardFragment
 import com.alteratom.dashboard.activities.fragments.MainScreenFragment
+import com.alteratom.dashboard.activities.fragments.SplashScreenFragment
 import com.alteratom.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -35,8 +39,8 @@ class MainActivity : AppCompatActivity() {
         FragmentSwitcher.activity = this
 
         fm.replaceWith(MainScreenFragment(), false)
-        if (settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {
-            fm.replaceWith(DashboardFragment())
+        supportFragmentManager.commit {
+            replace(R.id.m_fragment, SplashScreenFragment())
         }
     }
 

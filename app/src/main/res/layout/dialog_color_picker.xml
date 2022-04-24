@@ -23,7 +23,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:background="@drawable/background_oval" />
+            android:background="@drawable/bg_oval" />
 
     </FrameLayout>
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:foreground="@drawable/button_text"
+            android:foreground="@drawable/bt_text"
             android:paddingHorizontal="30dp"
             android:tag="colorC"
             android:text="CANCEL"
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:foreground="@drawable/button_text"
+            android:foreground="@drawable/bt_text"
             android:paddingHorizontal="30dp"
             android:tag="colorA"
             android:text="CONFIRM"

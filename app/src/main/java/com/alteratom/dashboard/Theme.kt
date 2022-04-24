@@ -20,7 +20,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.alteratom.dashboard.G.mapper
@@ -225,7 +224,7 @@ class Theme {
             "log" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(1, p.color)
-                val bar = getDrawable(context, R.drawable.background_bar)
+                val bar = getDrawable(context, R.drawable.bg_bar)
                 bar?.setTint(p.b)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     this.verticalScrollbarThumbDrawable = bar
@@ -478,9 +477,9 @@ class Theme {
 
             if (!isRaw) {
                 var col = 0
-                var maxS: Float = 1f
-                var maxV: Float = 1f
-                var minV: Float = 0f
+                var maxS = 1f
+                var maxV = 1f
+                var minV = 0f
 
                 //Compute maximal saturation/value
                 for (i in 100 downTo 0) {

@@ -23,7 +23,7 @@
             android:layout_marginStart="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_locked"
+            android:foreground="@drawable/bt_locked"
             android:tag="color" />
 
     </FrameLayout>
@@ -45,7 +45,7 @@
             android:layout_marginEnd="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_edit"
+            android:foreground="@drawable/bt_edit"
             android:tag="color" />
 
     </FrameLayout>
@@ -99,7 +99,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/background_bar"
+            android:background="@drawable/bg_bar"
             android:tag="bar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="5:1"
@@ -114,7 +114,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_add"
+                android:foreground="@drawable/bt_add"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -130,7 +130,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_trashcan"
+                android:foreground="@drawable/bt_trashcan"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -145,7 +145,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_swap"
+                android:foreground="@drawable/bt_swap"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -160,7 +160,7 @@
                 style="@style/button"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:foreground="@drawable/button_edit"
+                android:foreground="@drawable/bt_edit"
                 android:tag="colorA"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"

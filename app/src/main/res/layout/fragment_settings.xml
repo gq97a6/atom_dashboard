@@ -41,7 +41,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp"
@@ -151,7 +151,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:tag="frame">
@@ -214,7 +214,7 @@
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="30dp"
                         android:layout_marginVertical="5dp"
-                        android:foreground="@drawable/button_text"
+                        android:foreground="@drawable/bt_text"
                         android:tag="colorA"
                         android:text="EDIT COLOR"
                         android:textSize="11dp" />
@@ -243,7 +243,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:tag="frame">
@@ -260,7 +260,7 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:foreground="@drawable/button_text"
+                        android:foreground="@drawable/bt_text"
                         android:padding="0dp"
                         android:tag="colorA"
                         android:text="CREATE"
@@ -275,7 +275,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
-                        android:foreground="@drawable/button_text"
+                        android:foreground="@drawable/bt_text"
                         android:padding="0dp"
                         android:tag="colorA"
                         android:text="RESTORE"

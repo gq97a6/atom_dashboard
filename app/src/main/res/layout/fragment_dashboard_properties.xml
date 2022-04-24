@@ -44,7 +44,7 @@
             android:id="@+id/dp_name"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:background="@drawable/background_frame_sharp"
+            android:background="@drawable/bg_frame_sharp"
             android:hint="random"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -99,7 +99,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_frame"
+                android:background="@drawable/bg_frame"
                 android:orientation="vertical"
                 android:padding="10dp"
                 android:tag="frame">
@@ -167,7 +167,7 @@
                             android:layout_height="35dp"
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="8dp"
-                            android:background="@drawable/background_frame"
+                            android:background="@drawable/bg_frame"
                             android:gravity="center"
                             android:tag="frame"
                             android:text="DISCONNECTED"
@@ -198,7 +198,7 @@
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
-                            android:foreground="@drawable/button_text"
+                            android:foreground="@drawable/bt_text"
                             android:tag="colorB"
                             android:text="COPY PROPERTIES"
                             android:textSize="11dp" />
@@ -211,7 +211,7 @@
                             android:layout_gravity="center"
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
-                            android:foreground="@drawable/button_text"
+                            android:foreground="@drawable/bt_text"
                             android:tag="colorB"
                             android:text="TRANSFER"
                             android:textSize="11dp"
@@ -237,7 +237,7 @@
                             android:id="@+id/dp_mqtt_address"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:background="@drawable/background_frame_sharp"
+                            android:background="@drawable/bg_frame_sharp"
                             android:ems="100"
                             android:hint="tcp://"
                             android:importantForAutofill="no"
@@ -271,7 +271,7 @@
                             android:id="@+id/dp_mqtt_port"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:background="@drawable/background_frame_sharp"
+                            android:background="@drawable/bg_frame_sharp"
                             android:ems="100"
                             android:hint="1883"
                             android:importantForAutofill="no"
@@ -305,7 +305,7 @@
                             android:id="@+id/dp_mqtt_client_id"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:background="@drawable/background_frame_sharp"
+                            android:background="@drawable/bg_frame_sharp"
                             android:ems="100"
                             android:hint="random"
                             android:importantForAutofill="no"
@@ -328,7 +328,7 @@
                         android:layout_marginHorizontal="30dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginBottom="10dp"
-                        android:foreground="@drawable/button_text"
+                        android:foreground="@drawable/bt_text"
                         android:tag="colorB"
                         android:text="CONFIGURE SSL"
                         android:textSize="11dp" />
@@ -357,7 +357,7 @@
                             android:layout_height="40dp"
                             android:layout_marginEnd="5dp"
                             android:layout_weight="0"
-                            android:background="@drawable/icon_arrow"
+                            android:background="@drawable/ic_arrow"
                             android:clickable="true"
                             android:focusable="true"
                             android:tag="groupArrow"
@@ -393,7 +393,7 @@
                                 android:id="@+id/dp_mqtt_login"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
+                                android:background="@drawable/bg_frame_sharp"
                                 android:ems="100"
                                 android:importantForAutofill="no"
                                 android:inputType="textPassword"
@@ -425,7 +425,7 @@
                                 android:id="@+id/dp_mqtt_pass"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
-                                android:background="@drawable/background_frame_sharp"
+                                android:background="@drawable/bg_frame_sharp"
                                 android:ems="100"
                                 android:importantForAutofill="no"
                                 android:inputType="textPassword"
@@ -452,7 +452,7 @@
         android:id="@+id/dp_left"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/background_right_corner"
+        android:background="@drawable/bg_right_corner"
         android:tag="corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -466,7 +466,7 @@
             android:layout_marginStart="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_right"
+            android:foreground="@drawable/bt_right"
             android:tag="color" />
 
     </FrameLayout>
@@ -475,7 +475,7 @@
         android:id="@+id/dp_right"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:background="@drawable/background_left_corner"
+        android:background="@drawable/bg_left_corner"
         android:tag="corners"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -490,7 +490,7 @@
             android:layout_marginEnd="15dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_left"
+            android:foreground="@drawable/bt_left"
             android:tag="color" />
 
     </FrameLayout>

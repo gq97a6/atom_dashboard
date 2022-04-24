@@ -46,9 +46,9 @@ class ForegroundService : LifecycleService() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentTitle("Server working in background")
-            .setSmallIcon(R.mipmap.ic_generated_round)
+            .setSmallIcon(R.mipmap.ic_icon_bold_round)
             .setPriority(PRIORITY_MIN)
-            .addAction(R.drawable.icon_trashcan, "stop working in background", pendingIntent)
+            .addAction(R.drawable.ic_trashcan, "stop working in background", pendingIntent)
             .setVisibility(VISIBILITY_SECRET)
             .setSilent(true)
 

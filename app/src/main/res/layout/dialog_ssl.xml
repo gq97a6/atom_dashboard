@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginBottom="20dp"
-    android:background="@drawable/background_frame"
+    android:background="@drawable/bg_frame"
     android:orientation="vertical"
     android:padding="15dp"
     android:tag="frame">
@@ -66,7 +66,7 @@
                 android:id="@+id/ds_ca_cert"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/background_frame_sharp"
+                android:background="@drawable/bg_frame_sharp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="10dp"
                 android:tag="insert"
@@ -79,7 +79,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="center|end"
                 android:layout_marginEnd="10dp"
-                android:foreground="@drawable/button_include"
+                android:foreground="@drawable/bt_include"
                 android:tag="colorA" />
 
         </FrameLayout>
@@ -109,7 +109,7 @@
                 android:id="@+id/ds_client_cert"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/background_frame_sharp"
+                android:background="@drawable/bg_frame_sharp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="10dp"
                 android:tag="insert"
@@ -122,7 +122,7 @@
                 android:layout_height="25dp"
                 android:layout_gravity="center|end"
                 android:layout_marginEnd="10dp"
-                android:foreground="@drawable/button_include"
+                android:foreground="@drawable/bt_include"
                 android:tag="colorA" />
 
         </FrameLayout>

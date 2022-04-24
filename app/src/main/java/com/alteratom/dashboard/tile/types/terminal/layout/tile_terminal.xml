@@ -12,7 +12,7 @@
         android:id="@+id/ripple_foreground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_ripple"
+        android:background="@drawable/bg_ripple"
         android:elevation="20dp"
         android:tag="rippleForeground" />
 
@@ -27,7 +27,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_frame"
+        android:background="@drawable/bg_frame"
         android:elevation="10dp"
         android:tag="frame">
 
@@ -45,7 +45,7 @@
             android:id="@+id/t_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/icon_swap"
+            android:background="@drawable/ic_swap"
             android:tag="colorIcon"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintHeight_percent="0.15"

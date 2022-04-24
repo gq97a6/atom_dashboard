@@ -17,7 +17,7 @@
             android:layout_height="35dp"
             android:layout_marginEnd="2.5dp"
             android:layout_weight="1"
-            android:background="@drawable/background_frame_sharp"
+            android:background="@drawable/bg_frame_sharp"
             android:hint="random"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -33,7 +33,7 @@
             android:layout_height="35dp"
             android:layout_marginStart="2.5dp"
             android:layout_weight="1"
-            android:background="@drawable/background_frame_sharp"
+            android:background="@drawable/bg_frame_sharp"
             android:hint="random"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -52,7 +52,7 @@
             android:layout_marginStart="10dp"
             android:clickable="false"
             android:duplicateParentState="true"
-            android:foreground="@drawable/button_trashcan"
+            android:foreground="@drawable/bt_trashcan"
             android:tag="color" />
 
     </LinearLayout>

@@ -22,6 +22,7 @@ import com.alteratom.databinding.FragmentSettingsBinding
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -144,7 +145,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         b.sThemeEdit.setOnClickListener {
-            (activity as MainActivity).fm.replaceWith(ThemeFragment())
+            fm.replaceWith(ThemeFragment())
         }
 
         b.sThemeIsDark.setOnClickListener {

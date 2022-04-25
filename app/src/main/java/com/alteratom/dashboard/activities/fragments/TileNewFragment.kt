@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.click
 import com.alteratom.databinding.FragmentTileNewBinding
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.tile.types.button.ButtonTile
 import com.alteratom.tile.types.button.TextTile
@@ -102,6 +102,6 @@ class TileNewFragment : Fragment(R.layout.fragment_tile_new) {
         dashboard.tiles.add(t)
 
         tile = t
-        (activity as MainActivity).fm.replaceWith(TilePropertiesFragment(), false)
+        fm.replaceWith(TilePropertiesFragment(), false)
     }
 }

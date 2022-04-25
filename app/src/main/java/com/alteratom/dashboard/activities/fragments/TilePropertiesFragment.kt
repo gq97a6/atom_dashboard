@@ -18,8 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.dashboard.digitsOnly
 import com.alteratom.dashboard.G
@@ -32,6 +30,7 @@ import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.TileSwitcher.TileSwitcher
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.recycler_view.GenericAdapter
 import com.alteratom.dashboard.recycler_view.GenericItem
 import com.alteratom.tile.types.button.TextTile
@@ -109,7 +108,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
             setIconHSV = { hsv -> tile.hsv = hsv }
             setIconKey = { key -> tile.iconKey = key }
 
-            (activity as MainActivity).fm.replaceWith(TileIconFragment())
+            fm.replaceWith(TileIconFragment())
         }
 
         b.tpMqttSwitch.setOnCheckedChangeListener { _, state ->
@@ -320,7 +319,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     setIconHSV = { hsv -> tile.hsvTrue = hsv }
                     setIconKey = { key -> tile.iconKeyTrue = key }
 
-                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                    fm.replaceWith(TileIconFragment())
                 }
 
                 b.tpMqttPayloadFalseEditIcon.setOnClickListener {
@@ -331,7 +330,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     setIconHSV = { hsv -> tile.hsvFalse = hsv }
                     setIconKey = { key -> tile.iconKeyFalse = key }
 
-                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                    fm.replaceWith(TileIconFragment())
                 }
 
                 b.tpMqttPayloadTrue.addTextChangedListener {
@@ -829,7 +828,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     setIconHSV = { hsv -> tile.hsvTrue = hsv }
                     setIconKey = { key -> tile.iconKeyTrue = key }
 
-                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                    fm.replaceWith(TileIconFragment())
                 }
 
                 b.tpMqttPayloadFalseEditIcon.setOnClickListener {
@@ -840,7 +839,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                     setIconHSV = { hsv -> tile.hsvFalse = hsv }
                     setIconKey = { key -> tile.iconKeyFalse = key }
 
-                    (activity as MainActivity).fm.replaceWith(TileIconFragment())
+                    fm.replaceWith(TileIconFragment())
                 }
 
 

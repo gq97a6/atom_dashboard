@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.fadeLong
 import com.alteratom.databinding.FragmentSplashScreenBinding
 
 
@@ -38,22 +38,9 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
             .scaleX(1.3f)
             .scaleY(1.3f)
             .withStartAction {
-                (activity as MainActivity).apply {
-                    supportFragmentManager.commit {
-                        setCustomAnimations(
-                            R.anim.splashscreen_in,
-                            R.anim.splashscreen_out,
-                            R.anim.splashscreen_in,
-                            R.anim.splashscreen_out
-                        )
-                        replace(
-                            R.id.m_fragment,
-                            if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
-                                DashboardFragment()
-                            else MainScreenFragment()
-                        )
-                    }
-                }
+                if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
+                    fm.replaceWith(DashboardFragment(), false, fadeLong)
+                else fm.popBackStack(false, fadeLong)
             }
             .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 600
     }

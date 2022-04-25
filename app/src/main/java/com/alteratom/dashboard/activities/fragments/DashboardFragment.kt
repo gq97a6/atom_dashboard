@@ -23,8 +23,8 @@ import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SplashScreenActivity
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.log.LogAdapter
@@ -136,7 +136,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            (activity as MainActivity).fm.replaceWith(TileNewFragment())
+            fm.replaceWith(TileNewFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -211,13 +211,13 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         adapter.onItemEdit = { item ->
             tile = item
-            (activity as MainActivity).fm.replaceWith(TilePropertiesFragment())
+            fm.replaceWith(TilePropertiesFragment())
         }
 
         adapter.onItemLongClick = { item ->
             if (item is SliderTile && !item.dragCon || item !is SliderTile) {
                 tile = item
-                (activity as MainActivity).fm.replaceWith(TilePropertiesFragment())
+                fm.replaceWith(TilePropertiesFragment())
             }
         }
 
@@ -248,7 +248,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 //----------------------------------------------------------------------------------------------
 
     private fun propertiesOnClick() {
-        (activity as MainActivity).fm.replaceWith(DashboardPropertiesFragment())
+        fm.replaceWith(DashboardPropertiesFragment())
     }
 
 //----------------------------------------------------------------------------------------------

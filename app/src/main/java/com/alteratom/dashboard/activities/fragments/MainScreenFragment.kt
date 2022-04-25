@@ -15,6 +15,7 @@ import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.ToolBarController
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.foreground_service.ForegroundService
 import com.alteratom.databinding.FragmentMainScreenBinding
@@ -58,10 +59,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
             ForegroundService.service?.dgManager?.notifyDashboardNew(dashboard)
 
-            if (setCurrentDashboard(dashboard.id)) (activity as MainActivity).fm.replaceWith(
-                DashboardPropertiesFragment()
-            )
-
+            if (setCurrentDashboard(dashboard.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
         val onUiChange: () -> Unit = {
@@ -82,7 +80,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         )
 
         b.msMore.setOnClickListener {
-            (activity as MainActivity).fm.replaceWith(SettingsFragment())
+            fm.replaceWith(SettingsFragment())
         }
     }
 
@@ -105,22 +103,18 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemEdit = { item ->
-            if (setCurrentDashboard(item.id)) (activity as MainActivity).fm.replaceWith(
-                DashboardPropertiesFragment()
-            )
+            if (setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.onItemClick = { item ->
             if (adapter.editMode.isNone) {
                 setCurrentDashboard(item.id)
-                (activity as MainActivity).fm.replaceWith(DashboardFragment())
+                fm.replaceWith(DashboardFragment())
             }
         }
 
         adapter.onItemLongClick = { item ->
-            if (setCurrentDashboard(item.id)) (activity as MainActivity).fm.replaceWith(
-                DashboardPropertiesFragment()
-            )
+            if (setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.submitList(dashboards)

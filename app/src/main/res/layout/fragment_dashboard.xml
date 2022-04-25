@@ -1,4 +1,4 @@
-<com.alteratom.dashboard.TouchLayout.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.alteratom.dashboard.touchLayout.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -305,4 +305,4 @@
 
     </FrameLayout>
 
-</com.alteratom.dashboard.TouchLayout.TouchConstraintLayout>
+</com.alteratom.dashboard.touchLayout.TouchConstraintLayout>

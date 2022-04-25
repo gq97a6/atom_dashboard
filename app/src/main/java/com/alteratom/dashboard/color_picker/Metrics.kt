@@ -34,8 +34,3 @@ internal class Metrics(
     fun getColor() = HSVToColor(color)
 
 }
-
-data class Paints(
-    val shaderPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG),
-    val indicatorPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-)

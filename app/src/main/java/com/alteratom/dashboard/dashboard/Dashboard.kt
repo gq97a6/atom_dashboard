@@ -1,9 +1,13 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.dashboard
 
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.foreground_service.DaemonGroup
+import com.alteratom.dashboard.FolderTree
+import com.alteratom.dashboard.G
+import com.alteratom.dashboard.foreground_service.demons.DaemonGroup
 import com.alteratom.dashboard.log.Log
+import com.alteratom.dashboard.prepareSave
+import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.io.File
@@ -32,10 +36,10 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
         }
 
     var mqtt = MqttData()
-       // set(value) {
-       //     field = value
-       //     value.initSSLCert()
-       // }
+    // set(value) {
+    //     field = value
+    //     value.initSSLCert()
+    // }
 
     companion object {
         fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {

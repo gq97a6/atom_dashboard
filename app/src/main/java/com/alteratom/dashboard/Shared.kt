@@ -5,7 +5,6 @@ package com.alteratom.dashboard
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
@@ -24,9 +23,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
 import com.alteratom.R
 import java.math.RoundingMode
 import java.security.cert.Certificate
@@ -224,7 +220,7 @@ fun Certificate.toPem(): String? {
     val LINE_SEPARATOR = System.getProperty("line.separator")
 
     val encoder: Base64.Encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.toByteArray())
-    val rawCrtText: ByteArray = this.getEncoded()
+    val rawCrtText: ByteArray = this.encoded
     val encodedCertText = String(encoder.encode(rawCrtText))
     return BEGIN_CERT + LINE_SEPARATOR.toString() + encodedCertText + LINE_SEPARATOR.toString() + END_CERT
 }

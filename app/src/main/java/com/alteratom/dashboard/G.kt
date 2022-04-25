@@ -1,6 +1,7 @@
 package com.alteratom.dashboard
 
 import com.alteratom.dashboard.Theme.ColorPallet
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper

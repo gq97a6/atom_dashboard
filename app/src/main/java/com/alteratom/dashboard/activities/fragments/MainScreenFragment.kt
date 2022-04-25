@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.Dashboard.Companion.saveToFile
-import com.alteratom.dashboard.DashboardAdapter
+import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
+import com.alteratom.dashboard.dashboard.DashboardAdapter
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme

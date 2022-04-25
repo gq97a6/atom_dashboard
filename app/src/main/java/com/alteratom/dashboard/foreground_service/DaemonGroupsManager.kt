@@ -1,9 +1,10 @@
 package com.alteratom.dashboard.foreground_service
 
 import android.content.Context
-import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.foreground_service.demons.DaemonGroup
 
 class DaemonGroupsManager(val context: Context) {
 
@@ -53,17 +54,5 @@ class DaemonGroupsManager(val context: Context) {
 
     fun deprecateAll() {
         for (dg in list) dg.deprecate()
-    }
-}
-
-class DaemonGroup(val context: Context, val dashboard: Dashboard) {
-    var isDeprecated = false
-    val mqttd = Mqttd(context, dashboard)
-
-    fun deprecate() {
-        isDeprecated = true
-
-        mqttd.isEnabled = false
-        mqttd.conHandler.dispatch("dem_grp_dep")
     }
 }

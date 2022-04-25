@@ -28,7 +28,7 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SplashScreenActivity
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.log.LogAdapter
-import com.alteratom.dashboard.tile.TilesAdapter
+import com.alteratom.dashboard.tile.TileAdapter
 import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
 import java.util.*
@@ -36,7 +36,7 @@ import java.util.*
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
-    private lateinit var adapter: TilesAdapter
+    private lateinit var adapter: TileAdapter
     private lateinit var toolBarController: ToolBarController
 
     override fun onCreateView(
@@ -196,7 +196,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun setupRecyclerView() {
         val spanCount = if (screenVertical) 2 else 4
 
-        adapter = TilesAdapter(requireContext(), spanCount)
+        adapter = TileAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {

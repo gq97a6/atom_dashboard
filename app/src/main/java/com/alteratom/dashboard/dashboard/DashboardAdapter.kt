@@ -1,4 +1,4 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.dashboard
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil

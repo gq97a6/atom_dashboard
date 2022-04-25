@@ -1,16 +1,16 @@
-package com.alteratom.dashboard.TouchLayout
+package com.alteratom.dashboard.touchLayout
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 
-class TouchLinearLayout(
+class TouchConstraintLayout(
     context: Context,
     attrs: AttributeSet?,
     defStyleAttr: Int,
     defStyleRes: Int
-) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
+) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes)  {
 
     var onInterceptTouch: (ev: MotionEvent?) -> Boolean = { false }
 

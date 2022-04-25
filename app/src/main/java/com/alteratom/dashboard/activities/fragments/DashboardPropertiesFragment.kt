@@ -274,7 +274,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
             binding.dsSsl.isChecked = dashboard.mqtt.ssl
             binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
-            binding.dsCaCert.setText(dashboard.mqtt.sslFileName)
+            binding.dsCaCert.text = dashboard.mqtt.sslFileName
             binding.dsTrustAlert.visibility = if (dashboard.mqtt.sslTrustAll) VISIBLE else GONE
             if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
 
@@ -316,7 +316,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             }
 
             onOpenCertSuccess = {
-                binding.dsCaCert.setText(dashboard.mqtt.sslFileName)
+                binding.dsCaCert.text = dashboard.mqtt.sslFileName
                 binding.dsCaCertInsert.foreground =
                     requireContext().getDrawable(R.drawable.bt_remove)
 
@@ -341,7 +341,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     dashboard.mqtt.sslFileName = ""
                     dashboard.mqtt.sslCertStr = null
 
-                    binding.dsCaCert.setText("")
+                    binding.dsCaCert.text = ""
                     binding.dsCaCertInsert.foreground =
                         requireContext().getDrawable(R.drawable.bt_include)
 

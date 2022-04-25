@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 
-class TilesAdapter(context: Context, spanCount: Int) :
+class TileAdapter(context: Context, spanCount: Int) :
     RecyclerViewAdapter<Tile>(context, spanCount, DiffCallback) {
 
     object DiffCallback : DiffUtil.ItemCallback<Tile>() {

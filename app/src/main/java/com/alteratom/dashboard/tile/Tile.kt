@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.alteratom.R
-import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme

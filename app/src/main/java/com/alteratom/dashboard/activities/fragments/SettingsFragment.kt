@@ -17,12 +17,13 @@ import com.alteratom.dashboard.Settings.Companion.saveToFile
 import com.alteratom.dashboard.Theme.Companion.saveToFile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.Dashboard.Companion.saveToFile
+import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
 import com.alteratom.databinding.FragmentSettingsBinding
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.dashboard.Dashboard
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader

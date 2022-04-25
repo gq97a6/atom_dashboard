@@ -11,11 +11,12 @@ import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.Settings.Companion.saveToFile
 import com.alteratom.dashboard.Theme.Companion.saveToFile
 import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.Dashboard.Companion.saveToFile
+import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.databinding.DialogTransferBinding
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.random.Random

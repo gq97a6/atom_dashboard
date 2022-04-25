@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.dashboard.Dashboard
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -345,7 +345,7 @@ fun getSocketFactory(
     kmfStore.setCertificateEntry("certificate", cert)
     kmfStore.setKeyEntry(
         "private-cert",
-        key.getPrivate(),
+        key.private,
         password.toCharArray(),
         arrayOf<Certificate?>(cert)
     )
@@ -356,7 +356,7 @@ fun getSocketFactory(
     kmf.init(kmfStore, password.toCharArray())
 
     val context = SSLContext.getInstance("TLSv1.2")
-    context.init(kmf.getKeyManagers(), tmf.trustManagers, null)
+    context.init(kmf.keyManagers, tmf.trustManagers, null)
 
     return context.socketFactory
 }

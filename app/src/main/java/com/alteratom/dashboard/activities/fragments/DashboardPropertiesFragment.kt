@@ -180,10 +180,9 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     val pos = adapter.list.indexOf(it)
                     val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 
-                    dashboard.mqtt.address = dashboards[p].mqtt.address
-                    dashboard.mqtt.port = dashboards[p].mqtt.port
-                    dashboard.mqtt.username = dashboards[p].mqtt.username
-                    dashboard.mqtt.pass = dashboards[p].mqtt.pass
+                    dashboard.mqtt = dashboards[p].mqtt.copy()
+                    dashboard.mqtt.clientId = kotlin.math.abs(Random.nextInt()).toString()
+                    dashboard.dg?.mqttd?.notifyOptionsChanged()
 
                     viewConfig()
                     dialog.dismiss()

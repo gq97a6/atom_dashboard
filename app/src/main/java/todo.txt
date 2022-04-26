@@ -1,6 +1,7 @@
 //expand ------------------------------
 start guide
 client certificates
+mqtt daemon multiple dashboards
 
 //post development ------------------------------
 hardcoded text

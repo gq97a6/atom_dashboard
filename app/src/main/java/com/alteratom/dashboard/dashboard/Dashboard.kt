@@ -36,10 +36,6 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
         }
 
     var mqtt = MqttData()
-    // set(value) {
-    //     field = value
-    //     value.initSSLCert()
-    // }
 
     companion object {
         fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {
@@ -81,7 +77,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
     }
 
     data class MqttData(
-        var isEnabled: Boolean = true, //il_interface_exclamation_triangle
+        var isEnabled: Boolean = true,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
         @JsonIgnore

@@ -19,7 +19,7 @@ object TileSwitcher : Switcher() {
 
         tile = dashboard.tiles[index]
 
-        if (G.setCurrentDashboard(index)) fm.replaceWith(
+        fm.replaceWith(
             TilePropertiesFragment(),
             false,
             if (slideRight) slideRightAnimation else slideLeftAnimation

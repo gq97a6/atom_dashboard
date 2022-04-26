@@ -35,7 +35,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
             field = value
         }
 
-    var mqtt = MqttData()
+    var mqtt = ConnectionProperties()
 
     companion object {
         fun MutableList<Dashboard>.saveToFile(save: String = this.prepareSave()) {
@@ -76,7 +76,7 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
             name.uppercase(Locale.getDefault())
     }
 
-    data class MqttData(
+    data class ConnectionProperties(
         var isEnabled: Boolean = true,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,

@@ -1,7 +1,19 @@
 //expand ------------------------------
 start guide
 client certificates
-mqtt daemon multiple dashboards
+
+move transfer to settings
+add transfer pick dashboards
+picker dialog
+
+save daemons separately
+adapt daemons for multiple dashboards
+adapt init daemon_manager
+create daemonFragment to manage daemons
+dashboards properties select input daemons
+dashboards properties manage selected daemon
+
+add demons placeholders
 
 //post development ------------------------------
 hardcoded text

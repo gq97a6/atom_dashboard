@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -20,15 +21,21 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
+import kotlin.random.Random
 
 
-class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
+class Mqttd(private val context: Context) : Daemon(Dashboards()) {
 
     var isEnabled = true
-        get() = d.mqtt.isEnabled && field
 
-    var client = MqttAndroidClientExtended(context, d.mqtt.copy())
+    var client = MqttAndroidClientExtended(context, Dashboard.ConnectionProperties()) //todo
     var conHandler = MqttdConnectionHandler()
+    var conProp = client.conProp
+        set(value) {
+            field = value
+            notifyOptionsChanged()
+        }
+        get() = client.conProp
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
@@ -107,7 +114,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
+        for (tile in ds.getTiles().filter { it.mqtt.isEnabled }) {
             for (t in tile.mqtt.subs) {
                 Pair(t.value, tile.mqtt.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
@@ -138,7 +145,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
         fun dispatch(reason: String) {
 
-            _isDone = client.isConnected == isEnabled && (client.mqtt == d.mqtt || !isEnabled)
+            _isDone = client.isConnected == isEnabled && (client.conProp == conProp || !isEnabled)
 
             if (!_isDone && !isDispatchScheduled) {
                 isDone.postValue(_isDone)
@@ -147,10 +154,10 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 if (isEnabled) {
                     if (client.isConnected) client.closeAttempt()
                     else {
-                        if (client.mqtt.clientId != d.mqtt.clientId || client.mqtt.URI != d.mqtt.URI)
-                            client = MqttAndroidClientExtended(context, d.mqtt.copy())
+                        if (client.conProp.clientId != conProp.clientId || client.conProp.URI != conProp.URI)
+                            client = MqttAndroidClientExtended(context, conProp.copy())
 
-                        client.mqtt = d.mqtt.copy()
+                        client.conProp = conProp.copy()
                         client.connectAttempt()
                     }
                 } else {
@@ -167,8 +174,8 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var mqtt: Dashboard.MqttData
-    ) : MqttAndroidClient(context, mqtt.URI, mqtt.clientId) {
+        var conProp: Dashboard.ConnectionProperties
+    ) : MqttAndroidClient(context, conProp.URI, conProp.clientId) {
 
         private var isBusy = false
         var topics: MutableList<Pair<String, Int>> = mutableListOf()
@@ -191,7 +198,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in d.tiles) tile.receive(Pair(t ?: "", m))
+                    for (tile in ds.getTiles()) tile.receive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                 }
 
@@ -208,24 +215,24 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
 
             options.isCleanSession = true
 
-            if (mqtt.includeCred) {
-                options.userName = mqtt.username
-                options.password = mqtt.pass.toCharArray()
+            if (conProp.includeCred) {
+                options.userName = conProp.username
+                options.password = conProp.pass.toCharArray()
             } else {
                 options.userName = ""
                 options.password = charArrayOf()
             }
 
-            if (mqtt.ssl) {
+            if (conProp.ssl) {
 
                 val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
                 val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
 
                 trustManagerFactory.init(
-                    if (mqtt.sslCert != null) {
+                    if (conProp.sslCert != null) {
                         val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
                         keyStore.load(null, null)
-                        keyStore.setCertificateEntry("ca", mqtt.sslCert)
+                        keyStore.setCertificateEntry("ca", conProp.sslCert)
                         keyStore
                     } else null
                 )
@@ -249,7 +256,7 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
                 val tlsContext = SSLContext.getInstance("TLS")
                 tlsContext.init(
                     null,
-                    if (mqtt.sslTrustAll) trustAllCerts else trustManagerFactory.trustManagers,
+                    if (conProp.sslTrustAll) trustAllCerts else trustManagerFactory.trustManagers,
                     java.security.SecureRandom()
                 )
 
@@ -304,6 +311,35 @@ class Mqttd(private val context: Context, var d: Dashboard) : Daemon() {
         fun closeAttempt() {
             disconnectAttempt(true)
         }
+    }
+
+    data class MqttData(
+        var isEnabled: Boolean = true,
+        var ssl: Boolean = false,
+        var sslTrustAll: Boolean = false,
+        @JsonIgnore
+        var sslCert: X509Certificate? = null,
+        var sslFileName: String = "",
+        var address: String = "tcp://",
+        var port: Int = 1883,
+        var includeCred: Boolean = false,
+        var username: String = "",
+        var pass: String = "",
+        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
+    ) {
+        val URI
+            get() = "$address:$port"
+
+        var sslCertStr: String? = null
+            set(value) {
+                field = value
+                sslCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(sslCertStr?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    null
+                }
+            }
     }
 }
 

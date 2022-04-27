@@ -11,9 +11,9 @@ import com.alteratom.dashboard.alpha
 import com.alteratom.dashboard.G.theme
 
 @Suppress("UNUSED")
-abstract class RecyclerViewItem {
+abstract class RecyclerViewItem: IdGenerator.Indexed {
 
-    var id = IdGenerator.getId()
+    override var id = getNewId()
 
     abstract val layout: Int
 
@@ -27,10 +27,10 @@ abstract class RecyclerViewItem {
     var flag = Flags()
 
     init {
-        IdGenerator.reportTakenId(id)
+        reportTakenId()
     }
 
-    fun <a : RecyclerViewItem> getItemViewType(adapter: RecyclerViewAdapter<a>): Int {
+    fun <A : RecyclerViewItem> getItemViewType(adapter: RecyclerViewAdapter<A>): Int {
         this.adapter = adapter
 
         return layout

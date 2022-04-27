@@ -3,10 +3,8 @@ package com.alteratom.dashboard.foreground_service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -15,7 +13,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Activity
 import com.alteratom.R
 
@@ -24,7 +21,7 @@ class ForegroundService : LifecycleService() {
 
     var finishAffinity: () -> Unit = {}
     private var isRunning = false
-    lateinit var dgManager: DaemonGroupsManager
+    lateinit var dgManager: DaemonsManager
 
     companion object {
         var service: ForegroundService? = null
@@ -68,7 +65,7 @@ class ForegroundService : LifecycleService() {
             finishAffinity()
         } else {
             if (!isRunning) {
-                dgManager = DaemonGroupsManager(this)
+                dgManager = DaemonsManager(this)
                 isRunning = true
             }
         }

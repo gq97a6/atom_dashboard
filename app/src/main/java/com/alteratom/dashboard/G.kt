@@ -1,5 +1,7 @@
 package com.alteratom.dashboard
 
+import com.alteratom.dashboard.FolderTree.parseListSave
+import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.tile.Tile
@@ -42,9 +44,9 @@ object G {
     }
 
     fun initialize() {
-        dashboards = Dashboard.parseSave() ?: mutableListOf()
-        theme = Theme.parseSave() ?: Theme()
-        settings = Settings.parseSave() ?: Settings()
+        dashboards = parseListSave()
+        theme = parseSave() ?: Theme()
+        settings = parseSave() ?: Settings()
     }
 }
 

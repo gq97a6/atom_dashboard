@@ -199,8 +199,6 @@ infix fun Float.rangedIn(r: ClosedFloatingPointRange<Float>): Float =
 
 infix fun Long.rangedIn(r: LongRange): Long = minOf(r.first, maxOf(r.last, this))
 
-fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
-
 fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
     for (i in 0 until this.childCount) {
         val v = this.getChildAt(i)

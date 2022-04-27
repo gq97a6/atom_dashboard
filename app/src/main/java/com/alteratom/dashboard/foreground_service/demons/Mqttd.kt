@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import com.alteratom.dashboard.dashboard.Dashboard
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMKeyPair
@@ -23,23 +22,30 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.*
 import kotlin.random.Random
 
+class Mqttd(private val context: Context) : Daemon() {
 
-class Mqttd(private val context: Context) : Daemon(Dashboards()) {
-
-    var isEnabled = true
-
-    var client = MqttAndroidClientExtended(context, Dashboard.ConnectionProperties()) //todo
-    var conHandler = MqttdConnectionHandler()
-    var conProp = client.conProp
+    var conProp = ConnectionProperties()
         set(value) {
             field = value
             notifyOptionsChanged()
         }
-        get() = client.conProp
 
+    @JsonIgnore
+    var conHandler = ConnectionHandler()
+
+    @JsonIgnore
+    var client = MqttAndroidClientExtended(context, conProp.copy())
+
+    @JsonIgnore
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
-    init {
+    override var isEnabled
+        get() = conProp.isEnabled
+        set(value) {
+            conProp.isEnabled = value
+        }
+
+    override fun initialize() {
         conHandler.dispatch("init")
     }
 
@@ -131,7 +137,7 @@ class Mqttd(private val context: Context) : Daemon(Dashboards()) {
         for (t in subTopics) subscribe(t.first, t.second)
     }
 
-    inner class MqttdConnectionHandler {
+    inner class ConnectionHandler {
 
         var isDone = MutableLiveData(false)
 
@@ -174,7 +180,7 @@ class Mqttd(private val context: Context) : Daemon(Dashboards()) {
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: Dashboard.ConnectionProperties
+        var conProp: ConnectionProperties
     ) : MqttAndroidClient(context, conProp.URI, conProp.clientId) {
 
         private var isBusy = false
@@ -313,8 +319,8 @@ class Mqttd(private val context: Context) : Daemon(Dashboards()) {
         }
     }
 
-    data class MqttData(
-        var isEnabled: Boolean = true,
+    data class ConnectionProperties(
+        var isEnabled: Boolean = false,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
         @JsonIgnore
@@ -325,7 +331,7 @@ class Mqttd(private val context: Context) : Daemon(Dashboards()) {
         var includeCred: Boolean = false,
         var username: String = "",
         var pass: String = "",
-        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
+        var clientId: String = kotlin.math.abs(Random.nextInt()).toString(),
     ) {
         val URI
             get() = "$address:$port"

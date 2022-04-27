@@ -8,18 +8,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.Settings.Companion.saveToFile
-import com.alteratom.dashboard.Theme.Companion.saveToFile
-import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
+import com.alteratom.dashboard.FolderTree.parseListSave
+import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.prepareSave
+import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.activities.SplashScreenActivity
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.databinding.DialogTransferBinding
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import kotlin.random.Random
 
 object Transfer {
     fun showTransferPopup(fragment: Fragment) {
@@ -73,16 +73,9 @@ object Transfer {
                                 }
 
                                 if (save.isNotEmpty()) {
-                                    val d = Dashboard.parseSave(save[0])
-                                    val s = Settings.parseSave(save[1])
-                                    val t = Theme.parseSave(save[2])
-
-                                    if (d != null) {
-                                        for (dashboard in d) {
-                                            dashboard.mqtt.clientId =
-                                                kotlin.math.abs(Random.nextInt()).toString()
-                                        }
-                                    }
+                                    val d = parseListSave<Dashboard>(save[0])
+                                    val s = parseSave<Settings>(save[1])
+                                    val t = parseSave<Theme>(save[2])
 
                                     if (d != null) dashboards = d
                                     if (s != null) settings = s

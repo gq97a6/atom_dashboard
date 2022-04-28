@@ -1,9 +1,9 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.switcher
 
 import android.view.KeyEvent
 import android.view.MotionEvent
-import androidx.fragment.app.FragmentActivity
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.screenWidth
 import kotlin.math.abs
 
 abstract class Switcher {

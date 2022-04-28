@@ -18,15 +18,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
+import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.log.LogAdapter
 import com.alteratom.dashboard.tile.TileAdapter
 import com.alteratom.databinding.FragmentDashboardBinding
@@ -72,33 +71,22 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
-        //Ensure
-        if (dashboard.dg == null) {
-            if (service == null) {
-                Intent(requireContext(), SplashScreenActivity::class.java).also {
-                    startActivity(it)
-                }
-            } else {
-                service?.dgManager?.assign()
-            }
-        }
-
         //Set dashboard status
-        dashboard.dg?.mqttd?.let {
-            it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
+        dashboard.daemon?.let {
+            it.isDone.observe(viewLifecycleOwner) { isDone ->
                 b.dSslStatus.visibility = GONE
-                b.dStatus.text = if (!dashboard.mqtt.isEnabled) {
-                    "DISCONNECTED"
-                } else {
-                    if (it.client.isConnected) {
-                        if (dashboard.mqtt.ssl && !dashboard.mqtt.sslTrustAll)
-                            b.dSslStatus.visibility = VISIBLE
-                        "CONNECTED"
-                    } else {
-                        if (isDone) {
-                            "FAILED TO CONNECT"
-                        } else {
-                            "ATTEMPTING"
+
+                when(it) {
+                    is Mqttd -> {
+                        b.dStatus.text = when(it.status) {
+                            Mqttd.MqttdStatus.DISCONNECTED -> "DISCONNECTED"
+                            Mqttd.MqttdStatus.FAILED -> "FAILED TO CONNECT"
+                            Mqttd.MqttdStatus.ATTEMPTING -> "ATTEMPTING"
+                            Mqttd.MqttdStatus.CONNECTED -> "CONNECTED"
+                            Mqttd.MqttdStatus.CONNECTED_SSL -> {
+                                b.dSslStatus.visibility = VISIBLE
+                                "CONNECTED"
+                            }
                         }
                     }
                 }
@@ -200,7 +188,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {
-            if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
+            if (adapter.itemCount == 0) b.dPlaceholder.visibility = VISIBLE
             b.dRemove.clearAnimation()
         }
 
@@ -229,7 +217,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dRecyclerView.layoutManager = layoutManager
         b.dRecyclerView.adapter = adapter
 
-        if (adapter.itemCount == 0) b.dPlaceholder.visibility = View.VISIBLE
+        if (adapter.itemCount == 0) b.dPlaceholder.visibility = VISIBLE
     }
 
     private fun setupLogRecyclerView() {

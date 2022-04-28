@@ -13,6 +13,8 @@ import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
@@ -102,23 +104,29 @@ abstract class Tile : RecyclerViewItem() {
         retain: Boolean = false,
         raw: Boolean = false
     ) {
-        if (topic.isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd == null) return
+        when(dashboard.daemon) {
+            is Mqttd -> {
+                val d = dashboard.daemon as Mqttd
 
-        fun send() {
-            dashboard.dg?.mqttd?.publish(topic, msg, qos, retain)
-            onSend(topic, msg, qos, retain)
-        }
+                if (topic.isNullOrEmpty()) return
+                if (d == null) return
 
-        if (!mqtt.confirmPub || raw) {
-            send()
-            return
-        }
+                fun send() {
+                    d?.publish(topic, msg, qos, retain)
+                    onSend(topic, msg, qos, retain)
+                }
 
-        with(adapter.context) {
-            buildConfirm("Confirm publishing", "PUBLISH", {
-                send()
-            })
+                if (!mqtt.confirmPub || raw) {
+                    send()
+                    return
+                }
+
+                with(adapter.context) {
+                    buildConfirm("Confirm publishing", "PUBLISH", {
+                        send()
+                    })
+                }
+            }
         }
     }
 
@@ -139,7 +147,7 @@ abstract class Tile : RecyclerViewItem() {
         mqtt.lastReceive = Date()
 
         if (doNotify) {
-            dashboard.dg?.context?.let {
+            service?.let {
                 createNotification(
                     it,
                     dashboard.name.uppercase(Locale.getDefault()),

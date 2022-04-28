@@ -21,7 +21,7 @@ class ForegroundService : LifecycleService() {
 
     var finishAffinity: () -> Unit = {}
     private var isRunning = false
-    lateinit var dgManager: DaemonsManager
+    lateinit var dManager: DaemonsManager
 
     companion object {
         var service: ForegroundService? = null
@@ -57,7 +57,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            dgManager.deprecateAll()
+            dManager.deprecateAll()
 
             stopForeground(true)
             stopSelf()
@@ -65,7 +65,7 @@ class ForegroundService : LifecycleService() {
             finishAffinity()
         } else {
             if (!isRunning) {
-                dgManager = DaemonsManager(this)
+                dManager = DaemonsManager(this)
                 isRunning = true
             }
         }

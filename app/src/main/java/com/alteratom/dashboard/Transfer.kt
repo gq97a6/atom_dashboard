@@ -33,7 +33,7 @@ object Transfer {
 
             var transferCaptured = false
             val connectionObserver: (Boolean) -> Unit = {
-                dashboard.dg?.mqttd?.let {
+                dashboard.dg.mqttd?.let {
                     if (!it.client.isConnected && !transferCaptured) {
                         dialog.dismiss()
                         createToast(requireContext(), "Connection required", 1000)
@@ -41,15 +41,15 @@ object Transfer {
                 }
             }
 
-            dashboard.dg?.mqttd?.conHandler?.isDone?.observe(viewLifecycleOwner, connectionObserver)
+            dashboard.dg.mqttd?.conHandler?.isDone?.observe(viewLifecycleOwner, connectionObserver)
 
             binding.dtReceive.setOnClickListener {
 
                 fun receiveMode(enable: Boolean = binding.dtTransferBox.isVisible) {
                     binding.dtTransferTopic.isEnabled = !enable
                     if (!enable) {
-                        dashboard.dg?.mqttd?.data?.removeObserver(observer)
-                        dashboard.dg?.mqttd?.topicCheck()
+                        dashboard.dg.mqttd?.data?.removeObserver(observer)
+                        dashboard.dg.mqttd?.topicCheck()
 
                         binding.dtTransferBox.visibility = VISIBLE
                         binding.dtReceiveIcon.setBackgroundResource(R.drawable.il_arrow_import)
@@ -62,7 +62,7 @@ object Transfer {
                         var ignoreFirst = false
                         observer = { data ->
                             if (data.first == binding.dtTransferTopic.text.toString() && ignoreFirst) {
-                                dashboard.dg?.mqttd?.data?.removeObserver(observer)
+                                dashboard.dg.mqttd?.data?.removeObserver(observer)
                                 transferCaptured = true
 
                                 val save: List<String> = try {
@@ -104,9 +104,9 @@ object Transfer {
                             ignoreFirst = true
                         }
 
-                        dashboard.dg?.mqttd?.data?.removeObserver(observer)
-                        dashboard.dg?.mqttd?.data?.observe(viewLifecycleOwner, observer)
-                        dashboard.dg?.mqttd?.subscribe(binding.dtTransferTopic.text.toString(), 0)
+                        dashboard.dg.mqttd?.data?.removeObserver(observer)
+                        dashboard.dg.mqttd?.data?.observe(viewLifecycleOwner, observer)
+                        dashboard.dg.mqttd?.subscribe(binding.dtTransferTopic.text.toString(), 0)
                     }
                 }
 
@@ -123,7 +123,7 @@ object Transfer {
 
                 val saveString = G.mapper.writeValueAsString(save)
 
-                dashboard.dg?.mqttd?.publish(
+                dashboard.dg.mqttd?.publish(
                     binding.dtTransferTopic.text.toString(),
                     saveString,
                     2
@@ -132,9 +132,9 @@ object Transfer {
             }
 
             dialog.setOnDismissListener {
-                dashboard.dg?.mqttd?.data?.removeObserver(observer)
-                dashboard.dg?.mqttd?.conHandler?.isDone?.removeObserver(connectionObserver)
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
+                dashboard.dg.mqttd?.data?.removeObserver(observer)
+                dashboard.dg.mqttd?.conHandler?.isDone?.removeObserver(connectionObserver)
+                dashboard.dg.mqttd?.notifyOptionsChanged()
             }
 
             dialog.dialogSetup()

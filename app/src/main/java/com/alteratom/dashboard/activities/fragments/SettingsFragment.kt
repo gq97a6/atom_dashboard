@@ -11,19 +11,23 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.alteratom.*
-import com.alteratom.dashboard.*
-import com.alteratom.dashboard.Settings.Companion.saveToFile
-import com.alteratom.dashboard.Theme.Companion.saveToFile
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
-import com.alteratom.databinding.FragmentSettingsBinding
+import com.alteratom.R
+import com.alteratom.dashboard.FolderTree.parseListSave
+import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.prepareSave
+import com.alteratom.dashboard.FolderTree.saveToFile
+import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Settings
+import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.SplashScreenActivity
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.databinding.FragmentSettingsBinding
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -58,11 +62,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         )
 
                         try {
-                            requireContext().contentResolver.openFileDescriptor(uri, "w")?.use { it ->
-                                FileOutputStream(it.fileDescriptor).use {
-                                    it.write(G.mapper.writeValueAsString(backup).toByteArray())
+                            requireContext().contentResolver.openFileDescriptor(uri, "w")
+                                ?.use { it ->
+                                    FileOutputStream(it.fileDescriptor).use {
+                                        it.write(G.mapper.writeValueAsString(backup).toByteArray())
+                                    }
                                 }
-                            }
 
                             Handler(Looper.getMainLooper()).postDelayed({
                                 createToast(requireContext(), "Backup successful")
@@ -100,9 +105,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             }
 
                             if (backup.isNotEmpty()) {
-                                val d = Dashboard.parseSave(backup[0])
-                                val s = Settings.parseSave(backup[1])
-                                val t = Theme.parseSave(backup[2])
+                                val d = parseListSave<Dashboard>(backup[0])
+                                val s = parseSave<Settings>(backup[1])
+                                val t = parseSave<Theme>(backup[2])
 
                                 if (d != null) dashboards = d
                                 if (s != null) settings = s

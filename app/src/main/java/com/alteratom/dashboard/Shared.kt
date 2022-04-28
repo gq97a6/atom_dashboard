@@ -212,7 +212,7 @@ fun ViewGroup.iterate(setOnClick: (View) -> Unit) {
 
 fun Float.round(d: Int): Float = this.toBigDecimal().setScale(d, RoundingMode.FLOOR).toFloat()
 
-fun Certificate.toPem(): String? {
+fun Certificate.toPem(): String {
     val BEGIN_CERT = "-----BEGIN CERTIFICATE-----"
     val END_CERT = "-----END CERTIFICATE-----"
     val LINE_SEPARATOR = System.getProperty("line.separator")

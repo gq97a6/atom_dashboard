@@ -1,9 +1,8 @@
 package com.alteratom.dashboard.foreground_service.demons
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMKeyPair
@@ -22,7 +21,19 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.*
 import kotlin.random.Random
 
-class Mqttd(private val context: Context) : Daemon() {
+class Mqttd(context: Context? = null) : Daemon() {
+
+    @JsonIgnore
+    private lateinit var context: Context
+
+    @JsonIgnore
+    lateinit var client: MqttAndroidClientExtended
+
+    @JsonIgnore
+    var conHandler = ConnectionHandler()
+
+    @JsonIgnore
+    var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     var conProp = ConnectionProperties()
         set(value) {
@@ -30,33 +41,49 @@ class Mqttd(private val context: Context) : Daemon() {
             notifyOptionsChanged()
         }
 
-    @JsonIgnore
-    var conHandler = ConnectionHandler()
-
-    @JsonIgnore
-    var client = MqttAndroidClientExtended(context, conProp.copy())
-
-    @JsonIgnore
-    var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
-
     override var isEnabled
-        get() = conProp.isEnabled
+        get() = conProp.isEnabled && isDeprecated
         set(value) {
             conProp.isEnabled = value
         }
 
-    override fun initialize() {
-        conHandler.dispatch("init")
+    override val isDone: MutableLiveData<Boolean>
+        get() = conHandler.isDone
+
+    override val status: MqttdStatus
+        get() =
+            if (!isEnabled) {
+                MqttdStatus.DISCONNECTED
+            } else {
+                if (client.isConnected)
+                    if (conProp.ssl == true && conProp.sslTrustAll != true) MqttdStatus.CONNECTED_SSL
+                    else MqttdStatus.CONNECTED
+                else if (conHandler.isDone.value != true) MqttdStatus.ATTEMPTING
+                else MqttdStatus.FAILED
+            }
+
+    override fun deprecate() {
+        super.deprecate()
+        conHandler.dispatch("dep")
     }
+
+    init {
+        //Self initialize if context parameter has been passed
+        if (context != null) initialize(context)
+    }
+
+    override fun initialize(context: Context) {
+        this.context = context
+        conHandler.dispatch("init")
+        client = MqttAndroidClientExtended(context, conProp.copy())
+    }
+
+    override fun notifyDashboardAssigned(dashboard: Dashboard) = topicCheck()
+    override fun notifyDashboardDischarged(dashboard: Dashboard) = topicCheck()
 
     fun notifyOptionsChanged() {
         if (client.isConnected && isEnabled) topicCheck()
         conHandler.dispatch("opt_change")
-    }
-
-    fun notifyNewAssignment() {
-        client.topics = mutableListOf()
-        notifyOptionsChanged()
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
@@ -120,7 +147,7 @@ class Mqttd(private val context: Context) : Daemon() {
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in ds.getTiles().filter { it.mqtt.isEnabled }) {
+        for (tile in dg.getTiles().filter { it.mqtt.isEnabled }) {
             for (t in tile.mqtt.subs) {
                 Pair(t.value, tile.mqtt.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
@@ -137,43 +164,23 @@ class Mqttd(private val context: Context) : Daemon() {
         for (t in subTopics) subscribe(t.first, t.second)
     }
 
-    inner class ConnectionHandler {
+    inner class ConnectionHandler : DaemonConnectionHandler() {
 
-        var isDone = MutableLiveData(false)
+        override fun isDone(): Boolean =
+            client.isConnected == isEnabled && (client.conProp == conProp || !isEnabled)
 
-        private var _isDone = false
-            set(value) {
-                if (value != field) isDone.postValue(value)
-                field = value
-            }
+        override fun handleDispatch() {
+            if (isEnabled) {
+                if (client.isConnected) client.closeAttempt()
+                else {
+                    if (client.conProp.clientId != conProp.clientId || client.conProp.URI != conProp.URI)
+                        client = MqttAndroidClientExtended(context, conProp.copy())
 
-        private var isDispatchScheduled = false
-
-        fun dispatch(reason: String) {
-
-            _isDone = client.isConnected == isEnabled && (client.conProp == conProp || !isEnabled)
-
-            if (!_isDone && !isDispatchScheduled) {
-                isDone.postValue(_isDone)
-                isDispatchScheduled = true
-
-                if (isEnabled) {
-                    if (client.isConnected) client.closeAttempt()
-                    else {
-                        if (client.conProp.clientId != conProp.clientId || client.conProp.URI != conProp.URI)
-                            client = MqttAndroidClientExtended(context, conProp.copy())
-
-                        client.conProp = conProp.copy()
-                        client.connectAttempt()
-                    }
-                } else {
-                    client.disconnectAttempt()
+                    client.conProp = conProp.copy()
+                    client.connectAttempt()
                 }
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    isDispatchScheduled = false
-                    dispatch("internal")
-                }, 500)
+            } else {
+                client.disconnectAttempt()
             }
         }
     }
@@ -204,7 +211,7 @@ class Mqttd(private val context: Context) : Daemon() {
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in ds.getTiles()) tile.receive(Pair(t ?: "", m))
+                    for (tile in dg.getTiles()) tile.receive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                 }
 
@@ -273,13 +280,13 @@ class Mqttd(private val context: Context) : Daemon() {
                 connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
+                        conHandler.dispatch("con")
                     }
 
                     override fun onFailure(
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
-                        run {}
                     }
                 })
             } catch (e: MqttException) {
@@ -347,6 +354,8 @@ class Mqttd(private val context: Context) : Daemon() {
                 }
             }
     }
+
+    enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 }
 
 fun getSocketFactory(

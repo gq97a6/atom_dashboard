@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.dashboard.Dashboard.Companion.saveToFile
-import com.alteratom.dashboard.dashboard.DashboardAdapter
+import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
@@ -17,6 +15,8 @@ import com.alteratom.dashboard.ToolBarController
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.dashboard.DashboardAdapter
 import com.alteratom.dashboard.foreground_service.ForegroundService
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
@@ -57,8 +57,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             dashboards.add(dashboard)
             dashboards.saveToFile()
 
-            ForegroundService.service?.dgManager?.notifyDashboardNew(dashboard)
-
             if (setCurrentDashboard(dashboard.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
@@ -94,7 +92,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
             b.msRemove.clearAnimation()
 
-            ForegroundService.service?.dgManager?.notifyDashboardRemoved(it)
+            ForegroundService.service?.dManager?.notifyDashboardDischarge(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.color_picker
 
 import android.graphics.Color.HSVToColor
-import android.graphics.Paint
 
 internal class Metrics(
     var centerX: Float = 0f,

@@ -1,10 +1,8 @@
-package com.alteratom.dashboard.DashboardSwitcher
+package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.G
-import com.alteratom.dashboard.Switcher
-import com.alteratom.dashboard.TileSwitcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.DashboardFragment
 import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.slideLeft as slideLeftAnimation

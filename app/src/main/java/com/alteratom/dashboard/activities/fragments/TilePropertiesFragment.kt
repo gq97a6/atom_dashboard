@@ -29,7 +29,7 @@ import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.TileSwitcher.TileSwitcher
+import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.recycler_view.GenericAdapter
 import com.alteratom.dashboard.recycler_view.GenericItem
@@ -121,12 +121,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpMqttPub.addTextChangedListener {
             tile.mqtt.pubs["base"] = (it ?: "").toString()
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttSub.addTextChangedListener {
             tile.mqtt.subs["base"] = (it ?: "").toString()
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttPubCopy.setOnClickListener {
@@ -140,7 +140,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 R.id.tp_qos2 -> 2
                 else -> 1
             }
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
@@ -554,35 +554,35 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpThermostatTemperatureSub.addTextChangedListener {
                     tile.mqtt.subs["temp"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
                     tile.mqtt.subs["temp_set"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatTemperatureSetpointPub.addTextChangedListener {
                     tile.mqtt.pubs["temp_set"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySub.addTextChangedListener {
                     tile.mqtt.subs["humi"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointSub.addTextChangedListener {
                     tile.mqtt.subs["humi_set"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatHumiditySetpointPub.addTextChangedListener {
                     tile.mqtt.pubs["humi_set"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModeSub.addTextChangedListener {
                     tile.mqtt.subs["mode"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpThermostatModePub.addTextChangedListener {
                     tile.mqtt.pubs["mode"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
 
 
@@ -740,35 +740,35 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
                 b.tpLightsStateSub.addTextChangedListener {
                     tile.mqtt.subs["state"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsStatePub.addTextChangedListener {
                     tile.mqtt.pubs["state"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsColorSub.addTextChangedListener {
                     tile.mqtt.subs["color"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsColorPub.addTextChangedListener {
                     tile.mqtt.pubs["color"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessSub.addTextChangedListener {
                     tile.mqtt.subs["bright"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsBrightnessPub.addTextChangedListener {
                     tile.mqtt.pubs["bright"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsModeSub.addTextChangedListener {
                     tile.mqtt.subs["mode"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
                 b.tpLightsModePub.addTextChangedListener {
                     tile.mqtt.pubs["mode"] = (it ?: "").toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.dg.mqttd?.notifyOptionsChanged()
                 }
 
 
@@ -902,7 +902,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         switchMqttTab(state)
 
         tile.mqtt.isEnabled = state
-        dashboard.dg?.mqttd?.notifyOptionsChanged()
+        dashboard.dg.mqttd?.notifyOptionsChanged()
     }
 
     private fun switchMqttTab(state: Boolean, duration: Long = 250) {

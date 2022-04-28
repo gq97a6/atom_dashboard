@@ -1,32 +1,60 @@
 package com.alteratom.dashboard.foreground_service.demons
 
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.IdGenerator
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.tile.Tile
+import com.alteratom.dashboard.foreground_service.DaemonsManager
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-abstract class Daemon() : IdGenerator.Indexed {
+abstract class Daemon : IdGenerator.Indexed {
     override val id = getNewId()
+    var isDeprecated = false
     abstract var isEnabled: Boolean
 
+    abstract val isDone: MutableLiveData<Boolean>
+    abstract val status: Any
+
     @JsonIgnore
-    val ds = Dashboards()
+    lateinit var dg: DaemonsManager.DashboardGroup
 
     init {
         reportTakenId()
     }
 
-    abstract fun initialize()
+    open fun deprecate() {
+        isDeprecated = true
+    }
 
-    class Dashboards {
-        val list = mutableListOf<Dashboard>()
+    abstract fun initialize(context: Context)
+    abstract fun notifyDashboardAssigned(dashboard: Dashboard)
+    abstract fun notifyDashboardDischarged(dashboard: Dashboard)
 
-        //todo
-        fun getTiles(): MutableList<Tile> {
-            return list.fold(mutableListOf(), { tiles, d ->
-                tiles.addAll(d.tiles)
-                return tiles
-            })
+    abstract class DaemonConnectionHandler {
+
+        val isDone = MutableLiveData(false)
+        private var isDispatchScheduled = false
+
+        protected abstract fun isDone(): Boolean
+
+        fun dispatch(reason: String) {
+            val _isDone = isDone()
+            if (isDone.value != _isDone) isDone.postValue(_isDone)
+
+            if (!_isDone && !isDispatchScheduled) {
+
+                handleDispatch()
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    isDispatchScheduled = false
+                    dispatch("internal")
+                }, 500)
+                isDispatchScheduled = true
+            }
         }
+
+        abstract fun handleDispatch()
     }
 }

@@ -3,6 +3,7 @@ package com.alteratom.dashboard.dashboard
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.foreground_service.DaemonsManager
+import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
@@ -20,8 +21,8 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
     var log = Log()
 
     @JsonIgnore
-    lateinit var dg: DaemonsManager.DaemonGroup
-    var daemonsIds = mutableMapOf<KClass<out Any>, Long>()
+    var daemon = null as Daemon?
+    var daemonId = -1L
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {

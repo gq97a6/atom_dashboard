@@ -43,7 +43,7 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
         super.onClick(v, e)
 
         if (mqtt.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg?.mqttd?.client?.isConnected != true) return
+        if (dashboard.dg.mqttd?.client?.isConnected != true) return
 
         if (mqtt.varPayload) {
             val dialog = Dialog(adapter.context)

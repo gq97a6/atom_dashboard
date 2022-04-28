@@ -5,16 +5,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.dashboard.createToast
-import com.alteratom.databinding.DialogSelectBinding
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.GenericAdapter
 import com.alteratom.dashboard.recycler_view.GenericItem
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.tile.Tile
+import com.alteratom.databinding.DialogSelectBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 class SelectTile : com.alteratom.dashboard.tile.Tile() {
 
@@ -29,7 +28,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
     val options = mutableListOf("" to "")
     var showPayload = false
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
@@ -42,7 +41,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
         val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.isNotEmpty()) {
             val dialog = Dialog(adapter.context)
-            val adapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+            val adapter = GenericAdapter(adapter.context)
 
             dialog.setContentView(R.layout.dialog_select)
             val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -61,7 +60,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
 
             adapter.setHasStableIds(true)
             adapter.submitList(MutableList(notEmpty.size) {
-                com.alteratom.dashboard.recycler_view.GenericItem(
+                GenericItem(
                     R.layout.item_select
                 )
             })
@@ -70,8 +69,8 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
             binding.dsRecyclerView.adapter = adapter
 
             dialog.dialogSetup()
-            com.alteratom.dashboard.G.theme.apply(binding.root)
+            G.theme.apply(binding.root)
             dialog.show()
-        } else com.alteratom.dashboard.createToast(adapter.context, "Add options first")
+        } else createToast(adapter.context, "Add options first")
     }
 }

@@ -8,7 +8,9 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -32,6 +34,7 @@ import kotlin.random.Random
 
 class DaemonPropertiesFragment : Fragment(R.layout.fragment_daemon_properties) {
     private lateinit var b: FragmentDaemonPropertiesBinding
+    private lateinit var openCert: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -350,6 +353,38 @@ class DaemonPropertiesFragment : Fragment(R.layout.fragment_daemon_properties) {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
+        }
+    }
+
+    private fun viewConfig() {
+        b.dpName.setText(G.dashboard.name.lowercase(Locale.getDefault()))
+
+        b.dpMqttSwitch.isChecked = G.dashboard.mqtt.isEnabled
+
+        b.dpMqttAddress.setText(G.dashboard.mqtt.address)
+        G.dashboard.mqtt.port.let {
+            b.dpMqttPort.setText(if (it != -1) it.toString() else "")
+        }
+
+        b.dpMqttCred.isChecked = G.dashboard.mqtt.includeCred
+        b.dpMqttLogin.setText(G.dashboard.mqtt.username)
+        b.dpMqttPass.setText(G.dashboard.mqtt.pass)
+
+        b.dpMqttCredArrow.rotation = 180f
+        b.dpMqttCredBox.visibility = View.GONE
+
+        b.dpMqttClientId.setText(G.dashboard.mqtt.clientId)
+    }
+
+    private fun switchMqttCred(state: Boolean? = null) {
+        b.dpMqttCredBox.let {
+            b.dpMqttCredArrow.animate()
+                .rotation(if (state ?: it.isVisible) 180f else 0f)
+                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
+
+            it.visibility = if (state ?: it.isVisible) View.GONE else View.VISIBLE
+            b.dpMqttPass.requestFocus()
+            b.dpMqttPass.clearFocus()
         }
     }
 }

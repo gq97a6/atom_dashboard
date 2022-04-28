@@ -42,7 +42,6 @@ import kotlin.random.Random
 
 class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_properties) {
     private lateinit var b: FragmentDashboardPropertiesBinding
-    private lateinit var openCert: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,37 +57,23 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         theme.apply(b.root, requireContext())
         viewConfig()
+
+        b.dpDaemonSet.setOnClickListener {
+
+        }
+
+        b.dpDaemonProp.setOnClickListener {
+
+        }
+
+        b.dpManageDaemons.setOnClickListener {
+
+        }
     }
 
     private fun viewConfig() {
-        b.dpName.setText(dashboard.name.lowercase(Locale.getDefault()))
-
-        b.dpMqttSwitch.isChecked = dashboard.mqtt.isEnabled
-
-        b.dpMqttAddress.setText(dashboard.mqtt.address)
-        dashboard.mqtt.port.let {
-            b.dpMqttPort.setText(if (it != -1) it.toString() else "")
-        }
-
-        b.dpMqttCred.isChecked = dashboard.mqtt.includeCred
-        b.dpMqttLogin.setText(dashboard.mqtt.username)
-        b.dpMqttPass.setText(dashboard.mqtt.pass)
-
-        b.dpMqttCredArrow.rotation = 180f
-        b.dpMqttCredBox.visibility = GONE
-
-        b.dpMqttClientId.setText(dashboard.mqtt.clientId)
-    }
-
-    private fun switchMqttCred(state: Boolean? = null) {
-        b.dpMqttCredBox.let {
-            b.dpMqttCredArrow.animate()
-                .rotation(if (state ?: it.isVisible) 180f else 0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
-
-            it.visibility = if (state ?: it.isVisible) GONE else VISIBLE
-            b.dpMqttPass.requestFocus()
-            b.dpMqttPass.clearFocus()
-        }
+        b.dpName
+        b.dpDaemonName
+        b.dpDaemonType
     }
 }

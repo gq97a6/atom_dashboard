@@ -208,7 +208,7 @@
                 tools:ignore="TouchTargetSizeCheck" />
 
             <Button
-                android:id="@+id/dp_daemon_manager"
+                android:id="@+id/dp_manage_daemons"
                 style="@style/button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

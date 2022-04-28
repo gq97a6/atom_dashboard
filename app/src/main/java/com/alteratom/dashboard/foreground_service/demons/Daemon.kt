@@ -6,29 +6,30 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.IdGenerator
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.DaemonsManager
-import com.fasterxml.jackson.annotation.JsonIgnore
 
-abstract class Daemon : IdGenerator.Indexed {
+abstract class Daemon(val context: Context, var d: Dashboard<Daemon>) : IdGenerator.Indexed {
     override val id = getNewId()
     var isDeprecated = false
-    abstract var isEnabled: Boolean
+    abstract val isEnabled: Boolean
 
     abstract val isDone: MutableLiveData<Boolean>
     abstract val status: Any
 
-    @JsonIgnore
-    lateinit var dg: DaemonsManager.DashboardGroup
-
     init {
         reportTakenId()
+    }
+
+    companion object {
+        operator inline fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard<Daemon>): D {
+            val constructor = D::class.constructors.first()
+            return constructor.call(context, dashboard)
+        }
     }
 
     open fun deprecate() {
         isDeprecated = true
     }
 
-    abstract fun initialize(context: Context)
     abstract fun notifyDashboardAssigned(dashboard: Dashboard)
     abstract fun notifyDashboardDischarged(dashboard: Dashboard)
 

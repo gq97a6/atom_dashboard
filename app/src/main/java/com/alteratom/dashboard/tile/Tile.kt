@@ -29,7 +29,7 @@ import java.util.*
 abstract class Tile : RecyclerViewItem() {
 
     @JsonIgnore
-    var dashboard: Dashboard = Dashboard(isInvalid = true)
+    var dashboard = Dashboard()
 
     @JsonIgnore
     open var height = 1f

@@ -1,100 +1,65 @@
 package com.alteratom.dashboard.foreground_service
 
 import android.content.Context
-import com.alteratom.dashboard.FolderTree.parseListSave
-import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.demons.Bluetoothd
 import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
-import com.alteratom.dashboard.tile.Tile
 
 class DaemonsManager(val context: Context) {
 
-    lateinit var list: MutableMap<Long, Daemon>
-    inline fun <T> getDaemon(id: Long?): T? = id?.let { list[it] } as? T?
+    private val list: MutableList<Daemon> = mutableListOf()
+    //inline fun <T> getDaemon(id: Long?): T? = id?.let { list[it] } as? T?
 
     init {
         initialize()
     }
 
     fun initialize() {
-        //Deprecate existing daemons
-        deprecateAll()
-
-        //Get saved daemons list
-        list = parseListSave<Daemon>().associateBy { it.id }.toMutableMap()
-
-        //Initialize daemons
-        list.values.forEach {
-            it.dg = DashboardGroup(it)
-            it.initialize(context)
-        }
-
-        dashboards.forEach {
-            it.daemon = getDaemon(it.id)
-        }
+        //dashboards.forEach { list.add(DaemonGroup(context, it)) }
+        val d = Daemon<Mqttd>(context, dashboard)
+        assign()
     }
 
-    inline fun <reified D : Daemon> createDaemon() {
-        val d = when (D::class) {
-            Mqttd::class -> Mqttd(context)
-            Bluetoothd::class -> Bluetoothd()
-            else -> null
-        }
+    fun assign() {
 
-        d?.let { list[d.id] = d }
+        ////Pair dashboards and daemonGroups
+        //dashboards.forEach { d ->
+        //    list.find { it.dashboard.id == d.id }.let { dg ->
+        //        if (dg != null && !dg.isDeprecated) {
+        //            d.dg = dg
+        //            dg.mqttd.d = d
+        //            dg.mqttd.notifyNewAssignment()
+        //        } else {
+        //            notifyDashboardNew(d)
+        //        }
+        //    }
+        //}
+//
+        //val assigned = dashboards.map { it.dg }
+//
+        ////Deprecate not paired
+        //list.forEach { if (it !in assigned) it.deprecate() }
+//
+        ////Remove not paired
+        //list.removeIf { it.isDeprecated }
     }
 
-    fun <D : Daemon> removeDaemon(daemon: D) {
-        dashboards.forEach {
-            it.daemonId = -1L
-            it.daemon = null
-        }
-    }
+    //fun notifyDashboardAdded(dashboard: Dashboard) {
+    //}
 
-    fun deprecateAll() = list.values.forEach { it.deprecate() }
+    //fun notifyDashboardRemoved(dashboard: Dashboard) {
+    //}
 
-    fun notifyDaemonAssign(daemon: Daemon, dashboard: Dashboard, doPass: Boolean = true) {
-        dashboard.daemonId = daemon.id
-        dashboard.daemon = daemon
-        daemon.dg.setDashboard(dashboard)
+    //fun deprecateAll() = list.values.forEach { it.deprecate() }
 
-        if (doPass) daemon.notifyDashboardAssigned(dashboard)
-    }
-
-    fun notifyDashboardDischarge(dashboard: Dashboard) {
-        list.values.forEach {
-            it.dg.list.remove(dashboard)
-            it.notifyDashboardDischarged(dashboard)
-        }
-    }
-
-    inner class DashboardGroup(daemon: Daemon) {
-        val list = dashboards.filter { it.daemonId == daemon.id }.toMutableList()
-
-        fun setDashboard(dashboard: Dashboard) {
-            if (dashboard !in list) list.add(dashboard)
-        }
-
-        fun getTiles(): MutableList<Tile> =
-            list.fold(mutableListOf(), { tiles, d ->
-                tiles.addAll(d.tiles)
-                return tiles
-            })
-    }
-
-    //inner class DaemonGroup(dashboard: Dashboard) {
-    //    var mqttd = null as Mqttd?
-    //    init {
-    //        list.values.filter { dashboard.daemonsIds.containsValue(it.id) }.forEach {
-    //            setDaemon(it)
-    //        }
+    //inline fun <reified D : Daemon> createDaemon() {
+    //    val d = when (D::class) {
+    //        Mqttd::class -> Mqttd(context)
+    //        Bluetoothd::class -> Bluetoothd()
+    //        else -> null
     //    }
-    //    inline fun setDaemon(daemon: Daemon?) {
-    //        when (daemon) {
-    //            is Mqttd? -> mqttd = daemon
-    //        }
-    //    }
+//
+    //    d?.let { list[d.id] = d }
     //}
 }

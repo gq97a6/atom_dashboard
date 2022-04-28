@@ -1,18 +1,24 @@
 package com.alteratom.dashboard.dashboard
 
+import android.content.Context
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.foreground_service.DaemonsManager
+import com.alteratom.dashboard.G
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Daemon
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
-import kotlin.reflect.KClass
+import kotlin.random.Random
 
 @Suppress("UNUSED")
-class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
+
+class Dashboard<D : Daemon>(var name: String) :
     com.alteratom.dashboard.recycler_view.RecyclerViewItem() {
 
     override val layout
@@ -20,15 +26,29 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
 
     var log = Log()
 
+    var isInvalid = false
+
     @JsonIgnore
-    var daemon = null as Daemon?
-    var daemonId = -1L
+    var daemon = Daemon<Mqttd>(service as Context, this)
+        set(value) {
+            daemon.d = this
+        }
+
+    var mqtt = MqttData()
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
             for (t in value) t.dashboard = this
             field = value
         }
+
+    constructor() : this("") {
+        isInvalid = true
+    }
+
+    companion object {
+        operator inline fun <D: Daemon> invoke() = Dashboard<Daemon>()
+    }
 
     override fun onBindViewHolder(
         holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
@@ -44,5 +64,34 @@ class Dashboard(var name: String = "", var isInvalid: Boolean = false) :
 
         holder.itemView.findViewById<TextView>(R.id.id_tag).text =
             name.uppercase(Locale.getDefault())
+    }
+
+    data class MqttData(
+        var isEnabled: Boolean = true,
+        var ssl: Boolean = false,
+        var sslTrustAll: Boolean = false,
+        @JsonIgnore
+        var sslCert: X509Certificate? = null,
+        var sslFileName: String = "",
+        var address: String = "tcp://",
+        var port: Int = 1883,
+        var includeCred: Boolean = false,
+        var username: String = "",
+        var pass: String = "",
+        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
+    ) {
+        val URI
+            get() = "$address:$port"
+
+        var sslCertStr: String? = null
+            set(value) {
+                field = value
+                sslCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(sslCertStr?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    null
+                }
+            }
     }
 }

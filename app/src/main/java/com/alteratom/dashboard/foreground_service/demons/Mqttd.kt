@@ -19,15 +19,11 @@ import java.security.cert.Certificate
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
-import kotlin.random.Random
 
-class Mqttd(context: Context? = null) : Daemon() {
-
-    @JsonIgnore
-    private lateinit var context: Context
+class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
     @JsonIgnore
-    lateinit var client: MqttAndroidClientExtended
+    var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqtt.copy())
 
     @JsonIgnore
     var conHandler = ConnectionHandler()
@@ -35,17 +31,8 @@ class Mqttd(context: Context? = null) : Daemon() {
     @JsonIgnore
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
-    var conProp = ConnectionProperties()
-        set(value) {
-            field = value
-            notifyOptionsChanged()
-        }
-
-    override var isEnabled
-        get() = conProp.isEnabled && isDeprecated
-        set(value) {
-            conProp.isEnabled = value
-        }
+    override val isEnabled
+        get() = d.mqtt.isEnabled && isDeprecated
 
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
@@ -56,7 +43,7 @@ class Mqttd(context: Context? = null) : Daemon() {
                 MqttdStatus.DISCONNECTED
             } else {
                 if (client.isConnected)
-                    if (conProp.ssl == true && conProp.sslTrustAll != true) MqttdStatus.CONNECTED_SSL
+                    if (d.mqtt.ssl && !d.mqtt.sslTrustAll) MqttdStatus.CONNECTED_SSL
                     else MqttdStatus.CONNECTED
                 else if (conHandler.isDone.value != true) MqttdStatus.ATTEMPTING
                 else MqttdStatus.FAILED
@@ -68,14 +55,7 @@ class Mqttd(context: Context? = null) : Daemon() {
     }
 
     init {
-        //Self initialize if context parameter has been passed
-        if (context != null) initialize(context)
-    }
-
-    override fun initialize(context: Context) {
-        this.context = context
         conHandler.dispatch("init")
-        client = MqttAndroidClientExtended(context, conProp.copy())
     }
 
     override fun notifyDashboardAssigned(dashboard: Dashboard) = topicCheck()
@@ -147,7 +127,7 @@ class Mqttd(context: Context? = null) : Daemon() {
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in dg.getTiles().filter { it.mqtt.isEnabled }) {
+        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
             for (t in tile.mqtt.subs) {
                 Pair(t.value, tile.mqtt.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
@@ -167,16 +147,16 @@ class Mqttd(context: Context? = null) : Daemon() {
     inner class ConnectionHandler : DaemonConnectionHandler() {
 
         override fun isDone(): Boolean =
-            client.isConnected == isEnabled && (client.conProp == conProp || !isEnabled)
+            client.isConnected == isEnabled && (client.conProp == d.mqtt || !isEnabled)
 
         override fun handleDispatch() {
             if (isEnabled) {
                 if (client.isConnected) client.closeAttempt()
                 else {
-                    if (client.conProp.clientId != conProp.clientId || client.conProp.URI != conProp.URI)
-                        client = MqttAndroidClientExtended(context, conProp.copy())
+                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.URI != d.mqtt.URI)
+                        client = MqttAndroidClientExtended(context, d.mqtt.copy())
 
-                    client.conProp = conProp.copy()
+                    client.conProp = d.mqtt.copy()
                     client.connectAttempt()
                 }
             } else {
@@ -187,7 +167,7 @@ class Mqttd(context: Context? = null) : Daemon() {
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: ConnectionProperties
+        var conProp: Dashboard.MqttData
     ) : MqttAndroidClient(context, conProp.URI, conProp.clientId) {
 
         private var isBusy = false
@@ -211,7 +191,7 @@ class Mqttd(context: Context? = null) : Daemon() {
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
-                    for (tile in dg.getTiles()) tile.receive(Pair(t ?: "", m))
+                    for (tile in d.tiles) tile.receive(Pair(t ?: "", m))
                     data.postValue(Pair(t ?: "", m))
                 }
 
@@ -324,35 +304,6 @@ class Mqttd(context: Context? = null) : Daemon() {
         fun closeAttempt() {
             disconnectAttempt(true)
         }
-    }
-
-    data class ConnectionProperties(
-        var isEnabled: Boolean = false,
-        var ssl: Boolean = false,
-        var sslTrustAll: Boolean = false,
-        @JsonIgnore
-        var sslCert: X509Certificate? = null,
-        var sslFileName: String = "",
-        var address: String = "tcp://",
-        var port: Int = 1883,
-        var includeCred: Boolean = false,
-        var username: String = "",
-        var pass: String = "",
-        var clientId: String = kotlin.math.abs(Random.nextInt()).toString(),
-    ) {
-        val URI
-            get() = "$address:$port"
-
-        var sslCertStr: String? = null
-            set(value) {
-                field = value
-                sslCert = try {
-                    val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(sslCertStr?.byteInputStream()) as X509Certificate
-                } catch (e: Exception) {
-                    null
-                }
-            }
     }
 
     enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }

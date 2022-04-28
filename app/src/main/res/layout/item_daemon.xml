@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="90dp"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="8dp">
@@ -22,9 +24,75 @@
         android:background="#00000000"
         android:elevation="20dp" />
 
-    <View
-        android:id="@+id/iii_icon"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_round" />
+        android:background="@drawable/bg_frame"
+        android:padding="10dp"
+        android:tag="frame">
+
+        <TextView
+            android:id="@+id/id_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_frame"
+            android:gravity="center"
+            android:padding="12dp"
+            android:tag="frame"
+            android:text="TYPE"
+            android:textStyle="bold"
+            app:autoSizeMaxTextSize="25dp"
+            app:autoSizeMinTextSize="8dp"
+            app:autoSizeStepGranularity="1dp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/id_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_frame"
+            android:gravity="center"
+            android:padding="12dp"
+            android:tag="frame"
+            android:text="NAME"
+            app:autoSizeMaxTextSize="25dp"
+            app:autoSizeMinTextSize="8dp"
+            app:autoSizeStepGranularity="1dp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintStart_toEndOf="@+id/id_type"
+            tools:layout_editor_absoluteY="10dp" />
+
+
+        <Button
+            android:id="@+id/id_edit"
+            style="@style/button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="30dp"
+            android:foreground="@drawable/bt_text"
+            android:tag="colorB"
+            android:text="EDIT"
+            android:textSize="11dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/view"
+            app:layout_constraintStart_toEndOf="@+id/id_name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view"
+            style="@style/button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|end"
+            android:foreground="@drawable/bt_remove"
+            android:tag="colorA"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="10dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

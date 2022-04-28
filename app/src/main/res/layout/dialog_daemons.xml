@@ -15,14 +15,29 @@
         android:gravity="center"
         android:padding="10dp"
         android:tag="color"
-        android:text="Daemons"
+        android:text="Servers"
         android:textSize="25dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dd_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:paddingHorizontal="5dp"
         android:paddingTop="5dp" />
+
+    <Button
+        android:id="@+id/dp_mqtt_ssl"
+        style="@style/button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:foreground="@drawable/bt_text"
+        android:tag="colorB"
+        android:text="ADD SERVER"
+        android:textSize="11dp" />
 
 </LinearLayout>

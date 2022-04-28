@@ -1,73 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.alteratom.dashboard.touchLayout.TouchConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dp_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#00000000"
-    android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    android:id="@+id/dp_root"
     tools:context=".dashboard.activities.fragments.DashboardPropertiesFragment">
 
-    <TextView
-        android:id="@+id/view0"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:tag="color"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Properties"
-        android:textSize="45dp" />
-
     <LinearLayout
-        android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:paddingHorizontal="30dp"
+        android:paddingBottom="70dp">
 
         <TextView
+            android:id="@+id/view0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:tag="colorA"
-            android:text="dashboard name:"
-            android:textSize="20dp" />
+            android:gravity="center"
+            android:tag="color"
+            android:text="Properties"
+            android:textSize="45dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/dp_name"
+        <LinearLayout
+            android:id="@+id/view1"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:background="@drawable/bg_frame_sharp"
-            android:hint="random"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLength="15"
-            android:paddingHorizontal="10dp"
-            android:tag="basic"
-            android:textCursorDrawable="@null"
-            android:textSize="15dp"
-            tools:ignore="HardcodedText,TextFields,TouchTargetSizeCheck" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view0">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:tag="colorA"
+                android:text="dashboard name:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/dp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_frame_sharp"
+                android:hint="random"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="15"
+                android:paddingHorizontal="10dp"
+                android:tag="basic"
+                android:textCursorDrawable="@null"
+                android:textSize="15dp"
+                tools:ignore="HardcodedText,TextFields,TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="3dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:tag="colorA"
+                android:text="Server:"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorB"
+                android:text="MQTT"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_frame"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:tag="frame">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:tag="colorA"
+                    android:text="Name"
+                    android:textSize="15dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/dp_daemon_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_frame_sharp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:tag="insert"
+                        android:textSize="17dp" />
+
+                    <View
+                        style="@style/button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|end"
+                        android:layout_marginEnd="10dp"
+                        android:foreground="@drawable/il_content_letter_english_a"
+                        android:tag="colorA" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:gravity="center"
+                    android:tag="colorA"
+                    android:text="Type"
+                    android:textSize="15dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/dp_daemon_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/bg_frame_sharp"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:tag="insert"
+                        android:textSize="17dp" />
+
+                    <View
+                        style="@style/button"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|end"
+                        android:layout_marginEnd="10dp"
+                        android:foreground="@drawable/il_content_letter_english_a"
+                        android:tag="colorA" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/dp_daemon_set"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="15dp"
+                android:foreground="@drawable/bt_text"
+                android:tag="colorB"
+                android:text="SET SERVER"
+                android:textSize="11dp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/dp_daemon_prop"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="15dp"
+                android:foreground="@drawable/bt_text"
+                android:tag="colorB"
+                android:text="SERVER PROPERTIES"
+                android:textSize="11dp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/dp_daemon_manager"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginTop="15dp"
+                android:foreground="@drawable/bt_text"
+                android:tag="colorB"
+                android:text="MANAGE SERVERS"
+                android:textSize="11dp"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <ScrollView
-        app:layout_constraintTop_toBottomOf="@id/view1"
-        android:id="@+id/dp_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingHorizontal="30dp"
-        android:scrollbars="none">
-
-    </ScrollView>
 
     <FrameLayout
         android:id="@+id/dp_left"

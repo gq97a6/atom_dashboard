@@ -10,18 +10,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.R
-import com.alteratom.dashboard.click
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.click
 import com.alteratom.dashboard.iterate
 
 @Suppress("UNUSED")
-abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
+open class RecyclerViewAdapter<item : RecyclerViewItem>(
     var context: Context,
-    var spanCount: Int,
-    c: DiffUtil.ItemCallback<item>
-) : ListAdapter<item, RecyclerViewAdapter.ViewHolder>(c) {
+    var spanCount: Int = 1,
+) : ListAdapter<item, RecyclerViewAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<item>() {
+        override fun areItemsTheSame(oldItem: item, newItem: item): Boolean =
+            areItemsTheSame(oldItem, newItem)
+
+        override fun areContentsTheSame(oldItem: item, newItem: item): Boolean =
+            areContentsTheSame(oldItem, newItem)
+    }
+) {
 
     var editMode = Modes()
 
@@ -29,6 +36,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
     lateinit var currentItem: item
     private lateinit var touchHelper: ItemTouchHelper
 
+    var onBindViewHolder: (item, ViewHolder, Int) -> Unit = { _, _, _ -> }
     var onItemClick: (item) -> Unit = {}
     var onItemLongClick: (item) -> Unit = {}
     var onItemRemoved: (item) -> Unit = {}
@@ -125,6 +133,7 @@ abstract class RecyclerViewAdapter<item : RecyclerViewItem>(
         }
 
         holder.itemView.iterate(callback)
+        onBindViewHolder(list[position], holder, position)
     }
 
     private fun markItemRemove(position: Int) {

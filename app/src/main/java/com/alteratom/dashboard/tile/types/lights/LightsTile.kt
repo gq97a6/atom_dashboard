@@ -19,13 +19,15 @@ import androidx.core.graphics.red
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.R
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.toPx
 import com.alteratom.databinding.DialogLightsBinding
 import com.alteratom.databinding.DialogSelectBinding
-import com.alteratom.dashboard.toPx
+import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.roundToInt
@@ -54,11 +56,13 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
     var iconKeyTrue = "il_interface_toggle_on"
     val iconResTrue: Int
-        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res ?: R.drawable.il_interface_toggle_on
+        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res
+            ?: R.drawable.il_interface_toggle_on
 
     var iconKeyFalse = "il_interface_toggle_off"
     val iconResFalse: Int
-        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res ?: R.drawable.il_interface_toggle_off
+        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
+            ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
     val colorPalletTrue: com.alteratom.dashboard.Theme.ColorPallet
@@ -137,7 +141,10 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
         colorType = colorType
     }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE
@@ -159,7 +166,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
         super.onClick(v, e)
 
         val dialog = Dialog(adapter.context)
-        var modeAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
 
         dialog.setContentView(R.layout.dialog_lights)
         val binding = DialogLightsBinding.bind(dialog.findViewById(R.id.root))
@@ -203,7 +210,8 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
             )
         }
 
-        binding.dlPicker.setColorSelectionListener(object : com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener() {
+        binding.dlPicker.setColorSelectionListener(object :
+            com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
                 onColorChange()
             }
@@ -281,7 +289,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
             if (notEmpty.isNotEmpty()) {
                 val dialog = Dialog(adapter.context)
-                modeAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+                modeAdapter = RecyclerViewAdapter(adapter.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -315,7 +323,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
                 modeAdapter.setHasStableIds(true)
                 modeAdapter.submitList(MutableList(notEmpty.size) {
-                    com.alteratom.dashboard.recycler_view.GenericItem(
+                    RecyclerViewItem(
                         R.layout.item_select
                     )
                 })
@@ -380,7 +388,10 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                             it as ViewGroup,
                             anim = false,
                             colorPallet = if (!doPaint) colorPalletState
-                            else com.alteratom.dashboard.G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                            else com.alteratom.dashboard.G.theme.a.getColorPallet(
+                                hsvPicked,
+                                isRaw = paintRaw
+                            )
                         )
                     }
                 }
@@ -419,7 +430,10 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                             com.alteratom.dashboard.G.theme.apply(
                                 it as ViewGroup,
                                 anim = false,
-                                colorPallet = com.alteratom.dashboard.G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                                colorPallet = com.alteratom.dashboard.G.theme.a.getColorPallet(
+                                    hsvPicked,
+                                    isRaw = paintRaw
+                                )
                             )
                         }
                     }

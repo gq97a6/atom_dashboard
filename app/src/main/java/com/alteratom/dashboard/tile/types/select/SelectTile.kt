@@ -9,9 +9,8 @@ import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.recycler_view.GenericAdapter
-import com.alteratom.dashboard.recycler_view.GenericItem
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.databinding.DialogSelectBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 
@@ -41,7 +40,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
         val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.isNotEmpty()) {
             val dialog = Dialog(adapter.context)
-            val adapter = GenericAdapter(adapter.context)
+            val adapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
 
             dialog.setContentView(R.layout.dialog_select)
             val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -60,7 +59,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
 
             adapter.setHasStableIds(true)
             adapter.submitList(MutableList(notEmpty.size) {
-                GenericItem(
+                RecyclerViewItem(
                     R.layout.item_select
                 )
             })

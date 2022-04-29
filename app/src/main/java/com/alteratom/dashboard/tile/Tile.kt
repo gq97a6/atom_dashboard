@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.alteratom.R
-import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
@@ -13,6 +12,7 @@ import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
+import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
@@ -69,6 +69,8 @@ abstract class Tile : RecyclerViewItem() {
 
         val totalAvail = (screenWidth - view.paddingLeft * 2)
 
+        val r = RecyclerViewAdapter<Mqttd>()
+
         params.height =
             ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
         view.layoutParams = params
@@ -104,7 +106,7 @@ abstract class Tile : RecyclerViewItem() {
         retain: Boolean = false,
         raw: Boolean = false
     ) {
-        when(dashboard.daemon) {
+        when (dashboard.daemon) {
             is Mqttd -> {
                 val d = dashboard.daemon as Mqttd
 

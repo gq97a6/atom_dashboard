@@ -28,8 +28,8 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Transfer.showTransferPopup
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.recycler_view.GenericAdapter
-import com.alteratom.dashboard.recycler_view.GenericItem
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.toPem
 import com.alteratom.databinding.DialogCopyBrokerBinding
 import com.alteratom.databinding.DialogSslBinding
@@ -157,10 +157,10 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 createToast(requireContext(), "No dashboards to copy from")
             } else {
                 val dialog = Dialog(requireContext())
-                val adapter = GenericAdapter(requireContext())
+                val adapter = RecyclerViewAdapter<RecyclerViewItem>(requireContext())
 
                 val list = MutableList(dashboards.size) {
-                    GenericItem(
+                    RecyclerViewItem(
                         R.layout.item_copy_broker
                     )
                 }

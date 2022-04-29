@@ -7,11 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.databinding.DialogTextBinding
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.databinding.DialogTextBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
@@ -31,15 +33,15 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
     var log = mutableListOf<String>()
 
     @JsonIgnore
-    var terminalAdapter: com.alteratom.dashboard.recycler_view.GenericAdapter? = null
+    var terminalAdapter = null as RecyclerViewAdapter<RecyclerViewItem>
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
         layoutParams.isFullSpan = true
 
-        terminalAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+        terminalAdapter = RecyclerViewAdapter(adapter.context)
         terminalAdapter?.setHasStableIds(true)
 
         terminalAdapter?.onBindViewHolder = { _, holder, pos ->
@@ -48,7 +50,7 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
         }
 
         terminalAdapter?.submitList(MutableList(log.size) {
-            com.alteratom.dashboard.recycler_view.GenericItem(
+            RecyclerViewItem(
                 R.layout.item_terminal_entry
             )
         })
@@ -97,7 +99,7 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
         log.add(0, entry)
 
         terminalAdapter?.let {
-            it.list.add(com.alteratom.dashboard.recycler_view.GenericItem(R.layout.item_terminal_entry))
+            it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
 
             if (log.size > 10) {
                 log.removeLast()

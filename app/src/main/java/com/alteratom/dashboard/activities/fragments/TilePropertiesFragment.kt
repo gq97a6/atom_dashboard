@@ -31,8 +31,8 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.recycler_view.GenericAdapter
-import com.alteratom.dashboard.recycler_view.GenericItem
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.tile.types.button.TextTile
 import com.alteratom.tile.types.color.ColorTile
 import com.alteratom.tile.types.lights.LightsTile
@@ -930,10 +930,10 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         rv: RecyclerView,
         add: View
     ) {
-        val adapter = GenericAdapter(requireContext())
+        val adapter = RecyclerViewAdapter<RecyclerViewItem>(requireContext())
 
         val list = MutableList(options.size) {
-            GenericItem(R.layout.item_option)
+            RecyclerViewItem(R.layout.item_option)
         }
 
         adapter.setHasStableIds(true)
@@ -977,7 +977,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         add.setOnClickListener {
             options.add(Pair("", ""))
-            list.add(GenericItem(R.layout.item_option))
+            list.add(RecyclerViewItem(R.layout.item_option))
             adapter.notifyItemInserted(list.size - 1)
         }
 

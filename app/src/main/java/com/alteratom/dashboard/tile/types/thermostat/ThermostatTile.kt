@@ -15,10 +15,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
+import com.alteratom.dashboard.blink
 import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.round
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -126,7 +128,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
         }
 
         val dialog = Dialog(adapter.context)
-        var modeAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
 
         dialog.setContentView(R.layout.dialog_thermostat)
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
@@ -233,7 +235,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
             if (notEmpty.isNotEmpty() && !mqtt.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
-                modeAdapter = com.alteratom.dashboard.recycler_view.GenericAdapter(adapter.context)
+                modeAdapter = RecyclerViewAdapter(adapter.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -245,7 +247,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(theme.a.colors.color)
+                            ColorStateList.valueOf(theme.a.colorPallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
@@ -267,7 +269,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
                 modeAdapter.setHasStableIds(true)
                 modeAdapter.submitList(MutableList(notEmpty.size) {
-                    com.alteratom.dashboard.recycler_view.GenericItem(
+                    RecyclerViewItem(
                         R.layout.item_select
                     )
                 })

@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.IdGenerator
 import com.alteratom.R
-import com.alteratom.dashboard.alpha
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.IdGenerator
+import com.alteratom.dashboard.alpha
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")
-abstract class RecyclerViewItem: IdGenerator.Indexed {
+abstract class RecyclerViewItem : IdGenerator.Indexed {
 
     override var id = getNewId()
 
@@ -25,6 +25,14 @@ abstract class RecyclerViewItem: IdGenerator.Indexed {
 
     @JsonIgnore
     var flag = Flags()
+
+    companion object {
+        operator inline fun invoke(layout: Int): RecyclerViewItem =
+            object : RecyclerViewItem() {
+                override val layout: Int
+                    get() = layout
+            }
+    }
 
     init {
         reportTakenId()

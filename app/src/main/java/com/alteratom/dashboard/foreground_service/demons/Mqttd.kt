@@ -22,17 +22,14 @@ import javax.net.ssl.*
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    @JsonIgnore
     var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqtt.copy())
 
-    @JsonIgnore
     var conHandler = ConnectionHandler()
 
-    @JsonIgnore
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     override val isEnabled
-        get() = d.mqtt.isEnabled && isDeprecated
+        get() = d.mqtt.isEnabled && isDischarged
 
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
@@ -49,21 +46,23 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 else MqttdStatus.FAILED
             }
 
-    override fun deprecate() {
-        super.deprecate()
-        conHandler.dispatch("dep")
-    }
-
     init {
-        conHandler.dispatch("init")
+        super.notifyAssigned()
     }
 
-    override fun notifyDashboardAssigned(dashboard: Dashboard) = topicCheck()
-    override fun notifyDashboardDischarged(dashboard: Dashboard) = topicCheck()
+    override fun notifyAssigned() {
+        super.notifyAssigned()
+        conHandler.dispatch("assign")
+    }
 
-    fun notifyOptionsChanged() {
-        if (client.isConnected && isEnabled) topicCheck()
+    override fun notifyDischarged() {
+        super.notifyDischarged()
+        conHandler.dispatch("discharge")
+    }
+
+    override fun notifyOptionsChanged() {
         conHandler.dispatch("opt_change")
+        if (client.isConnected && isEnabled) topicCheck()
     }
 
     fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {

@@ -18,8 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.databinding.FragmentTilePropertiesBinding
-import com.alteratom.dashboard.digitsOnly
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.getIconColorPallet
@@ -29,10 +27,12 @@ import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.digitsOnly
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.switcher.TileSwitcher
+import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.tile.types.button.TextTile
 import com.alteratom.tile.types.color.ColorTile
 import com.alteratom.tile.types.lights.LightsTile
@@ -43,6 +43,7 @@ import com.alteratom.tile.types.terminal.TerminalTile
 import com.alteratom.tile.types.thermostat.ThermostatTile
 import com.alteratom.tile.types.time.TimeTile
 import java.util.*
+import kotlin.reflect.jvm.internal.impl.types.UnresolvedType
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -121,12 +122,12 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
         b.tpMqttPub.addTextChangedListener {
             tile.mqtt.pubs["base"] = (it ?: "").toString()
-            dashboard.dg.mqttd?.notifyOptionsChanged()
+            //dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttSub.addTextChangedListener {
             tile.mqtt.subs["base"] = (it ?: "").toString()
-            dashboard.dg.mqttd?.notifyOptionsChanged()
+            //dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttPubCopy.setOnClickListener {
@@ -140,7 +141,7 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 R.id.tp_qos2 -> 2
                 else -> 1
             }
-            dashboard.dg.mqttd?.notifyOptionsChanged()
+            //dashboard.dg.mqttd?.notifyOptionsChanged()
         }
 
         b.tpMqttRetainSwitch.setOnCheckedChangeListener { _, state ->
@@ -587,7 +588,8 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 
 
                 b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
-                    b.tpThermostatTemperatureSetpointPub.text = b.tpThermostatTemperatureSetpointSub.text
+                    b.tpThermostatTemperatureSetpointPub.text =
+                        b.tpThermostatTemperatureSetpointSub.text
                 }
                 b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
                     b.tpThermostatHumiditySetpointPub.text = b.tpThermostatHumiditySetpointSub.text
@@ -736,7 +738,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         else -> R.id.tp_lights_hsv
                     }
                 )
-
 
                 b.tpLightsStateSub.addTextChangedListener {
                     tile.mqtt.subs["state"] = (it ?: "").toString()

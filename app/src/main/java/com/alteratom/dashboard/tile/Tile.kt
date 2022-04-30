@@ -67,10 +67,6 @@ abstract class Tile : RecyclerViewItem() {
         val view = holder.itemView
         val params = view.layoutParams
 
-        val totalAvail = (screenWidth - view.paddingLeft * 2)
-
-        val r = RecyclerViewAdapter<Mqttd>()
-
         params.height =
             ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
         view.layoutParams = params

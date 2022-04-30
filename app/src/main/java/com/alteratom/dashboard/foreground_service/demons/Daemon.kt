@@ -8,16 +8,14 @@ import com.alteratom.dashboard.IdGenerator
 import com.alteratom.dashboard.dashboard.Dashboard
 
 abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Indexed {
+
     override val id = getNewId()
-    var isDeprecated = false
-    abstract val isEnabled: Boolean
+
+    var isDischarged = false
+    protected abstract val isEnabled: Boolean
 
     abstract val isDone: MutableLiveData<Boolean>
     abstract val status: Any
-
-    init {
-        reportTakenId()
-    }
 
     companion object {
         operator inline fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard): D {
@@ -26,12 +24,19 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
         }
     }
 
-    open fun deprecate() {
-        isDeprecated = true
+    init {
+        reportTakenId()
     }
 
-    abstract fun notifyDashboardAssigned(dashboard: Dashboard)
-    abstract fun notifyDashboardDischarged(dashboard: Dashboard)
+    open fun notifyAssigned() {
+        isDischarged = false
+    }
+
+    open fun notifyDischarged() {
+        isDischarged = true
+    }
+
+    open fun notifyOptionsChanged() {}
 
     abstract class DaemonConnectionHandler {
 

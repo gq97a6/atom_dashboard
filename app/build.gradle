@@ -50,6 +50,13 @@ android {
                         file('src\\main\\res\\icons')
 
             }
+            java {
+                kotlin {
+                    exclude '**/Transfer.kt'
+                    exclude '**/TileProperitesFragment.kt'
+                    exclude '**/ButtonTile.kt'
+                }
+            }
         }
     }
 

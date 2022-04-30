@@ -3,7 +3,6 @@ package com.alteratom.dashboard.dashboard
 import android.content.Context
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.G
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
@@ -18,7 +17,7 @@ import kotlin.random.Random
 
 @Suppress("UNUSED")
 
-class Dashboard<D : Daemon>(var name: String) :
+class Dashboard(var name: String) :
     com.alteratom.dashboard.recycler_view.RecyclerViewItem() {
 
     override val layout
@@ -28,11 +27,7 @@ class Dashboard<D : Daemon>(var name: String) :
 
     var isInvalid = false
 
-    @JsonIgnore
-    var daemon = Daemon<Mqttd>(service as Context, this)
-        set(value) {
-            daemon.d = this
-        }
+    lateinit var daemon: Daemon
 
     var mqtt = MqttData()
 
@@ -42,12 +37,13 @@ class Dashboard<D : Daemon>(var name: String) :
             field = value
         }
 
-    constructor() : this("") {
-        isInvalid = true
-    }
-
     companion object {
-        operator inline fun <D: Daemon> invoke() = Dashboard<Daemon>()
+        operator fun invoke() = Dashboard("").apply { isInvalid = true }
+
+        operator inline fun <reified D : Daemon> invoke(name: String) =
+            Dashboard("").apply {
+                daemon = Daemon<Mqttd>(service as Context, this)
+            }
     }
 
     override fun onBindViewHolder(

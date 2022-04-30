@@ -57,7 +57,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            dManager.deprecateAll()
+            //dManager.deprecateAll()
 
             stopForeground(true)
             stopSelf()

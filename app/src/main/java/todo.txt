@@ -7,6 +7,11 @@ add transfer pick dashboards
 
 add demons placeholders
 
+dashprop
+mainscreen
+tileprop
+textTile
+
 //post development ------------------------------
 hardcoded text
 tests

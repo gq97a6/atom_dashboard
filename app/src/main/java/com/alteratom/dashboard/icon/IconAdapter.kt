@@ -9,9 +9,7 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import java.util.*
 
-
-class IconAdapter(context: Context, spanCount: Int) :
-    RecyclerViewAdapter<Icon>(context, spanCount, DiffCallback) {
+class IconAdapter(context: Context, spanCount: Int) : RecyclerViewAdapter<Icon>(context, spanCount) {
 
     private var iconCount = 0
     var onColorChange: (FloatArray, ColorPallet) -> Unit = { _, _ -> }

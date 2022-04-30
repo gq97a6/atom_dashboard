@@ -16,15 +16,15 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.dashboard.DashboardAdapter
 import com.alteratom.dashboard.foreground_service.ForegroundService
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
 
-    private lateinit var adapter: DashboardAdapter
+    private lateinit var adapter: RecyclerViewAdapter<Dashboard>
     private lateinit var toolBarController: ToolBarController
 
     override fun onCreateView(
@@ -85,7 +85,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     //----------------------------------------------------------------------------------------------
 
     private fun setupRecyclerView() {
-        adapter = DashboardAdapter(requireContext())
+        adapter = RecyclerViewAdapter(requireContext())
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {

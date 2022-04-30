@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
@@ -26,8 +25,10 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
-import com.alteratom.dashboard.log.LogAdapter
-import com.alteratom.dashboard.tile.TileAdapter
+import com.alteratom.dashboard.log.LogEntry
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.switcher.FragmentSwitcher
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
 import java.util.*
@@ -35,7 +36,7 @@ import java.util.*
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
-    private lateinit var adapter: TileAdapter
+    private lateinit var adapter: RecyclerViewAdapter<Tile>
     private lateinit var toolBarController: ToolBarController
 
     override fun onCreateView(
@@ -77,9 +78,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             it.isDone.observe(viewLifecycleOwner) { isDone ->
                 b.dSslStatus.visibility = GONE
 
-                when(it) {
+                when (it) {
                     is Mqttd -> {
-                        b.dStatus.text = when(it.status) {
+                        b.dStatus.text = when (it.status) {
                             Mqttd.MqttdStatus.DISCONNECTED -> "DISCONNECTED"
                             Mqttd.MqttdStatus.FAILED -> "FAILED TO CONNECT"
                             Mqttd.MqttdStatus.ATTEMPTING -> "ATTEMPTING"
@@ -185,8 +186,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun setupRecyclerView() {
         val spanCount = if (screenVertical) 2 else 4
 
-        adapter = TileAdapter(requireContext(), spanCount)
+        adapter = RecyclerViewAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
+
+        adapter.onBindViewHolder = { t, h, _ ->
+            t.onSetTheme(h)
+        }
 
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.dPlaceholder.visibility = VISIBLE
@@ -222,7 +227,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     }
 
     private fun setupLogRecyclerView() {
-        val adapter = LogAdapter(requireContext())
+        val adapter = RecyclerViewAdapter<LogEntry>(requireContext())
         adapter.setHasStableIds(true)
         adapter.submitList(dashboard.log.list)
 

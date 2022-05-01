@@ -2,48 +2,40 @@ package com.alteratom.dashboard.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.get
+import androidx.core.view.WindowInsetsControllerCompat
 import com.alteratom.R
-import com.alteratom.dashboard.Activity
-import com.alteratom.dashboard.FolderTree.rootFolder
-import com.alteratom.dashboard.G
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
-import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
-import com.alteratom.dashboard.jiggle
-import com.alteratom.databinding.ActivitySplashScreenBinding
-import com.alteratom.testjetpackcompose.ui.theme.TestJetpackComposeTheme
+import com.alteratom.dashboard.*
+import com.alteratom.dashboard.Theme.Companion.artist
+import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.Theme.Companion.isDark
+import com.alteratom.dashboard.compose.ComposeTheme
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
-    private lateinit var b: ActivitySplashScreenBinding
+    //private lateinit var b: ActivitySplashScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //super.onCreate(savedInstanceState)
@@ -55,7 +47,7 @@ class SplashScreenActivity : AppCompatActivity() {
 //
         ////if (Build.VERSION.SDK_INT > 30) b.ssBox.visibility = GONE
 //
-        //b.ssIcon.setBackgroundResource(if (G.theme.a.isDark) R.drawable.ic_icon_light  else R.drawable.ic_icon)
+        //b.ssIcon.setBackgroundResource(if (G.theme.a.isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
 //
         //rootFolder = filesDir.canonicalPath.toString()
 //
@@ -78,9 +70,13 @@ class SplashScreenActivity : AppCompatActivity() {
         //}
 
         super.onCreate(savedInstanceState)
-        window.statusBarColor = android.graphics.Color.rgb(18, 18, 18)
+
+        window.statusBarColor = artist.colors.background
+        WindowInsetsControllerCompat(this.window, window.decorView)
+            .isAppearanceLightStatusBars = !isDark
+
         setContent {
-            TestJetpackComposeTheme {
+            ComposeTheme(isDark) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -139,21 +135,10 @@ private object RippleCustomTheme : RippleTheme {
         )
 }
 
-@Composable
-fun rect() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.Red)
-        )
+var textPrivate = ""
+    set(value) {
+        field = value
     }
-}
 
 @Composable
 fun Test() {
@@ -162,31 +147,135 @@ fun Test() {
     var text by remember { mutableStateOf("false") }
 
     Surface(modifier = Modifier.padding(16.dp)) {
-        Column {
-            Text(text = "Tile properties", fontSize = 45.sp)
-            Row(modifier = Modifier.padding(top = 20.dp)) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Text(text = "Tile properties", fontSize = 45.sp, color = colors.color)
+            Row(
+                modifier = Modifier.padding(top = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 OutlinedButton(
+                    contentPadding = PaddingValues(13.dp),
                     onClick = {},
-                    border = BorderStroke(0.dp, Color.White),
+                    border = BorderStroke(0.dp, colors.color),
                     modifier = Modifier
-                        .height(80.dp)
-                        .width(80.dp)
+                        .padding(top = 8.dp)
+                        .height(52.dp)
+                        .width(52.dp)
                 ) {
-                    Text("TEST", color = Color.White)
+                    Icon(painterResource(R.drawable.ic_icon_light), "")
                 }
-                Row(modifier = Modifier.height(80.dp).padding(bottom = 5.dp), verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        value = text,
-                        modifier = Modifier.padding(start = 20.dp),
-                        onValueChange = { text = it },
-                        label = {
-                            Row {
-                                Text(text = "Text ", fontWeight = FontWeight.Bold, fontSize = 15.sp)
-                                Text(text = "tile tag", fontSize = 15.sp)
-                            }
+
+                EditText(
+                    label = { BoldStartText("Text ", "tile tag") },
+                    value = textPrivate,
+                    onValueChange = {
+                        textPrivate = it
+                    },
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+            }
+
+            BoldStartText(
+                a = "Communication: ",
+                b = "MQTT",
+                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
+                    .padding(bottom = 6.dp)
+            ) {
+                LabeledSwitch(
+                    label = { Text("Enabled:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {})
+                EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { })
+                EditText(
+                    label = { Text("Publish topic") },
+                    value = textPrivate,
+                    onValueChange = { textPrivate = it },
+                    modifier = Modifier.padding(top = 10.dp),
+                    trailingIcon = {
+                        IconButton(onClick = {}) {
+                            Icon(painterResource(R.drawable.il_file_copy), "")
                         }
-                    )
-                }
+                    }
+                )
+                RadioGroup(
+                    listOf(
+                        "QoS 0: At most once. No guarantee.",
+                        "QoS 1: At least once. (Recommended)",
+                        "QoS 2: Delivery exactly once."
+                    ), "Quality of Service (MQTT protocol):",
+                    1,
+                    {},
+                    modifier = Modifier.padding(top = 20.dp)
+                )
+
+                LabeledSwitch(
+                    label = { Text("Retain massages:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(top = 10.dp)
+                )
+
+                LabeledSwitch(
+                    label = { Text("Confirm publishing:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(top = 0.dp)
+                )
+
+                LabeledSwitch(
+                    label = { Text("Payload is JSON:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(top = 0.dp)
+                )
+
+                EditText(
+                    label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
+                    value = textPrivate,
+                    onValueChange = { textPrivate = it },
+                    modifier = Modifier.padding(top = 5.dp)
+                )
+            }
+
+            Text(
+                "Notifications and log",
+                color = colors.a,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp,
+                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
+            ) {
+                LabeledSwitch(
+                    label = { Text("Log new values:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(top = 0.dp)
+                )
+
+                LabeledSwitch(
+                    label = { Text("Notify on receive:", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(top = 0.dp)
+                )
+
+                LabeledCheckbox(
+                    label = { Text("Make notification quiet", fontSize = 15.sp) },
+                    checked = state,
+                    onCheckedChange = {},
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
             }
         }
     }

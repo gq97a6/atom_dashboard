@@ -76,7 +76,7 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         mqtt.payloads["hex"] = "#@hex"
         mqtt.payloads["rgb"] = "@r;@g;@b"
 
-        colorToHSV(theme.a.colorPallet.color, hsvPicked)
+        colorToHSV(theme.a.colors.color, hsvPicked)
         colorType = colorType
     }
 

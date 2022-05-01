@@ -19,14 +19,15 @@ import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
+import com.alteratom.dashboard.G.mapper
+import com.alteratom.dashboard.G.theme
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.alteratom.dashboard.G.mapper
-import com.alteratom.dashboard.G.theme
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import java.io.File
 import java.io.FileReader
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 @Suppress("UNUSED")
 class Theme {
@@ -34,6 +35,15 @@ class Theme {
     val a = Artist()
 
     companion object {
+        val artist
+            get() = theme.a
+
+        val colors
+            get() = theme.a.composeColors
+
+        val isDark
+            get() = theme.a.isDark
+
         fun Theme.saveToFile(save: String = this.prepareSave()) {
             try {
                 File(FolderTree.themeFile).writeText(save)
@@ -60,7 +70,7 @@ class Theme {
         viewGroup: ViewGroup,
         context: Context? = null,
         anim: Boolean = true,
-        colorPallet: ColorPallet = a.colorPallet
+        colorPallet: ColorPallet = a.colors
     ) {
         context?.let {
             it.setTheme(R.style.theme)
@@ -167,14 +177,14 @@ class Theme {
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
-                background.setColor(ColorStateList.valueOf(theme.a.colorPallet.background.alpha(150)))
+                background.setColor(ColorStateList.valueOf(theme.a.colors.background.alpha(150)))
             }
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
                 background.setColor(
                     ColorStateList.valueOf(
-                        theme.a.colorPallet.background.darkened(
+                        theme.a.colors.background.darkened(
                             0.9f
                         ).alpha(150)
                     )
@@ -443,20 +453,29 @@ class Theme {
         var isDark = true
             set(value) {
                 field = value
-                colorPallet = getColorPallet(hsv)
+                colors = getColorPallet(hsv)
             }
-
-        var colorPallet: ColorPallet
 
         var hsv: FloatArray = floatArrayOf(0f, 0f, 0f)
             set(value) {
                 field = value
-                colorPallet = getColorPallet(hsv)
+                colors = getColorPallet(hsv)
             }
 
-        init {
-            colorPallet = getColorPallet(hsv)
-        }
+        var colors: ColorPallet = getColorPallet(hsv)
+            set(value) {
+                field = value
+                composeColors = ComposeColorPallet(
+                    ComposeColor(value.color),
+                    ComposeColor(value.background),
+                    ComposeColor(value.a),
+                    ComposeColor(value.b),
+                    ComposeColor(value.c),
+                    ComposeColor(value.d),
+                )
+            }
+
+        var composeColors: ComposeColorPallet = getComposeColorPallet()
 
         fun parseColor(color: Int, isAltCon: Boolean = false): Int {
             val hsv = floatArrayOf(0f, 0f, 0f)
@@ -532,7 +551,26 @@ class Theme {
 
             return ColorPallet(color, colorBackground, a, b, c, d)
         }
+
+        fun getComposeColorPallet(): ComposeColorPallet =
+            ComposeColorPallet(
+                ComposeColor(colors.color),
+                ComposeColor(colors.background),
+                ComposeColor(colors.a),
+                ComposeColor(colors.b),
+                ComposeColor(colors.c),
+                ComposeColor(colors.d),
+            )
     }
+
+    class ComposeColorPallet(
+        val color: ComposeColor,
+        val background: ComposeColor,
+        val a: ComposeColor,
+        val b: ComposeColor,
+        val c: ComposeColor,
+        val d: ComposeColor
+    )
 
     class ColorPallet(
         val color: Int,

@@ -19,6 +19,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
     }
 
     buildTypes {
@@ -49,6 +50,16 @@ android {
                         file('src\\main\\res\\icons')
 
             }
+        }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion "1.2.0-alpha08"
+    }
+
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
 }

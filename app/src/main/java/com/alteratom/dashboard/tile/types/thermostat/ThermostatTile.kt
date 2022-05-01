@@ -15,10 +15,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.dashboard.blink
 import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.round
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -245,7 +245,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(theme.a.colorPallet.color)
+                            ColorStateList.valueOf(theme.a.colors.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }

@@ -43,27 +43,6 @@ class Theme {
 
         val isDark
             get() = theme.a.isDark
-
-        fun Theme.saveToFile(save: String = this.prepareSave()) {
-            try {
-                File(FolderTree.themeFile).writeText(save)
-            } catch (e: Exception) {
-                run { }
-            }
-        }
-
-        fun getSaveFromFile() = try {
-            FileReader(FolderTree.themeFile).readText()
-        } catch (e: Exception) {
-            ""
-        }
-
-        fun parseSave(save: String = getSaveFromFile()): Theme? =
-            try {
-                mapper.readValue(save, Theme::class.java)
-            } catch (e: Exception) {
-                null
-            }
     }
 
     fun apply(

@@ -247,7 +247,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(theme.a.colorPallet.color)
+                            ColorStateList.valueOf(theme.a.colors.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }

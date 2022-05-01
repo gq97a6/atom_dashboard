@@ -8,13 +8,4 @@ class Bluetoothd(context: Context, dashboard: Dashboard) : Daemon(context, dashb
     override var isEnabled = false
     override val isDone = MutableLiveData(false)
     override val status = MutableLiveData(false)
-
-    override fun deprecate() {
-    }
-
-    override fun notifyDashboardAssigned(dashboard: Dashboard) {
-    }
-
-    override fun notifyDashboardDischarged(dashboard: Dashboard) {
-    }
 }

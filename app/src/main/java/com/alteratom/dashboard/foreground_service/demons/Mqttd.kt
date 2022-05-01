@@ -46,10 +46,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 else MqttdStatus.FAILED
             }
 
-    init {
-        super.notifyAssigned()
-    }
-
     override fun notifyAssigned() {
         super.notifyAssigned()
         conHandler.dispatch("assign")

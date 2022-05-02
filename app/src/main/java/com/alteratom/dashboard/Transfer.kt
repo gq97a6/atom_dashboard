@@ -1,30 +1,11 @@
 package com.alteratom.dashboard
 
-import android.app.Dialog
-import android.content.Intent
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.FolderTree.parseListSave
-import com.alteratom.dashboard.FolderTree.parseSave
-import com.alteratom.dashboard.FolderTree.prepareSave
-import com.alteratom.dashboard.FolderTree.saveToFile
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.databinding.DialogTransferBinding
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 object Transfer {
     fun showTransferPopup(fragment: Fragment) {
         fragment.apply {
-
+/*
             val dialog = Dialog(requireContext())
             var observer: (Pair<String?, MqttMessage?>) -> Unit = {}
 
@@ -140,6 +121,8 @@ object Transfer {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
+
+ */
         }
     }
 }

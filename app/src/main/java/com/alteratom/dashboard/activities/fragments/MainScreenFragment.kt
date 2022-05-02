@@ -16,7 +16,6 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.ForegroundService
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
@@ -91,8 +90,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
             b.msRemove.clearAnimation()
-
-            ForegroundService.service?.dManager?.notifyDashboardDischarge(it)
+            it.daemon.notifyDischarged()
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

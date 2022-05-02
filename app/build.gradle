@@ -50,18 +50,11 @@ android {
                         file('src\\main\\res\\icons')
 
             }
-            java {
-                kotlin {
-                    exclude '**/Transfer.kt'
-                    exclude '**/TileProperitesFragment.kt'
-                    exclude '**/ButtonTile.kt'
-                }
-            }
         }
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.2.0-alpha08"
+        kotlinCompilerExtensionVersion "1.2.0-alpha07"
     }
 
     packagingOptions {

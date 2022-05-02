@@ -94,6 +94,35 @@ abstract class Tile : RecyclerViewItem() {
     open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
     }
 
+    fun Mqttd.send(
+        msg: String,
+        topic: String? = mqtt.pubs["base"],
+        @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+        retain: Boolean = false,
+        raw: Boolean = false
+    ) {
+        val d = dashboard.daemon as Mqttd
+
+        if (topic.isNullOrEmpty()) return
+        if (d == null) return
+
+        fun send() {
+            d?.publish(topic, msg, qos, retain)
+            onSend(topic, msg, qos, retain)
+        }
+
+        if (!mqtt.confirmPub || raw) {
+            send()
+            return
+        }
+
+        with(adapter.context) {
+            buildConfirm("Confirm publishing", "PUBLISH", {
+                send()
+            })
+        }
+    }
+
     @JvmOverloads
     fun send(
         msg: String,
@@ -103,28 +132,7 @@ abstract class Tile : RecyclerViewItem() {
         raw: Boolean = false
     ) {
         when (dashboard.daemon) {
-            is Mqttd -> {
-                val d = dashboard.daemon as Mqttd
-
-                if (topic.isNullOrEmpty()) return
-                if (d == null) return
-
-                fun send() {
-                    d?.publish(topic, msg, qos, retain)
-                    onSend(topic, msg, qos, retain)
-                }
-
-                if (!mqtt.confirmPub || raw) {
-                    send()
-                    return
-                }
-
-                with(adapter.context) {
-                    buildConfirm("Confirm publishing", "PUBLISH", {
-                        send()
-                    })
-                }
-            }
+            is Mqttd -> (dashboard.daemon as Mqttd).send(msg, topic, qos, retain, raw)
         }
     }
 

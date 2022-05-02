@@ -19,17 +19,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.DashboardSwitcher.FragmentSwitcher
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.Transfer.showTransferPopup
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.toPem
 import com.alteratom.databinding.DialogCopyBrokerBinding
 import com.alteratom.databinding.DialogSslBinding
@@ -57,31 +57,40 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         theme.apply(b.root, requireContext())
         viewConfig()
-
-        dashboard.dg?.mqttd?.let {
-            it.conHandler.isDone.observe(viewLifecycleOwner) { isDone ->
+        //Set dashboard status
+        dashboard.daemon?.let {
+            it.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
-                v.text = if (dashboard.mqtt.isEnabled) {
-                    if (it.client.isConnected) {
-                        v.clearAnimation()
-                        "CONNECTED"
-                    } else if (!isDone) {
-                        if (v.animation == null) v.blink(-1, 400)
-                        "ATTEMPTING"
-                    } else {
-                        v.clearAnimation()
-                        "FAILED"
+                when (it) {
+                    is Mqttd -> when (it.status) {
+                        Mqttd.MqttdStatus.DISCONNECTED -> {
+                            v.clearAnimation()
+                            "DISCONNECTED"
+                        }
+                        Mqttd.MqttdStatus.FAILED -> {
+                            v.clearAnimation()
+                            "FAILED TO CONNECT"
+                        }
+                        Mqttd.MqttdStatus.ATTEMPTING -> {
+                            if (v.animation == null) v.blink(-1, 400)
+                            "ATTEMPTING"
+                        }
+                        Mqttd.MqttdStatus.CONNECTED -> {
+                            v.clearAnimation()
+                            "CONNECTED"
+                        }
+                        Mqttd.MqttdStatus.CONNECTED_SSL -> {
+                            v.clearAnimation()
+                            "CONNECTED"
+                        }
                     }
-                } else {
-                    v.clearAnimation()
-                    "DISCONNECTED"
                 }
             }
         }
 
         b.dpMqttSwitch.setOnCheckedChangeListener { _, state ->
             dashboard.mqtt.isEnabled = state
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            dashboard.daemon.notifyOptionsChanged()
         }
 
         b.dpName.addTextChangedListener { it ->
@@ -95,7 +104,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             (it ?: "").toString().trim().let {
                 if (dashboard.mqtt.address != it) {
                     dashboard.mqtt.address = it
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
                 }
             }
         }
@@ -104,13 +113,13 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             val port = (it ?: "").toString().trim().toIntOrNull() ?: (-1)
             if (dashboard.mqtt.port != port) {
                 dashboard.mqtt.port = port
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
+                dashboard.daemon.notifyOptionsChanged()
             }
         }
 
         b.dpMqttCred.setOnCheckedChangeListener { _, state ->
             dashboard.mqtt.includeCred = state
-            dashboard.dg?.mqttd?.notifyOptionsChanged()
+            dashboard.daemon.notifyOptionsChanged()
             switchMqttCred(!state)
         }
 
@@ -122,7 +131,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             (it ?: "").toString().trim().let {
                 if (dashboard.mqtt.username != it) {
                     dashboard.mqtt.username = it
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
                 }
             }
         }
@@ -131,7 +140,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             (it ?: "").toString().trim().let {
                 if (dashboard.mqtt.pass != it) {
                     dashboard.mqtt.pass = it
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
                 }
             }
         }
@@ -142,11 +151,11 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     it.isBlank() -> {
                         dashboard.mqtt.clientId = kotlin.math.abs(Random.nextInt()).toString()
                         b.dpMqttClientId.setText(dashboard.mqtt.clientId)
-                        dashboard.dg?.mqttd?.notifyOptionsChanged()
+                        dashboard.daemon.notifyOptionsChanged()
                     }
                     dashboard.mqtt.clientId != it -> {
                         dashboard.mqtt.clientId = it
-                        dashboard.dg?.mqttd?.notifyOptionsChanged()
+                        dashboard.daemon.notifyOptionsChanged()
                     }
                 }
             }
@@ -182,7 +191,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                     dashboard.mqtt = dashboards[p].mqtt.copy()
                     dashboard.mqtt.clientId = kotlin.math.abs(Random.nextInt()).toString()
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
 
                     viewConfig()
                     dialog.dismiss()
@@ -200,8 +209,8 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         }
 
         b.dpTransfer.setOnClickListener {
-            if (dashboard.dg?.mqttd?.client?.isConnected == true) showTransferPopup(this)
-            else createToast(requireContext(), "Connection required", 1000)
+            //if (dashboard.daemon.client?.isConnected == true) showTransferPopup(this)
+            //else createToast(requireContext(), "Connection required", 1000)
         }
 
         b.dpLeft.setOnClickListener {
@@ -282,7 +291,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
             binding.dsSsl.setOnCheckedChangeListener { _, state ->
                 dashboard.mqtt.ssl = state
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
+                dashboard.daemon.notifyOptionsChanged()
             }
 
             binding.dsTrustAll.setOnTouchListener { v, event ->
@@ -296,7 +305,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
                     else binding.dsTrustAlert.clearAnimation()
 
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
                 }
 
                 if (!dashboard.mqtt.sslTrustAll) {
@@ -319,7 +328,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 binding.dsCaCertInsert.foreground =
                     requireContext().getDrawable(R.drawable.bt_remove)
 
-                dashboard.dg?.mqttd?.notifyOptionsChanged()
+                dashboard.daemon.notifyOptionsChanged()
             }
 
             fun openCert() {
@@ -344,7 +353,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                     binding.dsCaCertInsert.foreground =
                         requireContext().getDrawable(R.drawable.bt_include)
 
-                    dashboard.dg?.mqttd?.notifyOptionsChanged()
+                    dashboard.daemon.notifyOptionsChanged()
                 }
             }
 

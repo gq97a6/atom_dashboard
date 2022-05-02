@@ -5,10 +5,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.databinding.DialogTextBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.random.Random
 
@@ -30,7 +32,10 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
             holder?.itemView?.findViewById<TextView>(R.id.tt_values)?.text = value
         }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
@@ -43,7 +48,9 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
         super.onClick(v, e)
 
         if (mqtt.pubs["base"].isNullOrEmpty()) return
-        if (dashboard.dg.mqttd?.client?.isConnected != true) return
+        (dashboard.daemon as? Mqttd?)?.let {
+            if (it.client.isConnected != true) return
+        }
 
         if (mqtt.varPayload) {
             val dialog = Dialog(adapter.context)
@@ -63,7 +70,7 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
             }
 
             dialog.dialogSetup()
-            com.alteratom.dashboard.G.theme.apply(binding.root)
+            theme.apply(binding.root)
             dialog.show()
         } else send(Random.nextInt().toString())
     }

@@ -13,8 +13,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
-import com.alteratom.dashboard.Activity
 import com.alteratom.R
+import com.alteratom.dashboard.Activity
+import com.alteratom.dashboard.G.dashboards
 
 
 class ForegroundService : LifecycleService() {
@@ -57,7 +58,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            //dManager.deprecateAll() //todo
+            dashboards.forEach { it.daemon.notifyDischarged() }
 
             stopForeground(true)
             stopSelf()

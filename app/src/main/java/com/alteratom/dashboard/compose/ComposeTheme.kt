@@ -4,6 +4,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.alteratom.dashboard.Theme.Companion.artist
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.testjetpackcompose.ui.theme.ComposeShapes
 import com.alteratom.testjetpackcompose.ui.theme.ComposeTypography
@@ -14,7 +16,7 @@ val DarkColorPalette = darkColors(
     primaryVariant = C.Gray,
     secondary = C.DarkGray,
     secondaryVariant = C.Black,
-    background = C(0xFF121212),
+    background = colors.background,
     surface = C.Transparent,
     onPrimary = C.White,
     onSecondary = C.White,
@@ -27,7 +29,7 @@ val LightColorPalette = lightColors(
     primaryVariant = C.DarkGray,
     secondary = C.Gray,
     secondaryVariant = C.LightGray,
-    background = C(0xFFf0f0f0),
+    background = colors.background,
     surface = C.Transparent,
     onPrimary = C.Black,
     onSecondary = C.Black,

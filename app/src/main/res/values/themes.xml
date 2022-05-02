@@ -5,4 +5,5 @@
         <item name="colorAccent">#808080</item>
         <item name="android:windowActivityTransitions">true</item>
     </style>
+
 </resources>

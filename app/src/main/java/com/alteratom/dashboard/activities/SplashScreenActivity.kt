@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
@@ -72,6 +73,10 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         window.statusBarColor = artist.colors.background
+        //window.setFlags(
+        //    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+        //    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        //)
         WindowInsetsControllerCompat(this.window, window.decorView)
             .isAppearanceLightStatusBars = !isDark
 
@@ -143,7 +148,7 @@ var textPrivate = ""
 @Composable
 fun Test() {
     var counter by remember { mutableStateOf(0) }
-    var state by remember { mutableStateOf(false) }
+    var state by remember { mutableStateOf(true) }
     var text by remember { mutableStateOf("false") }
 
     Surface(modifier = Modifier.padding(16.dp)) {
@@ -187,7 +192,7 @@ fun Test() {
                     .padding(horizontal = 14.dp, vertical = 10.dp)
                     .padding(bottom = 6.dp)
             ) {
-                LabeledSwitch(
+                var enabled = LabeledSwitch(
                     label = { Text("Enabled:", fontSize = 15.sp) },
                     checked = state,
                     onCheckedChange = {})

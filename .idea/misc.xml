@@ -170,7 +170,10 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/background_right_corner.xml" value="0.3315" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/background_round.xml" value="0.3315" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_frame.xml" value="0.244" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_left_corner.xml" value="0.1925" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_copy.xml" value="0.1985" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_left.xml" value="0.187" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_right.xml" value="0.187" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_include.xml" value="0.194" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_info.xml" value="0.174" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_left.xml" value="0.3315" />
@@ -179,6 +182,7 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_remove.xml" value="0.194" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_right.xml" value="0.3315" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/button_text.xml" value="0.194" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/ic_arrow.xml" value="0.3775" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/icon_arrow.xml" value="0.1775" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/icon_main.xml" value="0.1775" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/icon_main_new.xml" value="0.1775" />
@@ -208,7 +212,7 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_main_screen.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_settings.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_splash_screen.xml" value="0.2609375" />
-        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.33" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.5" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon_bar.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon_category.xml" value="0.19739583333333333" />

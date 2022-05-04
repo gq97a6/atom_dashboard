@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,6 +21,7 @@ import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -140,16 +143,18 @@ private object RippleCustomTheme : RippleTheme {
         )
 }
 
-var textPrivate = ""
-    set(value) {
-        field = value
-    }
+var isEn = false
 
 @Composable
 fun Test() {
-    var counter by remember { mutableStateOf(0) }
+    var index by remember { mutableStateOf(0) }
     var state by remember { mutableStateOf(true) }
     var text by remember { mutableStateOf("false") }
+    val rotation = if (state) 0f else 180f
+    val angle: Float by animateFloatAsState(
+        targetValue = if (rotation > 360 - rotation) { -(360 - rotation) } else rotation,
+        animationSpec = tween(durationMillis = 200, easing = LinearEasing)
+    )
 
     Surface(modifier = Modifier.padding(16.dp)) {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -172,9 +177,9 @@ fun Test() {
 
                 EditText(
                     label = { BoldStartText("Text ", "tile tag") },
-                    value = textPrivate,
+                    value = text,
                     onValueChange = {
-                        textPrivate = it
+                        text = it
                     },
                     modifier = Modifier.padding(start = 20.dp)
                 )
@@ -192,15 +197,35 @@ fun Test() {
                     .padding(horizontal = 14.dp, vertical = 10.dp)
                     .padding(bottom = 6.dp)
             ) {
-                var enabled = LabeledSwitch(
-                    label = { Text("Enabled:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = {})
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    LabeledSwitch(
+                        label = { Text("Enabled:", fontSize = 15.sp) },
+                        checked = state,
+                        onCheckedChange = { state = it }
+                    )
+
+                    IconButton(
+                        modifier = Modifier.size(40.dp),
+                        onClick = { state = !state }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_arrow), "",
+                            modifier = Modifier
+                                .size(40.dp)
+                                .rotate(angle)
+                        )
+                    }
+                }
+
                 EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { })
                 EditText(
                     label = { Text("Publish topic") },
-                    value = textPrivate,
-                    onValueChange = { textPrivate = it },
+                    value = text,
+                    onValueChange = { text = it },
                     modifier = Modifier.padding(top = 10.dp),
                     trailingIcon = {
                         IconButton(onClick = {}) {
@@ -214,36 +239,36 @@ fun Test() {
                         "QoS 1: At least once. (Recommended)",
                         "QoS 2: Delivery exactly once."
                     ), "Quality of Service (MQTT protocol):",
-                    1,
-                    {},
+                    index,
+                    { index = it },
                     modifier = Modifier.padding(top = 20.dp)
                 )
 
                 LabeledSwitch(
                     label = { Text("Retain massages:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(top = 10.dp)
                 )
 
                 LabeledSwitch(
                     label = { Text("Confirm publishing:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(top = 0.dp)
                 )
 
                 LabeledSwitch(
                     label = { Text("Payload is JSON:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(top = 0.dp)
                 )
 
                 EditText(
                     label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
-                    value = textPrivate,
-                    onValueChange = { textPrivate = it },
+                    value = text,
+                    onValueChange = { text = it },
                     modifier = Modifier.padding(top = 5.dp)
                 )
             }
@@ -264,48 +289,58 @@ fun Test() {
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(top = 0.dp)
                 )
 
                 LabeledSwitch(
                     label = { Text("Notify on receive:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(top = 0.dp)
                 )
 
                 LabeledCheckbox(
                     label = { Text("Make notification quiet", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = {},
+                    onCheckedChange = { state = it },
                     modifier = Modifier.padding(vertical = 10.dp)
                 )
             }
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            )
         }
     }
 
-    //Column(modifier = Modifier.padding(16.dp)) {
-    //    OutlinedTextField(
-    //        value = text,
-    //        onValueChange = { text = it },
-    //        label = { Text("Label") }
-    //    )
-//
-    //    CompositionLocalProvider(LocalRippleTheme provides RippleCustomTheme) {
-    //        OutlinedButton(
-    //            onClick = {},
-    //            border = BorderStroke(0.dp, Color.White),
-    //            shape = RectangleShape,
-    //            modifier = Modifier.padding(top = 10.dp)
-    //        ) {
-    //            Text("TEST", color = Color.White)
-    //        }
-    //    }
-//
-    //    CustomView()
-    //}
+    NavigationArrows({}, {})
 }
+
+// Test ------------------------------------------------------------------------------------------
+
+//Column(modifier = Modifier.padding(16.dp)) {
+//    OutlinedTextField(
+//        value = text,
+//        onValueChange = { text = it },
+//        label = { Text("Label") }
+//    )
+//
+//    CompositionLocalProvider(LocalRippleTheme provides RippleCustomTheme) {
+//        OutlinedButton(
+//            onClick = {},
+//            border = BorderStroke(0.dp, Color.White),
+//            shape = RectangleShape,
+//            modifier = Modifier.padding(top = 10.dp)
+//        ) {
+//            Text("TEST", color = Color.White)
+//        }
+//    }
+//
+//    CustomView()
+//}
 
 @Composable
 fun CustomView() {

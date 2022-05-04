@@ -1,17 +1,22 @@
 package com.alteratom.dashboard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,6 +26,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.CheckBoxColors
 import com.alteratom.dashboard.compose.EditTextColors
@@ -44,8 +50,6 @@ fun LabeledSwitch(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    var checkedState by remember { mutableStateOf(checked) }
-
     Row(
         modifier = modifier.wrapContentSize(),
         verticalAlignment = Alignment.CenterVertically
@@ -53,11 +57,8 @@ fun LabeledSwitch(
         label?.invoke()
         Text("OFF", fontSize = 12.sp, color = colors.b, modifier = Modifier.padding(start = 8.dp))
         Switch(
-            checked = checkedState,
-            onCheckedChange = {
-                checkedState = it
-                onCheckedChange?.invoke(checked)
-            },
+            checked = checked,
+            onCheckedChange = onCheckedChange,
             enabled = enabled,
             colors = SwitchColors(),
             interactionSource = interactionSource,
@@ -90,15 +91,11 @@ fun EditText(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small
 ) {
-    var valueState by remember { mutableStateOf(value) }
     OutlinedTextField(
         enabled = enabled,
         readOnly = readOnly,
-        value = valueState,
-        onValueChange = {
-            valueState = it
-            onValueChange(it)
-        },
+        value = value,
+        onValueChange = onValueChange,
         modifier = modifier
             .height(60.dp)
             .fillMaxWidth(),
@@ -124,10 +121,9 @@ fun RadioGroup(
     options: List<String> = listOf(),
     label: String = "",
     selected: Int,
-    onClick: ((Int) -> Unit)?,
+    onClick: ((Int) -> Unit),
     modifier: Modifier = Modifier
 ) {
-    var selectedState by remember { mutableStateOf(selected) }
     Column(modifier = modifier) {
         Text(text = label, fontSize = 15.sp, color = colors.color)
         options.forEachIndexed { index, item ->
@@ -136,11 +132,8 @@ fun RadioGroup(
                 modifier = Modifier.padding(top = 15.dp)
             ) {
                 RadioButton(
-                    selected = index == selectedState,
-                    onClick = {
-                        selectedState = index
-                        onClick?.invoke(index)
-                    },
+                    selected = index == selected,
+                    onClick = { onClick(index) },
                     modifier = Modifier
                         .width(20.dp)
                         .height(25.dp),
@@ -154,7 +147,7 @@ fun RadioGroup(
 
                 ClickableText(
                     text = annotatedText,
-                    onClick = { selectedState = index },
+                    onClick = { onClick(index) },
                     modifier = Modifier.padding(start = 5.dp)
                 )
             }
@@ -178,10 +171,9 @@ fun LabeledCheckbox(
     enabled: Boolean = true,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
-    var checkedState by remember { mutableStateOf(checked) }
     Row(
         modifier = modifier
-            .nrClickable(onClick = { checkedState = !checkedState })
+            .nrClickable(onClick = { onCheckedChange(!checked) })
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -189,16 +181,53 @@ fun LabeledCheckbox(
             modifier = Modifier
                 .width(20.dp)
                 .height(20.dp),
-            checked = checkedState,
+            checked = checked,
             enabled = enabled,
             interactionSource = interactionSource,
             colors = CheckBoxColors(),
-            onCheckedChange = {
-                onCheckedChange(it)
-                checkedState = it
-            }
+            onCheckedChange = onCheckedChange
         )
         Spacer(modifier = Modifier.padding(5.dp))
         label()
+    }
+}
+
+@Composable
+fun NavigationArrows(
+    onClickLeft: () -> Unit,
+    onClickRight: () -> Unit
+) {
+    IconButton(
+        onClick = { },
+        modifier = Modifier
+            .wrapContentSize(Alignment.BottomStart)
+            .size(60.dp)
+            .clip(RoundedCornerShape(topEnd = 40.dp))
+            .background(colors.d.copy(alpha = 0.4f))
+    ) {
+        Icon(
+            painterResource(R.drawable.il_arrow_angle_left_b),
+            "",
+            modifier = Modifier
+                .padding(end = 10.dp)
+                .size(40.dp)
+        )
+    }
+
+    IconButton(
+        onClick = { },
+        modifier = Modifier
+            .wrapContentSize(Alignment.BottomEnd)
+            .size(60.dp)
+            .clip(RoundedCornerShape(topStart = 40.dp))
+            .background(colors.d.copy(alpha = 0.4f))
+    ) {
+        Icon(
+            painterResource(R.drawable.il_arrow_angle_right_b),
+            "",
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .size(40.dp)
+        )
     }
 }

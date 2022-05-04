@@ -175,7 +175,7 @@ class Theme {
 
     private fun FrameLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "corners" -> this.backgroundTintList = ColorStateList.valueOf(p.d).withAlpha(100)
+            "corners" -> this.backgroundTintList = ColorStateList.valueOf(p.d.alpha(100))
             "background" -> this.setBackgroundColor(p.background)
             else -> onUnknownTag(this.tag, "frameLayout")
         }

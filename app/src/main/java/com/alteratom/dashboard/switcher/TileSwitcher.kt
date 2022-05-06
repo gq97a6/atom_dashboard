@@ -11,6 +11,8 @@ import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animation
 object TileSwitcher : Switcher() {
 
     fun switch(slideRight: Boolean) {
+        if (dashboard.tiles.size < 2) return
+
         var index = dashboard.tiles.indexOf(tile) - if (slideRight) 1 else -1
         if (index < 0) index = dashboard.tiles.lastIndex
         if (index > dashboard.tiles.lastIndex) index = 0

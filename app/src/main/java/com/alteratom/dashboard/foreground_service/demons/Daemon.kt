@@ -26,7 +26,6 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
 
     init {
         reportTakenId()
-        notifyAssigned()
     }
 
     open fun notifyAssigned() {

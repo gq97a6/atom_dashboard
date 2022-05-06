@@ -32,66 +32,48 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.FolderTree.rootFolder
+import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Theme.Companion.artist
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
+import com.alteratom.databinding.ActivitySplashScreenBinding
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
-    //private lateinit var b: ActivitySplashScreenBinding
+    private lateinit var b: ActivitySplashScreenBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //super.onCreate(savedInstanceState)
-        //Activity.onCreate(this)
-//
-        //b = ActivitySplashScreenBinding.inflate(layoutInflater)
-        //setContentView(b.root)
-        //G.theme.apply(b.root, this)
-//
-        ////if (Build.VERSION.SDK_INT > 30) b.ssBox.visibility = GONE
-//
-        //b.ssIcon.setBackgroundResource(if (G.theme.a.isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
-//
-        //rootFolder = filesDir.canonicalPath.toString()
-//
-        //if (service != null && dashboards.isNotEmpty()) {
-        //    service?.dgManager?.assign()
-        //    onServiceReady()
-        //} else {
-        //    G.initialize()
-//
-        //    val foregroundServiceHandler = ForegroundServiceHandler(this)
-        //    foregroundServiceHandler.service.observe(this) { s ->
-        //        if (s != null) {
-        //            service?.finishAffinity = { finishAffinity() }
-        //            onServiceReady()
-        //        }
-        //    }
-//
-        //    foregroundServiceHandler.start()
-        //    foregroundServiceHandler.bind()
-        //}
-
         super.onCreate(savedInstanceState)
+        Activity.onCreate(this)
 
-        window.statusBarColor = artist.colors.background
-        //window.setFlags(
-        //    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-        //    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-        //)
-        WindowInsetsControllerCompat(this.window, window.decorView)
-            .isAppearanceLightStatusBars = !isDark
+        b = ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView(b.root)
+        G.theme.apply(b.root, this)
 
-        setContent {
-            ComposeTheme(isDark) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Test()
+        b.ssIcon.setBackgroundResource(if (G.theme.a.isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
+
+        rootFolder = filesDir.canonicalPath.toString()
+
+        if (service != null && dashboards.isNotEmpty()) {
+            onServiceReady()
+        } else {
+            G.initialize()
+
+            val foregroundServiceHandler = ForegroundServiceHandler(this)
+            foregroundServiceHandler.service.observe(this) { s ->
+                run {}
+                if (s != null) {
+                    service?.finishAffinity = { finishAffinity() }
+                    onServiceReady()
                 }
             }
+
+            foregroundServiceHandler.start()
+            foregroundServiceHandler.bind()
         }
     }
 
@@ -113,245 +95,4 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        Test()
-    }
-}
-
-private object RippleCustomTheme : RippleTheme {
-
-    @Composable
-    override fun defaultColor() =
-        RippleTheme.defaultRippleColor(
-            Color(255, 255, 255),
-            lightTheme = false
-        )
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha =
-        RippleTheme.defaultRippleAlpha(
-            Color(255, 255, 255),
-            lightTheme = true
-        )
-}
-
-var isEn = false
-
-@Composable
-fun Test() {
-    var index by remember { mutableStateOf(0) }
-    var state by remember { mutableStateOf(true) }
-    var text by remember { mutableStateOf("false") }
-    val rotation = if (state) 0f else 180f
-    val angle: Float by animateFloatAsState(
-        targetValue = if (rotation > 360 - rotation) { -(360 - rotation) } else rotation,
-        animationSpec = tween(durationMillis = 200, easing = LinearEasing)
-    )
-
-    Surface(modifier = Modifier.padding(16.dp)) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Text(text = "Tile properties", fontSize = 45.sp, color = colors.color)
-            Row(
-                modifier = Modifier.padding(top = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedButton(
-                    contentPadding = PaddingValues(13.dp),
-                    onClick = {},
-                    border = BorderStroke(0.dp, colors.color),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .height(52.dp)
-                        .width(52.dp)
-                ) {
-                    Icon(painterResource(R.drawable.ic_icon_light), "")
-                }
-
-                EditText(
-                    label = { BoldStartText("Text ", "tile tag") },
-                    value = text,
-                    onValueChange = {
-                        text = it
-                    },
-                    modifier = Modifier.padding(start = 20.dp)
-                )
-            }
-
-            BoldStartText(
-                a = "Communication: ",
-                b = "MQTT",
-                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
-                    .padding(bottom = 6.dp)
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    LabeledSwitch(
-                        label = { Text("Enabled:", fontSize = 15.sp) },
-                        checked = state,
-                        onCheckedChange = { state = it }
-                    )
-
-                    IconButton(
-                        modifier = Modifier.size(40.dp),
-                        onClick = { state = !state }
-                    ) {
-                        Icon(
-                            painterResource(R.drawable.ic_arrow), "",
-                            modifier = Modifier
-                                .size(40.dp)
-                                .rotate(angle)
-                        )
-                    }
-                }
-
-                EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { })
-                EditText(
-                    label = { Text("Publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.padding(top = 10.dp),
-                    trailingIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(painterResource(R.drawable.il_file_copy), "")
-                        }
-                    }
-                )
-                RadioGroup(
-                    listOf(
-                        "QoS 0: At most once. No guarantee.",
-                        "QoS 1: At least once. (Recommended)",
-                        "QoS 2: Delivery exactly once."
-                    ), "Quality of Service (MQTT protocol):",
-                    index,
-                    { index = it },
-                    modifier = Modifier.padding(top = 20.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Retain massages:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 10.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Confirm publishing:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Payload is JSON:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                EditText(
-                    label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.padding(top = 5.dp)
-                )
-            }
-
-            Text(
-                "Notifications and log",
-                color = colors.a,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
-            ) {
-                LabeledSwitch(
-                    label = { Text("Log new values:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Notify on receive:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                LabeledCheckbox(
-                    label = { Text("Make notification quiet", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(vertical = 10.dp)
-                )
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-            )
-        }
-    }
-
-    NavigationArrows({}, {})
-}
-
-// Test ------------------------------------------------------------------------------------------
-
-//Column(modifier = Modifier.padding(16.dp)) {
-//    OutlinedTextField(
-//        value = text,
-//        onValueChange = { text = it },
-//        label = { Text("Label") }
-//    )
-//
-//    CompositionLocalProvider(LocalRippleTheme provides RippleCustomTheme) {
-//        OutlinedButton(
-//            onClick = {},
-//            border = BorderStroke(0.dp, Color.White),
-//            shape = RectangleShape,
-//            modifier = Modifier.padding(top = 10.dp)
-//        ) {
-//            Text("TEST", color = Color.White)
-//        }
-//    }
-//
-//    CustomView()
-//}
-
-@Composable
-fun CustomView() {
-    val selectedItem = remember { mutableStateOf(0) }
-    AndroidView(
-        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
-        factory = { context ->
-            val view = LayoutInflater.from(context).inflate(R.layout.fragment_tile_new, null, false)
-            view
-        },
-        update = { view ->
-        }
-    )
 }

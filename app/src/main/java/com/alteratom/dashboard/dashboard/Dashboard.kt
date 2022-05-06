@@ -25,8 +25,10 @@ class Dashboard(var name: String) :
 
     var log = Log()
 
+    @JsonIgnore
     var isInvalid = false
 
+    @JsonIgnore
     lateinit var daemon: Daemon
 
     var mqtt = MqttData()
@@ -41,7 +43,7 @@ class Dashboard(var name: String) :
         operator fun invoke() = Dashboard("").apply { isInvalid = true }
 
         operator inline fun <reified D : Daemon> invoke(name: String) =
-            Dashboard("").apply {
+            Dashboard(name).apply {
                 daemon = Daemon<Mqttd>(service as Context, this)
             }
     }

@@ -61,7 +61,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         dashboard.daemon?.let {
             it.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
-                when (it) {
+                v.text = when (it) {
                     is Mqttd -> when (it.status) {
                         Mqttd.MqttdStatus.DISCONNECTED -> {
                             v.clearAnimation()
@@ -84,6 +84,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                             "CONNECTED"
                         }
                     }
+                    else -> {"err"}
                 }
             }
         }

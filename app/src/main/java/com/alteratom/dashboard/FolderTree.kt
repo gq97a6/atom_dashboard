@@ -1,7 +1,6 @@
 package com.alteratom.dashboard
 
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.demons.Daemon
 import java.io.File
 import java.io.FileReader
 
@@ -12,15 +11,16 @@ object FolderTree {
         Theme::class to "$rootFolder/theme",
         Settings::class to "$rootFolder/settings",
         Dashboard::class to "$rootFolder/dashboards",
-        Daemon::class to "$rootFolder/daemons",
     )
 
     fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
 
     fun Any.saveToFile(save: String = this.prepareSave()) {
         try {
-            File(path[this::class]).writeText(save)
+            val path = path[(if (this is Collection<*>) this.first()!! else this)::class]
+            File(path).writeText(save)
         } catch (e: Exception) {
+            run { }
         }
     }
 

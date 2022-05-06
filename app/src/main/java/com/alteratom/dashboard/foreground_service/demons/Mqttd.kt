@@ -29,7 +29,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     override val isEnabled
-        get() = d.mqtt.isEnabled && isDischarged
+        get() = d.mqtt.isEnabled && !isDischarged
 
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
@@ -46,6 +46,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 else MqttdStatus.FAILED
             }
 
+    init {
+        notifyAssigned()
+    }
     override fun notifyAssigned() {
         super.notifyAssigned()
         conHandler.dispatch("assign")

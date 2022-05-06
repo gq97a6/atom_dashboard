@@ -16,6 +16,7 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
@@ -52,7 +53,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         val addOnClick: () -> Unit = {
             val name = kotlin.math.abs(Random.nextInt()).toString()
-            val dashboard = Dashboard(name)
+            val dashboard = Dashboard<Mqttd>(name)
             dashboards.add(dashboard)
             dashboards.saveToFile()
 

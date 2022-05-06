@@ -22,7 +22,6 @@ class ForegroundService : LifecycleService() {
 
     var finishAffinity: () -> Unit = {}
     private var isRunning = false
-    lateinit var dManager: DaemonsManager
 
     companion object {
         var service: ForegroundService? = null
@@ -64,12 +63,7 @@ class ForegroundService : LifecycleService() {
             stopSelf()
 
             finishAffinity()
-        } else {
-            if (!isRunning) {
-                dManager = DaemonsManager(this)
-                isRunning = true
-            }
-        }
+        } else if (!isRunning) isRunning = true
 
         return super.onStartCommand(intent, flags, startId)
     }

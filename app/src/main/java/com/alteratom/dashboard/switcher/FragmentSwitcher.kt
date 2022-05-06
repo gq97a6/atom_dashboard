@@ -11,6 +11,8 @@ import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animation
 object FragmentSwitcher : Switcher() {
 
     fun switch(slideRight: Boolean, target: Fragment = DashboardFragment()) {
+        if (G.dashboards.size < 2) return
+
         var index = G.dashboardIndex - if (slideRight) 1 else -1
         if (index < 0) index = G.dashboards.lastIndex
         if (index > G.dashboards.lastIndex) index = 0

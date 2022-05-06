@@ -29,10 +29,8 @@ class SplashScreenFragment : Fragment(R.layout.fragment_splash_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         theme.apply(b.root, requireContext())
 
-        b.ssIcon.setBackgroundResource(if (theme.a.isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
         b.ssIcon.animate()
             .rotationBy(100f)
             .scaleX(1.3f)

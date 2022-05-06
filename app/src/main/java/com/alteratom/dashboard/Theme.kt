@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Build
@@ -19,15 +21,12 @@ import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.dashboard.G.mapper
 import com.alteratom.dashboard.G.theme
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import me.tankery.lib.circularseekbar.CircularSeekBar
-import java.io.File
-import java.io.FileReader
 import androidx.compose.ui.graphics.Color as ComposeColor
 
 @Suppress("UNUSED")
@@ -169,6 +168,11 @@ class Theme {
                         ).alpha(150)
                     )
                 )
+            }
+            "splashIcon" -> {
+                this.setBackgroundResource(if (isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
+                this.background.colorFilter =
+                    PorterDuffColorFilter(artist.colors.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
             }
             else -> onUnknownTag(this.tag, "view")
         }

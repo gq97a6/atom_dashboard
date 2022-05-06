@@ -3,15 +3,20 @@ package com.alteratom.dashboard
 import com.alteratom.dashboard.dashboard.Dashboard
 import java.io.File
 import java.io.FileReader
+import kotlin.reflect.KClass
 
 object FolderTree {
     var rootFolder: String = ""
+        set(value) {
+            field = value
+            path = mapOf(
+                Theme::class to "$value/theme",
+                Settings::class to "$value/settings",
+                Dashboard::class to "$value/dashboards",
+            )
+        }
 
-    val path = mapOf(
-        Theme::class to "$rootFolder/theme",
-        Settings::class to "$rootFolder/settings",
-        Dashboard::class to "$rootFolder/dashboards",
-    )
+    lateinit var path: Map<KClass<out Any>, String>
 
     fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
 

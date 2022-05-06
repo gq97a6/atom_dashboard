@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.G.mapper
 import com.alteratom.dashboard.G.theme
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -441,6 +442,7 @@ class Theme {
                 colors = getColorPallet(hsv)
             }
 
+        @JsonIgnore
         var colors: ColorPallet = getColorPallet(hsv)
             set(value) {
                 field = value
@@ -454,6 +456,7 @@ class Theme {
                 )
             }
 
+        @JsonIgnore
         var composeColors: ComposeColorPallet = getComposeColorPallet()
 
         fun parseColor(color: Int, isAltCon: Boolean = false): Int {

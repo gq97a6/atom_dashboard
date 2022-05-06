@@ -53,7 +53,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         val addOnClick: () -> Unit = {
             val name = kotlin.math.abs(Random.nextInt()).toString()
-            val dashboard = Dashboard<Mqttd>(name)
+            val dashboard = Dashboard(name)
             dashboards.add(dashboard)
             dashboards.saveToFile()
 

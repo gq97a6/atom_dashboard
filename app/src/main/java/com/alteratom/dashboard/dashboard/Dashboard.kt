@@ -14,10 +14,11 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.random.Random
+import kotlin.reflect.KClass
 
 @Suppress("UNUSED")
 
-class Dashboard(var name: String) :
+class Dashboard(var name: String, var type: KClass<out Daemon> = Daemon::class) :
     com.alteratom.dashboard.recycler_view.RecyclerViewItem() {
 
     override val layout
@@ -28,10 +29,14 @@ class Dashboard(var name: String) :
     @JsonIgnore
     var isInvalid = false
 
-    @JsonIgnore
-    lateinit var daemon: Daemon
-
     var mqtt = MqttData()
+
+    @JsonIgnore
+    var daemon: Daemon
+
+    init {
+        daemon = type.constructors.first().call(service as Context, this)
+    }
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
@@ -41,11 +46,6 @@ class Dashboard(var name: String) :
 
     companion object {
         operator fun invoke() = Dashboard("").apply { isInvalid = true }
-
-        operator inline fun <reified D : Daemon> invoke(name: String) =
-            Dashboard(name).apply {
-                daemon = Daemon<Mqttd>(service as Context, this)
-            }
     }
 
     override fun onBindViewHolder(

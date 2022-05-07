@@ -21,7 +21,7 @@ import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 class ForegroundService : LifecycleService() {
 
     var finishAffinity: () -> Unit = {}
-    private var isRunning = false
+    var isRunning = false
 
     companion object {
         var service: ForegroundService? = null

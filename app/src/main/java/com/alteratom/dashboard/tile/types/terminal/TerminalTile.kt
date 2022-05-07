@@ -33,7 +33,7 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
     var log = mutableListOf<String>()
 
     @JsonIgnore
-    var terminalAdapter = null as RecyclerViewAdapter<RecyclerViewItem>
+    lateinit var terminalAdapter: RecyclerViewAdapter<RecyclerViewItem>
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

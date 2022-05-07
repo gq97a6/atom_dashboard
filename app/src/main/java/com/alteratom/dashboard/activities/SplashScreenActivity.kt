@@ -27,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         rootFolder = filesDir.canonicalPath.toString()
 
-        if (service != null && dashboards.isNotEmpty()) {
+        if (service?.isRunning == true && dashboards.isNotEmpty()) {
             G.theme.apply(b.root, this)
             onServiceReady()
         } else {

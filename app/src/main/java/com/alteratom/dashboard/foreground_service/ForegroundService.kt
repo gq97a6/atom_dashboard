@@ -15,7 +15,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
 import com.alteratom.dashboard.Activity
-import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 
 
 class ForegroundService : LifecycleService() {
@@ -57,7 +57,7 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
             isRunning = false
-            //dashboards.forEach { it.daemon.notifyDischarged() }
+            DaemonsManager.notifyAllDischarged()
 
             stopForeground(true)
             stopSelf()

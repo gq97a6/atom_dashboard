@@ -51,11 +51,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //todo
-        if (dashboard.isInvalid) Intent(context, MainActivity::class.java).also {
-            startActivity(it)
-        }
-
         setupRecyclerView()
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)

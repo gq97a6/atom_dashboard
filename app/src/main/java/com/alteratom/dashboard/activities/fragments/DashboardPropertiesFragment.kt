@@ -58,7 +58,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         theme.apply(b.root, requireContext())
         viewConfig()
         //Set dashboard status
-        dashboard.daemon?.let {
+        dashboard.daemon.let {
             it.isDone.observe(viewLifecycleOwner) { isDone ->
                 val v = b.dpMqttStatus
                 v.text = when (it) {

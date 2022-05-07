@@ -14,6 +14,7 @@ import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
@@ -29,7 +30,7 @@ import java.util.*
 abstract class Tile : RecyclerViewItem() {
 
     @JsonIgnore
-    var dashboard = Dashboard()
+    var dashboard: Dashboard? = null
 
     @JsonIgnore
     open var height = 1f
@@ -101,7 +102,7 @@ abstract class Tile : RecyclerViewItem() {
         retain: Boolean = false,
         raw: Boolean = false
     ) {
-        val d = dashboard.daemon as Mqttd
+        val d = dashboard?.daemon as? Mqttd?
 
         if (topic.isNullOrEmpty()) return
         if (d == null) return
@@ -131,8 +132,8 @@ abstract class Tile : RecyclerViewItem() {
         retain: Boolean = false,
         raw: Boolean = false
     ) {
-        when (dashboard.daemon) {
-            is Mqttd -> (dashboard.daemon as Mqttd).send(msg, topic, qos, retain, raw)
+        when (dashboard?.daemon) {
+            is Mqttd -> (dashboard?.daemon as? Mqttd?)?.send(msg, topic, qos, retain, raw)
         }
     }
 
@@ -153,20 +154,22 @@ abstract class Tile : RecyclerViewItem() {
         mqtt.lastReceive = Date()
 
         if (doNotify) {
-            service?.let {
-                createNotification(
-                    it,
-                    dashboard.name.uppercase(Locale.getDefault()),
-                    if (tag.isBlank() || data.second.toString().isBlank())
-                        "New value for: ${data.first}"
-                    else "$tag: ${data.second.toString()}",
-                    silentNotify,
-                    dashboard.id.toInt()
-                )
+            service?.let { s ->
+                dashboard?.let { d ->
+                    createNotification(
+                        s,
+                        d.name.uppercase(Locale.getDefault()),
+                        if (tag.isBlank() || data.second.toString().isBlank())
+                            "New value for: ${data.first}"
+                        else "$tag: ${data.second.toString()}",
+                        silentNotify,
+                        d.id.toInt()
+                    )
+                }
             }
         }
 
-        if (doLog) dashboard.log.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }

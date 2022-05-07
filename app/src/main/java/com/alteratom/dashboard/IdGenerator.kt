@@ -11,7 +11,7 @@ object IdGenerator {
 
         fun reportTakenId() = takenIds.add(id)
 
-        fun getNewId(): Long {
+        fun obtainNewId(): Long {
             while (true) {
                 kotlin.math.abs(Random().nextLong()).let {
                     if (!takenIds.contains(it)) {

@@ -48,7 +48,7 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
         super.onClick(v, e)
 
         if (mqtt.pubs["base"].isNullOrEmpty()) return
-        (dashboard.daemon as? Mqttd?)?.let {
+        (dashboard?.daemon as? Mqttd?)?.let {
             if (it.client.isConnected != true) return
         }
 

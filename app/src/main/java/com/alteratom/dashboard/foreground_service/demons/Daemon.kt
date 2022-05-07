@@ -9,7 +9,7 @@ import com.alteratom.dashboard.dashboard.Dashboard
 
 abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Indexed {
 
-    override val id = getNewId()
+    override val id = obtainNewId()
 
     var isDischarged = false
     protected abstract val isEnabled: Boolean
@@ -18,10 +18,14 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
     abstract val status: Any
 
     companion object {
-        operator inline fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard): D {
-            val constructor = D::class.constructors.first()
-            return constructor.call(context, dashboard)
-        }
+        operator inline fun invoke(context: Context, dashboard: Dashboard, type: Type) =
+            when (type) {
+                Type.MQTTD -> Mqttd::class
+                Type.BLUETOOTHD -> Bluetoothd::class
+            }.constructors.first().call(context, dashboard)
+
+        operator inline fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard) =
+            D::class.constructors.first().call(context, dashboard)
     }
 
     init {
@@ -63,4 +67,6 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
 
         abstract fun handleDispatch()
     }
+
+    enum class Type { MQTTD, BLUETOOTHD }
 }

@@ -16,7 +16,8 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random
@@ -53,9 +54,11 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         val addOnClick: () -> Unit = {
             val name = kotlin.math.abs(Random.nextInt()).toString()
-            val dashboard = Dashboard(name)
+            val dashboard = Dashboard(name, Daemon.Type.MQTTD)
             dashboards.add(dashboard)
             dashboards.saveToFile()
+
+            DaemonsManager.notifyDashboardAdded(dashboard)
 
             if (setCurrentDashboard(dashboard.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
@@ -91,7 +94,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
             b.msRemove.clearAnimation()
-            it.daemon.notifyDischarged()
+            DaemonsManager.notifyDashboardRemoved(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

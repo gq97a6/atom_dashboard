@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 @Suppress("UNUSED")
 abstract class RecyclerViewItem : IdGenerator.Indexed {
 
-    override var id = getNewId()
+    override var id = obtainNewId()
 
     abstract val layout: Int
 

@@ -3,7 +3,6 @@ package com.alteratom.dashboard.foreground_service.demons
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -46,9 +45,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 else MqttdStatus.FAILED
             }
 
-    init {
-        notifyAssigned()
-    }
     override fun notifyAssigned() {
         super.notifyAssigned()
         conHandler.dispatch("assign")
@@ -56,7 +52,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     override fun notifyDischarged() {
         super.notifyDischarged()
-        conHandler.dispatch("discharge")
+        if (client.isConnected) conHandler.dispatch("discharge")
+        else client.unregisterResources()
     }
 
     override fun notifyOptionsChanged() {

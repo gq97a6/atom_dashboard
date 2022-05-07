@@ -7,6 +7,7 @@ import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.se
 import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.log.Log
+import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -14,39 +15,24 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.random.Random
-import kotlin.reflect.KClass
 
-@Suppress("UNUSED")
-
-class Dashboard(var name: String, var type: KClass<out Daemon> = Daemon::class) :
-    com.alteratom.dashboard.recycler_view.RecyclerViewItem() {
+open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) : RecyclerViewItem() {
 
     override val layout
         get() = R.layout.item_dashboard
 
     var log = Log()
 
-    @JsonIgnore
-    var isInvalid = false
-
     var mqtt = MqttData()
 
     @JsonIgnore
-    var daemon: Daemon
-
-    init {
-        daemon = type.constructors.first().call(service as Context, this)
-    }
+    lateinit var daemon: Daemon
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {
             for (t in value) t.dashboard = this
             field = value
         }
-
-    companion object {
-        operator fun invoke() = Dashboard("").apply { isInvalid = true }
-    }
 
     override fun onBindViewHolder(
         holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,

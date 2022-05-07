@@ -9,10 +9,8 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -21,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
@@ -29,6 +26,7 @@ import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.tile.types.button.ButtonTile
@@ -1026,11 +1024,11 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 object TilePropComp {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
-        var text by remember { mutableStateOf("false") }
+        var text by remember { mutableStateOf("") }
 
         Surface(modifier = Modifier.padding(16.dp)) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
+                Text(text = "Tile properties", fontSize = 45.sp, color = colors.color)
                 Row(
                     modifier = Modifier.padding(top = 15.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -1038,13 +1036,12 @@ object TilePropComp {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {},
-                        border = BorderStroke(0.dp, Theme.colors.color),
+                        border = BorderStroke(0.dp, colors.color),
                         modifier = Modifier
-                            .padding(top = 8.dp)
                             .height(52.dp)
                             .width(52.dp)
                     ) {
-                        Icon(painterResource(R.drawable.ic_icon_light), "")
+                        Icon(painterResource(tile.iconRes), "")
                     }
 
                     val typeTag = tile.typeTag.replaceFirstChar {
@@ -1055,7 +1052,7 @@ object TilePropComp {
                         label = { BoldStartText("$typeTag ", "tile tag") },
                         value = text,
                         onValueChange = { text = it },
-                        modifier = Modifier.padding(start = 20.dp)
+                        modifier = Modifier.padding(bottom = 9.dp, start = 20.dp)
                     )
                 }
 
@@ -1084,45 +1081,37 @@ object TilePropComp {
             animationSpec = tween(durationMillis = 200, easing = LinearEasing)
         )
 
-        BoldStartText(
-            a = "Communication: ",
-            b = "MQTT",
-            modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
-                .padding(horizontal = 14.dp, vertical = 10.dp)
-                .padding(bottom = 6.dp)
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                LabeledSwitch(
-                    label = { Text("Enabled:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it }
-                )
-
-                IconButton(
-                    modifier = Modifier.size(40.dp),
-                    onClick = { state = !state }
+        FrameBox(a = "Communication: ", b = "MQTT") {
+            Column {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        painterResource(R.drawable.ic_arrow), "",
-                        modifier = Modifier
-                            .size(40.dp)
-                            .rotate(angle)
+                    LabeledSwitch(
+                        label = { Text("Enabled:", fontSize = 15.sp, color = colors.a) },
+                        checked = state,
+                        onCheckedChange = { state = it }
                     )
-                }
-            }
 
-            AnimatedVisibility(visible = state) {
-                Column {
-                    content()
+                    IconButton(
+                        modifier = Modifier.size(40.dp),
+                        onClick = { state = !state }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_arrow), "",
+                            tint = colors.a,
+                            modifier = Modifier
+                                .size(40.dp)
+                                .rotate(angle)
+                        )
+                    }
+                }
+
+                AnimatedVisibility(visible = state) {
+                    Column {
+                        content()
+                    }
                 }
             }
         }
@@ -1132,15 +1121,19 @@ object TilePropComp {
     fun Communication0() {
         var text by remember { mutableStateOf("false") }
 
-        EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { text = it })
+        EditText(
+            label = { Text("Subscribe topic") },
+            value = text,
+            onValueChange = { text = it }
+        )
+
         EditText(
             label = { Text("Publish topic") },
             value = text,
             onValueChange = { text = it },
-            modifier = Modifier.padding(top = 10.dp),
             trailingIcon = {
                 IconButton(onClick = {}) {
-                    Icon(painterResource(R.drawable.il_file_copy), "")
+                    Icon(painterResource(R.drawable.il_file_copy), "", tint = colors.b)
                 }
             }
         )
@@ -1164,31 +1157,30 @@ object TilePropComp {
         )
 
         LabeledSwitch(
-            label = { Text("Retain massages:", fontSize = 15.sp) },
+            label = { Text("Retain massages:", fontSize = 15.sp, color = colors.a) },
             checked = state,
             onCheckedChange = { state = it },
             modifier = Modifier.padding(top = 10.dp)
         )
 
         LabeledSwitch(
-            label = { Text("Confirm publishing:", fontSize = 15.sp) },
+            label = { Text("Confirm publishing:", fontSize = 15.sp, color = colors.a) },
             checked = state,
             onCheckedChange = { state = it },
             modifier = Modifier.padding(top = 0.dp)
         )
 
         LabeledSwitch(
-            label = { Text("Payload is JSON:", fontSize = 15.sp) },
+            label = { Text("Payload is JSON:", fontSize = 15.sp, color = colors.a) },
             checked = state,
             onCheckedChange = { state = it },
             modifier = Modifier.padding(top = 0.dp)
         )
 
         EditText(
-            label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
+            label = { Text("Payload JSON Pointer") },
             value = text,
-            onValueChange = { text = it },
-            modifier = Modifier.padding(top = 5.dp)
+            onValueChange = { text = it }
         )
     }
 
@@ -1202,39 +1194,29 @@ object TilePropComp {
     fun Notification() {
         var state by remember { mutableStateOf(true) }
 
-        Text(
-            "Notifications and log",
-            color = Theme.colors.a,
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp,
-            modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
-                .padding(horizontal = 14.dp, vertical = 10.dp)
-        ) {
-            LabeledSwitch(
-                label = { Text("Log new values:", fontSize = 15.sp) },
-                checked = state,
-                onCheckedChange = { state = it },
-                modifier = Modifier.padding(top = 0.dp)
-            )
+        FrameBox(a = "Notifications and log") {
+            Column {
+                LabeledSwitch(
+                    label = { Text("Log new values:", fontSize = 15.sp, color = colors.a) },
+                    checked = state,
+                    onCheckedChange = { state = it },
+                    modifier = Modifier.padding(top = 0.dp)
+                )
 
-            LabeledSwitch(
-                label = { Text("Notify on receive:", fontSize = 15.sp) },
-                checked = state,
-                onCheckedChange = { state = it },
-                modifier = Modifier.padding(top = 0.dp)
-            )
+                LabeledSwitch(
+                    label = { Text("Notify on receive:", fontSize = 15.sp, color = colors.a) },
+                    checked = state,
+                    onCheckedChange = { state = it },
+                    modifier = Modifier.padding(top = 0.dp)
+                )
 
-            LabeledCheckbox(
-                label = { Text("Make notification quiet", fontSize = 15.sp) },
-                checked = state,
-                onCheckedChange = { state = it },
-                modifier = Modifier.padding(vertical = 10.dp)
-            )
+                LabeledCheckbox(
+                    label = { Text("Make notification quiet", fontSize = 15.sp, color = colors.a) },
+                    checked = state,
+                    onCheckedChange = { state = it },
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+            }
         }
     }
 }

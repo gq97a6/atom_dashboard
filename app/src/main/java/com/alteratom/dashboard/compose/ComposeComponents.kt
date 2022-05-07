@@ -1,6 +1,8 @@
 package com.alteratom.dashboard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -74,7 +76,7 @@ fun LabeledSwitch(
 fun EditText(
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding(top = 6.dp),
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
@@ -141,7 +143,7 @@ fun RadioGroup(
                 )
 
                 val annotatedText = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = colors.color, fontSize = 15.sp))
+                    withStyle(style = SpanStyle(color = if(index == selected) colors.a else colors.b, fontSize = 15.sp))
                     { append(item) }
                 }
 
@@ -229,5 +231,29 @@ fun NavigationArrows(
                 .padding(start = 10.dp)
                 .size(40.dp)
         )
+    }
+}
+
+@Composable
+inline fun FrameBox(
+    a: String = "",
+    b: String = "",
+    modifier: Modifier = Modifier.fillMaxSize(),
+    crossinline content: @Composable () -> Unit
+) {
+    Column {
+        BoldStartText(
+            a = a,
+            b = b,
+            modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
+        )
+
+        Surface(
+            modifier = modifier
+                .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
+                .padding(14.dp)
+        ) {
+            content()
+        }
     }
 }

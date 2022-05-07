@@ -1,17 +1,10 @@
 package com.alteratom.dashboard.activities.fragments
 
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Button
-import android.widget.EditText
-import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -22,34 +15,35 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.databinding.FragmentTilePropertiesBinding
+import com.alteratom.tile.types.button.ButtonTile
+import com.alteratom.tile.types.button.TextTile
+import com.alteratom.tile.types.button.compose.ButtonTileCompose
+import com.alteratom.tile.types.color.ColorTile
+import com.alteratom.tile.types.color.compose.*
+import com.alteratom.tile.types.lights.LightsTile
+import com.alteratom.tile.types.pick.SelectTile
+import com.alteratom.tile.types.slider.SliderTile
+import com.alteratom.tile.types.switch.SwitchTile
+import com.alteratom.tile.types.terminal.TerminalTile
+import com.alteratom.tile.types.thermostat.ThermostatTile
+import com.alteratom.tile.types.time.TimeTile
+import java.util.*
 
 class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
     private lateinit var b: FragmentTilePropertiesBinding
@@ -73,7 +67,21 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        Test()
+                        tile.dashboard?.type?.let {
+                            when (tile) {
+                                is ButtonTile -> ButtonTileCompose
+                                is ColorTile -> ColorTileCompose
+                                is LightsTile -> LightsTileCompose
+                                is SelectTile -> SelectTileCompose
+                                is SliderTile -> SliderTileCompose
+                                is SwitchTile -> SwitchTileCompose
+                                is TerminalTile -> TerminalTileCompose
+                                is TextTile -> TextTileCompose
+                                is ThermostatTile -> ThermostatTileCompose
+                                is TimeTile -> TimeTileCompose
+                                else -> ButtonTileCompose
+                            }.compose(it)
+                        }
                     }
                 }
             }
@@ -1015,215 +1023,239 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
      */
 }
 
-// Compose --------------------------------------------------------------------------------------
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        Test()
-    }
-}
-
-private object RippleCustomTheme : RippleTheme {
-
+object TilePropComp {
     @Composable
-    override fun defaultColor() =
-        RippleTheme.defaultRippleColor(
-            Color(255, 255, 255),
-            lightTheme = false
-        )
+    inline fun Box(crossinline content: @Composable () -> Unit) {
+        var text by remember { mutableStateOf("false") }
 
-    @Composable
-    override fun rippleAlpha(): RippleAlpha =
-        RippleTheme.defaultRippleAlpha(
-            Color(255, 255, 255),
-            lightTheme = true
-        )
-}
-
-var isEn = false
-
-@Composable
-fun Test() {
-    var index by remember { mutableStateOf(0) }
-    var state by remember { mutableStateOf(true) }
-    var text by remember { mutableStateOf("false") }
-    val rotation = if (state) 0f else 180f
-    val angle: Float by animateFloatAsState(
-        targetValue = if (rotation > 360 - rotation) {
-            -(360 - rotation)
-        } else rotation,
-        animationSpec = tween(durationMillis = 200, easing = LinearEasing)
-    )
-
-    Surface(modifier = Modifier.padding(16.dp)) {
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
-            Row(
-                modifier = Modifier.padding(top = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedButton(
-                    contentPadding = PaddingValues(13.dp),
-                    onClick = {},
-                    border = BorderStroke(0.dp, Theme.colors.color),
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .height(52.dp)
-                        .width(52.dp)
-                ) {
-                    Icon(painterResource(R.drawable.ic_icon_light), "")
-                }
-
-                EditText(
-                    label = { BoldStartText("Text ", "tile tag") },
-                    value = text,
-                    onValueChange = {
-                        text = it
-                    },
-                    modifier = Modifier.padding(start = 20.dp)
-                )
-            }
-
-            BoldStartText(
-                a = "Communication: ",
-                b = "MQTT",
-                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
-                    .padding(bottom = 6.dp)
-            ) {
+        Surface(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
                 Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(top = 15.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    LabeledSwitch(
-                        label = { Text("Enabled:", fontSize = 15.sp) },
-                        checked = state,
-                        onCheckedChange = { state = it }
-                    )
-
-                    IconButton(
-                        modifier = Modifier.size(40.dp),
-                        onClick = { state = !state }
+                    OutlinedButton(
+                        contentPadding = PaddingValues(13.dp),
+                        onClick = {},
+                        border = BorderStroke(0.dp, Theme.colors.color),
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .height(52.dp)
+                            .width(52.dp)
                     ) {
-                        Icon(
-                            painterResource(R.drawable.ic_arrow), "",
-                            modifier = Modifier
-                                .size(40.dp)
-                                .rotate(angle)
-                        )
+                        Icon(painterResource(R.drawable.ic_icon_light), "")
                     }
+
+                    val typeTag = tile.typeTag.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                    }
+
+                    EditText(
+                        label = { BoldStartText("$typeTag ", "tile tag") },
+                        value = text,
+                        onValueChange = { text = it },
+                        modifier = Modifier.padding(start = 20.dp)
+                    )
                 }
 
-                EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { })
-                EditText(
-                    label = { Text("Publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.padding(top = 10.dp),
-                    trailingIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(painterResource(R.drawable.il_file_copy), "")
-                        }
-                    }
-                )
-                RadioGroup(
-                    listOf(
-                        "QoS 0: At most once. No guarantee.",
-                        "QoS 1: At least once. (Recommended)",
-                        "QoS 2: Delivery exactly once."
-                    ), "Quality of Service (MQTT protocol):",
-                    index,
-                    { index = it },
-                    modifier = Modifier.padding(top = 20.dp)
-                )
+                content()
 
-                LabeledSwitch(
-                    label = { Text("Retain massages:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 10.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Confirm publishing:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                LabeledSwitch(
-                    label = { Text("Payload is JSON:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                EditText(
-                    label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
-                    value = text,
-                    onValueChange = { text = it },
-                    modifier = Modifier.padding(top = 5.dp)
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(60.dp)
                 )
             }
+        }
 
-            Text(
-                "Notifications and log",
-                color = Theme.colors.a,
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp,
-                modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
-                    .padding(horizontal = 14.dp, vertical = 10.dp)
+        NavigationArrows({}, {})
+    }
+
+    @Composable
+    inline fun CommunicationBox(crossinline content: @Composable () -> Unit) {
+        var state by remember { mutableStateOf(true) }
+        val rotation = if (state) 0f else 180f
+
+        val angle: Float by animateFloatAsState(
+            targetValue = if (rotation > 360 - rotation) {
+                -(360 - rotation)
+            } else rotation,
+            animationSpec = tween(durationMillis = 200, easing = LinearEasing)
+        )
+
+        BoldStartText(
+            a = "Communication: ",
+            b = "MQTT",
+            modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
+                .padding(horizontal = 14.dp, vertical = 10.dp)
+                .padding(bottom = 6.dp)
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 LabeledSwitch(
-                    label = { Text("Log new values:", fontSize = 15.sp) },
+                    label = { Text("Enabled:", fontSize = 15.sp) },
                     checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
+                    onCheckedChange = { state = it }
                 )
 
-                LabeledSwitch(
-                    label = { Text("Notify on receive:", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
-                )
-
-                LabeledCheckbox(
-                    label = { Text("Make notification quiet", fontSize = 15.sp) },
-                    checked = state,
-                    onCheckedChange = { state = it },
-                    modifier = Modifier.padding(vertical = 10.dp)
-                )
+                IconButton(
+                    modifier = Modifier.size(40.dp),
+                    onClick = { state = !state }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_arrow), "",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .rotate(angle)
+                    )
+                }
             }
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-            )
+            AnimatedVisibility(visible = state) {
+                Column {
+                    content()
+                }
+            }
         }
     }
 
-    NavigationArrows({}, {})
-}
+    @Composable
+    fun Communication0() {
+        var text by remember { mutableStateOf("false") }
 
+        EditText(label = { Text("Subscribe topic") }, value = text, onValueChange = { text = it })
+        EditText(
+            label = { Text("Publish topic") },
+            value = text,
+            onValueChange = { text = it },
+            modifier = Modifier.padding(top = 10.dp),
+            trailingIcon = {
+                IconButton(onClick = {}) {
+                    Icon(painterResource(R.drawable.il_file_copy), "")
+                }
+            }
+        )
+    }
+
+    @Composable
+    fun Communication1() {
+        var index by remember { mutableStateOf(0) }
+        var state by remember { mutableStateOf(true) }
+        var text by remember { mutableStateOf("false") }
+
+        RadioGroup(
+            listOf(
+                "QoS 0: At most once. No guarantee.",
+                "QoS 1: At least once. (Recommended)",
+                "QoS 2: Delivery exactly once."
+            ), "Quality of Service (MQTT protocol):",
+            index,
+            { index = it },
+            modifier = Modifier.padding(top = 20.dp)
+        )
+
+        LabeledSwitch(
+            label = { Text("Retain massages:", fontSize = 15.sp) },
+            checked = state,
+            onCheckedChange = { state = it },
+            modifier = Modifier.padding(top = 10.dp)
+        )
+
+        LabeledSwitch(
+            label = { Text("Confirm publishing:", fontSize = 15.sp) },
+            checked = state,
+            onCheckedChange = { state = it },
+            modifier = Modifier.padding(top = 0.dp)
+        )
+
+        LabeledSwitch(
+            label = { Text("Payload is JSON:", fontSize = 15.sp) },
+            checked = state,
+            onCheckedChange = { state = it },
+            modifier = Modifier.padding(top = 0.dp)
+        )
+
+        EditText(
+            label = { Text("Payload JSON Pointer", fontSize = 15.sp) },
+            value = text,
+            onValueChange = { text = it },
+            modifier = Modifier.padding(top = 5.dp)
+        )
+    }
+
+    @Composable
+    fun Communication() {
+        Communication0()
+        Communication1()
+    }
+
+    @Composable
+    fun Notification() {
+        var state by remember { mutableStateOf(true) }
+
+        Text(
+            "Notifications and log",
+            color = Theme.colors.a,
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            modifier = Modifier.padding(start = 5.dp, bottom = 3.dp, top = 15.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .border(BorderStroke(0.dp, Theme.colors.color), RoundedCornerShape(10.dp))
+                .padding(horizontal = 14.dp, vertical = 10.dp)
+        ) {
+            LabeledSwitch(
+                label = { Text("Log new values:", fontSize = 15.sp) },
+                checked = state,
+                onCheckedChange = { state = it },
+                modifier = Modifier.padding(top = 0.dp)
+            )
+
+            LabeledSwitch(
+                label = { Text("Notify on receive:", fontSize = 15.sp) },
+                checked = state,
+                onCheckedChange = { state = it },
+                modifier = Modifier.padding(top = 0.dp)
+            )
+
+            LabeledCheckbox(
+                label = { Text("Make notification quiet", fontSize = 15.sp) },
+                checked = state,
+                onCheckedChange = { state = it },
+                modifier = Modifier.padding(vertical = 10.dp)
+            )
+        }
+    }
+}
 // Test ------------------------------------------------------------------------------------------
+
+//private object RippleCustomTheme : RippleTheme {
+//
+//    @Composable
+//    override fun defaultColor() =
+//        RippleTheme.defaultRippleColor(
+//            Color(255, 255, 255),
+//            lightTheme = false
+//        )
+//
+//    @Composable
+//    override fun rippleAlpha(): RippleAlpha =
+//        RippleTheme.defaultRippleAlpha(
+//            Color(255, 255, 255),
+//            lightTheme = true
+//        )
+//}
 
 //Column(modifier = Modifier.padding(16.dp)) {
 //    OutlinedTextField(
@@ -1246,16 +1278,16 @@ fun Test() {
 //    CustomView()
 //}
 
-@Composable
-fun CustomView() {
-    val selectedItem = remember { mutableStateOf(0) }
-    AndroidView(
-        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
-        factory = { context ->
-            val view = LayoutInflater.from(context).inflate(R.layout.fragment_tile_new, null, false)
-            view
-        },
-        update = { view ->
-        }
-    )
-}
+//@Composable
+//fun CustomView() {
+//    val selectedItem = remember { mutableStateOf(0) }
+//    AndroidView(
+//        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
+//        factory = { context ->
+//            val view = LayoutInflater.from(context).inflate(R.layout.fragment_tile_new, null, false)
+//            view
+//        },
+//        update = { view ->
+//        }
+//    )
+//}

@@ -12,6 +12,7 @@ import com.alteratom.dashboard.G
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 import com.alteratom.dashboard.activities.fragments.SplashScreenFragment
+import com.alteratom.dashboard.activities.fragments.TilePropertiesFragment
 import com.alteratom.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         TileSwitcher.activity = this
         FragmentSwitcher.activity = this
 
+        //TilePropertiesFragment
+        //SplashScreenFragment
         fm.replaceWith(SplashScreenFragment(), false, null)
     }
 

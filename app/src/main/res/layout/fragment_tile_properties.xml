@@ -224,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
@@ -464,7 +464,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -655,7 +655,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:visibility="visible">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -867,7 +867,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1204,7 +1204,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
                                 android:id="@+id/tp_mqtt_payload_tag"
@@ -1238,7 +1238,7 @@
                                 android:tag="colorB"
                                 android:text="Payload hint"
                                 android:textSize="15dp"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                         </LinearLayout>
 
@@ -1248,7 +1248,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -1492,7 +1492,7 @@
                                 android:tag="colorB"
                                 android:text="Example: /buttons/1/state"
                                 android:textSize="15dp"
-                                android:visibility="gone" />
+                                android:visibility="visible" />
 
                         </LinearLayout>
 
@@ -1501,7 +1501,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1667,7 +1667,7 @@
                                     android:tag="colorC"
                                     android:text="Example: /thermostat/1/temperature"
                                     android:textSize="15dp"
-                                    android:visibility="gone" />
+                                    android:visibility="visible" />
 
                             </LinearLayout>
 
@@ -1678,7 +1678,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -1949,7 +1949,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/view7"
@@ -2036,7 +2036,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/view8"
@@ -2079,7 +2079,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/view9"
@@ -2122,7 +2122,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/view10"
@@ -2324,7 +2324,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -2446,7 +2446,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -2696,7 +2696,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -3074,7 +3074,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -3231,7 +3231,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
 
                 <TextView
@@ -3315,7 +3315,7 @@
                         android:layout_height="50dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -3365,7 +3365,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="20dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
 
                 <TextView

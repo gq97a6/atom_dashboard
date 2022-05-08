@@ -24,7 +24,7 @@ class SelectTile : com.alteratom.dashboard.tile.Tile() {
 
     override var iconKey = "il_business_receipt_alt"
 
-    val options = mutableListOf("" to "")
+    val options = mutableListOf("" to "", "" to "", "" to "", "" to "","" to "")
     var showPayload = false
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {

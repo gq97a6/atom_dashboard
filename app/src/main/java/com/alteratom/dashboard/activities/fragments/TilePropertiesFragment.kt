@@ -9,16 +9,20 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
@@ -1037,9 +1041,7 @@ object TilePropComp {
                         contentPadding = PaddingValues(13.dp),
                         onClick = {},
                         border = BorderStroke(0.dp, colors.color),
-                        modifier = Modifier
-                            .height(52.dp)
-                            .width(52.dp)
+                        modifier = Modifier.size(52.dp)
                     ) {
                         Icon(painterResource(tile.iconRes), "")
                     }
@@ -1218,6 +1220,93 @@ object TilePropComp {
                     onCheckedChange = { state = it },
                     modifier = Modifier.padding(vertical = 10.dp)
                 )
+            }
+        }
+    }
+
+    @Composable
+    fun PairList(
+        options: MutableList<Pair<String, String>>,
+        onRemove: (Int) -> Unit = {},
+        onFirst: (Int, String) -> Unit = { _, _ -> },
+        onSecond: (Int, String) -> Unit = { _, _ -> }
+    ) {
+        var options by remember { mutableStateOf(options) }
+
+        @Composable
+        fun Item(index: Int, pair: Pair<String, String>) {
+        }
+
+        FrameBox(a = "Modes list") {
+            Column {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier
+                        .padding(end = 32.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text("ALIAS", fontSize = 13.sp, color = colors.a, letterSpacing = 2.sp)
+                    Text("PAYLOAD", fontSize = 13.sp, color = colors.a, letterSpacing = 2.sp)
+                }
+
+
+                options.forEachIndexed { index, pair ->
+
+                    var alias by remember { mutableStateOf(pair.first) }
+                    var payload by remember { mutableStateOf(pair.second) }
+
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                        modifier = Modifier.padding(top = 5.dp)
+                    ) {
+                        EditText(
+                            label = {},
+                            value = alias,
+                            onValueChange = {
+                                alias = it
+                                onFirst(index, it)
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+
+                        EditText(
+                            label = {},
+                            value = payload,
+                            onValueChange = {
+                                payload = it
+                                onSecond(index, it)
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(start = 12.dp)
+                        )
+
+                        Icon(
+                            painterResource(R.drawable.il_interface_multiply),
+                            "",
+                            tint = colors.b,
+                            modifier = Modifier
+                                .padding(start = 10.dp, bottom = 8.dp)
+                                .size(30.dp)
+                                .clickable(
+                                    onClick = {
+                                        options =
+                                            options
+                                                .filterIndexed { i, _ -> i != index }
+                                                .toMutableList()
+                                        onRemove(index)
+                                    },
+                                    role = Role.Button,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberRipple(
+                                        bounded = false,
+                                        radius = 15.dp
+                                    )
+                                ),
+                        )
+                    }
+                }
             }
         }
     }

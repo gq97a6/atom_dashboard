@@ -1030,8 +1030,8 @@ object TilePropComp {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Text(text = "Tile properties", fontSize = 45.sp, color = colors.color)
                 Row(
-                    modifier = Modifier.padding(top = 15.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.padding(top = 5.dp),
+                    verticalAlignment = Alignment.Bottom
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
@@ -1052,7 +1052,7 @@ object TilePropComp {
                         label = { BoldStartText("$typeTag ", "tile tag") },
                         value = text,
                         onValueChange = { text = it },
-                        modifier = Modifier.padding(bottom = 9.dp, start = 20.dp)
+                        modifier = Modifier.padding(start = 12.dp)
                     )
                 }
 
@@ -1140,7 +1140,16 @@ object TilePropComp {
     }
 
     @Composable
-    fun Communication1() {
+    fun Communication1(
+        retain: Boolean = true, pointer: @Composable () -> Unit = {
+            var text by remember { mutableStateOf("false") }
+            EditText(
+                label = { Text("Payload JSON pointer") },
+                value = text,
+                onValueChange = { text = it }
+            )
+        }
+    ) {
         var index by remember { mutableStateOf(0) }
         var state by remember { mutableStateOf(true) }
         var text by remember { mutableStateOf("false") }
@@ -1153,35 +1162,30 @@ object TilePropComp {
             ), "Quality of Service (MQTT protocol):",
             index,
             { index = it },
-            modifier = Modifier.padding(top = 20.dp)
+            modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
         )
 
-        LabeledSwitch(
-            label = { Text("Retain massages:", fontSize = 15.sp, color = colors.a) },
-            checked = state,
-            onCheckedChange = { state = it },
-            modifier = Modifier.padding(top = 10.dp)
-        )
+        if (retain) {
+            LabeledSwitch(
+                label = { Text("Retain massages:", fontSize = 15.sp, color = colors.a) },
+                checked = state,
+                onCheckedChange = { state = it }
+            )
+        }
 
         LabeledSwitch(
             label = { Text("Confirm publishing:", fontSize = 15.sp, color = colors.a) },
             checked = state,
-            onCheckedChange = { state = it },
-            modifier = Modifier.padding(top = 0.dp)
+            onCheckedChange = { state = it }
         )
 
         LabeledSwitch(
             label = { Text("Payload is JSON:", fontSize = 15.sp, color = colors.a) },
             checked = state,
-            onCheckedChange = { state = it },
-            modifier = Modifier.padding(top = 0.dp)
+            onCheckedChange = { state = it }
         )
 
-        EditText(
-            label = { Text("Payload JSON Pointer") },
-            value = text,
-            onValueChange = { text = it }
-        )
+        pointer()
     }
 
     @Composable

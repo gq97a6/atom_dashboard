@@ -28,7 +28,7 @@ object TimeTileCompose : ComposeObject {
                     onValueChange = { text = it }
                 )
                 Text(
-                    "User @hour and @minute to insert current values",
+                    "Use @hour and @minute to insert current values",
                     fontSize = 13.sp,
                     color = Theme.colors.a
                 )

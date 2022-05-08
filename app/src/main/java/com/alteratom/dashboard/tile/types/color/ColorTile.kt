@@ -12,11 +12,11 @@ import android.widget.TextView
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.databinding.DialogColorPickerBinding
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
+import com.alteratom.databinding.DialogColorPickerBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
@@ -80,7 +80,10 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         colorType = colorType
     }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =
@@ -117,7 +120,8 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         binding.dcpPicker.setColor(HSVToColor(hsvPickedTmp))
         onColorChange()
 
-        binding.dcpPicker.setColorSelectionListener(object : com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener() {
+        binding.dcpPicker.setColorSelectionListener(object :
+            com.alteratom.dashboard.color_picker.listeners.SimpleColorSelectionListener() {
             override fun onColorSelected(color: Int) {
                 onColorChange()
             }

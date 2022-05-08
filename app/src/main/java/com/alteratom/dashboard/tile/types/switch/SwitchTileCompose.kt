@@ -28,8 +28,8 @@ object SwitchTileCompose : ComposeObject {
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
                 Row(
-                    modifier = Modifier.padding(top = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier = Modifier.padding(top = 5.dp),
+                    verticalAlignment = Alignment.Bottom
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
@@ -46,13 +46,13 @@ object SwitchTileCompose : ComposeObject {
                         label = { Text("Off payload") },
                         value = text,
                         onValueChange = { text = it },
-                        modifier = Modifier.padding(bottom = 9.dp, start = 20.dp)
+                        modifier = Modifier.padding(start = 12.dp)
                     )
                 }
 
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.Bottom
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
@@ -69,7 +69,7 @@ object SwitchTileCompose : ComposeObject {
                         label = { Text("On payload") },
                         value = text,
                         onValueChange = { text = it },
-                        modifier = Modifier.padding(bottom = 9.dp, start = 20.dp)
+                        modifier = Modifier.padding(start = 12.dp)
                     )
                 }
 

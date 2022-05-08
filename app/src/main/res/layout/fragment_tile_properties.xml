@@ -1468,7 +1468,7 @@
                                 android:layout_marginBottom="2dp"
                                 android:gravity="center"
                                 android:tag="colorA"
-                                android:text="Payload JSON Pointer"
+                                android:text="Payload JSON pointer"
                                 android:textSize="15dp" />
 
                             <EditText
@@ -1515,7 +1515,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Temperature JSON Pointer"
+                                    android:text="Temperature JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1547,7 +1547,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Temperature setpoint JSON Pointer"
+                                    android:text="Temperature setpoint JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1579,7 +1579,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Humidity JSON Pointer"
+                                    android:text="Humidity JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1611,7 +1611,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Humidity setpoint JSON Pointer"
+                                    android:text="Humidity setpoint JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1643,7 +1643,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Mode JSON Pointer"
+                                    android:text="Mode JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1692,7 +1692,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="State JSON Pointer"
+                                    android:text="State JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1725,7 +1725,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Color JSON Pointer"
+                                    android:text="Color JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1757,7 +1757,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Brightness JSON Pointer"
+                                    android:text="Brightness JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText
@@ -1789,7 +1789,7 @@
                                     android:layout_marginBottom="2dp"
                                     android:gravity="center"
                                     android:tag="colorB"
-                                    android:text="Mode JSON Pointer"
+                                    android:text="Mode JSON pointer"
                                     android:textSize="15dp" />
 
                                 <EditText

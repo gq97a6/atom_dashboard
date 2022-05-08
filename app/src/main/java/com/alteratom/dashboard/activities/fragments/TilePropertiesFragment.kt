@@ -1200,14 +1200,12 @@ object TilePropComp {
                     label = { Text("Log new values:", fontSize = 15.sp, color = colors.a) },
                     checked = state,
                     onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
                 )
 
                 LabeledSwitch(
                     label = { Text("Notify on receive:", fontSize = 15.sp, color = colors.a) },
                     checked = state,
                     onCheckedChange = { state = it },
-                    modifier = Modifier.padding(top = 0.dp)
                 )
 
                 LabeledCheckbox(

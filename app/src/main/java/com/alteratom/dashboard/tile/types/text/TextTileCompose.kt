@@ -17,6 +17,7 @@ object TextTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
         var index by remember { mutableStateOf(0) }
+        var state by remember { mutableStateOf(true) }
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
@@ -39,7 +40,6 @@ object TextTileCompose : ComposeObject {
 
             FrameBox(a = "Type specific: ", b = "text") {
                 Row {
-                    var state by remember { mutableStateOf(true) }
                     LabeledSwitch(
                         label = { Text("Full width:", fontSize = 15.sp) },
                         checked = state,

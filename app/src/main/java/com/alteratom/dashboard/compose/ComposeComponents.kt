@@ -157,6 +157,45 @@ fun RadioGroup(
     }
 }
 
+@Composable
+fun HorizontalRadioGroup(
+    options: List<String> = listOf(),
+    label: String = "",
+    selected: Int,
+    onClick: ((Int) -> Unit),
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier.padding(vertical = 13.dp), verticalAlignment = Alignment.CenterVertically) {
+        Text(text = label, fontSize = 15.sp, color = colors.color)
+        options.forEachIndexed { index, item ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 10.dp)
+            ) {
+                RadioButton(
+                    selected = index == selected,
+                    onClick = { onClick(index) },
+                    modifier = Modifier
+                        .width(20.dp)
+                        .height(25.dp),
+                    colors = RadioButtonColors()
+                )
+
+                val annotatedText = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = if(index == selected) colors.a else colors.b, fontSize = 15.sp))
+                    { append(item) }
+                }
+
+                ClickableText(
+                    text = annotatedText,
+                    onClick = { onClick(index) },
+                    modifier = Modifier.padding(start = 5.dp)
+                )
+            }
+        }
+    }
+}
+
 inline fun Modifier.nrClickable(crossinline onClick: () -> Unit): Modifier = composed {
     clickable(indication = null,
         interactionSource = remember { MutableInteractionSource() }) {
@@ -200,7 +239,7 @@ fun NavigationArrows(
     onClickRight: () -> Unit
 ) {
     IconButton(
-        onClick = { },
+        onClick = onClickLeft,
         modifier = Modifier
             .wrapContentSize(Alignment.BottomStart)
             .size(60.dp)
@@ -217,7 +256,7 @@ fun NavigationArrows(
     }
 
     IconButton(
-        onClick = { },
+        onClick = onClickRight,
         modifier = Modifier
             .wrapContentSize(Alignment.BottomEnd)
             .size(60.dp)
@@ -251,7 +290,7 @@ inline fun FrameBox(
         Surface(
             modifier = modifier
                 .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
-                .padding(14.dp)
+                .padding(12.dp)
         ) {
             content()
         }

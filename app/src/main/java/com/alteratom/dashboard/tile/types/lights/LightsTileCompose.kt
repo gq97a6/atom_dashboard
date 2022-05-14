@@ -74,6 +74,12 @@ object LightsTileCompose : ComposeObject {
                     )
                 }
 
+                Divider(
+                    color = Theme.colors.b, thickness = 0.dp, modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(vertical = 10.dp)
+                )
+
                 EditText(
                     label = { Text("State subscribe topic") },
                     value = text,
@@ -172,7 +178,7 @@ object LightsTileCompose : ComposeObject {
 
             TilePropComp.Notification()
 
-            FrameBox(a = "Type specific: ", b = "color") {
+            FrameBox(a = "Type specific: ", b = "lights") {
                 Column {
                     LabeledSwitch(
                         label = {

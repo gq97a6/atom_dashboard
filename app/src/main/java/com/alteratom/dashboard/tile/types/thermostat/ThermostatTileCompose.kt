@@ -156,20 +156,8 @@ object ThermostatTileCompose : ComposeObject {
 
             TilePropComp.Notification()
 
-            FrameBox(a = "Type specific: ", b = "color") {
+            FrameBox(a = "Type specific: ", b = "thermostat") {
                 Column {
-                    LabeledSwitch(
-                        label = {
-                            Text(
-                                "Include humidity setpoint:",
-                                fontSize = 15.sp,
-                                color = colors.a
-                            )
-                        },
-                        checked = state,
-                        onCheckedChange = { state = it },
-                    )
-
                     LabeledSwitch(
                         label = {
                             Text(
@@ -181,6 +169,18 @@ object ThermostatTileCompose : ComposeObject {
                         checked = state,
                         onCheckedChange = { state = it },
                         modifier = Modifier.padding(top = 10.dp)
+                    )
+
+                    LabeledSwitch(
+                        label = {
+                            Text(
+                                "Include humidity setpoint:",
+                                fontSize = 15.sp,
+                                color = colors.a
+                            )
+                        },
+                        checked = state,
+                        onCheckedChange = { state = it },
                     )
 
                     Text(

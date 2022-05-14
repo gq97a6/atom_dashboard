@@ -1,14 +1,17 @@
 package com.alteratom.tile.types.color.compose
 
 import TilePropComp
+import TilePropComp.PairList
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.FrameBox
+import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.tile.types.pick.SelectTile
 
 object SelectTileCompose : ComposeObject {
     @Composable
@@ -38,8 +41,14 @@ object SelectTileCompose : ComposeObject {
                 }
             }
 
-            //val t = (tile as SelectTile)
-            //TilePropComp.PairList(options = t.options)
+            val o = (tile as SelectTile).options
+            PairList(
+                o,
+                { o.removeAt(it) },
+                { o.add(Pair("", "")) },
+                { i, v -> o[i] = o[i].copy(first = v) },
+                { i, v -> o[i] = o[i].copy(second = v) },
+            )
         }
     }
 

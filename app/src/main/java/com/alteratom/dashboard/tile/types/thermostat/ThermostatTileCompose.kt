@@ -28,7 +28,6 @@ object ThermostatTileCompose : ComposeObject {
     override fun Mqttd() {
         var text by remember { mutableStateOf("false") }
         var state by remember { mutableStateOf(true) }
-        var index by remember { mutableStateOf(0) }
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
@@ -159,7 +158,6 @@ object ThermostatTileCompose : ComposeObject {
 
             FrameBox(a = "Type specific: ", b = "color") {
                 Column {
-
                     LabeledSwitch(
                         label = {
                             Text(
@@ -170,6 +168,19 @@ object ThermostatTileCompose : ComposeObject {
                         },
                         checked = state,
                         onCheckedChange = { state = it },
+                    )
+
+                    LabeledSwitch(
+                        label = {
+                            Text(
+                                "Show payload on list:",
+                                fontSize = 15.sp,
+                                color = colors.a
+                            )
+                        },
+                        checked = state,
+                        onCheckedChange = { state = it },
+                        modifier = Modifier.padding(top = 10.dp)
                     )
 
                     Text(
@@ -247,19 +258,6 @@ object ThermostatTileCompose : ComposeObject {
                         label = { Text("Temperature setpoint to value") },
                         value = text,
                         onValueChange = { text = it }
-                    )
-
-                    LabeledSwitch(
-                        label = {
-                            Text(
-                                "Show payload on list:",
-                                fontSize = 15.sp,
-                                color = colors.a
-                            )
-                        },
-                        checked = state,
-                        onCheckedChange = { state = it },
-                        modifier = Modifier.padding(top = 10.dp)
                     )
                 }
             }

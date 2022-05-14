@@ -166,7 +166,7 @@ fun HorizontalRadioGroup(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier.padding(vertical = 13.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(text = label, fontSize = 15.sp, color = colors.color)
+        Text(text = label, fontSize = 15.sp, color = colors.a)
         options.forEachIndexed { index, item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,

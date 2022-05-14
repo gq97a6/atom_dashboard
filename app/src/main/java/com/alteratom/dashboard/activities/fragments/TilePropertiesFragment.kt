@@ -1234,8 +1234,6 @@ object TilePropComp {
         }
     }
 
-    @SuppressLint("UnrememberedMutableState")
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun PairList(
         options: MutableList<Pair<String, String>>,

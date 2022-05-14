@@ -2,12 +2,12 @@ package com.alteratom.dashboard.icon
 
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.google.android.material.slider.Slider
 import com.alteratom.R
 import com.alteratom.dashboard.G.getIconHSV
 import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.google.android.material.slider.Slider
 
 class IconColorPicker : Icon() {
 

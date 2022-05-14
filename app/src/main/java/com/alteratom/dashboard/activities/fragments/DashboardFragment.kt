@@ -1,8 +1,8 @@
 package com.alteratom.dashboard.activities.fragments
 
+import TilePropertiesFragment
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -69,7 +69,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
         //Set dashboard status
-        dashboard.daemon?.let {
+        dashboard.daemon.let {
             it.isDone.observe(viewLifecycleOwner) { isDone ->
                 b.dSslStatus.visibility = GONE
 

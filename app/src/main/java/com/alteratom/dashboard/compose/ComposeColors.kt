@@ -2,7 +2,6 @@ package com.alteratom.dashboard.compose
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import com.alteratom.dashboard.Theme.Companion.colors
 
 @Composable

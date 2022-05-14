@@ -4,7 +4,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import com.alteratom.dashboard.Theme.Companion.artist
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.testjetpackcompose.ui.theme.ComposeShapes

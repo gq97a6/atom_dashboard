@@ -5,11 +5,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.TextView
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.databinding.DialogTimeBinding
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
+import com.alteratom.databinding.DialogTimeBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class TimeTile : com.alteratom.dashboard.tile.Tile() {

@@ -7,12 +7,11 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.Activity
-import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.G
-import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 import com.alteratom.dashboard.activities.fragments.SplashScreenFragment
-import com.alteratom.dashboard.activities.fragments.TilePropertiesFragment
+import com.alteratom.dashboard.switcher.FragmentSwitcher
+import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

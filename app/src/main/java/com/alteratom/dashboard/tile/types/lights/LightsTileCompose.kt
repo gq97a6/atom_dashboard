@@ -1,7 +1,7 @@
 package com.alteratom.tile.types.color.compose
 
+import TilePropComp
 import androidx.compose.runtime.Composable
-import com.alteratom.dashboard.activities.fragments.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
 
 object LightsTileCompose : ComposeObject {

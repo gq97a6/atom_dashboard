@@ -9,12 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.R
-import com.alteratom.databinding.DialogSliderBinding
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.roundCloser
+import com.alteratom.databinding.DialogSliderBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 

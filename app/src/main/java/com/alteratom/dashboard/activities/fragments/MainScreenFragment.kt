@@ -16,8 +16,8 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.foreground_service.demons.Daemon
+import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
 import kotlin.random.Random

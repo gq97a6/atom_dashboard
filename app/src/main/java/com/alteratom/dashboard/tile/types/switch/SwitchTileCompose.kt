@@ -1,5 +1,6 @@
 package com.alteratom.tile.types.color.compose
 
+import TilePropComp
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -10,15 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.BoldStartText
 import com.alteratom.dashboard.EditText
-import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.fragments.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
 import com.alteratom.tile.types.switch.SwitchTile
-import java.util.*
 
 object SwitchTileCompose : ComposeObject {
     @Composable

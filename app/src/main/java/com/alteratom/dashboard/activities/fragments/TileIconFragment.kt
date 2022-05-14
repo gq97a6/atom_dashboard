@@ -7,21 +7,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.Theme
-import com.alteratom.databinding.FragmentTileIconBinding
 import com.alteratom.dashboard.G.getIconColorPallet
 import com.alteratom.dashboard.G.getIconRes
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.icon.IconAdapter
+import com.alteratom.databinding.FragmentTileIconBinding
 
 
 class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {

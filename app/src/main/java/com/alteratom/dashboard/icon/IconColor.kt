@@ -4,8 +4,8 @@ import android.content.res.ColorStateList
 import android.view.MotionEvent
 import android.view.View
 import com.alteratom.R
-import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.G.setIconHSV
+import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 
 class IconColor(

@@ -4,9 +4,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.R
 import com.alteratom.dashboard.G.theme
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SwitchTile : com.alteratom.dashboard.tile.Tile() {

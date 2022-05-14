@@ -10,9 +10,9 @@ import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.alteratom.R
+import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.databinding.FragmentThemeBinding
-import com.alteratom.dashboard.G.theme
 
 class ThemeFragment : Fragment(R.layout.fragment_theme) {
     private lateinit var b: FragmentThemeBinding

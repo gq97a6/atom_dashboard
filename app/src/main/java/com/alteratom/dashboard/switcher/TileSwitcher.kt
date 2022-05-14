@@ -1,10 +1,10 @@
 package com.alteratom.dashboard.switcher
 
+import TilePropertiesFragment
 import android.view.MotionEvent
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.TilePropertiesFragment
 import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.slideLeft as slideLeftAnimation
 import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.slideRight as slideRightAnimation
 

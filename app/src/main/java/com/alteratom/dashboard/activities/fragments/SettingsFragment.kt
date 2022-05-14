@@ -27,7 +27,6 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SplashScreenActivity
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.databinding.FragmentSettingsBinding
 import java.io.BufferedReader
 import java.io.FileOutputStream

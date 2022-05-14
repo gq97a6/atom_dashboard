@@ -4,8 +4,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.widget.TextView
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.alteratom.R
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 class ButtonTile : com.alteratom.dashboard.tile.Tile() {
 

@@ -8,9 +8,9 @@ import com.alteratom.dashboard.Activity
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
+import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.databinding.ActivitySplashScreenBinding
 
 

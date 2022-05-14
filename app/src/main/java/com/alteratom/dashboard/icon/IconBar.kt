@@ -1,9 +1,9 @@
 package com.alteratom.dashboard.icon
 
 import android.widget.LinearLayout
-import com.google.android.material.chip.ChipGroup
 import com.alteratom.R
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.google.android.material.chip.ChipGroup
 
 class IconBar : Icon() {
 

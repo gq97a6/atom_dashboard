@@ -11,17 +11,17 @@ import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.R
-import com.alteratom.dashboard.blink
-import com.alteratom.databinding.DialogSelectBinding
-import com.alteratom.databinding.DialogThermostatBinding
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.round
+import com.alteratom.databinding.DialogSelectBinding
+import com.alteratom.databinding.DialogThermostatBinding
+import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
@@ -88,13 +88,13 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
     var humidityStep = 5f
     var temperatureStep = 0.5f
     var temperatureRange = mutableListOf(15, 30)
-    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3")
+    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3", "Off" to "3", "Off3" to "3", "Off4" to "3", "Off6" to "3", "Off7" to "3")
     val retain = mutableListOf(false, false, false) //temp, humi, mode
 
     var includeHumiditySetpoint = false
     var showPayload = false
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
 
         abs(100 / humidityStep).let {

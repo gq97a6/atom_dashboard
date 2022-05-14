@@ -27,7 +27,7 @@ abstract class RecyclerViewItem : IdGenerator.Indexed {
     var flag = Flags()
 
     companion object {
-        operator inline fun invoke(layout: Int): RecyclerViewItem =
+        inline operator fun invoke(layout: Int): RecyclerViewItem =
             object : RecyclerViewItem() {
                 override val layout: Int
                     get() = layout

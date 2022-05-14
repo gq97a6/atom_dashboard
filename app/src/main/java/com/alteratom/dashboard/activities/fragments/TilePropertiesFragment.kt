@@ -1,5 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
-
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,28 +8,27 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.Theme.Companion.artist
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.tile.types.button.ButtonTile
@@ -58,19 +56,19 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
         //b = FragmentTilePropertiesBinding.inflate(inflater, container, false)
         //return b.root
 
-        requireActivity().window.statusBarColor = Theme.artist.colors.background
+        requireActivity().window.statusBarColor = artist.colors.background
         WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView)
-            .isAppearanceLightStatusBars = !Theme.isDark
+            .isAppearanceLightStatusBars = !isDark
 
         return ComposeView(requireContext()).apply {
             setContent {
-                ComposeTheme(Theme.isDark) {
+                ComposeTheme(isDark) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colors.background
                     ) {
-                        tile.dashboard?.type?.let {
-                            when (tile) {
+                        G.tile.dashboard?.type?.let {
+                            when (G.tile) {
                                 is ButtonTile -> ButtonTileCompose
                                 is ColorTile -> ColorTileCompose
                                 is LightsTile -> LightsTileCompose
@@ -1043,10 +1041,10 @@ object TilePropComp {
                         border = BorderStroke(0.dp, colors.color),
                         modifier = Modifier.size(52.dp)
                     ) {
-                        Icon(painterResource(tile.iconRes), "")
+                        Icon(painterResource(G.tile.iconRes), "")
                     }
 
-                    val typeTag = tile.typeTag.replaceFirstChar {
+                    val typeTag = G.tile.typeTag.replaceFirstChar {
                         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                     }
 
@@ -1209,13 +1207,25 @@ object TilePropComp {
                 )
 
                 LabeledSwitch(
-                    label = { Text("Notify on receive:", fontSize = 15.sp, color = colors.a) },
+                    label = {
+                        Text(
+                            "Notify on receive:",
+                            fontSize = 15.sp,
+                            color = colors.a
+                        )
+                    },
                     checked = state,
                     onCheckedChange = { state = it },
                 )
 
                 LabeledCheckbox(
-                    label = { Text("Make notification quiet", fontSize = 15.sp, color = colors.a) },
+                    label = {
+                        Text(
+                            "Make notification quiet",
+                            fontSize = 15.sp,
+                            color = colors.a
+                        )
+                    },
                     checked = state,
                     onCheckedChange = { state = it },
                     modifier = Modifier.padding(vertical = 10.dp)
@@ -1224,36 +1234,57 @@ object TilePropComp {
         }
     }
 
+    @SuppressLint("UnrememberedMutableState")
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun PairList(
         options: MutableList<Pair<String, String>>,
         onRemove: (Int) -> Unit = {},
+        onAdd: () -> Unit = {},
         onFirst: (Int, String) -> Unit = { _, _ -> },
         onSecond: (Int, String) -> Unit = { _, _ -> }
     ) {
-        var options by remember { mutableStateOf(options) }
-
-        @Composable
-        fun Item(index: Int, pair: Pair<String, String>) {
-        }
+        var options = remember { options.toMutableStateList() }
 
         FrameBox(a = "Modes list") {
             Column {
                 Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier
-                        .padding(end = 32.dp)
-                        .fillMaxWidth()
+                    verticalAlignment = Alignment.Bottom
                 ) {
-                    Text("ALIAS", fontSize = 13.sp, color = colors.a, letterSpacing = 2.sp)
-                    Text("PAYLOAD", fontSize = 13.sp, color = colors.a, letterSpacing = 2.sp)
+                    OutlinedButton(
+                        contentPadding = PaddingValues(13.dp),
+                        onClick = {
+                            options.add("" to "")
+                            onAdd()
+                        },
+                        border = BorderStroke(0.dp, colors.color),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("ADD OPTION", color = colors.a)
+                    }
                 }
 
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier
+                        .padding(end = 32.dp, top = 10.dp)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        "ALIAS",
+                        fontSize = 13.sp,
+                        color = colors.a,
+                        letterSpacing = 2.sp
+                    )
+                    Text(
+                        "PAYLOAD",
+                        fontSize = 13.sp,
+                        color = colors.a,
+                        letterSpacing = 2.sp
+                    )
+                }
 
                 options.forEachIndexed { index, pair ->
-
-                    var alias by remember { mutableStateOf(pair.first) }
-                    var payload by remember { mutableStateOf(pair.second) }
 
                     Row(
                         verticalAlignment = Alignment.Bottom,
@@ -1261,9 +1292,9 @@ object TilePropComp {
                     ) {
                         EditText(
                             label = {},
-                            value = alias,
+                            value = pair.first,
                             onValueChange = {
-                                alias = it
+                                options[index] = options[index].copy(first = it)
                                 onFirst(index, it)
                             },
                             modifier = Modifier
@@ -1272,9 +1303,9 @@ object TilePropComp {
 
                         EditText(
                             label = {},
-                            value = payload,
+                            value = pair.second,
                             onValueChange = {
-                                payload = it
+                                options[index] = options[index].copy(second = it)
                                 onSecond(index, it)
                             },
                             modifier = Modifier
@@ -1287,30 +1318,33 @@ object TilePropComp {
                             "",
                             tint = colors.b,
                             modifier = Modifier
-                                .padding(start = 10.dp, bottom = 8.dp)
+                                .padding(start = 10.dp, bottom = 13.dp)
                                 .size(30.dp)
-                                .clickable(
-                                    onClick = {
-                                        options =
-                                            options
-                                                .filterIndexed { i, _ -> i != index }
-                                                .toMutableList()
+                                .nrClickable {
+                                    if (options.size > 2) {
+                                        options.removeAt(index)
                                         onRemove(index)
-                                    },
-                                    role = Role.Button,
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(
-                                        bounded = false,
-                                        radius = 15.dp
-                                    )
-                                ),
+                                    }
+                                }
                         )
                     }
                 }
+
+                //LazyColumn(
+                //    modifier = Modifier
+                //        .height(500.dp)
+                //        .padding(bottom = 16.dp),
+                //) {
+                //    itemsIndexed(items = opts, key = { i, p -> p.hashCode() }) { index, pair ->
+//
+                //
+                //    }
+                //}
             }
         }
     }
 }
+
 // Test ------------------------------------------------------------------------------------------
 
 //private object RippleCustomTheme : RippleTheme {
@@ -1351,16 +1385,16 @@ object TilePropComp {
 //    CustomView()
 //}
 
-//@Composable
-//fun CustomView() {
-//    val selectedItem = remember { mutableStateOf(0) }
-//    AndroidView(
-//        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
-//        factory = { context ->
-//            val view = LayoutInflater.from(context).inflate(R.layout.fragment_tile_new, null, false)
-//            view
-//        },
-//        update = { view ->
-//        }
-//    )
-//}
+@Composable
+fun CustomView() {
+    val selectedItem = remember { mutableStateOf(0) }
+    AndroidView(
+        modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
+        factory = { context ->
+            val view = LayoutInflater.from(context).inflate(R.layout.fragment_tile_new, null, false)
+            view
+        },
+        update = { view ->
+        }
+    )
+}

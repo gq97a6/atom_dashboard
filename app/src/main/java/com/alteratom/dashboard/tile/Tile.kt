@@ -14,7 +14,6 @@ import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
-import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
@@ -108,7 +107,7 @@ abstract class Tile : RecyclerViewItem() {
         if (d == null) return
 
         fun send() {
-            d?.publish(topic, msg, qos, retain)
+            d.publish(topic, msg, qos, retain)
             onSend(topic, msg, qos, retain)
         }
 

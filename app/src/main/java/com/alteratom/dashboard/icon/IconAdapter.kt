@@ -2,11 +2,11 @@ package com.alteratom.dashboard.icon
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
-import com.google.android.material.slider.Slider
 import com.alteratom.R
-import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.google.android.material.slider.Slider
 import java.util.*
 
 class IconAdapter(context: Context, spanCount: Int) : RecyclerViewAdapter<Icon>(context, spanCount) {

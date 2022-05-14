@@ -18,13 +18,13 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
     abstract val status: Any
 
     companion object {
-        operator inline fun invoke(context: Context, dashboard: Dashboard, type: Type) =
+        inline operator fun invoke(context: Context, dashboard: Dashboard, type: Type) =
             when (type) {
                 Type.MQTTD -> Mqttd::class
                 Type.BLUETOOTHD -> Bluetoothd::class
             }.constructors.first().call(context, dashboard)
 
-        operator inline fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard) =
+        inline operator fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard) =
             D::class.constructors.first().call(context, dashboard)
     }
 

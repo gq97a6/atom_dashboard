@@ -1,11 +1,8 @@
 package com.alteratom.dashboard.dashboard
 
-import android.content.Context
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Daemon
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.screenWidth

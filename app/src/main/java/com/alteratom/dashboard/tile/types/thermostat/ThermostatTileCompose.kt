@@ -1,5 +1,7 @@
 package com.alteratom.tile.types.color.compose
 
+import TilePropComp
+import TilePropComp.PairList
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -14,11 +16,12 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.FrameBox
+import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledCheckbox
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.fragments.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.tile.types.thermostat.ThermostatTile
 
 object ThermostatTileCompose : ComposeObject {
     @Composable
@@ -260,6 +263,15 @@ object ThermostatTileCompose : ComposeObject {
                     )
                 }
             }
+
+            val m = (tile as ThermostatTile).modes
+            PairList(
+                m,
+                { m.removeAt(it) },
+                { m.add(Pair("", "")) },
+                { i, v -> m[i] = m[i].copy(first = v) },
+                { i, v -> m[i] = m[i].copy(second = v) },
+            )
         }
     }
 

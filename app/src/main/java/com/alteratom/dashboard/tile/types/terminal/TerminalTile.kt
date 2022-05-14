@@ -42,14 +42,14 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
         layoutParams.isFullSpan = true
 
         terminalAdapter = RecyclerViewAdapter(adapter.context)
-        terminalAdapter?.setHasStableIds(true)
+        terminalAdapter.setHasStableIds(true)
 
-        terminalAdapter?.onBindViewHolder = { _, holder, pos ->
+        terminalAdapter.onBindViewHolder = { _, holder, pos ->
             val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
             text.text = log[pos]
         }
 
-        terminalAdapter?.submitList(MutableList(log.size) {
+        terminalAdapter.submitList(MutableList(log.size) {
             RecyclerViewItem(
                 R.layout.item_terminal_entry
             )
@@ -98,7 +98,7 @@ class TerminalTile : com.alteratom.dashboard.tile.Tile() {
         val entry = jsonResult["base"] ?: data.second.toString()
         log.add(0, entry)
 
-        terminalAdapter?.let {
+        terminalAdapter.let {
             it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
 
             if (log.size > 10) {

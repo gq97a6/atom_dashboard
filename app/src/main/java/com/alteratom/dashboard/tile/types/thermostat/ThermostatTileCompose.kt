@@ -1,9 +1,9 @@
 package com.alteratom.tile.types.color.compose
 
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -11,47 +11,78 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.FrameBox
+import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledCheckbox
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
 import com.alteratom.dashboard.compose.ComposeObject
 import com.alteratom.tile.types.thermostat.ThermostatTile
 
 object ThermostatTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var text by remember { mutableStateOf("false") }
-        var state by remember { mutableStateOf(true) }
+        val tile = tile as ThermostatTile
+        var incHumi by remember { mutableStateOf(tile.includeHumiditySetpoint) }
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
 
+                var tempSub by remember { mutableStateOf(tile.mqtt.subs["temp"] ?: "") }
                 EditText(
                     label = { Text("Temperature subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = tempSub,
+                    onValueChange = {
+                        tempSub = it
+                        tile.mqtt.subs["temp"] = it
+                        dashboard.daemon.notifyOptionsChanged()
+                    }
                 )
 
+                var tempSetSub by remember {
+                    mutableStateOf(
+                        tile.mqtt.subs["temp_set"] ?: ""
+                    )
+                }
                 EditText(
                     label = { Text("Temperature setpoint subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = tempSetSub,
+                    onValueChange = {
+                        tempSetSub = it
+                        tile.mqtt.subs["temp_set"] = it
+                        dashboard.daemon.notifyOptionsChanged()
+                    }
                 )
 
+                var tempSetPub by remember {
+                    mutableStateOf(
+                        tile.mqtt.pubs["temp_set"] ?: ""
+                    )
+                }
                 EditText(
                     label = { Text("Temperature setpoint publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
+                    value = tempSetPub,
+                    onValueChange = {
+                        tempSetPub = it
+                        tile.mqtt.pubs["temp_set"] = it
+                        dashboard.daemon.notifyOptionsChanged()
+                    },
                     trailingIcon = {
                         IconButton(onClick = {}) {
-                            Icon(painterResource(R.drawable.il_file_copy), "", tint = colors.b)
+                            Icon(
+                                painterResource(R.drawable.il_file_copy),
+                                "",
+                                tint = colors.b
+                            )
                         }
                     }
                 )
@@ -62,28 +93,62 @@ object ThermostatTileCompose : ComposeObject {
                         .padding(vertical = 10.dp)
                 )
 
+                var humiSub by remember { mutableStateOf(tile.mqtt.subs["humi"] ?: "") }
                 EditText(
                     label = { Text("Humidity subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
-                )
-
-                EditText(
-                    label = { Text("Humidity setpoint subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
-                )
-
-                EditText(
-                    label = { Text("Humidity setpoint publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
-                    trailingIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(painterResource(R.drawable.il_file_copy), "", tint = colors.b)
-                        }
+                    value = humiSub,
+                    onValueChange = {
+                        humiSub = it
+                        tile.mqtt.subs["humi"] = it
+                        dashboard.daemon.notifyOptionsChanged()
                     }
                 )
+
+                AnimatedVisibility(
+                    visible = incHumi, enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Column {
+                        var humiSetSub by remember {
+                            mutableStateOf(
+                                tile.mqtt.subs["humi_set"] ?: ""
+                            )
+                        }
+                        EditText(
+                            label = { Text("Humidity setpoint subscribe topic") },
+                            value = humiSetSub,
+                            onValueChange = {
+                                humiSetSub = it
+                                tile.mqtt.subs["humi_set"] = it
+                                dashboard.daemon.notifyOptionsChanged()
+                            }
+                        )
+
+                        var humiSetPub by remember {
+                            mutableStateOf(
+                                tile.mqtt.pubs["humi_set"] ?: ""
+                            )
+                        }
+                        EditText(
+                            label = { Text("Humidity setpoint publish topic") },
+                            value = humiSetPub,
+                            onValueChange = {
+                                humiSetPub = it
+                                tile.mqtt.pubs["humi_set"] = it
+                                dashboard.daemon.notifyOptionsChanged()
+                            },
+                            trailingIcon = {
+                                IconButton(onClick = {}) {
+                                    Icon(
+                                        painterResource(R.drawable.il_file_copy),
+                                        "",
+                                        tint = colors.b
+                                    )
+                                }
+                            }
+                        )
+                    }
+                }
 
                 Divider(
                     color = colors.b, thickness = 0.dp, modifier = Modifier
@@ -91,35 +156,65 @@ object ThermostatTileCompose : ComposeObject {
                         .padding(vertical = 10.dp)
                 )
 
+                var modeSub by remember { mutableStateOf(tile.mqtt.subs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = modeSub,
+                    onValueChange = {
+                        modeSub = it
+                        tile.mqtt.subs["mode"] = it
+                        dashboard.daemon.notifyOptionsChanged()
+                    }
                 )
 
+                var modePub by remember { mutableStateOf(tile.mqtt.pubs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
+                    value = modePub,
+                    onValueChange = {
+                        modePub = it
+                        tile.mqtt.pubs["mode"] = it
+                        dashboard.daemon.notifyOptionsChanged()
+                    },
                     trailingIcon = {
                         IconButton(onClick = {}) {
-                            Icon(painterResource(R.drawable.il_file_copy), "", tint = colors.b)
+                            Icon(
+                                painterResource(R.drawable.il_file_copy),
+                                "",
+                                tint = colors.b
+                            )
                         }
                     }
                 )
 
                 Communication1(retain = false, pointer = {
 
+                    var tempJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["temp"] ?: ""
+                        )
+                    }
                     EditText(
                         label = { Text("Temperature JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = tempJson,
+                        onValueChange = {
+                            tempJson = it
+                            tile.mqtt.jsonPaths["temp"] = it
+                        }
                     )
 
+                    var tempSetJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["temp_set"] ?: ""
+                        )
+                    }
                     EditText(
                         label = { Text("Temperature setpoint JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = tempSetJson,
+                        onValueChange = {
+                            tempSetJson = it
+                            tile.mqtt.jsonPaths["temp_set"] = it
+                        }
                     )
 
                     Divider(
@@ -128,17 +223,40 @@ object ThermostatTileCompose : ComposeObject {
                             .padding(vertical = 10.dp)
                     )
 
+                    var humiJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["humi"] ?: ""
+                        )
+                    }
                     EditText(
                         label = { Text("Humidity JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = humiJson,
+                        onValueChange = {
+                            humiJson = it
+                            tile.mqtt.jsonPaths["humi"] = it
+                        }
                     )
 
-                    EditText(
-                        label = { Text("Humidity setpoint JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
-                    )
+                    var humiSetJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["humi_set"] ?: ""
+                        )
+                    }
+                    AnimatedVisibility(
+                        visible = incHumi, enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        Column {
+                            EditText(
+                                label = { Text("Humidity setpoint JSON pointer") },
+                                value = humiSetJson,
+                                onValueChange = {
+                                    humiSetJson = it
+                                    tile.mqtt.jsonPaths["humi_set"] = it
+                                }
+                            )
+                        }
+                    }
 
                     Divider(
                         color = colors.b, thickness = 0.dp, modifier = Modifier
@@ -146,10 +264,18 @@ object ThermostatTileCompose : ComposeObject {
                             .padding(vertical = 10.dp)
                     )
 
+                    var modeJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["mode"] ?: ""
+                        )
+                    }
                     EditText(
                         label = { Text("Mode JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = modeJson,
+                        onValueChange = {
+                            modeJson = it
+                            tile.mqtt.jsonPaths["mode"] = it
+                        }
                     )
 
                 })
@@ -159,6 +285,7 @@ object ThermostatTileCompose : ComposeObject {
 
             FrameBox(a = "Type specific: ", b = "thermostat") {
                 Column {
+                    var show by remember { mutableStateOf(tile.showPayload) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -167,8 +294,11 @@ object ThermostatTileCompose : ComposeObject {
                                 color = colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = show,
+                        onCheckedChange = {
+                            show = it
+                            tile.showPayload = it
+                        },
                         modifier = Modifier.padding(top = 10.dp)
                     )
 
@@ -180,8 +310,11 @@ object ThermostatTileCompose : ComposeObject {
                                 color = colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = incHumi,
+                        onCheckedChange = {
+                            incHumi = it
+                            tile.includeHumiditySetpoint = it
+                        },
                     )
 
                     Text(
@@ -191,6 +324,7 @@ object ThermostatTileCompose : ComposeObject {
                         modifier = Modifier.padding(top = 10.dp)
                     )
 
+                    var tempRet by remember { mutableStateOf(tile.retain[0]) }
                     LabeledCheckbox(
                         label = {
                             Text(
@@ -199,24 +333,39 @@ object ThermostatTileCompose : ComposeObject {
                                 color = colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
-                        modifier = Modifier.padding(vertical = 10.dp)
-                    )
-
-                    LabeledCheckbox(
-                        label = {
-                            Text(
-                                "Humidity setpoint",
-                                fontSize = 15.sp,
-                                color = colors.a
-                            )
+                        checked = tempRet,
+                        onCheckedChange = {
+                            tempRet = it
+                            tile.retain[0] = it
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
+                    var humiRet by remember { mutableStateOf(tile.retain[1]) }
+                    AnimatedVisibility(
+                        visible = incHumi, enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        Column {
+                            LabeledCheckbox(
+                                label = {
+                                    Text(
+                                        "Humidity setpoint",
+                                        fontSize = 15.sp,
+                                        color = colors.a
+                                    )
+                                },
+                                checked = humiRet,
+                                onCheckedChange = {
+                                    humiRet = it
+                                    tile.retain[1] = it
+                                },
+                                modifier = Modifier.padding(vertical = 10.dp)
+                            )
+                        }
+                    }
+
+                    var modeRet by remember { mutableStateOf(tile.retain[2]) }
                     LabeledCheckbox(
                         label = {
                             Text(
@@ -225,22 +374,42 @@ object ThermostatTileCompose : ComposeObject {
                                 color = colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = modeRet,
+                        onCheckedChange = {
+                            modeRet = it
+                            tile.retain[2] = it
+                        },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
-                    EditText(
-                        label = { Text("Humidity setpoint step") },
-                        value = text,
-                        onValueChange = { text = it },
-                        modifier = Modifier.padding(top = 10.dp)
-                    )
+                    var humiStep by remember { mutableStateOf(tile.humidityStep.toString()) }
+                    AnimatedVisibility(
+                        visible = incHumi, enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        Column {
+                            EditText(
+                                label = { Text("Humidity setpoint step") },
+                                value = humiStep,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                onValueChange = {
+                                    humiStep = it
+                                    tile.humidityStep = it.toFloatOrNull() ?: 5f
+                                },
+                                modifier = Modifier.padding(top = 10.dp)
+                            )
+                        }
+                    }
 
+                    var tempStep by remember { mutableStateOf(tile.temperatureStep.toString()) }
                     EditText(
                         label = { Text("Temperature setpoint step") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = tempStep,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            tempStep = it
+                            tile.temperatureStep = it.toFloatOrNull() ?: .5f
+                        }
                     )
 
                     Divider(
@@ -249,21 +418,31 @@ object ThermostatTileCompose : ComposeObject {
                             .padding(vertical = 10.dp)
                     )
 
+                    var tempFrom by remember { mutableStateOf(tile.temperatureRange[0].toString()) }
                     EditText(
                         label = { Text("Temperature setpoint from value") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = tempFrom,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            tempFrom = it
+                            tile.temperatureRange[0] = it.toIntOrNull() ?: 15
+                        }
                     )
 
+                    var tempTo by remember { mutableStateOf(tile.temperatureRange[1].toString()) }
                     EditText(
                         label = { Text("Temperature setpoint to value") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = tempTo,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            tempTo = it
+                            tile.temperatureRange[1] = it.toIntOrNull() ?: 30
+                        }
                     )
                 }
             }
 
-            val m = (tile as ThermostatTile).modes
+            val m = tile.modes
             PairList(
                 m,
                 { m.removeAt(it) },
@@ -278,154 +457,3 @@ object ThermostatTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-
-
-//val tile = tile as ThermostatTile
-//
-//b.tpMqttRetainBox.visibility = GONE
-//b.tpMqttTopics.visibility = GONE
-//b.tpMqttJsonPayload.visibility = GONE
-//b.tpThermostat.visibility = VISIBLE
-//b.tpThermostatTopics.visibility = VISIBLE
-//b.tpThermostatPaths.visibility =
-//if (tile.mqtt.payloadIsJson) VISIBLE else GONE
-//
-//b.tpThermostatTemperatureSub.setText(tile.mqtt.subs["temp"])
-//b.tpThermostatTemperatureSetpointSub.setText(tile.mqtt.subs["temp_set"])
-//b.tpThermostatTemperatureSetpointPub.setText(tile.mqtt.pubs["temp_set"])
-//b.tpThermostatHumiditySub.setText(tile.mqtt.subs["humi"])
-//b.tpThermostatHumiditySetpointSub.setText(tile.mqtt.subs["humi_set"])
-//b.tpThermostatHumiditySetpointPub.setText(tile.mqtt.pubs["humi_set"])
-//b.tpThermostatModeSub.setText(tile.mqtt.subs["mode"])
-//b.tpThermostatModePub.setText(tile.mqtt.pubs["mode"])
-//
-//b.tpThermostatTemperaturePath.setText(tile.mqtt.jsonPaths["temp"])
-//b.tpThermostatTemperatureSetpointPath.setText(tile.mqtt.jsonPaths["temp_set"])
-//b.tpThermostatHumidityPath.setText(tile.mqtt.jsonPaths["humi"])
-//b.tpThermostatHumiditySetpointPath.setText(tile.mqtt.jsonPaths["humi_set"])
-//b.tpThermostatModePath.setText(tile.mqtt.jsonPaths["mode"])
-//
-//b.tpThermostatHumidityStep.setText(tile.humidityStep.toString())
-//b.tpThermostatTemperatureFrom.setText(tile.temperatureRange[0].toString())
-//b.tpThermostatTemperatureTo.setText(tile.temperatureRange[1].toString())
-//b.tpThermostatTemperatureStep.setText(tile.temperatureStep.toString())
-//
-//tile.includeHumiditySetpoint.let {
-//    b.tpThermostatHumidityTopicsBox.visibility = if (it) VISIBLE else GONE
-//    b.tpThermostatHumidityStepBox.visibility = if (it) VISIBLE else GONE
-//    b.tpThermostatIncludeHumiditySetpoint.isChecked = it
-//}
-//
-//b.tpThermostatShowPayload.isChecked = tile.showPayload
-//b.tpThermostatTempRetain.isChecked = tile.retain[0]
-//b.tpThermostatHumiRetain.isChecked = tile.retain[1]
-//b.tpThermostatModeRetain.isChecked = tile.retain[2]
-//
-//b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-//    tile.mqtt.payloadIsJson = state
-//    b.tpThermostatPaths.visibility = if (state) VISIBLE else GONE
-//}
-//
-//
-//b.tpThermostatTemperatureSub.addTextChangedListener {
-//    tile.mqtt.subs["temp"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatTemperatureSetpointSub.addTextChangedListener {
-//    tile.mqtt.subs["temp_set"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatTemperatureSetpointPub.addTextChangedListener {
-//    tile.mqtt.pubs["temp_set"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatHumiditySub.addTextChangedListener {
-//    tile.mqtt.subs["humi"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatHumiditySetpointSub.addTextChangedListener {
-//    tile.mqtt.subs["humi_set"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatHumiditySetpointPub.addTextChangedListener {
-//    tile.mqtt.pubs["humi_set"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatModeSub.addTextChangedListener {
-//    tile.mqtt.subs["mode"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//b.tpThermostatModePub.addTextChangedListener {
-//    tile.mqtt.pubs["mode"] = (it ?: "").toString()
-//    dashboard.daemon.notifyOptionsChanged()
-//}
-//
-//
-//b.tpThermostatTemperatureSetpointPubCopy.setOnClickListener {
-//    b.tpThermostatTemperatureSetpointPub.text =
-//        b.tpThermostatTemperatureSetpointSub.text
-//}
-//b.tpThermostatHumiditySetpointPubCopy.setOnClickListener {
-//    b.tpThermostatHumiditySetpointPub.text = b.tpThermostatHumiditySetpointSub.text
-//}
-//b.tpThermostatModePubCopy.setOnClickListener {
-//    b.tpThermostatModePub.text = b.tpThermostatModeSub.text
-//}
-//
-//
-//b.tpThermostatTemperaturePath.addTextChangedListener {
-//    tile.mqtt.jsonPaths["temp"] = (it ?: "").toString()
-//}
-//b.tpThermostatTemperatureSetpointPath.addTextChangedListener {
-//    tile.mqtt.jsonPaths["temp_set"] = (it ?: "").toString()
-//}
-//b.tpThermostatHumidityPath.addTextChangedListener {
-//    tile.mqtt.jsonPaths["humi"] = (it ?: "").toString()
-//}
-//b.tpThermostatHumiditySetpointPath.addTextChangedListener {
-//    tile.mqtt.jsonPaths["humi_set"] = (it ?: "").toString()
-//}
-//b.tpThermostatModePath.addTextChangedListener {
-//    tile.mqtt.jsonPaths["mode"] = (it ?: "").toString()
-//}
-//
-//
-//b.tpThermostatTempRetain.setOnCheckedChangeListener { _, isChecked ->
-//    tile.retain[0] = isChecked
-//}
-//b.tpThermostatHumiRetain.setOnCheckedChangeListener { _, isChecked ->
-//    tile.retain[1] = isChecked
-//}
-//b.tpThermostatModeRetain.setOnCheckedChangeListener { _, isChecked ->
-//    tile.retain[2] = isChecked
-//}
-//
-//
-//b.tpThermostatHumidityStep.addTextChangedListener {
-//    tile.humidityStep = it.toString().toFloatOrNull() ?: 5f
-//}
-//b.tpThermostatTemperatureFrom.addTextChangedListener {
-//    tile.temperatureRange[0] = it.toString().toIntOrNull() ?: 15
-//}
-//b.tpThermostatTemperatureTo.addTextChangedListener {
-//    tile.temperatureRange[1] = it.toString().toIntOrNull() ?: 30
-//}
-//b.tpThermostatTemperatureStep.addTextChangedListener {
-//    tile.temperatureStep = it.toString().toFloatOrNull() ?: .5f
-//}
-//
-//
-//b.tpThermostatIncludeHumiditySetpoint.setOnCheckedChangeListener { _, state ->
-//    tile.includeHumiditySetpoint = state
-//    b.tpThermostatHumidityStepBox.visibility = if (state) VISIBLE else GONE
-//    b.tpThermostatHumidityTopicsBox.visibility = if (state) VISIBLE else GONE
-//}
-//b.tpThermostatShowPayload.setOnCheckedChangeListener { _, state ->
-//    tile.showPayload = state
-//}
-//
-//setupOptionsRecyclerView(
-//tile.modes,
-//b.tpThermostatRecyclerView,
-//b.tpThermostatModeAdd
-//)

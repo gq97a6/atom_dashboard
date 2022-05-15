@@ -1,6 +1,6 @@
 package com.alteratom.tile.types.color.compose
 
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -9,16 +9,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.tile.types.color.ColorTile
 
 object ColorTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var text by remember { mutableStateOf("false") }
-        var state by remember { mutableStateOf(true) }
-        var index by remember { mutableStateOf(0) }
+        val tile = tile as ColorTile
+
+        var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
+        var type by remember { mutableStateOf(tile.colorType) }
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
@@ -26,11 +30,21 @@ object ColorTileCompose : ComposeObject {
 
                 EditText(
                     label = { Text("Publish payload") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = pub,
+                    onValueChange = {
+                        pub = it
+                        tile.mqtt.payloads[type.toString()] = it
+                    }
                 )
                 Text(
-                    "Use @hex to insert current value",
+                    "Use ${
+                        when (type) {
+                            0 -> "@h, @s, @v"
+                            1 -> "@hex"
+                            2 -> "@r, @g, @b"
+                            else -> "@hex"
+                        }
+                    } to insert current value.",
                     fontSize = 13.sp,
                     color = Theme.colors.a
                 )
@@ -43,6 +57,7 @@ object ColorTileCompose : ComposeObject {
             FrameBox(a = "Type specific: ", b = "color") {
                 Column {
 
+                    var paint by remember { mutableStateOf(tile.doPaint) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -51,22 +66,36 @@ object ColorTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = paint,
+                        onCheckedChange = {
+                            paint = it
+                            tile.doPaint = it
+                        },
                     )
 
-                    LabeledCheckbox(
-                        label = {
-                            Text(
-                                "Paint with raw color (ignore contrast)",
-                                fontSize = 15.sp,
-                                color = Theme.colors.a
+                    var raw by remember { mutableStateOf(tile.paintRaw) }
+                    AnimatedVisibility(
+                        visible = paint, enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically()
+                    ) {
+                        Column {
+                            LabeledCheckbox(
+                                label = {
+                                    Text(
+                                        "Paint with raw color (ignore contrast)",
+                                        fontSize = 15.sp,
+                                        color = Theme.colors.a
+                                    )
+                                },
+                                checked = raw,
+                                onCheckedChange = {
+                                    raw = it
+                                    tile.paintRaw = it
+                                },
+                                modifier = Modifier.padding(vertical = 10.dp)
                             )
-                        },
-                        checked = state,
-                        onCheckedChange = { state = it },
-                        modifier = Modifier.padding(vertical = 10.dp)
-                    )
+                        }
+                    }
 
                     HorizontalRadioGroup(
                         listOf(
@@ -75,8 +104,12 @@ object ColorTileCompose : ComposeObject {
                             "RGB",
                         ),
                         "Type:",
-                        index,
-                        { index = it },
+                        type,
+                        {
+                            type = it
+                            tile.colorType = it
+                            pub = tile.mqtt.payloads[tile.colorType.toString()] ?: ""
+                        },
                     )
                 }
             }
@@ -87,67 +120,3 @@ object ColorTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-
-
-//val tile = tile as ColorTile
-//
-//b.tpColor.visibility = VISIBLE
-//b.tpMqttPayloadBox.visibility = VISIBLE
-//b.tpMqttPayloadHint.visibility = VISIBLE
-//b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
-//
-//b.tpColorDoPaint.isChecked = tile.doPaint
-//b.tpColorPaintRaw.isChecked = tile.paintRaw
-//
-//b.tpColorColorType.check(
-//when (tile.colorType) {
-//    "hsv" -> R.id.tp_color_hsv
-//    "hex" -> R.id.tp_color_hex
-//    "rgb" -> R.id.tp_color_rgb
-//    else -> R.id.tp_color_hsv
-//}
-//)
-//
-//b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
-//b.tpMqttPayloadHint.text =
-//"Use ${
-//when (tile.colorType) {
-//    "hsv" -> "@h, @s, @v"
-//    "hex" -> "@hex"
-//    "rgb" -> "@r, @g, @b"
-//    else -> "@hex"
-//}
-//} to insert current value."
-//
-//b.tpColorDoPaint.setOnCheckedChangeListener { _, state ->
-//    tile.doPaint = state
-//    b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
-//}
-//
-//b.tpColorPaintRaw.setOnCheckedChangeListener { _, state ->
-//    tile.paintRaw = state
-//}
-//
-//b.tpColorColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-//    tile.colorType = when (id) {
-//        R.id.tp_color_hsv -> "hsv"
-//        R.id.tp_color_hex -> "hex"
-//        R.id.tp_color_rgb -> "rgb"
-//        else -> "hex"
-//    }
-//
-//    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
-//    b.tpMqttPayloadHint.text =
-//        "Use ${
-//            when (tile.colorType) {
-//                "hsv" -> "@h, @s, @v"
-//                "hex" -> "@hex"
-//                "rgb" -> "@r, @g, @b"
-//                else -> "@hex"
-//            }
-//        } to insert current value."
-//}
-//
-//b.tpMqttPayload.addTextChangedListener {
-//    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
-//}

@@ -21,12 +21,10 @@ import com.alteratom.tile.types.lights.LightsTile
 object LightsTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var text by remember { mutableStateOf("false") }
-        var state by remember { mutableStateOf(true) }
+        val tile = tile as LightsTile
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -39,13 +37,17 @@ object LightsTileCompose : ComposeObject {
                             .height(52.dp)
                             .width(52.dp)
                     ) {
-                        Icon(painterResource((tile as LightsTile).iconResFalse), "")
+                        Icon(painterResource(tile.iconResFalse), "")
                     }
-
+                    tile.colorType
+                    var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
                     EditText(
                         label = { Text("Off payload") },
-                        value = text,
-                        onValueChange = { text = it },
+                        value = off,
+                        onValueChange = {
+                            off = it
+                            tile.mqtt.payloads["false"] = it
+                        },
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }
@@ -62,13 +64,17 @@ object LightsTileCompose : ComposeObject {
                             .height(52.dp)
                             .width(52.dp)
                     ) {
-                        Icon(painterResource((G.tile as LightsTile).iconResTrue), "")
+                        Icon(painterResource(tile.iconResTrue), "")
                     }
 
+                    var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
                     EditText(
                         label = { Text("On payload") },
-                        value = text,
-                        onValueChange = { text = it },
+                        value = on,
+                        onValueChange = {
+                            on = it
+                            tile.mqtt.payloads["true"] = it
+                        },
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }
@@ -79,16 +85,24 @@ object LightsTileCompose : ComposeObject {
                         .padding(vertical = 10.dp)
                 )
 
+                var stateSub by remember { mutableStateOf(tile.mqtt.subs["state"] ?: "") }
                 EditText(
                     label = { Text("State subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = stateSub,
+                    onValueChange = {
+                        stateSub = it
+                        tile.mqtt.subs["state"] = it
+                    }
                 )
 
+                var statePub by remember { mutableStateOf(tile.mqtt.pubs["state"] ?: "") }
                 EditText(
                     label = { Text("State publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
+                    value = statePub,
+                    onValueChange = {
+                        statePub = it
+                        tile.mqtt.pubs["state"] = it
+                    },
                     trailingIcon = {
                         IconButton(onClick = {}) {
                             Icon(
@@ -106,16 +120,24 @@ object LightsTileCompose : ComposeObject {
                         .padding(vertical = 10.dp)
                 )
 
+                var brightSub by remember { mutableStateOf(tile.mqtt.subs["bright"] ?: "") }
                 EditText(
                     label = { Text("Brightness subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = brightSub,
+                    onValueChange = {
+                        brightSub = it
+                        tile.mqtt.subs["bright"] = it
+                    }
                 )
 
+                var brightPub by remember { mutableStateOf(tile.mqtt.pubs["bright"] ?: "") }
                 EditText(
                     label = { Text("Brightness publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
+                    value = brightPub,
+                    onValueChange = {
+                        brightPub = it
+                        tile.mqtt.pubs["bright"] = it
+                    },
                     trailingIcon = {
                         IconButton(onClick = {}) {
                             Icon(
@@ -133,16 +155,59 @@ object LightsTileCompose : ComposeObject {
                         .padding(vertical = 10.dp)
                 )
 
+                var colorSub by remember { mutableStateOf(tile.mqtt.subs["color"] ?: "") }
                 EditText(
-                    label = { Text("Mode subscribe topic") },
-                    value = text,
-                    onValueChange = { text = it }
+                    label = { Text("Brightness subscribe topic") },
+                    value = colorSub,
+                    onValueChange = {
+                        colorSub = it
+                        tile.mqtt.subs["color"] = it
+                    }
                 )
 
+                var colorPub by remember { mutableStateOf(tile.mqtt.pubs["color"] ?: "") }
+                EditText(
+                    label = { Text("Brightness publish topic") },
+                    value = colorPub,
+                    onValueChange = {
+                        colorPub = it
+                        tile.mqtt.pubs["color"] = it
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {}) {
+                            Icon(
+                                painterResource(R.drawable.il_file_copy),
+                                "",
+                                tint = Theme.colors.b
+                            )
+                        }
+                    }
+                )
+
+                Divider(
+                    color = Theme.colors.b, thickness = 0.dp, modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(vertical = 10.dp)
+                )
+
+                var modeSub by remember { mutableStateOf(tile.mqtt.subs["mode"] ?: "") }
+                EditText(
+                    label = { Text("Mode subscribe topic") },
+                    value = modeSub,
+                    onValueChange = {
+                        modeSub = it
+                        tile.mqtt.subs["mode"] = it
+                    }
+                )
+
+                var modePub by remember { mutableStateOf(tile.mqtt.pubs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode publish topic") },
-                    value = text,
-                    onValueChange = { text = it },
+                    value = modePub,
+                    onValueChange = {
+                        modePub = it
+                        tile.mqtt.pubs["mode"] = it
+                    },
                     trailingIcon = {
                         IconButton(onClick = {}) {
                             Icon(
@@ -155,22 +220,52 @@ object LightsTileCompose : ComposeObject {
                 )
 
                 Communication1(retain = false, pointer = {
+                    var stateJson by remember { mutableStateOf(tile.mqtt.jsonPaths["state"] ?: "") }
                     EditText(
                         label = { Text("State JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = stateJson,
+                        onValueChange = {
+                            stateJson = it
+                            tile.mqtt.jsonPaths["state"] = it
+                        }
                     )
 
+                    var brightJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["bright"] ?: ""
+                        )
+                    }
                     EditText(
                         label = { Text("Brightness JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = brightJson,
+                        onValueChange = {
+                            brightJson = it
+                            tile.mqtt.jsonPaths["bright"] = it
+                        }
                     )
 
+                    var colorJson by remember {
+                        mutableStateOf(
+                            tile.mqtt.jsonPaths["color"] ?: ""
+                        )
+                    }
+                    EditText(
+                        label = { Text("Color JSON pointer") },
+                        value = colorJson,
+                        onValueChange = {
+                            colorJson = it
+                            tile.mqtt.jsonPaths["color"] = it
+                        }
+                    )
+
+                    var modeJson by remember { mutableStateOf(tile.mqtt.jsonPaths["mode"] ?: "") }
                     EditText(
                         label = { Text("Mode JSON pointer") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = modeJson,
+                        onValueChange = {
+                            modeJson = it
+                            tile.mqtt.jsonPaths["mode"] = it
+                        }
                     )
                 })
             }
@@ -179,6 +274,7 @@ object LightsTileCompose : ComposeObject {
 
             FrameBox(a = "Type specific: ", b = "lights") {
                 Column {
+                    var show by remember { mutableStateOf(tile.showPayload) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -187,10 +283,14 @@ object LightsTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = show,
+                        onCheckedChange = {
+                            show = it
+                            tile.showPayload = it
+                        },
                     )
 
+                    var incColor by remember { mutableStateOf(tile.includePicker) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -199,8 +299,55 @@ object LightsTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = incColor,
+                        onCheckedChange = {
+                            incColor = it
+                            tile.includePicker = it
+                        },
+                    )
+
+                    var type by remember { mutableStateOf(0) }
+                    HorizontalRadioGroup(
+                        listOf(
+                            "HSV",
+                            "HEX",
+                            "RGB",
+                        ),
+                        "Type:",
+                        type,
+                        {
+                            type = it
+                        },
+                    )
+
+                    var paint by remember { mutableStateOf(tile.doPaint) }
+                    LabeledSwitch(
+                        label = {
+                            Text(
+                                "Paint tile:",
+                                fontSize = 15.sp,
+                                color = Theme.colors.a
+                            )
+                        },
+                        checked = paint,
+                        onCheckedChange = { paint = it },
+                    )
+
+                    var raw by remember { mutableStateOf(tile.paintRaw) }
+                    LabeledCheckbox(
+                        label = {
+                            Text(
+                                "Paint with raw color (ignore contrast)",
+                                fontSize = 15.sp,
+                                color = Theme.colors.a
+                            )
+                        },
+                        checked = raw,
+                        onCheckedChange = {
+                            raw = it
+                            tile.paintRaw = it
+                        },
+                        modifier = Modifier.padding(vertical = 10.dp)
                     )
 
                     Text(
@@ -210,6 +357,7 @@ object LightsTileCompose : ComposeObject {
                         modifier = Modifier.padding(top = 10.dp)
                     )
 
+                    var stateRet by remember { mutableStateOf(tile.retain[0]) }
                     LabeledCheckbox(
                         label = {
                             Text(
@@ -218,11 +366,13 @@ object LightsTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = stateRet,
+                        onCheckedChange = { stateRet = it
+                            tile.retain[0] = it},
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
+                    var brightRet by remember { mutableStateOf(tile.retain[1]) }
                     LabeledCheckbox(
                         label = {
                             Text(
@@ -231,11 +381,26 @@ object LightsTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = brightRet,
+                        onCheckedChange = { brightRet = it },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
+                    var colorRet by remember { mutableStateOf(tile.retain[2]) }
+                    LabeledCheckbox(
+                        label = {
+                            Text(
+                                "Color",
+                                fontSize = 15.sp,
+                                color = Theme.colors.a
+                            )
+                        },
+                        checked = colorRet,
+                        onCheckedChange = { colorRet = it },
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+
+                    var modeRet by remember { mutableStateOf(tile.retain[3]) }
                     LabeledCheckbox(
                         label = {
                             Text(
@@ -244,8 +409,8 @@ object LightsTileCompose : ComposeObject {
                                 color = Theme.colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it },
+                        checked = modeRet,
+                        onCheckedChange = { modeRet = it },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
                 }
@@ -268,68 +433,8 @@ object LightsTileCompose : ComposeObject {
 }
 /*
 
-                val tile = tile as LightsTile
-
-                setupIcon(
-                    tile.iconResFalse,
-                    tile.colorPalletFalse.color,
-                    b.tpMqttPayloadFalseIconFrame,
-                    b.tpMqttPayloadFalseIcon
-                )
-                setupIcon(
-                    tile.iconResTrue,
-                    tile.colorPalletTrue.color,
-                    b.tpMqttPayloadTrueIconFrame,
-                    b.tpMqttPayloadTrueIcon
-                )
-
-                (if (tile.includePicker) VISIBLE else GONE).let {
-                    b.tpLightsColorRetain.visibility = it
-                    b.tpLightsColorTopics.visibility = it
-                    b.tpLightsTypeBox.visibility = it
-                    b.tpMqttPayloadBox.visibility = it
-                    b.tpLightsColorPathBox.visibility = it
-                    b.tpLightsPaintBox.visibility = it
-                }
-
-                b.tpMqttRetainBox.visibility = GONE
-                b.tpMqttTopics.visibility = GONE
-                b.tpMqttJsonPayload.visibility = GONE
-                b.tpLights.visibility = VISIBLE
-                b.tpLightsTopics.visibility = VISIBLE
-                b.tpMqttPayloadsBox.visibility = VISIBLE
-                b.tpMqttPayloadHint.visibility = VISIBLE
-                b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
-                b.tpLightsPaths.visibility =
-                    if (tile.mqtt.payloadIsJson) VISIBLE else GONE
-
-                b.tpLightsStateSub.setText(tile.mqtt.subs["state"])
-                b.tpLightsStatePub.setText(tile.mqtt.pubs["state"])
-                b.tpLightsColorSub.setText(tile.mqtt.subs["color"])
-                b.tpLightsColorPub.setText(tile.mqtt.pubs["color"])
-                b.tpLightsBrightnessSub.setText(tile.mqtt.subs["bright"])
-                b.tpLightsBrightnessPub.setText(tile.mqtt.pubs["bright"])
-                b.tpLightsModeSub.setText(tile.mqtt.subs["mode"])
-                b.tpLightsModePub.setText(tile.mqtt.pubs["mode"])
-
-                b.tpLightsStatePath.setText(tile.mqtt.jsonPaths["state"])
-                b.tpLightsColorPath.setText(tile.mqtt.jsonPaths["color"])
-                b.tpLightsBrightnessPath.setText(tile.mqtt.jsonPaths["bright"])
-                b.tpLightsModePath.setText(tile.mqtt.jsonPaths["mode"])
-
-
-                b.tpMqttPayloadFalse.setText(tile.mqtt.payloads["false"] ?: "")
-                b.tpMqttPayloadTrue.setText(tile.mqtt.payloads["true"] ?: "")
                 b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
 
-                b.tpLightsDoPaint.isChecked = tile.doPaint
-                b.tpLightsPaintRaw.isChecked = tile.paintRaw
-                b.tpLightsShowPayload.isChecked = tile.showPayload
-                b.tpLightsStateRetain.isChecked = tile.retain[0]
-                b.tpLightsColorRetain.isChecked = tile.retain[1]
-                b.tpLightsBrightnessRetain.isChecked = tile.retain[2]
-                b.tpLightsModeRetain.isChecked = tile.retain[3]
-                b.tpLightsIncludePicker.isChecked = tile.includePicker
                 b.tpMqttPayloadTag.text = "Color publish payload"
                 b.tpMqttPayloadHint.text =
                     "Use ${
@@ -349,39 +454,6 @@ object LightsTileCompose : ComposeObject {
                     }
                 )
 
-                b.tpLightsStateSub.addTextChangedListener {
-                    tile.mqtt.subs["state"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsStatePub.addTextChangedListener {
-                    tile.mqtt.pubs["state"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsColorSub.addTextChangedListener {
-                    tile.mqtt.subs["color"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsColorPub.addTextChangedListener {
-                    tile.mqtt.pubs["color"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsBrightnessSub.addTextChangedListener {
-                    tile.mqtt.subs["bright"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsBrightnessPub.addTextChangedListener {
-                    tile.mqtt.pubs["bright"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsModeSub.addTextChangedListener {
-                    tile.mqtt.subs["mode"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-                b.tpLightsModePub.addTextChangedListener {
-                    tile.mqtt.pubs["mode"] = (it ?: "").toString()
-                    dashboard.daemon.notifyOptionsChanged()
-                }
-
 
                 b.tpLightsStatePubCopy.setOnClickListener {
                     b.tpLightsStatePub.text = b.tpLightsStateSub.text
@@ -394,34 +466,6 @@ object LightsTileCompose : ComposeObject {
                 }
                 b.tpLightsModePubCopy.setOnClickListener {
                     b.tpLightsModePub.text = b.tpLightsModeSub.text
-                }
-
-
-                b.tpLightsStatePath.addTextChangedListener {
-                    tile.mqtt.jsonPaths["state"] = (it ?: "").toString()
-                }
-                b.tpLightsColorPath.addTextChangedListener {
-                    tile.mqtt.jsonPaths["color"] = (it ?: "").toString()
-                }
-                b.tpLightsBrightnessPath.addTextChangedListener {
-                    tile.mqtt.jsonPaths["brightness"] = (it ?: "").toString()
-                }
-                b.tpLightsModePath.addTextChangedListener {
-                    tile.mqtt.jsonPaths["mode"] = (it ?: "").toString()
-                }
-
-
-                b.tpLightsStateRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[0] = isChecked
-                }
-                b.tpLightsColorRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[1] = isChecked
-                }
-                b.tpLightsBrightnessRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[2] = isChecked
-                }
-                b.tpLightsModeRetain.setOnCheckedChangeListener { _, isChecked ->
-                    tile.retain[3] = isChecked
                 }
 
 

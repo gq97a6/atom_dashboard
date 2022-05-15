@@ -33,31 +33,26 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
     var paintRaw = true
     var doPaint = true
     private var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    private var toRemoves = mutableMapOf<String, MutableList<String>>()
+    private var toRemoves = mutableMapOf<Int, MutableList<String>>()
     private var flagIndexes = mutableMapOf<String, Int>()
 
-    var colorType = "hex"
+    var colorType = 1 //0-HSV 1-HEX 2-RGB
         set(value) {
             field = value
 
-            mqtt.payloads[colorType]?.let { pattern ->
+            mqtt.payloads[colorType.toString()]?.let { pattern ->
                 when (colorType) {
-                    "hsv" -> {
-                        toRemoves["hsv"] = Regex("@[hsv]").split(pattern) as MutableList
-                        toRemoves["hsv"]?.removeIf { it.isEmpty() }
+                    1 -> {
+                        toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[hsv]").findAll(pattern).map { it.value }
                         flagIndexes["h"] = indexes.indexOf("h")
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
-                    "hex" -> {
-                        toRemoves["hex"] = Regex("@hex").split(pattern) as MutableList
-                        toRemoves["hex"]?.removeIf { it.isEmpty() }
-                    }
-                    "rgb" -> {
-                        toRemoves["rgb"] = Regex("@[rgb]").split(pattern) as MutableList
-                        toRemoves["rgb"]?.removeIf { it.isEmpty() }
+                    2 -> toRemoves[2] = Regex("@hex").split(pattern) as MutableList
+                    3 -> {
+                        toRemoves[3] = Regex("@[rgb]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[rgb]").findAll(pattern).map { it.value }
                         flagIndexes["r"] = indexes.indexOf("r")
@@ -66,6 +61,8 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
                     }
                     else -> {}
                 }
+
+                toRemoves[colorType]?.removeIf { it.isEmpty() }
             }
         }
 
@@ -130,18 +127,18 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         binding.dcpConfirm.setOnClickListener {
             send(
                 when (colorType) {
-                    "hsv" -> {
+                    1 -> {
                         (mqtt.payloads["hsv"] ?: "")
                             .replace("@h", hsvPickedTmp[0].toInt().toString())
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
-                    "hex" -> {
+                    2 -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqtt.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
-                    "rgb" -> {
+                    3 -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqtt.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
@@ -184,15 +181,15 @@ class ColorTile : com.alteratom.dashboard.tile.Tile() {
         v.removeIf { it.isEmpty() }
 
         when (colorType) {
-            "hex" -> colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
-            "hsv" -> {
+            1 -> colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
+            2 -> {
                 hsvPicked = floatArrayOf(
                     v[flagIndexes["h"]!!].toFloat(),
                     v[flagIndexes["s"]!!].toFloat() / 100,
                     v[flagIndexes["v"]!!].toFloat() / 100
                 )
             }
-            "rgb" -> {
+            3 -> {
                 colorToHSV(
                     Color.rgb(
                         v[flagIndexes["r"]!!].toInt(),

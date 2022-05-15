@@ -52,7 +52,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
     private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
-    val retain = mutableListOf(false, false, false, false) //state, color, brightness, mode
+    val retain = mutableListOf(false, false, false, false) //state, brightness, color, mode
 
     var iconKeyTrue = "il_interface_toggle_on"
     val iconResTrue: Int
@@ -234,7 +234,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
         binding.dlConfirm.setOnClickListener {
             fun send() {
-                send("$brightnessTmp", mqtt.pubs["bright"], mqtt.qos, retain[2], true)
+                send("$brightnessTmp", mqtt.pubs["bright"], mqtt.qos, retain[1], true)
                 if (includePicker) send(
                     when (colorType) {
                         "hsv" -> {
@@ -266,7 +266,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                    }, mqtt.pubs["color"], mqtt.qos, retain[1], true
+                    }, mqtt.pubs["color"], mqtt.qos, retain[2], true
                 )
             }
 

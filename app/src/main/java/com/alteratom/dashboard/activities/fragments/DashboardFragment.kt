@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.activities.fragments
 
-import TilePropertiesFragment
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -24,6 +23,7 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter

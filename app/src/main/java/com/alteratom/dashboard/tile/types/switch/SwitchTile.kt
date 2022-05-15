@@ -30,18 +30,18 @@ class SwitchTile : com.alteratom.dashboard.tile.Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
-    val colorPalletTrue: com.alteratom.dashboard.Theme.ColorPallet
+    val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
         get() = theme.a.getColorPallet(hsvTrue, true)
 
     var hsvFalse = floatArrayOf(0f, 0f, 0f)
-    val colorPalletFalse: com.alteratom.dashboard.Theme.ColorPallet
+    val palletFalse: com.alteratom.dashboard.Theme.ColorPallet
         get() = theme.a.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {
-            true -> colorPalletTrue
-            false -> colorPalletFalse
-            null -> colorPallet
+            true -> palletTrue
+            false -> palletFalse
+            null -> pallet
         }
 
     private val iconResState

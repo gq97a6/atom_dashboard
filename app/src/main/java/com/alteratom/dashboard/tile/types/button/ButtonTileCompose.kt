@@ -1,7 +1,8 @@
 package com.alteratom.tile.types.button.compose
 
-import TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import androidx.compose.runtime.Composable
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication
 import com.alteratom.dashboard.compose.ComposeObject
 
 object ButtonTileCompose : ComposeObject {
@@ -9,7 +10,7 @@ object ButtonTileCompose : ComposeObject {
     override fun Mqttd() {
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-                TilePropComp.Communication()
+                Communication()
             }
             TilePropComp.Notification()
         }

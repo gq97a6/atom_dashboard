@@ -76,7 +76,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
         get() = when (state) {
             true -> colorPalletTrue
             false -> colorPalletFalse
-            null -> colorPallet
+            null -> pallet
         }
 
     private val iconResState
@@ -137,7 +137,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
         mqtt.payloads["hex"] = "#@hex"
         mqtt.payloads["rgb"] = "@r;@g;@b"
 
-        Color.colorToHSV(com.alteratom.dashboard.G.theme.a.colors.color, hsvPicked)
+        Color.colorToHSV(com.alteratom.dashboard.G.theme.a.pallet.color, hsvPicked)
         colorType = colorType
     }
 
@@ -301,7 +301,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(com.alteratom.dashboard.G.theme.a.colors.color)
+                            ColorStateList.valueOf(com.alteratom.dashboard.G.theme.a.pallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }

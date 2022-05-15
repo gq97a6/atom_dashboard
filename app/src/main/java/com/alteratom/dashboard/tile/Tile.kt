@@ -43,7 +43,7 @@ abstract class Tile : RecyclerViewItem() {
         floatArrayOf(it[0], it[1], it[2])
     }
 
-    val colorPallet: ColorPallet
+    val pallet: ColorPallet
         get() = theme.a.getColorPallet(hsv, true)
 
     abstract var typeTag: String
@@ -79,7 +79,7 @@ abstract class Tile : RecyclerViewItem() {
         theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
-            colorPallet = colorPallet
+            colorPallet = pallet
         )
     }
 

@@ -1,7 +1,5 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
-import TilePropComp.PairList
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -10,23 +8,28 @@ import com.alteratom.dashboard.FrameBox
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
 import com.alteratom.dashboard.compose.ComposeObject
 import com.alteratom.tile.types.pick.SelectTile
 
 object SelectTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var state by remember { mutableStateOf(true) }
+        val tile = tile as SelectTile
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-                TilePropComp.Communication()
+                Communication()
             }
 
             TilePropComp.Notification()
 
             FrameBox(a = "Type specific: ", b = "select") {
                 Row {
+
+                    var show by remember { mutableStateOf(tile.showPayload) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -35,13 +38,16 @@ object SelectTileCompose : ComposeObject {
                                 color = colors.a
                             )
                         },
-                        checked = state,
-                        onCheckedChange = { state = it }
+                        checked = show,
+                        onCheckedChange = {
+                            show = it
+                            tile.showPayload = it
+                        }
                     )
                 }
             }
 
-            val o = (tile as SelectTile).options
+            val o = tile.options
             PairList(
                 o,
                 { o.removeAt(it) },
@@ -56,16 +62,3 @@ object SelectTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-/*
-
-                val tile = tile as SelectTile
-
-                b.tpSelect.visibility = VISIBLE
-                b.tpSelectShowPayload.isChecked = tile.showPayload
-
-                b.tpSelectShowPayload.setOnCheckedChangeListener { _, state ->
-                    tile.showPayload = state
-                }
-
-                setupOptionsRecyclerView(tile.options, b.tpSelectRecyclerView, b.tpSelectAdd)
- */

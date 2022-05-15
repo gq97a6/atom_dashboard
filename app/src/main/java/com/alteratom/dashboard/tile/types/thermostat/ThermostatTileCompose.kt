@@ -1,7 +1,7 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
-import TilePropComp.PairList
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
@@ -20,6 +20,7 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledCheckbox
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.compose.ComposeObject
 import com.alteratom.tile.types.thermostat.ThermostatTile
 
@@ -107,7 +108,7 @@ object ThermostatTileCompose : ComposeObject {
                     }
                 )
 
-                TilePropComp.Communication1(retain = false, pointer = {
+                Communication1(retain = false, pointer = {
 
                     EditText(
                         label = { Text("Temperature JSON pointer") },

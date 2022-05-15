@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.activities.fragments
 
-import TilePropertiesFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.click
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentTileNewBinding

@@ -23,7 +23,7 @@ class IconIcon(
 
         val icon = view.findViewById<View>(R.id.iii_icon)
         icon.setBackgroundResource(res)
-        icon.backgroundTintList = ColorStateList.valueOf(theme.a.colors.a)
+        icon.backgroundTintList = ColorStateList.valueOf(theme.a.pallet.a)
     }
 
     override fun onClick(v: View, e: MotionEvent) {

@@ -1,6 +1,7 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
+import androidx.compose.animation.*
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -9,46 +10,68 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.tile.types.button.TextTile
 
 object TextTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var index by remember { mutableStateOf(0) }
-        var state by remember { mutableStateOf(true) }
-        var text by remember { mutableStateOf("false") }
-
+        val tile = tile as TextTile
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-                TilePropComp.Communication0()
+                Communication0()
 
-                EditText(
-                    label = { Text("Publish payload") },
-                    value = text,
-                    onValueChange = { text = it }
-                )
+                var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
+                var type by remember { mutableStateOf(if (tile.mqtt.varPayload) 0 else 1) }
+
+                AnimatedVisibility(
+                    visible = type == 0, enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Column {
+                        EditText(
+                            label = { Text("Publish payload") },
+                            value = pub,
+                            onValueChange = {
+                                pub = it
+                                tile.mqtt.payloads["base"] = it
+                            }
+                        )
+                    }
+                }
 
                 RadioGroup(
                     listOf(
                         "Variable (set on send)",
                         "Static (always the same)",
                     ), "Payload setting type",
-                    index,
-                    { index = it },
+                    type,
+                    {
+                        type = it
+                        tile.mqtt.varPayload = it == 0
+                    },
                     modifier = Modifier.padding(top = 20.dp)
                 )
 
-                TilePropComp.Communication1()
+                Communication1()
             }
 
             TilePropComp.Notification()
 
             FrameBox(a = "Type specific: ", b = "text") {
                 Row {
+                    var big by remember { mutableStateOf(tile.isBig) }
                     LabeledSwitch(
                         label = { Text("Full width:", fontSize = 15.sp, color = Theme.colors.a) },
-                        checked = state,
-                        onCheckedChange = { state = it }
+                        checked = big,
+                        onCheckedChange = {
+                            big = it
+                            tile.isBig
+                        }
                     )
                 }
             }
@@ -59,45 +82,3 @@ object TextTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-/*
-
-                val tile = tile as TextTile
-
-                b.tpText.visibility = VISIBLE
-                b.tpMqttPayloadTypeBox.visibility = VISIBLE
-
-                b.tpTextBig.isChecked = tile.isBig
-
-                b.tpTextBig.setOnCheckedChangeListener { _, isChecked ->
-                    tile.isBig = isChecked
-                }
-
-                b.tpPayloadType.check(
-                    if (tile.mqtt.varPayload) R.id.tp_mqtt_payload_var
-                    else {
-                        b.tpMqttPayload.visibility = VISIBLE
-                        R.id.tp_mqtt_payload_val
-                    }
-                )
-                b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-                    tile.mqtt.varPayload = when (id) {
-                        R.id.tp_mqtt_payload_val -> {
-                            b.tpMqttPayloadBox.visibility = VISIBLE
-                            false
-                        }
-                        R.id.tp_mqtt_payload_var -> {
-                            b.tpMqttPayloadBox.visibility = GONE
-                            true
-                        }
-                        else -> true
-                    }
-                }
-
-                b.tpMqttJsonPayloadPath.addTextChangedListener {
-                    tile.mqtt.jsonPaths["base"] = (it ?: "").toString()
-                }
-
-                b.tpMqttPayload.addTextChangedListener {
-                    tile.mqtt.payloads["base"] = (it ?: "").toString()
-                }
- */

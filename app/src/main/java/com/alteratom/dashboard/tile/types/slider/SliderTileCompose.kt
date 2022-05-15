@@ -1,35 +1,45 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.FrameBox
+import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.tile.types.slider.SliderTile
 
 object SliderTileCompose : ComposeObject {
     @Composable
     override fun Mqttd() {
-        var text by remember { mutableStateOf("false") }
+        val tile = tile as SliderTile
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-                TilePropComp.Communication0()
+                Communication0()
 
+                var pub by remember { mutableStateOf("false") }
                 EditText(
                     label = { Text("Publish payload") },
-                    value = text,
-                    onValueChange = { text = it }
+                    value = pub,
+                    onValueChange = {
+                        pub = it
+                        tile.mqtt.payloads["base"] = it
+                    }
                 )
                 Text(
                     "User @value to insert current value",
@@ -37,20 +47,28 @@ object SliderTileCompose : ComposeObject {
                     color = colors.a
                 )
 
-                TilePropComp.Communication1()
+                Communication1()
             }
 
             TilePropComp.Notification()
 
             FrameBox(a = "Type specific: ", b = "slider") {
                 Column {
-                    var state by remember { mutableStateOf(true) }
-
+                    var drag by remember { mutableStateOf(tile.dragCon) }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         LabeledSwitch(
-                            label = { Text("Drag to control:", fontSize = 15.sp, color = colors.a) },
-                            checked = state,
-                            onCheckedChange = { state = it }
+                            label = {
+                                Text(
+                                    "Drag to control:",
+                                    fontSize = 15.sp,
+                                    color = colors.a
+                                )
+                            },
+                            checked = drag,
+                            onCheckedChange = {
+                                drag = it
+                                tile.dragCon = it
+                            }
                         )
 
                         Text(
@@ -63,22 +81,67 @@ object SliderTileCompose : ComposeObject {
                         )
                     }
 
+                    var from by remember { mutableStateOf(tile.range[0].toString()) }
                     EditText(
                         label = { Text("From value") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = from,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            from = it
+                            it.toIntOrNull()?.let {
+                                tile.range[0] = it
+                            }
+                            //it.let { raw ->
+                            //    it.digitsOnly().let { parsed ->
+                            //        if (raw != parsed) from = parsed
+                            //        else parsed.toIntOrNull()?.let {
+                            //            tile.range[0] = it
+                            //        }
+                            //    }
+                            //}
+                        }
                     )
 
+                    var to by remember { mutableStateOf(tile.range[1].toString()) }
                     EditText(
                         label = { Text("To value") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = to,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            to = it
+                            it.toIntOrNull()?.let {
+                                tile.range[1] = it
+                            }
+                            //it.let { raw ->
+                            //    it.digitsOnly().let { parsed ->
+                            //        if (raw != parsed) to = parsed
+                            //        else parsed.toIntOrNull()?.let {
+                            //            tile.range[1] = it
+                            //        }
+                            //    }
+                            //}
+                        }
                     )
 
+                    var step by remember { mutableStateOf(tile.range[2].toString()) }
                     EditText(
                         label = { Text("Step value") },
-                        value = text,
-                        onValueChange = { text = it }
+                        value = step,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            step = it
+                            it.toIntOrNull()?.let {
+                                tile.range[2] = it
+                            }
+                            //it.let { raw ->
+                            //    it.digitsOnly().let { parsed ->
+                            //        if (raw != parsed) step = parsed
+                            //        else parsed.toIntOrNull()?.let {
+                            //            tile.range[2] = it
+                            //        }
+                            //    }
+                            //}
+                        }
                     )
                 }
             }
@@ -89,59 +152,3 @@ object SliderTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-/*
-
-                val tile = tile as SliderTile
-
-                b.tpSlider.visibility = VISIBLE
-                b.tpMqttPayloadBox.visibility = VISIBLE
-                b.tpMqttPayloadHint.visibility = VISIBLE
-
-                b.tpSliderDrag.isChecked = tile.dragCon
-
-                b.tpMqttPayloadHint.text = "Use @value to insert current value"
-                b.tpSliderFrom.setText(tile.range[0].toString())
-                b.tpSliderTo.setText(tile.range[1].toString())
-                b.tpSliderStep.setText(tile.range[2].toString())
-
-                b.tpSliderFrom.addTextChangedListener { it ->
-                    (it ?: "").toString().let { raw ->
-                        (it ?: "").toString().digitsOnly().let { parsed ->
-                            if (raw != parsed) b.tpSliderFrom.setText(parsed)
-                            else parsed.toIntOrNull()?.let {
-                                tile.range[0] = it
-                            }
-                        }
-                    }
-                }
-
-                b.tpSliderTo.addTextChangedListener { it ->
-                    (it ?: "").toString().let { raw ->
-                        (it ?: "").toString().digitsOnly().let { parsed ->
-                            if (raw != parsed) b.tpSliderTo.setText(parsed)
-                            else parsed.toIntOrNull()?.let {
-                                tile.range[1] = it
-                            }
-                        }
-                    }
-                }
-
-                b.tpSliderStep.addTextChangedListener { it ->
-                    (it ?: "").toString().let { raw ->
-                        (it ?: "").toString().digitsOnly().let { parsed ->
-                            if (raw != parsed) b.tpSliderStep.setText(parsed)
-                            else parsed.toIntOrNull()?.let {
-                                tile.range[2] = it
-                            }
-                        }
-                    }
-                }
-
-                b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
-                    tile.dragCon = state
-                }
-
-                b.tpMqttPayload.addTextChangedListener {
-                    tile.mqtt.payloads["base"] = (it ?: "").toString()
-                }
- */

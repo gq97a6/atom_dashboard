@@ -1,6 +1,6 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.compose.ComposeObject
 
 object ColorTileCompose : ComposeObject {
@@ -20,7 +22,7 @@ object ColorTileCompose : ComposeObject {
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
-                TilePropComp.Communication0()
+                Communication0()
 
                 EditText(
                     label = { Text("Publish payload") },
@@ -33,7 +35,7 @@ object ColorTileCompose : ComposeObject {
                     color = Theme.colors.a
                 )
 
-                TilePropComp.Communication1()
+                Communication1()
             }
 
             TilePropComp.Notification()

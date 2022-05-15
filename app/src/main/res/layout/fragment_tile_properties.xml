@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#00000000"
     android:orientation="vertical"
-    tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+    tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
     <TextView
         android:id="@+id/pt_transfer_box"
@@ -2325,7 +2325,7 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:visibility="visible"
-                tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+                tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
                 <TextView
                     android:id="@+id/view11"
@@ -2697,7 +2697,7 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:visibility="visible"
-                tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+                tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
                 <TextView
                     android:id="@+id/view12"
@@ -3075,7 +3075,7 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:visibility="visible"
-                tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+                tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
                 <TextView
                     android:id="@+id/view13"
@@ -3232,7 +3232,7 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:visibility="visible"
-                tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+                tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
                 <TextView
                     android:id="@+id/view14"
@@ -3366,7 +3366,7 @@
                 android:orientation="vertical"
                 android:paddingTop="20dp"
                 android:visibility="visible"
-                tools:context=".dashboard.activities.fragments.TilePropertiesFragment">
+                tools:context=".dashboard.activities.fragments.tile_properties.TilePropertiesFragment">
 
                 <TextView
                     android:id="@+id/view15"

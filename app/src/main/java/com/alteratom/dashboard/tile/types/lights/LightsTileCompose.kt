@@ -1,8 +1,5 @@
 package com.alteratom.tile.types.color.compose
 
-import TilePropComp
-import TilePropComp.Communication1
-import TilePropComp.PairList
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -15,6 +12,9 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
 import com.alteratom.dashboard.compose.ComposeObject
 import com.alteratom.tile.types.lights.LightsTile
 

@@ -39,7 +39,10 @@ class Theme {
             get() = theme.a
 
         val colors
-            get() = theme.a.composeColors
+            get() = theme.a.pallet.cc
+
+        val pallet
+            get() = theme.a.pallet
 
         val isDark
             get() = theme.a.isDark
@@ -49,7 +52,7 @@ class Theme {
         viewGroup: ViewGroup,
         context: Context? = null,
         anim: Boolean = true,
-        colorPallet: ColorPallet = a.colors
+        colorPallet: ColorPallet = a.pallet
     ) {
         context?.let {
             it.setTheme(R.style.theme)
@@ -156,14 +159,14 @@ class Theme {
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
-                background.setColor(ColorStateList.valueOf(theme.a.colors.background.alpha(150)))
+                background.setColor(ColorStateList.valueOf(theme.a.pallet.background.alpha(150)))
             }
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 //background?.mutate()
                 background.setColor(
                     ColorStateList.valueOf(
-                        theme.a.colors.background.darkened(
+                        theme.a.pallet.background.darkened(
                             0.9f
                         ).alpha(150)
                     )
@@ -172,7 +175,7 @@ class Theme {
             "splashIcon" -> {
                 this.setBackgroundResource(if (isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
                 this.background.colorFilter =
-                    PorterDuffColorFilter(artist.colors.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
+                    PorterDuffColorFilter(artist.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -437,31 +440,17 @@ class Theme {
         var isDark = true
             set(value) {
                 field = value
-                colors = getColorPallet(hsv)
+                pallet = getColorPallet(hsv)
             }
 
         var hsv: FloatArray = floatArrayOf(0f, 0f, 0f)
             set(value) {
                 field = value
-                colors = getColorPallet(hsv)
+                pallet = getColorPallet(hsv)
             }
 
         @JsonIgnore
-        var colors: ColorPallet = getColorPallet(hsv)
-            set(value) {
-                field = value
-                composeColors = ComposeColorPallet(
-                    ComposeColor(value.color),
-                    ComposeColor(value.background),
-                    ComposeColor(value.a),
-                    ComposeColor(value.b),
-                    ComposeColor(value.c),
-                    ComposeColor(value.d),
-                )
-            }
-
-        @JsonIgnore
-        var composeColors: ComposeColorPallet = getComposeColorPallet()
+        var pallet: ColorPallet = getColorPallet(hsv)
 
         fun parseColor(color: Int, isAltCon: Boolean = false): Int {
             val hsv = floatArrayOf(0f, 0f, 0f)
@@ -540,12 +529,12 @@ class Theme {
 
         fun getComposeColorPallet(): ComposeColorPallet =
             ComposeColorPallet(
-                ComposeColor(colors.color),
-                ComposeColor(colors.background),
-                ComposeColor(colors.a),
-                ComposeColor(colors.b),
-                ComposeColor(colors.c),
-                ComposeColor(colors.d),
+                ComposeColor(pallet.color),
+                ComposeColor(pallet.background),
+                ComposeColor(pallet.a),
+                ComposeColor(pallet.b),
+                ComposeColor(pallet.c),
+                ComposeColor(pallet.d),
             )
     }
 
@@ -565,5 +554,14 @@ class Theme {
         val b: Int,
         val c: Int,
         val d: Int
-    )
+    ) {
+        val cc = ComposeColorPallet(
+            ComposeColor(color),
+            ComposeColor(background),
+            ComposeColor(a),
+            ComposeColor(b),
+            ComposeColor(c),
+            ComposeColor(d),
+        )
+    }
 }

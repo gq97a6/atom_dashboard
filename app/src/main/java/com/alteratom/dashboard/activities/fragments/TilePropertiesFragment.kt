@@ -1,15 +1,7 @@
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioGroup
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -29,20 +21,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.getIconColorPallet
 import com.alteratom.dashboard.G.getIconHSV
 import com.alteratom.dashboard.G.getIconRes
 import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
-import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.Theme.Companion.artist
 import com.alteratom.dashboard.Theme.Companion.colors
@@ -50,8 +36,6 @@ import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.tile.types.button.ButtonTile
@@ -121,28 +105,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
 object TilePropComp {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
-        var text by remember { mutableStateOf("") }
-
-        //tile.tag = (it ?: "").toString()
-
-        /*
-        b.tpEditIcon.setOnClickListener {
-            getIconHSV = { tile.hsv }
-            getIconRes = { tile.iconRes }
-            getIconColorPallet = { tile.colorPallet }
-
-            setIconHSV = { hsv -> tile.hsv = hsv }
-            setIconKey = { key -> tile.iconKey = key }
-
-            fm.replaceWith(TileIconFragment())
-        }
-        iconView.setBackgroundResource(icon)
-        iconView.backgroundTintList = ColorStateList.valueOf(color)
-
-        val drawable = frameView.background as? GradientDrawable
-        drawable?.setStroke(1, color)
-        drawable?.cornerRadius = 15f
-         */
 
         Surface(modifier = Modifier.padding(16.dp)) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -153,21 +115,34 @@ object TilePropComp {
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
-                        onClick = {},
+                        onClick = {
+                            getIconHSV = { tile.hsv }
+                            getIconRes = { tile.iconRes }
+                            getIconColorPallet = { tile.colorPallet }
+
+                            setIconHSV = { hsv -> tile.hsv = hsv }
+                            setIconKey = { key -> tile.iconKey = key }
+
+                            fm.replaceWith(TileIconFragment())
+                        },
                         border = BorderStroke(0.dp, colors.color),
                         modifier = Modifier.size(52.dp)
                     ) {
-                        Icon(painterResource(G.tile.iconRes), "")
+                        Icon(painterResource(tile.iconRes), "")
                     }
 
-                    val typeTag = G.tile.typeTag.replaceFirstChar {
+                    val typeTag = tile.typeTag.replaceFirstChar {
                         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                     }
 
+                    var tag by remember { mutableStateOf(tile.tag) }
                     EditText(
                         label = { BoldStartText("$typeTag ", "tile tag") },
-                        value = text,
-                        onValueChange = { text = it },
+                        value = tag,
+                        onValueChange = {
+                            tag = it
+                            tile.tag = it
+                        },
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }

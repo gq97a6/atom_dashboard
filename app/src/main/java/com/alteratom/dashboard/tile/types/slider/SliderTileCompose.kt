@@ -89,3 +89,59 @@ object SliderTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                val tile = tile as SliderTile
+
+                b.tpSlider.visibility = VISIBLE
+                b.tpMqttPayloadBox.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
+
+                b.tpSliderDrag.isChecked = tile.dragCon
+
+                b.tpMqttPayloadHint.text = "Use @value to insert current value"
+                b.tpSliderFrom.setText(tile.range[0].toString())
+                b.tpSliderTo.setText(tile.range[1].toString())
+                b.tpSliderStep.setText(tile.range[2].toString())
+
+                b.tpSliderFrom.addTextChangedListener { it ->
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderFrom.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[0] = it
+                            }
+                        }
+                    }
+                }
+
+                b.tpSliderTo.addTextChangedListener { it ->
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderTo.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[1] = it
+                            }
+                        }
+                    }
+                }
+
+                b.tpSliderStep.addTextChangedListener { it ->
+                    (it ?: "").toString().let { raw ->
+                        (it ?: "").toString().digitsOnly().let { parsed ->
+                            if (raw != parsed) b.tpSliderStep.setText(parsed)
+                            else parsed.toIntOrNull()?.let {
+                                tile.range[2] = it
+                            }
+                        }
+                    }
+                }
+
+                b.tpSliderDrag.setOnCheckedChangeListener { _, state ->
+                    tile.dragCon = state
+                }
+
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
+                }
+ */

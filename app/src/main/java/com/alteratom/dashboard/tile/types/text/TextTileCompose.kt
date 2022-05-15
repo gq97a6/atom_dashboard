@@ -59,3 +59,45 @@ object TextTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                val tile = tile as TextTile
+
+                b.tpText.visibility = VISIBLE
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+
+                b.tpTextBig.isChecked = tile.isBig
+
+                b.tpTextBig.setOnCheckedChangeListener { _, isChecked ->
+                    tile.isBig = isChecked
+                }
+
+                b.tpPayloadType.check(
+                    if (tile.mqtt.varPayload) R.id.tp_mqtt_payload_var
+                    else {
+                        b.tpMqttPayload.visibility = VISIBLE
+                        R.id.tp_mqtt_payload_val
+                    }
+                )
+                b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.mqtt.varPayload = when (id) {
+                        R.id.tp_mqtt_payload_val -> {
+                            b.tpMqttPayloadBox.visibility = VISIBLE
+                            false
+                        }
+                        R.id.tp_mqtt_payload_var -> {
+                            b.tpMqttPayloadBox.visibility = GONE
+                            true
+                        }
+                        else -> true
+                    }
+                }
+
+                b.tpMqttJsonPayloadPath.addTextChangedListener {
+                    tile.mqtt.jsonPaths["base"] = (it ?: "").toString()
+                }
+
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
+                }
+ */

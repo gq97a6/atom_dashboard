@@ -56,3 +56,16 @@ object SelectTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                val tile = tile as SelectTile
+
+                b.tpSelect.visibility = VISIBLE
+                b.tpSelectShowPayload.isChecked = tile.showPayload
+
+                b.tpSelectShowPayload.setOnCheckedChangeListener { _, state ->
+                    tile.showPayload = state
+                }
+
+                setupOptionsRecyclerView(tile.options, b.tpSelectRecyclerView, b.tpSelectAdd)
+ */

@@ -46,3 +46,32 @@ object TerminalTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                b.tpMqttPayloadTypeBox.visibility = VISIBLE
+                b.tpPayloadType.check(
+                    if (tile.mqtt.varPayload) R.id.tp_mqtt_payload_var
+                    else {
+                        b.tpMqttPayload.visibility = VISIBLE
+                        R.id.tp_mqtt_payload_val
+                    }
+                )
+
+                b.tpPayloadType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.mqtt.varPayload = when (id) {
+                        R.id.tp_mqtt_payload_val -> {
+                            b.tpMqttPayloadBox.visibility = VISIBLE
+                            false
+                        }
+                        R.id.tp_mqtt_payload_var -> {
+                            b.tpMqttPayloadBox.visibility = GONE
+                            true
+                        }
+                        else -> true
+                    }
+                }
+
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqtt.payloads["base"] = (it ?: "").toString()
+                }
+ */

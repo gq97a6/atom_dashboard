@@ -85,3 +85,67 @@ object ColorTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+
+
+//val tile = tile as ColorTile
+//
+//b.tpColor.visibility = VISIBLE
+//b.tpMqttPayloadBox.visibility = VISIBLE
+//b.tpMqttPayloadHint.visibility = VISIBLE
+//b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
+//
+//b.tpColorDoPaint.isChecked = tile.doPaint
+//b.tpColorPaintRaw.isChecked = tile.paintRaw
+//
+//b.tpColorColorType.check(
+//when (tile.colorType) {
+//    "hsv" -> R.id.tp_color_hsv
+//    "hex" -> R.id.tp_color_hex
+//    "rgb" -> R.id.tp_color_rgb
+//    else -> R.id.tp_color_hsv
+//}
+//)
+//
+//b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
+//b.tpMqttPayloadHint.text =
+//"Use ${
+//when (tile.colorType) {
+//    "hsv" -> "@h, @s, @v"
+//    "hex" -> "@hex"
+//    "rgb" -> "@r, @g, @b"
+//    else -> "@hex"
+//}
+//} to insert current value."
+//
+//b.tpColorDoPaint.setOnCheckedChangeListener { _, state ->
+//    tile.doPaint = state
+//    b.tpColorPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
+//}
+//
+//b.tpColorPaintRaw.setOnCheckedChangeListener { _, state ->
+//    tile.paintRaw = state
+//}
+//
+//b.tpColorColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+//    tile.colorType = when (id) {
+//        R.id.tp_color_hsv -> "hsv"
+//        R.id.tp_color_hex -> "hex"
+//        R.id.tp_color_rgb -> "rgb"
+//        else -> "hex"
+//    }
+//
+//    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
+//    b.tpMqttPayloadHint.text =
+//        "Use ${
+//            when (tile.colorType) {
+//                "hsv" -> "@h, @s, @v"
+//                "hex" -> "@hex"
+//                "rgb" -> "@r, @g, @b"
+//                else -> "@hex"
+//            }
+//        } to insert current value."
+//}
+//
+//b.tpMqttPayload.addTextChangedListener {
+//    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
+//}

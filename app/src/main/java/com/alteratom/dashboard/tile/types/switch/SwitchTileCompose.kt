@@ -80,3 +80,56 @@ object SwitchTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                val tile = tile as SwitchTile
+
+                //b.tpSwitch.visibility = VISIBLE
+                b.tpMqttPayloadsBox.visibility = VISIBLE
+
+                b.tpMqttPayloadTrue.setText(tile.mqtt.payloads["true"] ?: "")
+                b.tpMqttPayloadFalse.setText(tile.mqtt.payloads["false"] ?: "")
+
+                setupIcon(
+                    tile.iconResTrue,
+                    tile.colorPalletTrue.color,
+                    b.tpMqttPayloadTrueIconFrame,
+                    b.tpMqttPayloadTrueIcon
+                )
+                setupIcon(
+                    tile.iconResFalse,
+                    tile.colorPalletFalse.color,
+                    b.tpMqttPayloadFalseIconFrame,
+                    b.tpMqttPayloadFalseIcon
+                )
+
+                b.tpMqttPayloadTrueEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvTrue }
+                    getIconRes = { tile.iconResTrue }
+                    getIconColorPallet = { tile.colorPalletTrue }
+
+                    setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                    setIconKey = { key -> tile.iconKeyTrue = key }
+
+                    fm.replaceWith(TileIconFragment())
+                }
+
+                b.tpMqttPayloadFalseEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvFalse }
+                    getIconRes = { tile.iconResFalse }
+                    getIconColorPallet = { tile.colorPalletFalse }
+
+                    setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                    setIconKey = { key -> tile.iconKeyFalse = key }
+
+                    fm.replaceWith(TileIconFragment())
+                }
+
+                b.tpMqttPayloadTrue.addTextChangedListener {
+                    tile.mqtt.payloads["true"] = (it ?: "").toString()
+                }
+
+                b.tpMqttPayloadFalse.addTextChangedListener {
+                    tile.mqtt.payloads["false"] = (it ?: "").toString()
+                }
+ */

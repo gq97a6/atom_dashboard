@@ -1,7 +1,6 @@
 package com.alteratom.tile.types.color.compose
 
 import TilePropComp
-import TilePropComp.Communication0
 import TilePropComp.Communication1
 import TilePropComp.PairList
 import androidx.compose.foundation.BorderStroke
@@ -267,3 +266,243 @@ object LightsTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
+/*
+
+                val tile = tile as LightsTile
+
+                setupIcon(
+                    tile.iconResFalse,
+                    tile.colorPalletFalse.color,
+                    b.tpMqttPayloadFalseIconFrame,
+                    b.tpMqttPayloadFalseIcon
+                )
+                setupIcon(
+                    tile.iconResTrue,
+                    tile.colorPalletTrue.color,
+                    b.tpMqttPayloadTrueIconFrame,
+                    b.tpMqttPayloadTrueIcon
+                )
+
+                (if (tile.includePicker) VISIBLE else GONE).let {
+                    b.tpLightsColorRetain.visibility = it
+                    b.tpLightsColorTopics.visibility = it
+                    b.tpLightsTypeBox.visibility = it
+                    b.tpMqttPayloadBox.visibility = it
+                    b.tpLightsColorPathBox.visibility = it
+                    b.tpLightsPaintBox.visibility = it
+                }
+
+                b.tpMqttRetainBox.visibility = GONE
+                b.tpMqttTopics.visibility = GONE
+                b.tpMqttJsonPayload.visibility = GONE
+                b.tpLights.visibility = VISIBLE
+                b.tpLightsTopics.visibility = VISIBLE
+                b.tpMqttPayloadsBox.visibility = VISIBLE
+                b.tpMqttPayloadHint.visibility = VISIBLE
+                b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
+                b.tpLightsPaths.visibility =
+                    if (tile.mqtt.payloadIsJson) VISIBLE else GONE
+
+                b.tpLightsStateSub.setText(tile.mqtt.subs["state"])
+                b.tpLightsStatePub.setText(tile.mqtt.pubs["state"])
+                b.tpLightsColorSub.setText(tile.mqtt.subs["color"])
+                b.tpLightsColorPub.setText(tile.mqtt.pubs["color"])
+                b.tpLightsBrightnessSub.setText(tile.mqtt.subs["bright"])
+                b.tpLightsBrightnessPub.setText(tile.mqtt.pubs["bright"])
+                b.tpLightsModeSub.setText(tile.mqtt.subs["mode"])
+                b.tpLightsModePub.setText(tile.mqtt.pubs["mode"])
+
+                b.tpLightsStatePath.setText(tile.mqtt.jsonPaths["state"])
+                b.tpLightsColorPath.setText(tile.mqtt.jsonPaths["color"])
+                b.tpLightsBrightnessPath.setText(tile.mqtt.jsonPaths["bright"])
+                b.tpLightsModePath.setText(tile.mqtt.jsonPaths["mode"])
+
+
+                b.tpMqttPayloadFalse.setText(tile.mqtt.payloads["false"] ?: "")
+                b.tpMqttPayloadTrue.setText(tile.mqtt.payloads["true"] ?: "")
+                b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
+
+                b.tpLightsDoPaint.isChecked = tile.doPaint
+                b.tpLightsPaintRaw.isChecked = tile.paintRaw
+                b.tpLightsShowPayload.isChecked = tile.showPayload
+                b.tpLightsStateRetain.isChecked = tile.retain[0]
+                b.tpLightsColorRetain.isChecked = tile.retain[1]
+                b.tpLightsBrightnessRetain.isChecked = tile.retain[2]
+                b.tpLightsModeRetain.isChecked = tile.retain[3]
+                b.tpLightsIncludePicker.isChecked = tile.includePicker
+                b.tpMqttPayloadTag.text = "Color publish payload"
+                b.tpMqttPayloadHint.text =
+                    "Use ${
+                        when (tile.colorType) {
+                            "hsv" -> "@h, @s, @v"
+                            "hex" -> "@hex"
+                            "rgb" -> "@r, @g, @b"
+                            else -> "@hex"
+                        }
+                    } to insert current value."
+                b.tpLightsColorType.check(
+                    when (tile.colorType) {
+                        "hsv" -> R.id.tp_lights_hsv
+                        "hex" -> R.id.tp_lights_hex
+                        "rgb" -> R.id.tp_lights_rgb
+                        else -> R.id.tp_lights_hsv
+                    }
+                )
+
+                b.tpLightsStateSub.addTextChangedListener {
+                    tile.mqtt.subs["state"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsStatePub.addTextChangedListener {
+                    tile.mqtt.pubs["state"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsColorSub.addTextChangedListener {
+                    tile.mqtt.subs["color"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsColorPub.addTextChangedListener {
+                    tile.mqtt.pubs["color"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsBrightnessSub.addTextChangedListener {
+                    tile.mqtt.subs["bright"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsBrightnessPub.addTextChangedListener {
+                    tile.mqtt.pubs["bright"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsModeSub.addTextChangedListener {
+                    tile.mqtt.subs["mode"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+                b.tpLightsModePub.addTextChangedListener {
+                    tile.mqtt.pubs["mode"] = (it ?: "").toString()
+                    dashboard.daemon.notifyOptionsChanged()
+                }
+
+
+                b.tpLightsStatePubCopy.setOnClickListener {
+                    b.tpLightsStatePub.text = b.tpLightsStateSub.text
+                }
+                b.tpLightsColorPubCopy.setOnClickListener {
+                    b.tpLightsColorPub.text = b.tpLightsColorSub.text
+                }
+                b.tpLightsBrightnessPubCopy.setOnClickListener {
+                    b.tpLightsBrightnessPub.text = b.tpLightsBrightnessSub.text
+                }
+                b.tpLightsModePubCopy.setOnClickListener {
+                    b.tpLightsModePub.text = b.tpLightsModeSub.text
+                }
+
+
+                b.tpLightsStatePath.addTextChangedListener {
+                    tile.mqtt.jsonPaths["state"] = (it ?: "").toString()
+                }
+                b.tpLightsColorPath.addTextChangedListener {
+                    tile.mqtt.jsonPaths["color"] = (it ?: "").toString()
+                }
+                b.tpLightsBrightnessPath.addTextChangedListener {
+                    tile.mqtt.jsonPaths["brightness"] = (it ?: "").toString()
+                }
+                b.tpLightsModePath.addTextChangedListener {
+                    tile.mqtt.jsonPaths["mode"] = (it ?: "").toString()
+                }
+
+
+                b.tpLightsStateRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[0] = isChecked
+                }
+                b.tpLightsColorRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[1] = isChecked
+                }
+                b.tpLightsBrightnessRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[2] = isChecked
+                }
+                b.tpLightsModeRetain.setOnCheckedChangeListener { _, isChecked ->
+                    tile.retain[3] = isChecked
+                }
+
+
+                b.tpMqttPayloadTrue.addTextChangedListener {
+                    tile.mqtt.payloads["true"] = (it ?: "").toString()
+                }
+                b.tpMqttPayloadFalse.addTextChangedListener {
+                    tile.mqtt.payloads["false"] = (it ?: "").toString()
+                }
+                b.tpMqttPayloadTrueEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvTrue }
+                    getIconRes = { tile.iconResTrue }
+                    getIconColorPallet = { tile.colorPalletTrue }
+
+                    setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                    setIconKey = { key -> tile.iconKeyTrue = key }
+
+                    fm.replaceWith(TileIconFragment())
+                }
+
+                b.tpMqttPayloadFalseEditIcon.setOnClickListener {
+                    getIconHSV = { tile.hsvFalse }
+                    getIconRes = { tile.iconResFalse }
+                    getIconColorPallet = { tile.colorPalletFalse }
+
+                    setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                    setIconKey = { key -> tile.iconKeyFalse = key }
+
+                    fm.replaceWith(TileIconFragment())
+                }
+
+
+                b.tpMqttPayload.addTextChangedListener {
+                    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
+                }
+                b.tpLightsIncludePicker.setOnCheckedChangeListener { _, state ->
+                    tile.includePicker = state
+                    (if (tile.includePicker) VISIBLE else GONE).let {
+                        b.tpLightsColorRetain.visibility = it
+                        b.tpLightsColorTopics.visibility = it
+                        b.tpLightsTypeBox.visibility = it
+                        b.tpMqttPayloadBox.visibility = it
+                        b.tpLightsColorPathBox.visibility = it
+                        b.tpLightsPaintBox.visibility = it
+                    }
+                }
+                b.tpLightsDoPaint.setOnCheckedChangeListener { _, state ->
+                    tile.doPaint = state
+                    b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
+                }
+
+                b.tpLightsPaintRaw.setOnCheckedChangeListener { _, state ->
+                    tile.paintRaw = state
+                }
+                b.tpLightsShowPayload.setOnCheckedChangeListener { _, state ->
+                    tile.showPayload = state
+                }
+                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
+                    tile.mqtt.payloadIsJson = state
+                    b.tpLightsPaths.visibility = if (state) VISIBLE else GONE
+                }
+                b.tpLightsColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
+                    tile.colorType = when (id) {
+                        R.id.tp_lights_hsv -> "hsv"
+                        R.id.tp_lights_hex -> "hex"
+                        R.id.tp_lights_rgb -> "rgb"
+                        else -> "hex"
+                    }
+
+                    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
+                    b.tpMqttPayloadHint.text =
+                        "Use ${
+                            when (tile.colorType) {
+                                "hsv" -> "@h, @s, @v"
+                                "hex" -> "@hex"
+                                "rgb" -> "@r, @g, @b"
+                                else -> "@hex"
+                            }
+                        } to insert current value."
+                }
+
+
+                setupOptionsRecyclerView(tile.modes, b.tpLightsRecyclerView, b.tpLightsAdd)
+ */

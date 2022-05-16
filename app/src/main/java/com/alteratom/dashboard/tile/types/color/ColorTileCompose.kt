@@ -10,13 +10,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.color.ColorTile
 
-object ColorTileCompose : TilePropType {
+object ColorTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as ColorTile
@@ -24,8 +24,8 @@ object ColorTileCompose : TilePropType {
         var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
         var type by remember { mutableStateOf(tile.colorType) }
 
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication0()
 
                 EditText(
@@ -52,7 +52,7 @@ object ColorTileCompose : TilePropType {
                 Communication1()
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "color") {
                 Column {

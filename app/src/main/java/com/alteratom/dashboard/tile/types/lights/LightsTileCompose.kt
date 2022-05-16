@@ -14,13 +14,13 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.lights.LightsTile
 
-object LightsTileCompose : TilePropType {
+object LightsTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as LightsTile
@@ -28,8 +28,8 @@ object LightsTileCompose : TilePropType {
         var type by remember { mutableStateOf(tile.colorType) }
         var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
 
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -318,7 +318,7 @@ object LightsTileCompose : TilePropType {
                 })
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "lights") {
                 Column {

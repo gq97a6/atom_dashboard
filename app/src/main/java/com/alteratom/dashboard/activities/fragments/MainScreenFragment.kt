@@ -14,6 +14,7 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.ToolBarController
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.Daemon

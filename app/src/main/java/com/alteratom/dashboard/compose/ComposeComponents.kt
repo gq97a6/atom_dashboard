@@ -226,9 +226,7 @@ fun LabeledCheckbox(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ) {
     Row(
-        modifier = modifier
-            .nrClickable(onClick = { onCheckedChange(!checked) })
-            .fillMaxWidth(),
+        modifier = modifier.nrClickable(onClick = { onCheckedChange(!checked) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(

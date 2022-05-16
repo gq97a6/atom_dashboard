@@ -8,23 +8,23 @@ import com.alteratom.dashboard.FrameBox
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.pick.SelectTile
 
-object SelectTileCompose : TilePropType {
+object SelectTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as SelectTile
 
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication()
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "select") {
                 Row {

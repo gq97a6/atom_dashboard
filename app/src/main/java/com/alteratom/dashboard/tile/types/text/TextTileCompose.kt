@@ -11,18 +11,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.button.TextTile
 
-object TextTileCompose : TilePropType {
+object TextTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as TextTile
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication0()
 
                 var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
@@ -60,7 +60,7 @@ object TextTileCompose : TilePropType {
                 Communication1()
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "text") {
                 Row {

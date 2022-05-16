@@ -1,43 +1,31 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
-import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.blink
-import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
-import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
-import com.alteratom.dashboard.recycler_view.RecyclerViewItem
-import com.alteratom.dashboard.switcher.FragmentSwitcher
-import com.alteratom.dashboard.toPem
-import com.alteratom.databinding.DialogCopyBrokerBinding
-import com.alteratom.databinding.DialogSslBinding
+import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.databinding.FragmentDashboardPropertiesBinding
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import java.util.*
-import kotlin.random.Random
 
 class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_properties) {
     private lateinit var b: FragmentDashboardPropertiesBinding
@@ -48,10 +36,49 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        b = FragmentDashboardPropertiesBinding.inflate(inflater, container, false)
-        return b.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ComposeTheme(Theme.isDark) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Surface(modifier = Modifier.padding(16.dp)) {
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                Text(
+                                    text = "Dashboard",
+                                    fontSize = 45.sp,
+                                    color = Theme.colors.color
+
+                                )
+                                Text(
+                                    modifier = Modifier.offset(y = -10.dp),
+                                    text = "properties",
+                                    fontSize = 35.sp,
+                                    color = Theme.colors.a
+
+                                )
+
+                                var name by remember { mutableStateOf(dashboard.name) }
+                                EditText(
+                                    label = { Text("Dashboard name") },
+                                    value = name,
+                                    onValueChange = {
+                                        name = it
+                                        dashboard.name = it
+                                    }
+                                )
+
+                                DashboardPropertiesCompose.compose(dashboard.type)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
+/*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -337,7 +364,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
             fun openCert() {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
-                    type = "*/*"
+                    type = "" todo
                 }
                 openCert.launch(intent)
             }
@@ -386,15 +413,5 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
         b.dpMqttClientId.setText(dashboard.mqtt.clientId)
     }
 
-    private fun switchMqttCred(state: Boolean? = null) {
-        b.dpMqttCredBox.let {
-            b.dpMqttCredArrow.animate()
-                .rotation(if (state ?: it.isVisible) 180f else 0f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
-
-            it.visibility = if (state ?: it.isVisible) View.GONE else View.VISIBLE
-            b.dpMqttPass.requestFocus()
-            b.dpMqttPass.clearFocus()
-        }
-    }
+*/
 }

@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
 
-object MqttTilePropCom {
+object TilePropertiesMqttCompose {
 
     @Composable
     fun Communication0() {

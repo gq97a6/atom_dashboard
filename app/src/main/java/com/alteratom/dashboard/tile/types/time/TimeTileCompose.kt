@@ -7,21 +7,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.time.TimeTile
 
-object TimeTileCompose : TilePropType {
+object TimeTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as TimeTile
 
         var type by remember { mutableStateOf(if (tile.isDate) 0 else 1) }
 
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication0()
 
                 var pub by remember {
@@ -46,7 +46,7 @@ object TimeTileCompose : TilePropType {
                 Communication1()
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "time") {
                 Column {

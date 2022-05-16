@@ -1,18 +1,18 @@
 package com.alteratom.tile.types.button.compose
 
 import androidx.compose.runtime.Composable
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 
-object ButtonTileCompose : TilePropType {
+object ButtonTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication()
             }
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
         }
     }
 

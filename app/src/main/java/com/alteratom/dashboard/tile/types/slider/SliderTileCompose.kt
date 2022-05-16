@@ -17,19 +17,19 @@ import com.alteratom.dashboard.FrameBox
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.slider.SliderTile
 
-object SliderTileCompose : TilePropType {
+object SliderTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as SliderTile
 
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication0()
 
                 var pub by remember { mutableStateOf("false") }
@@ -50,7 +50,7 @@ object SliderTileCompose : TilePropType {
                 Communication1()
             }
 
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
 
             FrameBox(a = "Type specific: ", b = "slider") {
                 Column {

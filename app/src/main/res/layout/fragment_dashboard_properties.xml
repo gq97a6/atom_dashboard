@@ -9,7 +9,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingTop="30dp"
-    tools:context=".dashboard.activities.fragments.DashboardPropertiesFragment">
+    tools:context=".dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment">
 
     <TextView
         android:id="@+id/test"

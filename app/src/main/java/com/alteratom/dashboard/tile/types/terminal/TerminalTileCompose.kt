@@ -10,16 +10,16 @@ import androidx.compose.ui.unit.dp
 import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.RadioGroup
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 
-object TerminalTileCompose : TilePropType {
+object TerminalTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Communication0()
 
                 var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
@@ -56,7 +56,7 @@ object TerminalTileCompose : TilePropType {
 
                 Communication1()
             }
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
         }
     }
 

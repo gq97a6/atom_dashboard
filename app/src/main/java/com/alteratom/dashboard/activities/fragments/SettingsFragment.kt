@@ -50,7 +50,7 @@ import java.io.FileOutputStream
 import java.io.InputStreamReader
 
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment() {
 
     private lateinit var open: ActivityResultLauncher<Intent>
     private lateinit var create: ActivityResultLauncher<Intent>

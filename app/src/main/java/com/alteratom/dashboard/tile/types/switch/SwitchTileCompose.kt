@@ -19,17 +19,17 @@ import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.switch.SwitchTile
 
-object SwitchTileCompose : TilePropType {
+object SwitchTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as SwitchTile
-        TilePropComp.Box {
-            TilePropComp.CommunicationBox {
+        TilePropertiesCompse.Box {
+            TilePropertiesCompse.CommunicationBox {
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -108,7 +108,7 @@ object SwitchTileCompose : TilePropType {
 
                 Communication()
             }
-            TilePropComp.Notification()
+            TilePropertiesCompse.Notification()
         }
     }
 

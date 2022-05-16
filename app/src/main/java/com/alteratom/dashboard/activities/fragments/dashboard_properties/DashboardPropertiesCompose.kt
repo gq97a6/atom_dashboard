@@ -1,5 +1,9 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.view.View
 import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -17,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontStyle.Companion.Normal
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,12 +28,107 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.databinding.DialogSslBinding
+import kotlin.random.Random
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
+
+    fun editSsl(context: Context) {
+
+        val dialog = Dialog(context)
+
+        dialog.setContentView(R.layout.dialog_ssl)
+        val binding = DialogSslBinding.bind(dialog.findViewById(R.id.root))
+
+        binding.dsSsl.isChecked = dashboard.mqtt.ssl
+        binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+        binding.dsCaCert.text = dashboard.mqtt.sslFileName
+        binding.dsTrustAlert.visibility =
+            if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
+        if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
+
+        if (dashboard.mqtt.sslCert != null) binding.dsCaCertInsert.foreground =
+            context.getDrawable(R.drawable.bt_remove)
+
+        binding.dsSsl.setOnCheckedChangeListener { _, state ->
+            dashboard.mqtt.ssl = state
+            dashboard.daemon.notifyOptionsChanged()
+        }
+
+        binding.dsTrustAll.setOnTouchListener { v, event ->
+            if (event.action != 0) return@setOnTouchListener true
+
+            fun validate() {
+                binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+                binding.dsTrustAlert.visibility =
+                    if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
+
+                if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
+                else binding.dsTrustAlert.clearAnimation()
+
+                dashboard.daemon.notifyOptionsChanged()
+            }
+
+            if (!dashboard.mqtt.sslTrustAll) {
+                context.buildConfirm("Confirm override", "CONFIRM",
+                    {
+                        dashboard.mqtt.sslTrustAll = true
+                        validate()
+                    }
+                )
+            } else {
+                dashboard.mqtt.sslTrustAll = false
+                validate()
+            }
+
+            return@setOnTouchListener true
+        }
+
+        (context as DashboardPropertiesFragment).onOpenCertSuccess = {
+            binding.dsCaCert.text = dashboard.mqtt.sslFileName
+            binding.dsCaCertInsert.foreground =
+                context.getDrawable(R.drawable.bt_remove)
+
+            dashboard.daemon.notifyOptionsChanged()
+        }
+
+        fun openCert() {
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+            }
+            (context as DashboardPropertiesFragment).openCert.launch(intent)
+        }
+
+        binding.dsCaCert.setOnClickListener {
+            if (dashboard.mqtt.sslCert == null) openCert()
+        }
+
+        binding.dsCaCertInsert.setOnClickListener {
+            if (dashboard.mqtt.sslCert == null) openCert()
+            else {
+                dashboard.mqtt.sslFileName = ""
+                dashboard.mqtt.sslCertStr = null
+
+                binding.dsCaCert.text = ""
+                binding.dsCaCertInsert.foreground =
+                    context.getDrawable(R.drawable.bt_include)
+
+                dashboard.daemon.notifyOptionsChanged()
+            }
+        }
+
+        dialog.dialogSetup()
+        G.theme.apply(binding.root)
+        dialog.show()
+    }
+
     @Composable
-    override fun Mqttd() {
+    override fun Mqttd(context: Context) {
         FrameBox("Communication:", "MQTT") {
             Column {
                 var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
@@ -46,11 +144,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     onCheckedChange = {
                         enabled = it
                         dashboard.mqtt.isEnabled = it
+                        dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
                 OutlinedButton(
-                    modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(.8f),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(.8f),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
                     onClick = { }
@@ -64,18 +165,32 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     value = address,
                     onValueChange = {
                         address = it
-                        dashboard.mqtt.address = it
+                        it.trim().let {
+                            if (dashboard.mqtt.address != it) {
+                                dashboard.mqtt.address = it
+                                dashboard.daemon.notifyOptionsChanged()
+                            }
+                        }
                     }
                 )
 
-                var port by remember { mutableStateOf(dashboard.mqtt.port.toString()) }
+                var port by remember {
+                    mutableStateOf(dashboard.mqtt.port.let {
+                        if (it != -1) it.toString() else ""
+                    })
+                }
                 EditText(
-                    label = { Text("Dashboard name") },
+                    label = { Text("Port") },
                     value = port,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = {
                         port = it
-                        dashboard.mqtt.port = it.toInt()
+                        (it.trim().toIntOrNull() ?: (-1)).let {
+                            if (dashboard.mqtt.port != it) {
+                                dashboard.mqtt.port = it
+                                dashboard.daemon.notifyOptionsChanged()
+                            }
+                        }
                     }
                 )
 
@@ -85,15 +200,31 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     value = id,
                     onValueChange = {
                         id = it
-                        dashboard.mqtt.clientId = it
+                        it.trim().let {
+                            when {
+                                it.isBlank() -> {
+                                    dashboard.mqtt.clientId =
+                                        kotlin.math.abs(Random.nextInt()).toString()
+                                    id = dashboard.mqtt.clientId
+                                    dashboard.daemon.notifyOptionsChanged()
+                                }
+                                dashboard.mqtt.clientId != it -> {
+                                    dashboard.mqtt.clientId = it
+                                    dashboard.daemon.notifyOptionsChanged()
+                                }
+                            }
+                        }
                     }
                 )
 
                 OutlinedButton(
-                    modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(.8f).padding(top = 10.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth(.8f)
+                        .padding(top = 10.dp),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { }
+                    onClick = { editSsl(context) }
                 ) {
                     Text("CONFIGURE SSL", fontSize = 10.sp, color = Theme.colors.a)
                 }
@@ -110,7 +241,9 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 )
 
                 Row(
-                    Modifier.fillMaxWidth().padding(top = 10.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -127,6 +260,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             cred = it
                             show = it
                             dashboard.mqtt.includeCred = it
+                            dashboard.daemon.notifyOptionsChanged()
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
@@ -153,17 +287,23 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 ) {
                     Column {
                         var userHidden by remember { mutableStateOf(!dashboard.mqtt.username.isEmpty()) }
-                        var user by remember { mutableStateOf(if(userHidden) "hidden" else "") }
+                        var user by remember { mutableStateOf(if (userHidden) "hidden" else "") }
                         EditText(
                             label = { Text("User name") },
                             value = user,
-                            textStyle = TextStyle(fontStyle = if(userHidden) Italic else Normal),
+                            textStyle = TextStyle(fontStyle = if (userHidden) Italic else Normal),
                             onValueChange = {
-                                if(userHidden) {
+                                if (userHidden) {
                                     user = ""
                                     userHidden = false
                                 } else user = it
-                                dashboard.mqtt.username = user
+
+                                user.trim().let {
+                                    if (dashboard.mqtt.username != it) {
+                                        dashboard.mqtt.username = it
+                                        dashboard.daemon.notifyOptionsChanged()
+                                    }
+                                }
                             },
                             trailingIcon = {
                                 IconButton(onClick = {
@@ -181,17 +321,23 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         )
 
                         var passHidden by remember { mutableStateOf(!dashboard.mqtt.pass.isEmpty()) }
-                        var pass by remember { mutableStateOf(if(passHidden) "hidden" else "") }
+                        var pass by remember { mutableStateOf(if (passHidden) "hidden" else "") }
                         EditText(
                             label = { Text("Password") },
                             value = pass,
-                            textStyle = TextStyle(fontStyle = if(passHidden) Italic else Normal),
+                            textStyle = TextStyle(fontStyle = if (passHidden) Italic else Normal),
                             onValueChange = {
-                                if(passHidden) {
+                                if (passHidden) {
                                     pass = ""
                                     passHidden = false
                                 } else pass = it
-                                dashboard.mqtt.pass = pass
+
+                                pass.trim().let {
+                                    if (dashboard.mqtt.pass != it) {
+                                        dashboard.mqtt.pass = it
+                                        dashboard.daemon.notifyOptionsChanged()
+                                    }
+                                }
                             },
                             trailingIcon = {
                                 IconButton(onClick = {
@@ -214,6 +360,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(context: Context) {
     }
 }

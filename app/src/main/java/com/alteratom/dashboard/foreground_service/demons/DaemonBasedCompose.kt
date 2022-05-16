@@ -1,9 +1,17 @@
 package com.alteratom.dashboard.foreground_service.demons
 
+import android.content.Context
 import androidx.compose.runtime.Composable
-import com.alteratom.dashboard.foreground_service.demons.Daemon
 
 interface DaemonBasedCompose {
+    @Composable
+    fun compose(type: Daemon.Type, context: Context) {
+        when (type) {
+            Daemon.Type.MQTTD -> Mqttd(context)
+            Daemon.Type.BLUETOOTHD -> Bluetoothd(context)
+        }
+    }
+
     @Composable
     fun compose(type: Daemon.Type) {
         when (type) {
@@ -13,8 +21,18 @@ interface DaemonBasedCompose {
     }
 
     @Composable
-    fun Mqttd()
+    fun Mqttd(context: Context) {
+    }
 
     @Composable
-    fun Bluetoothd()
+    fun Bluetoothd(context: Context) {
+    }
+
+    @Composable
+    fun Mqttd() {
+    }
+
+    @Composable
+    fun Bluetoothd() {
+    }
 }

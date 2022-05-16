@@ -10,7 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.G
+import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose.ComposeTheme
@@ -34,7 +34,7 @@ class TilePropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        G.theme.apply(context = requireContext())
+        theme.apply(context = requireContext())
 
         return ComposeView(requireContext()).apply {
             setContent {

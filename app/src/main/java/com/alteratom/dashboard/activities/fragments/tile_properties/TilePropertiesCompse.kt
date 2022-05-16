@@ -83,7 +83,9 @@ object TilePropertiesCompse {
             }
         }
 
-        NavigationArrows({ TileSwitcher.switch(true) }, { TileSwitcher.switch(false) })
+        if (!G.settings.hideNav) NavigationArrows(
+            { TileSwitcher.switch(true) },
+            { TileSwitcher.switch(false) })
     }
 
     @Composable

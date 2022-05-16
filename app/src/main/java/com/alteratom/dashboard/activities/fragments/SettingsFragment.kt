@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -207,6 +209,22 @@ class SettingsFragment : Fragment() {
                                             onCheckedChange = {
                                                 last = it
                                                 settings.startFromLast = it
+                                            },
+                                        )
+
+                                        var switch by remember { mutableStateOf(settings.hideNav) }
+                                        LabeledSwitch(
+                                            label = {
+                                                Text(
+                                                    "Hide navigation arrows:",
+                                                    fontSize = 15.sp,
+                                                    color = colors.a
+                                                )
+                                            },
+                                            checked = switch,
+                                            onCheckedChange = {
+                                                switch = it
+                                                settings.hideNav = it
                                             },
                                         )
                                     }

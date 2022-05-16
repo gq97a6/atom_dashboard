@@ -6,8 +6,23 @@ add transfer pick dashboards
 add demons placeholders
 color picker change in theme color setting
 check thermostat
-hide switch buttons on 1 dashboard
-toolbar background color
+
+Compose:
+    splash
+    color picker
+    confirm
+    copy broker
+    lights
+    select
+    slider
+    ssl
+    text
+    thermostat
+    time
+    transfer
+    theme
+    ?icon
+    tile new
 
 //post development ------------------------------
 hardcoded text

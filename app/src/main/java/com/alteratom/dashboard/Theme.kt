@@ -194,7 +194,7 @@ class Theme {
                 //drawable?.mutate()
                 drawable?.setStroke(2, p.color)
             }
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 200))
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 100))
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
     }

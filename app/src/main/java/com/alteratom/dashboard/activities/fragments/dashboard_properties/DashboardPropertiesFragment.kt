@@ -30,19 +30,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.databinding.DialogCopyBrokerBinding
-import com.alteratom.databinding.FragmentDashboardPropertiesBinding
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
 
-class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_properties) {
-    private lateinit var b: FragmentDashboardPropertiesBinding
+class DashboardPropertiesFragment : Fragment() {
 
     var onOpenCertSuccess: () -> Unit = {}
     lateinit var openCert: ActivityResultLauncher<Intent>
@@ -79,7 +82,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                 G.dashboard.mqtt.clientId = abs(Random.nextInt()).toString()
                 G.dashboard.daemon.notifyOptionsChanged()
 
-                //viewConfig()
+                fm.replaceWith(DashboardPropertiesFragment(), false)
                 dialog.dismiss()
             }
 
@@ -197,6 +200,13 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                                 )
                             }
                         }
+                    }
+
+                    if(!settings.hideNav) {
+                        NavigationArrows(
+                            { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) },
+                            { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) }
+                        )
                     }
                 }
             }

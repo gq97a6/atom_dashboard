@@ -27,10 +27,6 @@ class SplashScreenActivity : AppCompatActivity() {
 
         rootFolder = filesDir.canonicalPath.toString()
 
-        //G.initialize()
-        //G.theme.a.hsv = floatArrayOf(41f, 1f, 1f)
-        //onServiceReady()
-
         if (service?.isRunning == true && dashboards.isNotEmpty()) {
             G.theme.apply(b.root, this)
             onServiceReady()

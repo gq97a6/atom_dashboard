@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
@@ -89,6 +90,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                     }
                 }
             }
+        }
+
+        if (dashboards.size < 2 || settings.hideNav) {
+            b.dLeft.visibility = GONE
+            b.dRight.visibility = GONE
         }
 
         fun updateTilesStatus() {

@@ -23,11 +23,13 @@ class SwitchTile : com.alteratom.dashboard.tile.Tile() {
 
     var iconKeyTrue = "il_interface_toggle_on"
     val iconResTrue: Int
-        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res ?: R.drawable.il_interface_toggle_on
+        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res
+            ?: R.drawable.il_interface_toggle_on
 
     var iconKeyFalse = "il_interface_toggle_off"
     val iconResFalse: Int
-        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res ?: R.drawable.il_interface_toggle_off
+        get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
+            ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
     val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
@@ -65,7 +67,10 @@ class SwitchTile : com.alteratom.dashboard.tile.Tile() {
         )
     }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility =

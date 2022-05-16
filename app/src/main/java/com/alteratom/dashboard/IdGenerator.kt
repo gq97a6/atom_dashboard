@@ -24,6 +24,6 @@ object IdGenerator {
 
         fun reportTakenId() = reportTakenId(id)
 
-        fun obtainNewId(): Long  = IdGenerator.obtainNewId()
+        fun obtainNewId(): Long = IdGenerator.obtainNewId()
     }
 }

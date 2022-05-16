@@ -2,7 +2,6 @@ package com.alteratom.tile.types.color.compose
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -13,9 +12,10 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.RadioGroup
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
-import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
 
-object TerminalTileCompose : ComposeObject {
+object TerminalTileCompose : TilePropType {
     @Composable
     override fun Mqttd() {
         TilePropComp.Box {

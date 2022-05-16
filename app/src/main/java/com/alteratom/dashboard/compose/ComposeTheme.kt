@@ -1,13 +1,14 @@
 package com.alteratom.dashboard.compose
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
-import com.alteratom.testjetpackcompose.ui.theme.ComposeShapes
-import com.alteratom.testjetpackcompose.ui.theme.ComposeTypography
 import androidx.compose.ui.graphics.Color as C
 
 val DarkColorPalette = darkColors(
@@ -43,8 +44,11 @@ fun ComposeTheme(
 ) {
     MaterialTheme(
         colors = if (darkTheme) DarkColorPalette else LightColorPalette,
-        typography = ComposeTypography,
-        shapes = ComposeShapes,
+        shapes = Shapes(
+            small = RoundedCornerShape(4.dp),
+            medium = RoundedCornerShape(4.dp),
+            large = RoundedCornerShape(0.dp)
+        ),
         content = content
     )
 }

@@ -18,6 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G.getIconColorPallet
+import com.alteratom.dashboard.G.getIconHSV
+import com.alteratom.dashboard.G.getIconRes
+import com.alteratom.dashboard.G.setIconHSV
+import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.switcher.TileSwitcher
@@ -37,12 +42,12 @@ object TilePropComp {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
-                            G.getIconHSV = { G.tile.hsv }
-                            G.getIconRes = { G.tile.iconRes }
-                            G.getIconColorPallet = { G.tile.pallet }
+                            getIconHSV = { G.tile.hsv }
+                            getIconRes = { G.tile.iconRes }
+                            getIconColorPallet = { G.tile.pallet }
 
-                            G.setIconHSV = { hsv -> G.tile.hsv = hsv }
-                            G.setIconKey = { key -> G.tile.iconKey = key }
+                            setIconHSV = { hsv -> G.tile.hsv = hsv }
+                            setIconKey = { key -> G.tile.iconKey = key }
 
                             MainActivity.fm.replaceWith(TileIconFragment())
                         },
@@ -82,7 +87,10 @@ object TilePropComp {
     }
 
     @Composable
-    inline fun CommunicationBox(type: String = "MQTT", crossinline content: @Composable () -> Unit) {
+    inline fun CommunicationBox(
+        type: String = "MQTT",
+        crossinline content: @Composable () -> Unit
+    ) {
         var show by remember { mutableStateOf(G.settings.mqttTabShow) }
         var enabled by remember { mutableStateOf(G.dashboard.mqtt.isEnabled) }
         val rotation = if (show) 0f else 180f

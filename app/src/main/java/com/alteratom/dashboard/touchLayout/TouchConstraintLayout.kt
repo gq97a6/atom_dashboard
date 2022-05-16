@@ -10,7 +10,7 @@ class TouchConstraintLayout(
     attrs: AttributeSet?,
     defStyleAttr: Int,
     defStyleRes: Int
-) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes)  {
+) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     var onInterceptTouch: (ev: MotionEvent?) -> Boolean = { false }
 

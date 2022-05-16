@@ -9,7 +9,8 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.google.android.material.slider.Slider
 import java.util.*
 
-class IconAdapter(context: Context, spanCount: Int) : RecyclerViewAdapter<Icon>(context, spanCount) {
+class IconAdapter(context: Context, spanCount: Int) :
+    RecyclerViewAdapter<Icon>(context, spanCount) {
 
     private var iconCount = 0
     var onColorChange: (FloatArray, ColorPallet) -> Unit = { _, _ -> }

@@ -4,43 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
-import com.alteratom.R
-import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.getIconColorPallet
-import com.alteratom.dashboard.G.getIconHSV
-import com.alteratom.dashboard.G.getIconRes
-import com.alteratom.dashboard.G.setIconHSV
-import com.alteratom.dashboard.G.setIconKey
-import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.Theme.Companion.artist
-import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.switcher.TileSwitcher
-import com.alteratom.databinding.FragmentTilePropertiesBinding
 import com.alteratom.tile.types.button.ButtonTile
 import com.alteratom.tile.types.button.TextTile
 import com.alteratom.tile.types.button.compose.ButtonTileCompose
@@ -53,19 +26,15 @@ import com.alteratom.tile.types.switch.SwitchTile
 import com.alteratom.tile.types.terminal.TerminalTile
 import com.alteratom.tile.types.thermostat.ThermostatTile
 import com.alteratom.tile.types.time.TimeTile
-import java.util.*
 
-class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
-    private lateinit var b: FragmentTilePropertiesBinding
+class TilePropertiesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().window.statusBarColor = artist.pallet.background
-        WindowInsetsControllerCompat(requireActivity().window, requireActivity().window.decorView)
-            .isAppearanceLightStatusBars = !isDark
+        G.theme.apply(context = requireContext())
 
         return ComposeView(requireContext()).apply {
             setContent {
@@ -93,15 +62,6 @@ class TilePropertiesFragment : Fragment(R.layout.fragment_tile_properties) {
                 }
             }
         }
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        //b.tpRoot.onInterceptTouch = { e ->
-        //    TileSwitcher.handle(e)
-        //}
     }
 }
 

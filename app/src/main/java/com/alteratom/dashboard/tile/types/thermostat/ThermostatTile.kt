@@ -88,7 +88,17 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
     var humidityStep = 5f
     var temperatureStep = 0.5f
     var temperatureRange = mutableListOf(15, 30)
-    val modes = mutableListOf("Auto" to "0", "Heat" to "1", "Cool" to "2", "Off" to "3", "Off" to "3", "Off3" to "3", "Off4" to "3", "Off6" to "3", "Off7" to "3")
+    val modes = mutableListOf(
+        "Auto" to "0",
+        "Heat" to "1",
+        "Cool" to "2",
+        "Off" to "3",
+        "Off" to "3",
+        "Off3" to "3",
+        "Off4" to "3",
+        "Off6" to "3",
+        "Off7" to "3"
+    )
     val retain = mutableListOf(false, false, false) //temp, humi, mode
 
     var includeHumiditySetpoint = false

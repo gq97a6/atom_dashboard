@@ -13,7 +13,8 @@ import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.random.Random
 
-open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) : RecyclerViewItem() {
+open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) :
+    RecyclerViewItem() {
 
     override val layout
         get() = R.layout.item_dashboard

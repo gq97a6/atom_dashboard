@@ -15,6 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.ColorUtils.blendARGB
@@ -35,33 +38,27 @@ class Theme {
     val a = Artist()
 
     companion object {
-        val artist
-            get() = theme.a
-
         val colors
             get() = theme.a.pallet.cc
-
-        val pallet
-            get() = theme.a.pallet
 
         val isDark
             get() = theme.a.isDark
     }
 
     fun apply(
-        viewGroup: ViewGroup,
+        viewGroup: ViewGroup? = null,
         context: Context? = null,
         anim: Boolean = true,
         colorPallet: ColorPallet = a.pallet
     ) {
-        context?.let {
+        (context as? Activity?)?.let {
             it.setTheme(R.style.theme)
 
             try {
                 WindowInsetsControllerCompat(
-                    (it as Activity).window,
-                    viewGroup
-                ).isAppearanceLightStatusBars = !a.isDark
+                    it.window,
+                    it.window.decorView
+                ).isAppearanceLightStatusBars = !isDark
 
                 it.window.statusBarColor = colorPallet.background
             } catch (e: Exception) {
@@ -69,8 +66,8 @@ class Theme {
             }
         }
 
-        viewGroup.applyTheme(colorPallet)
-        if (anim) viewGroup.applyAnimations()
+        viewGroup?.applyTheme(colorPallet)
+        if (anim) viewGroup?.applyAnimations()
     }
 
     private fun ViewGroup.applyTheme(p: ColorPallet) {
@@ -175,7 +172,7 @@ class Theme {
             "splashIcon" -> {
                 this.setBackgroundResource(if (isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
                 this.background.colorFilter =
-                    PorterDuffColorFilter(artist.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
+                    PorterDuffColorFilter(a.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
             }
             else -> onUnknownTag(this.tag, "view")
         }
@@ -183,7 +180,7 @@ class Theme {
 
     private fun FrameLayout.applyTheme(p: ColorPallet) {
         when (this.tag) {
-            "corners" -> this.backgroundTintList = ColorStateList.valueOf(p.d.alpha(100))
+            "corners" -> this.backgroundTintList = ColorStateList.valueOf(p.d.alpha(120))
             "background" -> this.setBackgroundColor(p.background)
             else -> onUnknownTag(this.tag, "frameLayout")
         }

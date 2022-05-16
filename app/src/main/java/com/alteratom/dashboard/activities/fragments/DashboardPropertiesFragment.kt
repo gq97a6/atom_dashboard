@@ -84,7 +84,9 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
                             "CONNECTED"
                         }
                     }
-                    else -> {"err"}
+                    else -> {
+                        "err"
+                    }
                 }
             }
         }

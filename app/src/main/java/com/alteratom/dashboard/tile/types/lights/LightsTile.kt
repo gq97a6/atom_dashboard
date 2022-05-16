@@ -48,7 +48,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
     var mode: String? = null
     private var hsvPicked = floatArrayOf(0f, 0f, 0f)
     private var brightness: Int? = null
-    private var toRemoves = mutableMapOf<String, MutableList<String>>()
+    private var toRemoves = mutableMapOf<Int, MutableList<String>>()
     private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
@@ -65,17 +65,17 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
             ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
-    val colorPalletTrue: com.alteratom.dashboard.Theme.ColorPallet
+    val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
         get() = com.alteratom.dashboard.G.theme.a.getColorPallet(hsvTrue, true)
 
     var hsvFalse = floatArrayOf(0f, 0f, 0f)
-    val colorPalletFalse: com.alteratom.dashboard.Theme.ColorPallet
+    val palletFalse: com.alteratom.dashboard.Theme.ColorPallet
         get() = com.alteratom.dashboard.G.theme.a.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {
-            true -> colorPalletTrue
-            false -> colorPalletFalse
+            true -> palletTrue
+            false -> palletFalse
             null -> pallet
         }
 
@@ -97,28 +97,23 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
     var paintRaw = true
     var doPaint = false
 
-    var colorType = "hex"
+    var colorType = 1 //0-HSV 1-HEX 2-RGB
         set(value) {
             field = value
 
-            mqtt.payloads[colorType]?.let { pattern ->
+            mqtt.payloads[colorType.toString()]?.let { pattern ->
                 when (colorType) {
-                    "hsv" -> {
-                        toRemoves["hsv"] = Regex("@[hsv]").split(pattern) as MutableList
-                        toRemoves["hsv"]?.removeIf { it.isEmpty() }
+                    1 -> {
+                        toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[hsv]").findAll(pattern).map { it.value }
                         flagIndexes["h"] = indexes.indexOf("h")
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
-                    "hex" -> {
-                        toRemoves["hex"] = Regex("@hex").split(pattern) as MutableList
-                        toRemoves["hex"]?.removeIf { it.isEmpty() }
-                    }
-                    "rgb" -> {
-                        toRemoves["rgb"] = Regex("@[rgb]").split(pattern) as MutableList
-                        toRemoves["rgb"]?.removeIf { it.isEmpty() }
+                    2 -> toRemoves[2] = Regex("@hex").split(pattern) as MutableList
+                    3 -> {
+                        toRemoves[3] = Regex("@[rgb]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[rgb]").findAll(pattern).map { it.value }
                         flagIndexes["r"] = indexes.indexOf("r")
@@ -127,6 +122,8 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                     }
                     else -> {}
                 }
+
+                toRemoves[colorType]?.removeIf { it.isEmpty() }
             }
         }
 
@@ -237,13 +234,13 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                 send("$brightnessTmp", mqtt.pubs["bright"], mqtt.qos, retain[1], true)
                 if (includePicker) send(
                     when (colorType) {
-                        "hsv" -> {
+                        0 -> {
                             (mqtt.payloads["hsv"] ?: "")
                                 .replace("@h", hsvPickedTmp[0].toInt().toString())
                                 .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                                 .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                         }
-                        "hex" -> {
+                        1 -> {
                             val c = HSVToColor(hsvPickedTmp)
                             (mqtt.payloads["hex"] ?: "")
                                 .replace(
@@ -251,7 +248,7 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                        "rgb" -> {
+                        2 -> {
                             val c = HSVToColor(hsvPickedTmp)
                             (mqtt.payloads["rgb"] ?: "")
                                 .replace("@r", c.red.toString())
@@ -406,15 +403,15 @@ class LightsTile : com.alteratom.dashboard.tile.Tile() {
                     v.removeIf { it.isEmpty() }
 
                     when (colorType) {
-                        "hex" -> Color.colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
-                        "hsv" -> {
+                        0 -> Color.colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
+                        1 -> {
                             hsvPicked = floatArrayOf(
                                 v[flagIndexes["h"]!!].toFloat(),
                                 v[flagIndexes["s"]!!].toFloat() / 100,
                                 v[flagIndexes["v"]!!].toFloat() / 100
                             )
                         }
-                        "rgb" -> {
+                        2 -> {
                             Color.colorToHSV(
                                 Color.rgb(
                                     v[flagIndexes["r"]!!].toInt(),

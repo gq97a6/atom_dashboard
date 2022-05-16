@@ -7,6 +7,7 @@ add demons placeholders
 color picker change in theme color setting
 check thermostat
 hide switch buttons on 1 dashboard
+toolbar background color
 
 //post development ------------------------------
 hardcoded text

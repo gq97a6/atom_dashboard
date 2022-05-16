@@ -12,16 +12,21 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
-import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
 import com.alteratom.tile.types.lights.LightsTile
 
-object LightsTileCompose : ComposeObject {
+object LightsTileCompose : TilePropType {
     @Composable
     override fun Mqttd() {
         val tile = tile as LightsTile
+
+        var type by remember { mutableStateOf(tile.colorType) }
+        var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
 
         TilePropComp.Box {
             TilePropComp.CommunicationBox {
@@ -31,15 +36,28 @@ object LightsTileCompose : ComposeObject {
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
-                        onClick = {},
+                        onClick = {
+                            G.getIconHSV = { tile.hsvTrue }
+                            G.getIconRes = { tile.iconResTrue }
+                            G.getIconColorPallet = { tile.palletFalse }
+
+                            G.setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                            G.setIconKey = { key -> tile.iconKeyTrue = key }
+
+                            MainActivity.fm.replaceWith(TileIconFragment())
+                        },
                         border = BorderStroke(0.dp, Theme.colors.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)
                     ) {
-                        Icon(painterResource(tile.iconResFalse), "")
+                        Icon(
+                            painterResource(tile.iconResFalse),
+                            "",
+                            tint = tile.palletFalse.cc.color
+                        )
                     }
-                    tile.colorType
+
                     var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
                     EditText(
                         label = { Text("Off payload") },
@@ -58,13 +76,22 @@ object LightsTileCompose : ComposeObject {
                 ) {
                     OutlinedButton(
                         contentPadding = PaddingValues(13.dp),
-                        onClick = {},
+                        onClick = {
+                            G.getIconHSV = { tile.hsvTrue }
+                            G.getIconRes = { tile.iconResTrue }
+                            G.getIconColorPallet = { tile.palletTrue }
+
+                            G.setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                            G.setIconKey = { key -> tile.iconKeyTrue = key }
+
+                            MainActivity.fm.replaceWith(TileIconFragment())
+                        },
                         border = BorderStroke(0.dp, Theme.colors.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)
                     ) {
-                        Icon(painterResource(tile.iconResTrue), "")
+                        Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
                     }
 
                     var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
@@ -78,6 +105,27 @@ object LightsTileCompose : ComposeObject {
                         modifier = Modifier.padding(start = 12.dp)
                     )
                 }
+
+                EditText(
+                    label = { Text("Color publish payload") },
+                    value = pub,
+                    onValueChange = {
+                        pub = it
+                        tile.mqtt.payloads[type.toString()] = it
+                    }
+                )
+                Text(
+                    "Use ${
+                        when (type) {
+                            0 -> "@h, @s, @v"
+                            1 -> "@hex"
+                            2 -> "@r, @g, @b"
+                            else -> "@hex"
+                        }
+                    } to insert current value.",
+                    fontSize = 13.sp,
+                    color = Theme.colors.a
+                )
 
                 Divider(
                     color = Theme.colors.b, thickness = 0.dp, modifier = Modifier
@@ -104,7 +152,7 @@ object LightsTileCompose : ComposeObject {
                         tile.mqtt.pubs["state"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { statePub = stateSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -139,7 +187,7 @@ object LightsTileCompose : ComposeObject {
                         tile.mqtt.pubs["bright"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { brightPub = brightSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -174,7 +222,7 @@ object LightsTileCompose : ComposeObject {
                         tile.mqtt.pubs["color"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { colorPub = colorSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -209,7 +257,7 @@ object LightsTileCompose : ComposeObject {
                         tile.mqtt.pubs["mode"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { modePub = modeSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -306,7 +354,6 @@ object LightsTileCompose : ComposeObject {
                         },
                     )
 
-                    var type by remember { mutableStateOf(0) }
                     HorizontalRadioGroup(
                         listOf(
                             "HSV",
@@ -317,6 +364,8 @@ object LightsTileCompose : ComposeObject {
                         type,
                         {
                             type = it
+                            tile.colorType = it
+                            pub = tile.mqtt.payloads[tile.colorType.toString()] ?: ""
                         },
                     )
 
@@ -330,7 +379,10 @@ object LightsTileCompose : ComposeObject {
                             )
                         },
                         checked = paint,
-                        onCheckedChange = { paint = it },
+                        onCheckedChange = {
+                            paint = it
+                            tile.doPaint = it
+                        },
                     )
 
                     var raw by remember { mutableStateOf(tile.paintRaw) }
@@ -367,8 +419,10 @@ object LightsTileCompose : ComposeObject {
                             )
                         },
                         checked = stateRet,
-                        onCheckedChange = { stateRet = it
-                            tile.retain[0] = it},
+                        onCheckedChange = {
+                            stateRet = it
+                            tile.retain[0] = it
+                        },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
@@ -382,7 +436,10 @@ object LightsTileCompose : ComposeObject {
                             )
                         },
                         checked = brightRet,
-                        onCheckedChange = { brightRet = it },
+                        onCheckedChange = {
+                            brightRet = it
+                            tile.retain[1] = it
+                        },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
@@ -396,7 +453,10 @@ object LightsTileCompose : ComposeObject {
                             )
                         },
                         checked = colorRet,
-                        onCheckedChange = { colorRet = it },
+                        onCheckedChange = {
+                            colorRet = it
+                            tile.retain[2] = it
+                        },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
 
@@ -410,13 +470,16 @@ object LightsTileCompose : ComposeObject {
                             )
                         },
                         checked = modeRet,
-                        onCheckedChange = { modeRet = it },
+                        onCheckedChange = {
+                            modeRet = it
+                            tile.retain[3] = it
+                        },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
                 }
             }
 
-            val m = (tile as LightsTile).modes
+            val m = tile.modes
             PairList(
                 m,
                 { m.removeAt(it) },
@@ -431,122 +494,3 @@ object LightsTileCompose : ComposeObject {
     override fun Bluetoothd() {
     }
 }
-/*
-
-                b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
-
-                b.tpMqttPayloadTag.text = "Color publish payload"
-                b.tpMqttPayloadHint.text =
-                    "Use ${
-                        when (tile.colorType) {
-                            "hsv" -> "@h, @s, @v"
-                            "hex" -> "@hex"
-                            "rgb" -> "@r, @g, @b"
-                            else -> "@hex"
-                        }
-                    } to insert current value."
-                b.tpLightsColorType.check(
-                    when (tile.colorType) {
-                        "hsv" -> R.id.tp_lights_hsv
-                        "hex" -> R.id.tp_lights_hex
-                        "rgb" -> R.id.tp_lights_rgb
-                        else -> R.id.tp_lights_hsv
-                    }
-                )
-
-
-                b.tpLightsStatePubCopy.setOnClickListener {
-                    b.tpLightsStatePub.text = b.tpLightsStateSub.text
-                }
-                b.tpLightsColorPubCopy.setOnClickListener {
-                    b.tpLightsColorPub.text = b.tpLightsColorSub.text
-                }
-                b.tpLightsBrightnessPubCopy.setOnClickListener {
-                    b.tpLightsBrightnessPub.text = b.tpLightsBrightnessSub.text
-                }
-                b.tpLightsModePubCopy.setOnClickListener {
-                    b.tpLightsModePub.text = b.tpLightsModeSub.text
-                }
-
-
-                b.tpMqttPayloadTrue.addTextChangedListener {
-                    tile.mqtt.payloads["true"] = (it ?: "").toString()
-                }
-                b.tpMqttPayloadFalse.addTextChangedListener {
-                    tile.mqtt.payloads["false"] = (it ?: "").toString()
-                }
-                b.tpMqttPayloadTrueEditIcon.setOnClickListener {
-                    getIconHSV = { tile.hsvTrue }
-                    getIconRes = { tile.iconResTrue }
-                    getIconColorPallet = { tile.colorPalletTrue }
-
-                    setIconHSV = { hsv -> tile.hsvTrue = hsv }
-                    setIconKey = { key -> tile.iconKeyTrue = key }
-
-                    fm.replaceWith(TileIconFragment())
-                }
-
-                b.tpMqttPayloadFalseEditIcon.setOnClickListener {
-                    getIconHSV = { tile.hsvFalse }
-                    getIconRes = { tile.iconResFalse }
-                    getIconColorPallet = { tile.colorPalletFalse }
-
-                    setIconHSV = { hsv -> tile.hsvFalse = hsv }
-                    setIconKey = { key -> tile.iconKeyFalse = key }
-
-                    fm.replaceWith(TileIconFragment())
-                }
-
-
-                b.tpMqttPayload.addTextChangedListener {
-                    tile.mqtt.payloads[tile.colorType] = (it ?: "").toString()
-                }
-                b.tpLightsIncludePicker.setOnCheckedChangeListener { _, state ->
-                    tile.includePicker = state
-                    (if (tile.includePicker) VISIBLE else GONE).let {
-                        b.tpLightsColorRetain.visibility = it
-                        b.tpLightsColorTopics.visibility = it
-                        b.tpLightsTypeBox.visibility = it
-                        b.tpMqttPayloadBox.visibility = it
-                        b.tpLightsColorPathBox.visibility = it
-                        b.tpLightsPaintBox.visibility = it
-                    }
-                }
-                b.tpLightsDoPaint.setOnCheckedChangeListener { _, state ->
-                    tile.doPaint = state
-                    b.tpLightsPaintRawBox.visibility = if (tile.doPaint) VISIBLE else GONE
-                }
-
-                b.tpLightsPaintRaw.setOnCheckedChangeListener { _, state ->
-                    tile.paintRaw = state
-                }
-                b.tpLightsShowPayload.setOnCheckedChangeListener { _, state ->
-                    tile.showPayload = state
-                }
-                b.tpMqttJsonSwitch.setOnCheckedChangeListener { _, state ->
-                    tile.mqtt.payloadIsJson = state
-                    b.tpLightsPaths.visibility = if (state) VISIBLE else GONE
-                }
-                b.tpLightsColorType.setOnCheckedChangeListener { _: RadioGroup, id: Int ->
-                    tile.colorType = when (id) {
-                        R.id.tp_lights_hsv -> "hsv"
-                        R.id.tp_lights_hex -> "hex"
-                        R.id.tp_lights_rgb -> "rgb"
-                        else -> "hex"
-                    }
-
-                    b.tpMqttPayload.setText(tile.mqtt.payloads[tile.colorType])
-                    b.tpMqttPayloadHint.text =
-                        "Use ${
-                            when (tile.colorType) {
-                                "hsv" -> "@h, @s, @v"
-                                "hex" -> "@hex"
-                                "rgb" -> "@r, @g, @b"
-                                else -> "@hex"
-                            }
-                        } to insert current value."
-                }
-
-
-                setupOptionsRecyclerView(tile.modes, b.tpLightsRecyclerView, b.tpLightsAdd)
- */

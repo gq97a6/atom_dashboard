@@ -25,10 +25,10 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp.PairList
-import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
 import com.alteratom.tile.types.thermostat.ThermostatTile
 
-object ThermostatTileCompose : ComposeObject {
+object ThermostatTileCompose : TilePropType {
     @Composable
     override fun Mqttd() {
         val tile = tile as ThermostatTile
@@ -77,7 +77,7 @@ object ThermostatTileCompose : ComposeObject {
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { tempSetPub = tempSetSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -138,7 +138,7 @@ object ThermostatTileCompose : ComposeObject {
                                 dashboard.daemon.notifyOptionsChanged()
                             },
                             trailingIcon = {
-                                IconButton(onClick = {}) {
+                                IconButton(onClick = { humiSetPub = humiSetSub }) {
                                     Icon(
                                         painterResource(R.drawable.il_file_copy),
                                         "",
@@ -177,7 +177,7 @@ object ThermostatTileCompose : ComposeObject {
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = { modePub = modeSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",

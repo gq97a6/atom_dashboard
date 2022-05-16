@@ -143,7 +143,12 @@ fun RadioGroup(
                 )
 
                 val annotatedText = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = if(index == selected) colors.a else colors.b, fontSize = 15.sp))
+                    withStyle(
+                        style = SpanStyle(
+                            color = if (index == selected) colors.a else colors.b,
+                            fontSize = 15.sp
+                        )
+                    )
                     { append(item) }
                 }
 
@@ -165,7 +170,10 @@ fun HorizontalRadioGroup(
     onClick: ((Int) -> Unit),
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier.padding(vertical = 13.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.padding(vertical = 13.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(text = label, fontSize = 15.sp, color = colors.a)
         options.forEachIndexed { index, item ->
             Row(
@@ -182,7 +190,12 @@ fun HorizontalRadioGroup(
                 )
 
                 val annotatedText = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = if(index == selected) colors.a else colors.b, fontSize = 15.sp))
+                    withStyle(
+                        style = SpanStyle(
+                            color = if (index == selected) colors.a else colors.b,
+                            fontSize = 15.sp
+                        )
+                    )
                     { append(item) }
                 }
 
@@ -244,11 +257,12 @@ fun NavigationArrows(
             .wrapContentSize(Alignment.BottomStart)
             .size(60.dp)
             .clip(RoundedCornerShape(topEnd = 40.dp))
-            .background(colors.d.copy(alpha = 0.4f))
+            .background(colors.d.copy(alpha = 0.47f))
     ) {
         Icon(
             painterResource(R.drawable.il_arrow_angle_left_b),
             "",
+            tint = colors.color,
             modifier = Modifier
                 .padding(end = 10.dp)
                 .size(40.dp)
@@ -266,6 +280,7 @@ fun NavigationArrows(
         Icon(
             painterResource(R.drawable.il_arrow_angle_right_b),
             "",
+            tint = colors.color,
             modifier = Modifier
                 .padding(start = 10.dp)
                 .size(40.dp)

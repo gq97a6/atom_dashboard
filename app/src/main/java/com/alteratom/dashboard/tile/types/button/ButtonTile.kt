@@ -17,7 +17,10 @@ class ButtonTile : com.alteratom.dashboard.tile.Tile() {
 
     override var iconKey = "il_arrow_arrow_to_bottom"
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         if (tag.isBlank()) holder.itemView.findViewById<TextView>(R.id.t_tag)?.visibility = GONE

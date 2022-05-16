@@ -13,10 +13,10 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
 import com.alteratom.tile.types.color.ColorTile
 
-object ColorTileCompose : ComposeObject {
+object ColorTileCompose : TilePropType {
     @Composable
     override fun Mqttd() {
         val tile = tile as ColorTile

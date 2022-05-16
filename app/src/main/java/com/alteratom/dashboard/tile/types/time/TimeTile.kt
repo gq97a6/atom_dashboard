@@ -31,7 +31,10 @@ class TimeTile : com.alteratom.dashboard.tile.Tile() {
             holder?.itemView?.findViewById<TextView>(R.id.tt_values)?.text = value
         }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
 
         value = value

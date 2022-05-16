@@ -20,10 +20,10 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.MqttTilePropCom.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropComp
-import com.alteratom.dashboard.compose.ComposeObject
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropType
 import com.alteratom.tile.types.slider.SliderTile
 
-object SliderTileCompose : ComposeObject {
+object SliderTileCompose : TilePropType {
     @Composable
     override fun Mqttd() {
         val tile = tile as SliderTile

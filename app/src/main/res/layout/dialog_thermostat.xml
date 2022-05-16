@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="20dp"
-    android:gravity="center"
     android:clipChildren="false"
+    android:gravity="center"
     android:orientation="vertical"
     android:tag="frame">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dt_parent"
         android:layout_width="match_parent"
-        android:clipChildren="false"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
 
         <me.tankery.lib.circularseekbar.CircularSeekBar
             android:id="@+id/dt_temp"
@@ -48,30 +48,30 @@
         <com.arctextview.ArcTextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:textSize="20dp"
-            app:anchorAngle="225"
             android:padding="0dp"
-            app:textOrientation="outward"
-            app:text="temperature"
-            app:textDirection="clockwise"
+            app:anchorAngle="225"
             app:layout_constraintBottom_toBottomOf="@+id/dt_temp"
             app:layout_constraintEnd_toEndOf="@+id/dt_temp"
             app:layout_constraintStart_toStartOf="@+id/dt_temp"
-            app:layout_constraintTop_toTopOf="@+id/dt_temp" />
+            app:layout_constraintTop_toTopOf="@+id/dt_temp"
+            app:text="temperature"
+            app:textDirection="clockwise"
+            app:textOrientation="outward"
+            app:textSize="20dp" />
 
         <com.arctextview.ArcTextView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:textSize="20dp"
-            app:anchorAngle="45"
             android:padding="7dp"
-            app:textOrientation="inward"
-            app:text="humidity"
-            app:textDirection="anticlockwise"
+            app:anchorAngle="45"
             app:layout_constraintBottom_toBottomOf="@+id/dt_humi"
             app:layout_constraintEnd_toEndOf="@+id/dt_humi"
             app:layout_constraintStart_toStartOf="@+id/dt_humi"
-            app:layout_constraintTop_toTopOf="@+id/dt_humi" />
+            app:layout_constraintTop_toTopOf="@+id/dt_humi"
+            app:text="humidity"
+            app:textDirection="anticlockwise"
+            app:textOrientation="inward"
+            app:textSize="20dp" />
 
         <TextView
             android:id="@+id/dt_value"

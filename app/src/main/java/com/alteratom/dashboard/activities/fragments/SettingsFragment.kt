@@ -10,43 +10,50 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.FolderTree.parseListSave
 import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.prepareSave
 import com.alteratom.dashboard.FolderTree.saveToFile
-import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.Settings
-import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SplashScreenActivity
-import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.databinding.FragmentSettingsBinding
+import com.alteratom.dashboard.switcher.TileSwitcher
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
 
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
-    private lateinit var b: FragmentSettingsBinding
 
     private lateinit var open: ActivityResultLauncher<Intent>
     private lateinit var create: ActivityResultLauncher<Intent>
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        b = FragmentSettingsBinding.inflate(inflater, container, false)
-        return b.root
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,44 +143,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewConfig()
-        theme.apply(b.root, requireContext())
-
-        b.sAnimateUpdate.setOnClickListener {
-            settings.animateUpdate = b.sAnimateUpdate.isChecked
-        }
-
-        b.sLast.setOnClickListener {
-            settings.startFromLast = b.sLast.isChecked
-        }
-
-        b.sThemeEdit.setOnClickListener {
-            fm.replaceWith(ThemeFragment())
-        }
-
-        b.sThemeIsDark.setOnClickListener {
-            theme.a.isDark = b.sThemeIsDark.isChecked
-            theme.apply((activity as MainActivity).b.root, requireContext())
-        }
-
-        b.dpBackupCreate.setOnClickListener {
-            createFile()
-        }
-
-        b.dpBackupRestore.setOnClickListener {
-            openFile()
-        }
-    }
-
-    private fun viewConfig() {
-        b.sAnimateUpdate.isChecked = settings.animateUpdate
-        b.sLast.isChecked = settings.startFromLast
-        b.sThemeIsDark.isChecked = theme.a.isDark
-    }
-
     private fun openFile() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -189,5 +158,104 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             putExtra(Intent.EXTRA_TITLE, "atomDashboard.backup")
         }
         create.launch(intent)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ComposeTheme(Theme.isDark) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Surface(modifier = Modifier.padding(16.dp)) {
+                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                                Text(text = "Settings", fontSize = 45.sp, color = colors.color)
+
+                                FrameBox("Optionals") {
+                                    Column {
+                                        var anim by remember { mutableStateOf(settings.animateUpdate) }
+                                        LabeledSwitch(
+                                            label = {
+                                                Text(
+                                                    "Animate tile update:",
+                                                    fontSize = 15.sp,
+                                                    color = colors.a
+                                                )
+                                            },
+                                            checked = anim,
+                                            onCheckedChange = {
+                                                anim = it
+                                                settings.animateUpdate = it
+                                            },
+                                        )
+
+                                        var last by remember { mutableStateOf(settings.startFromLast) }
+                                        LabeledSwitch(
+                                            label = {
+                                                Text(
+                                                    "Last dashboard on start:",
+                                                    fontSize = 15.sp,
+                                                    color = colors.a
+                                                )
+                                            },
+                                            checked = last,
+                                            onCheckedChange = {
+                                                last = it
+                                                settings.startFromLast = it
+                                            },
+                                        )
+                                    }
+                                }
+
+                                FrameBox("Theme") {
+                                    OutlinedButton(
+                                        contentPadding = PaddingValues(13.dp),
+                                        border = BorderStroke(2.dp, colors.b),
+                                        onClick = { fm.replaceWith(ThemeFragment()) }
+                                    ) {
+                                        Text("EDIT THEME", fontSize = 10.sp, color = colors.a)
+                                    }
+                                }
+
+                                FrameBox("Backup") {
+                                    Row {
+                                        OutlinedButton(
+                                            contentPadding = PaddingValues(13.dp),
+                                            border = BorderStroke(2.dp, colors.b),
+                                            modifier = Modifier.weight(.47f),
+                                            onClick = { createFile() }
+                                        ) {
+                                            Text("CREATE", fontSize = 10.sp, color = colors.a)
+                                        }
+
+                                        Spacer(modifier = Modifier.weight(.06f))
+
+                                        OutlinedButton(
+                                            contentPadding = PaddingValues(13.dp),
+                                            border = BorderStroke(2.dp, colors.b),
+                                            modifier = Modifier.weight(.47f),
+                                            onClick = { openFile() }
+                                        ) {
+                                            Text("RESTORE", fontSize = 10.sp, color = colors.a)
+                                        }
+                                    }
+                                }
+
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(60.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

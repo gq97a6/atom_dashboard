@@ -12,14 +12,14 @@
 
     <application
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:hasFragileUserData="true"
         android:icon="@mipmap/ic_icon"
         android:label="Atom Dashboard"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/theme"
-        android:hasFragileUserData="true"
-        android:dataExtractionRules="@xml/data_extraction_rules">
+        android:theme="@style/theme">
         <activity
             android:name=".dashboard.activities.SplashScreenActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

@@ -53,7 +53,10 @@ class SliderTile : com.alteratom.dashboard.tile.Tile() {
         mqtt.payloads["base"] = "@value"
     }
 
-    override fun onBindViewHolder(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        position: Int
+    ) {
         super.onBindViewHolder(holder, position)
         if (range[2] == 0) range[2] = 1
         displayValue = value
@@ -110,7 +113,8 @@ class SliderTile : com.alteratom.dashboard.tile.Tile() {
     }
 
     private fun control(e: MotionEvent, v: View?): Pair<Int, Boolean> {
-        var p = 100f * (e.rawX - com.alteratom.dashboard.screenWidth * 0.2f) / (com.alteratom.dashboard.screenWidth * (0.8f - 0.2f))
+        var p =
+            100f * (e.rawX - com.alteratom.dashboard.screenWidth * 0.2f) / (com.alteratom.dashboard.screenWidth * (0.8f - 0.2f))
         if (p < 0) p = 0f
         else if (p > 100) p = 100f
 

@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.compose.animation.*
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.font.FontStyle.Companion.Normal
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
@@ -37,7 +37,10 @@ import kotlin.random.Random
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
 
-    fun editSsl(context: Context) {
+    fun editSsl(fragment: Fragment) {
+
+        val context = fragment.context
+        if (context == null) return
 
         val dialog = Dialog(context)
 
@@ -88,7 +91,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
             return@setOnTouchListener true
         }
 
-        (context as DashboardPropertiesFragment).onOpenCertSuccess = {
+        (fragment as DashboardPropertiesFragment).onOpenCertSuccess = {
             binding.dsCaCert.text = dashboard.mqtt.sslFileName
             binding.dsCaCertInsert.foreground =
                 context.getDrawable(R.drawable.bt_remove)
@@ -101,7 +104,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 addCategory(Intent.CATEGORY_OPENABLE)
                 type = "*/*"
             }
-            (context as DashboardPropertiesFragment).openCert.launch(intent)
+            fragment.openCert.launch(intent)
         }
 
         binding.dsCaCert.setOnClickListener {
@@ -128,7 +131,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Mqttd(context: Context) {
+    override fun Mqttd(fragment: Fragment) {
         FrameBox("Communication:", "MQTT") {
             Column {
                 var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
@@ -154,7 +157,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .fillMaxWidth(.8f),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { }
+                    onClick = { (fragment as DashboardPropertiesFragment).copyProperties() }
                 ) {
                     Text("COPY PROPERTIES", fontSize = 10.sp, color = Theme.colors.a)
                 }
@@ -224,7 +227,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .padding(top = 10.dp),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { editSsl(context) }
+                    onClick = { editSsl(fragment) }
                 ) {
                     Text("CONFIGURE SSL", fontSize = 10.sp, color = Theme.colors.a)
                 }
@@ -360,6 +363,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd(context: Context) {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

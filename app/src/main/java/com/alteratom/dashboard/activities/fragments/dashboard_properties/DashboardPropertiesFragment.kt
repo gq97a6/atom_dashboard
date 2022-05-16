@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
+import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -98,7 +99,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
         openCert =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
+                if (result.resultCode == RESULT_OK) {
                     result.data?.data?.also { uri ->
                         try {
                             requireContext().contentResolver.openInputStream(uri)
@@ -192,7 +193,7 @@ class DashboardPropertiesFragment : Fragment(R.layout.fragment_dashboard_propert
 
                                 DashboardPropertiesCompose.compose(
                                     G.dashboard.type,
-                                    requireContext()
+                                    this@DashboardPropertiesFragment
                                 )
                             }
                         }

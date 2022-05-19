@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -117,12 +118,15 @@ class SplashScreenFragment : Fragment() {
 @Composable
 fun RoundSlider(modifier: Modifier = Modifier) {
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
+    var changeVal by remember { mutableStateOf(Offset.Zero) }
 
     Canvas(
         modifier = modifier
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
                     dragPosition += dragAmount
+                    changeVal = change.position
+
                     change.consumeAllChanges()
                 }
             }
@@ -132,6 +136,14 @@ fun RoundSlider(modifier: Modifier = Modifier) {
         val yCenter = size.height / 2
 
         val radius = minOf(xCenter, yCenter)
+
+        Log.i(
+            "OUY",
+            "${calculateAngle(changeVal.x, changeVal.y, center.x, center.y, 0f, 180f, 180f)}"
+        )
+
+        drawCircle(color = Color.Green, radius = 15.dp.toPx(), center = center)
+        drawCircle(color = Color.Green, radius = 15.dp.toPx(), center = changeVal)
 
         fun calculateIndicatorPosition(dragPosition: Offset): Offset {
             val x = dragPosition.x - xCenter
@@ -145,23 +157,6 @@ fun RoundSlider(modifier: Modifier = Modifier) {
 
             return Offset(radius * cos(angle), radius * sin(angle))
         }
-
-        //drawCircle(
-        //    brush = Brush.sweepGradient(
-        //        colors = listOf(
-        //            Color.Red,
-        //            Color.Yellow,
-        //            Color.Green,
-        //            Color.Cyan,
-        //            Color.Blue,
-        //            Color.Magenta,
-        //            Color.Red
-        //        ),
-        //        center = center
-        //    ),
-        //    radius = radius,
-        //    style = Stroke(width = 10.dp.toPx())
-        //)
 
         drawArc(
             brush = Brush.sweepGradient(
@@ -193,5 +188,85 @@ fun RoundSlider(modifier: Modifier = Modifier) {
         translate(indicatorX, indicatorY) {
             drawCircle(color = Color.Black, radius = 15.dp.toPx())
         }
+
+        val inX = (center.x + radius * cos(Math.toRadians(-90.0))).toFloat()
+        val inY = (center.y + radius * sin(Math.toRadians(-90.0))).toFloat()
+        drawCircle(color = Color.Yellow, radius = 15.dp.toPx(), center = Offset(inX, inY))
     }
+}
+
+fun calculateAngleInContinuousRange(
+    middle: Float,
+    angle: Double,
+    arcStartAngle: Float,
+    arcEndAngle: Float
+): Double {
+    return when (angle) {
+        in arcEndAngle..middle -> arcEndAngle.toDouble()
+        in middle..arcStartAngle -> arcStartAngle.toDouble()
+        else -> 20.toDouble()
+    }
+}
+
+fun calculateAngleInNonContinuousRange(
+    middle: Float,
+    angle: Double,
+    arcStartAngle: Float,
+    arcEndAngle: Float
+): Double {
+    return if (middle > 360f) {
+        val correctedMiddle = middle - 360f
+        when (angle) {
+            in arcEndAngle..360f, in 0f..correctedMiddle -> arcEndAngle.toDouble()
+            in correctedMiddle..arcStartAngle -> arcStartAngle.toDouble()
+            else -> 10.toDouble()
+        }
+    } else {
+        when (angle) {
+            in arcEndAngle..middle -> arcEndAngle.toDouble()
+            in middle..360f, in 0f..arcStartAngle -> arcStartAngle.toDouble()
+            else -> 10.toDouble()
+        }
+    }
+}
+
+fun calculateAngle(
+    x: Float,
+    y: Float,
+    xCenter: Float,
+    yCenter: Float,
+    arcStartAngle: Float,
+    arcEndAngle: Float,
+    sweepAngle: Float
+): Double {
+    val x = x - xCenter
+    val y = y - yCenter
+    val c = sqrt((x * x + y * y).toDouble())
+
+    var angle = Math.toDegrees(acos(x / c))
+    if (y < 0) {
+        angle = 360 - angle
+    }
+
+    // Don't let the indicator go outside the arc
+    // limit the indicator between arcStartAngle and arcEndAngle
+    val associatedArcLength = 360f - sweepAngle
+    val middleOfAssociatedArc = arcEndAngle + associatedArcLength / 2f
+    if (arcEndAngle < arcStartAngle) {
+        angle = calculateAngleInContinuousRange(
+            middleOfAssociatedArc,
+            angle,
+            arcStartAngle,
+            arcEndAngle
+        )
+    } else if (arcEndAngle > arcStartAngle) {
+        angle = calculateAngleInNonContinuousRange(
+            middleOfAssociatedArc,
+            angle,
+            arcStartAngle,
+            arcEndAngle
+        )
+    }
+
+    return angle
 }

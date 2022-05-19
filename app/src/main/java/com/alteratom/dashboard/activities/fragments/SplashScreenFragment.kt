@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.consumeAllChanges
@@ -118,42 +119,74 @@ fun RoundSlider(modifier: Modifier = Modifier) {
     var dragPosition by remember { mutableStateOf(Offset.Zero) }
 
     Canvas(
-        modifier = modifier.pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                dragPosition += dragAmount
-                change.consumeAllChanges()
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectDragGestures { change, dragAmount ->
+                    dragPosition += dragAmount
+                    change.consumeAllChanges()
+                }
             }
-        }.background(color = Color.Green.copy(alpha = 0.2f))
+            .background(color = Color.Green.copy(alpha = 0.2f))
     ) {
         val xCenter = size.width / 2
         val yCenter = size.height / 2
 
-        fun outerCircleRadius() = minOf(xCenter, yCenter)
+        val radius = minOf(xCenter, yCenter)
 
         fun calculateIndicatorPosition(dragPosition: Offset): Offset {
-            val dragXOnCanvas = dragPosition.x - xCenter
-            val dragYOnCanvas = dragPosition.y - yCenter
+            val x = dragPosition.x - xCenter
+            val y = dragPosition.y - yCenter
 
-            drawCircle(color = Color.Yellow, radius = 15.dp.toPx(), center = Offset(dragXOnCanvas, dragYOnCanvas))
-            drawCircle(color = Color.Red, radius = 15.dp.toPx(), center = dragPosition)
+            var angle = sqrt(x.pow(2) + y.pow(2)).let { r ->
+                acos(x / r).let {
+                    if (y < 0) -it else it
+                }
+            }
 
-            val radius = sqrt(dragXOnCanvas.pow(2) + dragYOnCanvas.pow(2))
-            val angle = acos(dragXOnCanvas / radius)
-            val adjustedAngle = if (dragYOnCanvas < 0) angle * -1 else angle
-
-            val xOnCircle = outerCircleRadius() * cos(adjustedAngle)
-            val yOnCircle = outerCircleRadius() * sin(adjustedAngle)
-
-            return Offset(xOnCircle, yOnCircle)
+            return Offset(radius * cos(angle), radius * sin(angle))
         }
 
-        drawCircle(
+        //drawCircle(
+        //    brush = Brush.sweepGradient(
+        //        colors = listOf(
+        //            Color.Red,
+        //            Color.Yellow,
+        //            Color.Green,
+        //            Color.Cyan,
+        //            Color.Blue,
+        //            Color.Magenta,
+        //            Color.Red
+        //        ),
+        //        center = center
+        //    ),
+        //    radius = radius,
+        //    style = Stroke(width = 10.dp.toPx())
+        //)
+
+        drawArc(
             brush = Brush.sweepGradient(
-                colors = listOf(Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Magenta, Color.Red),
+                colors = listOf(
+                    Color.Red,
+                    Color.Yellow,
+                    Color.Green,
+                    Color.Cyan,
+                    Color.Blue,
+                    Color.Magenta,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red,
+                    Color.Red
+                ),
                 center = center
             ),
-            radius = outerCircleRadius(),
-            style = Stroke(width = 10.dp.toPx())
+            startAngle = -0f,
+            sweepAngle = 180f,
+            useCenter = false,
+            style = Stroke(width = 10.dp.toPx(), cap = StrokeCap.Round)
         )
 
         val (indicatorX, indicatorY) = calculateIndicatorPosition(dragPosition)

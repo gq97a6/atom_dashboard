@@ -10,12 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -24,14 +22,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.FolderTree.parseListSave
 import com.alteratom.dashboard.FolderTree.parseSave
@@ -41,12 +36,10 @@ import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.SplashScreenActivity
+import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.switcher.TileSwitcher
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -129,7 +122,7 @@ class SettingsFragment : Fragment() {
                                 activity?.startActivity(
                                     Intent(
                                         context,
-                                        SplashScreenActivity::class.java
+                                        SetupActivity::class.java
                                     )
                                 )
                                 activity?.finish()

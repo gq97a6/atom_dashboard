@@ -130,7 +130,7 @@ object TilePropertiesCompse {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_arrow), "",
+                            painterResource(R.drawable.ic_arrow), "arrow",
                             tint = Theme.colors.a,
                             modifier = Modifier
                                 .size(40.dp)
@@ -280,7 +280,7 @@ object TilePropertiesCompse {
 
                         Icon(
                             painterResource(R.drawable.il_interface_multiply),
-                            "",
+                            "x",
                             tint = Theme.colors.b,
                             modifier = Modifier
                                 .padding(start = 10.dp, bottom = 13.dp)

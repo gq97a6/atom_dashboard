@@ -275,7 +275,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     ) {
                         Icon(
-                            painterResource(R.drawable.ic_arrow), "",
+                            painterResource(R.drawable.ic_arrow), "arrow",
                             tint = Theme.colors.a,
                             modifier = Modifier
                                 .size(40.dp)
@@ -316,7 +316,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.it_interface_multiply),
-                                        "",
+                                        "x",
                                         tint = Theme.colors.b
                                     )
                                 }
@@ -350,7 +350,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.it_interface_multiply),
-                                        "",
+                                        "x",
                                         tint = Theme.colors.b
                                     )
                                 }

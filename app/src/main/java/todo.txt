@@ -1,14 +1,13 @@
 //expand ------------------------------
 start guide
 client certificates
+
 move transfer to settings
 add transfer pick dashboards
 add demons placeholders
 color picker change in theme color setting
-check thermostat
 
 Compose:
-    splash
     color picker
     confirm
     copy broker

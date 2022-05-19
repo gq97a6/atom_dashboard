@@ -37,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         TileSwitcher.activity = this
         FragmentSwitcher.activity = this
 
-        //com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
-        //SplashScreenFragment
         fm.replaceWith(SplashScreenFragment(), false, null)
     }
 

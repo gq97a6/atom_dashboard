@@ -43,7 +43,7 @@ object TilePropertiesMqttCompose {
                 IconButton(onClick = {
                     pub = sub
                 }) {
-                    Icon(painterResource(R.drawable.il_file_copy), "", tint = Theme.colors.b)
+                    Icon(painterResource(R.drawable.il_file_copy), "copy", tint = Theme.colors.b)
                 }
             }
         )

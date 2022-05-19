@@ -259,7 +259,7 @@ fun NavigationArrows(
     ) {
         Icon(
             painterResource(R.drawable.il_arrow_angle_left_b),
-            "",
+            "left arrow",
             tint = colors.color,
             modifier = Modifier
                 .padding(end = 10.dp)
@@ -277,7 +277,7 @@ fun NavigationArrows(
     ) {
         Icon(
             painterResource(R.drawable.il_arrow_angle_right_b),
-            "",
+            "right arrow",
             tint = colors.color,
             modifier = Modifier
                 .padding(start = 10.dp)

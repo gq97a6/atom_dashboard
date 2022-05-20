@@ -1,6 +1,7 @@
 //expand ------------------------------
 start guide
 client certificates
+widgets
 
 move transfer to settings
 add transfer pick dashboards

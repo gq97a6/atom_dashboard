@@ -234,8 +234,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                 var cred by remember { mutableStateOf(dashboard.mqtt.includeCred) }
                 var show by remember { mutableStateOf(false) }
-                val rotation = if (show) 0f else 180f
 
+                val rotation = if (show) 0f else 180f
                 val angle: Float by animateFloatAsState(
                     targetValue = if (rotation > 360 - rotation) {
                         -(360 - rotation)

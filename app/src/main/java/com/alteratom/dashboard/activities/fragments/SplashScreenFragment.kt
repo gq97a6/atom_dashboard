@@ -1,26 +1,37 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import com.alteratom.R
+import com.alteratom.dashboard.G
+import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.ArcSlider
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.toPx
 
 class SplashScreenFragment : Fragment() {
 
@@ -32,36 +43,7 @@ class SplashScreenFragment : Fragment() {
         theme.apply(context = requireContext())
 
         return ComposeView(requireContext()).apply {
-            setContent {
 
-                ComposeTheme(Theme.isDark) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        ArcSlider(
-                            modifier = Modifier
-                                .padding(0.dp)
-                                .size(200.dp),
-                            startAngle = 0.0,
-                            sweepAngle = 180.0,
-                            strokeWidth = 20.dp.toPx(),
-                            pointerRadius = 15.dp.toPx(),
-                            pointerColor = Color.Gray,
-                            colorList = listOf(
-                                Color.Red,
-                                Color.Yellow,
-                                Color.Green,
-                                Color.Cyan,
-                                Color.Blue,
-                                Color.Magenta,
-                                Color.Red
-                            ),
-                            onChange = {
-                                Log.i("OUY", "$it")
-                            }
-                        )
-                    }
-                }
-            }
-/*
             setContent {
                 var serviceReady by remember { mutableStateOf(false) }
 
@@ -113,9 +95,6 @@ class SplashScreenFragment : Fragment() {
 
                 serviceReady = true
             }
-
-        }
-        */
         }
     }
 }

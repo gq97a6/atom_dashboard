@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,29 @@ class ThemeFragment : Fragment(R.layout.fragment_theme) {
         b = FragmentThemeBinding.inflate(inflater, container, false)
         return b.root
     }
+
+    //ArcSlider(
+    //modifier = Modifier
+    //.padding(0.dp)
+    //.size(200.dp),
+    //startAngle = 0.0,
+    //sweepAngle = 180.0,
+    //strokeWidth = 20.dp.toPx(),
+    //pointerRadius = 15.dp.toPx(),
+    //pointerColor = Color.Gray,
+    //colorList = listOf(
+    //Color.Red,
+    //Color.Yellow,
+    //Color.Green,
+    //Color.Cyan,
+    //Color.Blue,
+    //Color.Magenta,
+    //Color.Red
+    //),
+    //onChange = {
+    //    Log.i("OUY", "$it")
+    //}
+    //)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

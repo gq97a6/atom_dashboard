@@ -17,6 +17,9 @@ import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.ColorUtils
@@ -42,9 +45,13 @@ val screenVertical
 
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
-
-fun Float.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Float.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+@Composable
+fun Dp.toPx() = LocalDensity.current.run { this@toPx.toPx() }
+
+@Composable
+fun Float.toDp() = LocalDensity.current.run { this@toDp.toDp() }
 
 fun getRandomColor(alpha: Int = 255, R: Int = 255, G: Int = 255, B: Int = 255): Int {
     val r = Random()

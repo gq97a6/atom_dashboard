@@ -1,9 +1,8 @@
 package com.alteratom.dashboard
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.annotation.FloatRange
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,13 +10,20 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.consumeAllChanges
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -34,6 +40,10 @@ import com.alteratom.dashboard.compose.CheckBoxColors
 import com.alteratom.dashboard.compose.EditTextColors
 import com.alteratom.dashboard.compose.RadioButtonColors
 import com.alteratom.dashboard.compose.SwitchColors
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Composable
 fun BoldStartText(a: String, b: String, fontSize: TextUnit = 15.sp, modifier: Modifier = Modifier) {
@@ -306,6 +316,179 @@ inline fun FrameBox(
                 .padding(12.dp)
         ) {
             content()
+        }
+    }
+}
+
+
+/**
+ * Create round slider, pass list of colors to be its gradient stroke.
+ */
+
+@Composable
+fun ArcSlider(
+    modifier: Modifier = Modifier,
+    @FloatRange(from = 0.0, to = 360.0)
+    startAngle: Double = 0.0,
+    @FloatRange(from = 0.0, to = 360.0)
+    sweepAngle: Double = 180.0,
+    onChange: (Double) -> Unit = {},
+    strokeCap: StrokeCap = StrokeCap.Round,
+    strokeWidth: Float = 10.dp.toPx(),
+    pointerColor: Color = Color.Black,
+    pointerRadius: Float = 15.dp.toPx(),
+    colorList: List<Color>
+) {
+    val endAngle = (startAngle + sweepAngle) % 360
+
+    var brush: Brush
+    if (startAngle > endAngle) {
+        val start = startAngle / 360
+        val range = sweepAngle / 360
+        val step = range / (colorList.size - 1)
+
+        var colorList = colorList.toMutableList()
+        var colors: MutableList<Pair<Float, Color>> = mutableListOf()
+
+        var left = start - step
+
+        for (i in 0..colorList.size) {
+            if (left < 1) {
+                left += step
+                colors.add(Pair(left.toFloat(), colorList[0]))
+                colorList.removeAt(0)
+            } else break
+        }
+
+        left -= 1
+
+        for (i in colorList.size - 1 downTo 0) {
+            colors.add(0, Pair((left + step * i).toFloat(), colorList.last()))
+            colorList.removeLast()
+        }
+
+        brush = Brush.sweepGradient(*colors.toTypedArray())
+    } else {
+        val start = startAngle / 360
+        val range = sweepAngle / 360
+        val step = range / (colorList.size - 1)
+
+        var colors = Array(colorList.size) {
+            Pair((start + step * it).toFloat(), colorList[it])
+        }
+
+        brush = Brush.sweepGradient(*colors)
+    }
+
+    ArcSlider(
+        modifier,
+        startAngle,
+        sweepAngle,
+        onChange,
+        strokeCap,
+        strokeWidth,
+        pointerColor,
+        pointerRadius,
+        brush
+    )
+}
+
+
+/**
+ * Create round slider, pass brush to be use as stroke.
+ */
+@Composable
+fun ArcSlider(
+    modifier: Modifier = Modifier,
+    @FloatRange(from = 0.0, to = 360.0)
+    startAngle: Double = 0.0,
+    @FloatRange(from = 0.0, to = 360.0)
+    sweepAngle: Double = 360.0,
+    onChange: (Double) -> Unit = {},
+    strokeCap: StrokeCap = StrokeCap.Round,
+    strokeWidth: Float = 10.dp.toPx(),
+    pointerColor: Color = Color.Black,
+    pointerRadius: Float = 15.dp.toPx(),
+    brush: Brush
+) {
+    var position by remember { mutableStateOf(Offset.Zero) }
+    var radius by remember { mutableStateOf(0f) }
+    var scale by remember { mutableStateOf(0f) }
+
+    val endAngle = (startAngle + sweepAngle) % 360
+    val midAngle = endAngle + (360.0 - sweepAngle) / 2.0
+
+    Surface(
+        modifier = modifier
+    ) {
+        Surface(modifier =
+        Modifier.pointerInput(Unit) {
+            detectDragGestures { change, dragAmount ->
+                position = change.position.div(scale)
+                change.consumeAllChanges()
+            }
+        }
+        ) { }
+
+        //Draw path
+        Canvas(
+            modifier = modifier.padding((strokeWidth / 2).toDp())
+        ) {
+            drawArc(
+                brush = brush,
+                startAngle = startAngle.toFloat(),
+                sweepAngle = sweepAngle.toFloat(),
+                useCenter = false,
+                style = Stroke(width = strokeWidth, cap = strokeCap)
+            )
+        }
+
+        //Draw pointer
+        Canvas(
+            modifier = modifier
+                .padding((strokeWidth / 2).toDp())
+                .onGloballyPositioned {
+                    radius = minOf(it.size.width / 2, it.size.height / 2).toFloat()
+                    scale = 1 + (strokeWidth / 2) / radius
+                }
+        ) {
+            //Calculate angle
+            var x = position.x - center.x
+            var y = position.y - center.y
+            val c = sqrt((x * x + y * y).toDouble())
+
+            var angle = Math.toDegrees(acos(x / c))
+            if (y < 0) angle = 360 - angle
+
+            //Keep in range
+            if (sweepAngle != 360.0) {
+                if (endAngle < startAngle) {
+                    when (angle) {
+                        in endAngle..midAngle -> angle = endAngle
+                        in midAngle..startAngle -> angle = startAngle
+                    }
+                } else if (endAngle > startAngle) {
+                    if (midAngle > 360) {
+                        val correctedMiddle = midAngle - 360
+                        when (angle) {
+                            in endAngle..360.0, in 0.0..correctedMiddle -> angle = endAngle
+                            in correctedMiddle..startAngle -> angle = startAngle
+                        }
+                    } else {
+                        when (angle) {
+                            in endAngle..midAngle -> angle = endAngle
+                            in midAngle..360.0, in 0.0..startAngle -> angle = startAngle
+                        }
+                    }
+                }
+            }
+
+
+            onChange(((angle + 360 - startAngle) % 360) / sweepAngle)
+
+            x = (center.x + radius * cos(Math.toRadians(angle))).toFloat()
+            y = (center.y + radius * sin(Math.toRadians(angle))).toFloat()
+            drawCircle(color = pointerColor, radius = pointerRadius, center = Offset(x, y))
         }
     }
 }

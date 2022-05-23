@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawStyle
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
@@ -40,10 +42,7 @@ import com.alteratom.dashboard.compose.CheckBoxColors
 import com.alteratom.dashboard.compose.EditTextColors
 import com.alteratom.dashboard.compose.RadioButtonColors
 import com.alteratom.dashboard.compose.SwitchColors
-import kotlin.math.acos
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 @Composable
 fun BoldStartText(a: String, b: String, fontSize: TextUnit = 15.sp, modifier: Modifier = Modifier) {
@@ -335,6 +334,8 @@ fun ArcSlider(
     onChange: (Double) -> Unit = {},
     strokeCap: StrokeCap = StrokeCap.Round,
     strokeWidth: Float = 10.dp.toPx(),
+    pointerDraw: ((Double) -> Unit)? = null,
+    pointerStyle: DrawStyle = Fill,
     pointerColor: Color = Color.Black,
     pointerRadius: Float = 15.dp.toPx(),
     colorList: List<Color>
@@ -343,28 +344,28 @@ fun ArcSlider(
 
     var brush: Brush
     if (startAngle > endAngle) {
-        val start = startAngle / 360
+        var start = startAngle / 360
         val range = sweepAngle / 360
         val step = range / (colorList.size - 1)
 
         var colorList = colorList.toMutableList()
         var colors: MutableList<Pair<Float, Color>> = mutableListOf()
 
-        var left = start - step
-
-        for (i in 0..colorList.size) {
-            if (left < 1) {
-                left += step
-                colors.add(Pair(left.toFloat(), colorList[0]))
-                colorList.removeAt(0)
-            } else break
+        while (start < 1 && colorList.isNotEmpty()) {
+            colors.add(Pair(start.toFloat(), colorList[0]))
+            colorList.removeAt(0)
+            start += step
         }
 
-        left -= 1
+        if (colorList.isNotEmpty()) {
+            colors.add(Pair(1f, colorList[0]))
 
-        for (i in colorList.size - 1 downTo 0) {
-            colors.add(0, Pair((left + step * i).toFloat(), colorList.last()))
-            colorList.removeLast()
+            start -= 1
+
+            for (i in colorList.size - 1 downTo 0) {
+                colors.add(0, Pair((start + step * i).toFloat(), colorList.last()))
+                colorList.removeLast()
+            }
         }
 
         brush = Brush.sweepGradient(*colors.toTypedArray())
@@ -387,6 +388,8 @@ fun ArcSlider(
         onChange,
         strokeCap,
         strokeWidth,
+        pointerDraw,
+        pointerStyle,
         pointerColor,
         pointerRadius,
         brush
@@ -407,32 +410,31 @@ fun ArcSlider(
     onChange: (Double) -> Unit = {},
     strokeCap: StrokeCap = StrokeCap.Round,
     strokeWidth: Float = 10.dp.toPx(),
+    pointerDraw: ((Double) -> Unit)? = null,
+    pointerStyle: DrawStyle = Fill,
     pointerColor: Color = Color.Black,
     pointerRadius: Float = 15.dp.toPx(),
     brush: Brush
 ) {
-    var position by remember { mutableStateOf(Offset.Zero) }
+    var drag by remember { mutableStateOf(Offset(1f, 1f)) }
+    var pointerOffset by remember { mutableStateOf(Offset.Zero) }
     var radius by remember { mutableStateOf(0f) }
-    var scale by remember { mutableStateOf(0f) }
 
+    var angle by remember { mutableStateOf(startAngle) }
     val endAngle = (startAngle + sweepAngle) % 360
     val midAngle = endAngle + (360.0 - sweepAngle) / 2.0
 
-    Surface(
+    Box(
         modifier = modifier
     ) {
-        Surface(modifier =
-        Modifier.pointerInput(Unit) {
-            detectDragGestures { change, dragAmount ->
-                position = change.position.div(scale)
-                change.consumeAllChanges()
-            }
-        }
-        ) { }
-
         //Draw path
         Canvas(
-            modifier = modifier.padding((strokeWidth / 2).toDp())
+            modifier = Modifier
+                .fillMaxSize()
+                .onGloballyPositioned {
+                    radius = (it.size.width / 2).toFloat()
+                    //scale = 1 + (strokeWidth / 2) / radius
+                }
         ) {
             drawArc(
                 brush = brush,
@@ -443,21 +445,18 @@ fun ArcSlider(
             )
         }
 
-        //Draw pointer
-        Canvas(
-            modifier = modifier
-                .padding((strokeWidth / 2).toDp())
-                .onGloballyPositioned {
-                    radius = minOf(it.size.width / 2, it.size.height / 2).toFloat()
-                    scale = 1 + (strokeWidth / 2) / radius
-                }
-        ) {
-            //Calculate angle
-            var x = position.x - center.x
-            var y = position.y - center.y
+        fun setAngle(angle: Double) {
+            val x = (radius + radius * cos(Math.toRadians(angle))).toFloat()
+            val y = (radius + radius * sin(Math.toRadians(angle))).toFloat()
+            pointerOffset = Offset(x, y) - Offset(pointerRadius, pointerRadius)
+        }
+
+        fun calculateAngle(d: Offset) {
+            var x = d.x - radius
+            var y = d.y - radius
             val c = sqrt((x * x + y * y).toDouble())
 
-            var angle = Math.toDegrees(acos(x / c))
+            angle = Math.toDegrees(acos(x / c))
             if (y < 0) angle = 360 - angle
 
             //Keep in range
@@ -483,12 +482,40 @@ fun ArcSlider(
                 }
             }
 
-
             onChange(((angle + 360 - startAngle) % 360) / sweepAngle)
 
-            x = (center.x + radius * cos(Math.toRadians(angle))).toFloat()
-            y = (center.y + radius * sin(Math.toRadians(angle))).toFloat()
-            drawCircle(color = pointerColor, radius = pointerRadius, center = Offset(x, y))
+            setAngle(angle)
+        }
+
+        //Draw pointer
+        Canvas(
+            modifier = Modifier
+                .absoluteOffset(pointerOffset.x.toDp(), pointerOffset.y.toDp())
+                .size(pointerRadius.toDp() * 2)
+                .onGloballyPositioned {
+                    setAngle(angle)
+                    drag = pointerOffset + Offset(pointerRadius, pointerRadius)
+                }
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDrag = { change, dragAmount ->
+                            drag += dragAmount
+                            calculateAngle(drag)
+                            change.consumeAllChanges()
+                        },
+                        onDragEnd = {
+                            drag = pointerOffset + Offset(pointerRadius, pointerRadius)
+                        }
+                    )
+                }
+        ) {
+            if (pointerDraw != null) pointerDraw(angle)
+            else drawCircle(
+                color = pointerColor,
+                radius = pointerRadius,
+                center = center,
+                style = pointerStyle
+            )
         }
     }
 }

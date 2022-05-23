@@ -1,55 +1,100 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.view.get
-import androidx.core.view.isVisible
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.alteratom.R
-import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.databinding.FragmentThemeBinding
+import com.alteratom.dashboard.ArcSlider
+import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.toPx
 
-class ThemeFragment : Fragment(R.layout.fragment_theme) {
-    private lateinit var b: FragmentThemeBinding
+class ThemeFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        b = FragmentThemeBinding.inflate(inflater, container, false)
-        return b.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ComposeTheme(Theme.isDark) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ArcSlider(
+                            modifier = Modifier.size(250.dp),
+                            startAngle = 100.0,
+                            sweepAngle = 160.0,
+                            strokeWidth = 15.dp.toPx(),
+                            pointerRadius = 15.dp.toPx(),
+                            //pointerStyle = Stroke(width = 2.dp.toPx()),
+                            pointerColor = Color.Gray,
+                            colorList = listOf(
+                                Color.Red,
+                                Color.Yellow,
+                                Color.Green,
+                                Color.Cyan,
+                                Color.Blue,
+                                Color.Magenta,
+                                Color.Red
+                            )
+                        )
+
+                        ArcSlider(
+                            modifier = Modifier.size(200.dp),
+                            startAngle = 100.0,
+                            sweepAngle = 160.0,
+                            strokeWidth = 15.dp.toPx(),
+                            pointerRadius = 15.dp.toPx(),
+                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                            pointerColor = Color.Gray,
+                            colorList = listOf(
+                                Color.Red,
+                                Color.Yellow,
+                                Color.Green,
+                                Color.Cyan,
+                                Color.Blue,
+                                Color.Magenta,
+                                Color.Red
+                            )
+                        )
+
+                        ArcSlider(
+                            modifier = Modifier.size(150.dp),
+                            startAngle = 0.0,
+                            sweepAngle = 360.0,
+                            strokeWidth = 15.dp.toPx(),
+                            pointerRadius = 15.dp.toPx(),
+                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                            pointerColor = Color.Gray,
+                            colorList = listOf(
+                                Color.Red,
+                                Color.Yellow,
+                                Color.Green,
+                                Color.Cyan,
+                                Color.Blue,
+                                Color.Magenta,
+                                Color.Red
+                            )
+                        )
+
+                    }
+                }
+            }
+        }
     }
 
-    //ArcSlider(
-    //modifier = Modifier
-    //.padding(0.dp)
-    //.size(200.dp),
-    //startAngle = 0.0,
-    //sweepAngle = 180.0,
-    //strokeWidth = 20.dp.toPx(),
-    //pointerRadius = 15.dp.toPx(),
-    //pointerColor = Color.Gray,
-    //colorList = listOf(
-    //Color.Red,
-    //Color.Yellow,
-    //Color.Green,
-    //Color.Cyan,
-    //Color.Blue,
-    //Color.Magenta,
-    //Color.Red
-    //),
-    //onChange = {
-    //    Log.i("OUY", "$it")
-    //}
-    //)
-
+    /*
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -124,4 +169,5 @@ class ThemeFragment : Fragment(R.layout.fragment_theme) {
                 .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
         }
     }
+    */
 }

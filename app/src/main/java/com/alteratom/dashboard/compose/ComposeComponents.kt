@@ -42,7 +42,10 @@ import com.alteratom.dashboard.compose.CheckBoxColors
 import com.alteratom.dashboard.compose.EditTextColors
 import com.alteratom.dashboard.compose.RadioButtonColors
 import com.alteratom.dashboard.compose.SwitchColors
-import kotlin.math.*
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 @Composable
 fun BoldStartText(a: String, b: String, fontSize: TextUnit = 15.sp, modifier: Modifier = Modifier) {
@@ -417,6 +420,7 @@ fun ArcSlider(
     brush: Brush
 ) {
     var drag by remember { mutableStateOf(Offset(1f, 1f)) }
+    var dragOffset by remember { mutableStateOf(Offset.Zero) }
     var pointerOffset by remember { mutableStateOf(Offset.Zero) }
     var radius by remember { mutableStateOf(0f) }
 
@@ -427,24 +431,6 @@ fun ArcSlider(
     Box(
         modifier = modifier
     ) {
-        //Draw path
-        Canvas(
-            modifier = Modifier
-                .fillMaxSize()
-                .onGloballyPositioned {
-                    radius = (it.size.width / 2).toFloat()
-                    //scale = 1 + (strokeWidth / 2) / radius
-                }
-        ) {
-            drawArc(
-                brush = brush,
-                startAngle = startAngle.toFloat(),
-                sweepAngle = sweepAngle.toFloat(),
-                useCenter = false,
-                style = Stroke(width = strokeWidth, cap = strokeCap)
-            )
-        }
-
         fun setAngle(angle: Double) {
             val x = (radius + radius * cos(Math.toRadians(angle))).toFloat()
             val y = (radius + radius * sin(Math.toRadians(angle))).toFloat()
@@ -487,27 +473,50 @@ fun ArcSlider(
             setAngle(angle)
         }
 
+        //Draw path
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .onGloballyPositioned {
+                }
+                .onGloballyPositioned {
+                    radius = (it.size.width / 2).toFloat()
+                    setAngle(angle)
+                    dragOffset = Offset(pointerOffset.x, pointerOffset.y)
+                }
+        ) {
+            drawArc(
+                brush = brush,
+                startAngle = startAngle.toFloat(),
+                sweepAngle = sweepAngle.toFloat(),
+                useCenter = false,
+                style = Stroke(width = strokeWidth, cap = strokeCap)
+            )
+        }
+
+        //Draw pointer hitbox
+        Box(
+            modifier = Modifier
+                .absoluteOffset(dragOffset.x.toDp(), dragOffset.y.toDp())
+                .size(pointerRadius.toDp() * 2)
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDrag = { change, dragAmount ->
+                            calculateAngle(dragOffset + change.position)
+                            change.consumeAllChanges()
+                        },
+                        onDragEnd = {
+                            dragOffset = pointerOffset
+                        }
+                    )
+                }
+        )
+
         //Draw pointer
         Canvas(
             modifier = Modifier
                 .absoluteOffset(pointerOffset.x.toDp(), pointerOffset.y.toDp())
                 .size(pointerRadius.toDp() * 2)
-                .onGloballyPositioned {
-                    setAngle(angle)
-                    drag = pointerOffset + Offset(pointerRadius, pointerRadius)
-                }
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDrag = { change, dragAmount ->
-                            drag += dragAmount
-                            calculateAngle(drag)
-                            change.consumeAllChanges()
-                        },
-                        onDragEnd = {
-                            drag = pointerOffset + Offset(pointerRadius, pointerRadius)
-                        }
-                    )
-                }
         ) {
             if (pointerDraw != null) pointerDraw(angle)
             else drawCircle(

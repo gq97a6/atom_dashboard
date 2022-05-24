@@ -5,6 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,14 +31,19 @@ class ThemeFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(Theme.isDark) {
+                    var angleA by remember { mutableStateOf(90.0) }
+                    var angleB by remember { mutableStateOf(90.0) }
+                    var angleC by remember { mutableStateOf(90.0) }
+
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
                         ArcSlider(
-                            modifier = Modifier.size(250.dp),
-                            startAngle = 100.0,
-                            sweepAngle = 150.0,
+                            modifier = Modifier.fillMaxWidth(.8f).aspectRatio(1f),
+                            angle = angleA,
+                            startAngle = 0.0,
+                            sweepAngle = 360.0,
                             strokeWidth = 15.dp.toPx(),
                             pointerRadius = 15.dp.toPx(),
                             //pointerStyle = Stroke(width = 2.dp.toPx()),
@@ -47,46 +56,57 @@ class ThemeFragment : Fragment() {
                                 Color.Blue,
                                 Color.Magenta,
                                 Color.Red
-                            )
+                            ),
+                            onChange = { a, v ->
+                                angleA = a
+                            }
                         )
 
-                        //ArcSlider(
-                        //    modifier = Modifier.size(200.dp),
-                        //    startAngle = 100.0,
-                        //    sweepAngle = 160.0,
-                        //    strokeWidth = 15.dp.toPx(),
-                        //    pointerRadius = 15.dp.toPx(),
-                        //    pointerStyle = Stroke(width = 1.dp.toPx()),
-                        //    pointerColor = Color.Gray,
-                        //    colorList = listOf(
-                        //        Color.Red,
-                        //        Color.Yellow,
-                        //        Color.Green,
-                        //        Color.Cyan,
-                        //        Color.Blue,
-                        //        Color.Magenta,
-                        //        Color.Red
-                        //    )
-                        //)
-//
-                        //ArcSlider(
-                        //    modifier = Modifier.size(150.dp),
-                        //    startAngle = 0.0,
-                        //    sweepAngle = 360.0,
-                        //    strokeWidth = 15.dp.toPx(),
-                        //    pointerRadius = 15.dp.toPx(),
-                        //    pointerStyle = Stroke(width = 1.dp.toPx()),
-                        //    pointerColor = Color.Gray,
-                        //    colorList = listOf(
-                        //        Color.Red,
-                        //        Color.Yellow,
-                        //        Color.Green,
-                        //        Color.Cyan,
-                        //        Color.Blue,
-                        //        Color.Magenta,
-                        //        Color.Red
-                        //    )
-                        //)
+                        ArcSlider(
+                            modifier = Modifier.fillMaxWidth(.6f).aspectRatio(1f),
+                            angle = angleB,
+                            startAngle = 100.0,
+                            sweepAngle = 160.0,
+                            strokeWidth = 15.dp.toPx(),
+                            pointerRadius = 15.dp.toPx(),
+                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                            pointerColor = Color.Gray,
+                            colorList = listOf(
+                                Color.Red,
+                                Color.Yellow,
+                                Color.Green,
+                                Color.Cyan,
+                                Color.Blue,
+                                Color.Magenta,
+                                Color.Red
+                            ),
+                            onChange = { a, v ->
+                                angleB = a
+                            }
+                        )
+
+                        ArcSlider(
+                            modifier = Modifier.fillMaxSize(.6f).aspectRatio(1f),
+                            angle = angleC,
+                            startAngle = 280.0,
+                            sweepAngle = 160.0,
+                            strokeWidth = 15.dp.toPx(),
+                            pointerRadius = 15.dp.toPx(),
+                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                            pointerColor = Color.Gray,
+                            colorList = listOf(
+                                Color.Red,
+                                Color.Yellow,
+                                Color.Green,
+                                Color.Cyan,
+                                Color.Blue,
+                                Color.Magenta,
+                                Color.Red
+                            ),
+                            onChange = { a, v ->
+                                angleC = a
+                            }
+                        )
 
                     }
                 }

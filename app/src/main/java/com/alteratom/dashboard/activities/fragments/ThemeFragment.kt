@@ -34,7 +34,7 @@ class ThemeFragment : Fragment() {
                         ArcSlider(
                             modifier = Modifier.size(250.dp),
                             startAngle = 100.0,
-                            sweepAngle = 160.0,
+                            sweepAngle = 150.0,
                             strokeWidth = 15.dp.toPx(),
                             pointerRadius = 15.dp.toPx(),
                             //pointerStyle = Stroke(width = 2.dp.toPx()),
@@ -50,43 +50,43 @@ class ThemeFragment : Fragment() {
                             )
                         )
 
-                        ArcSlider(
-                            modifier = Modifier.size(200.dp),
-                            startAngle = 100.0,
-                            sweepAngle = 160.0,
-                            strokeWidth = 15.dp.toPx(),
-                            pointerRadius = 15.dp.toPx(),
-                            pointerStyle = Stroke(width = 1.dp.toPx()),
-                            pointerColor = Color.Gray,
-                            colorList = listOf(
-                                Color.Red,
-                                Color.Yellow,
-                                Color.Green,
-                                Color.Cyan,
-                                Color.Blue,
-                                Color.Magenta,
-                                Color.Red
-                            )
-                        )
-
-                        ArcSlider(
-                            modifier = Modifier.size(150.dp),
-                            startAngle = 0.0,
-                            sweepAngle = 360.0,
-                            strokeWidth = 15.dp.toPx(),
-                            pointerRadius = 15.dp.toPx(),
-                            pointerStyle = Stroke(width = 1.dp.toPx()),
-                            pointerColor = Color.Gray,
-                            colorList = listOf(
-                                Color.Red,
-                                Color.Yellow,
-                                Color.Green,
-                                Color.Cyan,
-                                Color.Blue,
-                                Color.Magenta,
-                                Color.Red
-                            )
-                        )
+                        //ArcSlider(
+                        //    modifier = Modifier.size(200.dp),
+                        //    startAngle = 100.0,
+                        //    sweepAngle = 160.0,
+                        //    strokeWidth = 15.dp.toPx(),
+                        //    pointerRadius = 15.dp.toPx(),
+                        //    pointerStyle = Stroke(width = 1.dp.toPx()),
+                        //    pointerColor = Color.Gray,
+                        //    colorList = listOf(
+                        //        Color.Red,
+                        //        Color.Yellow,
+                        //        Color.Green,
+                        //        Color.Cyan,
+                        //        Color.Blue,
+                        //        Color.Magenta,
+                        //        Color.Red
+                        //    )
+                        //)
+//
+                        //ArcSlider(
+                        //    modifier = Modifier.size(150.dp),
+                        //    startAngle = 0.0,
+                        //    sweepAngle = 360.0,
+                        //    strokeWidth = 15.dp.toPx(),
+                        //    pointerRadius = 15.dp.toPx(),
+                        //    pointerStyle = Stroke(width = 1.dp.toPx()),
+                        //    pointerColor = Color.Gray,
+                        //    colorList = listOf(
+                        //        Color.Red,
+                        //        Color.Yellow,
+                        //        Color.Green,
+                        //        Color.Cyan,
+                        //        Color.Blue,
+                        //        Color.Magenta,
+                        //        Color.Red
+                        //    )
+                        //)
 
                     }
                 }

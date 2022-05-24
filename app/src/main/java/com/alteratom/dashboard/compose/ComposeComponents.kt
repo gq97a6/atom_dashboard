@@ -1,5 +1,6 @@
 package com.alteratom.dashboard
 
+import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -384,6 +385,7 @@ fun ArcSlider(
         brush = Brush.sweepGradient(*colors)
     }
 
+    Log.i("OUY", "-1")
     ArcSlider(
         modifier,
         startAngle,
@@ -419,14 +421,14 @@ fun ArcSlider(
     pointerRadius: Float = 15.dp.toPx(),
     brush: Brush
 ) {
-    var drag by remember { mutableStateOf(Offset(1f, 1f)) }
+    Log.i("OUY", "0")
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
     var pointerOffset by remember { mutableStateOf(Offset.Zero) }
     var radius by remember { mutableStateOf(0f) }
 
     var angle by remember { mutableStateOf(startAngle) }
-    val endAngle = (startAngle + sweepAngle) % 360
-    val midAngle = endAngle + (360.0 - sweepAngle) / 2.0
+    val endAngle by remember { mutableStateOf((startAngle + sweepAngle) % 360) }
+    val midAngle by remember { mutableStateOf(endAngle + (360.0 - sweepAngle) / 2.0) }
 
     Box(
         modifier = modifier
@@ -434,7 +436,7 @@ fun ArcSlider(
         fun setAngle(angle: Double) {
             val x = (radius + radius * cos(Math.toRadians(angle))).toFloat()
             val y = (radius + radius * sin(Math.toRadians(angle))).toFloat()
-            pointerOffset = Offset(x, y) - Offset(pointerRadius, pointerRadius)
+            pointerOffset = Offset(x, y)
         }
 
         fun calculateAngle(d: Offset) {
@@ -469,22 +471,22 @@ fun ArcSlider(
             }
 
             onChange(((angle + 360 - startAngle) % 360) / sweepAngle)
-
             setAngle(angle)
         }
+
+        Log.i("OUY", "1")
 
         //Draw path
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
                 .onGloballyPositioned {
-                }
-                .onGloballyPositioned {
                     radius = (it.size.width / 2).toFloat()
                     setAngle(angle)
                     dragOffset = Offset(pointerOffset.x, pointerOffset.y)
                 }
         ) {
+            Log.i("OUY", "2")
             drawArc(
                 brush = brush,
                 startAngle = startAngle.toFloat(),
@@ -515,9 +517,11 @@ fun ArcSlider(
         //Draw pointer
         Canvas(
             modifier = Modifier
+                .absoluteOffset(-pointerRadius.toDp(), -pointerRadius.toDp())
                 .absoluteOffset(pointerOffset.x.toDp(), pointerOffset.y.toDp())
                 .size(pointerRadius.toDp() * 2)
         ) {
+            Log.i("OUY", "3")
             if (pointerDraw != null) pointerDraw(angle)
             else drawCircle(
                 color = pointerColor,

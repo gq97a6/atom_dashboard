@@ -491,8 +491,8 @@ fun ArcSlider(
         //Draw pointer hitbox
         Box(
             modifier = Modifier
-                .absoluteOffset(-pointerRadius.toDp(), -pointerRadius.toDp())
                 .absoluteOffset(dragOffset.x.toDp(), dragOffset.y.toDp())
+                .background(Color.Red.copy(.4f))
                 .size(pointerRadius.toDp() * 2)
                 .pointerInput(Unit) {
                     detectDragGestures(
@@ -514,8 +514,7 @@ fun ArcSlider(
         //Draw pointer
         Canvas(
             modifier = Modifier
-                .absoluteOffset(-pointerRadius.toDp(), -pointerRadius.toDp())
-                .absoluteOffset(pointerOffset.x.toDp(), pointerOffset.y.toDp())
+                .absoluteOffset(pointerOffset.x.toDp(), pointerOffset.y.toDp()) //X
                 .size(pointerRadius.toDp() * 2)
         ) {
             if (pointerDraw != null) pointerDraw(angle)
@@ -530,6 +529,6 @@ fun ArcSlider(
 
     val x = (radius + radius * cos(Math.toRadians(angle))).toFloat()
     val y = (radius + radius * sin(Math.toRadians(angle))).toFloat()
-    pointerOffset = Offset(x, y)
-    if (!isSliding) dragOffset = Offset(x, y)
+    pointerOffset = Offset(x, y) - Offset(pointerRadius, pointerRadius)
+    if (!isSliding) dragOffset = pointerOffset
 }

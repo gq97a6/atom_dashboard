@@ -1,5 +1,6 @@
 package com.alteratom.dashboard
 
+import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -345,7 +346,7 @@ fun ArcSlider(
     pointerRadius: Float = 15.dp.toPx(),
     colorList: List<Color>
 ) {
-    var brush by remember {
+    var brush by remember(startAngle, sweepAngle, colorList) {
         mutableStateOf(
             if (startAngle > (startAngle + sweepAngle) % 360) {
                 var start = startAngle / 360
@@ -465,6 +466,7 @@ fun ArcSlider(
             }
         }
 
+        Log.i("OUY", "$angle $startAngle $sweepAngle")
         onChange(angle, ((angle + 360 - startAngle) % 360) / sweepAngle)
     }
 

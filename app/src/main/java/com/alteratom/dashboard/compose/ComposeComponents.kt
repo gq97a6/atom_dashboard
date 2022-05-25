@@ -492,7 +492,6 @@ fun ArcSlider(
         Box(
             modifier = Modifier
                 .absoluteOffset(dragOffset.x.toDp(), dragOffset.y.toDp())
-                .background(Color.Red.copy(.4f))
                 .size(pointerRadius.toDp() * 2)
                 .pointerInput(Unit) {
                     detectDragGestures(

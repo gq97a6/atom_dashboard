@@ -7,10 +7,11 @@ move transfer to settings
 add transfer pick dashboards
 add demons placeholders
 color picker change in theme color setting
-custom tile color not working
+change color picker in icon color
+icon prop chips color
+remove icons type
 
 Compose:
-    color picker
     confirm
     copy broker
     lights
@@ -22,7 +23,6 @@ Compose:
     time
     transfer
     theme
-    ?icon
     tile new
 
 //post development ------------------------------

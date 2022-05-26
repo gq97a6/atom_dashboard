@@ -16,22 +16,6 @@ class IconAdapter(context: Context, spanCount: Int) :
     var onColorChange: (FloatArray, ColorPallet) -> Unit = { _, _ -> }
     var onIconChange: (Int) -> Unit = {}
 
-    object DiffCallback : DiffUtil.ItemCallback<Icon>() {
-        override fun areItemsTheSame(
-            oldItem: Icon,
-            newItem: Icon
-        ): Boolean {
-            return oldItem.areItemsTheSame(oldItem, newItem)
-        }
-
-        override fun areContentsTheSame(
-            oldItem: Icon,
-            newItem: Icon
-        ): Boolean {
-            return oldItem.areContentsTheSame(oldItem, newItem)
-        }
-    }
-
     init {
         list.add(IconGap())
 
@@ -41,31 +25,15 @@ class IconAdapter(context: Context, spanCount: Int) :
                 else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
                 val colorPallet = theme.a.getColorPallet(hsv, true)
 
-                list.add(IconColor(hsv, colorPallet))
+                list.add(IconColor(1, hsv, colorPallet))
             }
         }
 
         val hsv = floatArrayOf(0f, 0f, 0f)
         val colorPallet = theme.a.getColorPallet(hsv, true)
 
-        list.add(IconColor(hsv, colorPallet))
+        list.add(IconColor(3, hsv, colorPallet))
         list.add(IconColorAny())
-
-        list.add(IconColorPicker())
-        list.add(IconBar())
-    }
-
-    fun setColorPicker(hsv: FloatArray) {
-        val picker = list.find { it is IconColorPicker } as IconColorPicker
-        picker.apply {
-            val h = holder?.itemView?.findViewById<Slider>(R.id.iicp_hue)
-            val s = holder?.itemView?.findViewById<Slider>(R.id.iicp_saturation)
-            val v = holder?.itemView?.findViewById<Slider>(R.id.iicp_value)
-
-            h?.value = hsv[0]
-            s?.value = hsv[1]
-            v?.value = hsv[2]
-        }
     }
 
     fun applyIconSet(type: String) {

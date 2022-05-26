@@ -38,12 +38,11 @@ class IconAdapter(context: Context, spanCount: Int) :
 
     fun applyIconSet(type: String) {
         val icons = Icons.icons.values.filter { it.type == type }
-        val cats = Icons.cats[type] ?: listOf()
 
         list.subList(list.size - iconCount, list.size).clear()
         val size = list.size
 
-        for (c in cats) {
+        for (c in Icons.cats) {
             val catUp =
                 c.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             list.add(IconCategory(catUp))

@@ -315,7 +315,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     dashboard.mqtt.username = ""
                                 }) {
                                     Icon(
-                                        painterResource(R.drawable.it_interface_multiply),
+                                        painterResource(R.drawable.il_interface_multiply),
                                         "x",
                                         tint = Theme.colors.b
                                     )
@@ -349,7 +349,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     dashboard.mqtt.pass = ""
                                 }) {
                                     Icon(
-                                        painterResource(R.drawable.it_interface_multiply),
+                                        painterResource(R.drawable.il_interface_multiply),
                                         "x",
                                         tint = Theme.colors.b
                                     )

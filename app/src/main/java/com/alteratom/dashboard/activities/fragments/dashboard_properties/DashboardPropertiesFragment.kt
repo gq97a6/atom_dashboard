@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -99,6 +100,7 @@ class DashboardPropertiesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        G.theme.apply(context = requireContext())
 
         openCert =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -151,10 +153,15 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        G.theme.apply(context = requireContext())
-
         return ComposeView(requireContext()).apply {
             setContent {
+                //Background
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Theme.colors.background)
+                )
+
                 ComposeTheme(Theme.isDark) {
                     Box(
                         modifier = Modifier.fillMaxSize(),

@@ -40,9 +40,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        theme.apply(b.root, requireContext())
 
         setupRecyclerView()
-        theme.apply(b.root, requireContext())
 
         (activity as MainActivity).onBackPressedBoolean = {
             if (!adapter.editMode.isNone) {

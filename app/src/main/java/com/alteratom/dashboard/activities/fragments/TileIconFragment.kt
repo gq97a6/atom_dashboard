@@ -34,10 +34,8 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         theme.apply(b.root, requireContext(), true)
         viewConfig()
-
         setupRecyclerView()
     }
 

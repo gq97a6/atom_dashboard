@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,11 +27,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import com.alteratom.R
 import com.alteratom.dashboard.ArcSlider
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.toPx
 
@@ -49,7 +49,7 @@ class ThemeFragment : Fragment() {
             setContent {
                 var hueAngle by remember { mutableStateOf(theme.a.hsv[0].toDouble()) }
                 var saturationAngle by remember { mutableStateOf(100 + 160.0 * theme.a.hsv[1]) }
-                var saturationAngleDark by remember { mutableStateOf(110 + 320.0 * theme.a.hsv[1]) }
+                var saturationDarkAngle by remember { mutableStateOf(110 + 320.0 * theme.a.hsv[1]) }
                 var valueAngle by remember { mutableStateOf((440 - 160.0 * theme.a.hsv[2]) % 360) }
 
                 var hue by remember { mutableStateOf(theme.a.hsv[0]) }
@@ -58,13 +58,6 @@ class ThemeFragment : Fragment() {
 
                 var colors by remember { mutableStateOf(colors) }
                 var isDark by remember { mutableStateOf(theme.a.isDark) }
-
-                val angle: Float by animateFloatAsState(
-                    targetValue = if (rotation > 360 - rotation) {
-                        -(360 - rotation)
-                    } else rotation,
-                    animationSpec = tween(durationMillis = 200, easing = LinearEasing)
-                )
 
                 ComposeTheme(theme.a.isDark, theme.a.getComposeColorPallet()) {
                     theme.apply(context = requireContext())
@@ -96,6 +89,7 @@ class ThemeFragment : Fragment() {
                                     theme.a.hsv = floatArrayOf(hue, saturation, value)
                                 }
 
+                                theme.apply((activity as MainActivity).b.root, requireContext())
                                 colors = Theme.colors
                             },
                             colors = colors
@@ -169,7 +163,7 @@ class ThemeFragment : Fragment() {
                                 onChange = { a, v ->
                                     saturationAngle = a
                                     v.toFloat().let {
-                                        saturationAngleDark = 110 + 320.0 * it
+                                        saturationDarkAngle = 110 + 320.0 * it
                                         saturation = it
                                     }
                                     theme.a.hsv = floatArrayOf(hue, saturation, value)
@@ -209,7 +203,7 @@ class ThemeFragment : Fragment() {
                                 modifier = Modifier
                                     .fillMaxSize(.6f)
                                     .aspectRatio(1f),
-                                angle = saturationAngleDark,
+                                angle = saturationDarkAngle,
                                 startAngle = 110.0,
                                 sweepAngle = 320.0,
                                 strokeWidth = 15.dp.toPx(),
@@ -221,7 +215,7 @@ class ThemeFragment : Fragment() {
                                     Color.hsv(hue, 0f, value),
                                 ).asReversed(),
                                 onChange = { a, v ->
-                                    saturationAngleDark = a
+                                    saturationDarkAngle = a
                                     v.toFloat().let {
                                         saturationAngle = 100 + 160.0 * it
                                         saturation = it

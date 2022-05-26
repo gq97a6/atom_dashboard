@@ -46,6 +46,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        settings.lastDashboardId = dashboard.id
+
         b = FragmentDashboardBinding.inflate(inflater, container, false)
         return b.root
     }
@@ -56,7 +58,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupRecyclerView()
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
-        settings.lastDashboardId = dashboard.id
 
         (activity as MainActivity).onBackPressedBoolean = {
             if (!adapter.editMode.isNone) {

@@ -53,8 +53,7 @@ class TilePropertiesFragment : Fragment() {
 
                 ComposeTheme(isDark) {
                     Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colors.background
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         tile.dashboard?.type?.let {
                             when (tile) {

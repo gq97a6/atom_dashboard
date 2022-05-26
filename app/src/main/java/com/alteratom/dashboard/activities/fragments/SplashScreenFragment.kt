@@ -91,10 +91,9 @@ class SplashScreenFragment : Fragment() {
                 }
 
                 if (serviceReady) {
-                    fm.replaceWith(ThemeFragment(), false, fadeLong)
-                    //if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
-                    //    fm.replaceWith(DashboardFragment(), false, fadeLong)
-                    //else fm.popBackStack(false, fadeLong)
+                    if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
+                        fm.replaceWith(DashboardFragment(), false, fadeLong)
+                    else fm.popBackStack(false, fadeLong)
                 }
 
                 serviceReady = true

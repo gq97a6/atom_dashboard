@@ -63,7 +63,8 @@ fun LabeledSwitch(
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    colors: Theme.ComposeColorPallet = Theme.colors
 ) {
     Row(
         modifier = modifier.wrapContentSize(),
@@ -466,7 +467,7 @@ fun ArcSlider(
             }
         }
 
-        Log.i("OUY", "$angle $startAngle $sweepAngle")
+        //Log.i("OUY", "$angle $startAngle $sweepAngle")
         onChange(angle, ((angle + 360 - startAngle) % 360) / sweepAngle)
     }
 

@@ -4,6 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +33,7 @@ import com.alteratom.dashboard.ArcSlider
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.toPx
 
@@ -42,46 +47,74 @@ class ThemeFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ComposeTheme(Theme.isDark) {
-                    var hueAngle by remember { mutableStateOf(theme.a.hsv[0].toDouble()) }
-                    var saturationAngle by remember { mutableStateOf(100 + 160.0 * theme.a.hsv[1]) }
-                    var valueAngle by remember { mutableStateOf((440 - 160.0 * theme.a.hsv[2]) % 360) }
+                var hueAngle by remember { mutableStateOf(theme.a.hsv[0].toDouble()) }
+                var saturationAngle by remember { mutableStateOf(100 + 160.0 * theme.a.hsv[1]) }
+                var saturationAngleDark by remember { mutableStateOf(110 + 320.0 * theme.a.hsv[1]) }
+                var valueAngle by remember { mutableStateOf((440 - 160.0 * theme.a.hsv[2]) % 360) }
 
-                    var color by remember {
-                        mutableStateOf(
-                            Color.hsv(
-                                theme.a.hsv[0],
-                                theme.a.hsv[1],
-                                theme.a.hsv[2]
-                            )
-                        )
-                    }
-                    var hue by remember { mutableStateOf(theme.a.hsv[0]) }
-                    var saturation by remember { mutableStateOf(theme.a.hsv[1]) }
-                    var value by remember { mutableStateOf(theme.a.hsv[2]) }
+                var hue by remember { mutableStateOf(theme.a.hsv[0]) }
+                var saturation by remember { mutableStateOf(theme.a.hsv[1]) }
+                var value by remember { mutableStateOf(theme.a.hsv[2]) }
 
-                    fun onColorChanged() {
-                        color = Color.hsv(hue, saturation, value)
-                        theme.a.hsv = floatArrayOf(hue, saturation, value)
-                    }
+                var colors by remember { mutableStateOf(colors) }
+                var isDark by remember { mutableStateOf(theme.a.isDark) }
 
-                    var isDark by remember { mutableStateOf(theme.a.isDark) }
+                val angle: Float by animateFloatAsState(
+                    targetValue = if (rotation > 360 - rotation) {
+                        -(360 - rotation)
+                    } else rotation,
+                    animationSpec = tween(durationMillis = 200, easing = LinearEasing)
+                )
+
+                ComposeTheme(theme.a.isDark, theme.a.getComposeColorPallet()) {
+                    theme.apply(context = requireContext())
+
+                    //Background
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(colors.background)
+                    )
+
                     Column {
                         LabeledSwitch(
                             label = {
                                 Text(
                                     "Dark background:",
                                     fontSize = 15.sp,
-                                    color = Theme.colors.a
+                                    color = colors.a
                                 )
                             },
                             checked = isDark,
                             onCheckedChange = {
-                                isDark = it
                                 theme.a.isDark = it
+                                isDark = it
+
+                                if(it) {
+                                    value = 1f
+                                    valueAngle = 280.0
+                                    theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                }
+
+                                colors = Theme.colors
                             },
+                            colors = colors
+                        )
+                        LabeledSwitch(
+                            label = {
+                                Text(
+                                    "Dark background:",
+                                    fontSize = 15.sp,
+                                    color = colors.a
+                                )
+                            },
+                            checked = false,
+                            onCheckedChange = {
+                            },
+                            colors = colors
                         )
                     }
+
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -109,144 +142,112 @@ class ThemeFragment : Fragment() {
                             onChange = { a, v ->
                                 hueAngle = a
                                 hue = (v * 360f).toFloat()
-                                theme.a.hsv[0] = a.toFloat()
-                                onColorChanged()
+                                theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                colors = Theme.colors
                             }
                         )
 
-                        ArcSlider(
-                            modifier = Modifier
-                                .fillMaxSize(.6f)
-                                .aspectRatio(1f),
-                            angle = saturationAngle,
-                            startAngle = 100.0,
-                            sweepAngle = 160.0,
-                            strokeWidth = 15.dp.toPx(),
-                            pointerRadius = 15.dp.toPx(),
-                            pointerStyle = Stroke(width = 1.dp.toPx()),
-                            pointerColor = Color.Gray,
-                            colorList = listOf(
-                                Color.hsv(hue, 1f, value),
-                                Color.hsv(hue, 0f, value),
-                            ).asReversed(),
-                            onChange = { a, v ->
-                                saturationAngle = a
-                                saturation = v.toFloat()
-                                theme.a.hsv[1] = v.toFloat()
-                                onColorChanged()
-                            }
-                        )
+                        AnimatedVisibility(
+                            visible = !isDark, enter = EnterTransition.None,
+                            exit = ExitTransition.None
+                        ) {
+                            ArcSlider(
+                                modifier = Modifier
+                                    .fillMaxSize(.6f)
+                                    .aspectRatio(1f),
+                                angle = saturationAngle,
+                                startAngle = 100.0,
+                                sweepAngle = 160.0,
+                                strokeWidth = 15.dp.toPx(),
+                                pointerRadius = 15.dp.toPx(),
+                                pointerStyle = Stroke(width = 1.dp.toPx()),
+                                pointerColor = Color.Gray,
+                                colorList = listOf(
+                                    Color.hsv(hue, 1f, value),
+                                    Color.hsv(hue, 0f, value),
+                                ).asReversed(),
+                                onChange = { a, v ->
+                                    saturationAngle = a
+                                    v.toFloat().let {
+                                        saturationAngleDark = 110 + 320.0 * it
+                                        saturation = it
+                                    }
+                                    theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                    colors = Theme.colors
+                                }
+                            )
 
-                        ArcSlider(
-                            modifier = Modifier
-                                .fillMaxSize(.6f)
-                                .aspectRatio(1f),
-                            angle = valueAngle,
-                            startAngle = 280.0,
-                            sweepAngle = 160.0,
-                            strokeWidth = 15.dp.toPx(),
-                            pointerRadius = 15.dp.toPx(),
-                            pointerStyle = Stroke(width = 1.dp.toPx()),
-                            pointerColor = Color.Gray,
-                            colorList = listOf(
-                                Color.hsv(hue, saturation, 1f),
-                                Color.hsv(hue, saturation, 0f)
-                            ),
-                            onChange = { a, v ->
-                                valueAngle = a
-                                value = (1 - v).toFloat()
-                                theme.a.hsv[2] = v.toFloat()
-                                onColorChanged()
-                            }
-                        )
+                            ArcSlider(
+                                modifier = Modifier
+                                    .fillMaxSize(.6f)
+                                    .aspectRatio(1f),
+                                angle = valueAngle,
+                                startAngle = 280.0,
+                                sweepAngle = 160.0,
+                                strokeWidth = 15.dp.toPx(),
+                                pointerRadius = 15.dp.toPx(),
+                                pointerStyle = Stroke(width = 1.dp.toPx()),
+                                pointerColor = Color.Gray,
+                                colorList = listOf(
+                                    Color.hsv(hue, saturation, 1f),
+                                    Color.hsv(hue, saturation, 0f)
+                                ),
+                                onChange = { a, v ->
+                                    valueAngle = a
+                                    value = (1 - v).toFloat()
+                                    theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                    colors = Theme.colors
+                                }
+                            )
+                        }
+
+                        AnimatedVisibility(
+                            visible = isDark, enter = EnterTransition.None,
+                            exit = ExitTransition.None
+                        ) {
+                            ArcSlider(
+                                modifier = Modifier
+                                    .fillMaxSize(.6f)
+                                    .aspectRatio(1f),
+                                angle = saturationAngleDark,
+                                startAngle = 110.0,
+                                sweepAngle = 320.0,
+                                strokeWidth = 15.dp.toPx(),
+                                pointerRadius = 15.dp.toPx(),
+                                pointerStyle = Stroke(width = 1.dp.toPx()),
+                                pointerColor = Color.Gray,
+                                colorList = listOf(
+                                    Color.hsv(hue, 1f, value),
+                                    Color.hsv(hue, 0f, value),
+                                ).asReversed(),
+                                onChange = { a, v ->
+                                    saturationAngleDark = a
+                                    v.toFloat().let {
+                                        saturationAngle = 100 + 160.0 * it
+                                        saturation = it
+                                    }
+                                    theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                    colors = Theme.colors
+                                }
+                            )
+                        }
 
                         Box(
                             modifier = Modifier
                                 .fillMaxSize(.4f)
                                 .aspectRatio(1f)
                                 .clip(CircleShape)
-                                .background(color)
+                                .background(
+                                    Color.hsv(
+                                        theme.a.hsv[0],
+                                        theme.a.hsv[1],
+                                        theme.a.hsv[2]
+                                    )
+                                )
                         )
                     }
                 }
             }
         }
     }
-
-    /*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewConfig()
-        theme.apply(b.root, requireContext())
-
-        fun onColorChange() {
-            theme.a.hsv = floatArrayOf(b.tHue.value, b.tSaturation.value, b.tValue.value)
-
-            theme.apply((activity as MainActivity).b.root, requireContext())
-        }
-
-        b.tHue.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
-
-        b.tSaturation.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
-
-        b.tValue.setOnTouchListener { _, e ->
-            onColorChange()
-            return@setOnTouchListener e.action == KeyEvent.ACTION_UP
-        }
-
-        b.tIsDark.setOnCheckedChangeListener { _, state ->
-            theme.a.isDark = state
-
-            b.tValText.tag = if (state) "colorC" else "colorB"
-            b.tValue.tag = if (state) "disabled" else "enabled"
-            b.tValue.isEnabled = !state
-            if (state) b.tValue.value = 1f
-            else b.tValue.value = theme.a.hsv[2]
-
-            theme.apply((activity as MainActivity).b.root, requireContext())
-        }
-
-        b.tAdvancedArrow.setOnClickListener {
-            switchAdvancedTab()
-        }
-    }
-
-    private fun viewConfig() {
-        b.tHue.value = theme.a.hsv[0]
-        b.tSaturation.value = theme.a.hsv[1]
-        b.tValue.value = theme.a.hsv[2]
-
-        b.tValText.tag = if (theme.a.isDark) "colorC" else "colorB"
-        b.tValue.tag = if (theme.a.isDark) "disabled" else "enabled"
-        b.tValue.isEnabled = !theme.a.isDark
-        if (theme.a.isDark) b.tValue.value = 1f
-
-        if (b.tSaturation.value + b.tValue.value < 2) {
-            b.tAdvancedArrow.rotation = 0f
-            b.tAdvanced.visibility = View.VISIBLE
-        }
-
-        b.tIsDark.isChecked = theme.a.isDark
-
-        b.tBar.post {
-            b.tBar.translationY = -1.5f * b.tBar[0].height.toFloat()
-        }
-    }
-
-    private fun switchAdvancedTab() {
-        b.tAdvanced.let {
-            it.visibility = if (it.isVisible) View.GONE else View.VISIBLE
-            b.tAdvancedArrow.animate()
-                .rotation(if (it.isVisible) 0f else 180f)
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 250
-        }
-    }
-    */
 }

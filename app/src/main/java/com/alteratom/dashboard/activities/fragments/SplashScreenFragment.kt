@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
+import android.service.quicksettings.Tile
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,6 +91,7 @@ class SplashScreenFragment : Fragment() {
                     }
                 }
 
+                //fm.replaceWith(TileNewFragment(), false, fadeLong)
                 if (serviceReady) {
                     if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
                         fm.replaceWith(DashboardFragment(), false, fadeLong)

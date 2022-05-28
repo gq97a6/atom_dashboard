@@ -93,14 +93,14 @@ class SplashScreenFragment : Fragment() {
                     }
                 }
 
-                tile = dashboards[0].tiles[0]
-                G.getIconRes = { tile.iconRes }
-                fm.replaceWith(TileIconFragment(), false, fadeLong)
-                //if (serviceReady) {
-                //    if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
-                //        fm.replaceWith(DashboardFragment(), false, fadeLong)
-                //    else fm.popBackStack(false, fadeLong)
-                //}
+                //tile = dashboards[0].tiles[0]
+                //G.getIconRes = { tile.iconRes }
+                //fm.replaceWith(TileIconFragment(), false, fadeLong)
+                if (serviceReady) {
+                    if (settings.startFromLast && G.setCurrentDashboard(settings.lastDashboardId))
+                        fm.replaceWith(DashboardFragment(), false, fadeLong)
+                    else fm.popBackStack(false, fadeLong)
+                }
 
                 serviceReady = true
             }

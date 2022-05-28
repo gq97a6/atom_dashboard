@@ -9,12 +9,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,8 +32,8 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.icon.*
-import com.alteratom.dashboard.icon.Icons.icons
+import com.alteratom.dashboard.icon.IconAdapter
+import com.alteratom.dashboard.icon.Icons
 import com.alteratom.databinding.FragmentTileIconBinding
 import java.util.*
 
@@ -55,6 +57,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         theme.apply(context = requireContext())
     }
 
+    @OptIn(ExperimentalFoundationApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,113 +67,147 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
             setContent {
                 ComposeTheme(Theme.isDark) {
                     //Background
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(colors.background)
-                    )
+                    Box(modifier = Modifier.background(colors.background))
+                    Box {
 
-                    LazyColumn(modifier = Modifier.padding(horizontal = 15.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        item {
-                            Box(
-                                modifier = Modifier
-                                    .padding(top = 20.dp)
-                                    .size(100.dp)
-                                    .border(
-                                        BorderStroke(0.dp, colors.color),
-                                        RoundedCornerShape(10.dp)
-                                    )
-                                    .padding(10.dp)
-                            ) {
-                                Icon(
-                                    painterResource(getIconRes()),
-                                    "",
-                                    tint = colors.a,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .aspectRatio(1f)
-                                        .padding(top = 7.dp)
-                                )
-                            }
-                        }
-
-                        item {
-                            Column(modifier = Modifier.fillMaxWidth().aspectRatio(6/5f), verticalArrangement = Arrangement.SpaceEvenly) {
+                        val cols = remember {
+                            mutableListOf<Color>().apply {
                                 for (i in 40..100 step 20) {
-                                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                        for (ii in 0..300 step 60) {
-                                            val hsv = if (theme.a.isDark) floatArrayOf(ii.toFloat(), i.toFloat() / 100, 1f)
-                                            else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
-                                            val colorPallet = theme.a.getColorPallet(hsv, true)
+                                    for (ii in 0..300 step 60) {
+                                        val hsv = if (theme.a.isDark) floatArrayOf(
+                                            ii.toFloat(),
+                                            i.toFloat() / 100,
+                                            1f
+                                        ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
 
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(40.dp)
-                                                    .clip(RoundedCornerShape(6.dp))
-                                                    .background(colorPallet.cc.a)
-                                            )
-                                        }
+                                        add(theme.a.getColorPallet(hsv, true).cc.a)
                                     }
                                 }
-                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                                    Box(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(40.dp)
-                                            .clip(RoundedCornerShape(6.dp))
-                                            .background(Color.White)
-                                    )
-
-                                    Box(
-                                        modifier = Modifier
-                                            .width(100.dp)
-                                            .height(40.dp)
-                                            .border(
-                                                BorderStroke(0.dp, colors.color),
-                                                RoundedCornerShape(6.dp)
-                                            )
-                                            .padding(5.dp),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Icon(
-                                            painterResource(R.drawable.il_interface_question),
-                                            "",
-                                            tint = colors.a,
-                                            modifier = Modifier
-                                                .fillMaxHeight()
-                                                .aspectRatio(1f)
-                                        )
-                                    }
-                                }
-                            }
+                            }.toList()
                         }
 
-                        for (c in Icons.cats) {
-                            val catUp =
-                                c.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                        val icons = remember {
+                            Icons.cats.map { c ->
+                                val catUp = c.replaceFirstChar {
+                                    if (it.isLowerCase()) it.titlecase(
+                                        Locale.getDefault()
+                                    ) else it.toString()
+                                }
+                                catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
+                            }.toMap()
+                        }
 
-                            item {
+                        LazyVerticalGrid(
+                            cells = GridCells.Fixed(6),
+                            modifier = Modifier.padding(horizontal = 10.dp),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+
+                            item({ GridItemSpan(6) }) {
+                                Spacer(modifier = Modifier.height(140.dp))
+                            }
+
+                            items(cols, { GridItemSpan(1) }) {
                                 Box(
                                     modifier = Modifier
-                                        .padding(top = 10.dp)
-                                        .fillMaxWidth()
-                                        .height(50.dp)
+                                        .padding(8.dp)
+                                        .aspectRatio(1f)
+                                        .clip(RoundedCornerShape(6.dp))
+                                        .background(it)
+                                )
+                            }
+
+                            item({ GridItemSpan(3) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .height(45.dp)
+                                        .clip(RoundedCornerShape(6.dp))
+                                        .background(Color.White)
+                                )
+                            }
+
+                            item({ GridItemSpan(3) }) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .height(45.dp)
                                         .border(
                                             BorderStroke(0.dp, colors.color),
                                             RoundedCornerShape(6.dp)
                                         )
                                         .padding(5.dp),
-                                    contentAlignment = Alignment.CenterStart
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Text(catUp, fontSize = 20.sp, color = colors.a)
+                                    Icon(
+                                        painterResource(R.drawable.il_interface_question),
+                                        "",
+                                        tint = colors.a,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .aspectRatio(1f)
+                                    )
                                 }
                             }
 
-                            items(icons.filter { it.value.cat == c }.values.toList()) {
-                                icons.filter { it.value.cat == c }.values.toList()
+                            for (pair in icons) {
+                                item({ GridItemSpan(6) }) {
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(top = 15.dp)
+                                            .padding(bottom = 5.dp)
+                                            .padding(horizontal = 8.dp)
+                                            .height(50.dp)
+                                            .border(
+                                                BorderStroke(0.dp, colors.color),
+                                                RoundedCornerShape(6.dp)
+                                            )
+                                            .padding(start = 10.dp),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        Text(pair.key, fontSize = 20.sp, color = colors.a)
+                                    }
+                                }
+
+                                items(pair.value, { GridItemSpan(1) }) {
+                                    Icon(
+                                        painterResource(it.res),
+                                        "",
+                                        tint = colors.a,
+                                        modifier = Modifier
+                                            .padding(8.dp)
+                                            .aspectRatio(1f)
+                                            .aspectRatio(1f)
+                                    )
+                                }
+
+                                item({ GridItemSpan(6) }) {
+                                    Spacer(Modifier)
+                                }
                             }
-                            //for(i in icons.filter { it.cat == c }) {
-                            //}
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 20.dp)
+                                .size(100.dp)
+                                .border(
+                                    BorderStroke(0.dp, colors.color),
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(colors.background.copy(.8f))
+                                .padding(10.dp)
+                                .align(Alignment.TopCenter)
+                        ) {
+                            Icon(
+                                painterResource(getIconRes()),
+                                "",
+                                tint = colors.a,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 7.dp)
+                            )
                         }
                     }
                 }

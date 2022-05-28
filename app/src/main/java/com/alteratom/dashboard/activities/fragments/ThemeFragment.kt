@@ -63,11 +63,7 @@ class ThemeFragment : Fragment() {
                     theme.apply(context = requireContext())
 
                     //Background
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(colors.background)
-                    )
+                    Box(modifier = Modifier.background(colors.background))
 
                     Column(
                         horizontalAlignment = CenterHorizontally,

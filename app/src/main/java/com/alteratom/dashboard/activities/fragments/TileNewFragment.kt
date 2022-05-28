@@ -56,11 +56,7 @@ class TileNewFragment : Fragment() {
             setContent {
                 ComposeTheme(Theme.isDark) {
                     //Background
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(colors.background)
-                    )
+                    Box(modifier = Modifier.background(colors.background))
 
                     Column(horizontalAlignment = CenterHorizontally) {
                         Text(

@@ -155,7 +155,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { statePub = stateSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = Theme.colors.b
                             )
                         }
@@ -190,7 +190,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { brightPub = brightSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = Theme.colors.b
                             )
                         }
@@ -225,7 +225,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { colorPub = colorSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = Theme.colors.b
                             )
                         }
@@ -260,7 +260,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { modePub = modeSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = Theme.colors.b
                             )
                         }

@@ -63,7 +63,7 @@ class SetupActivity : AppCompatActivity() {
                         else R.drawable.ic_icon
 
                         Image(
-                            painterResource(icon), "Logo",
+                            painterResource(icon), "",
                             modifier = Modifier.size(300.dp),
                             colorFilter = ColorFilter.tint(
                                 colors.color.copy(alpha = .4f),

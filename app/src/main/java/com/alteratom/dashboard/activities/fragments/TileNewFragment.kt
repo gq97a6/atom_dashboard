@@ -113,7 +113,7 @@ class TileNewFragment : Fragment() {
 
                                 Icon(
                                     painterResource(res),
-                                    "right arrow",
+                                    "",
                                     tint = colors.a,
                                     modifier = Modifier
                                         .fillMaxHeight()
@@ -325,75 +325,4 @@ class TileNewFragment : Fragment() {
             }
         }
     }
-
-    /*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        G.theme.apply(b.root, requireActivity())
-
-        b.tnButton.setOnClickListener {
-            b.tnButtonRipple.click()
-            addTile(ButtonTile())
-        }
-
-        b.tnSlider.setOnClickListener {
-            b.tnSliderRipple.click()
-            addTile(SliderTile())
-        }
-
-        b.tnSwitch.setOnClickListener {
-            b.tnSwitchRipple.click()
-            addTile(SwitchTile())
-        }
-
-        b.tnText.setOnClickListener {
-            b.tnTextRipple.click()
-            addTile(TextTile())
-        }
-
-        b.tnSelect.setOnClickListener {
-            b.tnSelectRipple.click()
-            addTile(SelectTile())
-        }
-
-        b.tnTerminal.setOnClickListener {
-            b.tnTerminalRipple.click()
-            addTile(TerminalTile())
-        }
-
-        b.tnTime.setOnClickListener {
-            b.tnTimeRipple.click()
-            addTile(TimeTile())
-        }
-
-        b.tnColor.setOnClickListener {
-            b.tnColorRipple.click()
-            addTile(ColorTile())
-        }
-
-        b.tnThermostat.setOnClickListener {
-            b.tnThermostatRipple.click()
-            addTile(ThermostatTile())
-        }
-
-        b.tnLights.setOnClickListener {
-            b.tnLightsRipple.click()
-            addTile(LightsTile())
-        }
-    }
-
-    private var isDone = false
-    private fun addTile(t: Tile) {
-        if (isDone) return
-        isDone = true
-
-        t.dashboard = dashboard
-        t.onCreateTile()
-        dashboard.tiles.add(t)
-
-        tile = t
-        fm.replaceWith(TilePropertiesFragment(), false)
-    }
-
-     */
 }

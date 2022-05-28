@@ -80,7 +80,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { tempSetPub = tempSetSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = colors.b
                             )
                         }
@@ -141,7 +141,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                                 IconButton(onClick = { humiSetPub = humiSetSub }) {
                                     Icon(
                                         painterResource(R.drawable.il_file_copy),
-                                        "copy",
+                                        "",
                                         tint = colors.b
                                     )
                                 }
@@ -180,7 +180,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         IconButton(onClick = { modePub = modeSub }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
-                                "copy",
+                                "",
                                 tint = colors.b
                             )
                         }

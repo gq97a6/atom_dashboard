@@ -11,8 +11,6 @@ object DaemonsManager {
         dashboards.forEach {
             notifyDashboardAdded(it)
         }
-
-        notifyAllAssigned()
     }
 
     fun notifyAssigned(dashboard: Dashboard) =

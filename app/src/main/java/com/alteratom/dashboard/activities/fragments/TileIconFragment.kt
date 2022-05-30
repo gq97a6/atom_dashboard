@@ -57,6 +57,31 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         theme.apply(context = requireContext())
     }
 
+
+
+    val cols = mutableListOf<Color>().apply {
+        for (i in 40..100 step 20) {
+            for (ii in 0..300 step 60) {
+                val hsv = if (theme.a.isDark) floatArrayOf(
+                    ii.toFloat(),
+                    i.toFloat() / 100,
+                    1f
+                ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
+
+                add(theme.a.getColorPallet(hsv, true).cc.a)
+            }
+        }
+    }.toList()
+
+    val icons = Icons.cats.map { c ->
+        val catUp = c.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
+        catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
+    }.toMap()
+
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,33 +94,6 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                     //Background
                     Box(modifier = Modifier.background(colors.background))
                     Box {
-
-                        val cols = remember {
-                            mutableListOf<Color>().apply {
-                                for (i in 40..100 step 20) {
-                                    for (ii in 0..300 step 60) {
-                                        val hsv = if (theme.a.isDark) floatArrayOf(
-                                            ii.toFloat(),
-                                            i.toFloat() / 100,
-                                            1f
-                                        ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
-
-                                        add(theme.a.getColorPallet(hsv, true).cc.a)
-                                    }
-                                }
-                            }.toList()
-                        }
-
-                        val icons = remember {
-                            Icons.cats.map { c ->
-                                val catUp = c.replaceFirstChar {
-                                    if (it.isLowerCase()) it.titlecase(
-                                        Locale.getDefault()
-                                    ) else it.toString()
-                                }
-                                catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
-                            }.toMap()
-                        }
 
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(6),

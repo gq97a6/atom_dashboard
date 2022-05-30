@@ -59,7 +59,7 @@ class ThemeFragment : Fragment() {
                 var colors by remember { mutableStateOf(colors) }
                 var isDark by remember { mutableStateOf(theme.a.isDark) }
 
-                ComposeTheme(theme.a.isDark, theme.a.getComposeColorPallet()) {
+                ComposeTheme(theme.a.isDark) {
                     theme.apply(context = requireContext())
 
                     //Background

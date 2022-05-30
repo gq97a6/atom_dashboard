@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.GridItemSpan
@@ -16,7 +13,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
+import com.alteratom.dashboard.G.getIconColorPallet
 import com.alteratom.dashboard.G.getIconRes
+import com.alteratom.dashboard.G.setIconHSV
+import com.alteratom.dashboard.G.setIconKey
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
@@ -58,8 +61,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     }
 
 
-
-    val cols = mutableListOf<Color>().apply {
+    val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
         for (i in 40..100 step 20) {
             for (ii in 0..300 step 60) {
                 val hsv = if (theme.a.isDark) floatArrayOf(
@@ -68,7 +70,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                     1f
                 ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
 
-                add(theme.a.getColorPallet(hsv, true).cc.a)
+                add(theme.a.getColorPallet(hsv, true).cc.a to hsv)
             }
         }
     }.toList()
@@ -90,14 +92,21 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
+
+                var iconRes by remember { mutableStateOf(getIconRes()) }
+                var iconColor by remember { mutableStateOf(getIconColorPallet().cc.a) }
+
                 ComposeTheme(Theme.isDark) {
                     //Background
                     Box(modifier = Modifier.background(colors.background))
+
                     Box {
 
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(6),
-                            modifier = Modifier.padding(horizontal = 10.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp)
+                                .padding(bottom = 10.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
 
@@ -111,7 +120,11 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                         .padding(8.dp)
                                         .aspectRatio(1f)
                                         .clip(RoundedCornerShape(6.dp))
-                                        .background(it)
+                                        .background(it.first)
+                                        .clickable {
+                                            setIconHSV(it.second)
+                                            iconColor = getIconColorPallet().cc.a
+                                        }
                                 )
                             }
 
@@ -121,7 +134,11 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                         .padding(8.dp)
                                         .height(45.dp)
                                         .clip(RoundedCornerShape(6.dp))
-                                        .background(Color.White)
+                                        .background(if (theme.a.isDark) Color.White else Color.Black)
+                                        .clickable {
+                                            setIconHSV(floatArrayOf(0f, 0f, 0f))
+                                            iconColor = getIconColorPallet().cc.a
+                                        }
                                 )
                             }
 
@@ -134,6 +151,9 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                             BorderStroke(0.dp, colors.color),
                                             RoundedCornerShape(6.dp)
                                         )
+                                        .clickable {
+
+                                        }
                                         .padding(5.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -175,7 +195,12 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                         modifier = Modifier
                                             .padding(8.dp)
                                             .aspectRatio(1f)
-                                            .aspectRatio(1f)
+                                            .clickable {
+                                                val key =
+                                                    Icons.icons.filterValues { i -> i.res == it.res }.keys
+                                                setIconKey(key.first())
+                                                iconRes = getIconRes()
+                                            }
                                     )
                                 }
 
@@ -190,7 +215,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                 .padding(top = 20.dp)
                                 .size(100.dp)
                                 .border(
-                                    BorderStroke(0.dp, colors.color),
+                                    BorderStroke(0.dp, iconColor),
                                     RoundedCornerShape(10.dp)
                                 )
                                 .clip(RoundedCornerShape(10.dp))
@@ -199,9 +224,9 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                 .align(Alignment.TopCenter)
                         ) {
                             Icon(
-                                painterResource(getIconRes()),
+                                painterResource(iconRes),
                                 "",
-                                tint = colors.a,
+                                tint = iconColor,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(top = 7.dp)

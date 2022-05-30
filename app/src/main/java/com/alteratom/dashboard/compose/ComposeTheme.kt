@@ -1,21 +1,24 @@
 package com.alteratom.dashboard.compose
 
-import android.util.Log
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.Theme.Companion.isDark
 import androidx.compose.ui.graphics.Color as C
 
 val DarkColorPalette: Colors
     get() = darkColors(
-        primary = C.LightGray,
-        primaryVariant = C.Gray,
-        secondary = C.DarkGray,
-        secondaryVariant = C.Black,
-        background = C.Blue,
+        primary = C.White,
+        primaryVariant = C.White,
+        secondary = C.White,
+        secondaryVariant = C.White,
+        background = colors.background,
         surface = C.Transparent,
         onPrimary = C.White,
         onSecondary = C.White,
@@ -26,10 +29,10 @@ val DarkColorPalette: Colors
 val LightColorPalette: Colors
     get() = lightColors(
         primary = C.Black,
-        primaryVariant = C.DarkGray,
-        secondary = C.Gray,
-        secondaryVariant = C.LightGray,
-        background = C.Red,
+        primaryVariant = C.Black,
+        secondary = C.Black,
+        secondaryVariant = C.Black,
+        background = colors.background,
         surface = C.Transparent,
         onPrimary = C.Black,
         onSecondary = C.Black,
@@ -40,7 +43,6 @@ val LightColorPalette: Colors
 @Composable
 fun ComposeTheme(
     darkTheme: Boolean = isDark,
-    colors: Theme.ComposeColorPallet? = null,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
@@ -49,7 +51,18 @@ fun ComposeTheme(
             small = RoundedCornerShape(4.dp),
             medium = RoundedCornerShape(4.dp),
             large = RoundedCornerShape(0.dp)
-        ),
-        content = content
-    )
+        )
+    ) {
+        CompositionLocalProvider(
+            LocalRippleTheme provides object : RippleTheme {
+                @Composable
+                override fun defaultColor(): C = colors.background
+
+                @Composable
+                override fun rippleAlpha(): RippleAlpha = RippleAlpha(1f, 1f, 1f, 1f)
+                //RippleTheme.defaultRippleAlpha(androidx.compose.ui.graphics.Color.Black, lightTheme = !isSystemInDarkTheme())
+            },
+            content = content
+        )
+    }
 }

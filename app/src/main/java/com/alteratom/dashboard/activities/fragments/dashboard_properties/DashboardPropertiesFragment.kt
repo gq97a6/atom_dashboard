@@ -156,11 +156,7 @@ class DashboardPropertiesFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 //Background
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Theme.colors.background)
-                )
+                Box(modifier = Modifier.background(Theme.colors.background))
 
                 ComposeTheme(Theme.isDark) {
                     Box(

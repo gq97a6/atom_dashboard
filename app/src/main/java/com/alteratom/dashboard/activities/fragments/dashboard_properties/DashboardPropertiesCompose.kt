@@ -4,11 +4,11 @@ import android.app.Dialog
 import android.content.Intent
 import android.view.View
 import androidx.compose.animation.*
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -17,11 +17,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontStyle.Companion.Normal
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +34,7 @@ import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.databinding.DialogSslBinding
 import kotlin.random.Random
 
@@ -134,25 +137,82 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
     override fun Mqttd(fragment: Fragment) {
         FrameBox("Communication:", "MQTT") {
             Column {
-                var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
-                LabeledSwitch(
-                    label = {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    Arrangement.SpaceBetween
+                ) {
+                    var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
+                    LabeledSwitch(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        label = {
+                            Text(
+                                "Enabled:",
+                                fontSize = 15.sp,
+                                color = Theme.colors.a
+                            )
+                        },
+                        checked = enabled,
+                        onCheckedChange = {
+                            enabled = it
+                            dashboard.mqtt.isEnabled = it
+                            dashboard.daemon.notifyOptionsChanged()
+                        }
+                    )
+
+                    var conStatus by remember { mutableStateOf("") }
+
+                    dashboard.daemon.let {
+                        it.isDone.observe(fragment.viewLifecycleOwner) { isDone ->
+                            when (it) {
+                                is Mqttd -> {
+                                    conStatus = when (it.status) {
+                                        Mqttd.MqttdStatus.DISCONNECTED -> "DISCONNECTED"
+                                        Mqttd.MqttdStatus.FAILED -> "FAILED"
+                                        Mqttd.MqttdStatus.ATTEMPTING -> "ATTEMPTING"
+                                        Mqttd.MqttdStatus.CONNECTED -> "CONNECTED"
+                                        Mqttd.MqttdStatus.CONNECTED_SSL -> "CONNECTED"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    val value = rememberInfiniteTransition()
+                    val alpha = value.animateFloat(
+                        initialValue = 1f,
+                        targetValue = 0f,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(300, 200),
+                            repeatMode = RepeatMode.Reverse,
+                        )
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .alpha(if (conStatus == "ATTEMPTING") alpha.value else 1f)
+                            .fillMaxWidth(.9f)
+                            .aspectRatio(4f)
+                            .align(Alignment.CenterVertically)
+                            .border(
+                                BorderStroke(2.dp, Theme.colors.a),
+                                RoundedCornerShape(10.dp)
+                            )
+                    ) {
                         Text(
-                            "Enabled:",
-                            fontSize = 15.sp,
+                            conStatus,
+                            modifier = Modifier.align(Alignment.Center),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.sp,
                             color = Theme.colors.a
                         )
-                    },
-                    checked = enabled,
-                    onCheckedChange = {
-                        enabled = it
-                        dashboard.mqtt.isEnabled = it
-                        dashboard.daemon.notifyOptionsChanged()
                     }
-                )
+                }
 
                 OutlinedButton(
                     modifier = Modifier
+                        .padding(top = 5.dp)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f),
                     contentPadding = PaddingValues(13.dp),

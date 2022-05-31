@@ -10,9 +10,11 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.dialogConfirmCompose
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
@@ -116,7 +118,7 @@ abstract class Tile : RecyclerViewItem() {
             return
         }
 
-        with(adapter.context) {
+        with(adapter.context as MainActivity) {
             buildConfirm("Confirm publishing", "PUBLISH", {
                 send()
             })

@@ -5,6 +5,11 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.WindowManager
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.alteratom.R
 import com.alteratom.databinding.DialogConfirmBinding
 
@@ -49,5 +54,16 @@ object DialogBuilder {
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
         )
+    }
+}
+
+@Composable
+fun Context.dialogConfirmCompose() {
+    Dialog(onDismissRequest = { }) {
+        ComposeView(this).apply {
+            setContent {
+                Text("TEST", fontSize = 40.sp, color = Theme.colors.a)
+            }
+        }
     }
 }

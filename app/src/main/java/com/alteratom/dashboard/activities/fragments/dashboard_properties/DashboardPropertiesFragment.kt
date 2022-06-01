@@ -3,8 +3,8 @@ package com.alteratom.dashboard.activities.fragments.dashboard_properties
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,60 +30,64 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.NavigationArrows
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.switcher.FragmentSwitcher
-import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.DialogCopyBrokerBinding
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
+import java.io.InputStream
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
 
 class DashboardPropertiesFragment : Fragment() {
 
-    var onOpenCertSuccess: () -> Unit = {}
-    lateinit var openCert: ActivityResultLauncher<Intent>
+    var openCert: (action: (uri: Uri, inputStream: InputStream) -> Unit) -> Unit = {}
+
+    private lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
+    private lateinit var request: ActivityResultLauncher<Intent>
 
     val copyProperties: () -> Unit = {
-        if (G.dashboards.size <= 1) {
+        if (dashboards.size <= 1) {
             createToast(requireContext(), "No dashboards to copy from")
         } else {
             val dialog = Dialog(requireContext())
             val adapter = RecyclerViewAdapter<RecyclerViewItem>(requireContext())
 
-            val list = MutableList(G.dashboards.size) {
+            val list = MutableList(dashboards.size) {
                 RecyclerViewItem(
                     R.layout.item_copy_broker
                 )
             }
-            list.removeAt(G.dashboards.indexOf(G.dashboard))
+            list.removeAt(dashboards.indexOf(dashboard))
 
             dialog.setContentView(R.layout.dialog_copy_broker)
             val binding = DialogCopyBrokerBinding.bind(dialog.findViewById(R.id.root))
 
             adapter.setHasStableIds(true)
             adapter.onBindViewHolder = { _, holder, pos ->
-                val p = pos + if (pos >= G.dashboards.indexOf(G.dashboard)) 1 else 0
+                val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
                 val text = holder.itemView.findViewById<TextView>(R.id.icb_text)
-                text.text = G.dashboards[p].name.uppercase(Locale.getDefault())
+                text.text = dashboards[p].name.uppercase(Locale.getDefault())
             }
 
             adapter.onItemClick = {
                 val pos = adapter.list.indexOf(it)
-                val p = pos + if (pos >= G.dashboards.indexOf(G.dashboard)) 1 else 0
+                val p = pos + if (pos >= dashboards.indexOf(dashboard)) 1 else 0
 
-                G.dashboard.mqtt = G.dashboards[p].mqtt.copy()
-                G.dashboard.mqtt.clientId = abs(Random.nextInt()).toString()
-                G.dashboard.daemon.notifyOptionsChanged()
+                dashboard.mqtt = dashboards[p].mqtt.copy()
+                dashboard.mqtt.clientId = abs(Random.nextInt()).toString()
+                dashboard.daemon.notifyOptionsChanged()
 
                 fm.replaceWith(DashboardPropertiesFragment(), false)
                 dialog.dismiss()
@@ -95,59 +99,36 @@ class DashboardPropertiesFragment : Fragment() {
             adapter.submitList(list)
 
             dialog.dialogSetup()
-            G.theme.apply(binding.root)
+            theme.apply(binding.root)
             dialog.show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        G.theme.apply(context = requireContext())
+        theme.apply(context = requireContext())
 
-        openCert =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK) {
-                    result.data?.data?.also { uri ->
-                        try {
-                            requireContext().contentResolver.openInputStream(uri)
-                                ?.use { inputStream ->
-                                    G.dashboard.mqtt.let { m ->
-
-                                        m.sslCertStr = try {
-                                            val cf = CertificateFactory.getInstance("X.509")
-                                            cf.generateCertificate(inputStream) as X509Certificate
-                                        } catch (e: Exception) {
-                                            null
-                                        }?.toPem()
-
-                                        m.sslFileName =
-                                            if (m.sslCert != null) {
-                                                runCatching {
-                                                    requireContext().contentResolver.query(
-                                                        uri,
-                                                        null,
-                                                        null,
-                                                        null,
-                                                        null
-                                                    )?.use { cursor ->
-                                                        cursor.moveToFirst()
-                                                        return@use cursor.getColumnIndexOrThrow(
-                                                            OpenableColumns.DISPLAY_NAME
-                                                        ).let(cursor::getString)
-                                                    }
-                                                }.getOrNull() ?: "cert.crt"
-                                            } else ""
-
-                                        if (m.sslCert != null) onOpenCertSuccess()
-                                    }
-                                }
-
-                        } catch (e: java.lang.Exception) {
-                            createToast(requireContext(), "Certificate error")
-                        }
+        request = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.data?.also { uri ->
+                    try {
+                        requireContext().contentResolver.openInputStream(uri)
+                            ?.use { inputStream -> requestAction(uri, inputStream) }
+                    } catch (e: java.lang.Exception) {
+                        createToast(requireContext(), "Certificate error")
                     }
                 }
             }
+        }
+
+        openCert = { action ->
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+            }
+            requestAction = action
+            request.launch(intent)
+        }
     }
 
     override fun onCreateView(
@@ -167,7 +148,10 @@ class DashboardPropertiesFragment : Fragment() {
                             .pointerInput(Unit) {
                                 awaitPointerEventScope {
                                     while (true) {
-                                        FragmentSwitcher.handle(awaitPointerEvent(), DashboardPropertiesFragment())
+                                        FragmentSwitcher.handle(
+                                            awaitPointerEvent(),
+                                            DashboardPropertiesFragment()
+                                        )
                                     }
                                 }
                             },
@@ -225,47 +209,4 @@ class DashboardPropertiesFragment : Fragment() {
             }
         }
     }
-
-    /*
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        //Set dashboard status
-        G.dashboard.daemon.let {
-            it.isDone.observe(viewLifecycleOwner) { isDone ->
-                val v = b.dpMqttStatus
-                v.text = when (it) {
-                    is Mqttd -> when (it.status) {
-                        Mqttd.MqttdStatus.DISCONNECTED -> {
-                            v.clearAnimation()
-                            "DISCONNECTED"
-                        }
-                        Mqttd.MqttdStatus.FAILED -> {
-                            v.clearAnimation()
-                            "FAILED TO CONNECT"
-                        }
-                        Mqttd.MqttdStatus.ATTEMPTING -> {
-                            if (v.animation == null) v.blink(-1, 400)
-                            "ATTEMPTING"
-                        }
-                        Mqttd.MqttdStatus.CONNECTED -> {
-                            v.clearAnimation()
-                            "CONNECTED"
-                        }
-                        Mqttd.MqttdStatus.CONNECTED_SSL -> {
-                            v.clearAnimation()
-                            "CONNECTED"
-                        }
-                    }
-                    else -> {
-                        "err"
-                    }
-                }
-            }
-        }
-
-
-    }
-     */
 }

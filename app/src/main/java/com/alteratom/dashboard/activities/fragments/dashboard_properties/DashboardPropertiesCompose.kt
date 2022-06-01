@@ -1,11 +1,10 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
-import android.app.Dialog
-import android.content.Intent
-import android.view.View
+import android.provider.OpenableColumns
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -27,114 +27,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
-import com.alteratom.databinding.DialogSslBinding
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import kotlin.random.Random
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
 
-    fun editSsl(fragment: Fragment) {
-
-        val context = fragment.context
-        if (context == null) return
-
-        val dialog = Dialog(context)
-
-        dialog.setContentView(R.layout.dialog_ssl)
-        val binding = DialogSslBinding.bind(dialog.findViewById(R.id.root))
-
-        binding.dsSsl.isChecked = dashboard.mqtt.ssl
-        binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
-        binding.dsCaCert.text = dashboard.mqtt.sslFileName
-        binding.dsTrustAlert.visibility =
-            if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
-        if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
-
-        if (dashboard.mqtt.sslCert != null) binding.dsCaCertInsert.foreground =
-            context.getDrawable(R.drawable.bt_remove)
-
-        binding.dsSsl.setOnCheckedChangeListener { _, state ->
-            dashboard.mqtt.ssl = state
-            dashboard.daemon.notifyOptionsChanged()
-        }
-
-        binding.dsTrustAll.setOnTouchListener { v, event ->
-            if (event.action != 0) return@setOnTouchListener true
-
-            fun validate() {
-                binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
-                binding.dsTrustAlert.visibility =
-                    if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
-
-                if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
-                else binding.dsTrustAlert.clearAnimation()
-
-                dashboard.daemon.notifyOptionsChanged()
-            }
-
-            if (!dashboard.mqtt.sslTrustAll) {
-                context.buildConfirm("Confirm override", "CONFIRM",
-                    {
-                        dashboard.mqtt.sslTrustAll = true
-                        validate()
-                    }
-                )
-            } else {
-                dashboard.mqtt.sslTrustAll = false
-                validate()
-            }
-
-            return@setOnTouchListener true
-        }
-
-        (fragment as DashboardPropertiesFragment).onOpenCertSuccess = {
-            binding.dsCaCert.text = dashboard.mqtt.sslFileName
-            binding.dsCaCertInsert.foreground =
-                context.getDrawable(R.drawable.bt_remove)
-
-            dashboard.daemon.notifyOptionsChanged()
-        }
-
-        fun openCert() {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "*/*"
-            }
-            fragment.openCert.launch(intent)
-        }
-
-        binding.dsCaCert.setOnClickListener {
-            if (dashboard.mqtt.sslCert == null) openCert()
-        }
-
-        binding.dsCaCertInsert.setOnClickListener {
-            if (dashboard.mqtt.sslCert == null) openCert()
-            else {
-                dashboard.mqtt.sslFileName = ""
-                dashboard.mqtt.sslCertStr = null
-
-                binding.dsCaCert.text = ""
-                binding.dsCaCertInsert.foreground =
-                    context.getDrawable(R.drawable.bt_include)
-
-                dashboard.daemon.notifyOptionsChanged()
-            }
-        }
-
-        dialog.dialogSetup()
-        G.theme.apply(binding.root)
-        dialog.show()
-    }
-
     @Composable
     override fun Mqttd(fragment: Fragment) {
+        fragment as DashboardPropertiesFragment
+
         FrameBox("Communication:", "MQTT") {
             Column {
                 Row(
@@ -164,7 +74,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     var conStatus by remember { mutableStateOf("") }
 
                     dashboard.daemon.let {
-                        it.isDone.observe(fragment.viewLifecycleOwner) { isDone ->
+                        it.isDone.observe(fragment.viewLifecycleOwner) { _ ->
                             when (it) {
                                 is Mqttd -> {
                                     conStatus = when (it.status) {
@@ -217,7 +127,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .fillMaxWidth(.8f),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { (fragment as DashboardPropertiesFragment).copyProperties() }
+                    onClick = { fragment.copyProperties() }
                 ) {
                     Text("COPY PROPERTIES", fontSize = 10.sp, color = Theme.colors.a)
                 }
@@ -280,6 +190,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 )
 
+                var sshShow by remember { mutableStateOf(false) }
+
                 OutlinedButton(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -287,9 +199,180 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .padding(top = 10.dp),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { editSsl(fragment) }
+                    onClick = { sshShow = true } //editSsl(fragment) }
                 ) {
                     Text("CONFIGURE SSL", fontSize = 10.sp, color = Theme.colors.a)
+                }
+
+                if (sshShow) {
+                    /*
+                    fun validate() {
+                        binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
+                        binding.dsTrustAlert.visibility =
+                            if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
+
+                        if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
+                        else binding.dsTrustAlert.clearAnimation()
+
+                        dashboard.daemon.notifyOptionsChanged()
+                    }
+
+                    if (!dashboard.mqtt.sslTrustAll) {
+                        context.buildConfirm("Confirm override", "CONFIRM",
+                            {
+                                dashboard.mqtt.sslTrustAll = true
+                                validate()
+                            }
+                        )
+                    } else {
+                        dashboard.mqtt.sslTrustAll = false
+                        validate()
+                    }
+                     */
+
+                    Dialog({ sshShow = false }) {
+                        Column(
+                            modifier = Modifier
+                                .padding(bottom = 20.dp)
+                                .padding(horizontal = 20.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .border(
+                                    BorderStroke(0.dp, Theme.colors.color),
+                                    RoundedCornerShape(6.dp)
+                                )
+                                .background(colors.background.copy(.9f))
+                                .padding(15.dp),
+                        ) {
+                            var enable by remember { mutableStateOf(dashboard.mqtt.ssl) }
+                            var trust by remember { mutableStateOf(dashboard.mqtt.sslTrustAll) }
+
+                            var ca by remember { mutableStateOf(dashboard.mqtt.sslFileName) }
+                            val client by remember { mutableStateOf("") }
+
+                            fun getCaCert() {
+                                fragment.openCert { uri, inputStream ->
+                                    dashboard.mqtt.let { m ->
+
+                                        m.sslCertStr = try {
+                                            val cf = CertificateFactory.getInstance("X.509")
+                                            cf.generateCertificate(inputStream) as X509Certificate
+                                        } catch (e: Exception) {
+                                            null
+                                        }?.toPem()
+
+                                        m.sslFileName =
+                                            if (m.sslCert != null) {
+                                                runCatching {
+                                                    fragment.requireContext().contentResolver.query(
+                                                        uri,
+                                                        null,
+                                                        null,
+                                                        null,
+                                                        null
+                                                    )?.use { cursor ->
+                                                        cursor.moveToFirst()
+                                                        return@use cursor.getColumnIndexOrThrow(
+                                                            OpenableColumns.DISPLAY_NAME
+                                                        ).let(cursor::getString)
+                                                    }
+                                                }.getOrNull() ?: "cert.crt"
+                                            } else ""
+
+                                        if (m.sslCert != null) {
+                                            ca = dashboard.mqtt.sslFileName
+                                            dashboard.daemon.notifyOptionsChanged()
+                                        }
+                                    }
+                                }
+                            }
+
+                            LabeledCheckbox(
+                                label = {
+                                    Text(
+                                        "Enable SSL",
+                                        fontSize = 15.sp,
+                                        color = Theme.colors.a
+                                    )
+                                },
+                                checked = enable,
+                                onCheckedChange = {
+                                    enable = it
+                                    dashboard.mqtt.ssl = it
+                                    dashboard.daemon.notifyOptionsChanged()
+                                },
+                                modifier = Modifier.padding(vertical = 10.dp)
+                            )
+
+                            LabeledCheckbox(
+                                label = {
+                                    Text(
+                                        "Trust all certificates",
+                                        fontSize = 15.sp,
+                                        color = Theme.colors.a
+                                    )
+                                },
+                                checked = trust,
+                                onCheckedChange = {
+                                    trust = it
+                                    dashboard.mqtt.sslTrustAll = it
+                                    dashboard.daemon.notifyOptionsChanged()
+                                },
+                                modifier = Modifier.padding(vertical = 10.dp)
+                            )
+
+                            EditText(
+                                enabled = false,
+                                label = { Text("Custom CA certificate") },
+                                value = ca,
+                                onValueChange = {},
+                                modifier = Modifier
+                                    .nrClickable {
+                                        if (dashboard.mqtt.sslCert == null) getCaCert()
+                                    }
+                                    .padding(top = 10.dp),
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = {
+                                            if (dashboard.mqtt.sslCert == null) getCaCert()
+                                            else {
+                                                ca = ""
+                                                dashboard.mqtt.sslFileName = ""
+                                                dashboard.mqtt.sslCertStr = null
+                                                dashboard.daemon.notifyOptionsChanged()
+                                            }
+                                        }
+                                    ) {
+                                        Icon(
+                                            painterResource(if (ca.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
+                                            "",
+                                            tint = Theme.colors.b
+                                        )
+                                    }
+                                }
+                            )
+
+                            EditText(
+                                enabled = false,
+                                label = { Text("Client certificate") },
+                                value = client,
+                                onValueChange = {},
+                                modifier = Modifier.nrClickable {
+                                },
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = {
+                                        }
+                                    ) {
+                                        Icon(
+                                            painterResource(if (client.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
+                                            "",
+                                            tint = Theme.colors.b
+                                        )
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
 
                 var cred by remember { mutableStateOf(dashboard.mqtt.includeCred) }
@@ -349,7 +432,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     exit = fadeOut() + shrinkVertically()
                 ) {
                     Column {
-                        var userHidden by remember { mutableStateOf(!dashboard.mqtt.username.isEmpty()) }
+                        var userHidden by remember { mutableStateOf(dashboard.mqtt.username.isNotEmpty()) }
                         var user by remember { mutableStateOf(if (userHidden) "hidden" else "") }
                         EditText(
                             label = { Text("User name") },
@@ -383,7 +466,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             }
                         )
 
-                        var passHidden by remember { mutableStateOf(!dashboard.mqtt.pass.isEmpty()) }
+                        var passHidden by remember { mutableStateOf(dashboard.mqtt.pass.isNotEmpty()) }
                         var pass by remember { mutableStateOf(if (passHidden) "hidden" else "") }
                         EditText(
                             label = { Text("Password") },

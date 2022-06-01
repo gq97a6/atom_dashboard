@@ -8,6 +8,9 @@ import com.alteratom.dashboard.Theme.Companion.colors
 fun EditTextColors() = TextFieldDefaults.outlinedTextFieldColors(
     textColor = colors.b,
     cursorColor = colors.b,
+    disabledTextColor = colors.b,
+    disabledBorderColor = colors.b,
+    disabledLabelColor = colors.b,
     focusedBorderColor = colors.a,
     unfocusedBorderColor = colors.b,
     leadingIconColor = MaterialTheme.colors.onSurface.copy(alpha = TextFieldDefaults.IconOpacity),

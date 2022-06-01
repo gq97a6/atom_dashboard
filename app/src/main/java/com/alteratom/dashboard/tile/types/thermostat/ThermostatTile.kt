@@ -1,29 +1,32 @@
 package com.alteratom.tile.types.thermostat
 
 import android.app.Dialog
+import android.content.res.ColorStateList
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.INVISIBLE
 import android.widget.TextView
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.round
-import com.arctextview.ArcTextView
+import com.alteratom.databinding.DialogSelectBinding
+import com.alteratom.databinding.DialogThermostatBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
 
@@ -129,37 +132,6 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
         var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
 
         dialog.setContentView(R.layout.dialog_thermostat)
-        dialog.setContentView(ComposeView(adapter.context).apply {
-            setContent {
-
-                ComposeTheme(Theme.isDark) {
-                    Box {
-                        val selectedItem = remember { mutableStateOf(0) }
-
-                        // Adds view to Compose
-                        AndroidView(
-                            modifier = Modifier.fillMaxSize(), // Occupy the max size in the Compose UI tree
-                            factory = { context ->
-                                // Creates custom view
-                                ArcTextView(context).apply {
-                                }
-                            },
-                            update = { view ->
-                                // View's been inflated or state read in this block has been updated
-                                // Add logic here if necessary
-
-                                // As selectedItem is read here, AndroidView will recompose
-                                // whenever the state changes
-                                // Example of Compose -> View communication
-                                // view.
-                                // view.coordinator.selectedItem = selectedItem.value
-                            }
-                        )
-                    }
-                }
-            }
-        })
-/*
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
 
         val observer: (String) -> Unit = { it ->
@@ -337,9 +309,9 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
         tempSetpointTmp?.let { binding.dtValue.text = "${it.round(3)}°C" }
         tempSetpointTmp?.let { binding.dtTempSetpoint.text = "${it.round(3)}°C" }
         temp?.let { binding.dtTempCurrent.text = "${it.round(3)}°C" }
-*/
+
         dialog.dialogSetup()
-        //theme.apply(binding.root, anim = false)
+        theme.apply(binding.root, anim = false)
         dialog.show()
     }
 

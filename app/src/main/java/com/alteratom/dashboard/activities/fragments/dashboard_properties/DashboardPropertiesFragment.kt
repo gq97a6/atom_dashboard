@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,14 +32,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.switcher.FragmentSwitcher
+import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.DialogCopyBrokerBinding
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -160,7 +162,15 @@ class DashboardPropertiesFragment : Fragment() {
 
                 ComposeTheme(Theme.isDark) {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                awaitPointerEventScope {
+                                    while (true) {
+                                        FragmentSwitcher.handle(awaitPointerEvent(), DashboardPropertiesFragment())
+                                    }
+                                }
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Surface(modifier = Modifier.padding(16.dp)) {
@@ -180,7 +190,7 @@ class DashboardPropertiesFragment : Fragment() {
                                 )
 
                                 var name by remember {
-                                    mutableStateOf(G.dashboard.name.lowercase(Locale.getDefault()))
+                                    mutableStateOf(dashboard.name.lowercase(Locale.getDefault()))
                                 }
                                 EditText(
                                     label = { Text("Dashboard name") },
@@ -189,7 +199,7 @@ class DashboardPropertiesFragment : Fragment() {
                                         name = it
 
                                         it.trim().let {
-                                            G.dashboard.name =
+                                            dashboard.name =
                                                 it.ifBlank {
                                                     abs(Random.nextInt(0, 100)).toString()
                                                 }
@@ -198,17 +208,17 @@ class DashboardPropertiesFragment : Fragment() {
                                 )
 
                                 DashboardPropertiesCompose.compose(
-                                    G.dashboard.type,
+                                    dashboard.type,
                                     this@DashboardPropertiesFragment
                                 )
                             }
                         }
                     }
 
-                    if(!settings.hideNav) {
+                    if (!settings.hideNav && dashboards.size > 1) {
                         NavigationArrows(
-                            { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) },
-                            { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) }
+                            { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) },
+                            { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) }
                         )
                     }
                 }

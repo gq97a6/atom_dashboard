@@ -26,7 +26,7 @@ object TerminalTileCompose : DaemonBasedCompose {
                 var type by remember { mutableStateOf(if (tile.mqtt.varPayload) 0 else 1) }
 
                 AnimatedVisibility(
-                    visible = type == 0, enter = fadeIn() + expandVertically(),
+                    visible = type == 1, enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically()
                 ) {
                     Column {

@@ -441,7 +441,7 @@ class Theme {
                 pallet = getColorPallet(hsv)
             }
 
-        var hsv: FloatArray = floatArrayOf(0f, 0f, 0f)
+        var hsv: FloatArray = floatArrayOf(0f, 0f, 1f)
             set(value) {
                 field = value
                 pallet = getColorPallet(hsv)

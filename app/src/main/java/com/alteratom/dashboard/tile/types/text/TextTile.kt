@@ -72,7 +72,7 @@ class TextTile : com.alteratom.dashboard.tile.Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(Random.nextInt().toString())
+        } else send(mqtt.payloads["base"] ?: "")
     }
 
     override fun onReceive(

@@ -41,6 +41,7 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -113,7 +114,12 @@ class SettingsFragment : Fragment() {
                                 val s = parseSave<Settings>(backup[1])
                                 val t = parseSave<Theme>(backup[2])
 
-                                if (d != null) dashboards = d
+                                if (d != null) {
+                                    DaemonsManager.notifyAllDischarged()
+                                    dashboards = d
+                                    DaemonsManager.initialize()
+                                }
+
                                 if (s != null) settings = s
                                 if (t != null) theme = t
 
@@ -132,7 +138,7 @@ class SettingsFragment : Fragment() {
                             } else {
                                 createToast(requireContext(), "Backup restore failed")
                             }
-                        } catch (e: java.lang.Exception) {
+                        } catch (e: Exception) {
                             createToast(requireContext(), "Backup restore failed")
                         }
                     }

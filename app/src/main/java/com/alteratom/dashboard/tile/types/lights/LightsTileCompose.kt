@@ -14,9 +14,9 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.lights.LightsTile
 
@@ -152,7 +152,10 @@ object LightsTileCompose : DaemonBasedCompose {
                         tile.mqtt.pubs["state"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = { statePub = stateSub }) {
+                        IconButton(onClick = {
+                            statePub = stateSub
+                            tile.mqtt.pubs["state"] = stateSub
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -187,7 +190,10 @@ object LightsTileCompose : DaemonBasedCompose {
                         tile.mqtt.pubs["bright"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = { brightPub = brightSub }) {
+                        IconButton(onClick = {
+                            brightPub = brightSub
+                            tile.mqtt.pubs["bright"] = brightSub
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -222,7 +228,10 @@ object LightsTileCompose : DaemonBasedCompose {
                         tile.mqtt.pubs["color"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = { colorPub = colorSub }) {
+                        IconButton(onClick = {
+                            colorPub = colorSub
+                            tile.mqtt.pubs["color"] = colorSub
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -257,7 +266,10 @@ object LightsTileCompose : DaemonBasedCompose {
                         tile.mqtt.pubs["mode"] = it
                     },
                     trailingIcon = {
-                        IconButton(onClick = { modePub = modeSub }) {
+                        IconButton(onClick = {
+                            modePub = modeSub
+                            tile.mqtt.pubs["mode"] = modeSub
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",

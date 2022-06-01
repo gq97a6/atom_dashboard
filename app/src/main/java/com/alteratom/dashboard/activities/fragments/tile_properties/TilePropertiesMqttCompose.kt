@@ -42,6 +42,8 @@ object TilePropertiesMqttCompose {
             trailingIcon = {
                 IconButton(onClick = {
                     pub = sub
+                    G.tile.mqtt.pubs["base"] = sub
+                    G.dashboard.daemon.notifyOptionsChanged()
                 }) {
                     Icon(painterResource(R.drawable.il_file_copy), "", tint = Theme.colors.b)
                 }

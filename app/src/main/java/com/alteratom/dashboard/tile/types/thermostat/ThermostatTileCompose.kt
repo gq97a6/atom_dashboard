@@ -22,9 +22,9 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledCheckbox
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.thermostat.ThermostatTile
 
@@ -77,7 +77,11 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
-                        IconButton(onClick = { tempSetPub = tempSetSub }) {
+                        IconButton(onClick = {
+                            tempSetPub = tempSetSub
+                            tile.mqtt.pubs["temp_set"] = tempSetSub
+                            dashboard.daemon.notifyOptionsChanged()
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",
@@ -138,7 +142,10 @@ object ThermostatTileCompose : DaemonBasedCompose {
                                 dashboard.daemon.notifyOptionsChanged()
                             },
                             trailingIcon = {
-                                IconButton(onClick = { humiSetPub = humiSetSub }) {
+                                IconButton(onClick = {
+                                    humiSetPub = humiSetSub
+                                    tile.mqtt.pubs["humi_set"] = humiSetSub
+                                    dashboard.daemon.notifyOptionsChanged() }) {
                                     Icon(
                                         painterResource(R.drawable.il_file_copy),
                                         "",
@@ -177,7 +184,10 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
-                        IconButton(onClick = { modePub = modeSub }) {
+                        IconButton(onClick = {
+                            modePub = modeSub
+                            tile.mqtt.pubs["mode"] = modeSub
+                            dashboard.daemon.notifyOptionsChanged() }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",

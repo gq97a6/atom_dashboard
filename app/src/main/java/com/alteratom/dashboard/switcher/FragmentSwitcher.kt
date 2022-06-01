@@ -1,6 +1,8 @@
 package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
@@ -24,7 +26,9 @@ object FragmentSwitcher : Switcher() {
         )
     }
 
-    fun handle(e: MotionEvent?) = TileSwitcher.handle(e, { r -> switch(r) })
-    fun handle(e: MotionEvent?, target: Fragment) =
-        TileSwitcher.handle(e, { r -> switch(r, target) })
+    fun handle(e: MotionEvent?) = handle(e, { r -> switch(r) })
+    //fun handle(e: MotionEvent?, target: Fragment) = handle(e, { r -> switch(r, target) })
+
+    //fun handle(e: PointerEvent) = handle(e, { r -> switch(r) })
+    fun handle(e: PointerEvent, target: Fragment) = handle(e, { r -> switch(r, target) })
 }

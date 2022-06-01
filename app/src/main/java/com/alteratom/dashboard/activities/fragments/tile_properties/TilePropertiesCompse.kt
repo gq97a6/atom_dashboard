@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.getIconColorPallet
 import com.alteratom.dashboard.G.getIconHSV
 import com.alteratom.dashboard.G.getIconRes
 import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
+import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.switcher.TileSwitcher
@@ -83,9 +85,9 @@ object TilePropertiesCompse {
             }
         }
 
-        if (!G.settings.hideNav) NavigationArrows(
-            { TileSwitcher.switch(true) },
-            { TileSwitcher.switch(false) })
+        if (!settings.hideNav && dashboard.tiles.size > 1) NavigationArrows(
+            { TileSwitcher.switch(false) },
+            { TileSwitcher.switch(true) })
     }
 
     @Composable
@@ -93,8 +95,8 @@ object TilePropertiesCompse {
         type: String = "MQTT",
         crossinline content: @Composable () -> Unit
     ) {
-        var show by remember { mutableStateOf(G.settings.mqttTabShow) }
-        var enabled by remember { mutableStateOf(G.dashboard.mqtt.isEnabled) }
+        var show by remember { mutableStateOf(settings.mqttTabShow) }
+        var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
         val rotation = if (show) 0f else 180f
 
         val angle: Float by animateFloatAsState(
@@ -126,7 +128,7 @@ object TilePropertiesCompse {
                         modifier = Modifier.size(40.dp),
                         onClick = {
                             show = !show
-                            G.settings.mqttTabShow = show
+                            settings.mqttTabShow = show
                         }
                     ) {
                         Icon(

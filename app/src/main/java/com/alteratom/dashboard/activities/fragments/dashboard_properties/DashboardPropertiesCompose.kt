@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridItemSpan
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,10 +31,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Theme.Companion.colors
@@ -60,11 +59,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     Modifier
                         .fillMaxWidth()
                         .wrapContentHeight(),
-                    Arrangement.SpaceBetween
+                    Arrangement.SpaceBetween,
+                    Alignment.CenterVertically
                 ) {
                     var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
                     LabeledSwitch(
-                        modifier = Modifier.align(Alignment.CenterVertically),
                         label = {
                             Text(
                                 "Enabled:",
@@ -113,7 +112,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .alpha(if (conStatus == "ATTEMPTING") alpha.value else 1f)
                             .fillMaxWidth(.9f)
                             .aspectRatio(4f)
-                            .align(Alignment.CenterVertically)
                             .border(
                                 BorderStroke(2.dp, Theme.colors.a),
                                 RoundedCornerShape(10.dp)
@@ -179,16 +177,24 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                             )
                                             .clickable {
                                                 dashboard.mqtt = it.mqtt.copy()
-                                                dashboard.mqtt.clientId = abs(Random.nextInt()).toString()
+                                                dashboard.mqtt.clientId =
+                                                    abs(Random.nextInt()).toString()
                                                 dashboard.daemon.notifyOptionsChanged()
 
                                                 copyShow = false
-                                                MainActivity.fm.replaceWith(DashboardPropertiesFragment(), false)
+                                                MainActivity.fm.replaceWith(
+                                                    DashboardPropertiesFragment(),
+                                                    false
+                                                )
                                             }
                                             .padding(start = 10.dp),
                                         contentAlignment = Alignment.CenterStart
                                     ) {
-                                        Text(it.name.uppercase(Locale.getDefault()), fontSize = 20.sp, color = colors.a)
+                                        Text(
+                                            it.name.uppercase(Locale.getDefault()),
+                                            fontSize = 20.sp,
+                                            color = colors.a
+                                        )
                                     }
                                 }
                             }
@@ -269,31 +275,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 }
 
                 if (sshShow) {
-                    /*
-                    fun validate() {
-                        binding.dsTrustAll.isChecked = dashboard.mqtt.sslTrustAll
-                        binding.dsTrustAlert.visibility =
-                            if (dashboard.mqtt.sslTrustAll) View.VISIBLE else View.GONE
-
-                        if (dashboard.mqtt.sslTrustAll) binding.dsTrustAlert.blink(-1, 400, 300)
-                        else binding.dsTrustAlert.clearAnimation()
-
-                        dashboard.daemon.notifyOptionsChanged()
-                    }
-
-                    if (!dashboard.mqtt.sslTrustAll) {
-                        context.buildConfirm("Confirm override", "CONFIRM",
-                            {
-                                dashboard.mqtt.sslTrustAll = true
-                                validate()
-                            }
-                        )
-                    } else {
-                        dashboard.mqtt.sslTrustAll = false
-                        validate()
-                    }
-                     */
-
                     Dialog({ sshShow = false }) {
                         Column(
                             modifier = Modifier
@@ -367,22 +348,61 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 modifier = Modifier.padding(vertical = 10.dp)
                             )
 
-                            LabeledCheckbox(
-                                label = {
-                                    Text(
-                                        "Trust all certificates",
-                                        fontSize = 15.sp,
-                                        color = Theme.colors.a
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                LabeledCheckbox(
+                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    label = {
+                                        Text(
+                                            "Trust all certificates",
+                                            fontSize = 15.sp,
+                                            color = Theme.colors.a
+                                        )
+                                    },
+                                    checked = trust,
+                                    onCheckedChange = {
+                                        if (it) {
+                                            fragment.requireContext().buildConfirm("Confirm override", "CONFIRM",
+                                                {
+                                                    trust = it
+                                                    dashboard.mqtt.sslTrustAll = it
+                                                    dashboard.daemon.notifyOptionsChanged()
+                                                }
+                                            )
+                                        } else {
+                                            trust = it
+                                            dashboard.mqtt.sslTrustAll = it
+                                            dashboard.daemon.notifyOptionsChanged()
+                                        }
+                                    }
+                                )
+
+                                val value = rememberInfiniteTransition()
+                                val alpha = value.animateFloat(
+                                    initialValue = 1f,
+                                    targetValue = 0f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(300, 200),
+                                        repeatMode = RepeatMode.Reverse,
                                     )
-                                },
-                                checked = trust,
-                                onCheckedChange = {
-                                    trust = it
-                                    dashboard.mqtt.sslTrustAll = it
-                                    dashboard.daemon.notifyOptionsChanged()
-                                },
-                                modifier = Modifier.padding(vertical = 10.dp)
-                            )
+                                )
+
+                                Icon(
+                                    painterResource(R.drawable.il_interface_exclamation_triangle),
+                                    "",
+                                    tint = colors.a,
+                                    modifier = Modifier
+                                        .padding(start = 12.dp)
+                                        .alpha(if (trust) alpha.value else 0f)
+                                        .size(20.dp)
+                                        //.fillMaxHeight(1f)
+                                        //.aspectRatio(1f)
+                                )
+                            }
 
                             EditText(
                                 enabled = false,

@@ -44,7 +44,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
     private var hasReceived = MutableLiveData("")
 
     var mode: String? = null
-    private var temp: Float? = null
+    var temp: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_temp_value)?.text = value.let {
@@ -56,7 +56,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
             }
         }
 
-    private var humi: Float? = null
+    var humi: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_humi_value)?.text = value.let {
@@ -68,7 +68,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
             }
         }
 
-    private var tempSetpoint: Float? = null
+    var tempSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {
@@ -77,7 +77,7 @@ class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
             }
         }
 
-    private var humiSetpoint: Float? = null
+    var humiSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {

@@ -6,7 +6,11 @@ import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridItemSpan
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -28,15 +32,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.util.*
+import kotlin.math.abs
 import kotlin.random.Random
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
@@ -120,6 +129,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 }
 
+                var copyShow by remember { mutableStateOf(false) }
+
                 OutlinedButton(
                     modifier = Modifier
                         .padding(top = 5.dp)
@@ -127,9 +138,62 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .fillMaxWidth(.8f),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { fragment.copyProperties() }
+                    onClick = {
+                        if (G.dashboards.size <= 1)
+                            createToast(fragment.requireContext(), "No dashboards to copy from")
+                        else copyShow = true
+                    }
                 ) {
                     Text("COPY PROPERTIES", fontSize = 10.sp, color = Theme.colors.a)
+                }
+
+                if (copyShow) {
+                    Dialog({ copyShow = false }) {
+                        Column(
+                            modifier = Modifier
+                                .padding(bottom = 20.dp)
+                                .padding(horizontal = 20.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .border(
+                                    BorderStroke(0.dp, Theme.colors.color),
+                                    RoundedCornerShape(6.dp)
+                                )
+                                .background(colors.background.copy(.9f))
+                                .padding(15.dp),
+                        ) {
+                            Text(
+                                text = "Pick dashboard to copy from",
+                                fontSize = 35.sp,
+                                color = colors.color
+                            )
+                            LazyColumn(Modifier.fillMaxHeight(.8f)) {
+                                items(dashboards.filter { it != dashboard }) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 15.dp)
+                                            .height(50.dp)
+                                            .border(
+                                                BorderStroke(0.dp, colors.color),
+                                                RoundedCornerShape(6.dp)
+                                            )
+                                            .clickable {
+                                                dashboard.mqtt = it.mqtt.copy()
+                                                dashboard.mqtt.clientId = abs(Random.nextInt()).toString()
+                                                dashboard.daemon.notifyOptionsChanged()
+
+                                                copyShow = false
+                                                MainActivity.fm.replaceWith(DashboardPropertiesFragment(), false)
+                                            }
+                                            .padding(start = 10.dp),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        Text(it.name.uppercase(Locale.getDefault()), fontSize = 20.sp, color = colors.a)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 var address by remember { mutableStateOf(dashboard.mqtt.address) }

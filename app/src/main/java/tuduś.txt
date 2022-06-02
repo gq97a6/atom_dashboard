@@ -6,11 +6,9 @@ widgets
 move transfer to settings
 add transfer pick dashboards
 add demons placeholders
-
-change color picker in icon color
+add color picker in icon color
 
 Compose:
-    copy broker
     transfer
 
 //post development ------------------------------

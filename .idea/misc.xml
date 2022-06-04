@@ -172,7 +172,9 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_bar.xml" value="0.1155" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_frame.xml" value="0.244" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_left_corner.xml" value="0.1925" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bg_ripple.xml" value="0.2825" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_copy.xml" value="0.1985" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_edit.xml" value="0.2185" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_include.xml" value="0.212" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_left.xml" value="0.187" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/drawable/bt_remove.xml" value="0.3675" />
@@ -225,6 +227,7 @@
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_tile_new.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/fragment_tile_properties.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_copy_broker.xml" value="0.37447916666666664" />
+        <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_dashboard.xml" value="0.37447916666666664" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon_bar.xml" value="0.25" />
         <entry key="..\:/Users/Ja/Desktop/AndroidProjects/Atom Dashboard/app/src/main/res/layout/item_icon_category.xml" value="0.19739583333333333" />
@@ -344,7 +347,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

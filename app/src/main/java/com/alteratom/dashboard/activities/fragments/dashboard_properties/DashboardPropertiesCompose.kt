@@ -171,10 +171,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                             .fillMaxWidth()
                                             .padding(top = 15.dp)
                                             .height(50.dp)
-                                            .border(
-                                                BorderStroke(0.dp, colors.color),
-                                                RoundedCornerShape(6.dp)
-                                            )
                                             .clickable {
                                                 dashboard.mqtt = it.mqtt.copy()
                                                 dashboard.mqtt.clientId =
@@ -187,6 +183,10 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                     false
                                                 )
                                             }
+                                            .border(
+                                                BorderStroke(0.dp, colors.color),
+                                                RoundedCornerShape(6.dp)
+                                            )
                                             .padding(start = 10.dp),
                                         contentAlignment = Alignment.CenterStart
                                     ) {
@@ -260,7 +260,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 )
 
-                var sshShow by remember { mutableStateOf(false) }
+                var sslShow by remember { mutableStateOf(false) }
 
                 OutlinedButton(
                     modifier = Modifier
@@ -269,13 +269,13 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .padding(top = 10.dp),
                     contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
-                    onClick = { sshShow = true } //editSsl(fragment) }
+                    onClick = { sslShow = true }
                 ) {
                     Text("CONFIGURE SSL", fontSize = 10.sp, color = Theme.colors.a)
                 }
 
-                if (sshShow) {
-                    Dialog({ sshShow = false }) {
+                if (sslShow) {
+                    Dialog({ sslShow = false }) {
                         Column(
                             modifier = Modifier
                                 .padding(bottom = 20.dp)

@@ -22,10 +22,17 @@ object FolderTree {
 
     fun Any.saveToFile(save: String = this.prepareSave()) {
         try {
-            val path = path[(if (this is Collection<*>) this.first()!! else this)::class]
+            val path = path[this::class]
             File(path).writeText(save)
         } catch (e: Exception) {
-            run { }
+        }
+    }
+
+    fun Collection<*>.saveToFile(save: String = this.prepareSave()) {
+        try {
+            val path = path[this.first()!!::class]
+            File(path).writeText(save)
+        } catch (e: Exception) {
         }
     }
 

@@ -472,6 +472,7 @@ class Theme {
                 var maxS = 1f
                 var maxV = 1f
                 var minV = 0f
+                var hsv = if(isDark) floatArrayOf(hsv[0], hsv[1], 1f) else hsv
 
                 //Compute maximal saturation/value
                 for (i in 100 downTo 0) {

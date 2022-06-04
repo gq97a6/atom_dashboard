@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.GridItemSpan
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -21,13 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ExperimentalGraphicsApi
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
+import com.alteratom.dashboard.ArcSlider
 import com.alteratom.dashboard.G.getIconColorPallet
+import com.alteratom.dashboard.G.getIconHSV
 import com.alteratom.dashboard.G.getIconRes
 import com.alteratom.dashboard.G.setIconHSV
 import com.alteratom.dashboard.G.setIconKey
@@ -36,16 +42,16 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.icon.Icons
+import com.alteratom.dashboard.toPx
 import java.util.*
 
 
-class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
+class TileIconFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         theme.apply(context = requireContext())
     }
-
 
     val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
         for (i in 40..100 step 20) {
@@ -70,7 +76,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
         catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
     }.toMap()
 
-    @OptIn(ExperimentalFoundationApi::class)
+    @OptIn(ExperimentalFoundationApi::class, ExperimentalGraphicsApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,16 +84,36 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-
                 var iconRes by remember { mutableStateOf(getIconRes()) }
                 var iconColor by remember { mutableStateOf(getIconColorPallet().cc.a) }
+                var pickerShow by remember { mutableStateOf(false) }
+
+                var hueAngle by remember { mutableStateOf(0.0) }
+                var saturationAngle by remember { mutableStateOf(0.0) }
+                var valueAngle by remember { mutableStateOf(0.0) }
+
+                var hue by remember { mutableStateOf(0f) }
+                var saturation by remember { mutableStateOf(0f) }
+                var value by remember { mutableStateOf(0f) }
+
+                fun setPickerColor(hsv: FloatArray) {
+                    hue = hsv[0]
+                    saturation = hsv[1]
+                    value = hsv[2]
+
+                    hueAngle = hsv[0].toDouble()
+                    saturationAngle = if (theme.a.isDark) 110 + 320.0 * hsv[1]
+                    else 100 + 160.0 * hsv[1]
+                    valueAngle = (440 - 160.0 * hsv[2]) % 360
+                }
+
+                setPickerColor(getIconHSV())
 
                 ComposeTheme(Theme.isDark) {
                     //Background
                     Box(modifier = Modifier.background(colors.background))
 
                     Box {
-
                         LazyVerticalGrid(
                             cells = GridCells.Fixed(6),
                             modifier = Modifier
@@ -108,8 +134,9 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                         .clip(RoundedCornerShape(6.dp))
                                         .background(it.first)
                                         .clickable {
+                                            setPickerColor(it.second)
                                             setIconHSV(it.second)
-                                            iconColor = getIconColorPallet().cc.a
+                                            iconColor = it.first
                                         }
                                 )
                             }
@@ -122,6 +149,7 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                         .clip(RoundedCornerShape(6.dp))
                                         .background(if (theme.a.isDark) Color.White else Color.Black)
                                         .clickable {
+                                            setPickerColor(floatArrayOf(0f, 0f, 0f))
                                             setIconHSV(floatArrayOf(0f, 0f, 0f))
                                             iconColor = getIconColorPallet().cc.a
                                         }
@@ -133,13 +161,13 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .height(45.dp)
+                                        .clickable {
+                                            pickerShow = true
+                                        }
                                         .border(
                                             BorderStroke(0.dp, colors.color),
                                             RoundedCornerShape(6.dp)
                                         )
-                                        .clickable {
-
-                                        }
                                         .padding(5.dp),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -213,10 +241,124 @@ class TileIconFragment : Fragment(R.layout.fragment_tile_icon) {
                                 painterResource(iconRes),
                                 "",
                                 tint = iconColor,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(top = 7.dp)
+                                modifier = Modifier.fillMaxSize()
                             )
+                        }
+
+                        if (pickerShow) {
+                            Dialog({ pickerShow = false }) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(1f),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    ArcSlider(
+                                        modifier = Modifier
+                                            .fillMaxSize(.8f),
+                                        angle = hueAngle,
+                                        startAngle = 0.0,
+                                        sweepAngle = 360.0,
+                                        strokeWidth = 15.dp.toPx(),
+                                        pointerRadius = 15.dp.toPx(),
+                                        pointerStyle = Stroke(width = 2.dp.toPx()),
+                                        pointerColor = Color.Gray,
+                                        colorList = listOf(
+                                            Color.Red,
+                                            Color.Yellow,
+                                            Color.Green,
+                                            Color.Cyan,
+                                            Color.Blue,
+                                            Color.Magenta,
+                                            Color.Red
+                                        ),
+                                        onChange = { a, v ->
+                                            hueAngle = a
+                                            hue = (v * 360f).toFloat()
+                                            setIconHSV(floatArrayOf(hue, saturation, value))
+                                            iconColor = getIconColorPallet().cc.a
+                                        }
+                                    )
+
+                                    if (theme.a.isDark) {
+                                        ArcSlider(
+                                            modifier = Modifier.fillMaxSize(.6f),
+                                            angle = saturationAngle,
+                                            startAngle = 110.0,
+                                            sweepAngle = 320.0,
+                                            strokeWidth = 15.dp.toPx(),
+                                            pointerRadius = 15.dp.toPx(),
+                                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                                            pointerColor = Color.Gray,
+                                            colorList = listOf(
+                                                Color.hsv(hue, 1f, 1f),
+                                                Color.hsv(hue, 0f, 1f),
+                                            ).asReversed(),
+                                            onChange = { a, v ->
+                                                saturationAngle = a
+                                                saturation = v.toFloat()
+                                                setIconHSV(floatArrayOf(hue, saturation, value))
+                                                iconColor = getIconColorPallet().cc.a
+                                            }
+                                        )
+                                    } else {
+                                        ArcSlider(
+                                            modifier = Modifier.fillMaxSize(.6f),
+                                            angle = saturationAngle,
+                                            startAngle = 100.0,
+                                            sweepAngle = 160.0,
+                                            strokeWidth = 15.dp.toPx(),
+                                            pointerRadius = 15.dp.toPx(),
+                                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                                            pointerColor = Color.Gray,
+                                            colorList = listOf(
+                                                Color.hsv(hue, 1f, value),
+                                                Color.hsv(hue, 0f, value),
+                                            ).asReversed(),
+                                            onChange = { a, v ->
+                                                saturationAngle = a
+                                                saturation = v.toFloat()
+                                                setIconHSV(floatArrayOf(hue, saturation, value))
+                                                iconColor = getIconColorPallet().cc.a
+                                            }
+                                        )
+
+                                        ArcSlider(
+                                            modifier = Modifier.fillMaxSize(.6f),
+                                            angle = valueAngle,
+                                            startAngle = 280.0,
+                                            sweepAngle = 160.0,
+                                            strokeWidth = 15.dp.toPx(),
+                                            pointerRadius = 15.dp.toPx(),
+                                            pointerStyle = Stroke(width = 1.dp.toPx()),
+                                            pointerColor = Color.Gray,
+                                            colorList = listOf(
+                                                Color.hsv(hue, saturation, 1f),
+                                                Color.hsv(hue, saturation, 0f)
+                                            ),
+                                            onChange = { a, v ->
+                                                valueAngle = a
+                                                value = (1 - v).toFloat()
+                                                setIconHSV(floatArrayOf(hue, saturation, value))
+                                                iconColor = getIconColorPallet().cc.a
+                                            }
+                                        )
+                                    }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize(.4f)
+                                            .clip(CircleShape)
+                                            .background(
+                                                Color.hsv(
+                                                    hue,
+                                                    saturation,
+                                                    if (theme.a.isDark) 1f else value
+                                                )
+                                            )
+                                    )
+                                }
+                            }
                         }
                     }
                 }

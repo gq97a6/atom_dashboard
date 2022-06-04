@@ -145,7 +145,8 @@ object ThermostatTileCompose : DaemonBasedCompose {
                                 IconButton(onClick = {
                                     humiSetPub = humiSetSub
                                     tile.mqtt.pubs["humi_set"] = humiSetSub
-                                    dashboard.daemon.notifyOptionsChanged() }) {
+                                    dashboard.daemon.notifyOptionsChanged()
+                                }) {
                                     Icon(
                                         painterResource(R.drawable.il_file_copy),
                                         "",
@@ -187,7 +188,8 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         IconButton(onClick = {
                             modePub = modeSub
                             tile.mqtt.pubs["mode"] = modeSub
-                            dashboard.daemon.notifyOptionsChanged() }) {
+                            dashboard.daemon.notifyOptionsChanged()
+                        }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
                                 "",

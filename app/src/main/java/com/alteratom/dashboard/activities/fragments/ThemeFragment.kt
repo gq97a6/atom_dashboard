@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -30,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.ArcSlider
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.ComposeTheme
@@ -56,7 +53,6 @@ class ThemeFragment : Fragment() {
                 var saturation by remember { mutableStateOf(theme.a.hsv[1]) }
                 var value by remember { mutableStateOf(theme.a.hsv[2]) }
 
-                var colors by remember { mutableStateOf(colors) }
                 var isDark by remember { mutableStateOf(theme.a.isDark) }
 
                 ComposeTheme(theme.a.isDark) {
@@ -70,7 +66,9 @@ class ThemeFragment : Fragment() {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Box(
-                            modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .aspectRatio(1f),
                             contentAlignment = Alignment.Center
                         ) {
                             ArcSlider(
@@ -96,14 +94,33 @@ class ThemeFragment : Fragment() {
                                     hueAngle = a
                                     hue = (v * 360f).toFloat()
                                     theme.a.hsv = floatArrayOf(hue, saturation, value)
-                                    colors = Theme.colors
                                 }
                             )
 
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = !isDark, enter = EnterTransition.None,
-                                exit = ExitTransition.None
-                            ) {
+                            if (isDark) {
+                                ArcSlider(
+                                    modifier = Modifier.fillMaxSize(.6f),
+                                    angle = saturationDarkAngle,
+                                    startAngle = 110.0,
+                                    sweepAngle = 320.0,
+                                    strokeWidth = 15.dp.toPx(),
+                                    pointerRadius = 15.dp.toPx(),
+                                    pointerStyle = Stroke(width = 1.dp.toPx()),
+                                    pointerColor = Color.Gray,
+                                    colorList = listOf(
+                                        Color.hsv(hue, 1f, 1f),
+                                        Color.hsv(hue, 0f, 1f),
+                                    ).asReversed(),
+                                    onChange = { a, v ->
+                                        saturationDarkAngle = a
+                                        v.toFloat().let {
+                                            saturationAngle = 100 + 160.0 * it
+                                            saturation = it
+                                        }
+                                        theme.a.hsv = floatArrayOf(hue, saturation, value)
+                                    }
+                                )
+                            } else {
                                 ArcSlider(
                                     modifier = Modifier.fillMaxSize(.6f),
                                     angle = saturationAngle,
@@ -124,7 +141,6 @@ class ThemeFragment : Fragment() {
                                             saturation = it
                                         }
                                         theme.a.hsv = floatArrayOf(hue, saturation, value)
-                                        colors = Theme.colors
                                     }
                                 )
 
@@ -145,36 +161,6 @@ class ThemeFragment : Fragment() {
                                         valueAngle = a
                                         value = (1 - v).toFloat()
                                         theme.a.hsv = floatArrayOf(hue, saturation, value)
-                                        colors = Theme.colors
-                                    }
-                                )
-                            }
-
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = isDark, enter = EnterTransition.None,
-                                exit = ExitTransition.None
-                            ) {
-                                ArcSlider(
-                                    modifier = Modifier.fillMaxSize(.6f),
-                                    angle = saturationDarkAngle,
-                                    startAngle = 110.0,
-                                    sweepAngle = 320.0,
-                                    strokeWidth = 15.dp.toPx(),
-                                    pointerRadius = 15.dp.toPx(),
-                                    pointerStyle = Stroke(width = 1.dp.toPx()),
-                                    pointerColor = Color.Gray,
-                                    colorList = listOf(
-                                        Color.hsv(hue, 1f, value),
-                                        Color.hsv(hue, 0f, value),
-                                    ).asReversed(),
-                                    onChange = { a, v ->
-                                        saturationDarkAngle = a
-                                        v.toFloat().let {
-                                            saturationAngle = 100 + 160.0 * it
-                                            saturation = it
-                                        }
-                                        theme.a.hsv = floatArrayOf(hue, saturation, value)
-                                        colors = Theme.colors
                                     }
                                 )
                             }
@@ -185,9 +171,9 @@ class ThemeFragment : Fragment() {
                                     .clip(CircleShape)
                                     .background(
                                         Color.hsv(
-                                            theme.a.hsv[0],
-                                            theme.a.hsv[1],
-                                            theme.a.hsv[2]
+                                            hue,
+                                            saturation,
+                                            if (isDark) 1f else value
                                         )
                                     )
                             )
@@ -201,7 +187,9 @@ class ThemeFragment : Fragment() {
                         )
 
                         Row(
-                            modifier = Modifier.wrapContentSize().padding(bottom = 100.dp),
+                            modifier = Modifier
+                                .wrapContentSize()
+                                .padding(bottom = 100.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
@@ -219,14 +207,7 @@ class ThemeFragment : Fragment() {
                                     theme.a.isDark = it
                                     isDark = it
 
-                                    if (it) {
-                                        value = 1f
-                                        valueAngle = 280.0
-                                        theme.a.hsv = floatArrayOf(hue, saturation, value)
-                                    }
-
                                     theme.apply((activity as MainActivity).b.root, requireContext())
-                                    colors = Theme.colors
                                 }
                             )
 

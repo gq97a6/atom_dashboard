@@ -50,7 +50,7 @@ fun ComposeTheme(
         shapes = Shapes(
             small = RoundedCornerShape(4.dp),
             medium = RoundedCornerShape(4.dp),
-            large = RoundedCornerShape(0.dp)
+            large = RoundedCornerShape(4.dp)
         )
     ) {
         CompositionLocalProvider(
@@ -59,7 +59,7 @@ fun ComposeTheme(
                 override fun defaultColor(): C = colors.background
 
                 @Composable
-                override fun rippleAlpha(): RippleAlpha = RippleAlpha(1f, 1f, 1f, 1f)
+                override fun rippleAlpha(): RippleAlpha = RippleAlpha(.2f, .2f, .1f, 1f)
                 //RippleTheme.defaultRippleAlpha(androidx.compose.ui.graphics.Color.Black, lightTheme = !isSystemInDarkTheme())
             },
             content = content

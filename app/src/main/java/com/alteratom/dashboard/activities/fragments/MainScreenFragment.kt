@@ -54,14 +54,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val addOnClick: () -> Unit = {
-            val name = kotlin.math.abs(Random.nextInt()).toString()
-            val dashboard = Dashboard(name, Daemon.Type.MQTTD)
-            dashboards.add(dashboard)
-            dashboards.saveToFile()
-
-            DaemonsManager.notifyDashboardAdded(dashboard)
-
-            if (setCurrentDashboard(dashboard.id)) fm.replaceWith(DashboardPropertiesFragment())
+            fm.replaceWith(DashboardNewFragment())
         }
 
         val onUiChange: () -> Unit = {

@@ -58,19 +58,19 @@ class TileNewFragment : Fragment() {
                     //Background
                     Box(modifier = Modifier.background(colors.background))
 
-                    Column(horizontalAlignment = CenterHorizontally) {
+                    Column(Modifier.padding(bottom = 20.dp), Arrangement.Center, CenterHorizontally) {
                         Text(
                             "Pick new tile",
                             fontSize = 40.sp,
                             color = colors.a,
-                            modifier = Modifier.padding(top = 70.dp)
+                            modifier = Modifier.fillMaxWidth(.85f)
                         )
 
                         Text(
                             "You will be redirected to its\nproperties afterwards",
                             fontSize = 15.sp,
                             color = colors.b,
-                            textAlign = TextAlign.Center
+                            modifier = Modifier.fillMaxWidth(.85f)
                         )
 
                         @Composable

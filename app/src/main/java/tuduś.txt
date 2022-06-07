@@ -1,4 +1,3 @@
-add demons placeholders
 client certificates
 widgets
 start guide

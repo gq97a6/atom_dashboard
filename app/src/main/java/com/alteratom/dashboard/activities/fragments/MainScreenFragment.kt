@@ -40,7 +40,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        theme.apply(b.root, requireContext())
+        theme.apply(b.root, requireContext(), false)
 
         setupRecyclerView()
 
@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.root, requireContext())
+            theme.apply(b.root, requireContext(), false)
         }
 
         toolBarController = ToolBarController(

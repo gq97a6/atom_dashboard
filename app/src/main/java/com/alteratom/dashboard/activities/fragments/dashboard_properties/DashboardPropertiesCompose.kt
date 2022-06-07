@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
-import android.provider.OpenableColumns
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -41,8 +40,6 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
@@ -291,45 +288,54 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             var enable by remember { mutableStateOf(dashboard.mqtt.ssl) }
                             var trust by remember { mutableStateOf(dashboard.mqtt.sslTrustAll) }
 
-                            var ca by remember { mutableStateOf(dashboard.mqtt.sslFileName) }
-                            val client by remember { mutableStateOf("") }
+                            var ca by remember { mutableStateOf(dashboard.mqtt.caFileName) }
+                            var client by remember { mutableStateOf(dashboard.mqtt.clientFileName) }
+                            var key by remember { mutableStateOf(dashboard.mqtt.keyFileName) }
 
-                            fun getCaCert() {
-                                fragment.openCert { uri, inputStream ->
+                            fun getCaCert() =
+                                fragment.openFile { str, file ->
                                     dashboard.mqtt.let { m ->
-
-                                        m.sslCertStr = try {
-                                            val cf = CertificateFactory.getInstance("X.509")
-                                            cf.generateCertificate(inputStream) as X509Certificate
-                                        } catch (e: Exception) {
-                                            null
-                                        }?.toPem()
-
-                                        m.sslFileName =
-                                            if (m.sslCert != null) {
-                                                runCatching {
-                                                    fragment.requireContext().contentResolver.query(
-                                                        uri,
-                                                        null,
-                                                        null,
-                                                        null,
-                                                        null
-                                                    )?.use { cursor ->
-                                                        cursor.moveToFirst()
-                                                        return@use cursor.getColumnIndexOrThrow(
-                                                            OpenableColumns.DISPLAY_NAME
-                                                        ).let(cursor::getString)
-                                                    }
-                                                }.getOrNull() ?: "cert.crt"
-                                            } else ""
-
-                                        if (m.sslCert != null) {
-                                            ca = dashboard.mqtt.sslFileName
+                                        m.caCertStr = str
+                                        if (m.caCert != null) {
+                                            m.caFileName = file ?: "ca.crt"
+                                            ca = dashboard.mqtt.caFileName
                                             dashboard.daemon.notifyOptionsChanged()
-                                        }
+                                        } else createToast(
+                                            fragment.requireContext(),
+                                            "Certificate error"
+                                        )
                                     }
                                 }
-                            }
+
+                            fun getClientCert() =
+                                fragment.openFile { str, file ->
+                                    dashboard.mqtt.let { m ->
+                                        m.clientCertStr = str
+                                        if (m.clientCert != null) {
+                                            m.clientFileName = file ?: "client.crt"
+                                            client = dashboard.mqtt.clientFileName
+                                            dashboard.daemon.notifyOptionsChanged()
+                                        } else createToast(
+                                            fragment.requireContext(),
+                                            "Certificate error"
+                                        )
+                                    }
+                                }
+
+                            fun getClientKey() =
+                                fragment.openFile { str, file ->
+                                    dashboard.mqtt.let { m ->
+                                        m.clientKeyStr = str
+                                        if (m.clientKey != null) {
+                                            m.keyFileName = file ?: "client.key"
+                                            key = dashboard.mqtt.keyFileName
+                                            dashboard.daemon.notifyOptionsChanged()
+                                        } else createToast(
+                                            fragment.requireContext(),
+                                            "Key error"
+                                        )
+                                    }
+                                }
 
                             LabeledCheckbox(
                                 label = {
@@ -366,13 +372,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     checked = trust,
                                     onCheckedChange = {
                                         if (it) {
-                                            fragment.requireContext().buildConfirm("Confirm override", "CONFIRM",
-                                                {
-                                                    trust = it
-                                                    dashboard.mqtt.sslTrustAll = it
-                                                    dashboard.daemon.notifyOptionsChanged()
-                                                }
-                                            )
+                                            fragment.requireContext()
+                                                .buildConfirm("Confirm override", "CONFIRM",
+                                                    {
+                                                        trust = it
+                                                        dashboard.mqtt.sslTrustAll = it
+                                                        dashboard.daemon.notifyOptionsChanged()
+                                                    }
+                                                )
                                         } else {
                                             trust = it
                                             dashboard.mqtt.sslTrustAll = it
@@ -399,8 +406,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         .padding(start = 12.dp)
                                         .alpha(if (trust) alpha.value else 0f)
                                         .size(20.dp)
-                                        //.fillMaxHeight(1f)
-                                        //.aspectRatio(1f)
                                 )
                             }
 
@@ -411,17 +416,17 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 onValueChange = {},
                                 modifier = Modifier
                                     .nrClickable {
-                                        if (dashboard.mqtt.sslCert == null) getCaCert()
+                                        if (dashboard.mqtt.caCert == null) getCaCert()
                                     }
                                     .padding(top = 10.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {
-                                            if (dashboard.mqtt.sslCert == null) getCaCert()
+                                            if (dashboard.mqtt.caCert == null) getCaCert()
                                             else {
                                                 ca = ""
-                                                dashboard.mqtt.sslFileName = ""
-                                                dashboard.mqtt.sslCertStr = null
+                                                dashboard.mqtt.caFileName = ""
+                                                dashboard.mqtt.caCertStr = null
                                                 dashboard.daemon.notifyOptionsChanged()
                                             }
                                         }
@@ -440,15 +445,91 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 label = { Text("Client certificate") },
                                 value = client,
                                 onValueChange = {},
-                                modifier = Modifier.nrClickable {
-                                },
+                                modifier = Modifier
+                                    .nrClickable {
+                                        if (dashboard.mqtt.clientCert == null) getClientCert()
+                                    }
+                                    .padding(top = 5.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {
+                                            if (dashboard.mqtt.clientCert == null) getClientCert()
+                                            else {
+                                                client = ""
+                                                dashboard.mqtt.clientFileName = ""
+                                                dashboard.mqtt.clientCertStr = null
+                                                dashboard.daemon.notifyOptionsChanged()
+                                            }
                                         }
                                     ) {
                                         Icon(
                                             painterResource(if (client.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
+                                            "",
+                                            tint = Theme.colors.b
+                                        )
+                                    }
+                                }
+                            )
+
+                            EditText(
+                                enabled = false,
+                                label = { Text("Client key") },
+                                value = key,
+                                onValueChange = {},
+                                modifier = Modifier
+                                    .nrClickable {
+                                        if (dashboard.mqtt.clientKey == null) getClientKey()
+                                    }
+                                    .padding(top = 5.dp),
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = {
+                                            if (dashboard.mqtt.clientKey == null) getClientKey()
+                                            else {
+                                                key = ""
+                                                dashboard.mqtt.keyFileName = ""
+                                                dashboard.mqtt.clientKeyStr = null
+                                                dashboard.daemon.notifyOptionsChanged()
+                                            }
+                                        }
+                                    ) {
+                                        Icon(
+                                            painterResource(if (key.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
+                                            "",
+                                            tint = Theme.colors.b
+                                        )
+                                    }
+                                }
+                            )
+
+                            var passwordHidden by remember { mutableStateOf(dashboard.mqtt.clientKeyPassword.isNotEmpty()) }
+                            var password by remember { mutableStateOf(if (passwordHidden) "hidden" else "") }
+                            EditText(
+                                label = { Text("Key password") },
+                                modifier = Modifier.padding(top = 5.dp),
+                                value = password,
+                                textStyle = TextStyle(fontStyle = if (passwordHidden) Italic else Normal),
+                                onValueChange = {
+                                    if (passwordHidden) {
+                                        password = ""
+                                        passwordHidden = false
+                                    } else password = it
+
+                                    password.trim().let {
+                                        if (dashboard.mqtt.clientKeyPassword != it) {
+                                            dashboard.mqtt.clientKeyPassword = it
+                                            dashboard.daemon.notifyOptionsChanged()
+                                        }
+                                    }
+                                },
+                                trailingIcon = {
+                                    IconButton(onClick = {
+                                        password = ""
+                                        passwordHidden = false
+                                        dashboard.mqtt.clientKeyPassword = ""
+                                    }) {
+                                        Icon(
+                                            painterResource(R.drawable.il_interface_multiply),
                                             "",
                                             tint = Theme.colors.b
                                         )

@@ -8,6 +8,11 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.bouncycastle.openssl.PEMKeyPair
+import org.bouncycastle.openssl.PEMParser
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
+import java.io.InputStreamReader
+import java.security.KeyPair
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
@@ -53,8 +58,15 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
         @JsonIgnore
-        var sslCert: X509Certificate? = null,
-        var sslFileName: String = "",
+        var caCert: X509Certificate? = null,
+        var caFileName: String = "",
+        @JsonIgnore
+        var clientCert: X509Certificate? = null,
+        var clientFileName: String = "",
+        @JsonIgnore
+        var clientKey: KeyPair? = null,
+        var keyFileName: String = "",
+        var clientKeyPassword: String = "",
         var address: String = "tcp://",
         var port: Int = 1883,
         var includeCred: Boolean = false,
@@ -65,13 +77,37 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
         val URI
             get() = "$address:$port"
 
-        var sslCertStr: String? = null
+        var caCertStr: String? = null
             set(value) {
                 field = value
-                sslCert = try {
+                caCert = try {
                     val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(sslCertStr?.byteInputStream()) as X509Certificate
+                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
                 } catch (e: Exception) {
+                    field = null
+                    null
+                }
+            }
+
+        var clientCertStr: String? = null
+            set(value) {
+                field = value
+                clientCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    field = null
+                    null
+                }
+            }
+
+        var clientKeyStr: String? = null
+            set(value) {
+                field = value
+                clientKey = try {
+                    JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value?.byteInputStream())).readObject() as PEMKeyPair)
+                } catch (e: Exception) {
+                    field = null
                     null
                 }
             }

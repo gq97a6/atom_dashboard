@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,27 +27,24 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.EditText
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.NavigationArrows
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
 
 class DashboardPropertiesFragment : Fragment() {
 
-    var openCert: (action: (uri: Uri, inputStream: InputStream) -> Unit) -> Unit = {}
-
-    private lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
-    private lateinit var request: ActivityResultLauncher<Intent>
+    lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
+    lateinit var request: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,15 +63,35 @@ class DashboardPropertiesFragment : Fragment() {
                     }
                 }
             }
+    }
 
-        openCert = { action ->
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "*/*"
-            }
-            requestAction = action
-            request.launch(intent)
+    inline fun openFile(crossinline action: (String, String?) -> Unit) {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "*/*"
         }
+
+        requestAction = { uri, inputStream ->
+            action(
+                inputStream.bufferedReader().use { it.readText() },
+                runCatching {
+                    requireContext().contentResolver.query(
+                        uri,
+                        null,
+                        null,
+                        null,
+                        null
+                    )?.use { cursor ->
+                        cursor.moveToFirst()
+                        return@use cursor.getColumnIndexOrThrow(
+                            OpenableColumns.DISPLAY_NAME
+                        ).let(cursor::getString)
+                    }
+                }.getOrNull()
+            )
+        }
+
+        request.launch(intent)
     }
 
     override fun onCreateView(
@@ -111,7 +129,7 @@ class DashboardPropertiesFragment : Fragment() {
 
                                 )
                                 Text(
-                                    modifier = Modifier.offset(y = -10.dp),
+                                    modifier = Modifier.offset(y = (-10).dp),
                                     text = "properties",
                                     fontSize = 35.sp,
                                     color = Theme.colors.a

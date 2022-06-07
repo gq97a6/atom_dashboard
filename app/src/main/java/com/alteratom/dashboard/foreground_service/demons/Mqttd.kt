@@ -212,39 +212,57 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
 
             if (conProp.ssl) {
+                val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+                kmfStore.load(null, null)
+                kmfStore.setCertificateEntry("cc", conProp.clientCert)
+                conProp.clientKey?.let {
+                    kmfStore.setKeyEntry(
+                        "k",
+                        it.private,
+                        conProp.clientKeyPassword.toCharArray(),
+                        arrayOf<Certificate?>(conProp.clientCert)
+                    )
+                }
 
-                val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-                val trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm)
-
-                trustManagerFactory.init(
-                    if (conProp.sslCert != null) {
-                        val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-                        keyStore.load(null, null)
-                        keyStore.setCertificateEntry("ca", conProp.sslCert)
-                        keyStore
-                    } else null
-                )
-
-                val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                    override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
-
-                    override fun checkClientTrusted(
-                        chain: Array<X509Certificate>,
-                        authType: String
-                    ) {
-                    }
-
-                    override fun checkServerTrusted(
-                        chain: Array<X509Certificate>,
-                        authType: String
-                    ) {
-                    }
-                })
+                val kmf: KeyManagerFactory =
+                    KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+                kmf.init(kmfStore, conProp.clientKeyPassword.toCharArray())
 
                 val tlsContext = SSLContext.getInstance("TLS")
                 tlsContext.init(
-                    null,
-                    if (conProp.sslTrustAll) trustAllCerts else trustManagerFactory.trustManagers,
+                    kmf.keyManagers,
+                    if (!conProp.sslTrustAll) { //TRUST ONLY IMPORTED
+                        val trustManagerFactory = TrustManagerFactory.getInstance(
+                            TrustManagerFactory.getDefaultAlgorithm()
+                        )
+
+                        trustManagerFactory.init(
+                            if (conProp.caCert != null) {
+                                KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                                    load(null, null)
+                                    setCertificateEntry("c", conProp.caCert)
+                                }
+                            } else null
+                        )
+
+                        trustManagerFactory.trustManagers
+                    } else { //TRUST ALL CERTS
+                        arrayOf<TrustManager>(object : X509TrustManager {
+                            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+
+                            override fun checkClientTrusted(
+                                chain: Array<X509Certificate>,
+                                authType: String
+                            ) {
+                            }
+
+                            override fun checkServerTrusted(
+                                chain: Array<X509Certificate>,
+                                authType: String
+                            ) {
+                            }
+                        })
+                    },
                     java.security.SecureRandom()
                 )
 
@@ -305,7 +323,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 }
 
 fun getSocketFactory(
-    caCrtFile: InputStream?, crtFile: InputStream?, keyFile: InputStream?,
+    caCrtFile: InputStream?,
+    crtFile: InputStream?,
+    keyFile: InputStream?,
     password: String
 ): SSLSocketFactory? {
     Security.addProvider(BouncyCastleProvider())
@@ -349,11 +369,11 @@ fun getSocketFactory(
 
     val kmf: KeyManagerFactory =
         KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-
     kmf.init(kmfStore, password.toCharArray())
+
+    // --------------------------------------------------------------------------------------------
 
     val context = SSLContext.getInstance("TLSv1.2")
     context.init(kmf.keyManagers, tmf.trustManagers, null)
-
     return context.socketFactory
 }

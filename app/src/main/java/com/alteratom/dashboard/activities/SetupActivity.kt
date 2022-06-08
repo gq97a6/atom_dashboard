@@ -40,6 +40,7 @@ import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 class SetupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        finishAffinity()
         super.onCreate(savedInstanceState)
         Activity.onCreate(this)
 

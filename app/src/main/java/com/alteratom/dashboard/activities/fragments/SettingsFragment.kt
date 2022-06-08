@@ -10,27 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
-import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
-import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.FolderTree.parseListSave
 import com.alteratom.dashboard.FolderTree.parseSave
@@ -48,7 +37,6 @@ import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
-import java.util.*
 
 
 class SettingsFragment : Fragment() {
@@ -179,7 +167,6 @@ class SettingsFragment : Fragment() {
                     Box(modifier = Modifier.background(colors.background))
 
                     Box(
-                        modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
                         Surface(modifier = Modifier.padding(16.dp)) {
@@ -239,7 +226,7 @@ class SettingsFragment : Fragment() {
                                 }
 
                                 FrameBox("Theme") {
-                                    OutlinedButton(
+                                    BasicButton(
                                         contentPadding = PaddingValues(13.dp),
                                         border = BorderStroke(2.dp, colors.b),
                                         onClick = { fm.replaceWith(ThemeFragment()) }
@@ -250,7 +237,7 @@ class SettingsFragment : Fragment() {
 
                                 FrameBox("Backup") {
                                     Row {
-                                        OutlinedButton(
+                                        BasicButton(
                                             contentPadding = PaddingValues(13.dp),
                                             border = BorderStroke(2.dp, colors.b),
                                             modifier = Modifier.weight(.47f),
@@ -261,7 +248,7 @@ class SettingsFragment : Fragment() {
 
                                         Spacer(modifier = Modifier.weight(.06f))
 
-                                        OutlinedButton(
+                                        BasicButton(
                                             contentPadding = PaddingValues(13.dp),
                                             border = BorderStroke(2.dp, colors.b),
                                             modifier = Modifier.weight(.47f),

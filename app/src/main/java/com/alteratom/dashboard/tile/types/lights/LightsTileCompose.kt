@@ -34,7 +34,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
+                    BasicButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
                             G.getIconHSV = { tile.hsvTrue }
@@ -74,7 +74,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
+                    BasicButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
                             G.getIconHSV = { tile.hsvTrue }

@@ -41,7 +41,7 @@ object TilePropertiesCompse {
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
+                    BasicButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
                             getIconHSV = { G.tile.hsv }
@@ -218,7 +218,7 @@ object TilePropertiesCompse {
                 Row(
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
+                    BasicButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
                             options.add("" to "")

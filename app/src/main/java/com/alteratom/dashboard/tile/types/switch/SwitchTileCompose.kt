@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.EditText
 import com.alteratom.dashboard.G.getIconColorPallet
 import com.alteratom.dashboard.G.getIconHSV
@@ -34,8 +35,7 @@ object SwitchTileCompose : DaemonBasedCompose {
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
-                        contentPadding = PaddingValues(13.dp),
+                    BasicButton(
                         onClick = {
                             getIconHSV = { tile.hsvFalse }
                             getIconRes = { tile.iconResFalse }
@@ -74,8 +74,7 @@ object SwitchTileCompose : DaemonBasedCompose {
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    OutlinedButton(
-                        contentPadding = PaddingValues(13.dp),
+                    BasicButton(
                         onClick = {
                             getIconHSV = { tile.hsvTrue }
                             getIconRes = { tile.iconResTrue }

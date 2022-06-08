@@ -1,6 +1,5 @@
 package com.alteratom.dashboard
 
-import android.util.Log
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -28,12 +27,14 @@ import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -533,4 +534,26 @@ fun ArcSlider(
     val y = (radius + radius * sin(Math.toRadians(angle))).toFloat()
     pointerOffset = Offset(x, y) - Offset(pointerRadius, pointerRadius)
     if (!isSliding) dragOffset = pointerOffset
+}
+
+@Composable
+fun BasicButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = MaterialTheme.shapes.small,
+    border: BorderStroke = BorderStroke(2.dp, colors.b),
+    contentPadding: PaddingValues = PaddingValues(13.dp),
+    contentAlignment: Alignment = Alignment.Center,
+    content: @Composable () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clickable(enabled, role = Role.Button, onClick = onClick)
+            .border(border, shape)
+            .padding(contentPadding),
+        contentAlignment = contentAlignment
+    ) {
+        content()
+    }
 }

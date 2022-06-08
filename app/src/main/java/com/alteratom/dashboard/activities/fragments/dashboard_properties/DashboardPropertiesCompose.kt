@@ -126,12 +126,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                 var copyShow by remember { mutableStateOf(false) }
 
-                OutlinedButton(
+                BasicButton(
                     modifier = Modifier
                         .padding(top = 5.dp)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f),
-                    contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
                     onClick = {
                         if (G.dashboards.size <= 1)
@@ -259,12 +258,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                 var sslShow by remember { mutableStateOf(false) }
 
-                OutlinedButton(
+                BasicButton(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f)
                         .padding(top = 10.dp),
-                    contentPadding = PaddingValues(13.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
                     onClick = { sslShow = true }
                 ) {

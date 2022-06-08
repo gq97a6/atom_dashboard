@@ -8,10 +8,4 @@
         <item name="android:background">#00000000</item>
     </style>
 
-    <style name="slider" parent="@style/Widget.MaterialComponents.Slider">
-        <item name="haloColor">#00000000</item>
-        <item name="labelBehavior">gone</item>
-        <item name="haloRadius">0dp</item>
-    </style>
-
 </resources>

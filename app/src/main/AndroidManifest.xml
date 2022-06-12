@@ -21,7 +21,7 @@
         android:theme="@style/theme">
 
         <receiver
-            android:name=".dashboard.widgets.Widget"
+            android:name=".dashboard.widgets.ShortWidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -29,11 +29,51 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_info" />
+                android:resource="@xml/short_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".dashboard.widgets.ButtonWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/button_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".dashboard.widgets.SwitchWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/switch_widget_info" />
         </receiver>
 
         <activity
-            android:name=".dashboard.activities.WidgetConfigureActivity"
+            android:name=".dashboard.activities.widgets.ButtonWidgetConActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".dashboard.activities.widgets.ShortWidgetConActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".dashboard.activities.widgets.SwitchWidgetConActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

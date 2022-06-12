@@ -2,6 +2,8 @@ package com.alteratom.dashboard.activities.fragments
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.appwidget.AppWidgetManager
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -129,6 +131,16 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
+            //requireActivity().apply {
+            //    Intent(this, WidgetConfigureActivity::class.java).apply {
+            //        startActivity(this)
+            //        val b = Bundle()
+            //        b.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 1)
+            //        intent.putExtras(b)
+            //        overridePendingTransition(0, 0)
+            //        finish()
+            //    }
+            //}
             fm.replaceWith(TileNewFragment())
         }
 

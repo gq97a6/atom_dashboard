@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,6 +42,7 @@ import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
+
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
 

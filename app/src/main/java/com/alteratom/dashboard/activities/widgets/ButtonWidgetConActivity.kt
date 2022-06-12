@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities
+package com.alteratom.dashboard.activities.widgets
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
@@ -26,9 +26,9 @@ import com.alteratom.dashboard.G
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.widgets.updateAppWidget
+import com.alteratom.dashboard.widgets.ButtonWidgetProvider
 
-class WidgetConfigureActivity : AppCompatActivity() {
+class ButtonWidgetConActivity : AppCompatActivity() {
     private var id = INVALID_APPWIDGET_ID
 
     public override fun onCreate(icicle: Bundle?) {
@@ -54,28 +54,27 @@ class WidgetConfigureActivity : AppCompatActivity() {
                         .background(colors.background)
                         .padding(20.dp)
                 ) {
-                    val context = this@WidgetConfigureActivity
-                    var title by remember {
-                        mutableStateOf(
-                            loadTitlePref(
-                                this@WidgetConfigureActivity,
-                                id
-                            )
-                        )
-                    }
-                    EditText(
-                        label = { Text("Widget title") },
-                        value = title,
-                        onValueChange = {
-                            title = it
-                        }
+                    val context = this@ButtonWidgetConActivity
+
+                    //saveTitlePref(context, id, title)
+                    ButtonWidgetProvider.updateWidget(
+                        context,
+                        AppWidgetManager.getInstance(context),
+                        id
                     )
+
+                    setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, id))
+                    finish()
 
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),
                         onClick = {
-                            saveTitlePref(context, id, title)
-                            updateAppWidget(context, AppWidgetManager.getInstance(context), id)
+                            //saveTitlePref(context, id, title)
+                            ButtonWidgetProvider.updateWidget(
+                                context,
+                                AppWidgetManager.getInstance(context),
+                                id
+                            )
 
                             setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, id))
                             finish()
@@ -89,20 +88,3 @@ class WidgetConfigureActivity : AppCompatActivity() {
     }
 
 }
-
-private const val PREFS_NAME = "com.alteratom.dashboard.Widget"
-private const val PREF_PREFIX_KEY = "widget_"
-
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    context.getSharedPreferences(PREFS_NAME, 0).edit()
-        .putString(PREF_PREFIX_KEY + appWidgetId, text).apply()
-}
-
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
-    context.getSharedPreferences(PREFS_NAME, 0).edit()
-        .remove(PREF_PREFIX_KEY + appWidgetId).apply()
-}
-
-internal fun loadTitlePref(context: Context, appWidgetId: Int) =
-    context.getSharedPreferences(PREFS_NAME, 0)
-        .getString(PREF_PREFIX_KEY + appWidgetId, null) ?: "error_title"

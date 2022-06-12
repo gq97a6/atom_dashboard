@@ -1,6 +1,50 @@
-client certificates
 widgets
+    dashboard shortcut
+    logs~
+    button
+    switch
+
+
 start guide
 hardcoded text
 tests
 publish
+
+/*
+(requireContext() as MainActivity).apply {
+    sendBroadcast(Intent(this, Widget::class.java).apply {
+        action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        val ids = AppWidgetManager.getInstance(application)
+            .getAppWidgetIds(
+                ComponentName(
+                    getApplicationContext(),
+                    Widget::class.java!!
+                )
+            )
+
+        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
+    })
+}
+*/
+
+//val intent = Intent(context, SetupActivity::class.java)
+//intent.putExtra("d", 13L)
+//val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+//views.setOnClickPendingIntent(R.id.appwidget_text, pendingIntent)
+
+private const val PREFS_NAME = "com.alteratom.dashboard.Widget"
+private const val PREF_PREFIX_KEY = "widget_"
+
+internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
+    context.getSharedPreferences(PREFS_NAME, 0).edit()
+        .putString(PREF_PREFIX_KEY + appWidgetId, text).apply()
+}
+
+internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
+    context.getSharedPreferences(PREFS_NAME, 0).edit()
+        .remove(PREF_PREFIX_KEY + appWidgetId).apply()
+}
+
+internal fun loadTitlePref(context: Context, appWidgetId: Int) =
+    context.getSharedPreferences(PREFS_NAME, 0)
+        .getString(PREF_PREFIX_KEY + appWidgetId, null) ?: "error_title"

@@ -18,14 +18,30 @@ abstract class WidgetProviderCompanion : AppWidgetProvider() {
 
     open fun save(context: Context, appWidgetId: Int, text: String) {}
     open fun load(context: Context, appWidgetId: Int) {}
-    open fun delete(context: Context, appWidgetId: Int)  {
+    open fun delete(context: Context, appWidgetId: Int) {
         context.getSharedPreferences(PREFS_NAME, 0).edit()
             .remove(PREF_PREFIX_KEY + appWidgetId).apply()
     }
 
-    fun getPendingSelfIntent(context: Context?, action: String?, provider: Class<*>?): PendingIntent? {
+    fun getPendingSelfIntent(
+        context: Context?,
+        action: String?,
+        provider: Class<*>?
+    ): PendingIntent? {
         val intent = Intent(context, provider)
         intent.action = action
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+    }
+
+    fun getPendingSelfIntent(
+        context: Context?,
+        action: String?,
+        id: Int,
+        provider: Class<*>?
+    ): PendingIntent? {
+        val intent = Intent(context, provider)
+        intent.action = action
+        intent.putExtra("id", id)
+        return PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_MUTABLE)
     }
 }

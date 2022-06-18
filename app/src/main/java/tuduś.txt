@@ -1,6 +1,5 @@
 widgets
     dashboard shortcut
-    logs~
     button
     switch
 

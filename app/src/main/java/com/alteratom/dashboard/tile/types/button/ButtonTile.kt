@@ -5,9 +5,10 @@ import android.view.View
 import android.view.View.GONE
 import android.widget.TextView
 import com.alteratom.R
+import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-class ButtonTile : com.alteratom.dashboard.tile.Tile() {
+class ButtonTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_button

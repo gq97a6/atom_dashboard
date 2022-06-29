@@ -14,7 +14,7 @@ import com.alteratom.dashboard.foreground_service.demons.Mqttd
 class SwitchWidgetProvider : AppWidgetProvider() {
 
     companion object : WidgetProviderCompanion() {
-        override val PREFS_NAME = "switch"
+        override val type = "switch"
 
         override fun updateWidget(
             context: Context,
@@ -25,10 +25,19 @@ class SwitchWidgetProvider : AppWidgetProvider() {
 
             views.setOnClickPendingIntent(
                 R.id.widget_root,
-                getPendingSelfIntent(context, "c", SwitchWidgetProvider::class.java)
+                getPendingSelfIntent(context, ShortWidgetProvider::class.java, appWidgetId)
             )
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
+    }
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+
+        if (intent?.action == "self" && context != null) {
+            val id = intent.getIntExtra("id", -1)
+
         }
     }
 
@@ -42,23 +51,6 @@ class SwitchWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        for (id in appWidgetIds) {
-            delete(context, id)
-        }
-    }
-
-    override fun onReceive(context: Context?, intent: Intent?) {
-        super.onReceive(context, intent)
-
-        if (intent?.getAction() == "c") {
-            when (G.dashboard.daemon) {
-                is Mqttd -> {
-                    if (ForegroundService.service?.isRunning == true) {
-                        (G.dashboard.daemon as? Mqttd?)?.publish("gda_switch0b", "")
-                    } else createToast(context!!, "err")
-                }
-            }
-        }
+    class Data : WidgetDataHolder.Data() {
     }
 }

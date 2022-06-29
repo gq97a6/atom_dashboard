@@ -13,12 +13,13 @@ import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.roundCloser
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 
-class SliderTile : com.alteratom.dashboard.tile.Tile() {
+class SliderTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_slider

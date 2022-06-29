@@ -3,7 +3,8 @@ widgets
     button
     switch
 
-
+version stap, compatibility stap
+save transfer
 start guide
 hardcoded text
 tests

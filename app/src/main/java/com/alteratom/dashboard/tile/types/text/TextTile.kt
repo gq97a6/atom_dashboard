@@ -9,12 +9,13 @@ import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.random.Random
 
-class TextTile : com.alteratom.dashboard.tile.Tile() {
+class TextTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_text

@@ -5,13 +5,13 @@ import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.tile.Tile
+import com.alteratom.dashboard.widgets.WidgetDataHolder
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 object G {
-    val mapper: ObjectMapper =
-        jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    val mapper = jacksonObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     var settings = Settings()
     var theme = Theme()
@@ -21,6 +21,7 @@ object G {
     var dashboardIndex = -2
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
+    lateinit var widgetDataHolder: WidgetDataHolder
 
     lateinit var setIconHSV: (FloatArray) -> Unit
     lateinit var setIconKey: (String) -> Unit
@@ -44,6 +45,7 @@ object G {
     }
 
     fun initialize() {
+        widgetDataHolder = parseSave() ?: WidgetDataHolder()
         dashboards = parseListSave()
         theme = parseSave() ?: Theme()
         settings = parseSave() ?: Settings()

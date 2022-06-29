@@ -11,10 +11,11 @@ import com.alteratom.dashboard.G
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSelectBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 
-class SelectTile : com.alteratom.dashboard.tile.Tile() {
+class SelectTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_select

@@ -8,11 +8,12 @@ import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTimeBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class TimeTile : com.alteratom.dashboard.tile.Tile() {
+class TimeTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_time

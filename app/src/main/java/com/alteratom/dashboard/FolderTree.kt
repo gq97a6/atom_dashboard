@@ -1,6 +1,7 @@
 package com.alteratom.dashboard
 
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.widgets.WidgetDataHolder
 import java.io.File
 import java.io.FileReader
 import kotlin.reflect.KClass
@@ -13,6 +14,7 @@ object FolderTree {
                 Theme::class to "$value/theme",
                 Settings::class to "$value/settings",
                 Dashboard::class to "$value/dashboards",
+                WidgetDataHolder::class to "$value/widgets"
             )
         }
 
@@ -28,9 +30,9 @@ object FolderTree {
         }
     }
 
-    fun Collection<*>.saveToFile(save: String = this.prepareSave()) {
+    inline fun <reified T> Collection<T>.saveToFile(save: String = this.prepareSave()) {
         try {
-            val path = path[this.first()!!::class]
+            val path = path[T::class]
             File(path).writeText(save)
         } catch (e: Exception) {
         }

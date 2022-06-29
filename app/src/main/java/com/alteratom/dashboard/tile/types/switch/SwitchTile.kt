@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class SwitchTile : com.alteratom.dashboard.tile.Tile() {
+class SwitchTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_switch

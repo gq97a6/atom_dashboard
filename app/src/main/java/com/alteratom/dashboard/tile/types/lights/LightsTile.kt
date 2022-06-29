@@ -24,6 +24,7 @@ import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.dashboard.toPx
 import com.alteratom.databinding.DialogLightsBinding
 import com.alteratom.databinding.DialogSelectBinding
@@ -32,7 +33,7 @@ import me.tankery.lib.circularseekbar.CircularSeekBar
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.roundToInt
 
-class LightsTile : com.alteratom.dashboard.tile.Tile() {
+class LightsTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_lights

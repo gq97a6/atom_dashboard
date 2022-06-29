@@ -31,11 +31,6 @@ import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.*
 
-const val A = 255 //100%
-const val B = 150 //60%
-const val C = 75 //30%
-const val D = 25 //10%
-
 val screenHeight
     get() = Resources.getSystem().displayMetrics.heightPixels
 val screenWidth

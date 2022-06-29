@@ -12,12 +12,13 @@ import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
-class TerminalTile : com.alteratom.dashboard.tile.Tile() {
+class TerminalTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_terminal

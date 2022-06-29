@@ -20,6 +20,7 @@ import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.round
+import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -28,7 +29,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class ThermostatTile : com.alteratom.dashboard.tile.Tile() {
+class ThermostatTile : Tile() {
 
     @JsonIgnore
     override val layout = R.layout.tile_thermostat

@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.FolderTree
+import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.widgetDataHolder
@@ -42,6 +44,7 @@ class ShortWidgetConActivity : AppCompatActivity() {
             return
         }
 
+        rootFolder = filesDir.canonicalPath.toString()
         G.theme.apply(context = this)
 
         setContent {
@@ -54,16 +57,13 @@ class ShortWidgetConActivity : AppCompatActivity() {
                 ) {
                     val context = this@ShortWidgetConActivity
 
-                    setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, id))
-                    finish()
-
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),
                         onClick = {
                             val holder = try {
                                 widgetDataHolder
                             } catch (e: Exception) {
-                                FolderTree.parseSave<WidgetDataHolder>() ?: WidgetDataHolder()
+                                parseSave<WidgetDataHolder>() ?: WidgetDataHolder()
                             }
 
                             holder.short[id] = ShortWidgetProvider.Data()

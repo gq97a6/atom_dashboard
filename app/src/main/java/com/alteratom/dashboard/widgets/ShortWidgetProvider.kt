@@ -8,6 +8,7 @@ import android.widget.RemoteViews
 import com.alteratom.R
 import com.alteratom.dashboard.FolderTree
 import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G
 
@@ -55,6 +56,7 @@ class ShortWidgetProvider : AppWidgetProvider() {
         super.onRestored(context, oldWidgetIds, newWidgetIds)
 
         if (newWidgetIds == null || oldWidgetIds == null || context == null) return
+        rootFolder = context.filesDir.canonicalPath.toString()
 
         val holder = try {
             G.widgetDataHolder
@@ -71,7 +73,9 @@ class ShortWidgetProvider : AppWidgetProvider() {
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
+
         if (appWidgetIds == null || context == null) return
+        rootFolder = context.filesDir.canonicalPath.toString()
 
         val holder = try {
             G.widgetDataHolder
@@ -86,6 +90,6 @@ class ShortWidgetProvider : AppWidgetProvider() {
         holder.saveToFile()
     }
 
-    class Data : WidgetDataHolder.Data() {
+    class Data {
     }
 }

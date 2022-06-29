@@ -16,11 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.BasicButton
+import com.alteratom.dashboard.FolderTree
+import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G
+import com.alteratom.dashboard.G.widgetDataHolder
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.widgets.ButtonWidgetProvider
 import com.alteratom.dashboard.widgets.SwitchWidgetProvider
+import com.alteratom.dashboard.widgets.WidgetDataHolder
 
 class SwitchWidgetConActivity : AppCompatActivity() {
     private var id = INVALID_APPWIDGET_ID
@@ -49,36 +55,19 @@ class SwitchWidgetConActivity : AppCompatActivity() {
                         .padding(20.dp)
                 ) {
                     val context = this@SwitchWidgetConActivity
-                    //var title by remember {
-                    //    mutableStateOf(
-                    //        loadTitlePref(
-                    //            context,
-                    //            id
-                    //        )
-                    //    )
-                    //}
-                    //EditText(
-                    //    label = { Text("Widget title") },
-                    //    value = title,
-                    //    onValueChange = {
-                    //        title = it
-                    //    }
-                    //)
-
-                    //saveTitlePref(context, id, title)
-                    SwitchWidgetProvider.updateWidget(
-                        context,
-                        AppWidgetManager.getInstance(context),
-                        id
-                    )
-
-                    setResult(RESULT_OK, Intent().putExtra(EXTRA_APPWIDGET_ID, id))
-                    finish()
 
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),
                         onClick = {
-                            //saveTitlePref(context, id, title)
+                            val holder = try {
+                                widgetDataHolder
+                            } catch (e: Exception) {
+                                parseSave<WidgetDataHolder>() ?: WidgetDataHolder()
+                            }
+
+                            holder.switch[id] = SwitchWidgetProvider.Data()
+                            holder.saveToFile()
+
                             SwitchWidgetProvider.updateWidget(
                                 context,
                                 AppWidgetManager.getInstance(context),

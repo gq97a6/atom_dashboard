@@ -16,16 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.BasicButton
-import com.alteratom.dashboard.FolderTree.parseListSave
+import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.widgetDataHolder
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.widgets.WidgetDataHolder.Data
-import com.alteratom.tile.types.button.ButtonTile
-import com.alteratom.dashboard.widgets.ButtonWidgetProvider as Provider
+import com.alteratom.dashboard.widgets.ButtonWidgetProvider
+import com.alteratom.dashboard.widgets.WidgetDataHolder
 
 class ButtonWidgetConActivity : AppCompatActivity() {
     private var id = INVALID_APPWIDGET_ID
@@ -58,23 +57,16 @@ class ButtonWidgetConActivity : AppCompatActivity() {
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),
                         onClick = {
-                            try {
-                                widgetDataHolder.get()
-                                widgetDataHolder.add(Provider.Data())
-                                widgetDataHolder.saveToFile()
+                            val holder = try {
+                                widgetDataHolder
                             } catch (e: Exception) {
-                                try {
-                                    parseListSave<Data>().let {
-                                        it.add(Provider.Data())
-                                        saveToFile()
-                                    }
-                                } catch (e: Exception) {
-                                    run {}
-                                }
+                                parseSave<WidgetDataHolder>() ?: WidgetDataHolder()
                             }
 
+                            holder.button[id] = ButtonWidgetProvider.Data()
+                            holder.saveToFile()
 
-                            Provider.updateWidget(
+                            ButtonWidgetProvider.updateWidget(
                                 context,
                                 AppWidgetManager.getInstance(context),
                                 id
@@ -91,8 +83,4 @@ class ButtonWidgetConActivity : AppCompatActivity() {
         }
     }
 
-}
-
-class a() {
-    val test = mutableListOf(ButtonTile())
 }

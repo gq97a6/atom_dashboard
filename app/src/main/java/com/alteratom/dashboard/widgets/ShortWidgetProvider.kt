@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import com.alteratom.R
+import com.alteratom.dashboard.FolderTree
+import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G
-import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.foreground_service.ForegroundService
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
 
 class ShortWidgetProvider : AppWidgetProvider() {
 
@@ -49,6 +49,41 @@ class ShortWidgetProvider : AppWidgetProvider() {
         for (id in appWidgetIds) {
             updateWidget(context, appWidgetManager, id)
         }
+    }
+
+    override fun onRestored(context: Context?, oldWidgetIds: IntArray?, newWidgetIds: IntArray?) {
+        super.onRestored(context, oldWidgetIds, newWidgetIds)
+
+        if (newWidgetIds == null || oldWidgetIds == null || context == null) return
+
+        val holder = try {
+            G.widgetDataHolder
+        } catch (e: Exception) {
+            parseSave<WidgetDataHolder>() ?: return
+        }
+
+        for (i in oldWidgetIds.indices) {
+            holder.short.mapKeys { newWidgetIds[oldWidgetIds.indexOf(it.key)] }
+        }
+
+        holder.saveToFile()
+    }
+
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        super.onDeleted(context, appWidgetIds)
+        if (appWidgetIds == null || context == null) return
+
+        val holder = try {
+            G.widgetDataHolder
+        } catch (e: Exception) {
+            parseSave<WidgetDataHolder>() ?: return
+        }
+
+        for (id in appWidgetIds) {
+            holder.short.remove(id)
+        }
+
+        holder.saveToFile()
     }
 
     class Data : WidgetDataHolder.Data() {

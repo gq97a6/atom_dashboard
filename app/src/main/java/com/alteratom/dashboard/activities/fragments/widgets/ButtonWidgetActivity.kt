@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.widgets
+package com.alteratom.dashboard.activities.fragments.widgets
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
@@ -24,10 +24,10 @@ import com.alteratom.dashboard.G.widgetDataHolder
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.widgets.SwitchWidgetProvider
+import com.alteratom.dashboard.widgets.ButtonWidgetProvider
 import com.alteratom.dashboard.widgets.WidgetDataHolder
 
-class SwitchWidgetActivity : AppCompatActivity() {
+class ButtonWidgetActivity : AppCompatActivity() {
     private var id = INVALID_APPWIDGET_ID
 
     public override fun onCreate(icicle: Bundle?) {
@@ -54,7 +54,7 @@ class SwitchWidgetActivity : AppCompatActivity() {
                         .background(colors.background)
                         .padding(20.dp)
                 ) {
-                    val context = this@SwitchWidgetActivity
+                    val context = this@ButtonWidgetActivity
 
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),
@@ -65,10 +65,10 @@ class SwitchWidgetActivity : AppCompatActivity() {
                                 parseSave<WidgetDataHolder>() ?: WidgetDataHolder()
                             }
 
-                            holder.switch[id] = SwitchWidgetProvider.Data()
+                            holder.button[id] = ButtonWidgetProvider.Data()
                             holder.saveToFile()
 
-                            SwitchWidgetProvider.updateWidget(
+                            ButtonWidgetProvider.updateWidget(
                                 context,
                                 AppWidgetManager.getInstance(context),
                                 id

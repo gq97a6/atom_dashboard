@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.alteratom.dashboard.activities.widgets.ShortWidgetActivity"
+    android:configure="com.alteratom.dashboard.activities.fragments.widgets.ShortWidgetActivity"
     android:initialKeyguardLayout="@layout/widget_short"
     android:initialLayout="@layout/widget_short"
     android:previewLayout="@layout/widget_short"

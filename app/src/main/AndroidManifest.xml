@@ -60,7 +60,7 @@
         </receiver>
 
         <activity
-            android:name=".dashboard.activities.widgets.ButtonWidgetActivity"
+            android:name="com.alteratom.dashboard.activities.fragments.widgets.ButtonWidgetActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -68,7 +68,7 @@
         </activity>
 
         <activity
-            android:name=".dashboard.activities.widgets.ShortWidgetActivity"
+            android:name="com.alteratom.dashboard.activities.fragments.widgets.ShortWidgetActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -76,7 +76,7 @@
         </activity>
 
         <activity
-            android:name=".dashboard.activities.widgets.SwitchWidgetActivity"
+            android:name="com.alteratom.dashboard.activities.fragments.widgets.SwitchWidgetActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

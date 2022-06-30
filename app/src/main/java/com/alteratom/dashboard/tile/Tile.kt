@@ -1,26 +1,24 @@
 package com.alteratom.dashboard.tile
 
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.alteratom.R
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.attentate
-import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.dialogConfirmCompose
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
-import com.alteratom.dashboard.screenWidth
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -62,6 +60,11 @@ abstract class Tile : RecyclerViewItem() {
     }
 
     open fun onCreateTile() {}
+
+    override fun onClick(v: View, e: MotionEvent) {
+        super.onClick(v, e)
+        performClick(adapter.context)
+    }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

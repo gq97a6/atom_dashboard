@@ -22,7 +22,7 @@ class ShortWidgetProvider : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
-            val views = RemoteViews(context.packageName, R.layout.widget_button)
+            val views = RemoteViews(context.packageName, R.layout.widget_short)
 
             views.setOnClickPendingIntent(
                 R.id.widget_root,

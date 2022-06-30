@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.alteratom.dashboard.activities.widgets.SwitchWidgetConActivity"
+    android:configure="com.alteratom.dashboard.activities.widgets.SwitchWidgetActivity"
     android:initialKeyguardLayout="@layout/widget"
     android:initialLayout="@layout/widget"
     android:previewLayout="@layout/widget"

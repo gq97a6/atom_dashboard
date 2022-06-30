@@ -7,11 +7,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.widget.RemoteViews
 import com.alteratom.R
-import com.alteratom.dashboard.FolderTree
 import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G.widgetDataHolder
+import com.alteratom.dashboard.createVibration
+import com.alteratom.dashboard.performClick
+import kotlinx.coroutines.runBlocking
 
 class SwitchWidgetProvider : AppWidgetProvider() {
 
@@ -23,7 +25,7 @@ class SwitchWidgetProvider : AppWidgetProvider() {
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
-            val views = RemoteViews(context.packageName, R.layout.widget_button)
+            val views = RemoteViews(context.packageName, R.layout.widget_switch)
 
             views.setOnClickPendingIntent(
                 R.id.widget_root,
@@ -35,6 +37,10 @@ class SwitchWidgetProvider : AppWidgetProvider() {
             } catch (e: Exception) {
                 null
             }
+
+            //val drawable = this.background as? GradientDrawable
+            //drawable?.setStroke(10, p.color)
+            //drawable?.cornerRadius = 25f
 
             views.setInt(
                 R.id.widget_root,
@@ -57,6 +63,7 @@ class SwitchWidgetProvider : AppWidgetProvider() {
             val id = intent.getIntExtra("id", -1)
 
             try {
+                performClick(context)
                 widgetDataHolder.switch[id]!!.state = !widgetDataHolder.switch[id]!!.state
             } catch (e: Exception) {
             }

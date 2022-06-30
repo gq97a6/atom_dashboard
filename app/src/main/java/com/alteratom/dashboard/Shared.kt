@@ -137,17 +137,24 @@ internal fun createNotificationChannel(context: Context) {
     notificationManager.createNotificationChannel(channel)
 }
 
+fun performClick(context: Context) {
+    createVibration(
+        context,
+        vibe = VibrationEffect.createWaveform(longArrayOf(5,3,5), intArrayOf(200, 0, 100), -1)
+    )
+}
+
 @Suppress("DEPRECATION")
-fun createVibration(context: Context, ms: Long = 500) {
+fun createVibration(
+    context: Context,
+    ms: Long = 500,
+    am: Int = VibrationEffect.DEFAULT_AMPLITUDE,
+    vibe: VibrationEffect? = null,
+) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     if (vibrator.hasVibrator()) {
-        vibrator.vibrate(
-            VibrationEffect.createOneShot(
-                ms,
-                VibrationEffect.DEFAULT_AMPLITUDE
-            )
-        )
+        vibrator.vibrate(vibe ?: VibrationEffect.createOneShot(ms, am))
     }
 }
 

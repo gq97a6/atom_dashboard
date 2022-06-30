@@ -1,9 +1,8 @@
 widgets
-    dashboard shortcut
-    button
-    switch
+    color
+    icons
 
-version stap, compatibility stap
+version stamp, compatibility stamp
 save transfer
 start guide
 hardcoded text

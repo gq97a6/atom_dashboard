@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.BasicButton
-import com.alteratom.dashboard.FolderTree
 import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile
@@ -25,11 +24,10 @@ import com.alteratom.dashboard.G.widgetDataHolder
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.widgets.ButtonWidgetProvider
 import com.alteratom.dashboard.widgets.SwitchWidgetProvider
 import com.alteratom.dashboard.widgets.WidgetDataHolder
 
-class SwitchWidgetConActivity : AppCompatActivity() {
+class SwitchWidgetActivity : AppCompatActivity() {
     private var id = INVALID_APPWIDGET_ID
 
     public override fun onCreate(icicle: Bundle?) {
@@ -56,7 +54,7 @@ class SwitchWidgetConActivity : AppCompatActivity() {
                         .background(colors.background)
                         .padding(20.dp)
                 ) {
-                    val context = this@SwitchWidgetConActivity
+                    val context = this@SwitchWidgetActivity
 
                     BasicButton(
                         modifier = Modifier.padding(top = 10.dp),

@@ -11,9 +11,7 @@ import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G.widgetDataHolder
-import com.alteratom.dashboard.createVibration
 import com.alteratom.dashboard.performClick
-import kotlinx.coroutines.runBlocking
 
 class SwitchWidgetProvider : AppWidgetProvider() {
 
@@ -28,7 +26,7 @@ class SwitchWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_switch)
 
             views.setOnClickPendingIntent(
-                R.id.widget_root,
+                R.id.w_root,
                 getPendingSelfIntent(context, SwitchWidgetProvider::class.java, appWidgetId)
             )
 
@@ -38,17 +36,21 @@ class SwitchWidgetProvider : AppWidgetProvider() {
                 null
             }
 
-            //val drawable = this.background as? GradientDrawable
-            //drawable?.setStroke(10, p.color)
-            //drawable?.cornerRadius = 25f
-
             views.setInt(
-                R.id.widget_root,
-                "setBackgroundColor",
+                R.id.w_color,
+                "setColorFilter",
                 when (status) {
                     true -> Color.RED
                     false -> Color.GREEN
                     null -> Color.BLUE
+                }
+            )
+
+            views.setImageViewResource(
+                R.id.w_icon, when (status) {
+                    true -> R.drawable.il_business_briefcase_alt
+                    false -> R.drawable.il_business_lightbulb_alt
+                    null -> R.drawable.il_arrow_sort
                 }
             )
 

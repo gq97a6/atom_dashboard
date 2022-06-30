@@ -25,7 +25,7 @@ class ShortWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_short)
 
             views.setOnClickPendingIntent(
-                R.id.widget_root,
+                R.id.w_root,
                 getPendingSelfIntent(context, ShortWidgetProvider::class.java, appWidgetId)
             )
 

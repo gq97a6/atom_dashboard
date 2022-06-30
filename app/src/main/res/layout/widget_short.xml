@@ -1,9 +1,23 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_root"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/w_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/w_color"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".5"
+        android:src="@drawable/bg_widget" />
+
+    <ImageView
+        android:id="@+id/w_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/il_interface_bookmark" />
+
+</FrameLayout>

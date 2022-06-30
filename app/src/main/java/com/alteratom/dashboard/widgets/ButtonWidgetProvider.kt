@@ -25,7 +25,7 @@ class ButtonWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, R.layout.widget_button)
 
             views.setOnClickPendingIntent(
-                R.id.widget_root,
+                R.id.w_root,
                 getPendingSelfIntent(context, ButtonWidgetProvider::class.java, appWidgetId)
             )
 

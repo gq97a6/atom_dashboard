@@ -12,7 +12,7 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.color.ColorTile
 
@@ -24,8 +24,8 @@ object ColorTileCompose : DaemonBasedCompose {
         var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
         var type by remember { mutableStateOf(tile.colorType) }
 
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
                 EditText(
@@ -52,7 +52,7 @@ object ColorTileCompose : DaemonBasedCompose {
                 Communication1()
             }
 
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
 
             FrameBox(a = "Type specific: ", b = "color") {
                 Column {

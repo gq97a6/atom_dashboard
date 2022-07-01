@@ -14,8 +14,8 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.lights.LightsTile
@@ -28,8 +28,8 @@ object LightsTileCompose : DaemonBasedCompose {
         var type by remember { mutableStateOf(tile.colorType) }
         var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
 
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -330,7 +330,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 })
             }
 
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
 
             FrameBox(a = "Type specific: ", b = "lights") {
                 Column {

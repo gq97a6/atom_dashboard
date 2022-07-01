@@ -3,7 +3,6 @@ package com.alteratom.tile.types.color.compose
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,7 +20,7 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.switch.SwitchTile
 
@@ -29,8 +28,8 @@ object SwitchTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as SwitchTile
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -107,7 +106,7 @@ object SwitchTileCompose : DaemonBasedCompose {
 
                 Communication()
             }
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
         }
     }
 

@@ -30,7 +30,7 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 
-object TilePropertiesCompse {
+object TilePropertiesCompose {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
 

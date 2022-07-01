@@ -19,7 +19,7 @@ import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.slider.SliderTile
 
@@ -28,8 +28,8 @@ object SliderTileCompose : DaemonBasedCompose {
     override fun Mqttd() {
         val tile = tile as SliderTile
 
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
                 var pub by remember { mutableStateOf("false") }
@@ -50,7 +50,7 @@ object SliderTileCompose : DaemonBasedCompose {
                 Communication1()
             }
 
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
 
             FrameBox(a = "Type specific: ", b = "slider") {
                 Column {

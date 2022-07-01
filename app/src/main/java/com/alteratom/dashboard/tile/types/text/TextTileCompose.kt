@@ -13,7 +13,7 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.button.TextTile
 
@@ -21,8 +21,8 @@ object TextTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd() {
         val tile = tile as TextTile
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
                 var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
@@ -60,7 +60,7 @@ object TextTileCompose : DaemonBasedCompose {
                 Communication1()
             }
 
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
 
             FrameBox(a = "Type specific: ", b = "text") {
                 Row {

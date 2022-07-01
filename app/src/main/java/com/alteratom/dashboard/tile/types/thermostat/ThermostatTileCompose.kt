@@ -22,8 +22,8 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.LabeledCheckbox
 import com.alteratom.dashboard.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompse.PairList
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.thermostat.ThermostatTile
@@ -34,8 +34,8 @@ object ThermostatTileCompose : DaemonBasedCompose {
         val tile = tile as ThermostatTile
         var incHumi by remember { mutableStateOf(tile.includeHumiditySetpoint) }
 
-        TilePropertiesCompse.Box {
-            TilePropertiesCompse.CommunicationBox {
+        TilePropertiesCompose.Box {
+            TilePropertiesCompose.CommunicationBox {
 
                 var tempSub by remember { mutableStateOf(tile.mqtt.subs["temp"] ?: "") }
                 EditText(
@@ -293,7 +293,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                 })
             }
 
-            TilePropertiesCompse.Notification()
+            TilePropertiesCompose.Notification()
 
             FrameBox(a = "Type specific: ", b = "thermostat") {
                 Column {

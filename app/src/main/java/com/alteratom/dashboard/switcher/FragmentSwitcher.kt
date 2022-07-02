@@ -2,7 +2,6 @@ package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
 import androidx.compose.ui.input.pointer.PointerEvent
-import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm

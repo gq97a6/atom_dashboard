@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import com.alteratom.R
-import com.alteratom.dashboard.FolderTree
 import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.FolderTree.saveToFile

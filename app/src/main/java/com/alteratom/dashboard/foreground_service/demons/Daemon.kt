@@ -6,7 +6,6 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.IdGenerator
 import com.alteratom.dashboard.dashboard.Dashboard
-import kotlin.reflect.full.primaryConstructor
 
 abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Indexed {
 

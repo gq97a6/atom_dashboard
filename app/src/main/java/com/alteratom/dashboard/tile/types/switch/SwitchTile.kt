@@ -82,7 +82,7 @@ class SwitchTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        send(mqtt.payloads[if (state == false) "true" else "false"] ?: "")
+        send(mqttData.payloads[if (state == false) "true" else "false"] ?: "")
     }
 
     override fun onReceive(
@@ -92,8 +92,8 @@ class SwitchTile : Tile() {
         super.onReceive(data, jsonResult)
 
         state = when (data.second.toString()) {
-            mqtt.payloads["true"] -> true
-            mqtt.payloads["false"] -> false
+            mqttData.payloads["true"] -> true
+            mqttData.payloads["false"] -> false
             else -> null
         }
 

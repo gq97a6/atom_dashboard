@@ -7,9 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.time.TimeTile
 
@@ -26,7 +26,7 @@ object TimeTileCompose : DaemonBasedCompose {
 
                 var pub by remember {
                     mutableStateOf(
-                        tile.mqtt.payloads[if (type == 0) "time" else "date"] ?: ""
+                        tile.mqttData.payloads[if (type == 0) "time" else "date"] ?: ""
                     )
                 }
                 EditText(
@@ -34,7 +34,7 @@ object TimeTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.mqtt.payloads[if (type == 0) "time" else "date"] = it
+                        tile.mqttData.payloads[if (type == 0) "time" else "date"] = it
                     }
                 )
                 Text(

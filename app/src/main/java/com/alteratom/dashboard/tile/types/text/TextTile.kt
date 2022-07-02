@@ -47,18 +47,18 @@ class TextTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqtt.pubs["base"].isNullOrEmpty()) return
+        if (mqttData.pubs["base"].isNullOrEmpty()) return
         (dashboard?.daemon as? Mqttd?)?.let {
             if (it.client.isConnected != true) return
         }
 
-        if (mqtt.payloadIsVar) {
+        if (mqttData.payloadIsVar) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.dtTopic.text = mqtt.pubs["base"].toString()
+            binding.dtTopic.text = mqttData.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
                 send(binding.dtPayload.text.toString())
@@ -72,7 +72,7 @@ class TextTile : Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(mqtt.payloads["base"] ?: "")
+        } else send(mqttData.payloads["base"] ?: "")
     }
 
     override fun onReceive(

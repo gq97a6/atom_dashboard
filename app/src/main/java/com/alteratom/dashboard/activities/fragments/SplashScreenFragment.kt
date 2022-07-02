@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.os.Bundle
-import android.service.quicksettings.Tile
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,10 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.G
-import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.fadeLong

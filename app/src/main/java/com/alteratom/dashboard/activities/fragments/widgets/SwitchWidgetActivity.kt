@@ -121,7 +121,7 @@ class SwitchWidgetActivity : AppCompatActivity() {
 
                                 var off by remember {
                                     mutableStateOf(
-                                        tile.mqtt.payloads["false"] ?: ""
+                                        tile.mqttData.payloads["false"] ?: ""
                                     )
                                 }
                                 EditText(
@@ -129,7 +129,7 @@ class SwitchWidgetActivity : AppCompatActivity() {
                                     value = off,
                                     onValueChange = {
                                         off = it
-                                        tile.mqtt.payloads["false"] = it
+                                        tile.mqttData.payloads["false"] = it
                                     },
                                     modifier = Modifier.padding(start = 12.dp)
                                 )
@@ -164,7 +164,7 @@ class SwitchWidgetActivity : AppCompatActivity() {
 
                                 var on by remember {
                                     mutableStateOf(
-                                        tile.mqtt.payloads["true"] ?: ""
+                                        tile.mqttData.payloads["true"] ?: ""
                                     )
                                 }
                                 EditText(
@@ -172,7 +172,7 @@ class SwitchWidgetActivity : AppCompatActivity() {
                                     value = on,
                                     onValueChange = {
                                         on = it
-                                        tile.mqtt.payloads["true"] = it
+                                        tile.mqttData.payloads["true"] = it
                                     },
                                     modifier = Modifier.padding(start = 12.dp)
                                 )

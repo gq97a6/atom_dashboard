@@ -16,7 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.*
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +34,6 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.tile.types.button.ButtonTile
 import com.alteratom.tile.types.button.TextTile
@@ -58,7 +59,11 @@ class TileNewFragment : Fragment() {
                     //Background
                     Box(modifier = Modifier.background(colors.background))
 
-                    Column(Modifier.padding(bottom = 20.dp), Arrangement.Center, CenterHorizontally) {
+                    Column(
+                        Modifier.padding(bottom = 20.dp),
+                        Arrangement.Center,
+                        CenterHorizontally
+                    ) {
                         Text(
                             "Pick new tile",
                             fontSize = 40.sp,

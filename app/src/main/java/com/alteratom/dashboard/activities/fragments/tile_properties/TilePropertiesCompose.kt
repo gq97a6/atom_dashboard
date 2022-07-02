@@ -8,7 +8,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,14 +22,9 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.activities.fragments.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.getIconHSV
-import com.alteratom.dashboard.activities.fragments.getIconRes
-import com.alteratom.dashboard.activities.fragments.setIconHSV
-import com.alteratom.dashboard.activities.fragments.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
+import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 
@@ -96,7 +94,7 @@ object TilePropertiesCompose {
         crossinline content: @Composable () -> Unit
     ) {
         var show by remember { mutableStateOf(settings.mqttTabShow) }
-        var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
+        var enabled by remember { mutableStateOf(dashboard.mqttData.isEnabled) }
         val rotation = if (show) 0f else 180f
 
         val angle: Float by animateFloatAsState(
@@ -119,8 +117,8 @@ object TilePropertiesCompose {
                         onCheckedChange = {
                             enabled = it
                             show = it
-                            G.dashboard.mqtt.isEnabled = it
-                            G.dashboard.daemon.notifyOptionsChanged()
+                            dashboard.mqttData.isEnabled = it
+                            dashboard.daemon.notifyOptionsChanged()
                         }
                     )
 
@@ -155,17 +153,17 @@ object TilePropertiesCompose {
 
         FrameBox(a = "Notifications and log") {
             Column {
-                var log by remember { mutableStateOf(G.tile.doLog) }
+                var log by remember { mutableStateOf(G.tile.mqttData.doLog) }
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = log,
                     onCheckedChange = {
                         log = it
-                        G.tile.doLog = it
+                        G.tile.mqttData.doLog = it
                     },
                 )
 
-                var notify by remember { mutableStateOf(G.tile.doNotify) }
+                var notify by remember { mutableStateOf(G.tile.mqttData.doNotify) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -177,11 +175,11 @@ object TilePropertiesCompose {
                     checked = notify,
                     onCheckedChange = {
                         notify = it
-                        G.tile.doNotify = it
+                        G.tile.mqttData.doNotify = it
                     },
                 )
 
-                var quiet by remember { mutableStateOf(G.tile.silentNotify) }
+                var quiet by remember { mutableStateOf(G.tile.mqttData.silentNotify) }
                 AnimatedVisibility(visible = notify) {
                     LabeledCheckbox(
                         label = {
@@ -194,7 +192,7 @@ object TilePropertiesCompose {
                         checked = quiet,
                         onCheckedChange = {
                             quiet = it
-                            G.tile.silentNotify = it
+                            G.tile.mqttData.silentNotify = it
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )

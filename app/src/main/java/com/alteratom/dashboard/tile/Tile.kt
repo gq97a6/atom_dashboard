@@ -4,21 +4,21 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.IntRange
 import com.alteratom.R
-import com.alteratom.dashboard.*
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.FolderTree.mapper
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.ColorPallet
-import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.attentate
+import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
+import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.screenWidth
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -26,10 +26,10 @@ import java.util.*
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-abstract class Tile : RecyclerViewItem() {
+abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
 
     @JsonIgnore
-    var dashboard: Dashboard? = null
+    override var dashboard: Dashboard? = null
 
     @JsonIgnore
     open var height = 1f
@@ -48,11 +48,8 @@ abstract class Tile : RecyclerViewItem() {
     val pallet: ColorPallet
         get() = theme.a.getColorPallet(hsv, true)
 
-    val mqtt = MqttClientData()
-
-    var doLog = false
-    var doNotify = false
-    var silentNotify = false
+    @JsonAlias("mqtt")
+    override val mqttData = Mqttd.ClientData()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -88,72 +85,13 @@ abstract class Tile : RecyclerViewItem() {
         )
     }
 
-    open fun onSend(
-        topic: String?,
-        msg: String,
-        @IntRange(from = 0, to = 2) qos: Int,
-        retained: Boolean = false
+    override fun onReceive(
+        data: Pair<String?, MqttMessage?>,
+        jsonResult: MutableMap<String, String>
     ) {
-    }
+        super.onReceive(data, jsonResult)
 
-    open fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
-    }
-
-    fun Mqttd.send(
-        msg: String,
-        topic: String? = mqtt.pubs["base"],
-        @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
-        retain: Boolean = false,
-        raw: Boolean = false
-    ) {
-        if (topic.isNullOrEmpty()) return
-
-        {
-            this.publish(topic, msg, qos, retain)
-            onSend(topic, msg, qos, retain)
-        }.let {
-            if (!mqtt.doConfirmPub || raw) it()
-            else with(adapter.context as MainActivity) {
-                buildConfirm("Confirm publishing", "PUBLISH", { it() })
-            }
-        }
-    }
-
-    fun send(
-        msg: String,
-        topic: String? = mqtt.pubs["base"],
-        @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
-        retain: Boolean = false,
-        raw: Boolean = false
-    ) {
-        when (dashboard?.daemon) {
-            is Mqttd -> (dashboard?.daemon as? Mqttd?)?.send(msg, topic, qos, retain, raw)
-        }
-    }
-
-    fun receive(data: Pair<String?, MqttMessage?>) {
-        if (!mqtt.isEnabled) return
-        if (!mqtt.subs.containsValue(data.first)) return
-
-        //Build map of jsonPath key and value. Null on absence or fail.
-        val jsonResult = mutableMapOf<String, String>()
-        if (mqtt.payloadIsJson) {
-            for (p in mqtt.jsonPaths) {
-                data.second.toString().let {
-                    try {
-                        mapper.readTree(it).at(p.value).asText()
-                    } catch (e: Exception) {
-                        null
-                    }?.let {
-                        jsonResult[p.key] = it
-                    }
-                }
-            }
-        }
-
-        mqtt.lastReceive = Date()
-
-        if (doNotify) {
+        if (mqttData.doNotify) {
             service?.let { s ->
                 dashboard?.let { d ->
                     createNotification(
@@ -162,47 +100,16 @@ abstract class Tile : RecyclerViewItem() {
                         if (tag.isBlank() || data.second.toString().isBlank())
                             "New value for: ${data.first}"
                         else "$tag: ${data.second.toString()}",
-                        silentNotify,
+                        mqttData.silentNotify,
                         d.id.toInt()
                     )
                 }
             }
         }
 
-        if (doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (mqttData.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }
-
-        try {
-            onReceive(data, jsonResult)
-        } catch (e: Exception) {
-        }
-    }
-
-    data class MqttClientData(
-        var isEnabled: Boolean = true
-    ) {
-        var lastReceive: Date? = null
-
-        val subs = mutableMapOf<String, String>()
-        val pubs = mutableMapOf<String, String>()
-        val jsonPaths = mutableMapOf<String, String>()
-        var payloads: MutableMap<String, String> =
-            mutableMapOf("base" to "", "true" to "1", "false" to "0")
-
-        var qos = 0
-            set(value) {
-                field = minOf(2, maxOf(0, value))
-            }
-
-        fun setQos() {
-
-        }
-
-        var payloadIsVar = true
-        var payloadIsJson = false
-        var doConfirmPub = false
-        var doRetain = false
     }
 }

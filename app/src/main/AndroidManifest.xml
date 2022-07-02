@@ -22,8 +22,8 @@
 
         <receiver
             android:name=".dashboard.widgets.ShortWidgetProvider"
-            android:label="Shortcut"
-            android:exported="false">
+            android:exported="false"
+            android:label="Shortcut">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -35,8 +35,8 @@
 
         <receiver
             android:name=".dashboard.widgets.ButtonWidgetProvider"
-            android:label="Button"
-            android:exported="false">
+            android:exported="false"
+            android:label="Button">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -48,8 +48,8 @@
 
         <receiver
             android:name=".dashboard.widgets.SwitchWidgetProvider"
-            android:label="Switch"
-            android:exported="false">
+            android:exported="false"
+            android:label="Switch">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

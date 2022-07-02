@@ -102,7 +102,7 @@ class LightsTile : Tile() {
         set(value) {
             field = value
 
-            mqtt.payloads[colorType.toString()]?.let { pattern ->
+            mqttData.payloads[colorType.toString()]?.let { pattern ->
                 when (colorType) {
                     1 -> {
                         toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
@@ -131,9 +131,9 @@ class LightsTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqtt.payloads["hsv"] = "@h;@s;@v"
-        mqtt.payloads["hex"] = "#@hex"
-        mqtt.payloads["rgb"] = "@r;@g;@b"
+        mqttData.payloads["hsv"] = "@h;@s;@v"
+        mqttData.payloads["hex"] = "#@hex"
+        mqttData.payloads["rgb"] = "@r;@g;@b"
 
         Color.colorToHSV(com.alteratom.dashboard.G.theme.a.pallet.color, hsvPicked)
         colorType = colorType
@@ -232,18 +232,18 @@ class LightsTile : Tile() {
 
         binding.dlConfirm.setOnClickListener {
             fun send() {
-                send("$brightnessTmp", mqtt.pubs["bright"], mqtt.qos, retain[1], true)
+                send("$brightnessTmp", mqttData.pubs["bright"], mqttData.qos, retain[1], true)
                 if (includePicker) send(
                     when (colorType) {
                         0 -> {
-                            (mqtt.payloads["hsv"] ?: "")
+                            (mqttData.payloads["hsv"] ?: "")
                                 .replace("@h", hsvPickedTmp[0].toInt().toString())
                                 .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                                 .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                         }
                         1 -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqtt.payloads["hex"] ?: "")
+                            (mqttData.payloads["hex"] ?: "")
                                 .replace(
                                     "@hex",
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
@@ -251,24 +251,24 @@ class LightsTile : Tile() {
                         }
                         2 -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqtt.payloads["rgb"] ?: "")
+                            (mqttData.payloads["rgb"] ?: "")
                                 .replace("@r", c.red.toString())
                                 .replace("@g", c.green.toString())
                                 .replace("@b", c.blue.toString())
                         }
                         else -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqtt.payloads["hex"] ?: "")
+                            (mqttData.payloads["hex"] ?: "")
                                 .replace(
                                     "@hex",
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                    }, mqtt.pubs["color"], mqtt.qos, retain[2], true
+                    }, mqttData.pubs["color"], mqttData.qos, retain[2], true
                 )
             }
 
-            if (mqtt.doConfirmPub) {
+            if (mqttData.doConfirmPub) {
                 with(adapter.context) {
                     buildConfirm("Confirm publishing", "PUBLISH", {
                         send()
@@ -309,8 +309,8 @@ class LightsTile : Tile() {
 
                     send(
                         this.modes[pos].second,
-                        mqtt.pubs["mode"],
-                        mqtt.qos,
+                        mqttData.pubs["mode"],
+                        mqttData.qos,
                         retain[3]
                     )
 
@@ -337,9 +337,9 @@ class LightsTile : Tile() {
 
         binding.dlSwitch.setOnClickListener {
             send(
-                mqtt.payloads[if (state == false) "true" else "false"] ?: "",
-                mqtt.pubs["state"],
-                mqtt.qos,
+                mqttData.payloads[if (state == false) "true" else "false"] ?: "",
+                mqttData.pubs["state"],
+                mqttData.qos,
                 retain[0]
             )
         }
@@ -373,8 +373,8 @@ class LightsTile : Tile() {
             when (field) {
                 "state" -> {
                     state = when (value) {
-                        mqtt.payloads["true"] -> true
-                        mqtt.payloads["false"] -> false
+                        mqttData.payloads["true"] -> true
+                        mqttData.payloads["false"] -> false
                         else -> null
                     }
 
@@ -450,10 +450,10 @@ class LightsTile : Tile() {
             val value = data.second.toString()
             parse(
                 value, when (data.first) {
-                    mqtt.subs["state"] -> "state"
-                    mqtt.subs["color"] -> "color"
-                    mqtt.subs["bright"] -> "bright"
-                    mqtt.subs["mode"] -> "mode"
+                    mqttData.subs["state"] -> "state"
+                    mqttData.subs["color"] -> "color"
+                    mqttData.subs["bright"] -> "bright"
+                    mqttData.subs["mode"] -> "mode"
                     else -> null
                 }
             )

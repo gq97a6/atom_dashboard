@@ -15,9 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.ColorUtils.blendARGB
@@ -462,7 +459,7 @@ class Theme {
                 var maxS = 1f
                 var maxV = 1f
                 var minV = 0f
-                var hsv = if(isDark) floatArrayOf(hsv[0], hsv[1], 1f) else hsv
+                var hsv = if (isDark) floatArrayOf(hsv[0], hsv[1], 1f) else hsv
 
                 //Compute maximal saturation/value
                 for (i in 100 downTo 0) {

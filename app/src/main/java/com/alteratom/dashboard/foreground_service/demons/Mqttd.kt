@@ -23,14 +23,14 @@ import kotlin.random.Random
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqtt.copy())
+    var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqttData.copy())
 
     var conHandler = ConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     override val isEnabled
-        get() = d.mqtt.isEnabled && !isDischarged
+        get() = d.mqttData.isEnabled && !isDischarged
 
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
@@ -41,7 +41,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 MqttdStatus.DISCONNECTED
             } else {
                 if (client.isConnected)
-                    if (d.mqtt.ssl && !d.mqtt.sslTrustAll) MqttdStatus.CONNECTED_SSL
+                    if (d.mqttData.ssl && !d.mqttData.sslTrustAll) MqttdStatus.CONNECTED_SSL
                     else MqttdStatus.CONNECTED
                 else if (conHandler.isDone.value != true) MqttdStatus.ATTEMPTING
                 else MqttdStatus.FAILED
@@ -124,9 +124,10 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
-            for (t in tile.mqtt.subs) {
-                Pair(t.value, tile.mqtt.qos).let {
+
+        for (tile in d.tiles.filter { it.mqttData.isEnabled }) {
+            for (t in tile.mqttData.subs) {
+                Pair(t.value, tile.mqttData.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
                         topics.add(it)
                     }
@@ -144,16 +145,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     inner class ConnectionHandler : DaemonConnectionHandler() {
 
         override fun isDone(): Boolean =
-            client.isConnected == isEnabled && (client.conProp == d.mqtt || !isEnabled)
+            client.isConnected == isEnabled && (client.conProp == d.mqttData || !isEnabled)
 
         override fun handleDispatch() {
             if (isEnabled) {
                 if (client.isConnected) client.closeAttempt()
                 else {
-                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.uri != d.mqtt.uri)
-                        client = MqttAndroidClientExtended(context, d.mqtt.copy())
+                    if (client.conProp.clientId != d.mqttData.clientId || client.conProp.uri != d.mqttData.uri)
+                        client = MqttAndroidClientExtended(context, d.mqttData.copy())
 
-                    client.conProp = d.mqtt.copy()
+                    client.conProp = d.mqttData.copy()
                     client.connectAttempt()
                 }
             } else {
@@ -323,7 +324,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
-    class MqttClientData(
+    class ClientData(
         var isEnabled: Boolean = true,
         var lastReceive: Date? = null,
         val subs: MutableMap<String, String> = mutableMapOf(),
@@ -350,7 +351,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             get() = _qos
     }
 
-    data class MqttBrokerData(
+    data class BrokerData(
         var isEnabled: Boolean = true,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
@@ -410,9 +411,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
     }
 
-    internal interface MqttSubject {
-        var dashboard: Dashboard
-        var mqtt: MqttClientData
+    interface Subject {
+        var dashboard: Dashboard?
+        val mqttData: ClientData
 
         fun onSend(
             topic: String?,
@@ -426,13 +427,12 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
 
         fun confirmSend(send: () -> Unit) {
-
         }
 
         fun Mqttd.send(
             msg: String,
-            topic: String? = mqtt.pubs["base"],
-            @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+            topic: String? = mqttData.pubs["base"],
+            @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
             retain: Boolean = false,
             raw: Boolean = false
         ) {
@@ -442,31 +442,31 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 this.publish(topic, msg, qos, retain)
                 onSend(topic, msg, qos, retain)
             }.let {
-                if (!mqtt.doConfirmPub || raw) it()
+                if (!mqttData.doConfirmPub || raw) it()
                 else confirmSend(it)
             }
         }
 
         fun send(
             msg: String,
-            topic: String? = mqtt.pubs["base"],
-            @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+            topic: String? = mqttData.pubs["base"],
+            @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
             retain: Boolean = false,
             raw: Boolean = false
         ) {
-            when (dashboard.daemon) {
-                is Mqttd -> (dashboard.daemon as? Mqttd?)?.send(msg, topic, qos, retain, raw)
+            when (dashboard?.daemon) {
+                is Mqttd -> (dashboard?.daemon as? Mqttd)?.send(msg, topic, qos, retain, raw)
             }
         }
 
         fun receive(data: Pair<String?, MqttMessage?>) {
-            if (!mqtt.isEnabled) return
-            if (!mqtt.subs.containsValue(data.first)) return
+            if (!mqttData.isEnabled) return
+            if (!mqttData.subs.containsValue(data.first)) return
 
             //Build map of jsonPath key and value. Null on absence or fail.
             val jsonResult = mutableMapOf<String, String>()
-            if (mqtt.payloadIsJson) {
-                for (p in mqtt.jsonPaths) {
+            if (mqttData.payloadIsJson) {
+                for (p in mqttData.jsonPaths) {
                     data.second.toString().let {
                         try {
                             FolderTree.mapper.readTree(it).at(p.value).asText()
@@ -479,7 +479,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 }
             }
 
-            mqtt.lastReceive = Date()
+            mqttData.lastReceive = Date()
 
             try {
                 onReceive(data, jsonResult)

@@ -7,6 +7,8 @@ import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.tile.Tile
+import com.alteratom.dashboard.widgets.WidgetDataHolder
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -26,7 +28,8 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
     var log = Log()
 
-    var mqtt = MqttBrokerData()
+    @JsonAlias("mqtt")
+    var mqttData = MqttBrokerData()
 
     @JsonIgnore
     lateinit var daemon: Daemon

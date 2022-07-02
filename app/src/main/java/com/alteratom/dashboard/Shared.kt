@@ -140,7 +140,7 @@ internal fun createNotificationChannel(context: Context) {
 fun performClick(context: Context) {
     createVibration(
         context,
-        vibe = VibrationEffect.createWaveform(longArrayOf(5,3,5), intArrayOf(200, 0, 100), -1)
+        vibe = VibrationEffect.createWaveform(longArrayOf(5, 3, 5), intArrayOf(200, 0, 100), -1)
     )
 }
 

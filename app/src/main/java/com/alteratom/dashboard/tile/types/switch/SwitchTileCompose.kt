@@ -1,7 +1,10 @@
 package com.alteratom.tile.types.color.compose
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -11,16 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.EditText
-import com.alteratom.dashboard.activities.fragments.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.getIconHSV
-import com.alteratom.dashboard.activities.fragments.getIconRes
-import com.alteratom.dashboard.activities.fragments.setIconHSV
-import com.alteratom.dashboard.activities.fragments.setIconKey
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.switch.SwitchTile
 
@@ -57,13 +55,13 @@ object SwitchTileCompose : DaemonBasedCompose {
                         )
                     }
 
-                    var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
+                    var off by remember { mutableStateOf(tile.mqttData.payloads["false"] ?: "") }
                     EditText(
                         label = { Text("Off payload") },
                         value = off,
                         onValueChange = {
                             off = it
-                            tile.mqtt.payloads["false"] = it
+                            tile.mqttData.payloads["false"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )
@@ -92,13 +90,13 @@ object SwitchTileCompose : DaemonBasedCompose {
                         Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
                     }
 
-                    var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
+                    var on by remember { mutableStateOf(tile.mqttData.payloads["true"] ?: "") }
                     EditText(
                         label = { Text("On payload") },
                         value = on,
                         onValueChange = {
                             on = it
-                            tile.mqtt.payloads["true"] = it
+                            tile.mqttData.payloads["true"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )

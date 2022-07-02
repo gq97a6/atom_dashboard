@@ -10,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.tile.types.color.ColorTile
 
@@ -21,7 +21,11 @@ object ColorTileCompose : DaemonBasedCompose {
     override fun Mqttd() {
         val tile = tile as ColorTile
 
-        var pub by remember { mutableStateOf(tile.mqtt.payloads[tile.colorType.toString()] ?: "") }
+        var pub by remember {
+            mutableStateOf(
+                tile.mqttData.payloads[tile.colorType.toString()] ?: ""
+            )
+        }
         var type by remember { mutableStateOf(tile.colorType) }
 
         TilePropertiesCompose.Box {
@@ -33,7 +37,7 @@ object ColorTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.mqtt.payloads[type.toString()] = it
+                        tile.mqttData.payloads[type.toString()] = it
                     }
                 )
                 Text(
@@ -108,7 +112,7 @@ object ColorTileCompose : DaemonBasedCompose {
                         {
                             type = it
                             tile.colorType = it
-                            pub = tile.mqtt.payloads[tile.colorType.toString()] ?: ""
+                            pub = tile.mqttData.payloads[tile.colorType.toString()] ?: ""
                         },
                     )
                 }

@@ -5,11 +5,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.WindowManager
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.alteratom.R
 import com.alteratom.databinding.DialogConfirmBinding
 

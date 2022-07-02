@@ -41,7 +41,7 @@ class ColorTile : Tile() {
         set(value) {
             field = value
 
-            mqtt.payloads[colorType.toString()]?.let { pattern ->
+            mqttData.payloads[colorType.toString()]?.let { pattern ->
                 when (colorType) {
                     1 -> {
                         toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
@@ -70,9 +70,9 @@ class ColorTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqtt.payloads["hsv"] = "@h;@s;@v"
-        mqtt.payloads["hex"] = "#@hex"
-        mqtt.payloads["rgb"] = "@r;@g;@b"
+        mqttData.payloads["hsv"] = "@h;@s;@v"
+        mqttData.payloads["hex"] = "#@hex"
+        mqttData.payloads["rgb"] = "@r;@g;@b"
 
         colorToHSV(theme.a.pallet.color, hsvPicked)
         colorType = colorType
@@ -129,26 +129,26 @@ class ColorTile : Tile() {
             send(
                 when (colorType) {
                     1 -> {
-                        (mqtt.payloads["hsv"] ?: "")
+                        (mqttData.payloads["hsv"] ?: "")
                             .replace("@h", hsvPickedTmp[0].toInt().toString())
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
                     2 -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqtt.payloads["hex"] ?: "")
+                        (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                     3 -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqtt.payloads["rgb"] ?: "")
+                        (mqttData.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
                             .replace("@g", c.green.toString())
                             .replace("@b", c.blue.toString())
                     }
                     else -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (mqtt.payloads["hex"] ?: "")
+                        (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                 }

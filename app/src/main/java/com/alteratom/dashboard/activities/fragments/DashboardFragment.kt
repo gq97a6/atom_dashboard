@@ -2,8 +2,6 @@ package com.alteratom.dashboard.activities.fragments
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.appwidget.AppWidgetManager
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -103,7 +101,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         fun updateTilesStatus() {
             for (tile in adapter.list) {
                 tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
-                    tile.mqtt.lastReceive?.time.let { lr ->
+                    tile.mqttData.lastReceive?.time.let { lr ->
                         val t = Date().time - (lr ?: 0)
                         if (lr != null) it.text = (t / 1000).let { s ->
                             if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"

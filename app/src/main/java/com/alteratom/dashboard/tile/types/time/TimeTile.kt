@@ -58,7 +58,7 @@ class TimeTile : Tile() {
             if (isDate) {
                 val d = binding.dtDate
                 send(
-                    (mqtt.payloads["date"] ?: "")
+                    (mqttData.payloads["date"] ?: "")
                         .replace("@day", d.dayOfMonth.toString())
                         .replace("@month", d.month.toString())
                         .replace("@year", d.year.toString())
@@ -66,7 +66,7 @@ class TimeTile : Tile() {
             } else {
                 val t = binding.dtTime
                 send(
-                    (mqtt.payloads["time"] ?: "")
+                    (mqttData.payloads["time"] ?: "")
                         .replace("@hour", t.hour.toString())
                         .replace("@minute", t.minute.toString())
                 )
@@ -97,7 +97,7 @@ class TimeTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqtt.payloads["time"] = "@hour:@minute"
-        mqtt.payloads["date"] = "@day.@month.@year"
+        mqttData.payloads["time"] = "@hour:@minute"
+        mqttData.payloads["date"] = "@day.@month.@year"
     }
 }

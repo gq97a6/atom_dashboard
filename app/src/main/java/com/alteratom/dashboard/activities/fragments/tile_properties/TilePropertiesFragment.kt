@@ -1,18 +1,14 @@
 package com.alteratom.dashboard.activities.fragments.tile_properties
 
 import android.os.Bundle
-import android.service.quicksettings.Tile
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
@@ -20,9 +16,7 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
-import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.tile.types.button.ButtonTile
 import com.alteratom.tile.types.button.TextTile

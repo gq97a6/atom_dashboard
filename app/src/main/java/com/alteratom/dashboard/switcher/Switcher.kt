@@ -3,7 +3,8 @@ package com.alteratom.dashboard.switcher
 import android.view.KeyEvent
 import android.view.MotionEvent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.input.pointer.PointerEvent
+import androidx.compose.ui.input.pointer.PointerEventType
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.screenWidth
 import kotlin.math.abs

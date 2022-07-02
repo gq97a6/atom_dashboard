@@ -11,11 +11,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.EditText
-import com.alteratom.dashboard.G.getIconColorPallet
-import com.alteratom.dashboard.G.getIconHSV
-import com.alteratom.dashboard.G.getIconRes
-import com.alteratom.dashboard.G.setIconHSV
-import com.alteratom.dashboard.G.setIconKey
+import com.alteratom.dashboard.activities.fragments.getIconColorPallet
+import com.alteratom.dashboard.activities.fragments.getIconHSV
+import com.alteratom.dashboard.activities.fragments.getIconRes
+import com.alteratom.dashboard.activities.fragments.setIconHSV
+import com.alteratom.dashboard.activities.fragments.setIconKey
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.TileIconFragment

@@ -2,11 +2,16 @@ package com.alteratom.dashboard
 
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.widgets.WidgetDataHolder
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import java.io.FileReader
 import kotlin.reflect.KClass
 
 object FolderTree {
+    val mapper = jacksonObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
     var rootFolder: String = ""
         set(value) {
             field = value
@@ -20,7 +25,7 @@ object FolderTree {
 
     lateinit var path: Map<KClass<out Any>, String>
 
-    fun Any.prepareSave(): String = G.mapper.writeValueAsString(this)
+    fun Any.prepareSave(): String = mapper.writeValueAsString(this)
 
     fun Any.saveToFile(save: String = this.prepareSave()) {
         try {
@@ -47,14 +52,14 @@ object FolderTree {
 
     inline fun <reified T> parseSave(save: String = getSave<T>()): T? =
         try {
-            G.mapper.readValue(save, T::class.java)
+            mapper.readValue(save, T::class.java)
         } catch (e: Exception) {
             null
         }
 
     inline fun <reified T> parseListSave(save: String = getSave<T>()): MutableList<T> =
         try {
-            G.mapper.readerForListOf(T::class.java).readValue(save)
+            mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
             mutableListOf()
         }

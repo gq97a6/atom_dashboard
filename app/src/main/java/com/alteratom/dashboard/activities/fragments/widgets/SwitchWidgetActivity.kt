@@ -28,8 +28,7 @@ import com.alteratom.dashboard.FolderTree.saveToFile
 import com.alteratom.dashboard.G.widgetDataHolder
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
+import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.widgets.SwitchWidgetProvider
@@ -99,12 +98,12 @@ class SwitchWidgetActivity : AppCompatActivity() {
                             ) {
                                 BasicButton(
                                     onClick = {
-                                        G.getIconHSV = { tile.hsvFalse }
-                                        G.getIconRes = { tile.iconResFalse }
-                                        G.getIconColorPallet = { tile.palletFalse }
+                                        getIconHSV = { tile.hsvFalse }
+                                        getIconRes = { tile.iconResFalse }
+                                        getIconColorPallet = { tile.palletFalse }
 
-                                        G.setIconHSV = { hsv -> tile.hsvFalse = hsv }
-                                        G.setIconKey = { key -> tile.iconKeyFalse = key }
+                                        setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                                        setIconKey = { key -> tile.iconKeyFalse = key }
 
                                         MainActivity.fm.replaceWith(TileIconFragment())
                                     },
@@ -142,12 +141,12 @@ class SwitchWidgetActivity : AppCompatActivity() {
                             ) {
                                 BasicButton(
                                     onClick = {
-                                        G.getIconHSV = { tile.hsvTrue }
-                                        G.getIconRes = { tile.iconResTrue }
-                                        G.getIconColorPallet = { tile.palletTrue }
+                                        getIconHSV = { tile.hsvTrue }
+                                        getIconRes = { tile.iconResTrue }
+                                        getIconColorPallet = { tile.palletTrue }
 
-                                        G.setIconHSV = { hsv -> tile.hsvTrue = hsv }
-                                        G.setIconKey = { key -> tile.iconKeyTrue = key }
+                                        setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                                        setIconKey = { key -> tile.iconKeyTrue = key }
 
                                         MainActivity.fm.replaceWith(TileIconFragment())
                                     },

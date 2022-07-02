@@ -1,14 +1,25 @@
 package com.alteratom.dashboard.foreground_service.demons
 
 import android.content.Context
+import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
+import com.alteratom.dashboard.FolderTree
 import com.alteratom.dashboard.dashboard.Dashboard
+import com.fasterxml.jackson.annotation.JsonIgnore
+import org.bouncycastle.openssl.PEMKeyPair
+import org.bouncycastle.openssl.PEMParser
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
+import java.io.InputStreamReader
+import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.Certificate
+import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.util.*
 import javax.net.ssl.*
+import kotlin.random.Random
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
@@ -139,7 +150,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             if (isEnabled) {
                 if (client.isConnected) client.closeAttempt()
                 else {
-                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.URI != d.mqtt.URI)
+                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.uri != d.mqtt.uri)
                         client = MqttAndroidClientExtended(context, d.mqtt.copy())
 
                     client.conProp = d.mqtt.copy()
@@ -154,7 +165,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     inner class MqttAndroidClientExtended(
         context: Context,
         var conProp: Dashboard.MqttBrokerData
-    ) : MqttAndroidClient(context, conProp.URI, conProp.clientId) {
+    ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 
         private var isBusy = false
         var topics: MutableList<Pair<String, Int>> = mutableListOf()
@@ -311,4 +322,169 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
+
+    class MqttClientData(
+        var isEnabled: Boolean = true,
+        var lastReceive: Date? = null,
+        val subs: MutableMap<String, String> = mutableMapOf(),
+        val pubs: MutableMap<String, String> = mutableMapOf(),
+        val jsonPaths: MutableMap<String, String> = mutableMapOf(),
+        var payloads: MutableMap<String, String> = mutableMapOf(
+            "base" to "",
+            "true" to "1",
+            "false" to "0"
+        ),
+        private var _qos: Int = 0,
+        var payloadIsVar: Boolean = true,
+        var payloadIsJson: Boolean = false,
+        var doConfirmPub: Boolean = false,
+        var doRetain: Boolean = false,
+        var doLog: Boolean = false,
+        var doNotify: Boolean = false,
+        var silentNotify: Boolean = false
+    ) {
+        var qos
+            set(value) {
+                _qos = minOf(2, maxOf(0, value))
+            }
+            get() = _qos
+    }
+
+    data class MqttBrokerData(
+        var isEnabled: Boolean = true,
+        var ssl: Boolean = false,
+        var sslTrustAll: Boolean = false,
+        @JsonIgnore
+        var caCert: X509Certificate? = null,
+        var caFileName: String = "",
+        @JsonIgnore
+        var clientCert: X509Certificate? = null,
+        var clientFileName: String = "",
+        @JsonIgnore
+        var clientKey: KeyPair? = null,
+        var keyFileName: String = "",
+        var clientKeyPassword: String = "",
+        var address: String = "tcp://",
+        var port: Int = 1883,
+        var includeCred: Boolean = false,
+        var username: String = "",
+        var pass: String = "",
+        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
+    ) {
+        val uri
+            get() = "$address:$port"
+
+        var caCertStr: String? = null
+            set(value) {
+                field = value
+                caCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    field = null
+                    null
+                }
+            }
+
+        var clientCertStr: String? = null
+            set(value) {
+                field = value
+                clientCert = try {
+                    val cf = CertificateFactory.getInstance("X.509")
+                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
+                } catch (e: Exception) {
+                    field = null
+                    null
+                }
+            }
+
+        var clientKeyStr: String? = null
+            set(value) {
+                field = value
+                clientKey = try {
+                    JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value?.byteInputStream())).readObject() as PEMKeyPair)
+                } catch (e: Exception) {
+                    field = null
+                    null
+                }
+            }
+    }
+
+    internal interface MqttSubject {
+        var dashboard: Dashboard
+        var mqtt: MqttClientData
+
+        fun onSend(
+            topic: String?,
+            msg: String,
+            @IntRange(from = 0, to = 2) qos: Int,
+            retained: Boolean = false
+        ) {
+        }
+
+        fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
+        }
+
+        fun confirmSend(send: () -> Unit) {
+
+        }
+
+        fun Mqttd.send(
+            msg: String,
+            topic: String? = mqtt.pubs["base"],
+            @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+            retain: Boolean = false,
+            raw: Boolean = false
+        ) {
+            if (topic.isNullOrEmpty()) return
+
+            {
+                this.publish(topic, msg, qos, retain)
+                onSend(topic, msg, qos, retain)
+            }.let {
+                if (!mqtt.doConfirmPub || raw) it()
+                else confirmSend(it)
+            }
+        }
+
+        fun send(
+            msg: String,
+            topic: String? = mqtt.pubs["base"],
+            @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+            retain: Boolean = false,
+            raw: Boolean = false
+        ) {
+            when (dashboard.daemon) {
+                is Mqttd -> (dashboard.daemon as? Mqttd?)?.send(msg, topic, qos, retain, raw)
+            }
+        }
+
+        fun receive(data: Pair<String?, MqttMessage?>) {
+            if (!mqtt.isEnabled) return
+            if (!mqtt.subs.containsValue(data.first)) return
+
+            //Build map of jsonPath key and value. Null on absence or fail.
+            val jsonResult = mutableMapOf<String, String>()
+            if (mqtt.payloadIsJson) {
+                for (p in mqtt.jsonPaths) {
+                    data.second.toString().let {
+                        try {
+                            FolderTree.mapper.readTree(it).at(p.value).asText()
+                        } catch (e: Exception) {
+                            null
+                        }?.let {
+                            jsonResult[p.key] = it
+                        }
+                    }
+                }
+            }
+
+            mqtt.lastReceive = Date()
+
+            try {
+                onReceive(data, jsonResult)
+            } catch (e: Exception) {
+            }
+        }
+    }
 }

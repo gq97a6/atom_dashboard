@@ -74,7 +74,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
         var pass: String = "",
         var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
     ) {
-        val URI
+        val uri
             get() = "$address:$port"
 
         var caCertStr: String? = null

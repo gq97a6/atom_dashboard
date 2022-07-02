@@ -56,14 +56,3 @@ object DialogBuilder {
         )
     }
 }
-
-@Composable
-fun Context.dialogConfirmCompose() {
-    Dialog(onDismissRequest = { }) {
-        ComposeView(this).apply {
-            setContent {
-                Text("TEST", fontSize = 40.sp, color = Theme.colors.a)
-            }
-        }
-    }
-}

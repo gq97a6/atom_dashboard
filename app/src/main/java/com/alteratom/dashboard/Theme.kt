@@ -134,7 +134,6 @@ class Theme {
             "background200" -> this.setBackgroundColor(p.background.alpha(200))
             "sliderBackground" -> {
                 val drawable = GradientDrawable()
-                //drawable.mutate()
                 drawable.setColor(p.d)
                 drawable.cornerRadius = 15f
                 this.background = drawable
@@ -145,23 +144,19 @@ class Theme {
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
             "sliderPopupFrame" -> {
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(10, p.color)
                 drawable?.cornerRadius = 25f
             }
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                //background?.mutate()
                 background.setColor(ColorStateList.valueOf(theme.a.pallet.background.alpha(150)))
             }
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
-                //background?.mutate()
                 background.setColor(
                     ColorStateList.valueOf(
                         theme.a.pallet.background.darkened(
@@ -192,7 +187,6 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(2, p.color)
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 100))
@@ -205,7 +199,6 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(2, p.color)
             }
             "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
@@ -317,13 +310,11 @@ class Theme {
             "frame" -> {
                 this.setTextColor(p.color)
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(1, p.color)
             }
             "insert" -> {
                 this.setTextColor(p.b)
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(1, p.c)
             }
             "log" -> {
@@ -340,7 +331,6 @@ class Theme {
                 this.setTextColor(p.b)
                 this.setHintTextColor(p.c)
                 val drawable = this.background as? GradientDrawable
-                //drawable?.mutate()
                 drawable?.setStroke(1, p.c)
             }
             else -> onUnknownTag(this.tag, "editText")

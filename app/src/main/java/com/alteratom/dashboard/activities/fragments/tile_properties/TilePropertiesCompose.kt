@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.getIconColorPallet
-import com.alteratom.dashboard.G.getIconHSV
-import com.alteratom.dashboard.G.getIconRes
-import com.alteratom.dashboard.G.setIconHSV
-import com.alteratom.dashboard.G.setIconKey
+import com.alteratom.dashboard.activities.fragments.getIconColorPallet
+import com.alteratom.dashboard.activities.fragments.getIconHSV
+import com.alteratom.dashboard.activities.fragments.getIconRes
+import com.alteratom.dashboard.activities.fragments.setIconHSV
+import com.alteratom.dashboard.activities.fragments.setIconKey
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment

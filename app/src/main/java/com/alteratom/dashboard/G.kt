@@ -10,9 +10,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
 object G {
-    val mapper = jacksonObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
@@ -22,12 +19,6 @@ object G {
     var dashboardIndex = -2
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
-
-    lateinit var setIconHSV: (FloatArray) -> Unit
-    lateinit var setIconKey: (String) -> Unit
-    lateinit var getIconRes: () -> Int
-    lateinit var getIconHSV: () -> FloatArray
-    lateinit var getIconColorPallet: () -> ColorPallet
 
     fun setCurrentDashboard(index: Int): Boolean {
         return if (index !in 0..dashboards.size - 1) false

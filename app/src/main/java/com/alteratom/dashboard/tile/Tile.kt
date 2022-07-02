@@ -6,22 +6,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.alteratom.R
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.FolderTree.mapper
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.attentate
-import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
-import com.alteratom.dashboard.screenWidth
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -142,8 +139,14 @@ abstract class Tile : RecyclerViewItem() {
         val jsonResult = mutableMapOf<String, String>()
         if (mqtt.payloadIsJson) {
             for (p in mqtt.jsonPaths) {
-                data.second.toString().byJSONPath(p.value)?.let {
-                    jsonResult[p.key] = it
+                data.second.toString().let {
+                    try {
+                        mapper.readTree(it).at(p.value).asText()
+                    } catch (e: Exception) {
+                        null
+                    }?.let {
+                        jsonResult[p.key] = it
+                    }
                 }
             }
         }

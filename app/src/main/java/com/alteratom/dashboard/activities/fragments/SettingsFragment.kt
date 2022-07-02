@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.FolderTree.mapper
 import com.alteratom.dashboard.FolderTree.parseListSave
 import com.alteratom.dashboard.FolderTree.parseSave
 import com.alteratom.dashboard.FolderTree.prepareSave
@@ -62,7 +63,7 @@ class SettingsFragment : Fragment() {
                             requireContext().contentResolver.openFileDescriptor(uri, "w")
                                 ?.use { it ->
                                     FileOutputStream(it.fileDescriptor).use {
-                                        it.write(G.mapper.writeValueAsString(backup).toByteArray())
+                                        it.write(mapper.writeValueAsString(backup).toByteArray())
                                     }
                                 }
 
@@ -96,7 +97,7 @@ class SettingsFragment : Fragment() {
                             val backupString = stringBuilder.toString()
 
                             val backup: List<String> = try {
-                                G.mapper.readerForListOf(String::class.java).readValue(backupString)
+                                mapper.readerForListOf(String::class.java).readValue(backupString)
                             } catch (e: Exception) {
                                 listOf()
                             }

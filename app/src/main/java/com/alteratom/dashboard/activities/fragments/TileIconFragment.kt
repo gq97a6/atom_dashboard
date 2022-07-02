@@ -45,6 +45,11 @@ import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.toPx
 import java.util.*
 
+lateinit var setIconHSV: (FloatArray) -> Unit
+lateinit var setIconKey: (String) -> Unit
+lateinit var getIconRes: () -> Int
+lateinit var getIconHSV: () -> FloatArray
+lateinit var getIconColorPallet: () -> Theme.ColorPallet
 
 class TileIconFragment : Fragment() {
 

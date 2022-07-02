@@ -6,19 +6,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.IntRange
 import com.alteratom.R
-import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Parser.byJSONPath
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.attentate
+import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
+import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.screenWidth
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -35,6 +38,8 @@ abstract class Tile : RecyclerViewItem() {
     open var height = 1f
 
     var tag = ""
+    abstract var typeTag: String
+
     abstract var iconKey: String
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus
@@ -46,9 +51,7 @@ abstract class Tile : RecyclerViewItem() {
     val pallet: ColorPallet
         get() = theme.a.getColorPallet(hsv, true)
 
-    abstract var typeTag: String
-
-    val mqtt = MqttData()
+    val mqtt = MqttClientData()
 
     var doLog = false
     var doNotify = false
@@ -106,29 +109,19 @@ abstract class Tile : RecyclerViewItem() {
         retain: Boolean = false,
         raw: Boolean = false
     ) {
-        val d = dashboard?.daemon as? Mqttd?
-
         if (topic.isNullOrEmpty()) return
-        if (d == null) return
 
-        fun send() {
-            d.publish(topic, msg, qos, retain)
+        {
+            this.publish(topic, msg, qos, retain)
             onSend(topic, msg, qos, retain)
-        }
-
-        if (!mqtt.confirmPub || raw) {
-            send()
-            return
-        }
-
-        with(adapter.context as MainActivity) {
-            buildConfirm("Confirm publishing", "PUBLISH", {
-                send()
-            })
+        }.let {
+            if (!mqtt.doConfirmPub || raw) it()
+            else with(adapter.context as MainActivity) {
+                buildConfirm("Confirm publishing", "PUBLISH", { it() })
+            }
         }
     }
 
-    @JvmOverloads
     fun send(
         msg: String,
         topic: String? = mqtt.pubs["base"],
@@ -145,7 +138,7 @@ abstract class Tile : RecyclerViewItem() {
         if (!mqtt.isEnabled) return
         if (!mqtt.subs.containsValue(data.first)) return
 
-        //Build map of jsonPath key and value of at it. Null on absence or fail.
+        //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
         if (mqtt.payloadIsJson) {
             for (p in mqtt.jsonPaths) {
@@ -184,25 +177,29 @@ abstract class Tile : RecyclerViewItem() {
         }
     }
 
-    data class MqttData(var isEnabled: Boolean = true) {
-
+    data class MqttClientData(
+        var isEnabled: Boolean = true
+    ) {
         var lastReceive: Date? = null
 
         val subs = mutableMapOf<String, String>()
         val pubs = mutableMapOf<String, String>()
-        val colors = mutableMapOf<String, Int>()
         val jsonPaths = mutableMapOf<String, String>()
+        var payloads: MutableMap<String, String> =
+            mutableMapOf("base" to "", "true" to "1", "false" to "0")
 
-        var retain = false
         var qos = 0
             set(value) {
                 field = minOf(2, maxOf(0, value))
             }
 
-        var varPayload = true
-        var payloads: MutableMap<String, String> =
-            mutableMapOf("base" to "", "true" to "1", "false" to "0")
-        var confirmPub = false
+        fun setQos() {
+
+        }
+
+        var payloadIsVar = true
         var payloadIsJson = false
+        var doConfirmPub = false
+        var doRetain = false
     }
 }

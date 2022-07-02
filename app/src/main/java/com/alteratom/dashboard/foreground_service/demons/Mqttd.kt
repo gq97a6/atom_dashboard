@@ -3,19 +3,10 @@ package com.alteratom.dashboard.foreground_service.demons
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.dashboard.Dashboard
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.openssl.PEMKeyPair
-import org.bouncycastle.openssl.PEMParser
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.io.BufferedInputStream
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.security.KeyStore
-import java.security.Security
 import java.security.cert.Certificate
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
 
@@ -162,7 +153,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: Dashboard.MqttData
+        var conProp: Dashboard.MqttBrokerData
     ) : MqttAndroidClient(context, conProp.URI, conProp.clientId) {
 
         private var isBusy = false
@@ -320,60 +311,4 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
-}
-
-fun getSocketFactory(
-    caCrtFile: InputStream?,
-    crtFile: InputStream?,
-    keyFile: InputStream?,
-    password: String
-): SSLSocketFactory? {
-    Security.addProvider(BouncyCastleProvider())
-
-    // --------------------------------------------------------------------------------------------
-
-    var caCert: X509Certificate? = null
-    var bis = BufferedInputStream(caCrtFile)
-    val cf: CertificateFactory = CertificateFactory.getInstance("X.509")
-    while (bis.available() > 0) {
-        caCert = cf.generateCertificate(bis) as? X509Certificate?
-    }
-
-    val tmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
-    tmfStore.load(null, null)
-    tmfStore.setCertificateEntry("cert-certificate", caCert)
-
-    val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
-    tmf.init(tmfStore)
-
-    // --------------------------------------------------------------------------------------------
-
-    bis = BufferedInputStream(crtFile)
-    var cert: X509Certificate? = null
-    while (bis.available() > 0) {
-        cert = cf.generateCertificate(bis) as? X509Certificate?
-    }
-
-    val key = JcaPEMKeyConverter().setProvider("BC")
-        .getKeyPair(PEMParser(InputStreamReader(keyFile)).readObject() as PEMKeyPair)
-
-    val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
-    kmfStore.load(null, null)
-    kmfStore.setCertificateEntry("certificate", cert)
-    kmfStore.setKeyEntry(
-        "private-cert",
-        key.private,
-        password.toCharArray(),
-        arrayOf<Certificate?>(cert)
-    )
-
-    val kmf: KeyManagerFactory =
-        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-    kmf.init(kmfStore, password.toCharArray())
-
-    // --------------------------------------------------------------------------------------------
-
-    val context = SSLContext.getInstance("TLSv1.2")
-    context.init(kmf.keyManagers, tmf.trustManagers, null)
-    return context.socketFactory
 }

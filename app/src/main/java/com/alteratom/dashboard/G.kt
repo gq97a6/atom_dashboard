@@ -16,12 +16,12 @@ object G {
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
+    lateinit var widgetDataHolder: WidgetDataHolder
 
     //Current
     var dashboardIndex = -2
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
-    lateinit var widgetDataHolder: WidgetDataHolder
 
     lateinit var setIconHSV: (FloatArray) -> Unit
     lateinit var setIconKey: (String) -> Unit

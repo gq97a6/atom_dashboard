@@ -26,7 +26,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
     var log = Log()
 
-    var mqtt = MqttData()
+    var mqtt = MqttBrokerData()
 
     @JsonIgnore
     lateinit var daemon: Daemon
@@ -53,7 +53,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
             name.uppercase(Locale.getDefault())
     }
 
-    data class MqttData(
+    data class MqttBrokerData(
         var isEnabled: Boolean = true,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,

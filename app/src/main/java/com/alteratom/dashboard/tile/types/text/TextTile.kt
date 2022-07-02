@@ -13,7 +13,6 @@ import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import kotlin.random.Random
 
 class TextTile : Tile() {
 
@@ -53,7 +52,7 @@ class TextTile : Tile() {
             if (it.client.isConnected != true) return
         }
 
-        if (mqtt.varPayload) {
+        if (mqtt.payloadIsVar) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.dialog_text)

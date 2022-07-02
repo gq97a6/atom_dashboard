@@ -83,24 +83,24 @@ object TilePropertiesMqttCompose {
         )
 
         if (retain) {
-            var ret by remember { mutableStateOf(G.tile.mqtt.retain) }
+            var ret by remember { mutableStateOf(G.tile.mqtt.doRetain) }
             LabeledSwitch(
                 label = { Text("Retain massages:", fontSize = 15.sp, color = Theme.colors.a) },
                 checked = ret,
                 onCheckedChange = {
                     ret = it
-                    G.tile.mqtt.retain = it
+                    G.tile.mqtt.doRetain = it
                 }
             )
         }
 
-        var conf by remember { mutableStateOf(G.tile.mqtt.confirmPub) }
+        var conf by remember { mutableStateOf(G.tile.mqtt.doConfirmPub) }
         LabeledSwitch(
             label = { Text("Confirm publishing:", fontSize = 15.sp, color = Theme.colors.a) },
             checked = conf,
             onCheckedChange = {
                 conf = it
-                G.tile.mqtt.confirmPub = it
+                G.tile.mqtt.doConfirmPub = it
             }
         )
 

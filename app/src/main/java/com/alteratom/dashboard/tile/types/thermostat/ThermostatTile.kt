@@ -217,7 +217,7 @@ class ThermostatTile : Tile() {
                 send("$humiSetpointTmp", mqtt.pubs["humi_set"], mqtt.qos, retain[1], true)
             }
 
-            if (mqtt.confirmPub) {
+            if (mqtt.doConfirmPub) {
                 with(adapter.context) {
                     buildConfirm("Confirm publishing", "PUBLISH", {
                         send()

@@ -20,69 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/theme">
 
-        <receiver
-            android:name=".dashboard.widgets.ShortWidgetProvider"
-            android:exported="false"
-            android:label="Shortcut">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/short_widget_info" />
-        </receiver>
-
-        <receiver
-            android:name=".dashboard.widgets.ButtonWidgetProvider"
-            android:exported="false"
-            android:label="Button">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/button_widget_info" />
-        </receiver>
-
-        <receiver
-            android:name=".dashboard.widgets.SwitchWidgetProvider"
-            android:exported="false"
-            android:label="Switch">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/switch_widget_info" />
-        </receiver>
-
-        <activity
-            android:name="com.alteratom.dashboard.activities.fragments.widgets.ButtonWidgetActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.alteratom.dashboard.activities.fragments.widgets.ShortWidgetActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name="com.alteratom.dashboard.activities.fragments.widgets.SwitchWidgetActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-
         <activity
             android:name=".dashboard.activities.SetupActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"

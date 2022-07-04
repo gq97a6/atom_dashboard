@@ -62,7 +62,7 @@ class TileIconFragment : Fragment() {
                     1f
                 ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
 
-                add(theme.a.getColorPallet(hsv, true).cc.a to hsv)
+                add(theme.a.getColorPallet(hsv, true).cc.color to hsv)
             }
         }
     }.toList()

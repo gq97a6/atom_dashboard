@@ -10,12 +10,12 @@ import com.alteratom.R
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.ToolBarController
+import com.alteratom.dashboard.ToolBarHandler
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
 import com.alteratom.dashboard.blink
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
@@ -24,7 +24,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Dashboard>
-    private lateinit var toolBarController: ToolBarController
+    private lateinit var toolBarHandler: ToolBarHandler
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +43,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         (activity as MainActivity).onBackPressedBoolean = {
             if (!adapter.editMode.isNone) {
-                toolBarController.toggleTools()
+                toolBarHandler.toggleTools()
                 true
             } else {
                 false
@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             theme.apply(b.root, requireContext(), false)
         }
 
-        toolBarController = ToolBarController(
+        toolBarHandler = ToolBarHandler(
             adapter,
             b.msBar,
             b.msToolbar,

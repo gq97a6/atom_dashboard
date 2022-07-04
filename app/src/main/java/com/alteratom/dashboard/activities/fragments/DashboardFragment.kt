@@ -35,11 +35,12 @@ import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
 import java.util.*
 
+
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Tile>
-    private lateinit var toolBarController: ToolBarController
+    private lateinit var toolBarHandler: ToolBarHandler
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +62,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         (activity as MainActivity).onBackPressedBoolean = {
             if (!adapter.editMode.isNone) {
-                toolBarController.toggleTools()
+                toolBarHandler.toggleTools()
                 true
             } else {
                 false
@@ -79,11 +80,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 when (it) {
                     is Mqttd -> {
                         b.dStatus.text = when (it.status) {
-                            Mqttd.MqttdStatus.DISCONNECTED -> "DISCONNECTED"
-                            Mqttd.MqttdStatus.FAILED -> "FAILED TO CONNECT"
-                            Mqttd.MqttdStatus.ATTEMPTING -> "ATTEMPTING"
-                            Mqttd.MqttdStatus.CONNECTED -> "CONNECTED"
-                            Mqttd.MqttdStatus.CONNECTED_SSL -> {
+                            Mqttd.Status.DISCONNECTED -> "DISCONNECTED"
+                            Mqttd.Status.FAILED -> "FAILED TO CONNECT"
+                            Mqttd.Status.ATTEMPTING -> "ATTEMPTING"
+                            Mqttd.Status.CONNECTED -> "CONNECTED"
+                            Mqttd.Status.CONNECTED_SSL -> {
                                 b.dSslStatus.visibility = VISIBLE
                                 "CONNECTED"
                             }
@@ -129,16 +130,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         updateTilesStatus()
 
         val addOnClick: () -> Unit = {
-            //requireActivity().apply {
-            //    Intent(this, WidgetConfigureActivity::class.java).apply {
-            //        startActivity(this)
-            //        val b = Bundle()
-            //        b.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 1)
-            //        intent.putExtras(b)
-            //        overridePendingTransition(0, 0)
-            //        finish()
-            //    }
-            //}
             fm.replaceWith(TileNewFragment())
         }
 
@@ -147,7 +138,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             adapter.notifyDataSetChanged()
         }
 
-        toolBarController = ToolBarController(
+        toolBarHandler = ToolBarHandler(
             adapter,
             b.dBar,
             b.dToolbar,
@@ -201,10 +192,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         adapter = RecyclerViewAdapter(requireContext(), spanCount)
         adapter.setHasStableIds(true)
-
-        adapter.onBindViewHolder = { t, h, _ ->
-            t.onSetTheme(h)
-        }
 
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.dPlaceholder.visibility = VISIBLE

@@ -128,7 +128,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toStartOf="@+id/view0"
+            app:layout_constraintEnd_toStartOf="@+id/id_icon_frame"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent=".3">
@@ -158,7 +158,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/view0"
+            android:id="@+id/id_icon_frame"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

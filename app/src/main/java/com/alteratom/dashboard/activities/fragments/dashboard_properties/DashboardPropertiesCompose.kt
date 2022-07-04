@@ -83,11 +83,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             when (it) {
                                 is Mqttd -> {
                                     conStatus = when (it.status) {
-                                        Mqttd.MqttdStatus.DISCONNECTED -> "DISCONNECTED"
-                                        Mqttd.MqttdStatus.FAILED -> "FAILED"
-                                        Mqttd.MqttdStatus.ATTEMPTING -> "ATTEMPTING"
-                                        Mqttd.MqttdStatus.CONNECTED -> "CONNECTED"
-                                        Mqttd.MqttdStatus.CONNECTED_SSL -> "CONNECTED"
+                                        Mqttd.Status.DISCONNECTED -> "DISCONNECTED"
+                                        Mqttd.Status.FAILED -> "FAILED"
+                                        Mqttd.Status.ATTEMPTING -> "ATTEMPTING"
+                                        Mqttd.Status.CONNECTED -> "CONNECTED"
+                                        Mqttd.Status.CONNECTED_SSL -> "CONNECTED"
                                     }
                                 }
                             }

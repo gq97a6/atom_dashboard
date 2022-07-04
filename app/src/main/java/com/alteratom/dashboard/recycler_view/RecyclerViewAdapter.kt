@@ -88,8 +88,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { //3 (order of execution)
         currentItem.onBindViewHolder(holder, position)
-
-        theme.apply(holder.itemView as ViewGroup, anim = false)
+        currentItem.onSetTheme(holder)
 
         val callback = { v: View ->
             var isLongPressed = false
@@ -132,6 +131,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
             }
         }
 
+        holder.itemView as ViewGroup
         holder.itemView.iterate(callback)
         onBindViewHolder(list[position], holder, position)
     }

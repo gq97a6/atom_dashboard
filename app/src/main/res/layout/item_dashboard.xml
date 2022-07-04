@@ -25,15 +25,43 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_frame"
-        android:elevation="10dp"
-        android:tag="frame">
+        android:elevation="10dp">
 
         <View
-            android:layout_width="match_parent"
+            android:id="@+id/id_icon_frame"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.15"
+            android:background="@drawable/bg_frame"
+            android:tag="frame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/id_tag_frame"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_frame"
+            android:tag="frame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/id_icon_frame"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/id_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="15dp"
+            android:background="@drawable/il_interface_plus_circle"
+            android:tag="colorIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/id_icon_frame"
+            app:layout_constraintEnd_toEndOf="@+id/id_icon_frame"
+            app:layout_constraintStart_toStartOf="@+id/id_icon_frame"
+            app:layout_constraintTop_toTopOf="@+id/id_icon_frame" />
 
         <TextView
             android:id="@+id/id_tag"
@@ -47,16 +75,11 @@
             android:maxLines="1"
             android:tag="color"
             android:text="Empty"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_percent="0.15" />
+            app:layout_constraintBottom_toBottomOf="@id/id_tag_frame"
+            app:layout_constraintEnd_toEndOf="@+id/id_tag_frame"
+            app:layout_constraintHeight_percent=".7"
+            app:layout_constraintStart_toStartOf="@id/id_tag_frame"
+            app:layout_constraintTop_toTopOf="@+id/id_tag_frame" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

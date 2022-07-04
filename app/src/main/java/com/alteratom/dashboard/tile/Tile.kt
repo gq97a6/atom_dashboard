@@ -10,7 +10,7 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
@@ -77,7 +77,7 @@ abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
         holder.itemView.findViewById<TextView>(R.id.t_tag)?.text = tag.ifBlank { "???" }
     }
 
-    open fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         theme.apply(
             holder.itemView as ViewGroup,
             anim = false,

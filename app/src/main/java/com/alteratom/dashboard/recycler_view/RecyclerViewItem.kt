@@ -63,6 +63,10 @@ abstract class RecyclerViewItem : IdGenerator.Indexed {
         onEdit(!(adapter.editMode.isNone))
     }
 
+    open fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) { //4 (order of execution)
+        theme.apply(holder.itemView as ViewGroup, anim = false)
+    }
+
     fun areItemsTheSame(oldItem: RecyclerViewItem, newItem: RecyclerViewItem): Boolean {
         return oldItem == newItem
     }

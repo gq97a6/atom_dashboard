@@ -32,7 +32,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import kotlin.random.Random

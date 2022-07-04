@@ -2,7 +2,7 @@ package com.alteratom.dashboard.foreground_service.demons
 
 import android.content.Context
 import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.ForegroundService
 
 object DaemonsManager {

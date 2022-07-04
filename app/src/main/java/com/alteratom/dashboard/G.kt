@@ -2,15 +2,12 @@ package com.alteratom.dashboard
 
 import com.alteratom.dashboard.FolderTree.parseListSave
 import com.alteratom.dashboard.FolderTree.parseSave
-import com.alteratom.dashboard.dashboard.Dashboard
 import com.alteratom.dashboard.tile.Tile
-import com.alteratom.dashboard.widgets.WidgetDataHolder
 
 object G {
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
-    lateinit var widgetDataHolder: WidgetDataHolder
 
     //Current
     var dashboardIndex = -2
@@ -33,7 +30,6 @@ object G {
     }
 
     fun initialize() {
-        widgetDataHolder = parseSave() ?: WidgetDataHolder()
         dashboards = parseListSave()
         theme = parseSave() ?: Theme()
         settings = parseSave() ?: Settings()

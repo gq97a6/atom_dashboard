@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.alteratom.R
-import com.alteratom.dashboard.Activity
+import com.alteratom.dashboard.ActivityHandler
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 import com.alteratom.dashboard.activities.fragments.SplashScreenFragment
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Activity.onCreate(this)
+        ActivityHandler.onCreate(this)
 
         fm = FragmentManager(this)
 
@@ -42,12 +42,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Activity.onDestroy()
+        ActivityHandler.onDestroy()
     }
 
     override fun onPause() {
         super.onPause()
-        Activity.onPause()
+        ActivityHandler.onPause()
     }
 
     override fun onBackPressed() {

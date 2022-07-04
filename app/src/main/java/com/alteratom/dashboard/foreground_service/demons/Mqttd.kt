@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.FolderTree
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -35,16 +35,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
 
-    override val status: MqttdStatus
+    override val status: Status
         get() =
             if (!isEnabled) {
-                MqttdStatus.DISCONNECTED
+                Status.DISCONNECTED
             } else {
                 if (client.isConnected)
-                    if (d.mqttData.ssl && !d.mqttData.sslTrustAll) MqttdStatus.CONNECTED_SSL
-                    else MqttdStatus.CONNECTED
-                else if (conHandler.isDone.value != true) MqttdStatus.ATTEMPTING
-                else MqttdStatus.FAILED
+                    if (d.mqttData.ssl && !d.mqttData.sslTrustAll) Status.CONNECTED_SSL
+                    else Status.CONNECTED
+                else if (conHandler.isDone.value != true) Status.ATTEMPTING
+                else Status.FAILED
             }
 
     override fun notifyAssigned() {
@@ -322,7 +322,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
-    enum class MqttdStatus { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
+    enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
     class ClientData(
         var isEnabled: Boolean = true,

@@ -1,7 +1,5 @@
 package com.alteratom.dashboard
 
-import com.alteratom.dashboard.dashboard.Dashboard
-import com.alteratom.dashboard.widgets.WidgetDataHolder
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
@@ -18,8 +16,7 @@ object FolderTree {
             path = mapOf(
                 Theme::class to "$value/theme",
                 Settings::class to "$value/settings",
-                Dashboard::class to "$value/dashboards",
-                WidgetDataHolder::class to "$value/widgets"
+                Dashboard::class to "$value/dashboards"
             )
         }
 

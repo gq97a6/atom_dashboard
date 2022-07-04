@@ -10,7 +10,7 @@ import androidx.core.view.get
 import com.alteratom.R
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 
-class ToolBarController(
+class ToolBarHandler(
     private val adapter: RecyclerViewAdapter<*>,
     private val bar: ConstraintLayout,
     toolbar: FrameLayout,

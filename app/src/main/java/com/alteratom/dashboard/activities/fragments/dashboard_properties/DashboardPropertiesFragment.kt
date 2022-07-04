@@ -10,10 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
@@ -24,18 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.EditText
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.NavigationArrows
-import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import java.util.*
@@ -137,23 +139,46 @@ class DashboardPropertiesFragment : Fragment() {
 
                                 )
 
-                                var name by remember {
-                                    mutableStateOf(dashboard.name.lowercase(Locale.getDefault()))
-                                }
-                                EditText(
-                                    label = { Text("Dashboard name") },
-                                    value = name,
-                                    onValueChange = {
-                                        name = it
+                                Row(
+                                    modifier = Modifier.padding(top = 5.dp),
+                                    verticalAlignment = Alignment.Bottom
+                                ) {
+                                    BasicButton(
+                                        contentPadding = PaddingValues(13.dp),
+                                        onClick = {
+                                            getIconHSV = { dashboard.hsv }
+                                            getIconRes = { dashboard.iconRes }
+                                            getIconColorPallet = { dashboard.pallet }
 
-                                        it.trim().let {
-                                            dashboard.name =
-                                                it.ifBlank {
-                                                    abs(Random.nextInt(0, 100)).toString()
-                                                }
-                                        }
+                                            setIconHSV = { hsv -> dashboard.hsv = hsv }
+                                            setIconKey = { key -> dashboard.iconKey = key }
+
+                                            MainActivity.fm.replaceWith(TileIconFragment())
+                                        },
+                                        border = BorderStroke(0.dp, dashboard.pallet.cc.color),
+                                        modifier = Modifier.size(52.dp)
+                                    ) {
+                                        Icon(painterResource(dashboard.iconRes), "", tint = dashboard.pallet.cc.color)
                                     }
-                                )
+
+                                    var name by remember {
+                                        mutableStateOf(dashboard.name.lowercase(Locale.getDefault()))
+                                    }
+                                    EditText(
+                                        label = { Text("Dashboard name") },
+                                        value = name,
+                                        onValueChange = {
+                                            name = it
+                                            it.trim().let {
+                                                dashboard.name =
+                                                    it.ifBlank {
+                                                        abs(Random.nextInt(0, 100)).toString()
+                                                    }
+                                            }
+                                        },
+                                        modifier = Modifier.padding(start = 12.dp)
+                                    )
+                                }
 
                                 DashboardPropertiesCompose.compose(
                                     dashboard.type,

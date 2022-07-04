@@ -40,7 +40,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.dashboard.Dashboard
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
@@ -263,6 +263,43 @@ class SettingsFragment : Fragment() {
                                             onClick = { openFile() }
                                         ) {
                                             Text("RESTORE", fontSize = 10.sp, color = colors.a)
+                                        }
+                                    }
+                                }
+
+                                FrameBox("About") {
+                                    Column {
+                                        Row {
+                                            Text(
+                                                "Version: ",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                            Text(
+                                                "stable - 1.0.0",
+                                                fontSize = 15.sp,
+                                                color = colors.b
+                                            )
+                                        }
+                                        Row(Modifier.padding(top = 5.dp)) {
+                                            Text(
+                                                "Contact: ",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                            Text(
+                                                "dev@alteratom.com",
+                                                fontSize = 15.sp,
+                                                color = colors.b
+                                            )
+                                        }
+                                        BasicButton(
+                                            contentPadding = PaddingValues(13.dp),
+                                            border = BorderStroke(2.dp, colors.b),
+                                            modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                                            onClick = { openFile() }
+                                        ) {
+                                            Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
                                         }
                                     }
                                 }

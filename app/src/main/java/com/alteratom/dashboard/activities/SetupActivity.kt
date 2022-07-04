@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.R
-import com.alteratom.dashboard.Activity
+import com.alteratom.dashboard.ActivityHandler
 import com.alteratom.dashboard.FolderTree.rootFolder
 import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
@@ -32,7 +32,7 @@ class SetupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Activity.onCreate(this)
+        ActivityHandler.onCreate(this)
 
         val serviceRunning = service?.isRunning == true && dashboards.isNotEmpty()
 
@@ -94,12 +94,12 @@ class SetupActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Activity.onDestroy()
+        ActivityHandler.onDestroy()
     }
 
     override fun onPause() {
         super.onPause()
-        Activity.onPause()
+        ActivityHandler.onPause()
         finish()
     }
 }

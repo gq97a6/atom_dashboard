@@ -1,6 +1,4 @@
-version stamp, compatibility stamp
-save transfer
 start guide
-hardcoded text
 tests
 publish
+hardcoded text

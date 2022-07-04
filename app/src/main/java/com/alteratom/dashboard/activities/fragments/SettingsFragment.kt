@@ -40,7 +40,6 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
@@ -175,142 +174,116 @@ class SettingsFragment : Fragment() {
                     Box(modifier = Modifier.background(colors.background))
 
                     Box(
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.BottomCenter
                     ) {
-                        Surface(modifier = Modifier.padding(16.dp)) {
-                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                                Text(text = "Settings", fontSize = 45.sp, color = colors.color)
+                        Column(modifier = Modifier.fillMaxHeight().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.Center) {
+                            Text(text = "Settings", fontSize = 45.sp, color = colors.color)
 
-                                FrameBox("Optionals") {
-                                    Column {
-                                        var anim by remember { mutableStateOf(settings.animateUpdate) }
-                                        LabeledSwitch(
-                                            label = {
-                                                Text(
-                                                    "Animate tile update:",
-                                                    fontSize = 15.sp,
-                                                    color = colors.a
-                                                )
-                                            },
-                                            checked = anim,
-                                            onCheckedChange = {
-                                                anim = it
-                                                settings.animateUpdate = it
-                                            },
-                                        )
+                            FrameBox("Optionals") {
+                                Column {
+                                    var anim by remember { mutableStateOf(settings.animateUpdate) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "Animate tile update:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = anim,
+                                        onCheckedChange = {
+                                            anim = it
+                                            settings.animateUpdate = it
+                                        },
+                                    )
 
-                                        var last by remember { mutableStateOf(settings.startFromLast) }
-                                        LabeledSwitch(
-                                            label = {
-                                                Text(
-                                                    "Last dashboard on start:",
-                                                    fontSize = 15.sp,
-                                                    color = colors.a
-                                                )
-                                            },
-                                            checked = last,
-                                            onCheckedChange = {
-                                                last = it
-                                                settings.startFromLast = it
-                                            },
-                                        )
+                                    var last by remember { mutableStateOf(settings.startFromLast) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "Last dashboard on start:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = last,
+                                        onCheckedChange = {
+                                            last = it
+                                            settings.startFromLast = it
+                                        },
+                                    )
 
-                                        var switch by remember { mutableStateOf(settings.hideNav) }
-                                        LabeledSwitch(
-                                            label = {
-                                                Text(
-                                                    "Hide navigation arrows:",
-                                                    fontSize = 15.sp,
-                                                    color = colors.a
-                                                )
-                                            },
-                                            checked = switch,
-                                            onCheckedChange = {
-                                                switch = it
-                                                settings.hideNav = it
-                                            },
-                                        )
-                                    }
+                                    var switch by remember { mutableStateOf(settings.hideNav) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "Hide navigation arrows:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = switch,
+                                        onCheckedChange = {
+                                            switch = it
+                                            settings.hideNav = it
+                                        },
+                                    )
                                 }
+                            }
 
-                                FrameBox("Theme") {
+                            FrameBox("Theme") {
+                                BasicButton(
+                                    contentPadding = PaddingValues(13.dp),
+                                    border = BorderStroke(2.dp, colors.b),
+                                    onClick = { fm.replaceWith(ThemeFragment()) }
+                                ) {
+                                    Text("EDIT THEME", fontSize = 10.sp, color = colors.a)
+                                }
+                            }
+
+                            FrameBox("Backup") {
+                                Row {
                                     BasicButton(
                                         contentPadding = PaddingValues(13.dp),
                                         border = BorderStroke(2.dp, colors.b),
-                                        onClick = { fm.replaceWith(ThemeFragment()) }
+                                        modifier = Modifier.weight(.47f),
+                                        onClick = { createFile() }
                                     ) {
-                                        Text("EDIT THEME", fontSize = 10.sp, color = colors.a)
+                                        Text("CREATE", fontSize = 10.sp, color = colors.a)
+                                    }
+
+                                    Spacer(modifier = Modifier.weight(.06f))
+
+                                    BasicButton(
+                                        contentPadding = PaddingValues(13.dp),
+                                        border = BorderStroke(2.dp, colors.b),
+                                        modifier = Modifier.weight(.47f),
+                                        onClick = { openFile() }
+                                    ) {
+                                        Text("RESTORE", fontSize = 10.sp, color = colors.a)
                                     }
                                 }
-
-                                FrameBox("Backup") {
-                                    Row {
-                                        BasicButton(
-                                            contentPadding = PaddingValues(13.dp),
-                                            border = BorderStroke(2.dp, colors.b),
-                                            modifier = Modifier.weight(.47f),
-                                            onClick = { createFile() }
-                                        ) {
-                                            Text("CREATE", fontSize = 10.sp, color = colors.a)
-                                        }
-
-                                        Spacer(modifier = Modifier.weight(.06f))
-
-                                        BasicButton(
-                                            contentPadding = PaddingValues(13.dp),
-                                            border = BorderStroke(2.dp, colors.b),
-                                            modifier = Modifier.weight(.47f),
-                                            onClick = { openFile() }
-                                        ) {
-                                            Text("RESTORE", fontSize = 10.sp, color = colors.a)
-                                        }
-                                    }
-                                }
-
-                                FrameBox("About") {
-                                    Column {
-                                        Row {
-                                            Text(
-                                                "Version: ",
-                                                fontSize = 15.sp,
-                                                color = colors.a
-                                            )
-                                            Text(
-                                                "stable - 1.0.0",
-                                                fontSize = 15.sp,
-                                                color = colors.b
-                                            )
-                                        }
-                                        Row(Modifier.padding(top = 5.dp)) {
-                                            Text(
-                                                "Contact: ",
-                                                fontSize = 15.sp,
-                                                color = colors.a
-                                            )
-                                            Text(
-                                                "dev@alteratom.com",
-                                                fontSize = 15.sp,
-                                                color = colors.b
-                                            )
-                                        }
-                                        BasicButton(
-                                            contentPadding = PaddingValues(13.dp),
-                                            border = BorderStroke(2.dp, colors.b),
-                                            modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                                            onClick = { openFile() }
-                                        ) {
-                                            Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
-                                        }
-                                    }
-                                }
-
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(60.dp)
-                                )
                             }
+
+                            FrameBox("About") {
+                                BasicButton(
+                                    contentPadding = PaddingValues(13.dp),
+                                    border = BorderStroke(2.dp, colors.b),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onClick = { fm.replaceWith(SupportFragment()) }
+                                ) {
+                                    Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
+                                }
+                            }
+
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(40.dp)
+                            )
                         }
+
+                        Text("stable 1.0.0", Modifier.padding(bottom = 5.dp), fontSize = 10.sp, color = colors.d)
                     }
                 }
             }

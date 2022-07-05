@@ -73,31 +73,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <TextView
         android:id="@+id/ms_placeholder"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:elevation="1dp"
         android:gravity="center"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="1dp"
-            android:gravity="center"
-            android:tag="colorC"
-            android:text="Add new \n dashboard first "
-            android:textSize="20dp"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/ms_recycler_view"
-            app:layout_constraintTop_toTopOf="@id/ms_recycler_view" />
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/il_interface_plus_circle"/>
-
-    </LinearLayout>
+        android:tag="colorC"
+        android:text="Add your first dashboard\nUse left icon to access edit mode"
+        android:textSize="20dp"
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ms_bar"

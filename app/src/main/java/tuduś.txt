@@ -1,4 +1,3 @@
-start guide
 tests
 publish
 hardcoded text

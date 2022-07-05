@@ -270,7 +270,7 @@ class SettingsFragment : Fragment() {
                                     contentPadding = PaddingValues(13.dp),
                                     border = BorderStroke(2.dp, colors.b),
                                     modifier = Modifier.fillMaxWidth(),
-                                    onClick = { fm.replaceWith(SupportFragment()) }
+                                    onClick = { /* fm.replaceWith(SupportFragment())*/ }
                                 ) {
                                     Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
                                 }

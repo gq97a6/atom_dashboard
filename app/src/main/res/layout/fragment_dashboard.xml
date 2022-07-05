@@ -160,15 +160,13 @@
     <TextView
         android:id="@+id/d_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:elevation="1dp"
         android:gravity="center"
         android:tag="colorC"
-        android:text="Add new tiles first. \n Use left icon to access edit mode."
+        android:text="Add your first tile\nUse left icon to access edit mode"
         android:textSize="20dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/d_recycler_view"
-        app:layout_constraintTop_toTopOf="@id/d_recycler_view" />
+        android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/d_bar"

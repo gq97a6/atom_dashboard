@@ -30,6 +30,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".dashboard.activities.LVLActivity"
+            android:configChanges="screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".dashboard.activities.MainActivity"
             android:configChanges="screenSize|keyboardHidden"

@@ -8,4 +8,21 @@
         <item name="android:background">#00000000</item>
     </style>
 
+    <string name="app_name">Market Licensing Example</string>
+
+    <!-- License checking status messages -->
+    <string name="check_license">Check license</string>
+    <string name="checking_license">Checking license...</string>
+    <string name="dont_allow">Don\'t allow the user access</string>
+    <string name="allow">Allow the user access</string>
+    <string name="application_error">Application error: %1$d</string>
+
+    <!-- Unlicensed dialog messages -->
+    <string name="unlicensed_dialog_title">Application not licensed</string>
+    <string name="unlicensed_dialog_body">This application is not licensed.</string>
+    <string name="unlicensed_dialog_retry_body">Unable to validate license. Check to see if a network connection is available.</string>
+    <string name="restore_access_button">Restore Access</string>
+    <string name="retry_button">Retry</string>
+    <string name="quit_button">Exit</string>
+
 </resources>

@@ -85,7 +85,7 @@ class SetupActivity : AppCompatActivity() {
     }
 
     fun onServiceReady() {
-        Intent(this, MainActivity::class.java).also {
+        Intent(this, LVLActivity::class.java).also {
             startActivity(it)
             overridePendingTransition(0, 0)
             finish()

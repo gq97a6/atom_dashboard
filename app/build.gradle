@@ -33,7 +33,7 @@ android {
             //shrinkResources true
             minifyEnabled false
             //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            applicationIdSuffix ".debug"
+            //applicationIdSuffix ".debug"
             debuggable true
         }
     }
@@ -79,6 +79,7 @@ dependencies {
     implementation 'androidx.compose.animation:animation:1.1.1'
     implementation 'androidx.compose.ui:ui-tooling:1.1.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    implementation project(path: ':lvl_library')
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
     implementation 'me.tankery.lib:circularSeekBar:1.4.0'

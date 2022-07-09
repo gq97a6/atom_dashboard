@@ -25,6 +25,8 @@ import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 
 @SuppressLint("CustomSplashScreen")
@@ -85,7 +87,7 @@ class SetupActivity : AppCompatActivity() {
     }
 
     fun onServiceReady() {
-        Intent(this, LVLActivity::class.java).also {
+        Intent(this, MainActivity::class.java).also {
             startActivity(it)
             overridePendingTransition(0, 0)
             finish()

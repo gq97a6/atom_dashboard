@@ -28,8 +28,6 @@ import com.google.android.vending.licensing.LicenseChecker
 import com.google.android.vending.licensing.LicenseCheckerCallback
 import com.google.android.vending.licensing.ServerManagedPolicy
 
-
-@SuppressLint("CustomSplashScreen")
 class LVLActivity : AppCompatActivity() {
 
     private lateinit var checker: LicenseChecker

@@ -15,7 +15,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -176,7 +175,13 @@ class SettingsFragment : Fragment() {
                     Box(
                         contentAlignment = Alignment.BottomCenter
                     ) {
-                        Column(modifier = Modifier.fillMaxHeight().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.Center) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .verticalScroll(rememberScrollState())
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             Text(text = "Settings", fontSize = 45.sp, color = colors.color)
 
                             FrameBox("Optionals") {
@@ -270,7 +275,7 @@ class SettingsFragment : Fragment() {
                                     contentPadding = PaddingValues(13.dp),
                                     border = BorderStroke(2.dp, colors.b),
                                     modifier = Modifier.fillMaxWidth(),
-                                    onClick = { /* fm.replaceWith(SupportFragment())*/ }
+                                    onClick = { fm.replaceWith(PayFragment()) }
                                 ) {
                                     Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
                                 }
@@ -283,7 +288,12 @@ class SettingsFragment : Fragment() {
                             )
                         }
 
-                        Text("stable 1.0.0", Modifier.padding(bottom = 5.dp), fontSize = 10.sp, color = colors.d)
+                        Text(
+                            "stable 1.0.0",
+                            Modifier.padding(bottom = 5.dp),
+                            fontSize = 10.sp,
+                            color = colors.d
+                        )
                     }
                 }
             }

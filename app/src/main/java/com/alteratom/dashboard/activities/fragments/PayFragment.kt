@@ -40,7 +40,15 @@ class PayFragment : Fragment() {
         billingClient = BillingClient.newBuilder(requireContext())
             .setListener { billingResult, purchases ->
                 if (billingResult.responseCode == OK && purchases != null) {
-                    run {}
+                    ConsumeParams
+                        .newBuilder()
+                        .setPurchaseToken(purchases[0].purchaseToken)
+                        .build()
+                        .let {
+                            billingClient.consumeAsync(it) { billingResult, str ->
+                                run {}
+                            }
+                        }
                 } else if (billingResult.responseCode == USER_CANCELED) {
                     run {}
                 } else {
@@ -54,6 +62,10 @@ class PayFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         theme.apply(context = requireContext())
+
+        billingClient.queryPurchasesAsync(QueryPurchasesParams()) { _, _ ->
+
+        }
     }
 
     override fun onCreateView(

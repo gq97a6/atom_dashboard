@@ -28,6 +28,7 @@ import com.alteratom.dashboard.createToast
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
+import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -121,6 +122,7 @@ class PayFragment : Fragment() {
                         .build()
                         .let {
                             billingClient.queryPurchaseHistoryAsync(it) { result, history ->
+                                if (history?.size == 0) return@queryPurchaseHistoryAsync
                                 history?.get(0)?.let { p ->
                                     AcknowledgePurchaseParams
                                         .newBuilder()
@@ -143,6 +145,7 @@ class PayFragment : Fragment() {
                         .build()
                         .let {
                             billingClient.queryPurchaseHistoryAsync(it) { result, history ->
+                                if (history?.size == 0) return@queryPurchaseHistoryAsync
                                 history?.get(0)?.let { p ->
                                     ConsumeParams
                                         .newBuilder()
@@ -171,6 +174,7 @@ class PayFragment : Fragment() {
                                     .build()
                                     .let {
                                         billingClient.queryPurchasesAsync(it) { result, history ->
+                                            if (history.size == 0) return@queryPurchasesAsync
                                             history?.get(0)?.let { p ->
                                                 val p0 = p.developerPayload
                                                 val p1 = p.accountIdentifiers
@@ -196,6 +200,7 @@ class PayFragment : Fragment() {
                         .build()
                         .let {
                             billingClient.queryPurchaseHistoryAsync(it) { result, history ->
+                                if (history?.size == 0) return@queryPurchaseHistoryAsync
                                 history?.get(0)?.let { p ->
                                     val p0 = p.developerPayload
                                     val p1 = p.products
@@ -216,6 +221,7 @@ class PayFragment : Fragment() {
                         .build()
                         .let {
                             billingClient.queryPurchasesAsync(it) { result, history ->
+                                if (history.size == 0) return@queryPurchasesAsync
                                 history?.get(0)?.let { p ->
                                     val p0 = p.developerPayload
                                     val p1 = p.accountIdentifiers
@@ -234,6 +240,11 @@ class PayFragment : Fragment() {
 
                 fun lunchPurchaseFlow(productId: String) {
                     if (billingClient.isReady) {
+                        if (billingClient.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK){
+                            createToast(requireContext(), "Feature not supported")
+                            return
+                        }
+
                         val queryDetails = QueryProductDetailsParams
                             .newBuilder()
                             .setProductList(
@@ -246,6 +257,7 @@ class PayFragment : Fragment() {
                             ).build()
 
                         billingClient.queryProductDetailsAsync(queryDetails) { result, details ->
+                            if (details.size == 0) return@queryProductDetailsAsync
                             billingClient.launchBillingFlow(
                                 requireActivity(),
                                 BillingFlowParams
@@ -294,19 +306,31 @@ class PayFragment : Fragment() {
                             BasicButton(onClick = {
                                 getPurchasesOnline()
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("PURCHASES ONLINE", textAlign = TextAlign.Center, color = Color.White)
+                                Text(
+                                    "PURCHASES ONLINE",
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White
+                                )
                             }
 
                             BasicButton(onClick = {
                                 getPurchasesOffline()
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("PURCHASES OFFLINE", textAlign = TextAlign.Center, color = Color.White)
+                                Text(
+                                    "PURCHASES OFFLINE",
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White
+                                )
                             }
 
                             BasicButton(onClick = {
                                 acknowledge()
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("ACKNOWLEDGE", textAlign = TextAlign.Center, color = Color.White)
+                                Text(
+                                    "ACKNOWLEDGE",
+                                    textAlign = TextAlign.Center,
+                                    color = Color.White
+                                )
                             }
 
                             BasicButton(onClick = {

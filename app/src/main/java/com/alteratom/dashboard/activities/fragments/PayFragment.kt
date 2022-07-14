@@ -29,7 +29,6 @@ import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
-import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -159,6 +158,37 @@ class PayFragment : Fragment() {
                         }
                 }
 
+                fun getPurchasesOnline() {
+                    QueryPurchaseHistoryParams
+                        .newBuilder()
+                        .setProductType(INAPP)
+                        .build()
+                        .let {
+                            billingClient.queryPurchaseHistoryAsync(it) { result, history ->
+                                QueryPurchasesParams
+                                    .newBuilder()
+                                    .setProductType(INAPP)
+                                    .build()
+                                    .let {
+                                        billingClient.queryPurchasesAsync(it) { result, history ->
+                                            history?.get(0)?.let { p ->
+                                                val p0 = p.developerPayload
+                                                val p1 = p.accountIdentifiers
+                                                val p2 = p.products
+                                                val p3 = p.purchaseState
+                                                val p4 = p.signature
+                                                val p5 = p.packageName
+                                                val p6 = p.isAcknowledged
+                                                val p7 = p.purchaseTime
+
+                                                run {}
+                                            }
+                                        }
+                                    }
+                            }
+                        }
+                }
+
                 fun getHistory() {
                     QueryPurchaseHistoryParams
                         .newBuilder()
@@ -172,6 +202,29 @@ class PayFragment : Fragment() {
                                     val p2 = p.signature
                                     val p3 = p.purchaseTime
                                     val p4 = p.purchaseToken
+
+                                    run {}
+                                }
+                            }
+                        }
+                }
+
+                fun getPurchasesOffline() {
+                    QueryPurchasesParams
+                        .newBuilder()
+                        .setProductType(INAPP)
+                        .build()
+                        .let {
+                            billingClient.queryPurchasesAsync(it) { result, history ->
+                                history?.get(0)?.let { p ->
+                                    val p0 = p.developerPayload
+                                    val p1 = p.accountIdentifiers
+                                    val p2 = p.products
+                                    val p3 = p.purchaseState
+                                    val p4 = p.signature
+                                    val p5 = p.packageName
+                                    val p6 = p.isAcknowledged
+                                    val p7 = p.purchaseTime
 
                                     run {}
                                 }
@@ -236,6 +289,18 @@ class PayFragment : Fragment() {
                                 getHistory()
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("HISTORY", textAlign = TextAlign.Center, color = Color.White)
+                            }
+
+                            BasicButton(onClick = {
+                                getPurchasesOnline()
+                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                                Text("PURCHASES ONLINE", textAlign = TextAlign.Center, color = Color.White)
+                            }
+
+                            BasicButton(onClick = {
+                                getPurchasesOffline()
+                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                                Text("PURCHASES OFFLINE", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {

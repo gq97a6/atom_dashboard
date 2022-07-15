@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
@@ -31,6 +32,8 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
@@ -113,7 +116,6 @@ class PayFragment : Fragment() {
             setContent {
                 var text by remember { mutableStateOf("NULL") }
                 var isChecking by remember { mutableStateOf(false) }
-
 
                 fun acknowledge() {
                     QueryPurchaseHistoryParams
@@ -294,7 +296,21 @@ class PayFragment : Fragment() {
                             BasicButton(onClick = {
                                 lunchPurchaseFlow("atom_dashboard_pro")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("PAY", textAlign = TextAlign.Center, color = Color.White)
+                                Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
+                            }
+
+
+                            BasicButton(onClick = {
+                                lunchPurchaseFlow("test_product_01")
+                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                                Text("PAY 01", textAlign = TextAlign.Center, color = Color.White)
+                            }
+
+
+                            BasicButton(onClick = {
+                                lunchPurchaseFlow("test_product_02")
+                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                                Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {

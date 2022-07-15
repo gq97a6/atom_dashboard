@@ -1,3 +1,5 @@
 tests
 publish
 hardcoded text
+no splashscreen animation
+face/finger/pass protect dashboard

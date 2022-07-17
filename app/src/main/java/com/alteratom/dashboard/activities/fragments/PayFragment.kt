@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
@@ -32,8 +31,6 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
@@ -242,7 +239,7 @@ class PayFragment : Fragment() {
 
                 fun lunchPurchaseFlow(productId: String) {
                     if (billingClient.isReady) {
-                        if (billingClient.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK){
+                        if (billingClient.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK) {
                             createToast(requireContext(), "Feature not supported")
                             return
                         }

@@ -20,9 +20,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.BasicButton
+import com.alteratom.dashboard.BillingHandler
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.createToast
 import com.android.billingclient.api.*
@@ -84,6 +86,8 @@ class PayFragment : Fragment() {
 
         //billingClient.acknowledgePurchase() //accept or will be refunded
         //billingClient.queryPurchasesAsync()
+
+        //BillingHandler(requireActivity() as MainActivity).lunchPurchaseFlow("")
 
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
@@ -192,27 +196,6 @@ class PayFragment : Fragment() {
                         }
                 }
 
-                fun getHistory() {
-                    QueryPurchaseHistoryParams
-                        .newBuilder()
-                        .setProductType(INAPP)
-                        .build()
-                        .let {
-                            billingClient.queryPurchaseHistoryAsync(it) { result, history ->
-                                if (history?.size == 0) return@queryPurchaseHistoryAsync
-                                history?.get(0)?.let { p ->
-                                    val p0 = p.developerPayload
-                                    val p1 = p.products
-                                    val p2 = p.signature
-                                    val p3 = p.purchaseTime
-                                    val p4 = p.purchaseToken
-
-                                    run {}
-                                }
-                            }
-                        }
-                }
-
                 fun getPurchasesOffline() {
                     QueryPurchasesParams
                         .newBuilder()
@@ -296,7 +279,6 @@ class PayFragment : Fragment() {
                                 Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
                             }
 
-
                             BasicButton(onClick = {
                                 lunchPurchaseFlow("test_product_01")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
@@ -308,12 +290,6 @@ class PayFragment : Fragment() {
                                 lunchPurchaseFlow("test_product_02")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
-                            }
-
-                            BasicButton(onClick = {
-                                getHistory()
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("HISTORY", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {

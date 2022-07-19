@@ -1,9 +1,12 @@
 package com.alteratom.dashboard
 
 object ProVersion {
-    var status: Boolean? = null
+    var status = false
 
-    fun check() {
+    fun updateStatus() {
 
     }
+
+    fun createLocalLicence() {}
+
 }

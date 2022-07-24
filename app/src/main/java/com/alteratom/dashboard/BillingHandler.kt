@@ -2,30 +2,68 @@ package com.alteratom.dashboard
 
 import com.alteratom.dashboard.activities.MainActivity
 import com.android.billingclient.api.*
+import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
-import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class BillingHandler(val activity: MainActivity) {
 
     var client = BillingClient.newBuilder(activity)
+        .setListener { billingResult, purchases ->
+            if (purchases != null &&
+                (billingResult.responseCode == OK ||
+                        billingResult.responseCode == ITEM_ALREADY_OWNED)
+            ) {
+                onPurchasesUpdated(billingResult, purchases)
+            }
+        }
         .enablePendingPurchases()
         .build()
 
     companion object {
         //Products ids
         var PRO = "atom_dashboard_pro"
+        var DON0 = "atom_dashboard_pro"
+        var DON1 = "atom_dashboard_pro"
+        var DON2 = "atom_dashboard_pro"
+
     }
 
     fun initialize() {
 
     }
 
+    fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
+        for (purchase in purchases) {
+            onPurchased(purchase)
+        }
+    }
+
+    fun onPurchased(purchase: Purchase) {
+        if (!purchase.isAcknowledged) return
+        for (product in purchase.products) {
+            when (product) {
+                PRO -> {
+                    createToast(activity, "Thanks for buying Pro!")
+                    ProVersion.createLocalLicence()
+                    purchase.acknowledge()
+                }
+                DON0, DON1, DON2 -> {
+                    createToast(activity, "Thanks the donation!")
+                    purchase.consume()
+                }
+                else -> {}
+            }
+        }
+    }
+
     fun lunchPurchaseFlow(id: String) {
         if (!client.isReady) return
         if (client.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK) {
-            createToast(activity, "Feature not supported")
+            createToast(activity, "Please update Google Play Store")
             return
         }
 
@@ -59,30 +97,26 @@ class BillingHandler(val activity: MainActivity) {
         }
     }
 
-    fun checkPurchaseStatus(id: String): Boolean {
+    suspend fun checkPurchasesStatus(id: String): Boolean = suspendCoroutine { continuation ->
+        if (!client.isReady) continuation.resume(false)
         QueryPurchasesParams
             .newBuilder()
             .setProductType(INAPP)
             .build()
             .let {
                 client.queryPurchasesAsync(it) { result, history ->
-                    if (history.size == 0) return@queryPurchasesAsync
-                    history.find { it.products.contains(id) && it.purchaseState == PURCHASED }
-                    history.get(0).let { p ->
-                        val p0 = p.developerPayload
-                        val p1 = p.accountIdentifiers
-                        val p2 = p.products
-                        val p3 = p.purchaseState
-                        val p4 = p.signature
-                        val p5 = p.packageName
-                        val p6 = p.isAcknowledged
-                        val p7 = p.purchaseTime
-
-                        run {}
-                    }
+                    if (history.size == 0) continuation.resume(false)
+                    for (purchase in history) onPurchased(purchase)
+                    //developerPayload
+                    //accountIdentifiers
+                    //products
+                    //purchaseState
+                    //signature
+                    //packageName
+                    //isAcknowledged
+                    //purchaseTime
                 }
             }
-        return false
     }
 
     private fun Purchase.acknowledge() {

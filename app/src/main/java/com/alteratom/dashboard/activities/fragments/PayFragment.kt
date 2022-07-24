@@ -20,11 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.BasicButton
-import com.alteratom.dashboard.BillingHandler
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.createToast
 import com.android.billingclient.api.*
@@ -92,18 +90,12 @@ class PayFragment : Fragment() {
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == OK) {
-                    createToast(
-                        requireContext(),
-                        "Connection with Google Play successful"
-                    )
+                    createToast(requireContext(), "Update Google Play Store")
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                createToast(
-                    requireContext(),
-                    "Connection with Google Play failed"
-                )
+                createToast(requireContext(), "Connection with Google Play failed")
             }
         })
     }

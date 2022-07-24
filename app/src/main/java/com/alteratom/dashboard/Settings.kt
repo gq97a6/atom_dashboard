@@ -6,4 +6,6 @@ class Settings {
     var startFromLast: Boolean = true
     var mqttTabShow: Boolean = true
     var animateUpdate: Boolean = true
+
+    var isPro = false
 }

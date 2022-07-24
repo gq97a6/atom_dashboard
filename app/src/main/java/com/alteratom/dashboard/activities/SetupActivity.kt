@@ -15,18 +15,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.R
-import com.alteratom.dashboard.ActivityHandler
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.FolderTree.rootFolder
-import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 
 @SuppressLint("CustomSplashScreen")
@@ -42,6 +38,9 @@ class SetupActivity : AppCompatActivity() {
         if (!serviceRunning) G.initialize()
 
         G.theme.apply(context = this)
+
+        //tmp
+        createToast(this, if (ProVersion.status) "PRO" else "NO PRO")
 
         setContent {
             ComposeTheme(Theme.isDark) {

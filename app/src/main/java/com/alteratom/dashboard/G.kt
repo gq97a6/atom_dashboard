@@ -33,6 +33,7 @@ object G {
         dashboards = parseListSave()
         theme = parseSave() ?: Theme()
         settings = parseSave() ?: Settings()
+        ProVersion.updateStatus()
     }
 }
 

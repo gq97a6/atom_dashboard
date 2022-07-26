@@ -42,31 +42,5 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Inde
 
     open fun notifyOptionsChanged() {}
 
-    abstract class DaemonConnectionHandler {
-
-        val isDone = MutableLiveData(false)
-        private var isDispatchScheduled = false
-
-        protected abstract fun isDone(): Boolean
-
-        fun dispatch(reason: String) {
-            val _isDone = isDone()
-            if (isDone.value != _isDone) isDone.postValue(_isDone)
-
-            if (!_isDone && !isDispatchScheduled) {
-
-                handleDispatch()
-
-                Handler(Looper.getMainLooper()).postDelayed({
-                    isDispatchScheduled = false
-                    dispatch("internal")
-                }, 500)
-                isDispatchScheduled = true
-            }
-        }
-
-        abstract fun handleDispatch()
-    }
-
     enum class Type { MQTTD, BLUETOOTHD }
 }

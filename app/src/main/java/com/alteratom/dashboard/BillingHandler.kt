@@ -1,11 +1,18 @@
 package com.alteratom.dashboard
 
+import android.os.Handler
+import android.os.Looper
+import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.activities.MainActivity
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -97,8 +104,17 @@ class BillingHandler(val activity: MainActivity) {
         }
     }
 
+    suspend fun test() = coroutineScope {
+        checkConnection()
+        launch {
+            delay(1000L)
+            println("World!")
+        }
+        println("Hello")
+    }
+
     suspend fun checkPurchasesStatus(id: String): Boolean = suspendCoroutine { continuation ->
-        if (!client.isReady) continuation.resume(false)
+        runBlocking { if (!checkConnection()) continuation.resume(false) }
         QueryPurchasesParams
             .newBuilder()
             .setProductType(INAPP)
@@ -133,5 +149,36 @@ class BillingHandler(val activity: MainActivity) {
             .setPurchaseToken(this.purchaseToken)
             .build()
             .let { client.consumeAsync(it) { _, _ -> } }
+    }
+
+    private suspend fun checkConnection(): Boolean = suspendCoroutine { continuation ->
+        if (!client.isReady) {
+            client.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == OK) continuation.resume(true)
+                }
+
+                override fun onBillingServiceDisconnected() {
+                    continuation.resume(false)
+                }
+            })
+        } else continuation.resume(true)
+    }
+
+    inner class BillingConnectionHandler : ConnectionHandler() {
+        override fun isDone(): Boolean = client.isReady
+
+        override fun handleDispatch() {
+            client.startConnection(object : BillingClientStateListener {
+                override fun onBillingSetupFinished(billingResult: BillingResult) {}
+
+                override fun onBillingServiceDisconnected() {}
+            })
+        }
+
+        suspend fun check(): Boolean = suspendCoroutine { continuation ->
+            if (!client.isReady) connect()
+            else continuation.resume(true)
+        }
     }
 }

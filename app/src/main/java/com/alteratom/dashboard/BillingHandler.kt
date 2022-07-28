@@ -4,22 +4,22 @@ import android.app.Activity
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
-import com.android.billingclient.api.BillingClient.ConnectionState.*
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BillingHandler(val activity: Activity) {
+class BillingHandler(private val activity: Activity) {
 
     private var isEnabled = false
 
     private lateinit var client: BillingClient
 
-    val connectionHandler = BillingConnectionHandler()
+    private val connectionHandler = BillingConnectionHandler()
 
     companion object {
         //Products ids
@@ -33,13 +33,13 @@ class BillingHandler(val activity: Activity) {
         createClient()
     }
 
-    fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
+    private fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
         for (purchase in purchases) {
             onPurchased(purchase)
         }
     }
 
-    fun onPurchased(purchase: Purchase) {
+    private fun onPurchased(purchase: Purchase) {
         if (!purchase.isAcknowledged) return
         for (product in purchase.products) {
             when (product) {
@@ -58,10 +58,11 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun lunchPurchaseFlow(id: String) {
-        if (!runBlocking { return@runBlocking connectionHandler.requestConnection() }) {
-            createToast(activity, "Failed to connect")
-            return
-        }
+        //todo
+        //if (!runBlocking { return@runBlocking connectionHandler.requestConnection() }) {
+        //    createToast(activity, "Failed to connect")
+        //    return
+        //}
 
         if (client.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK) {
             createToast(activity, "Please update Google Play Store")
@@ -99,10 +100,11 @@ class BillingHandler(val activity: Activity) {
     }
 
     suspend fun checkPurchasesStatus(id: String): Boolean? = suspendCoroutine { continuation ->
-        if (!runBlocking { return@runBlocking connectionHandler.requestConnection() }) {
-            continuation.resume(null)
-            return@suspendCoroutine
-        }
+        //todo
+        //if (!runBlocking { return@runBlocking connectionHandler.requestConnection() }) {
+        //    continuation.resume(null)
+        //    return@suspendCoroutine
+        //}
 
         QueryPurchasesParams
             .newBuilder()
@@ -150,7 +152,7 @@ class BillingHandler(val activity: Activity) {
         connectionHandler.dispatch("disable")
     }
 
-    fun createClient() {
+    private fun createClient() {
         client = BillingClient.newBuilder(activity)
             .setListener { billingResult, purchases ->
                 if (purchases != null &&
@@ -164,41 +166,38 @@ class BillingHandler(val activity: Activity) {
             .build()
     }
 
-    inner class BillingConnectionHandler : ConnectionHandler() {
+    private inner class BillingConnectionHandler : ConnectionHandler() {
 
-        override fun isDone(): Boolean = when (client.connectionState) {
-            CONNECTED -> isEnabled
-            CONNECTING -> false
-            DISCONNECTED, CLOSED -> !isEnabled
-            else -> true
-        }
+        override fun isDone(): Boolean = false//when (client.connectionState) {
+        //    CONNECTED -> isEnabled
+        //    CONNECTING -> false
+        //    DISCONNECTED, CLOSED -> !isEnabled
+        //    else -> true
+        //}
 
         override fun handleDispatch() {
-            when (client.connectionState) {
-                DISCONNECTED -> if (isEnabled) {
-                    client.startConnection(object : BillingClientStateListener {
-                        override fun onBillingSetupFinished(billingResult: BillingResult) {}
-                        override fun onBillingServiceDisconnected() {}
-                    })
-                }
-                CONNECTED -> if (!isEnabled) client.endConnection()
-                CLOSED -> {
-                    createClient()
-                    handleDispatch()
-                }
-            }
+            run {}
+            //when (client.connectionState) {
+            //    CONNECTED -> client.endConnection()
+            //    DISCONNECTED -> client.startConnection(object : BillingClientStateListener {
+            //        override fun onBillingSetupFinished(billingResult: BillingResult) {}
+            //        override fun onBillingServiceDisconnected() {}
+            //    })
+            //    CLOSED -> {
+            //        createClient()
+            //        handleDispatch()
+            //    }
+            //}
         }
 
-        suspend fun requestConnection(timeout: Long = 5000): Boolean =
+        suspend fun requestConnection(timeout: Long = 2000): Boolean =
             suspendCoroutine { continuation ->
                 if (client.isReady) {
                     continuation.resume(true)
                     return@suspendCoroutine
                 }
 
-                isEnabled = true
-                dispatch("req_con")
-
+                //todo first
                 runBlocking {
                     val j1 = launch { delay(timeout) }
                     val j2 = launch { while (!client.isReady) delay(50) }

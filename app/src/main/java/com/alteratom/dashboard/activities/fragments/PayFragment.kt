@@ -18,12 +18,17 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.BillingHandler
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.createToast
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PayFragment : Fragment() {
 
@@ -33,6 +38,20 @@ class PayFragment : Fragment() {
         super.onStart()
         billingHandler = BillingHandler(requireActivity())
         billingHandler.enable()
+
+        //lifecycleScope.launch {
+        //    runBlocking {
+        //        delay(3000)
+        //    }
+        //    //createToast(
+        //    //    requireActivity(),
+        //    //    when(billingHandler.checkPurchasesStatus("atom_dashboard_pro")) {
+        //    //        true -> "PRO"
+        //    //        false -> "NO PRO"
+        //    //        null -> "FAILED"
+        //    //    }
+        //    //)
+        //}
     }
 
     override fun onStop() {

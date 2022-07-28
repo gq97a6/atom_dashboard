@@ -17,17 +17,7 @@ class BillingHandler(val activity: Activity) {
 
     private var isEnabled = false
 
-    private var client = BillingClient.newBuilder(activity)
-        .setListener { billingResult, purchases ->
-            if (purchases != null &&
-                (billingResult.responseCode == OK ||
-                        billingResult.responseCode == ITEM_ALREADY_OWNED)
-            ) {
-                onPurchasesUpdated(billingResult, purchases)
-            }
-        }
-        .enablePendingPurchases()
-        .build()
+    private lateinit var client: BillingClient
 
     val connectionHandler = BillingConnectionHandler()
 
@@ -37,6 +27,10 @@ class BillingHandler(val activity: Activity) {
         var DON0 = "atom_dashboard_pro"
         var DON1 = "atom_dashboard_pro"
         var DON2 = "atom_dashboard_pro"
+    }
+
+    init {
+        createClient()
     }
 
     fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
@@ -157,13 +151,26 @@ class BillingHandler(val activity: Activity) {
         connectionHandler.dispatch("disable")
     }
 
+    fun createClient() {
+        client = BillingClient.newBuilder(activity)
+            .setListener { billingResult, purchases ->
+                if (purchases != null &&
+                    (billingResult.responseCode == OK ||
+                            billingResult.responseCode == ITEM_ALREADY_OWNED)
+                ) {
+                    onPurchasesUpdated(billingResult, purchases)
+                }
+            }
+            .enablePendingPurchases()
+            .build()
+    }
+
     inner class BillingConnectionHandler : ConnectionHandler() {
 
         override fun isDone(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false
-            DISCONNECTED -> !isEnabled
-            CLOSED -> true
+            DISCONNECTED, CLOSED -> !isEnabled
             else -> true
         }
 
@@ -181,6 +188,10 @@ class BillingHandler(val activity: Activity) {
                     })
                 }
                 CONNECTED -> if (!isEnabled) client.endConnection()
+                CLOSED -> {
+                    createClient()
+                    handleDispatch()
+                }
             }
         }
 

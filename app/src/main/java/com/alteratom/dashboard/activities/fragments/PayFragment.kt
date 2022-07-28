@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.activities.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,25 +24,19 @@ import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.android.billingclient.api.*
-
 
 class PayFragment : Fragment() {
 
     lateinit var billingHandler: BillingHandler
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onStart() {
+        super.onStart()
         billingHandler = BillingHandler(requireActivity())
-    }
-
-    override fun onResume() {
-        super.onResume()
         billingHandler.enable()
     }
 
-    override fun onPause() {
-        super.onPause()
+    override fun onStop() {
+        super.onStop()
         billingHandler.disable()
     }
 

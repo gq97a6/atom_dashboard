@@ -2,11 +2,11 @@ package com.alteratom.dashboard
 
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.activities.MainActivity
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
+import com.android.billingclient.api.BillingClient.ConnectionState.*
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import kotlinx.coroutines.coroutineScope
@@ -30,17 +30,58 @@ class BillingHandler(val activity: MainActivity) {
         .enablePendingPurchases()
         .build()
 
+    val connectionHandler = object : ConnectionHandler() {
+
+        var isEnabled = false
+
+        override fun isDone(): Boolean = when (client.connectionState) {
+            CONNECTED -> isEnabled
+            CONNECTING -> false
+            DISCONNECTED -> !isEnabled
+            CLOSED -> true
+            else -> true
+        }
+
+        override fun handleDispatch() {
+            when (client.connectionState) {
+                DISCONNECTED -> if (isEnabled) {
+                    client.startConnection(object : BillingClientStateListener {
+                        override fun onBillingSetupFinished(billingResult: BillingResult) {}
+                        override fun onBillingServiceDisconnected() {}
+                    })
+                }
+                CONNECTED -> if (!isEnabled) client.endConnection()
+            }
+        }
+
+        suspend fun requestConnection(timeout: Long = 5000): Boolean =
+            suspendCoroutine { continuation ->
+                isEnabled = true
+                dispatch("req_con")
+
+                runBlocking {
+                    val j1 = launch { delay(timeout) }
+                    val j2 = launch { while (!isDone()) delay(50) }
+
+                    j1.invokeOnCompletion { j2.cancel() }
+                    j2.invokeOnCompletion { j1.cancel() }
+                }
+
+                continuation.resume(isDone())
+            }
+
+        fun dropConnection() {
+            isEnabled = false
+            dispatch("drop_con")
+        }
+    }
+
     companion object {
         //Products ids
         var PRO = "atom_dashboard_pro"
         var DON0 = "atom_dashboard_pro"
         var DON1 = "atom_dashboard_pro"
         var DON2 = "atom_dashboard_pro"
-
-    }
-
-    fun initialize() {
-
     }
 
     fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
@@ -105,7 +146,7 @@ class BillingHandler(val activity: MainActivity) {
     }
 
     suspend fun test() = coroutineScope {
-        checkConnection()
+        //checkConnection()
         launch {
             delay(1000L)
             println("World!")
@@ -114,7 +155,7 @@ class BillingHandler(val activity: MainActivity) {
     }
 
     suspend fun checkPurchasesStatus(id: String): Boolean = suspendCoroutine { continuation ->
-        runBlocking { if (!checkConnection()) continuation.resume(false) }
+        //runBlocking { if (!checkConnection()) continuation.resume(false) }
         QueryPurchasesParams
             .newBuilder()
             .setProductType(INAPP)
@@ -149,36 +190,5 @@ class BillingHandler(val activity: MainActivity) {
             .setPurchaseToken(this.purchaseToken)
             .build()
             .let { client.consumeAsync(it) { _, _ -> } }
-    }
-
-    private suspend fun checkConnection(): Boolean = suspendCoroutine { continuation ->
-        if (!client.isReady) {
-            client.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(billingResult: BillingResult) {
-                    if (billingResult.responseCode == OK) continuation.resume(true)
-                }
-
-                override fun onBillingServiceDisconnected() {
-                    continuation.resume(false)
-                }
-            })
-        } else continuation.resume(true)
-    }
-
-    inner class BillingConnectionHandler : ConnectionHandler() {
-        override fun isDone(): Boolean = client.isReady
-
-        override fun handleDispatch() {
-            client.startConnection(object : BillingClientStateListener {
-                override fun onBillingSetupFinished(billingResult: BillingResult) {}
-
-                override fun onBillingServiceDisconnected() {}
-            })
-        }
-
-        suspend fun check(): Boolean = suspendCoroutine { continuation ->
-            if (!client.isReady) connect()
-            else continuation.resume(true)
-        }
     }
 }

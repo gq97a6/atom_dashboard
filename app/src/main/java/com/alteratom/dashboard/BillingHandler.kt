@@ -49,7 +49,7 @@ class BillingHandler(val activity: Activity) {
                     purchase.acknowledge()
                 }
                 DON0, DON1, DON2 -> {
-                    createToast(activity, "Thanks the donation!")
+                    createToast(activity, "Thanks for the donation!")
                     purchase.consume()
                 }
                 else -> {}
@@ -100,7 +100,6 @@ class BillingHandler(val activity: Activity) {
 
     suspend fun checkPurchasesStatus(id: String): Boolean? = suspendCoroutine { continuation ->
         if (!runBlocking { return@runBlocking connectionHandler.requestConnection() }) {
-            createToast(activity, "Failed to connect")
             continuation.resume(null)
             return@suspendCoroutine
         }
@@ -178,13 +177,8 @@ class BillingHandler(val activity: Activity) {
             when (client.connectionState) {
                 DISCONNECTED -> if (isEnabled) {
                     client.startConnection(object : BillingClientStateListener {
-                        override fun onBillingSetupFinished(billingResult: BillingResult) {
-                            createToast(activity, "Am connected")
-                        }
-
-                        override fun onBillingServiceDisconnected() {
-                            createToast(activity, "I have failed")
-                        }
+                        override fun onBillingSetupFinished(billingResult: BillingResult) {}
+                        override fun onBillingServiceDisconnected() {}
                     })
                 }
                 CONNECTED -> if (!isEnabled) client.endConnection()
@@ -198,23 +192,16 @@ class BillingHandler(val activity: Activity) {
         suspend fun requestConnection(timeout: Long = 5000): Boolean =
             suspendCoroutine { continuation ->
                 if (client.isReady) {
-                    createToast(activity, "Already connected")
                     continuation.resume(true)
                     return@suspendCoroutine
-                } else createToast(activity, "I have to connect")
+                }
 
                 isEnabled = true
                 dispatch("req_con")
 
                 runBlocking {
-                    val j1 = launch {
-                        delay(timeout)
-                        createToast(activity, "Timeout")
-                    }
-                    val j2 = launch {
-                        while (!client.isReady) delay(50)
-                        createToast(activity, "Done!")
-                    }
+                    val j1 = launch { delay(timeout) }
+                    val j2 = launch { while (!client.isReady) delay(50) }
 
                     j1.invokeOnCompletion { j2.cancel() }
                     j2.invokeOnCompletion { j1.cancel() }
@@ -222,10 +209,5 @@ class BillingHandler(val activity: Activity) {
 
                 continuation.resume(client.isReady)
             }
-
-        fun dropConnection() {
-            isEnabled = false
-            dispatch("drop_con")
-        }
     }
 }

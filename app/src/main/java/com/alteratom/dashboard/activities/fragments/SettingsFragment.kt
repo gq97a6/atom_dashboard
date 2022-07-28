@@ -52,7 +52,6 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
 
         create =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -166,6 +165,7 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(Theme.isDark) {

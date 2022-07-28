@@ -33,16 +33,12 @@ import com.alteratom.tile.types.time.TimeTile
 
 class TilePropertiesFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 //Background

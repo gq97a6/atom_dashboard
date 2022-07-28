@@ -51,7 +51,6 @@ class DashboardPropertiesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
 
         request =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -102,6 +101,7 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 //Background

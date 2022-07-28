@@ -20,84 +20,31 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.BasicButton
+import com.alteratom.dashboard.BillingHandler
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.createToast
 import com.android.billingclient.api.*
-import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
-import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
-import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
-import com.android.billingclient.api.BillingClient.ProductType.INAPP
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 
 class PayFragment : Fragment() {
 
-    private lateinit var billingClient: BillingClient
-
-    suspend fun handlePurchase(purchase: Purchase) {
-        if (purchase.purchaseState === Purchase.PurchaseState.PURCHASED) {
-            if (!purchase.isAcknowledged) {
-                val acknowledgePurchaseParams = AcknowledgePurchaseParams
-                    .newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                withContext(Dispatchers.IO) {
-                    billingClient.acknowledgePurchase(acknowledgePurchaseParams.build()) {
-
-                    }
-                }
-            }
-        }
-    }
+    lateinit var billingHandler: BillingHandler
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        billingClient = BillingClient.newBuilder(requireContext())
-            .setListener { billingResult, purchases ->
-                if (billingResult.responseCode == OK && purchases != null) {
-                    val p = purchases[0]
-                    val p0 = p.developerPayload
-                    val p1 = p.accountIdentifiers
-                    val p2 = p.products
-                    val p3 = p.purchaseState
-                    val p4 = p.signature
-                    val p5 = p.packageName
-                    val p6 = p.isAcknowledged
-                    val p7 = p.purchaseTime
-                } else if (billingResult.responseCode == ITEM_ALREADY_OWNED) {
-                    run {}
-                } else {
-                    run {}
-                }
-            }
-            .enablePendingPurchases()
-            .build()
+        billingHandler = BillingHandler(requireActivity())
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
+    override fun onResume() {
+        super.onResume()
+        billingHandler.enable()
+    }
 
-        //billingClient.acknowledgePurchase() //accept or will be refunded
-        //billingClient.queryPurchasesAsync()
-
-        //BillingHandler(requireActivity() as MainActivity).lunchPurchaseFlow("")
-
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == OK) {
-                    createToast(requireContext(), "Update Google Play Store")
-                }
-            }
-
-            override fun onBillingServiceDisconnected() {
-                createToast(requireContext(), "Connection with Google Play failed")
-            }
-        })
+    override fun onPause() {
+        super.onPause()
+        billingHandler.disable()
     }
 
     override fun onCreateView(
@@ -105,150 +52,11 @@ class PayFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 var text by remember { mutableStateOf("NULL") }
                 var isChecking by remember { mutableStateOf(false) }
-
-                fun acknowledge() {
-                    QueryPurchaseHistoryParams
-                        .newBuilder()
-                        .setProductType(INAPP)
-                        .build()
-                        .let {
-                            billingClient.queryPurchaseHistoryAsync(it) { result, history ->
-                                if (history?.size == 0) return@queryPurchaseHistoryAsync
-                                history?.get(0)?.let { p ->
-                                    AcknowledgePurchaseParams
-                                        .newBuilder()
-                                        .setPurchaseToken(p.purchaseToken)
-                                        .build()
-                                        .let {
-                                            billingClient.acknowledgePurchase(it) {
-                                                text = result.debugMessage
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                }
-
-                fun consume() {
-                    QueryPurchaseHistoryParams
-                        .newBuilder()
-                        .setProductType(INAPP)
-                        .build()
-                        .let {
-                            billingClient.queryPurchaseHistoryAsync(it) { result, history ->
-                                if (history?.size == 0) return@queryPurchaseHistoryAsync
-                                history?.get(0)?.let { p ->
-                                    ConsumeParams
-                                        .newBuilder()
-                                        .setPurchaseToken(p.purchaseToken)
-                                        .build()
-                                        .let {
-                                            billingClient.consumeAsync(it) { billingResult, str ->
-                                                text = result.debugMessage
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                }
-
-                fun getPurchasesOnline() {
-                    QueryPurchaseHistoryParams
-                        .newBuilder()
-                        .setProductType(INAPP)
-                        .build()
-                        .let {
-                            billingClient.queryPurchaseHistoryAsync(it) { result, history ->
-                                QueryPurchasesParams
-                                    .newBuilder()
-                                    .setProductType(INAPP)
-                                    .build()
-                                    .let {
-                                        billingClient.queryPurchasesAsync(it) { result, history ->
-                                            if (history.size == 0) return@queryPurchasesAsync
-                                            history?.get(0)?.let { p ->
-                                                val p0 = p.developerPayload
-                                                val p1 = p.accountIdentifiers
-                                                val p2 = p.products
-                                                val p3 = p.purchaseState
-                                                val p4 = p.signature
-                                                val p5 = p.packageName
-                                                val p6 = p.isAcknowledged
-                                                val p7 = p.purchaseTime
-
-                                                run {}
-                                            }
-                                        }
-                                    }
-                            }
-                        }
-                }
-
-                fun getPurchasesOffline() {
-                    QueryPurchasesParams
-                        .newBuilder()
-                        .setProductType(INAPP)
-                        .build()
-                        .let {
-                            billingClient.queryPurchasesAsync(it) { result, history ->
-                                if (history.size == 0) return@queryPurchasesAsync
-                                history?.get(0)?.let { p ->
-                                    val p0 = p.developerPayload
-                                    val p1 = p.accountIdentifiers
-                                    val p2 = p.products
-                                    val p3 = p.purchaseState
-                                    val p4 = p.signature
-                                    val p5 = p.packageName
-                                    val p6 = p.isAcknowledged
-                                    val p7 = p.purchaseTime
-
-                                    run {}
-                                }
-                            }
-                        }
-                }
-
-                fun lunchPurchaseFlow(productId: String) {
-                    if (billingClient.isReady) {
-                        if (billingClient.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK) {
-                            createToast(requireContext(), "Feature not supported")
-                            return
-                        }
-
-                        val queryDetails = QueryProductDetailsParams
-                            .newBuilder()
-                            .setProductList(
-                                listOf(
-                                    QueryProductDetailsParams.Product.newBuilder()
-                                        .setProductId(productId)
-                                        .setProductType(INAPP)
-                                        .build()
-                                )
-                            ).build()
-
-                        billingClient.queryProductDetailsAsync(queryDetails) { result, details ->
-                            if (details.size == 0) return@queryProductDetailsAsync
-                            billingClient.launchBillingFlow(
-                                requireActivity(),
-                                BillingFlowParams
-                                    .newBuilder()
-                                    .setProductDetailsParamsList(
-                                        listOf(
-                                            BillingFlowParams.ProductDetailsParams
-                                                .newBuilder()
-                                                .setProductDetails(details.first())
-                                                .build()
-                                        )
-                                    )
-                                    .build()
-                            )
-                        }
-                    }
-                }
 
                 ComposeTheme(Theme.isDark) {
                     Box(
@@ -266,58 +74,22 @@ class PayFragment : Fragment() {
                             )
 
                             BasicButton(onClick = {
-                                lunchPurchaseFlow("atom_dashboard_pro")
+                                billingHandler.lunchPurchaseFlow("atom_dashboard_pro")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {
-                                lunchPurchaseFlow("test_product_01")
+                                billingHandler.lunchPurchaseFlow("test_product_01")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY 01", textAlign = TextAlign.Center, color = Color.White)
                             }
 
 
                             BasicButton(onClick = {
-                                lunchPurchaseFlow("test_product_02")
+                                billingHandler.lunchPurchaseFlow("test_product_02")
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
-                            }
-
-                            BasicButton(onClick = {
-                                getPurchasesOnline()
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text(
-                                    "PURCHASES ONLINE",
-                                    textAlign = TextAlign.Center,
-                                    color = Color.White
-                                )
-                            }
-
-                            BasicButton(onClick = {
-                                getPurchasesOffline()
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text(
-                                    "PURCHASES OFFLINE",
-                                    textAlign = TextAlign.Center,
-                                    color = Color.White
-                                )
-                            }
-
-                            BasicButton(onClick = {
-                                acknowledge()
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text(
-                                    "ACKNOWLEDGE",
-                                    textAlign = TextAlign.Center,
-                                    color = Color.White
-                                )
-                            }
-
-                            BasicButton(onClick = {
-                                consume()
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
-                                Text("CONSUME", textAlign = TextAlign.Center, color = Color.White)
                             }
                         }
                     }

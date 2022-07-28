@@ -48,11 +48,6 @@ lateinit var getIconColorPallet: () -> Theme.ColorPallet
 
 class TileIconFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
-    }
-
     val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
         for (i in 40..100 step 20) {
             for (ii in 0..300 step 60) {
@@ -82,6 +77,7 @@ class TileIconFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 var iconRes by remember { mutableStateOf(getIconRes()) }

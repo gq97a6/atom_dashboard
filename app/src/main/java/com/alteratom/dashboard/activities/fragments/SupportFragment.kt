@@ -16,16 +16,12 @@ import com.alteratom.dashboard.compose.ComposeTheme
 
 class SupportFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        theme.apply(context = requireContext())
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(Theme.isDark) {

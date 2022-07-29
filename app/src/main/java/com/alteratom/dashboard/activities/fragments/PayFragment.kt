@@ -21,14 +21,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.BasicButton
 import com.alteratom.dashboard.BillingHandler
+import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.createToast
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PayFragment : Fragment() {
 
@@ -39,19 +38,13 @@ class PayFragment : Fragment() {
         billingHandler = BillingHandler(requireActivity())
         billingHandler.enable()
 
-        //lifecycleScope.launch {
-        //    runBlocking {
-        //        delay(3000)
-        //    }
-        //    //createToast(
-        //    //    requireActivity(),
-        //    //    when(billingHandler.checkPurchasesStatus("atom_dashboard_pro")) {
-        //    //        true -> "PRO"
-        //    //        false -> "NO PRO"
-        //    //        null -> "FAILED"
-        //    //    }
-        //    //)
-        //}
+        lifecycleScope.launch {
+            val pro = billingHandler.getPurchases(false)?.find {
+                it.products.contains(PRO)
+            }
+
+            createToast(requireContext(), if (pro != null) "PRO" else "NO PRO")
+        }
     }
 
     override fun onStop() {
@@ -86,20 +79,20 @@ class PayFragment : Fragment() {
                             )
 
                             BasicButton(onClick = {
-                                billingHandler.lunchPurchaseFlow("atom_dashboard_pro")
+                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("atom_dashboard_pro") }
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {
-                                billingHandler.lunchPurchaseFlow("test_product_01")
+                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_01") }
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY 01", textAlign = TextAlign.Center, color = Color.White)
                             }
 
 
                             BasicButton(onClick = {
-                                billingHandler.lunchPurchaseFlow("test_product_02")
+                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_02") }
                             }, Modifier.padding(10.dp), enabled = !isChecking) {
                                 Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
                             }

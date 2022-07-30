@@ -94,8 +94,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     }
 
-                    val value = rememberInfiniteTransition()
-                    val alpha = value.animateFloat(
+                    val alpha = rememberInfiniteTransition().animateFloat(
                         initialValue = 1f,
                         targetValue = 0f,
                         animationSpec = infiniteRepeatable(
@@ -386,8 +385,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     }
                                 )
 
-                                val value = rememberInfiniteTransition()
-                                val alpha = value.animateFloat(
+                                val alpha = rememberInfiniteTransition().animateFloat(
                                     initialValue = 1f,
                                     targetValue = 0f,
                                     animationSpec = infiniteRepeatable(

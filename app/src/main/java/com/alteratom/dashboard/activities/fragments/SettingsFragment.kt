@@ -10,11 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +20,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.FolderTree.mapper
 import com.alteratom.dashboard.FolderTree.parseListSave
@@ -40,9 +46,13 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import com.android.billingclient.api.Purchase
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
+import kotlin.system.measureTimeMillis
 
 
 class SettingsFragment : Fragment() {
@@ -270,14 +280,88 @@ class SettingsFragment : Fragment() {
                                 }
                             }
 
+                            var proCheckShow by remember { mutableStateOf(false) }
+
                             FrameBox("About") {
-                                BasicButton(
-                                    contentPadding = PaddingValues(13.dp),
-                                    border = BorderStroke(2.dp, colors.b),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    onClick = { fm.replaceWith(PayFragment()) }
-                                ) {
-                                    Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
+                                Column {
+                                    BasicButton(
+                                        contentPadding = PaddingValues(13.dp),
+                                        border = BorderStroke(2.dp, colors.b),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onClick = { fm.replaceWith(PayFragment()) }
+                                    ) {
+                                        Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
+                                    }
+                                    BasicButton(
+                                        contentPadding = PaddingValues(13.dp),
+                                        border = BorderStroke(2.dp, colors.b),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 12.dp),
+                                        onClick = {
+                                            proCheckShow = true
+                                        }
+                                    ) {
+                                        Text("PRO CHECK", fontSize = 10.sp, color = colors.a)
+                                    }
+                                }
+                            }
+
+                            if (proCheckShow) {
+                                val scale = rememberInfiniteTransition().animateFloat(
+                                    initialValue = 1f,
+                                    targetValue = .8f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(3000, 10),
+                                        repeatMode = RepeatMode.Reverse,
+                                    )
+                                )
+
+                                val rotation = rememberInfiniteTransition().animateFloat(
+                                    initialValue = 0f,
+                                    targetValue = 360f,
+                                    animationSpec = infiniteRepeatable(
+                                        animation = tween(3000, 10),
+                                        repeatMode = RepeatMode.Reverse,
+                                    )
+                                )
+
+                                Dialog({ proCheckShow = true }) {
+                                    Image(
+                                        painterResource(
+                                            if (Theme.isDark) R.drawable.ic_icon_light
+                                            else R.drawable.ic_icon
+                                        ), "",
+                                        modifier = Modifier
+                                            .padding(bottom = 100.dp)
+                                            .scale(scale.value)
+                                            .rotate(rotation.value)
+                                            .size(300.dp),
+                                        colorFilter = ColorFilter.tint(
+                                            colors.color.copy(alpha = .4f),
+                                            BlendMode.SrcAtop
+                                        )
+                                    )
+                                }
+
+                                lifecycleScope.launch {
+                                    val billingHandler = BillingHandler(requireActivity())
+                                    val result: Purchase?
+                                    measureTimeMillis {
+                                        billingHandler.enable()
+                                        result = billingHandler.getPurchases(false)?.find {
+                                            it.products.contains(BillingHandler.PRO)
+                                        }
+                                        billingHandler.disable()
+                                        billingHandler.connectionHandler.awaitConnection()
+                                    }.let {
+                                        delay(maxOf(10000 - it, 0))
+                                        createToast(
+                                            requireContext(),
+                                            if (result != null) "PRO" else "NO PRO"
+                                        )
+                                        proCheckShow = false
+                                    }
                                 }
                             }
 

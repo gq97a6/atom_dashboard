@@ -19,7 +19,7 @@ class BillingHandler(private val activity: Activity) {
 
     private lateinit var client: BillingClient
 
-    private val connectionHandler = BillingConnectionHandler()
+    val connectionHandler = BillingConnectionHandler()
 
     companion object {
         //Products ids
@@ -166,7 +166,7 @@ class BillingHandler(private val activity: Activity) {
             .build()
     }
 
-    private inner class BillingConnectionHandler : ConnectionHandler() {
+    inner class BillingConnectionHandler : ConnectionHandler() {
 
         override fun isDone(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
@@ -192,7 +192,7 @@ class BillingHandler(private val activity: Activity) {
 
 
         suspend fun awaitConnection(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
-            while (!client.isReady) delay(50)
+            while (!isDone()) delay(50)
             return@withTimeoutOrNull client.isReady
         } ?: false
     }

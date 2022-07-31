@@ -29,7 +29,6 @@ object FolderTree {
             val path = path[this::class]
             File(path).writeText(save)
         } catch (e: Exception) {
-            throw e
         }
     }
 

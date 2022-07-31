@@ -37,14 +37,6 @@ class PayFragment : Fragment() {
         super.onStart()
         billingHandler = BillingHandler(requireActivity())
         billingHandler.enable()
-
-        lifecycleScope.launch {
-            val pro = billingHandler.getPurchases(false)?.find {
-                it.products.contains(PRO)
-            }
-
-            createToast(requireContext(), if (pro != null) "PRO" else "NO PRO")
-        }
     }
 
     override fun onStop() {

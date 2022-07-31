@@ -33,32 +33,35 @@ class BillingHandler(private val activity: Activity) {
         createClient()
     }
 
-    private fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>) {
-        for (purchase in purchases) {
-            onPurchased(purchase)
-        }
-    }
-
-    private fun onPurchased(purchase: Purchase) {
-        if (purchase.isAcknowledged) return
+    fun onPurchased(purchase: Purchase, callback: Boolean) {
         for (product in purchase.products) {
             when (product) {
                 PRO -> {
-                    createToast(activity, "Thanks for buying Pro!")
                     ProVersion.createLocalLicence()
-                    purchase.acknowledge()
+                    if (!purchase.isAcknowledged) purchase.acknowledge()
                 }
                 DON0, DON1, DON2 -> {
-                    createToast(activity, "Thanks for the donation!")
-                    purchase.consume()
+                    if (!purchase.isAcknowledged) purchase.consume()
                 }
-                else -> {}
+            }
+
+            if(callback) onPurchaseProcessed(product)
+        }
+    }
+
+    fun onPurchaseProcessed(product: String) {
+        when (product) {
+            PRO -> {
+                createToast(activity, "Thanks for buying Pro!")
+            }
+            DON0, DON1, DON2 -> {
+                createToast(activity, "Thanks for the donation!")
             }
         }
     }
 
     suspend fun lunchPurchaseFlow(id: String) {
-        if (!connectionHandler.awaitConnection()) {
+        if (!connectionHandler.awaitDone()) {
             createToast(activity, "Failed to connect")
             return
         }
@@ -98,8 +101,8 @@ class BillingHandler(private val activity: Activity) {
         }
     }
 
-    suspend fun getPurchases(callback: Boolean = true): MutableList<Purchase>? = coroutineScope {
-        return@coroutineScope if (!connectionHandler.awaitConnection()) {
+    suspend fun getPurchases(): MutableList<Purchase>? = coroutineScope {
+        return@coroutineScope if (!connectionHandler.awaitDone()) {
             createToast(activity, "Failed to connect")
             null
         } else withTimeoutOrNull(2000) {
@@ -110,7 +113,6 @@ class BillingHandler(private val activity: Activity) {
                     .build()
                     .let {
                         client.queryPurchasesAsync(it) { result, history ->
-                            if (callback) for (purchase in history) onPurchased(purchase)
                             continuation.resume(history)
                             //developerPayload
                             //accountIdentifiers
@@ -159,7 +161,7 @@ class BillingHandler(private val activity: Activity) {
                     (billingResult.responseCode == OK ||
                             billingResult.responseCode == ITEM_ALREADY_OWNED)
                 ) {
-                    onPurchasesUpdated(billingResult, purchases)
+                    for (purchase in purchases) onPurchased(purchase, true)
                 }
             }
             .enablePendingPurchases()
@@ -176,7 +178,6 @@ class BillingHandler(private val activity: Activity) {
         }
 
         override fun handleDispatch() {
-            run {}
             when (client.connectionState) {
                 CONNECTED -> client.endConnection()
                 DISCONNECTED -> client.startConnection(object : BillingClientStateListener {
@@ -190,8 +191,8 @@ class BillingHandler(private val activity: Activity) {
             }
         }
 
-
-        suspend fun awaitConnection(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
+        //Wait for connectionHandler to settle down
+        suspend fun awaitDone(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
             while (!isDone()) delay(50)
             return@withTimeoutOrNull client.isReady
         } ?: false

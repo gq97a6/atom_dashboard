@@ -46,13 +46,12 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import com.android.billingclient.api.Purchase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
-import kotlin.system.measureTimeMillis
 
 
 class SettingsFragment : Fragment() {
@@ -308,11 +307,15 @@ class SettingsFragment : Fragment() {
                             }
 
                             if (proCheckShow) {
+                                var scaleInitialValue by remember { mutableStateOf(1f) }
+                                var scaleTargetValue by remember { mutableStateOf(.8f) }
+                                var scaleDuration by remember { mutableStateOf(3000) }
+
                                 val scale = rememberInfiniteTransition().animateFloat(
-                                    initialValue = 1f,
-                                    targetValue = .8f,
+                                    initialValue = scaleInitialValue,
+                                    targetValue = scaleTargetValue,
                                     animationSpec = infiniteRepeatable(
-                                        animation = tween(3000, 10),
+                                        animation = tween(scaleDuration),
                                         repeatMode = RepeatMode.Reverse,
                                     )
                                 )
@@ -321,7 +324,7 @@ class SettingsFragment : Fragment() {
                                     initialValue = 0f,
                                     targetValue = 360f,
                                     animationSpec = infiniteRepeatable(
-                                        animation = tween(3000, 10),
+                                        animation = tween(3000),
                                         repeatMode = RepeatMode.Reverse,
                                     )
                                 )
@@ -345,21 +348,11 @@ class SettingsFragment : Fragment() {
                                 }
 
                                 lifecycleScope.launch {
-                                    val billingHandler = BillingHandler(requireActivity())
-                                    val result: Purchase?
-                                    measureTimeMillis {
-                                        billingHandler.enable()
-                                        result = billingHandler.getPurchases(false)?.find {
-                                            it.products.contains(BillingHandler.PRO)
-                                        }
-                                        billingHandler.disable()
-                                        billingHandler.connectionHandler.awaitConnection()
-                                    }.let {
-                                        delay(maxOf(10000 - it, 0))
-                                        createToast(
-                                            requireContext(),
-                                            if (result != null) "PRO" else "NO PRO"
-                                        )
+                                    ProVersion.checkPurchase(requireActivity()) {
+                                        scaleInitialValue = scale.value
+                                        scaleTargetValue = 0f
+                                        scaleDuration = 1000
+                                        delay(1000)
                                         proCheckShow = false
                                     }
                                 }
@@ -373,10 +366,10 @@ class SettingsFragment : Fragment() {
                         }
 
                         Text(
-                            "stable 1.0.0",
+                            "stable ${if (ProVersion.status) "pro" else "free"} 1.0.0",
                             Modifier.padding(bottom = 5.dp),
                             fontSize = 10.sp,
-                            color = colors.d
+                            color = colors.c
                         )
                     }
                 }

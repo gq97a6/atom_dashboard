@@ -17,21 +17,24 @@ object ProVersion {
     inline suspend fun checkPurchase(activity: Activity, onDone: () -> Unit) {
         var result: Purchase? = null
         val bh = BillingHandler(activity)
+
         measureTimeMillis {
-            bh.enable()
+            bh.apply {
+                enable()
 
-            bh.getPurchases()?.find {
-                it.products.contains(BillingHandler.PRO)
-            }?.let {
-                bh.onPurchased(it, false)
-                result = it
+                getPurchases()?.find {
+                    it.products.contains(BillingHandler.PRO)
+                }?.let {
+                    onPurchased(it, false)
+                    result = it
+                }
+
+                disable()
+                connectionHandler.awaitDone()
             }
-
-            bh.disable()
-            bh.connectionHandler.awaitDone()
         }.let {
             delay(maxOf(10000 - it, 0))
-            ///result?.let { for (product in it.products) bh.onPurchaseProcessed(product) }
+            result?.let { for (product in it.products) bh.onPurchaseProcessed(product) }
             onDone()
         }
     }
@@ -39,6 +42,15 @@ object ProVersion {
     fun createLocalLicence() {
         try {
             File("$rootFolder/license").writeText("")
+            updateStatus()
+        } catch (e: Exception) {
+        }
+    }
+
+    fun removeLocalLicence() {
+        try {
+            File("$rootFolder/license").delete()
+            updateStatus()
         } catch (e: Exception) {
         }
     }

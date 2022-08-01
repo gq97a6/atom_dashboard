@@ -7,17 +7,18 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.ConnectionState.*
 import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class BillingHandler(private val activity: Activity) {
+class BillingHandler(internal val activity: Activity) {
 
-    private var isEnabled = false
+    internal var isEnabled = false
 
-    private lateinit var client: BillingClient
+    internal lateinit var client: BillingClient
 
     val connectionHandler = BillingConnectionHandler()
 
@@ -45,7 +46,7 @@ class BillingHandler(private val activity: Activity) {
                 }
             }
 
-            if(callback) onPurchaseProcessed(product)
+            if (callback) onPurchaseProcessed(product)
         }
     }
 
@@ -113,6 +114,7 @@ class BillingHandler(private val activity: Activity) {
                     .build()
                     .let {
                         client.queryPurchasesAsync(it) { result, history ->
+                            val s = history[0].purchaseState
                             continuation.resume(history)
                             //developerPayload
                             //accountIdentifiers
@@ -128,7 +130,7 @@ class BillingHandler(private val activity: Activity) {
         }
     }
 
-    private fun Purchase.acknowledge() {
+    internal fun Purchase.acknowledge() {
         AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -136,7 +138,7 @@ class BillingHandler(private val activity: Activity) {
             .let { client.acknowledgePurchase(it) {} }
     }
 
-    private fun Purchase.consume() {
+    internal fun Purchase.consume() {
         ConsumeParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -154,7 +156,7 @@ class BillingHandler(private val activity: Activity) {
         connectionHandler.dispatch("disable")
     }
 
-    private fun createClient() {
+    internal fun createClient() {
         client = BillingClient.newBuilder(activity)
             .setListener { billingResult, purchases ->
                 if (purchases != null &&

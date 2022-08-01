@@ -301,6 +301,35 @@ class SettingsFragment : Fragment() {
                                 }
                             }
 
+                            BasicButton(
+                                contentPadding = PaddingValues(13.dp),
+                                border = BorderStroke(2.dp, colors.b),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
+                                onClick = {
+                                    lifecycleScope.launch {
+                                        BillingHandler(requireActivity()).apply {
+                                            enable()
+
+                                            getPurchases()?.find {
+                                                it.products.contains(PRO)
+                                            }?.let {
+                                                it.consume()
+                                            }
+
+                                            disable()
+                                            connectionHandler.awaitDone()
+                                        }
+
+                                        ProVersion.removeLocalLicence()
+                                        createToast(requireContext(), "DONE")
+                                    }
+                                }
+                            ) {
+                                Text("PRO REMOVE", fontSize = 10.sp, color = colors.a)
+                            }
+
                             Spacer(
                                 modifier = Modifier
                                     .fillMaxWidth()

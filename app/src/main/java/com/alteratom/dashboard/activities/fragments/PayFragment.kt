@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
@@ -61,8 +59,6 @@ class PayFragment : Fragment() {
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
-                var text by remember { mutableStateOf("NULL") }
-                var isChecking by remember { mutableStateOf(false) }
 
                 ComposeTheme(Theme.isDark) {
                     Box(
@@ -71,9 +67,16 @@ class PayFragment : Fragment() {
                             .background(color = colors.background),
                         contentAlignment = Alignment.Center
                     ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .verticalScroll(rememberScrollState())
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(text = "Donate", fontSize = 45.sp, color = colors.color)
                             Text(
-                                text,
+                                "text",
                                 Modifier.fillMaxWidth(),
                                 textAlign = TextAlign.Center,
                                 color = Color.White
@@ -81,19 +84,19 @@ class PayFragment : Fragment() {
 
                             BasicButton(onClick = {
                                 lifecycleScope.launch { billingHandler.lunchPurchaseFlow("atom_dashboard_pro") }
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                            }, Modifier.padding(10.dp)) {
                                 Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {
                                 lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_01") }
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                            }, Modifier.padding(10.dp)) {
                                 Text("PAY 01", textAlign = TextAlign.Center, color = Color.White)
                             }
 
                             BasicButton(onClick = {
                                 lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_02") }
-                            }, Modifier.padding(10.dp), enabled = !isChecking) {
+                            }, Modifier.padding(10.dp)) {
                                 Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
                             }
 
@@ -142,7 +145,7 @@ class PayFragment : Fragment() {
                                         scaleDuration = 3000
 
                                         lifecycleScope.launch {
-                                            ProVersion.checkPurchase(requireActivity()) {
+                                            billingHandler.checkPendingPurchases {
                                                 scaleInitialValue = scale.value
                                                 scaleTargetValue = 0f
                                                 scaleDuration = 1000
@@ -153,7 +156,7 @@ class PayFragment : Fragment() {
                                     }
                                 }
                             ) {
-                                Text("PRO CHECK", fontSize = 10.sp, color = colors.a)
+                                Text("CHECK PENDING", fontSize = 10.sp, color = colors.a)
                             }
 
                             if (proCheckShow) {
@@ -176,34 +179,11 @@ class PayFragment : Fragment() {
                                 }
                             }
 
-                            BasicButton(
-                                contentPadding = PaddingValues(13.dp),
-                                border = BorderStroke(2.dp, colors.b),
+                            Spacer(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(top = 12.dp),
-                                onClick = {
-                                    lifecycleScope.launch {
-                                        BillingHandler(requireActivity()).apply {
-                                            enable()
-
-                                            getPurchases()?.find {
-                                                it.products.contains(PRO)
-                                            }?.let {
-                                                it.consume()
-                                            }
-
-                                            disable()
-                                            connectionHandler.awaitDone()
-                                        }
-
-                                        ProVersion.removeLocalLicence()
-                                        createToast(requireContext(), "DONE")
-                                    }
-                                }
-                            ) {
-                                Text("PRO REMOVE", fontSize = 10.sp, color = colors.a)
-                            }
+                                    .height(40.dp)
+                            )
                         }
                     }
                 }

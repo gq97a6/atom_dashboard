@@ -14,6 +14,7 @@ object ProVersion {
         status = File("$rootFolder/license").exists()
     }
 
+    //todo
     inline suspend fun checkPurchase(activity: Activity, onDone: () -> Unit) {
         var result: Purchase? = null
         val bh = BillingHandler(activity)

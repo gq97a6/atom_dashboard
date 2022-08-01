@@ -13,8 +13,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.system.measureTimeMillis
 
-class BillingHandler(internal val activity: Activity) {
+class BillingHandler(val activity: Activity) {
 
     internal var isEnabled = false
 
@@ -127,6 +128,22 @@ class BillingHandler(internal val activity: Activity) {
                         }
                     }
             }
+        }
+    }
+
+    inline suspend fun checkPendingPurchases(onDone: () -> Unit) {
+        var result: MutableList<Purchase>? = null
+
+        measureTimeMillis {
+            getPurchases()?.let {
+                for (purchase in it) onPurchased(purchase)
+                result = it
+            }
+        }.let {
+            delay(maxOf(10000 - it, 0))
+            if (result != null) for (purchase in result!!) onPurchaseProcessed(purchase)
+            else createToast(activity, "No purchase found")
+            onDone()
         }
     }
 

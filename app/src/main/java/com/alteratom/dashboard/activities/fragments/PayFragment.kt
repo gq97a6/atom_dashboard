@@ -17,20 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.BasicButton
+import com.alteratom.dashboard.BillingHandler
+import com.alteratom.dashboard.BillingHandler.Companion.DON0
+import com.alteratom.dashboard.BillingHandler.Companion.DON1
+import com.alteratom.dashboard.BillingHandler.Companion.DON2
 import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import kotlinx.coroutines.delay
@@ -76,28 +79,65 @@ class PayFragment : Fragment() {
                         ) {
                             Text(text = "Donate", fontSize = 45.sp, color = colors.color)
                             Text(
-                                "text",
-                                Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Center,
-                                color = Color.White
+                                "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium," +
+                                        "totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. " +
+                                        "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, " +
+                                        "sed quia consequuntur magni dolores eos qui ratione voluptatem nesciunt.",
+                                fontSize = 12.sp,
+                                color = colors.a
                             )
 
-                            BasicButton(onClick = {
-                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("atom_dashboard_pro") }
-                            }, Modifier.padding(10.dp)) {
-                                Text("PAY PRO", textAlign = TextAlign.Center, color = Color.White)
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                BasicButton(onClick = {
+                                    lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON0) }
+                                }, Modifier.weight(1f)) {
+                                    Text("5$", fontSize = 10.sp, color = colors.a)
+                                }
+
+                                Spacer(modifier = Modifier.width(16.dp))
+
+                                BasicButton(onClick = {
+                                    lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON1) }
+                                }, Modifier.weight(1f)) {
+                                    Text("10$", fontSize = 10.sp, color = colors.a)
+                                }
+
+                                Spacer(modifier = Modifier.width(16.dp))
+
+                                BasicButton(onClick = {
+                                    lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON2) }
+                                }, Modifier.weight(1f)) {
+                                    Text("15$", fontSize = 10.sp, color = colors.a)
+                                }
                             }
 
-                            BasicButton(onClick = {
-                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_01") }
-                            }, Modifier.padding(10.dp)) {
-                                Text("PAY 01", textAlign = TextAlign.Center, color = Color.White)
-                            }
+                            Text(text = "Premium", fontSize = 45.sp, color = colors.color)
+                            Text(
+                                "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium," +
+                                        "totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. " +
+                                        "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, " +
+                                        "sed quia consequuntur magni dolores eos qui ratione voluptatem nesciunt.",
+                                //modifier = Modifier.padding(12.dp),
+                                fontSize = 12.sp,
+                                color = colors.a
+                            )
 
-                            BasicButton(onClick = {
-                                lifecycleScope.launch { billingHandler.lunchPurchaseFlow("test_product_02") }
-                            }, Modifier.padding(10.dp)) {
-                                Text("PAY 02", textAlign = TextAlign.Center, color = Color.White)
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp)
+                            ) {
+                                BasicButton(onClick = {
+                                    lifecycleScope.launch { billingHandler.lunchPurchaseFlow(PRO) }
+                                }, Modifier.fillMaxWidth(.3f)) {
+                                    Text("5$", fontSize = 10.sp, color = colors.a)
+                                }
                             }
 
                             var proCheckShow by remember { mutableStateOf(false) }
@@ -124,39 +164,42 @@ class PayFragment : Fragment() {
                             )
 
                             Text(
-                                "For delayed payment process use button below to process purchase after it succeeds",
-                                modifier = Modifier.padding(12.dp),
-                                textAlign = TextAlign.Center,
-                                fontSize = 10.sp,
+                                "For delayed payment process use button below to process purchase after it succeeds.",
+                                fontSize = 12.sp,
                                 color = colors.a
                             )
 
-                            BasicButton(
-                                contentPadding = PaddingValues(13.dp),
-                                border = BorderStroke(2.dp, colors.b),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 12.dp),
-                                onClick = {
-                                    if (!proCheckShow) {
-                                        proCheckShow = true
-                                        scaleInitialValue = 1f
-                                        scaleTargetValue = .8f
-                                        scaleDuration = 3000
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                BasicButton(
+                                    contentPadding = PaddingValues(13.dp),
+                                    border = BorderStroke(2.dp, colors.b),
+                                    modifier = Modifier
+                                        .fillMaxWidth(.8f)
+                                        .padding(top = 12.dp),
+                                    onClick = {
+                                        if (!proCheckShow) {
+                                            proCheckShow = true
+                                            scaleInitialValue = 1f
+                                            scaleTargetValue = .8f
+                                            scaleDuration = 3000
 
-                                        lifecycleScope.launch {
-                                            billingHandler.checkPendingPurchases {
-                                                scaleInitialValue = scale.value
-                                                scaleTargetValue = 0f
-                                                scaleDuration = 1000
-                                                delay(1000)
-                                                proCheckShow = false
+                                            lifecycleScope.launch {
+                                                billingHandler.checkPendingPurchases {
+                                                    scaleInitialValue = scale.value
+                                                    scaleTargetValue = 0f
+                                                    scaleDuration = 1000
+                                                    delay(1000)
+                                                    proCheckShow = false
+                                                }
                                             }
                                         }
                                     }
+                                ) {
+                                    Text("CHECK PENDING", fontSize = 10.sp, color = colors.a)
                                 }
-                            ) {
-                                Text("CHECK PENDING", fontSize = 10.sp, color = colors.a)
                             }
 
                             if (proCheckShow) {

@@ -26,9 +26,9 @@ class BillingHandler(val activity: Activity) {
     companion object {
         //Products ids
         var PRO = "atom_dashboard_pro"
-        var DON0 = "atom_dashboard_pro"
-        var DON1 = "atom_dashboard_pro"
-        var DON2 = "atom_dashboard_pro"
+        var DON0 = "test_product_01"
+        var DON1 = "test_product_02"
+        var DON2 = "test_product_03"
     }
 
     init {

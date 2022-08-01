@@ -25,7 +25,7 @@ object ProVersion {
                 getPurchases()?.find {
                     it.products.contains(BillingHandler.PRO)
                 }?.let {
-                    onPurchased(it, false)
+                    onPurchased(it)
                     result = it
                 }
 
@@ -34,7 +34,8 @@ object ProVersion {
             }
         }.let {
             delay(maxOf(10000 - it, 0))
-            result?.let { for (product in it.products) bh.onPurchaseProcessed(product) }
+            if (result != null) bh.onPurchaseProcessed(result!!)
+            else createToast(activity, "No purchase found")
             onDone()
         }
     }

@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,10 +48,8 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import com.android.billingclient.api.Purchase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -281,29 +280,6 @@ class SettingsFragment : Fragment() {
                                 }
                             }
 
-                            var proCheckShow by remember { mutableStateOf(false) }
-                            var scaleInitialValue by remember { mutableStateOf(1f) }
-                            var scaleTargetValue by remember { mutableStateOf(.8f) }
-                            var scaleDuration by remember { mutableStateOf(3000) }
-
-                            val scale = rememberInfiniteTransition().animateFloat(
-                                initialValue = scaleInitialValue,
-                                targetValue = scaleTargetValue,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(scaleDuration),
-                                    repeatMode = RepeatMode.Reverse,
-                                )
-                            )
-
-                            val rotation = rememberInfiniteTransition().animateFloat(
-                                initialValue = 0f,
-                                targetValue = 360f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(3000),
-                                    repeatMode = RepeatMode.Reverse,
-                                )
-                            )
-
                             FrameBox("About") {
                                 Column {
                                     BasicButton(
@@ -312,83 +288,16 @@ class SettingsFragment : Fragment() {
                                         modifier = Modifier.fillMaxWidth(),
                                         onClick = { fm.replaceWith(PayFragment()) }
                                     ) {
-                                        Text("SUPPORT US", fontSize = 10.sp, color = colors.a)
-                                    }
-                                    BasicButton(
-                                        contentPadding = PaddingValues(13.dp),
-                                        border = BorderStroke(2.dp, colors.b),
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 12.dp),
-                                        onClick = {
-                                            if (!proCheckShow) {
-                                                proCheckShow = true
-                                                scaleInitialValue = 1f
-                                                scaleTargetValue = .8f
-                                                scaleDuration = 3000
-
-                                                lifecycleScope.launch {
-                                                    ProVersion.checkPurchase(requireActivity()) {
-                                                        scaleInitialValue = scale.value
-                                                        scaleTargetValue = 0f
-                                                        scaleDuration = 1000
-                                                        delay(1000)
-                                                        proCheckShow = false
-                                                    }
-                                                }
-                                            }
+                                        Row(verticalAlignment = Alignment.CenterVertically) {
+                                            Text("SUPPORT ME ", fontSize = 10.sp, color = colors.a)
+                                            Icon(
+                                                painterResource(R.drawable.il_shape_heart_alt),
+                                                "",
+                                                tint = colors.a,
+                                                modifier = Modifier.height(10.dp),
+                                            )
                                         }
-                                    ) {
-                                        Text("PRO CHECK", fontSize = 10.sp, color = colors.a)
                                     }
-                                    BasicButton(
-                                        contentPadding = PaddingValues(13.dp),
-                                        border = BorderStroke(2.dp, colors.b),
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 12.dp),
-                                        onClick = {
-                                            lifecycleScope.launch {
-                                                BillingHandler(requireActivity()).apply {
-                                                    enable()
-
-                                                    getPurchases()?.find {
-                                                        it.products.contains(PRO)
-                                                    }?.let {
-                                                        it.consume()
-                                                    }
-
-                                                    disable()
-                                                    connectionHandler.awaitDone()
-                                                }
-
-                                                ProVersion.removeLocalLicence()
-                                                createToast(requireContext(), "DONE")
-                                            }
-                                        }
-                                    ) {
-                                        Text("PRO REMOVE", fontSize = 10.sp, color = colors.a)
-                                    }
-                                }
-                            }
-
-                            if (proCheckShow) {
-                                Dialog({ proCheckShow = true }) {
-                                    Image(
-                                        painterResource(
-                                            if (Theme.isDark) R.drawable.ic_icon_light
-                                            else R.drawable.ic_icon
-                                        ), "",
-                                        modifier = Modifier
-                                            .padding(bottom = 100.dp)
-                                            .scale(scale.value)
-                                            .rotate(rotation.value)
-                                            .size(300.dp),
-                                        colorFilter = ColorFilter.tint(
-                                            colors.color.copy(alpha = .4f),
-                                            BlendMode.SrcAtop
-                                        )
-                                    )
                                 }
                             }
 

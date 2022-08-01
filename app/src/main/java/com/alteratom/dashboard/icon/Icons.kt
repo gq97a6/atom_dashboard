@@ -1586,7 +1586,7 @@ object Icons {
         "il_security_unlock" to Icon(R.drawable.il_security_unlock, "l", "security"),
         "il_security_unlock_alt" to Icon(R.drawable.il_security_unlock_alt, "l", "security"),
         "il_shape_circle" to Icon(R.drawable.il_shape_circle, "l", "shape"),
-        "il_shape_heart" to Icon(R.drawable.il_shape_heart, "l", "shape"),
+        "il_shape_heartheart" to Icon(R.drawable.il_shape_heart, "l", "shape"),
         "il_shape_heart_alt" to Icon(R.drawable.il_shape_heart_alt, "l", "shape"),
         "il_shape_octagon" to Icon(R.drawable.il_shape_octagon, "l", "shape"),
         "il_shape_pentagon" to Icon(R.drawable.il_shape_pentagon, "l", "shape"),

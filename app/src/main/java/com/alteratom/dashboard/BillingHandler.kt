@@ -34,7 +34,8 @@ class BillingHandler(internal val activity: Activity) {
         createClient()
     }
 
-    fun onPurchased(purchase: Purchase, callback: Boolean) {
+    fun onPurchased(purchase: Purchase) {
+        if (purchase.purchaseState != PURCHASED) return
         for (product in purchase.products) {
             when (product) {
                 PRO -> {
@@ -45,18 +46,18 @@ class BillingHandler(internal val activity: Activity) {
                     if (!purchase.isAcknowledged) purchase.consume()
                 }
             }
-
-            if (callback) onPurchaseProcessed(product)
         }
     }
 
-    fun onPurchaseProcessed(product: String) {
-        when (product) {
-            PRO -> {
-                createToast(activity, "Thanks for buying Pro!")
-            }
-            DON0, DON1, DON2 -> {
-                createToast(activity, "Thanks for the donation!")
+    fun onPurchaseProcessed(purchase: Purchase) {
+        if (purchase.purchaseState != PURCHASED) {
+            createToast(activity, "Payment in process, please wait")
+            return
+        }
+        for (product in purchase.products) {
+            when (product) {
+                PRO -> createToast(activity, "Thanks for buying Pro!")
+                DON0, DON1, DON2 -> createToast(activity, "Thanks for the donation!")
             }
         }
     }
@@ -114,7 +115,6 @@ class BillingHandler(internal val activity: Activity) {
                     .build()
                     .let {
                         client.queryPurchasesAsync(it) { result, history ->
-                            val s = history[0].purchaseState
                             continuation.resume(history)
                             //developerPayload
                             //accountIdentifiers
@@ -163,7 +163,10 @@ class BillingHandler(internal val activity: Activity) {
                     (billingResult.responseCode == OK ||
                             billingResult.responseCode == ITEM_ALREADY_OWNED)
                 ) {
-                    for (purchase in purchases) onPurchased(purchase, true)
+                    for (purchase in purchases) {
+                        onPurchased(purchase)
+                        onPurchaseProcessed(purchase)
+                    }
                 }
             }
             .enablePendingPurchases()

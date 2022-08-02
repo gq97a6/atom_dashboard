@@ -14,8 +14,7 @@ object ProVersion {
         status = File("$rootFolder/license").exists()
     }
 
-    //todo
-    inline suspend fun checkPurchase(activity: Activity, onDone: () -> Unit) {
+    inline suspend fun checkPurchase(activity: Activity, eta: Long = 10000, onDone: () -> Unit) {
         var result: Purchase? = null
         val bh = BillingHandler(activity)
 
@@ -23,9 +22,7 @@ object ProVersion {
             bh.apply {
                 enable()
 
-                getPurchases()?.find {
-                    it.products.contains(BillingHandler.PRO)
-                }?.let {
+                getPurchases()?.find { it.products.contains(BillingHandler.PRO) }?.let {
                     onPurchased(it)
                     result = it
                 }
@@ -34,7 +31,7 @@ object ProVersion {
                 connectionHandler.awaitDone()
             }
         }.let {
-            delay(maxOf(10000 - it, 0))
+            delay(maxOf(eta - it, 0))
             if (result != null) bh.onPurchaseProcessed(result!!)
             else createToast(activity, "No purchase found")
             onDone()

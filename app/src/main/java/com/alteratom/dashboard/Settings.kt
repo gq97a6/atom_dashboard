@@ -1,9 +1,10 @@
 package com.alteratom.dashboard
 
 class Settings {
-    var hideNav: Boolean = false
-    var lastDashboardId: Long = 0
-    var startFromLast: Boolean = true
-    var mqttTabShow: Boolean = true
-    var animateUpdate: Boolean = true
+    var hideNav = false
+    var lastDashboardId = 0L
+    var startFromLast = true
+    var mqttTabShow = true
+    var animateUpdate = true
+    var pendingPurchase = false
 }

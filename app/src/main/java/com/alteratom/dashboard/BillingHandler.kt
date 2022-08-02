@@ -1,12 +1,13 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
+import com.alteratom.dashboard.G.settings
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.ConnectionState.*
-import com.android.billingclient.api.BillingClient.FeatureType.PRODUCT_DETAILS
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import com.android.billingclient.api.Purchase.PurchaseState.PENDING
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -79,7 +80,11 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun onPurchased(purchase: Purchase) {
-        if (purchase.purchaseState != PURCHASED) return
+        settings.pendingPurchase = false
+        if (purchase.purchaseState != PURCHASED) {
+            settings.pendingPurchase = true
+            return
+        }
         for (product in purchase.products) {
             when (product) {
                 PRO -> {
@@ -106,29 +111,30 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? = coroutineScope {
-        return@coroutineScope if (!connectionHandler.awaitDone()) {
-            createToast(activity, "Failed to connect")
-            null
-        } else withTimeoutOrNull(2000) {
-            suspendCoroutine { continuation ->
-                val queryDetails = QueryProductDetailsParams
-                    .newBuilder()
-                    .setProductList(
-                        listOf(
-                            QueryProductDetailsParams.Product.newBuilder()
-                                .setProductId(id)
-                                .setProductType(INAPP)
-                                .build()
-                        )
-                    ).build()
+    private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
+        coroutineScope {
+            return@coroutineScope if (!connectionHandler.awaitDone()) {
+                createToast(activity, "Failed to connect")
+                null
+            } else withTimeoutOrNull(2000) {
+                suspendCoroutine { continuation ->
+                    val queryDetails = QueryProductDetailsParams
+                        .newBuilder()
+                        .setProductList(
+                            listOf(
+                                QueryProductDetailsParams.Product.newBuilder()
+                                    .setProductId(id)
+                                    .setProductType(INAPP)
+                                    .build()
+                            )
+                        ).build()
 
-                client.queryProductDetailsAsync(queryDetails) { _, details ->
-                    continuation.resume(details)
+                    client.queryProductDetailsAsync(queryDetails) { _, details ->
+                        continuation.resume(details)
+                    }
                 }
             }
         }
-    }
 
     suspend fun getPurchases(): MutableList<Purchase>? = coroutineScope {
         return@coroutineScope if (!connectionHandler.awaitDone()) {
@@ -189,16 +195,16 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    suspend inline fun checkPendingPurchases(onDone: (MutableList<Purchase>?) -> Unit) {
-        var result: MutableList<Purchase>? = null
+    suspend inline fun checkPendingPurchases(eta: Long = 10000, onDone: (List<Purchase>?) -> Unit) {
+        var result: List<Purchase>? = null
 
         measureTimeMillis {
-            getPurchases()?.let {
+            getPurchases()?.filter { !it.isAcknowledged }?.let {
                 for (purchase in it) onPurchased(purchase)
                 result = it
             }
         }.let {
-            delay(maxOf(10000 - it, 0))
+            delay(maxOf(eta - it, 0))
             if (result != null) for (purchase in result!!) onPurchaseProcessed(purchase)
             onDone(result)
         }

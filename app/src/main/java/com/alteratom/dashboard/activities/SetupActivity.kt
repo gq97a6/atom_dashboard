@@ -14,16 +14,21 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.ActivityHandler
+import com.alteratom.dashboard.BillingHandler
 import com.alteratom.dashboard.FolderTree.rootFolder
+import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 
 
 @SuppressLint("CustomSplashScreen")
@@ -67,19 +72,30 @@ class SetupActivity : AppCompatActivity() {
             }
         }
 
-        if (serviceRunning) onServiceReady()
-        else {
-            val foregroundServiceHandler = ForegroundServiceHandler(this)
-            foregroundServiceHandler.service.observe(this) { s ->
-                if (s != null) {
-                    DaemonsManager.initialize()
-                    service?.finishAffinity = { finishAffinity() }
-                    onServiceReady()
+        lifecycleScope.launch {
+            if (settings.pendingPurchase) {
+                BillingHandler(this@SetupActivity).apply {
+                    enable()
+                    checkPendingPurchases(0) {}
+                    disable()
+                    connectionHandler.awaitDone()
                 }
             }
 
-            foregroundServiceHandler.start()
-            foregroundServiceHandler.bind()
+            if (serviceRunning) onServiceReady()
+            else {
+                val foregroundServiceHandler = ForegroundServiceHandler(this@SetupActivity)
+                foregroundServiceHandler.service.observe(this@SetupActivity) { s ->
+                    if (s != null) {
+                        DaemonsManager.initialize()
+                        service?.finishAffinity = { finishAffinity() }
+                        onServiceReady()
+                    }
+                }
+
+                foregroundServiceHandler.start()
+                foregroundServiceHandler.bind()
+            }
         }
     }
 

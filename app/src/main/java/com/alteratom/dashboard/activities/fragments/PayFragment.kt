@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
@@ -35,7 +37,10 @@ import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.createToast
+import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -43,17 +48,18 @@ class PayFragment : Fragment() {
 
     lateinit var billingHandler: BillingHandler
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         billingHandler = BillingHandler(requireActivity())
         billingHandler.enable()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         billingHandler.disable()
     }
 
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +68,46 @@ class PayFragment : Fragment() {
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
+                var proCheckShow by remember { mutableStateOf(false) }
+                var scaleInitialValue by remember { mutableStateOf(1f) }
+                var scaleTargetValue by remember { mutableStateOf(.8f) }
+                var scaleDuration by remember { mutableStateOf(3000) }
+
+                val scale = rememberInfiniteTransition().animateFloat(
+                    initialValue = scaleInitialValue,
+                    targetValue = scaleTargetValue,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(scaleDuration),
+                        repeatMode = RepeatMode.Reverse,
+                    )
+                )
+
+                val rotation = rememberInfiniteTransition().animateFloat(
+                    initialValue = 0f,
+                    targetValue = 360f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(3000),
+                        repeatMode = RepeatMode.Reverse,
+                    )
+                )
+
+                var priceTags by remember { mutableStateOf(mapOf<String, String>()) }
+
+                remember {
+                    lifecycleScope.launch {
+                        proCheckShow = true
+                        billingHandler.getPriceTags(listOf(PRO, DON0, DON1, DON2)).let {
+                            if (it != null) {
+                                priceTags = it
+                                scaleInitialValue = scale.value
+                                scaleTargetValue = 0f
+                                scaleDuration = 500
+                                delay(500)
+                                proCheckShow = false
+                            } else fm.popBackStack()
+                        }
+                    }
+                }
 
                 ComposeTheme(Theme.isDark) {
                     Box(
@@ -96,7 +142,7 @@ class PayFragment : Fragment() {
                                 BasicButton(onClick = {
                                     lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON0) }
                                 }, Modifier.weight(1f)) {
-                                    Text("5$", fontSize = 10.sp, color = colors.a)
+                                    Text(priceTags[DON0] ?: "", fontSize = 10.sp, color = colors.a)
                                 }
 
                                 Spacer(modifier = Modifier.width(16.dp))
@@ -104,7 +150,7 @@ class PayFragment : Fragment() {
                                 BasicButton(onClick = {
                                     lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON1) }
                                 }, Modifier.weight(1f)) {
-                                    Text("10$", fontSize = 10.sp, color = colors.a)
+                                    Text(priceTags[DON1] ?: "", fontSize = 10.sp, color = colors.a)
                                 }
 
                                 Spacer(modifier = Modifier.width(16.dp))
@@ -112,7 +158,7 @@ class PayFragment : Fragment() {
                                 BasicButton(onClick = {
                                     lifecycleScope.launch { billingHandler.lunchPurchaseFlow(DON2) }
                                 }, Modifier.weight(1f)) {
-                                    Text("15$", fontSize = 10.sp, color = colors.a)
+                                    Text(priceTags[DON2] ?: "", fontSize = 10.sp, color = colors.a)
                                 }
                             }
 
@@ -136,32 +182,9 @@ class PayFragment : Fragment() {
                                 BasicButton(onClick = {
                                     lifecycleScope.launch { billingHandler.lunchPurchaseFlow(PRO) }
                                 }, Modifier.fillMaxWidth(.3f)) {
-                                    Text("5$", fontSize = 10.sp, color = colors.a)
+                                    Text(priceTags[PRO] ?: "", fontSize = 10.sp, color = colors.a)
                                 }
                             }
-
-                            var proCheckShow by remember { mutableStateOf(false) }
-                            var scaleInitialValue by remember { mutableStateOf(1f) }
-                            var scaleTargetValue by remember { mutableStateOf(.8f) }
-                            var scaleDuration by remember { mutableStateOf(3000) }
-
-                            val scale = rememberInfiniteTransition().animateFloat(
-                                initialValue = scaleInitialValue,
-                                targetValue = scaleTargetValue,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(scaleDuration),
-                                    repeatMode = RepeatMode.Reverse,
-                                )
-                            )
-
-                            val rotation = rememberInfiniteTransition().animateFloat(
-                                initialValue = 0f,
-                                targetValue = 360f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(3000),
-                                    repeatMode = RepeatMode.Reverse,
-                                )
-                            )
 
                             Text(
                                 "For delayed payment process use button below to process purchase after it succeeds.",
@@ -188,6 +211,11 @@ class PayFragment : Fragment() {
 
                                             lifecycleScope.launch {
                                                 billingHandler.checkPendingPurchases {
+                                                    if (it?.find { it.purchaseState != PURCHASED } == null)
+                                                        createToast(
+                                                            requireContext(),
+                                                            "No pending purchase found"
+                                                        )
                                                     scaleInitialValue = scale.value
                                                     scaleTargetValue = 0f
                                                     scaleDuration = 1000
@@ -203,7 +231,10 @@ class PayFragment : Fragment() {
                             }
 
                             if (proCheckShow) {
-                                Dialog({ proCheckShow = true }) {
+                                Dialog(
+                                    { proCheckShow = true },
+                                    DialogProperties(usePlatformDefaultWidth = false)
+                                ) {
                                     Image(
                                         painterResource(
                                             if (Theme.isDark) R.drawable.ic_icon_light

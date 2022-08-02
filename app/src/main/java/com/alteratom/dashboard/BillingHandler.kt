@@ -35,6 +35,49 @@ class BillingHandler(val activity: Activity) {
         createClient()
     }
 
+    internal fun createClient() {
+        client = BillingClient.newBuilder(activity)
+            .setListener { billingResult, purchases ->
+                if (purchases != null &&
+                    (billingResult.responseCode == OK ||
+                            billingResult.responseCode == ITEM_ALREADY_OWNED)
+                ) {
+                    for (purchase in purchases) {
+                        onPurchased(purchase)
+                        onPurchaseProcessed(purchase)
+                    }
+                }
+            }
+            .enablePendingPurchases()
+            .build()
+    }
+
+    fun enable() {
+        isEnabled = true
+        connectionHandler.dispatch("enable")
+    }
+
+    fun disable() {
+        isEnabled = false
+        connectionHandler.dispatch("disable")
+    }
+
+    private fun Purchase.acknowledge() {
+        AcknowledgePurchaseParams
+            .newBuilder()
+            .setPurchaseToken(this.purchaseToken)
+            .build()
+            .let { client.acknowledgePurchase(it) {} }
+    }
+
+    internal fun Purchase.consume() {
+        ConsumeParams
+            .newBuilder()
+            .setPurchaseToken(this.purchaseToken)
+            .build()
+            .let { client.consumeAsync(it) { _, _ -> } }
+    }
+
     fun onPurchased(purchase: Purchase) {
         if (purchase.purchaseState != PURCHASED) return
         for (product in purchase.products) {
@@ -63,44 +106,27 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    suspend fun lunchPurchaseFlow(id: String) {
-        if (!connectionHandler.awaitDone()) {
+    private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? = coroutineScope {
+        return@coroutineScope if (!connectionHandler.awaitDone()) {
             createToast(activity, "Failed to connect")
-            return
-        }
-
-        if (client.isFeatureSupported(PRODUCT_DETAILS).responseCode != OK) {
-            createToast(activity, "Please update Google Play Store")
-            return
-        }
-
-        val queryDetails = QueryProductDetailsParams
-            .newBuilder()
-            .setProductList(
-                listOf(
-                    QueryProductDetailsParams.Product.newBuilder()
-                        .setProductId(id)
-                        .setProductType(INAPP)
-                        .build()
-                )
-            ).build()
-
-        client.queryProductDetailsAsync(queryDetails) { result, details ->
-            if (details.size == 0) return@queryProductDetailsAsync
-            client.launchBillingFlow(
-                activity,
-                BillingFlowParams
+            null
+        } else withTimeoutOrNull(2000) {
+            suspendCoroutine { continuation ->
+                val queryDetails = QueryProductDetailsParams
                     .newBuilder()
-                    .setProductDetailsParamsList(
+                    .setProductList(
                         listOf(
-                            BillingFlowParams.ProductDetailsParams
-                                .newBuilder()
-                                .setProductDetails(details.first())
+                            QueryProductDetailsParams.Product.newBuilder()
+                                .setProductId(id)
+                                .setProductType(INAPP)
                                 .build()
                         )
-                    )
-                    .build()
-            )
+                    ).build()
+
+                client.queryProductDetailsAsync(queryDetails) { _, details ->
+                    continuation.resume(details)
+                }
+            }
         }
     }
 
@@ -115,7 +141,7 @@ class BillingHandler(val activity: Activity) {
                     .setProductType(INAPP)
                     .build()
                     .let {
-                        client.queryPurchasesAsync(it) { result, history ->
+                        client.queryPurchasesAsync(it) { _, history ->
                             continuation.resume(history)
                             //developerPayload
                             //accountIdentifiers
@@ -131,7 +157,39 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    inline suspend fun checkPendingPurchases(onDone: () -> Unit) {
+    suspend fun getPriceTags(ids: List<String>): Map<String, String>? = withTimeoutOrNull(2000) {
+        List(ids.size) {
+            getProductDetails(ids[it])?.first() ?: return@withTimeoutOrNull null
+        }.let {
+            it.map {
+                it.productId to
+                        (it.oneTimePurchaseOfferDetails?.formattedPrice
+                            ?: return@withTimeoutOrNull null)
+            }.toMap()
+        }
+    }
+
+    suspend fun lunchPurchaseFlow(id: String) {
+        getProductDetails(id)?.let {
+            if (it.isEmpty()) return
+            client.launchBillingFlow(
+                activity,
+                BillingFlowParams
+                    .newBuilder()
+                    .setProductDetailsParamsList(
+                        listOf(
+                            BillingFlowParams.ProductDetailsParams
+                                .newBuilder()
+                                .setProductDetails(it.first())
+                                .build()
+                        )
+                    )
+                    .build()
+            )
+        }
+    }
+
+    suspend inline fun checkPendingPurchases(onDone: (MutableList<Purchase>?) -> Unit) {
         var result: MutableList<Purchase>? = null
 
         measureTimeMillis {
@@ -142,52 +200,8 @@ class BillingHandler(val activity: Activity) {
         }.let {
             delay(maxOf(10000 - it, 0))
             if (result != null) for (purchase in result!!) onPurchaseProcessed(purchase)
-            else createToast(activity, "No purchase found")
-            onDone()
+            onDone(result)
         }
-    }
-
-    internal fun Purchase.acknowledge() {
-        AcknowledgePurchaseParams
-            .newBuilder()
-            .setPurchaseToken(this.purchaseToken)
-            .build()
-            .let { client.acknowledgePurchase(it) {} }
-    }
-
-    internal fun Purchase.consume() {
-        ConsumeParams
-            .newBuilder()
-            .setPurchaseToken(this.purchaseToken)
-            .build()
-            .let { client.consumeAsync(it) { _, _ -> } }
-    }
-
-    fun enable() {
-        isEnabled = true
-        connectionHandler.dispatch("enable")
-    }
-
-    fun disable() {
-        isEnabled = false
-        connectionHandler.dispatch("disable")
-    }
-
-    internal fun createClient() {
-        client = BillingClient.newBuilder(activity)
-            .setListener { billingResult, purchases ->
-                if (purchases != null &&
-                    (billingResult.responseCode == OK ||
-                            billingResult.responseCode == ITEM_ALREADY_OWNED)
-                ) {
-                    for (purchase in purchases) {
-                        onPurchased(purchase)
-                        onPurchaseProcessed(purchase)
-                    }
-                }
-            }
-            .enablePendingPurchases()
-            .build()
     }
 
     inner class BillingConnectionHandler : ConnectionHandler() {

@@ -200,8 +200,8 @@ class BillingHandler(val activity: Activity) {
 
         measureTimeMillis {
             getPurchases()?.filter { !it.isAcknowledged }?.let {
-                for (purchase in it) onPurchased(purchase)
                 result = it
+                for (purchase in it) onPurchased(purchase)
             }
         }.let {
             delay(maxOf(eta - it, 0))

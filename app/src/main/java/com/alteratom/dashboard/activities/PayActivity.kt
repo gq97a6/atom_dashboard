@@ -28,6 +28,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,7 @@ class PayActivity : AppCompatActivity() {
 
             remember {
                 lifecycleScope.launch {
-                    proCheckShow = true
+                    //proCheckShow = true
                     billingHandler.getPriceTags(
                         listOf(
                             BillingHandler.PRO,
@@ -171,13 +172,12 @@ class PayActivity : AppCompatActivity() {
                             }
                         }
 
-                        Text(text = "Premium", fontSize = 45.sp, color = Theme.colors.color)
+                        Text(text = "Pro", fontSize = 45.sp, color = Theme.colors.color)
                         Text(
                             "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium," +
                                     "totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. " +
                                     "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, " +
                                     "sed quia consequuntur magni dolores eos qui ratione voluptatem nesciunt.",
-                            //modifier = Modifier.padding(12.dp),
                             fontSize = 12.sp,
                             color = Theme.colors.a
                         )
@@ -228,7 +228,7 @@ class PayActivity : AppCompatActivity() {
 
                                         lifecycleScope.launch {
                                             billingHandler.checkPendingPurchases {
-                                                if (it?.find { it.purchaseState != Purchase.PurchaseState.PURCHASED } == null)
+                                                if (it?.isEmpty() ?: true == true)
                                                     createToast(
                                                         this@PayActivity,
                                                         "No pending purchase found"

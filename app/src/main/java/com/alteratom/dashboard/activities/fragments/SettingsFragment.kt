@@ -133,7 +133,7 @@ class SettingsFragment : Fragment() {
 
                                 activity?.startActivity(
                                     Intent(
-                                        context,
+                                        requireContext(),
                                         SetupActivity::class.java
                                     )
                                 )
@@ -176,8 +176,6 @@ class SettingsFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(Theme.isDark) {
-                    //Background
-                    Box(modifier = Modifier.background(colors.background))
 
                     Box(
                         contentAlignment = Alignment.BottomCenter
@@ -284,11 +282,13 @@ class SettingsFragment : Fragment() {
                                         border = BorderStroke(2.dp, colors.b),
                                         modifier = Modifier.fillMaxWidth(),
                                         onClick = {
-                                            Intent(
-                                                requireActivity(),
-                                                PayActivity::class.java
-                                            ).also {
-                                                startActivity(it)
+                                            activity?.apply {
+                                                Intent(
+                                                    this,
+                                                    PayActivity::class.java
+                                                ).also {
+                                                    startActivity(it)
+                                                }
                                             }
                                         }
                                     ) {

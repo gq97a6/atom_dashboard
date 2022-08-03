@@ -47,8 +47,6 @@ class DashboardNewFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(Theme.isDark) {
-                    //Background
-                    Box(modifier = Modifier.background(colors.background))
 
                     Column(
                         Modifier.padding(bottom = 80.dp),

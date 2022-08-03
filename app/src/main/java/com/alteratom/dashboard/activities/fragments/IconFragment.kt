@@ -106,8 +106,6 @@ class TileIconFragment : Fragment() {
                 setPickerColor(getIconHSV())
 
                 ComposeTheme(Theme.isDark) {
-                    //Background
-                    Box(modifier = Modifier.background(colors.background))
 
                     Box {
                         LazyVerticalGrid(

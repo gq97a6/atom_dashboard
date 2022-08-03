@@ -61,6 +61,17 @@ class MainActivity : AppCompatActivity() {
         private var currentFragment: Fragment = MainScreenFragment()
 
         companion object Animations {
+            val swap: (FragmentTransaction) -> Unit = {
+                it.apply {
+                    setCustomAnimations(
+                        R.anim.fragment_in_swap,
+                        R.anim.fragment_out_swap,
+                        R.anim.fragment_in_swap,
+                        R.anim.fragment_out_swap
+                    )
+                }
+            }
+
             val fade: (FragmentTransaction) -> Unit = {
                 it.apply {
                     setCustomAnimations(
@@ -109,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         fun replaceWith(
             fragment: Fragment,
             stack: Boolean = true,
-            animation: ((FragmentTransaction) -> Unit?)? = fade
+            animation: ((FragmentTransaction) -> Unit?)? = swap
         ) {
             mainActivity.apply {
                 supportFragmentManager.commit {
@@ -125,7 +136,7 @@ class MainActivity : AppCompatActivity() {
 
         fun popBackStack(
             stack: Boolean = false,
-            animation: ((FragmentTransaction) -> Unit?)? = fade
+            animation: ((FragmentTransaction) -> Unit?)? = swap
         ): Boolean {
             return if (backstack.isEmpty()) false
             else {

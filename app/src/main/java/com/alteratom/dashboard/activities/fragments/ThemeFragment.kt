@@ -58,9 +58,6 @@ class ThemeFragment : Fragment() {
                 ComposeTheme(theme.a.isDark) {
                     theme.apply(context = requireContext())
 
-                    //Background
-                    Box(modifier = Modifier.background(colors.background))
-
                     Column(
                         horizontalAlignment = CenterHorizontally,
                         verticalArrangement = Arrangement.Center

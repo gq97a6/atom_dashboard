@@ -33,7 +33,7 @@
         </activity>
 
         <activity
-            android:name=".dashboard.activities.LVLActivity"
+            android:name=".dashboard.activities.PayActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 

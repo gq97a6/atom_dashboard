@@ -13,6 +13,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
@@ -33,6 +34,8 @@ import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentDashboardBinding
 import com.alteratom.tile.types.slider.SliderTile
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -99,21 +102,24 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             b.dRight.visibility = GONE
         }
 
-        fun updateTilesStatus() {
-            for (tile in adapter.list) {
-                tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
-                    tile.mqttData.lastReceive?.time.let { lr ->
-                        val t = Date().time - (lr ?: 0)
-                        if (lr != null) it.text = (t / 1000).let { s ->
-                            if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
-                            else (t / 60000).let { m ->
-                                if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
-                                else (t / 3600000).let { h ->
-                                    if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
-                                    else (t / 86400000).let { d ->
-                                        if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
-                                        else (t / 31536000000).let { y ->
-                                            if (y == 1L) "$y year ago" else "$y years ago"
+        lifecycleScope.launch {
+            delay(100)
+            while (true) {
+                for (tile in adapter.list) {
+                    tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
+                        tile.mqttData.lastReceive?.time.let { lr ->
+                            val t = Date().time - (lr ?: 0)
+                            if (lr != null) it.text = (t / 1000).let { s ->
+                                if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
+                                else (t / 60000).let { m ->
+                                    if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
+                                    else (t / 3600000).let { h ->
+                                        if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
+                                        else (t / 86400000).let { d ->
+                                            if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
+                                            else (t / 31536000000).let { y ->
+                                                if (y == 1L) "$y year ago" else "$y years ago"
+                                            }
                                         }
                                     }
                                 }
@@ -121,13 +127,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                         }
                     }
                 }
+                delay(1000)
             }
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                updateTilesStatus()
-            }, 500)
         }
-        updateTilesStatus()
 
         val addOnClick: () -> Unit = {
             fm.replaceWith(TileNewFragment())

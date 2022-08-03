@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
@@ -21,15 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
@@ -45,10 +42,10 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileOutputStream
@@ -286,7 +283,14 @@ class SettingsFragment : Fragment() {
                                         contentPadding = PaddingValues(13.dp),
                                         border = BorderStroke(2.dp, colors.b),
                                         modifier = Modifier.fillMaxWidth(),
-                                        onClick = { fm.replaceWith(PayFragment()) }
+                                        onClick = {
+                                            Intent(
+                                                requireActivity(),
+                                                PayActivity::class.java
+                                            ).also {
+                                                startActivity(it)
+                                            }
+                                        }
                                     ) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             Text("SUPPORT ME ", fontSize = 10.sp, color = colors.a)

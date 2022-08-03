@@ -9,8 +9,8 @@ import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.se
 
 object ActivityHandler {
 
-    fun onCreate(activity: Activity) {
-        service?.finishAffinity = { activity.finishAffinity() }
+    fun onCreate(activity: Activity, finish: Boolean = true) {
+        if (finish) service?.finishAffinity = { activity.finishAffinity() }
     }
 
     fun onDestroy() {

@@ -7,7 +7,6 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALRE
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.ConnectionState.*
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
-import com.android.billingclient.api.Purchase.PurchaseState.PENDING
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -27,9 +26,9 @@ class BillingHandler(val activity: Activity) {
     companion object {
         //Products ids
         var PRO = "atom_dashboard_pro"
-        var DON0 = "test_product_01"
-        var DON1 = "test_product_02"
-        var DON2 = "test_product_03"
+        var DON1 = "atom_dashboard_don1"
+        var DON5 = "atom_dashboard_don5"
+        var DON25 = "atom_dashboard_don25"
     }
 
     init {
@@ -91,7 +90,7 @@ class BillingHandler(val activity: Activity) {
                     ProVersion.createLocalLicence()
                     if (!purchase.isAcknowledged) purchase.acknowledge()
                 }
-                DON0, DON1, DON2 -> {
+                DON1, DON5, DON25 -> {
                     if (!purchase.isAcknowledged) purchase.consume()
                 }
             }
@@ -106,7 +105,7 @@ class BillingHandler(val activity: Activity) {
         for (product in purchase.products) {
             when (product) {
                 PRO -> createToast(activity, "Thanks for buying Pro!")
-                DON0, DON1, DON2 -> createToast(activity, "Thanks for the donation!")
+                DON1, DON5, DON25 -> createToast(activity, "Thanks for the donation!")
             }
         }
     }
@@ -136,11 +135,11 @@ class BillingHandler(val activity: Activity) {
             }
         }
 
-    suspend fun getPurchases(): MutableList<Purchase>? = coroutineScope {
+    suspend fun getPurchases(timeout: Long = 2000): MutableList<Purchase>? = coroutineScope {
         return@coroutineScope if (!connectionHandler.awaitDone()) {
             createToast(activity, "Failed to connect")
             null
-        } else withTimeoutOrNull(2000) {
+        } else withTimeoutOrNull(timeout) {
             suspendCoroutine { continuation ->
                 QueryPurchasesParams
                     .newBuilder()
@@ -195,7 +194,7 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    suspend inline fun checkPendingPurchases(eta: Long = 10000, onDone: (List<Purchase>?) -> Unit) {
+    suspend inline fun checkPendingPurchases(eta: Long = 10000, timeout: Long = 2000, onDone: (List<Purchase>?) -> Unit) {
         var result: List<Purchase>? = null
 
         measureTimeMillis {

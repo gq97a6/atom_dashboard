@@ -27,8 +27,6 @@ import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -74,13 +72,13 @@ class PayActivity : AppCompatActivity() {
 
             remember {
                 lifecycleScope.launch {
-                    //proCheckShow = true
+                    proCheckShow = true
                     billingHandler.getPriceTags(
                         listOf(
                             BillingHandler.PRO,
-                            BillingHandler.DON0,
                             BillingHandler.DON1,
-                            BillingHandler.DON2
+                            BillingHandler.DON5,
+                            BillingHandler.DON25
                         )
                     ).let {
                         if (it != null) {
@@ -128,28 +126,12 @@ class PayActivity : AppCompatActivity() {
                             BasicButton(onClick = {
                                 lifecycleScope.launch {
                                     billingHandler.lunchPurchaseFlow(
-                                        BillingHandler.DON0
-                                    )
-                                }
-                            }, Modifier.weight(1f)) {
-                                Text(
-                                    priceTags[BillingHandler.DON0] ?: "",
-                                    fontSize = 10.sp,
-                                    color = Theme.colors.a
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(16.dp))
-
-                            BasicButton(onClick = {
-                                lifecycleScope.launch {
-                                    billingHandler.lunchPurchaseFlow(
                                         BillingHandler.DON1
                                     )
                                 }
                             }, Modifier.weight(1f)) {
                                 Text(
-                                    priceTags[BillingHandler.DON1] ?: "",
+                                    priceTags[BillingHandler.DON1] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )
@@ -160,12 +142,28 @@ class PayActivity : AppCompatActivity() {
                             BasicButton(onClick = {
                                 lifecycleScope.launch {
                                     billingHandler.lunchPurchaseFlow(
-                                        BillingHandler.DON2
+                                        BillingHandler.DON5
                                     )
                                 }
                             }, Modifier.weight(1f)) {
                                 Text(
-                                    priceTags[BillingHandler.DON2] ?: "",
+                                    priceTags[BillingHandler.DON5] ?: "99.99$",
+                                    fontSize = 10.sp,
+                                    color = Theme.colors.a
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(16.dp))
+
+                            BasicButton(onClick = {
+                                lifecycleScope.launch {
+                                    billingHandler.lunchPurchaseFlow(
+                                        BillingHandler.DON25
+                                    )
+                                }
+                            }, Modifier.weight(1f)) {
+                                Text(
+                                    priceTags[BillingHandler.DON25] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )
@@ -196,7 +194,7 @@ class PayActivity : AppCompatActivity() {
                                 }
                             }, Modifier.fillMaxWidth(.3f)) {
                                 Text(
-                                    priceTags[BillingHandler.PRO] ?: "",
+                                    priceTags[BillingHandler.PRO] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )

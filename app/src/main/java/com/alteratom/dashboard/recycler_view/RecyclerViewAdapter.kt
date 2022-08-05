@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.click
 import com.alteratom.dashboard.iterate
 
@@ -187,7 +186,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
     open inner class Modes {
         private var mode = -1
 
-        var onSetMode: (Modes) -> Unit = {}
+        var onSet: (Modes) -> Unit = {}
 
         val isNone
             get() = mode == -1
@@ -205,7 +204,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
 
         private fun setMode(type: Int) {
             mode = type
-            onSetMode(this)
+            onSet(this)
             for (e in list) {
                 e.flag.setNone()
                 e.onEdit(!isNone)

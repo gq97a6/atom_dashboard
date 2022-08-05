@@ -57,7 +57,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
         }
 
     override fun onBindViewHolder(
-        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        holder: RecyclerViewAdapter.ViewHolder,
         position: Int
     ) {
         super.onBindViewHolder(holder, position)

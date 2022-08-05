@@ -2,6 +2,7 @@ tests
 publish
 hardcoded text
 face/finger/pass protect dashboard
+dashboard locked due to lack of pro version
 
 billing
     pro split

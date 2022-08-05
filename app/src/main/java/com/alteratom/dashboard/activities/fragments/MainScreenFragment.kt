@@ -55,7 +55,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.root, requireContext(), false)
+            theme.apply(b.msToolbar, requireContext(), false)
         }
 
         toolBarHandler = ToolBarHandler(

@@ -136,8 +136,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.root, requireContext(), false)
-            adapter.notifyDataSetChanged()
+            theme.apply(b.dToolbar, requireContext(), false)
         }
 
         toolBarHandler = ToolBarHandler(

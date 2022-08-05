@@ -293,7 +293,7 @@ class SettingsFragment : Fragment() {
                                         }
                                     ) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text("SUPPORT ME ", fontSize = 10.sp, color = colors.a)
+                                            Text("SUPPORT DEVELOPMENT ", fontSize = 10.sp, color = colors.a)
                                             Icon(
                                                 painterResource(R.drawable.il_shape_heart_alt),
                                                 "",

@@ -107,20 +107,18 @@ class PayActivity : AppCompatActivity() {
                             .padding(16.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = "Donate", fontSize = 45.sp, color = Theme.colors.color)
+                        Text(text = "Donate", fontSize = 40.sp, color = Theme.colors.color)
                         Text(
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium," +
-                                    "totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. " +
-                                    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, " +
-                                    "sed quia consequuntur magni dolores eos qui ratione voluptatem nesciunt.",
-                            fontSize = 12.sp,
+                            "Developing apps takes time and effort.\n\n" +
+                                    "If you like the app and wish to support its further development, here you can make a donation.",
+                            fontSize = 13.sp,
                             color = Theme.colors.a
                         )
 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(15.dp),
+                                .padding(vertical = 16.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             BasicButton(onClick = {
@@ -170,13 +168,18 @@ class PayActivity : AppCompatActivity() {
                             }
                         }
 
-                        Text(text = "Pro", fontSize = 45.sp, color = Theme.colors.color)
                         Text(
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium," +
-                                    "totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. " +
-                                    "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, " +
-                                    "sed quia consequuntur magni dolores eos qui ratione voluptatem nesciunt.",
-                            fontSize = 12.sp,
+                            text = "Pro upgrade",
+                            modifier = Modifier.padding(top = 16.dp),
+                            fontSize = 40.sp,
+                            color = Theme.colors.color
+                        )
+                        Text(
+                            "Support further development and upgrade to pro.\n\n" +
+                                    "Get access to unlimited number of dashboards\nand fingerprint or pin access control.\n" +
+                                    "Includes pro features added in future updates.",
+                            modifier = Modifier.padding(top = 3.dp),
+                            fontSize = 13.sp,
                             color = Theme.colors.a
                         )
 
@@ -184,15 +187,17 @@ class PayActivity : AppCompatActivity() {
                             horizontalArrangement = Arrangement.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(15.dp)
+                                .padding(vertical = 16.dp)
                         ) {
-                            BasicButton(onClick = {
-                                lifecycleScope.launch {
-                                    billingHandler.lunchPurchaseFlow(
-                                        BillingHandler.PRO
-                                    )
-                                }
-                            }, Modifier.fillMaxWidth(.3f)) {
+                            BasicButton(
+                                onClick = {
+                                    lifecycleScope.launch {
+                                        billingHandler.lunchPurchaseFlow(
+                                            BillingHandler.PRO
+                                        )
+                                    }
+                                }, Modifier.fillMaxWidth()
+                            ) {
                                 Text(
                                     priceTags[BillingHandler.PRO] ?: "99.99$",
                                     fontSize = 10.sp,
@@ -202,20 +207,23 @@ class PayActivity : AppCompatActivity() {
                         }
 
                         Text(
-                            "For delayed payment process use button below to process purchase after it succeeds.",
+                            "For delayed payment process use button\nbelow to process purchase after it succeeds",
                             fontSize = 12.sp,
-                            color = Theme.colors.a
+                            //textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(top = 30.dp),
+                            color = Theme.colors.b
                         )
 
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxWidth()
                         ) {
+
                             BasicButton(
                                 contentPadding = PaddingValues(13.dp),
                                 border = BorderStroke(2.dp, Theme.colors.b),
                                 modifier = Modifier
-                                    .fillMaxWidth(.8f)
+                                    .fillMaxWidth()
                                     .padding(top = 12.dp),
                                 onClick = {
                                     if (!proCheckShow) {
@@ -241,7 +249,7 @@ class PayActivity : AppCompatActivity() {
                                     }
                                 }
                             ) {
-                                Text("CHECK PENDING", fontSize = 10.sp, color = Theme.colors.a)
+                                Text("CHECK PENDING", fontSize = 10.sp, color = Theme.colors.b)
                             }
                         }
 

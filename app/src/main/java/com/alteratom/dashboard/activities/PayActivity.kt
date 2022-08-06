@@ -209,7 +209,6 @@ class PayActivity : AppCompatActivity() {
                         Text(
                             "For delayed payment process use button\nbelow to process purchase after it succeeds",
                             fontSize = 12.sp,
-                            //textAlign = TextAlign.Center,
                             modifier = Modifier.padding(top = 30.dp),
                             color = Theme.colors.b
                         )
@@ -279,7 +278,7 @@ class PayActivity : AppCompatActivity() {
                         Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(40.dp)
+                                .height(60.dp)
                         )
                     }
                 }

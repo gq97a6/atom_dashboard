@@ -1,11 +1,8 @@
-tests
-publish
-hardcoded text
+DEVELOPMENT
 face/finger/pass protect dashboard
 dashboard locked due to lack of pro version
 
-billing
-    pro split
-        dashboard protection
-        more than 2 dashboards
-        more than 3 nfc tags
+POST DEVELOPMENT
+tests
+publish
+hardcoded text

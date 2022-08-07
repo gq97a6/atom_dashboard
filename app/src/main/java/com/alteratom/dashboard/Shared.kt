@@ -2,14 +2,15 @@
 
 package com.alteratom.dashboard
 
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.hardware.biometrics.BiometricManager
-import android.os.*
+import android.os.Handler
+import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -18,7 +19,8 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
-import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
@@ -31,8 +33,10 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
+import com.alteratom.dashboard.activities.MainActivity
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.*
@@ -128,7 +132,6 @@ fun createNotification(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 internal fun createNotificationChannel(context: Context) {
     val channel = NotificationChannel(
         "notification_id",
@@ -230,12 +233,12 @@ fun Float.round(d: Int): Float = this.toBigDecimal().setScale(d, RoundingMode.FL
 fun Certificate.toPem(): String {
     val BEGIN_CERT = "-----BEGIN CERTIFICATE-----"
     val END_CERT = "-----END CERTIFICATE-----"
-    val LINE_SEPARATOR = System.getProperty("line.separator")
+    val LINE_SEPARATOR = System.getProperty("line.separator") ?: ""
 
     val encoder: Base64.Encoder = Base64.getMimeEncoder(64, LINE_SEPARATOR.toByteArray())
     val rawCrtText: ByteArray = this.encoded
     val encodedCertText = String(encoder.encode(rawCrtText))
-    return BEGIN_CERT + LINE_SEPARATOR.toString() + encodedCertText + LINE_SEPARATOR.toString() + END_CERT
+    return BEGIN_CERT + LINE_SEPARATOR + encodedCertText + LINE_SEPARATOR + END_CERT
 }
 
 inline fun Fragment.biometricAuthentication(
@@ -246,16 +249,16 @@ inline fun Fragment.biometricAuthentication(
     crossinline onError: (Int, CharSequence) -> Unit = { _, _ -> },
     crossinline onSuccess: (BiometricPrompt.AuthenticationResult) -> Unit = {}
 ) {
-    var executor = ContextCompat.getMainExecutor(this.requireContext())
-    var promptInfo = BiometricPrompt.PromptInfo.Builder()
+    val executor = ContextCompat.getMainExecutor(this.requireContext())
+    val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(title)
         .setDescription(description)
         .setSubtitle(subtitle)
         .setConfirmationRequired(false)
-        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+        .setAllowedAuthenticators(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
         .build()
 
-    var biometricPrompt = BiometricPrompt(this, executor,
+    val biometricPrompt = BiometricPrompt(this, executor,
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
@@ -274,4 +277,18 @@ inline fun Fragment.biometricAuthentication(
         })
 
     biometricPrompt.authenticate(promptInfo)
+}
+
+inline fun Fragment.dashboardAuthentication(crossinline onSuccess: () -> Unit) {
+    lifecycleScope.launch {
+        if (ProVersion.status &&
+            (G.dashboard.securityLevel == 2 ||
+                    (G.dashboard.securityLevel == 1 && !G.unlockedDashboards.contains(G.dashboard.id)))
+        ) {
+            this@dashboardAuthentication.biometricAuthentication(onError = { _, _ -> MainActivity.fm.popBackStack() }) {
+                if (G.dashboard.securityLevel == 1) G.unlockedDashboards.add(G.dashboard.id)
+                onSuccess()
+            }
+        } else onSuccess()
+    }
 }

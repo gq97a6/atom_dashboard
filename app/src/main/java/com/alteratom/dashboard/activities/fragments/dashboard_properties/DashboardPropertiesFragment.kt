@@ -19,17 +19,20 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
@@ -49,6 +52,8 @@ class DashboardPropertiesFragment : Fragment() {
 
     lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
     lateinit var request: ActivityResultLauncher<Intent>
+
+    var test = MutableLiveData(0f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,12 +110,15 @@ class DashboardPropertiesFragment : Fragment() {
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
+                val test by test.observeAsState(0f)
+
                 //Background
                 Box(modifier = Modifier.background(Theme.colors.background))
 
                 ComposeTheme(Theme.isDark) {
                     Box(
                         modifier = Modifier
+                            .alpha(test)
                             .fillMaxSize()
                             .pointerInput(Unit) {
                                 awaitPointerEventScope {
@@ -246,5 +254,12 @@ class DashboardPropertiesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
+        this.dashboardAuthentication { test.postValue(1f) }
     }
 }

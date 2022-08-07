@@ -182,17 +182,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         super.onResume()
         adapter.notifyDataSetChanged()
 
-        lifecycleScope.launch {
-            if (ProVersion.status &&
-                (dashboard.securityLevel == 2 ||
-                        (dashboard.securityLevel == 1 && !G.unlockedDashboards.contains(dashboard.id)))
-            ) {
-                this@DashboardFragment.biometricAuthentication(onError = { _, _ -> fm.popBackStack() }) {
-                    if (dashboard.securityLevel == 1) G.unlockedDashboards.add(dashboard.id)
-                    b.dRecyclerView.visibility = VISIBLE
-                }
-            } else b.dRecyclerView.visibility = VISIBLE
-        }
+        if (ProVersion.status && dashboard.securityLevel > 0) b.dRecyclerView.visibility = GONE
+        this.dashboardAuthentication { b.dRecyclerView.visibility = VISIBLE }
     }
 
     //----------------------------------------------------------------------------------------------

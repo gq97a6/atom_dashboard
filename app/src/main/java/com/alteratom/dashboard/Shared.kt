@@ -282,16 +282,13 @@ inline fun Fragment.biometricAuthentication(
 
 inline fun Fragment.dashboardAuthentication(crossinline onSuccess: () -> Unit) {
     lifecycleScope.launch {
-        delay(1000)
         if (ProVersion.status &&
             (G.dashboard.securityLevel == 2 ||
                     (G.dashboard.securityLevel == 1 && !G.unlockedDashboards.contains(G.dashboard.id)))
         ) {
-            run {}
             this@dashboardAuthentication.biometricAuthentication(onError = { _, _ -> MainActivity.fm.popBackStack() }) {
-                //if (G.dashboard.securityLevel == 1) G.unlockedDashboards.add(G.dashboard.id)
+                if (G.dashboard.securityLevel == 1) G.unlockedDashboards.add(G.dashboard.id)
                 onSuccess()
-                run {}
             }
         } else onSuccess()
     }

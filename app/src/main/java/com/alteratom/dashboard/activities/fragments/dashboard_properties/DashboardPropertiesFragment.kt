@@ -44,6 +44,7 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.switcher.FragmentSwitcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.util.*
@@ -266,9 +267,12 @@ class DashboardPropertiesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        //if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
-        this.dashboardAuthentication {
-            test.postValue(1f)
+        if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
+        lifecycleScope.launch {
+            delay(1000)
+            this@DashboardPropertiesFragment.dashboardAuthentication {
+                test.postValue(1f)
+            }
         }
     }
 }

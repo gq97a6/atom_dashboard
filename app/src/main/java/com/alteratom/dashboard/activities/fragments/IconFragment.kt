@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.GridItemSpan
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -22,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -71,7 +73,6 @@ class TileIconFragment : Fragment() {
         catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
     }.toMap()
 
-    @OptIn(ExperimentalFoundationApi::class, ExperimentalGraphicsApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -109,18 +110,18 @@ class TileIconFragment : Fragment() {
 
                     Box {
                         LazyVerticalGrid(
-                            cells = GridCells.Fixed(6),
+                            columns = GridCells.Fixed(6),
                             modifier = Modifier
                                 .padding(horizontal = 10.dp)
                                 .padding(bottom = 10.dp),
                             horizontalArrangement = Arrangement.Center
                         ) {
 
-                            item({ GridItemSpan(6) }) {
+                            item(span = { GridItemSpan(6) }) {
                                 Spacer(modifier = Modifier.height(140.dp))
                             }
 
-                            items(cols, { GridItemSpan(1) }) {
+                            items(cols, span = { GridItemSpan(1) }) {
                                 Box(
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -135,7 +136,7 @@ class TileIconFragment : Fragment() {
                                 )
                             }
 
-                            item({ GridItemSpan(3) }) {
+                            item(span = { GridItemSpan(3) }) {
                                 Box(
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -150,7 +151,7 @@ class TileIconFragment : Fragment() {
                                 )
                             }
 
-                            item({ GridItemSpan(3) }) {
+                            item(span = { GridItemSpan(3) }) {
                                 Box(
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -177,7 +178,7 @@ class TileIconFragment : Fragment() {
                             }
 
                             for (pair in icons) {
-                                item({ GridItemSpan(6) }) {
+                                item(span = { GridItemSpan(6) }) {
                                     Box(
                                         modifier = Modifier
                                             .padding(top = 15.dp)
@@ -195,7 +196,7 @@ class TileIconFragment : Fragment() {
                                     }
                                 }
 
-                                items(pair.value, { GridItemSpan(1) }) {
+                                items(pair.value, span = { GridItemSpan(1) }) {
                                     Icon(
                                         painterResource(it.res),
                                         "",
@@ -212,7 +213,7 @@ class TileIconFragment : Fragment() {
                                     )
                                 }
 
-                                item({ GridItemSpan(6) }) {
+                                item(span = { GridItemSpan(6) }) {
                                     Spacer(Modifier)
                                 }
                             }

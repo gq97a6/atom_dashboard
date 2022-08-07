@@ -131,7 +131,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
         }
 
         holder.itemView as ViewGroup
-        holder.itemView.iterate(callback)
+        (holder.itemView as ViewGroup).iterate(callback)
         onBindViewHolder(list[position], holder, position)
     }
 

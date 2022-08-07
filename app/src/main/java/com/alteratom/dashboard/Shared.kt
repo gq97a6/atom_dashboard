@@ -36,6 +36,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.activities.MainActivity
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.security.cert.Certificate
@@ -281,13 +282,16 @@ inline fun Fragment.biometricAuthentication(
 
 inline fun Fragment.dashboardAuthentication(crossinline onSuccess: () -> Unit) {
     lifecycleScope.launch {
+        delay(1000)
         if (ProVersion.status &&
             (G.dashboard.securityLevel == 2 ||
                     (G.dashboard.securityLevel == 1 && !G.unlockedDashboards.contains(G.dashboard.id)))
         ) {
+            run {}
             this@dashboardAuthentication.biometricAuthentication(onError = { _, _ -> MainActivity.fm.popBackStack() }) {
-                if (G.dashboard.securityLevel == 1) G.unlockedDashboards.add(G.dashboard.id)
+                //if (G.dashboard.securityLevel == 1) G.unlockedDashboards.add(G.dashboard.id)
                 onSuccess()
+                run {}
             }
         } else onSuccess()
     }

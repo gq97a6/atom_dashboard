@@ -6,8 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -182,8 +181,10 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         super.onResume()
         adapter.notifyDataSetChanged()
 
-        if (ProVersion.status && dashboard.securityLevel > 0) b.dRecyclerView.visibility = GONE
-        this.dashboardAuthentication { b.dRecyclerView.visibility = VISIBLE }
+        if (ProVersion.status && dashboard.securityLevel > 0) b.dRecyclerView.visibility = INVISIBLE
+        this.dashboardAuthentication {
+            b.dRecyclerView.visibility = VISIBLE
+        }
     }
 
     //----------------------------------------------------------------------------------------------

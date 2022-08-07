@@ -62,7 +62,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.2.0-alpha07"
+        kotlinCompilerExtensionVersion "1.2.0"
     }
 
     packagingOptions {
@@ -74,16 +74,15 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-beta01'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.2.0'
+    implementation 'androidx.compose.material:material:1.2.0'
+    implementation 'androidx.compose.animation:animation:1.2.0'
+    implementation 'androidx.compose.ui:ui-tooling:1.2.0'
+    implementation 'androidx.activity:activity-compose:1.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
     implementation("androidx.biometric:biometric:1.2.0-alpha04")
     implementation 'com.android.billingclient:billing:5.0.0'
-    implementation 'androidx.activity:activity-compose:1.5.1'
-    implementation 'androidx.compose.material:material:1.1.1'
-    implementation 'androidx.compose.animation:animation:1.1.1'
-    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
     implementation project(path: ':lvl_library')
-    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.0'
     implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
     implementation 'me.tankery.lib:circularSeekBar:1.4.1'
     implementation 'com.github.gq97a6:arc_textview:1.0.0'

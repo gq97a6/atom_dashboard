@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
@@ -43,6 +44,7 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.switcher.FragmentSwitcher
+import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.util.*
 import kotlin.math.abs
@@ -107,10 +109,16 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //lifecycleScope.launch {
+        //    delay(1000)
+        //    test.postValue(1f)
+        //}
+
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
-                val test by test.observeAsState(0f)
+                //val test by test.observeAsState(0f)
+                val test = test.observeAsState(0f)
 
                 //Background
                 Box(modifier = Modifier.background(Theme.colors.background))
@@ -118,7 +126,7 @@ class DashboardPropertiesFragment : Fragment() {
                 ComposeTheme(Theme.isDark) {
                     Box(
                         modifier = Modifier
-                            .alpha(test)
+                            .alpha(test.value)
                             .fillMaxSize()
                             .pointerInput(Unit) {
                                 awaitPointerEventScope {
@@ -258,8 +266,9 @@ class DashboardPropertiesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
-        this.dashboardAuthentication { test.postValue(1f) }
+        //if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
+        this.dashboardAuthentication {
+            test.postValue(1f)
+        }
     }
 }

@@ -42,6 +42,8 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     val pallet: Theme.ColorPallet
         get() = G.theme.a.getColorPallet(hsv, true)
 
+    var excludeNavigation = false
+    var securityLevel = 0
     var log = Log()
 
     @JsonAlias("mqtt")

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
@@ -158,7 +159,11 @@ class DashboardPropertiesFragment : Fragment() {
                                         border = BorderStroke(0.dp, dashboard.pallet.cc.color),
                                         modifier = Modifier.size(52.dp)
                                     ) {
-                                        Icon(painterResource(dashboard.iconRes), "", tint = dashboard.pallet.cc.color)
+                                        Icon(
+                                            painterResource(dashboard.iconRes),
+                                            "",
+                                            tint = dashboard.pallet.cc.color
+                                        )
                                     }
 
                                     var name by remember {
@@ -184,6 +189,50 @@ class DashboardPropertiesFragment : Fragment() {
                                     dashboard.type,
                                     this@DashboardPropertiesFragment
                                 )
+
+                                var securityLevel by remember { mutableStateOf(dashboard.securityLevel) }
+                                var excludeNavigation by remember { mutableStateOf(dashboard.excludeNavigation) }
+
+                                FrameBox("Security") {
+                                    Column {
+                                        LabeledCheckbox(
+                                            label = {
+                                                Text(
+                                                    "Exclude from quick navigation",
+                                                    fontSize = 15.sp,
+                                                    color = Theme.colors.a
+                                                )
+                                            },
+                                            checked = excludeNavigation,
+                                            onCheckedChange = {
+                                                excludeNavigation = it
+                                                dashboard.excludeNavigation = it
+                                            },
+                                            modifier = Modifier.padding(vertical = 10.dp)
+                                        )
+
+                                        RadioGroup(
+                                            listOf(
+                                                "Never",
+                                                "Once (unlock until app minimized)",
+                                                "Every time",
+                                            ),
+                                            "Access authentication level",
+                                            securityLevel,
+                                            {
+                                                requireContext().buildConfirm(
+                                                    "Confirm change",
+                                                    "CONFIRM",
+                                                    {
+                                                        securityLevel = it
+                                                        dashboard.securityLevel = it
+                                                    }
+                                                )
+                                            },
+                                            modifier = Modifier.padding(top = 5.dp)
+                                        )
+                                    }
+                                }
                             }
                         }
                     }

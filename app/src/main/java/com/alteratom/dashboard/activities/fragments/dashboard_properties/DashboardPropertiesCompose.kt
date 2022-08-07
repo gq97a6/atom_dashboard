@@ -50,7 +50,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
     override fun Mqttd(fragment: Fragment) {
         fragment as DashboardPropertiesFragment
 
-        FrameBox("Communication:", "MQTT") {
+        FrameBox("Communication:", " MQTT") {
             Column {
                 Row(
                     Modifier
@@ -261,7 +261,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f)
-                        .padding(top = 10.dp),
+                        .padding(top = 14.dp),
                     border = BorderStroke(2.dp, Theme.colors.b),
                     onClick = { sslShow = true }
                 ) {

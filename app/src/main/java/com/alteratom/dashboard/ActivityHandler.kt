@@ -20,6 +20,7 @@ object ActivityHandler {
     }
 
     fun onPause() {
+        G.unlockedDashboards.clear()
         dashboards.saveToFile()
         settings.saveToFile()
         theme.saveToFile()

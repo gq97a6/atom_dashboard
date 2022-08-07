@@ -13,6 +13,7 @@ object G {
     var dashboardIndex = -2
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
+    val unlockedDashboards = mutableListOf<Long>()
 
     fun setCurrentDashboard(index: Int): Boolean {
         return if (index !in 0..dashboards.size - 1) false

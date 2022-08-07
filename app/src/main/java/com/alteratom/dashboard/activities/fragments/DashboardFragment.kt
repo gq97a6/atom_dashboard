@@ -3,8 +3,6 @@ package com.alteratom.dashboard.activities.fragments
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -37,7 +35,6 @@ import com.alteratom.tile.types.slider.SliderTile
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
@@ -184,6 +181,18 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
+
+        lifecycleScope.launch {
+            if (ProVersion.status &&
+                (dashboard.securityLevel == 2 ||
+                        (dashboard.securityLevel == 1 && !G.unlockedDashboards.contains(dashboard.id)))
+            ) {
+                this@DashboardFragment.biometricAuthentication(onError = { _, _ -> fm.popBackStack() }) {
+                    if (dashboard.securityLevel == 1) G.unlockedDashboards.add(dashboard.id)
+                    b.dRecyclerView.visibility = VISIBLE
+                }
+            } else b.dRecyclerView.visibility = VISIBLE
+        }
     }
 
     //----------------------------------------------------------------------------------------------

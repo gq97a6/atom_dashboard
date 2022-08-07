@@ -2,11 +2,13 @@
 
 package com.alteratom.dashboard
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
+import android.hardware.biometrics.BiometricManager
 import android.os.*
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +19,19 @@ import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricPrompt
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.alteratom.R
 import java.math.RoundingMode
 import java.security.cert.Certificate
@@ -230,4 +236,42 @@ fun Certificate.toPem(): String {
     val rawCrtText: ByteArray = this.encoded
     val encodedCertText = String(encoder.encode(rawCrtText))
     return BEGIN_CERT + LINE_SEPARATOR.toString() + encodedCertText + LINE_SEPARATOR.toString() + END_CERT
+}
+
+inline fun Fragment.biometricAuthentication(
+    title: String = "Biometric authentication",
+    subtitle: String = "",
+    description: String = "",
+    crossinline onFail: () -> Unit = {},
+    crossinline onError: (Int, CharSequence) -> Unit = { _, _ -> },
+    crossinline onSuccess: (BiometricPrompt.AuthenticationResult) -> Unit = {}
+) {
+    var executor = ContextCompat.getMainExecutor(this.requireContext())
+    var promptInfo = BiometricPrompt.PromptInfo.Builder()
+        .setTitle(title)
+        .setDescription(description)
+        .setSubtitle(subtitle)
+        .setConfirmationRequired(false)
+        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK or BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+        .build()
+
+    var biometricPrompt = BiometricPrompt(this, executor,
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                onError(errorCode, errString)
+            }
+
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                onSuccess(result)
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                onFail()
+            }
+        })
+
+    biometricPrompt.authenticate(promptInfo)
 }

@@ -142,7 +142,7 @@ fun RadioGroup(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        Text(text = label, fontSize = 15.sp, color = colors.color)
+        Text(text = label, fontSize = 15.sp, color = colors.a)
         options.forEachIndexed { index, item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -160,7 +160,7 @@ fun RadioGroup(
                 val annotatedText = buildAnnotatedString {
                     withStyle(
                         style = SpanStyle(
-                            color = if (index == selected) colors.a else colors.b,
+                            color = if (index == selected) colors.b else colors.c,
                             fontSize = 15.sp
                         )
                     )

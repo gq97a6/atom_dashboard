@@ -1,8 +1,7 @@
 package com.alteratom.dashboard
 
-import android.content.res.ColorStateList
-import android.graphics.drawable.GradientDrawable
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
@@ -72,6 +71,11 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
         holder.itemView.findViewById<View>(R.id.id_icon)?.setBackgroundResource(iconRes)
 
+        if (!Pro.status && position > 1){
+            holder.itemView.alpha = .5f
+            holder.itemView.findViewById<TextView>(R.id.id_pro).visibility = VISIBLE
+        }
+
         holder.itemView.findViewById<TextView>(R.id.id_tag).text =
             name.uppercase(Locale.getDefault())
     }
@@ -85,7 +89,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     }
 
     data class MqttBrokerData(
-        var isEnabled: Boolean = true,
+        var isEnabled: Boolean = Pro.status,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
         @JsonIgnore

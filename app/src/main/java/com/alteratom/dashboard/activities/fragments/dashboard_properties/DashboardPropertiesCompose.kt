@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments.dashboard_properties
 
+import android.content.Intent
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.BorderStroke
@@ -30,15 +31,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
+import com.alteratom.dashboard.G.dashboardIndex
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
@@ -59,6 +65,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     Arrangement.SpaceBetween,
                     Alignment.CenterVertically
                 ) {
+                    var lock by remember { mutableStateOf(false) }
                     var enabled by remember { mutableStateOf(dashboard.mqttData.isEnabled) }
                     LabeledSwitch(
                         label = {
@@ -69,10 +76,35 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             )
                         },
                         checked = enabled,
+                        enabled = !lock,
                         onCheckedChange = {
-                            enabled = it
-                            dashboard.mqttData.isEnabled = it
-                            dashboard.daemon.notifyOptionsChanged()
+                            if (Pro.status || dashboardIndex < 2) {
+                                enabled = it
+                                dashboard.mqttData.isEnabled = it
+                                dashboard.daemon.notifyOptionsChanged()
+                            } else {
+                                lock = true
+                                fragment.lifecycleScope.launch {
+                                    fragment.requireContext()
+                                        .buildConfirm("This feature requires pro\n\nNote: free of charge\nfor beta testers", "UNLOCK",
+                                            {
+                                                fragment.activity?.apply {
+                                                    Intent(
+                                                        this,
+                                                        PayActivity::class.java
+                                                    ).also {
+                                                        startActivity(it)
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    enabled = true
+                                    lock = true
+                                    delay(1000)
+                                    lock = false
+                                    enabled = false
+                                }
+                            }
                         }
                     )
 

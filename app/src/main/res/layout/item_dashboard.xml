@@ -81,6 +81,21 @@
             app:layout_constraintStart_toStartOf="@id/id_tag_frame"
             app:layout_constraintTop_toTopOf="@+id/id_tag_frame" />
 
+
+        <TextView
+            android:id="@+id/id_pro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="15dp"
+            android:tag="color"
+            android:text="PRO"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".7" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

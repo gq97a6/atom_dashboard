@@ -1,13 +1,15 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
+import android.view.View
+import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Storage.rootFolder
 import com.android.billingclient.api.Purchase
 import kotlinx.coroutines.delay
 import java.io.File
 import kotlin.system.measureTimeMillis
 
-object ProVersion {
+object Pro {
     var status = false
 
     fun updateStatus() {

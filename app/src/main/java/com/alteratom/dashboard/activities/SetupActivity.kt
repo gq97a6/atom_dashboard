@@ -16,8 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.Storage.rootFolder
 import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.Storage.rootFolder
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
@@ -67,14 +67,6 @@ class SetupActivity : AppCompatActivity() {
             }
         }
 
-        GlobalScope.launch {
-            BillingHandler(this@SetupActivity).apply {
-                enable()
-                checkPendingPurchases(0) {}
-                disable()
-            }
-        }
-
         if (serviceRunning) onServiceReady()
         else {
             val foregroundServiceHandler = ForegroundServiceHandler(this@SetupActivity)
@@ -92,6 +84,21 @@ class SetupActivity : AppCompatActivity() {
     }
 
     fun onServiceReady() {
+        GlobalScope.launch {
+            BillingHandler(this@SetupActivity).apply {
+                enable()
+                checkPendingPurchases(0) {}
+                disable()
+            }
+
+            if (!Pro.status) {
+                for (e in dashboards.slice(2..dashboards.size - 1)) {
+                    e.mqttData.isEnabled = false
+                    e.daemon.notifyOptionsChanged()
+                }
+            }
+        }
+
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
             overridePendingTransition(0, 0)

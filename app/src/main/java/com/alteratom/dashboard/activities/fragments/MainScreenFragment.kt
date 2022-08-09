@@ -3,19 +3,22 @@ package com.alteratom.dashboard.activities.fragments
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.Pro
 import com.alteratom.dashboard.ToolbarHandler
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
 import com.alteratom.dashboard.blink
-import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
@@ -106,6 +109,14 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         adapter.onItemLongClick = { item ->
             if (setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
+        }
+
+        adapter.editMode.onSet = {
+            if (!Pro.status) {
+                for (e in adapter.list.slice(2..adapter.list.size - 1)) {
+                    e.holder?.itemView?.visibility = if (it.isSwap) GONE else VISIBLE
+                }
+            }
         }
 
         adapter.submitList(dashboards)

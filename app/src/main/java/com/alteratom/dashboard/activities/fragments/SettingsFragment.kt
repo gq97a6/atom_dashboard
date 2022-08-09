@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,18 +28,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.BillingHandler.Companion.PRO
+import com.alteratom.dashboard.G.dashboards
+import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Storage.mapper
 import com.alteratom.dashboard.Storage.parseListSave
 import com.alteratom.dashboard.Storage.parseSave
 import com.alteratom.dashboard.Storage.prepareSave
 import com.alteratom.dashboard.Storage.saveToFile
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
@@ -55,6 +57,8 @@ class SettingsFragment : Fragment() {
 
     private lateinit var open: ActivityResultLauncher<Intent>
     private lateinit var create: ActivityResultLauncher<Intent>
+
+    var pro = MutableLiveData(Pro.status)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -174,6 +178,7 @@ class SettingsFragment : Fragment() {
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
+
                 ComposeTheme(Theme.isDark) {
 
                     Box(
@@ -292,7 +297,11 @@ class SettingsFragment : Fragment() {
                                         }
                                     ) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text("SUPPORT DEVELOPMENT ", fontSize = 10.sp, color = colors.a)
+                                            Text(
+                                                "SUPPORT DEVELOPMENT ",
+                                                fontSize = 10.sp,
+                                                color = colors.a
+                                            )
                                             Icon(
                                                 painterResource(R.drawable.il_shape_heart_alt),
                                                 "",
@@ -325,7 +334,7 @@ class SettingsFragment : Fragment() {
                                             connectionHandler.awaitDone()
                                         }
 
-                                        ProVersion.removeLocalLicence()
+                                        Pro.removeLocalLicence()
                                         createToast(requireContext(), "DONE")
                                     }
                                 }
@@ -340,8 +349,10 @@ class SettingsFragment : Fragment() {
                             )
                         }
 
+                        val pro by pro.observeAsState()
+
                         Text(
-                            "stable ${if (ProVersion.status) "pro" else "free"} 1.0.0",
+                            "beta ${if (pro ?: Pro.status) "pro" else "free"} 1.0.0",
                             Modifier.padding(bottom = 5.dp),
                             fontSize = 10.sp,
                             color = colors.c
@@ -350,5 +361,10 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        pro.postValue(Pro.status)
     }
 }

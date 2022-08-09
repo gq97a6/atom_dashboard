@@ -82,7 +82,7 @@ class TileIconFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 var iconRes by remember { mutableStateOf(getIconRes()) }
-                var iconColor by remember { mutableStateOf(getIconColorPallet().cc.a) }
+                var iconColor by remember { mutableStateOf(getIconColorPallet().cc.color) }
                 var pickerShow by remember { mutableStateOf(false) }
 
                 var hueAngle by remember { mutableStateOf(0.0) }
@@ -146,7 +146,7 @@ class TileIconFragment : Fragment() {
                                         .clickable {
                                             setPickerColor(floatArrayOf(0f, 0f, 0f))
                                             setIconHSV(floatArrayOf(0f, 0f, 0f))
-                                            iconColor = getIconColorPallet().cc.a
+                                            iconColor = getIconColorPallet().cc.color
                                         }
                                 )
                             }
@@ -271,7 +271,7 @@ class TileIconFragment : Fragment() {
                                             hueAngle = a
                                             hue = (v * 360f).toFloat()
                                             setIconHSV(floatArrayOf(hue, saturation, value))
-                                            iconColor = getIconColorPallet().cc.a
+                                            iconColor = getIconColorPallet().cc.color
                                         }
                                     )
 
@@ -293,7 +293,7 @@ class TileIconFragment : Fragment() {
                                                 saturationAngle = a
                                                 saturation = v.toFloat()
                                                 setIconHSV(floatArrayOf(hue, saturation, value))
-                                                iconColor = getIconColorPallet().cc.a
+                                                iconColor = getIconColorPallet().cc.color
                                             }
                                         )
                                     } else {
@@ -314,7 +314,7 @@ class TileIconFragment : Fragment() {
                                                 saturationAngle = a
                                                 saturation = v.toFloat()
                                                 setIconHSV(floatArrayOf(hue, saturation, value))
-                                                iconColor = getIconColorPallet().cc.a
+                                                iconColor = getIconColorPallet().cc.color
                                             }
                                         )
 
@@ -335,7 +335,7 @@ class TileIconFragment : Fragment() {
                                                 valueAngle = a
                                                 value = (1 - v).toFloat()
                                                 setIconHSV(floatArrayOf(hue, saturation, value))
-                                                iconColor = getIconColorPallet().cc.a
+                                                iconColor = getIconColorPallet().cc.color
                                             }
                                         )
                                     }

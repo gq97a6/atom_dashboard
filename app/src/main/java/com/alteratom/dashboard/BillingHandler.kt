@@ -87,7 +87,7 @@ class BillingHandler(val activity: Activity) {
         for (product in purchase.products) {
             when (product) {
                 PRO -> {
-                    ProVersion.createLocalLicence()
+                    Pro.createLocalLicence()
                     if (!purchase.isAcknowledged) purchase.acknowledge()
                 }
                 DON1, DON5, DON25 -> {

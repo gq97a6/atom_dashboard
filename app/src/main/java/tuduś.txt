@@ -1,6 +1,3 @@
-DEVELOPMENT
-dashboard locked due to lack of pro version
-
 POST DEVELOPMENT
 tests
 publish

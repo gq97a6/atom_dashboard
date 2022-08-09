@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -45,7 +46,7 @@ class PayActivity : AppCompatActivity() {
         billingHandler.enable()
 
         setContent {
-            var proCheckShow by remember { mutableStateOf(false) }
+            var showLoading by remember { mutableStateOf(false) }
             var scaleInitialValue by remember { mutableStateOf(1f) }
             var scaleTargetValue by remember { mutableStateOf(.8f) }
             var scaleDuration by remember { mutableStateOf(3000) }
@@ -72,7 +73,7 @@ class PayActivity : AppCompatActivity() {
 
             remember {
                 lifecycleScope.launch {
-                    proCheckShow = true
+                    showLoading = true
                     billingHandler.getPriceTags(
                         listOf(
                             BillingHandler.PRO,
@@ -87,7 +88,7 @@ class PayActivity : AppCompatActivity() {
                             scaleTargetValue = 0f
                             scaleDuration = 500
                             delay(500)
-                            proCheckShow = false
+                            showLoading = false
                         } else MainActivity.fm.popBackStack()
                     }
                 }
@@ -182,6 +183,12 @@ class PayActivity : AppCompatActivity() {
                             fontSize = 13.sp,
                             color = Theme.colors.a
                         )
+                        Text(
+                            "\nNote: free pro upgrade for beta testers, includes final version of the app.",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Theme.colors.color
+                        )
 
                         Row(
                             horizontalArrangement = Arrangement.Center,
@@ -197,15 +204,61 @@ class PayActivity : AppCompatActivity() {
                                         )
                                     }
                                 },
-                                enabled = !ProVersion.status,
+                                //enabled = !ProVersion.status,
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    if (ProVersion.status) "OWNED"
-                                    else priceTags[BillingHandler.PRO] ?: "99.99$",
+                                    priceTags[BillingHandler.PRO] ?: "99.99$",
+                                    //if (ProVersion.status) "OWNED"
+                                    //else priceTags[BillingHandler.PRO] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )
+                            }
+                        }
+
+
+                        Text(
+                            "\nNote: free pro upgrade for beta testers, does NOT include final version of the app.",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 10.dp),
+                            color = Theme.colors.color
+                        )
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+
+                            BasicButton(
+                                contentPadding = PaddingValues(13.dp),
+                                border = BorderStroke(2.dp, Theme.colors.b),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 12.dp),
+                                onClick = {
+                                    if (!showLoading) {
+                                        showLoading = true
+                                        scaleInitialValue = 1f
+                                        scaleTargetValue = .8f
+                                        scaleDuration = 3000
+
+                                        Pro.createLocalLicence()
+
+                                        lifecycleScope.launch {
+                                            delay(8000)
+                                            createToast(this@PayActivity, "Temporary license created")
+                                            scaleInitialValue = scale.value
+                                            scaleTargetValue = 0f
+                                            scaleDuration = 1000
+                                            delay(1000)
+                                            showLoading = false
+                                        }
+                                    }
+                                }
+                            ) {
+                                Text("GET PRO TEMPORARILY", fontSize = 10.sp, color = Theme.colors.b)
                             }
                         }
 
@@ -228,8 +281,8 @@ class PayActivity : AppCompatActivity() {
                                     .fillMaxWidth()
                                     .padding(top = 12.dp),
                                 onClick = {
-                                    if (!proCheckShow) {
-                                        proCheckShow = true
+                                    if (!showLoading) {
+                                        showLoading = true
                                         scaleInitialValue = 1f
                                         scaleTargetValue = .8f
                                         scaleDuration = 3000
@@ -245,7 +298,7 @@ class PayActivity : AppCompatActivity() {
                                                 scaleTargetValue = 0f
                                                 scaleDuration = 1000
                                                 delay(1000)
-                                                proCheckShow = false
+                                                showLoading = false
                                             }
                                         }
                                     }
@@ -255,9 +308,9 @@ class PayActivity : AppCompatActivity() {
                             }
                         }
 
-                        if (proCheckShow) {
+                        if (showLoading) {
                             Dialog(
-                                { proCheckShow = true },
+                                { showLoading = true },
                                 DialogProperties(usePlatformDefaultWidth = false)
                             ) {
                                 Image(

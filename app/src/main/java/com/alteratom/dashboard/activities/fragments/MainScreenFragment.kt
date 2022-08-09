@@ -10,7 +10,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.ToolBarHandler
+import com.alteratom.dashboard.ToolbarHandler
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
@@ -24,7 +24,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Dashboard>
-    private lateinit var toolBarHandler: ToolBarHandler
+    private lateinit var toolBarHandler: ToolbarHandler
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             theme.apply(b.msToolbar, requireContext(), false)
         }
 
-        toolBarHandler = ToolBarHandler(
+        toolBarHandler = ToolbarHandler(
             adapter,
             b.msBar,
             b.msToolbar,

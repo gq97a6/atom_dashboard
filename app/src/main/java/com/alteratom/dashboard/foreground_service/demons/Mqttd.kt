@@ -5,7 +5,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.FolderTree
+import com.alteratom.dashboard.Storage
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -471,7 +471,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 for (p in mqttData.jsonPaths) {
                     data.second.toString().let {
                         try {
-                            FolderTree.mapper.readTree(it).at(p.value).asText()
+                            Storage.mapper.readTree(it).at(p.value).asText()
                         } catch (e: Exception) {
                             null
                         }?.let {

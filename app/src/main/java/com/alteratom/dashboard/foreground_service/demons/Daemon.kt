@@ -1,13 +1,11 @@
 package com.alteratom.dashboard.foreground_service.demons
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import com.alteratom.dashboard.IdGenerator
+import com.alteratom.dashboard.IdentityGenerator
 import com.alteratom.dashboard.Dashboard
 
-abstract class Daemon(val context: Context, var d: Dashboard) : IdGenerator.Indexed {
+abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerator.Indexed {
 
     override val id = obtainNewId()
 

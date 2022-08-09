@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.alteratom.R
 import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.IdGenerator
+import com.alteratom.dashboard.IdentityGenerator
 import com.alteratom.dashboard.alpha
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")
-abstract class RecyclerViewItem : IdGenerator.Indexed {
+abstract class RecyclerViewItem : IdentityGenerator.Indexed {
 
     override var id = obtainNewId()
 

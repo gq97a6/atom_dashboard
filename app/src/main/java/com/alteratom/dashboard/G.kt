@@ -1,7 +1,7 @@
 package com.alteratom.dashboard
 
-import com.alteratom.dashboard.FolderTree.parseListSave
-import com.alteratom.dashboard.FolderTree.parseSave
+import com.alteratom.dashboard.Storage.parseListSave
+import com.alteratom.dashboard.Storage.parseSave
 import com.alteratom.dashboard.tile.Tile
 
 object G {

@@ -33,9 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
@@ -44,8 +42,6 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.switcher.FragmentSwitcher
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.InputStream
 import java.util.*
 import kotlin.math.abs
@@ -55,8 +51,6 @@ class DashboardPropertiesFragment : Fragment() {
 
     lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
     lateinit var request: ActivityResultLauncher<Intent>
-
-    var test = MutableLiveData(0f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,24 +104,16 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //lifecycleScope.launch {
-        //    delay(1000)
-        //    test.postValue(1f)
-        //}
 
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
-                //val test by test.observeAsState(0f)
-                val test = test.observeAsState(0f)
-
                 //Background
                 Box(modifier = Modifier.background(Theme.colors.background))
 
                 ComposeTheme(Theme.isDark) {
                     Box(
                         modifier = Modifier
-                            .alpha(test.value)
                             .fillMaxSize()
                             .pointerInput(Unit) {
                                 awaitPointerEventScope {
@@ -207,49 +193,49 @@ class DashboardPropertiesFragment : Fragment() {
                                     this@DashboardPropertiesFragment
                                 )
 
-                                var securityLevel by remember { mutableStateOf(dashboard.securityLevel) }
-                                var excludeNavigation by remember { mutableStateOf(dashboard.excludeNavigation) }
-
-                                FrameBox("Security") {
-                                    Column {
-                                        LabeledCheckbox(
-                                            label = {
-                                                Text(
-                                                    "Exclude from quick navigation",
-                                                    fontSize = 15.sp,
-                                                    color = Theme.colors.a
-                                                )
-                                            },
-                                            checked = excludeNavigation,
-                                            onCheckedChange = {
-                                                excludeNavigation = it
-                                                dashboard.excludeNavigation = it
-                                            },
-                                            modifier = Modifier.padding(vertical = 10.dp)
-                                        )
-
-                                        RadioGroup(
-                                            listOf(
-                                                "Never",
-                                                "Once (unlock until app minimized)",
-                                                "Every time",
-                                            ),
-                                            "Access authentication level",
-                                            securityLevel,
-                                            {
-                                                requireContext().buildConfirm(
-                                                    "Confirm change",
-                                                    "CONFIRM",
-                                                    {
-                                                        securityLevel = it
-                                                        dashboard.securityLevel = it
-                                                    }
-                                                )
-                                            },
-                                            modifier = Modifier.padding(top = 5.dp)
-                                        )
-                                    }
-                                }
+                                //var securityLevel by remember { mutableStateOf(dashboard.securityLevel) }
+                                //var excludeNavigation by remember { mutableStateOf(dashboard.excludeNavigation) }
+//
+                                //FrameBox("Security") {
+                                //    Column {
+                                //        LabeledCheckbox(
+                                //            label = {
+                                //                Text(
+                                //                    "Exclude from quick navigation",
+                                //                    fontSize = 15.sp,
+                                //                    color = Theme.colors.a
+                                //                )
+                                //            },
+                                //            checked = excludeNavigation,
+                                //            onCheckedChange = {
+                                //                excludeNavigation = it
+                                //                dashboard.excludeNavigation = it
+                                //            },
+                                //            modifier = Modifier.padding(vertical = 10.dp)
+                                //        )
+//
+                                //        RadioGroup(
+                                //            listOf(
+                                //                "Never",
+                                //                "Once (unlock until app minimized)",
+                                //                "Every time",
+                                //            ),
+                                //            "Access authentication level",
+                                //            securityLevel,
+                                //            {
+                                //                requireContext().buildConfirm(
+                                //                    "Confirm change",
+                                //                    "CONFIRM",
+                                //                    {
+                                //                        securityLevel = it
+                                //                        dashboard.securityLevel = it
+                                //                    }
+                                //                )
+                                //            },
+                                //            modifier = Modifier.padding(top = 5.dp)
+                                //        )
+                                //    }
+                                //}
                             }
                         }
                     }
@@ -261,17 +247,6 @@ class DashboardPropertiesFragment : Fragment() {
                         )
                     }
                 }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (ProVersion.status && dashboard.securityLevel > 0) test.postValue(0f)
-        lifecycleScope.launch {
-            delay(1000)
-            this@DashboardPropertiesFragment.dashboardAuthentication {
-                test.postValue(1f)
             }
         }
     }

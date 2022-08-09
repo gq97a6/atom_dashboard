@@ -1,7 +1,7 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
-import com.alteratom.dashboard.FolderTree.rootFolder
+import com.alteratom.dashboard.Storage.rootFolder
 import com.android.billingclient.api.Purchase
 import kotlinx.coroutines.delay
 import java.io.File

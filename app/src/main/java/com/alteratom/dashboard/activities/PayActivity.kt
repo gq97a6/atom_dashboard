@@ -176,8 +176,8 @@ class PayActivity : AppCompatActivity() {
                         )
                         Text(
                             "Support further development and upgrade to pro.\n\n" +
-                                    "Get access to unlimited number of dashboards\nand fingerprint or pin access control.\n" +
-                                    "Includes pro features added in future updates.",
+                                    "Get access to unlimited number of dashboards\n" +
+                                    "and other pro features added in future updates.",
                             modifier = Modifier.padding(top = 3.dp),
                             fontSize = 13.sp,
                             color = Theme.colors.a
@@ -196,10 +196,13 @@ class PayActivity : AppCompatActivity() {
                                             BillingHandler.PRO
                                         )
                                     }
-                                }, Modifier.fillMaxWidth()
+                                },
+                                enabled = !ProVersion.status,
+                                modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    priceTags[BillingHandler.PRO] ?: "99.99$",
+                                    if (ProVersion.status) "OWNED"
+                                    else priceTags[BillingHandler.PRO] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )

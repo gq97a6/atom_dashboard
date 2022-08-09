@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,11 +31,11 @@ import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.BillingHandler.Companion.PRO
-import com.alteratom.dashboard.FolderTree.mapper
-import com.alteratom.dashboard.FolderTree.parseListSave
-import com.alteratom.dashboard.FolderTree.parseSave
-import com.alteratom.dashboard.FolderTree.prepareSave
-import com.alteratom.dashboard.FolderTree.saveToFile
+import com.alteratom.dashboard.Storage.mapper
+import com.alteratom.dashboard.Storage.parseListSave
+import com.alteratom.dashboard.Storage.parseSave
+import com.alteratom.dashboard.Storage.prepareSave
+import com.alteratom.dashboard.Storage.saveToFile
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
@@ -44,7 +43,6 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.activities.SetupActivity
-import com.alteratom.dashboard.activities.TestActivity
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import kotlinx.coroutines.launch

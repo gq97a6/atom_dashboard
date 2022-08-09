@@ -1,7 +1,5 @@
 DEVELOPMENT
 dashboard locked due to lack of pro version
-exclude from quick navigation
-dashboard properties protection
 
 POST DEVELOPMENT
 tests

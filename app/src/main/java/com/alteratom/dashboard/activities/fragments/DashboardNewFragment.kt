@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
-import com.alteratom.dashboard.FolderTree.saveToFile
+import com.alteratom.dashboard.Storage.saveToFile
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.setCurrentDashboard
 import com.alteratom.dashboard.Theme

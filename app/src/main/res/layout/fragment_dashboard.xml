@@ -154,7 +154,6 @@
         android:paddingHorizontal="5dp"
         android:paddingTop="5dp"
         android:touchscreenBlocksFocus="false"
-        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/d_log" />
 

@@ -2,7 +2,7 @@ package com.alteratom.dashboard
 
 import java.util.*
 
-object IdGenerator {
+object IdentityGenerator {
 
     private val takenIds = mutableListOf<Long>()
 
@@ -24,6 +24,6 @@ object IdGenerator {
 
         fun reportTakenId() = reportTakenId(id)
 
-        fun obtainNewId(): Long = IdGenerator.obtainNewId()
+        fun obtainNewId(): Long = IdentityGenerator.obtainNewId()
     }
 }

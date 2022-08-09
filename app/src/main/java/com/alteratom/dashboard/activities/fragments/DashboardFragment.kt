@@ -39,7 +39,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Tile>
-    private lateinit var toolBarHandler: ToolBarHandler
+    private lateinit var toolBarHandler: ToolbarHandler
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -135,7 +135,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             theme.apply(b.dToolbar, requireContext(), false)
         }
 
-        toolBarHandler = ToolBarHandler(
+        toolBarHandler = ToolbarHandler(
             adapter,
             b.dBar,
             b.dToolbar,
@@ -180,11 +180,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
-
-        if (ProVersion.status && dashboard.securityLevel > 0) b.dRecyclerView.visibility = INVISIBLE
-        this.dashboardAuthentication {
-            b.dRecyclerView.visibility = VISIBLE
-        }
     }
 
     //----------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@ import java.io.File
 import java.io.FileReader
 import kotlin.reflect.KClass
 
-object FolderTree {
+object Storage {
     val mapper = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 

@@ -29,10 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
@@ -45,9 +43,11 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.activities.SetupActivity
+import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose.FrameBox
+import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -313,34 +313,34 @@ class SettingsFragment : Fragment() {
                                 }
                             }
 
-                            BasicButton(
-                                contentPadding = PaddingValues(13.dp),
-                                border = BorderStroke(2.dp, colors.b),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 12.dp),
-                                onClick = {
-                                    lifecycleScope.launch {
-                                        BillingHandler(requireActivity()).apply {
-                                            enable()
-
-                                            getPurchases()?.find {
-                                                it.products.contains(PRO)
-                                            }?.let {
-                                                it.consume()
-                                            }
-
-                                            disable()
-                                            connectionHandler.awaitDone()
-                                        }
-
-                                        Pro.removeLocalLicence()
-                                        createToast(requireContext(), "DONE")
-                                    }
-                                }
-                            ) {
-                                Text("PRO REMOVE", fontSize = 10.sp, color = colors.a)
-                            }
+                            //BasicButton(
+                            //    contentPadding = PaddingValues(13.dp),
+                            //    border = BorderStroke(2.dp, colors.b),
+                            //    modifier = Modifier
+                            //        .fillMaxWidth()
+                            //        .padding(top = 12.dp),
+                            //    onClick = {
+                            //        lifecycleScope.launch {
+                            //            BillingHandler(requireActivity()).apply {
+                            //                enable()
+//
+                            //                getPurchases()?.find {
+                            //                    it.products.contains(PRO)
+                            //                }?.let {
+                            //                    it.consume()
+                            //                }
+//
+                            //                disable()
+                            //                connectionHandler.awaitDone()
+                            //            }
+//
+                            //            Pro.removeLocalLicence()
+                            //            createToast(requireContext(), "DONE")
+                            //        }
+                            //    }
+                            //) {
+                            //    Text("PRO REMOVE", fontSize = 10.sp, color = colors.a)
+                            //}
 
                             Spacer(
                                 modifier = Modifier

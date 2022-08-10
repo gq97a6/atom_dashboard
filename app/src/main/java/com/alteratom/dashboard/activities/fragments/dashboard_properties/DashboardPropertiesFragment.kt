@@ -37,7 +37,10 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
+import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose.EditText
+import com.alteratom.dashboard.compose.NavigationArrows
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import java.util.*

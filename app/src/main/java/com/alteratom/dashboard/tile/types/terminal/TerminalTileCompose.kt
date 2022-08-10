@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.color.compose
-
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -7,9 +5,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.EditText
+import com.alteratom.dashboard.compose.EditText
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.RadioGroup
+import com.alteratom.dashboard.compose.RadioGroup
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1

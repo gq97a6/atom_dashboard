@@ -1,3 +1,5 @@
+@file:Suppress("LocalVariableName")
+
 package com.alteratom.dashboard
 
 import android.os.Handler
@@ -10,10 +12,10 @@ abstract class ConnectionHandler(private var interval: Long = 500) {
     private var isDispatchScheduled = false
 
     fun dispatch(reason: String) {
-        val _isDone = isDone()
-        if (isDone.value != _isDone) isDone.postValue(_isDone)
+        val isDoneResult = isDoneCheck()
+        if (isDone.value != isDoneResult) isDone.postValue(isDoneResult)
 
-        if (!_isDone && !isDispatchScheduled) {
+        if (!isDoneResult && !isDispatchScheduled) {
             handleDispatch()
             Handler(Looper.getMainLooper()).postDelayed({
                 isDispatchScheduled = false
@@ -23,6 +25,6 @@ abstract class ConnectionHandler(private var interval: Long = 500) {
         }
     }
 
-    protected abstract fun isDone(): Boolean
+    protected abstract fun isDoneCheck(): Boolean
     protected abstract fun handleDispatch()
 }

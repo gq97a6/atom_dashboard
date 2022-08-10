@@ -1,18 +1,15 @@
-package com.alteratom.tile.types.color.compose
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.FrameBox
+import com.alteratom.dashboard.compose.FrameBox
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.LabeledSwitch
+import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import com.alteratom.tile.types.pick.SelectTile
 
 object SelectTileCompose : DaemonBasedCompose {
     @Composable

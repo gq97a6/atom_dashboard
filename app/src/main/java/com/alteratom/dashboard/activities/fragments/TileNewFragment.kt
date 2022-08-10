@@ -1,11 +1,11 @@
 package com.alteratom.dashboard.activities.fragments
 
+import TextTile
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -35,16 +35,15 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.tile.Tile
-import com.alteratom.tile.types.button.ButtonTile
-import com.alteratom.tile.types.button.TextTile
-import com.alteratom.tile.types.color.ColorTile
-import com.alteratom.tile.types.lights.LightsTile
-import com.alteratom.tile.types.pick.SelectTile
-import com.alteratom.tile.types.slider.SliderTile
-import com.alteratom.tile.types.switch.SwitchTile
-import com.alteratom.tile.types.terminal.TerminalTile
-import com.alteratom.tile.types.thermostat.ThermostatTile
-import com.alteratom.tile.types.time.TimeTile
+import ButtonTile
+import ColorTile
+import LightsTile
+import SelectTile
+import SliderTile
+import SwitchTile
+import TerminalTile
+import ThermostatTile
+import TimeTile
 
 class TileNewFragment : Fragment() {
 

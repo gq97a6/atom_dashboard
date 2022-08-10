@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.color.compose
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -20,8 +18,8 @@ import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import com.alteratom.tile.types.lights.LightsTile
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable

@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.color.compose
-
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -12,15 +10,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.BasicButton
-import com.alteratom.dashboard.EditText
+import com.alteratom.dashboard.compose.BasicButton
+import com.alteratom.dashboard.compose.EditText
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.*
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import com.alteratom.tile.types.switch.SwitchTile
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

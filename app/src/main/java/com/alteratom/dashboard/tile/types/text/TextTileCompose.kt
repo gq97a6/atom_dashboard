@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.color.compose
-
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +12,11 @@ import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose.EditText
+import com.alteratom.dashboard.compose.FrameBox
+import com.alteratom.dashboard.compose.LabeledSwitch
+import com.alteratom.dashboard.compose.RadioGroup
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import com.alteratom.tile.types.button.TextTile
 
 object TextTileCompose : DaemonBasedCompose {
     @Composable

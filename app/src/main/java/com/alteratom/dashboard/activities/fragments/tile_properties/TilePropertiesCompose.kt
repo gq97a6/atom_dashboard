@@ -25,6 +25,7 @@ import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
+import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 

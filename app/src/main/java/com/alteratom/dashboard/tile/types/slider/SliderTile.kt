@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.slider
-
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.view.MotionEvent

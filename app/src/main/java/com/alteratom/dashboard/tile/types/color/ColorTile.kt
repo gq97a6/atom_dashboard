@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.color
-
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color

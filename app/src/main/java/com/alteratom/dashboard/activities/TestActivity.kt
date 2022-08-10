@@ -10,10 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.ActivityHandler
+import com.alteratom.dashboard.compose.BasicButton
+import com.alteratom.dashboard.G
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose.ComposeTheme
-import kotlinx.coroutines.launch
 
 class TestActivity : AppCompatActivity() {
 

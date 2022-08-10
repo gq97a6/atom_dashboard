@@ -1,5 +1,16 @@
 package com.alteratom.dashboard.activities.fragments.tile_properties
 
+import ButtonTileCompose
+import ColorTileCompose
+import LightsTileCompose
+import SelectTileCompose
+import SliderTileCompose
+import SwitchTileCompose
+import TerminalTileCompose
+import TextTile
+import TextTileCompose
+import ThermostatTileCompose
+import TimeTileCompose
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,18 +29,15 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.switcher.TileSwitcher
-import com.alteratom.tile.types.button.ButtonTile
-import com.alteratom.tile.types.button.TextTile
-import com.alteratom.tile.types.button.compose.ButtonTileCompose
-import com.alteratom.tile.types.color.ColorTile
-import com.alteratom.tile.types.color.compose.*
-import com.alteratom.tile.types.lights.LightsTile
-import com.alteratom.tile.types.pick.SelectTile
-import com.alteratom.tile.types.slider.SliderTile
-import com.alteratom.tile.types.switch.SwitchTile
-import com.alteratom.tile.types.terminal.TerminalTile
-import com.alteratom.tile.types.thermostat.ThermostatTile
-import com.alteratom.tile.types.time.TimeTile
+import ButtonTile
+import ColorTile
+import LightsTile
+import SelectTile
+import SliderTile
+import SwitchTile
+import TerminalTile
+import ThermostatTile
+import TimeTile
 
 class TilePropertiesFragment : Fragment() {
 

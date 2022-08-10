@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.thermostat
-
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.os.Handler

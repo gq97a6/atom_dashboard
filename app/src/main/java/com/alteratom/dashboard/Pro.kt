@@ -1,8 +1,6 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
-import android.view.View
-import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Storage.rootFolder
 import com.android.billingclient.api.Purchase
 import kotlinx.coroutines.delay
@@ -16,7 +14,7 @@ object Pro {
         status = File("$rootFolder/license").exists()
     }
 
-    inline suspend fun checkPurchase(activity: Activity, eta: Long = 10000, onDone: () -> Unit) {
+    suspend inline fun checkPurchase(activity: Activity, eta: Long = 10000, onDone: () -> Unit) {
         var result: Purchase? = null
         val bh = BillingHandler(activity)
 

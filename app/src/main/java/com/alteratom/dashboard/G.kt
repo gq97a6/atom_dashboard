@@ -16,7 +16,7 @@ object G {
     val unlockedDashboards = mutableListOf<Long>()
 
     fun setCurrentDashboard(index: Int): Boolean {
-        return if (index !in 0..dashboards.size - 1) false
+        return if (index !in 0 until dashboards.size) false
         else {
             dashboard = dashboards[index]
             dashboardIndex = index

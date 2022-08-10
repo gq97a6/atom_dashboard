@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.button
-
 import android.app.Dialog
 import android.view.MotionEvent
 import android.view.View

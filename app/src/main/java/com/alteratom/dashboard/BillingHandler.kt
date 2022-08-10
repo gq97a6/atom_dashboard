@@ -194,7 +194,11 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    suspend inline fun checkPendingPurchases(eta: Long = 10000, timeout: Long = 2000, onDone: (List<Purchase>?) -> Unit) {
+    suspend inline fun checkPendingPurchases(
+        eta: Long = 10000,
+        timeout: Long = 2000,
+        onDone: (List<Purchase>?) -> Unit
+    ) {
         var result: List<Purchase>? = null
 
         measureTimeMillis {
@@ -211,7 +215,7 @@ class BillingHandler(val activity: Activity) {
 
     inner class BillingConnectionHandler : ConnectionHandler() {
 
-        override fun isDone(): Boolean = when (client.connectionState) {
+        override fun isDoneCheck(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false
             DISCONNECTED, CLOSED -> !isEnabled
@@ -234,7 +238,7 @@ class BillingHandler(val activity: Activity) {
 
         //Wait for connectionHandler to settle down
         suspend fun awaitDone(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
-            while (!isDone()) delay(50)
+            while (!isDoneCheck()) delay(50)
             return@withTimeoutOrNull client.isReady
         } ?: false
     }

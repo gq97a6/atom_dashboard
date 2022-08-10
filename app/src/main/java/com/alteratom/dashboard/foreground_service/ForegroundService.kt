@@ -13,13 +13,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.ActivityHandler
-import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class ForegroundService : LifecycleService() {

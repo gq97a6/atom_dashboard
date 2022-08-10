@@ -144,7 +144,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     inner class MqttdConnectionHandler : ConnectionHandler() {
-        override fun isDone(): Boolean =
+        override fun isDoneCheck(): Boolean =
             client.isConnected == isEnabled && (client.conProp == d.mqttData || !isEnabled)
 
         override fun handleDispatch() {

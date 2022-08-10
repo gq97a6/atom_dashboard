@@ -92,7 +92,7 @@ class SetupActivity : AppCompatActivity() {
             }
 
             if (!Pro.status) {
-                for (e in dashboards.slice(2..dashboards.size - 1)) {
+                for (e in dashboards.slice(2 until dashboards.size)) {
                     e.mqttData.isEnabled = false
                     e.daemon.notifyOptionsChanged()
                 }

@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.ArcSlider
+import com.alteratom.dashboard.compose.ArcSlider
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
@@ -36,7 +36,6 @@ import com.alteratom.dashboard.toPx
 
 class ThemeFragment : Fragment() {
 
-    @OptIn(ExperimentalGraphicsApi::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -6,7 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentDashboardBinding
-import com.alteratom.tile.types.slider.SliderTile
+import SliderTile
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*

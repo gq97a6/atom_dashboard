@@ -71,7 +71,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
         holder.itemView.findViewById<View>(R.id.id_icon)?.setBackgroundResource(iconRes)
 
-        if (!Pro.status && position > 1){
+        if (!Pro.status && position > 1) {
             holder.itemView.alpha = .5f
             holder.itemView.findViewById<TextView>(R.id.id_pro).visibility = VISIBLE
         }

@@ -13,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.compose.EditText
+import com.alteratom.dashboard.compose.LabeledSwitch
+import com.alteratom.dashboard.compose.RadioGroup
 
 object TilePropertiesMqttCompose {
 

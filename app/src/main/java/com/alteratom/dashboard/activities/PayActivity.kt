@@ -27,6 +27,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -248,7 +249,10 @@ class PayActivity : AppCompatActivity() {
 
                                         lifecycleScope.launch {
                                             delay(8000)
-                                            createToast(this@PayActivity, "Temporary license created")
+                                            createToast(
+                                                this@PayActivity,
+                                                "Temporary license created"
+                                            )
                                             scaleInitialValue = scale.value
                                             scaleTargetValue = 0f
                                             scaleDuration = 1000
@@ -258,7 +262,11 @@ class PayActivity : AppCompatActivity() {
                                     }
                                 }
                             ) {
-                                Text("GET PRO TEMPORARILY", fontSize = 10.sp, color = Theme.colors.b)
+                                Text(
+                                    "GET PRO TEMPORARILY",
+                                    fontSize = 10.sp,
+                                    color = Theme.colors.b
+                                )
                             }
                         }
 
@@ -289,7 +297,7 @@ class PayActivity : AppCompatActivity() {
 
                                         lifecycleScope.launch {
                                             billingHandler.checkPendingPurchases {
-                                                if (it?.isEmpty() ?: true == true)
+                                                if (it?.isEmpty() != false == true)
                                                     createToast(
                                                         this@PayActivity,
                                                         "No pending purchase found"

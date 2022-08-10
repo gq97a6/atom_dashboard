@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.button.compose
-
 import androidx.compose.runtime.Composable
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication

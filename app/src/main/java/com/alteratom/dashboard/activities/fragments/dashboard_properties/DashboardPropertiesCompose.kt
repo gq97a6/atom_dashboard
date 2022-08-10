@@ -41,6 +41,7 @@ import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.PayActivity
+import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import kotlinx.coroutines.delay
@@ -72,7 +73,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             Text(
                                 "Enabled:",
                                 fontSize = 15.sp,
-                                color = Theme.colors.a
+                                color = colors.a
                             )
                         },
                         checked = enabled,
@@ -86,7 +87,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 lock = true
                                 fragment.lifecycleScope.launch {
                                     fragment.requireContext()
-                                        .buildConfirm("This feature requires pro\n\nNote: free of charge\nfor beta testers", "UNLOCK",
+                                        .buildConfirm("This feature requires pro\n\nNote: free of charge\nfor beta testers",
+                                            "UNLOCK",
                                             {
                                                 fragment.activity?.apply {
                                                     Intent(
@@ -141,7 +143,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .fillMaxWidth(.9f)
                             .aspectRatio(4f)
                             .border(
-                                BorderStroke(2.dp, Theme.colors.a),
+                                BorderStroke(2.dp, colors.a),
                                 RoundedCornerShape(10.dp)
                             )
                     ) {
@@ -150,7 +152,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             modifier = Modifier.align(Alignment.Center),
                             fontWeight = FontWeight.Bold,
                             fontSize = 10.sp,
-                            color = Theme.colors.a
+                            color = colors.a
                         )
                     }
                 }
@@ -162,14 +164,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .padding(top = 5.dp)
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f),
-                    border = BorderStroke(2.dp, Theme.colors.b),
+                    border = BorderStroke(2.dp, colors.b),
                     onClick = {
-                        if (G.dashboards.size <= 1)
+                        if (dashboards.size <= 1)
                             createToast(fragment.requireContext(), "No dashboards to copy from")
                         else copyShow = true
                     }
                 ) {
-                    Text("COPY PROPERTIES", fontSize = 10.sp, color = Theme.colors.a)
+                    Text("COPY PROPERTIES", fontSize = 10.sp, color = colors.a)
                 }
 
                 if (copyShow) {
@@ -180,7 +182,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(
-                                    BorderStroke(0.dp, Theme.colors.color),
+                                    BorderStroke(0.dp, colors.color),
                                     RoundedCornerShape(6.dp)
                                 )
                                 .background(colors.background.copy(.9f))
@@ -274,7 +276,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             when {
                                 it.isBlank() -> {
                                     dashboard.mqttData.clientId =
-                                        kotlin.math.abs(Random.nextInt()).toString()
+                                        abs(Random.nextInt()).toString()
                                     id = dashboard.mqttData.clientId
                                     dashboard.daemon.notifyOptionsChanged()
                                 }
@@ -294,10 +296,10 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         .align(Alignment.CenterHorizontally)
                         .fillMaxWidth(.8f)
                         .padding(top = 14.dp),
-                    border = BorderStroke(2.dp, Theme.colors.b),
+                    border = BorderStroke(2.dp, colors.b),
                     onClick = { sslShow = true }
                 ) {
-                    Text("CONFIGURE SSL", fontSize = 10.sp, color = Theme.colors.a)
+                    Text("CONFIGURE SSL", fontSize = 10.sp, color = colors.a)
                 }
 
                 if (sslShow) {
@@ -308,7 +310,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(
-                                    BorderStroke(0.dp, Theme.colors.color),
+                                    BorderStroke(0.dp, colors.color),
                                     RoundedCornerShape(6.dp)
                                 )
                                 .background(colors.background.copy(.9f))
@@ -371,7 +373,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     Text(
                                         "Enable SSL",
                                         fontSize = 15.sp,
-                                        color = Theme.colors.a
+                                        color = colors.a
                                     )
                                 },
                                 checked = enable,
@@ -395,7 +397,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Text(
                                             "Trust all certificates",
                                             fontSize = 15.sp,
-                                            color = Theme.colors.a
+                                            color = colors.a
                                         )
                                     },
                                     checked = trust,
@@ -462,7 +464,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Icon(
                                             painterResource(if (ca.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
                                             "",
-                                            tint = Theme.colors.b
+                                            tint = colors.b
                                         )
                                     }
                                 }
@@ -493,7 +495,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Icon(
                                             painterResource(if (client.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
                                             "",
-                                            tint = Theme.colors.b
+                                            tint = colors.b
                                         )
                                     }
                                 }
@@ -524,7 +526,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Icon(
                                             painterResource(if (key.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
                                             "",
-                                            tint = Theme.colors.b
+                                            tint = colors.b
                                         )
                                     }
                                 }
@@ -559,7 +561,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Icon(
                                             painterResource(R.drawable.il_interface_multiply),
                                             "",
-                                            tint = Theme.colors.b
+                                            tint = colors.b
                                         )
                                     }
                                 }
@@ -591,7 +593,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             Text(
                                 "Include login credentials",
                                 fontSize = 15.sp,
-                                color = Theme.colors.a
+                                color = colors.a
                             )
                         },
                         checked = cred,
@@ -612,7 +614,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     ) {
                         Icon(
                             painterResource(R.drawable.ic_arrow), "",
-                            tint = Theme.colors.a,
+                            tint = colors.a,
                             modifier = Modifier
                                 .size(40.dp)
                                 .rotate(angle)
@@ -653,7 +655,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),
                                         "",
-                                        tint = Theme.colors.b
+                                        tint = colors.b
                                     )
                                 }
                             }
@@ -687,7 +689,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),
                                         "",
-                                        tint = Theme.colors.b
+                                        tint = colors.b
                                     )
                                 }
                             }

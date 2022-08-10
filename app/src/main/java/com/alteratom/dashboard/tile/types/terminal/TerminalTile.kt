@@ -1,5 +1,3 @@
-package com.alteratom.tile.types.terminal
-
 import android.app.Dialog
 import android.view.MotionEvent
 import android.view.View

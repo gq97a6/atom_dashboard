@@ -57,6 +57,36 @@ object Storage {
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
-            mutableListOf()
+            try {
+                mapper.readerForListOf(T::class.java).readValue(save.fixSave())
+            } catch (e: Exception) {
+                mutableListOf()
+            }
         }
+
+    fun String.fixSave(): String {
+        var s = this.replace("com.alteratom.tile.types.button.", "")
+        s = s.replace("com.alteratom.tile.types.button.", "")
+        s = s.replace("com.alteratom.tile.types.thermostat.", "")
+        s = s.replace("com.alteratom.tile.types.time.", "")
+        s = s.replace("com.alteratom.tile.types.button.", "")
+        s = s.replace("com.alteratom.tile.types.pick.", "")
+        s = s.replace("com.alteratom.tile.types.lights.", "")
+        s = s.replace("com.alteratom.tile.types.color.", "")
+        s = s.replace("com.alteratom.tile.types.switch.", "")
+        s = s.replace("com.alteratom.tile.types.slider.", "")
+        s = s.replace("com.alteratom.tile.types.terminal.", "")
+        return s
+    }
 }
+
+//com.alteratom.tile.types.button
+//com.alteratom.tile.types.thermostat
+//com.alteratom.tile.types.time
+//com.alteratom.tile.types.button
+//com.alteratom.tile.types.pick
+//com.alteratom.tile.types.lights
+//com.alteratom.tile.types.color
+//com.alteratom.tile.types.switch
+//com.alteratom.tile.types.slider
+//com.alteratom.tile.types.terminal

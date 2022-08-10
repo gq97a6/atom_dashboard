@@ -86,7 +86,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.setHasStableIds(true)
 
         adapter.onItemRemoved = {
-            if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
+            if (adapter.itemCount == 0) b.msPlaceholder.visibility = VISIBLE
             b.msRemove.clearAnimation()
             DaemonsManager.notifyDashboardRemoved(it)
         }
@@ -113,7 +113,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         adapter.editMode.onSet = {
             if (!Pro.status) {
-                for (e in adapter.list.slice(2..adapter.list.size - 1)) {
+                for (e in adapter.list.slice(2 until adapter.list.size)) {
                     e.holder?.itemView?.visibility = if (it.isSwap) GONE else VISIBLE
                 }
             }
@@ -126,6 +126,6 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         b.msRecyclerView.layoutManager = layoutManager
         b.msRecyclerView.adapter = adapter
 
-        if (adapter.itemCount == 0) b.msPlaceholder.visibility = View.VISIBLE
+        if (adapter.itemCount == 0) b.msPlaceholder.visibility = VISIBLE
     }
 }

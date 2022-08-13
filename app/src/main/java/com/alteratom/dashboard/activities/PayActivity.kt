@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -185,7 +186,7 @@ class PayActivity : AppCompatActivity() {
                             color = Theme.colors.a
                         )
                         Text(
-                            "\nNote: free pro upgrade for beta testers, includes final version of the app.",
+                            "\nNote: includes final version of the app",
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold,
                             color = Theme.colors.color
@@ -218,9 +219,17 @@ class PayActivity : AppCompatActivity() {
                             }
                         }
 
+                        Text(
+                            "Due to Google's policy\nthe price of the product cannot be 0$." +
+                                    "\nHowever, send an e-mail to dev@alteratom.com,\nopinions welcome, to get a -100% promo code in return.",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 10.dp),
+                            color = Color.Red
+                        )
 
                         Text(
-                            "\nNote: free pro upgrade for beta testers, does NOT include final version of the app.",
+                            "\nNote: free pro upgrade for beta testers, does NOT include final version of the app, local only.",
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 10.dp),

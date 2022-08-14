@@ -157,7 +157,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(
-                                    BorderStroke(0.dp, colors.color),
+                                    BorderStroke(1.dp, colors.color),
                                     RoundedCornerShape(6.dp)
                                 )
                                 .background(colors.background.copy(.9f))
@@ -188,7 +188,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 )
                                             }
                                             .border(
-                                                BorderStroke(0.dp, colors.color),
+                                                BorderStroke(1.dp, colors.color),
                                                 RoundedCornerShape(6.dp)
                                             )
                                             .padding(start = 10.dp),
@@ -285,7 +285,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(
-                                    BorderStroke(0.dp, colors.color),
+                                    BorderStroke(1.dp, colors.color),
                                     RoundedCornerShape(6.dp)
                                 )
                                 .background(colors.background.copy(.9f))

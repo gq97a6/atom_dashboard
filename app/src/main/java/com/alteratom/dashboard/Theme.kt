@@ -141,7 +141,7 @@ class Theme {
             "groupArrow" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, p.color)
+                drawable?.setStroke(3, p.color)
             }
             "sliderPopupFrame" -> {
                 val drawable = this.background as? GradientDrawable
@@ -184,7 +184,7 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(2, p.color)
+                drawable?.setStroke(3, p.color)
             }
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 100))
             else -> onUnknownTag(this.tag, "constraintLayout")
@@ -196,8 +196,10 @@ class Theme {
             "background" -> this.setBackgroundColor(p.background)
             "frame" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(2, p.color)
+                drawable?.setStroke(3, p.color)
             }
+            "backgroundTint" -> this.backgroundTintList =
+                ColorStateList.valueOf(p.background)
             "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
             "group" -> this.setBackgroundColor(Color.TRANSPARENT)
             else -> onUnknownTag(this.tag, "linearLayout")
@@ -208,7 +210,7 @@ class Theme {
         when (this.tag) {
             "log" -> {
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, p.color)
+                drawable?.setStroke(3, p.color)
                 val bar = getDrawable(context, R.drawable.bg_bar)
                 bar?.setTint(p.b)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -307,12 +309,12 @@ class Theme {
             "frame" -> {
                 this.setTextColor(p.color)
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, p.color)
+                drawable?.setStroke(3, p.color)
             }
             "insert" -> {
                 this.setTextColor(p.b)
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, p.c)
+                drawable?.setStroke(3, p.c)
             }
             "log" -> {
                 this.setTextColor(p.color)
@@ -328,7 +330,7 @@ class Theme {
                 this.setTextColor(p.b)
                 this.setHintTextColor(p.c)
                 val drawable = this.background as? GradientDrawable
-                drawable?.setStroke(1, p.c)
+                drawable?.setStroke(3, p.c)
             }
             else -> onUnknownTag(this.tag, "editText")
         }
@@ -452,7 +454,7 @@ class Theme {
 
             val color: Int
             val colorBackground = if (isDark) Color.rgb(20, 20, 20)
-            else Color.rgb(240, 240, 240)
+            else Color.rgb(230, 230, 230)
 
             if (!isRaw) {
                 var col = 0

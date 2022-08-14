@@ -162,7 +162,7 @@ class TileIconFragment : Fragment() {
                                             pickerShow = true
                                         }
                                         .border(
-                                            BorderStroke(0.dp, colors.color),
+                                            BorderStroke(1.dp, colors.color),
                                             RoundedCornerShape(6.dp)
                                         )
                                         .padding(5.dp),
@@ -188,7 +188,7 @@ class TileIconFragment : Fragment() {
                                             .padding(horizontal = 8.dp)
                                             .height(50.dp)
                                             .border(
-                                                BorderStroke(0.dp, colors.color),
+                                                BorderStroke(1.dp, colors.color),
                                                 RoundedCornerShape(6.dp)
                                             )
                                             .padding(start = 10.dp),
@@ -226,7 +226,7 @@ class TileIconFragment : Fragment() {
                                 .padding(top = 20.dp)
                                 .size(100.dp)
                                 .border(
-                                    BorderStroke(0.dp, iconColor),
+                                    BorderStroke(1.dp, iconColor),
                                     RoundedCornerShape(10.dp)
                                 )
                                 .clip(RoundedCornerShape(10.dp))

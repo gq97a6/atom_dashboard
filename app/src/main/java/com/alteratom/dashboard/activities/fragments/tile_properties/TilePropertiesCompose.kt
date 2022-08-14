@@ -58,7 +58,7 @@ object TilePropertiesCompose {
 
                             MainActivity.fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(0.dp, G.tile.pallet.cc.color),
+                        border = BorderStroke(1.dp, G.tile.pallet.cc.color),
                         modifier = Modifier.size(52.dp)
                     ) {
                         Icon(painterResource(G.tile.iconRes), "", tint = G.tile.pallet.cc.color)
@@ -229,7 +229,7 @@ object TilePropertiesCompose {
                             options.add("" to "")
                             onAdd()
                         },
-                        border = BorderStroke(0.dp, Theme.colors.color),
+                        border = BorderStroke(1.dp, Theme.colors.color),
                         modifier = Modifier.fillMaxSize()
                     ) {
                         Text("ADD OPTION", color = Theme.colors.a)

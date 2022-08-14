@@ -318,7 +318,7 @@ inline fun FrameBox(
 
         Surface(
             modifier = modifier
-                .border(BorderStroke(0.dp, colors.color), RoundedCornerShape(10.dp))
+                .border(BorderStroke(1.dp, colors.color), RoundedCornerShape(10.dp))
                 .padding(12.dp)
         ) {
             content()

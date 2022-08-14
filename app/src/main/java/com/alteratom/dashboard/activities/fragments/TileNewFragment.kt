@@ -96,7 +96,7 @@ class TileNewFragment : Fragment() {
                                         }
                                     }
                                     .border(
-                                        BorderStroke(0.dp, colors.color),
+                                        BorderStroke(1.dp, colors.color),
                                         RoundedCornerShape(10.dp)
                                     )
                                     .padding(10.dp)
@@ -127,7 +127,7 @@ class TileNewFragment : Fragment() {
                                 .fillMaxWidth(.85f)
                                 .padding(top = 20.dp)
                                 .border(
-                                    BorderStroke(0.dp, colors.color),
+                                    BorderStroke(1.dp, colors.color),
                                     RoundedCornerShape(10.dp)
                                 )
                                 .padding(end = padding, bottom = padding, top = padding)

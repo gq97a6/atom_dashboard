@@ -113,7 +113,7 @@ class BillingHandler(val activity: Activity) {
     private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
         coroutineScope {
             return@coroutineScope if (!connectionHandler.awaitDone()) {
-                createToast(activity, "Failed to connect")
+                //createToast(activity, "Failed to connect")
                 null
             } else withTimeoutOrNull(2000) {
                 suspendCoroutine { continuation ->
@@ -137,7 +137,7 @@ class BillingHandler(val activity: Activity) {
 
     suspend fun getPurchases(timeout: Long = 2000): MutableList<Purchase>? = coroutineScope {
         return@coroutineScope if (!connectionHandler.awaitDone()) {
-            createToast(activity, "Failed to connect")
+            //createToast(activity, "Failed to connect")
             null
         } else withTimeoutOrNull(timeout) {
             suspendCoroutine { continuation ->

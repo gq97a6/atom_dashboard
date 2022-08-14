@@ -163,7 +163,7 @@ class DashboardPropertiesFragment : Fragment() {
 
                                             MainActivity.fm.replaceWith(TileIconFragment())
                                         },
-                                        border = BorderStroke(0.dp, dashboard.pallet.cc.color),
+                                        border = BorderStroke(1.dp, dashboard.pallet.cc.color),
                                         modifier = Modifier.size(52.dp)
                                     ) {
                                         Icon(

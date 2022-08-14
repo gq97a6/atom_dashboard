@@ -43,10 +43,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.activities.SetupActivity
-import com.alteratom.dashboard.compose.BasicButton
-import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.compose.FrameBox
-import com.alteratom.dashboard.compose.LabeledSwitch
+import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
@@ -177,9 +174,7 @@ class SettingsFragment : Fragment() {
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
-
                 ComposeTheme(Theme.isDark) {
-
                     Box(
                         contentAlignment = Alignment.BottomCenter
                     ) {

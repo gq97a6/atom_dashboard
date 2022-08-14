@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_marginBottom="20dp"
-    android:background="@drawable/bg_frame"
+    android:background="@drawable/bg_round"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="20dp"
-    android:tag="frame">
+    android:tag="backgroundTint">
 
 
     <LinearLayout

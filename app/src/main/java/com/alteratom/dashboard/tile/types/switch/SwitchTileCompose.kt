@@ -45,7 +45,7 @@ object SwitchTileCompose : DaemonBasedCompose {
 
                             fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(0.dp, tile.palletFalse.cc.color),
+                        border = BorderStroke(1.dp, tile.palletFalse.cc.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)
@@ -84,7 +84,7 @@ object SwitchTileCompose : DaemonBasedCompose {
 
                             fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(0.dp, tile.palletTrue.cc.color),
+                        border = BorderStroke(1.dp, tile.palletTrue.cc.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)

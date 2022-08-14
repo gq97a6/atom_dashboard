@@ -75,7 +75,7 @@ class DashboardNewFragment : Fragment() {
                                 .fillMaxWidth(.85f)
                                 .padding(top = 20.dp)
                                 .border(
-                                    BorderStroke(0.dp, colors.color),
+                                    BorderStroke(1.dp, colors.color),
                                     RoundedCornerShape(10.dp)
                                 )
                                 .padding(horizontal = 10.dp)
@@ -103,7 +103,7 @@ class DashboardNewFragment : Fragment() {
                                         )
                                     }
                                     .border(
-                                        BorderStroke(0.dp, colors.color),
+                                        BorderStroke(1.dp, colors.color),
                                         RoundedCornerShape(10.dp)
                                     ),
                                 contentAlignment = Alignment.Center
@@ -122,7 +122,7 @@ class DashboardNewFragment : Fragment() {
                                     .padding(bottom = 10.dp)
                                     .clip(RoundedCornerShape(10.dp))
                                     .border(
-                                        BorderStroke(0.dp, colors.color.copy(.3f)),
+                                        BorderStroke(1.dp, colors.color.copy(.3f)),
                                         RoundedCornerShape(10.dp)
                                     ),
                                 contentAlignment = Alignment.Center
@@ -150,7 +150,7 @@ class DashboardNewFragment : Fragment() {
                                     .padding(bottom = 10.dp)
                                     .clip(RoundedCornerShape(10.dp))
                                     .border(
-                                        BorderStroke(0.dp, colors.color.copy(.3f)),
+                                        BorderStroke(1.dp, colors.color.copy(.3f)),
                                         RoundedCornerShape(10.dp)
                                     ),
                                 contentAlignment = Alignment.Center
@@ -181,7 +181,7 @@ class DashboardNewFragment : Fragment() {
                                     .padding(bottom = 10.dp)
                                     .clip(RoundedCornerShape(10.dp))
                                     .border(
-                                        BorderStroke(0.dp, colors.color.copy(.3f)),
+                                        BorderStroke(1.dp, colors.color.copy(.3f)),
                                         RoundedCornerShape(10.dp)
                                     ),
                                 contentAlignment = Alignment.Center

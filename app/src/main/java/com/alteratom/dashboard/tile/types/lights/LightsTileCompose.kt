@@ -56,7 +56,7 @@ object LightsTileCompose : DaemonBasedCompose {
 
                             MainActivity.fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(0.dp, Theme.colors.color),
+                        border = BorderStroke(1.dp, Theme.colors.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)
@@ -96,7 +96,7 @@ object LightsTileCompose : DaemonBasedCompose {
 
                             MainActivity.fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(0.dp, Theme.colors.color),
+                        border = BorderStroke(1.dp, Theme.colors.color),
                         modifier = Modifier
                             .height(52.dp)
                             .width(52.dp)

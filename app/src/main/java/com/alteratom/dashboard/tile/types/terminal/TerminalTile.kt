@@ -85,7 +85,7 @@ class TerminalTile : Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(mqttData.payloads["base"] ?: "")
+        } else send(mqttData.payloads["base"] ?: "err")
     }
 
     override fun onReceive(

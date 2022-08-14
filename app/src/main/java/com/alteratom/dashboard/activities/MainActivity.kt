@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
-            mainActivity.apply { onBackPressedBoolean = { false } }
+            //mainActivity.apply { onBackPressedBoolean = { false } }
         }
     }
 }

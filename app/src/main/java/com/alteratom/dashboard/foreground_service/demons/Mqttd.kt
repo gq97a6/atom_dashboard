@@ -5,6 +5,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.Storage
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
@@ -428,9 +429,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
         }
 
-        fun confirmSend(send: () -> Unit) {
-        }
-
         fun Mqttd.send(
             msg: String,
             topic: String? = mqttData.pubs["base"],
@@ -445,7 +443,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 onSend(topic, msg, qos, retain)
             }.let {
                 if (!mqttData.doConfirmPub || raw) it()
-                else confirmSend(it)
+                else dashboard?.tiles?.first()?.adapter?.context?.let {
+                    with(it) { buildConfirm("Confirm publishing", "PUBLISH") { it() } }
+                }
             }
         }
 

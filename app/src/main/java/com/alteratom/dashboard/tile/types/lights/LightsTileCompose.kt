@@ -15,6 +15,11 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1

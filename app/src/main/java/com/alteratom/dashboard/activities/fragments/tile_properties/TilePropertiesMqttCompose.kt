@@ -12,7 +12,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose.EditText
 import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.compose.RadioGroup
@@ -56,7 +57,8 @@ object TilePropertiesMqttCompose {
 
     @Composable
     fun Communication1(
-        retain: Boolean = true, pointer: @Composable () -> Unit = {
+        retain: Boolean = true,
+        pointer: @Composable () -> Unit = {
             var json by remember { mutableStateOf(G.tile.mqttData.jsonPaths["base"] ?: "") }
             EditText(
                 label = { Text("Payload JSON pointer") },

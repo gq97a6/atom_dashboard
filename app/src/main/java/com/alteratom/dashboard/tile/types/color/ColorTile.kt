@@ -21,6 +21,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class ColorTile : Tile() {
 
+    companion object {
+        enum class CT { HSV, HEX, RGB }
+    }
+
     @JsonIgnore
     override val layout = R.layout.tile_color
 
@@ -32,45 +36,42 @@ class ColorTile : Tile() {
     var paintRaw = true
     var doPaint = true
     private var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    private var toRemoves = mutableMapOf<Int, MutableList<String>>()
+    private var toRemoves = mutableListOf<String>()
     private var flagIndexes = mutableMapOf<String, Int>()
 
-    var colorType = 1 //0-HSV 1-HEX 2-RGB
+    var colorType = CT.HSV
         set(value) {
             field = value
 
-            mqttData.payloads[colorType.toString()]?.let { pattern ->
+            mqttData.payloads[colorType.name]?.let { pattern ->
                 when (colorType) {
-                    1 -> {
-                        toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
+                    CT.HSV -> {
+                        toRemoves = Regex("@[hsv]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[hsv]").findAll(pattern).map { it.value }
                         flagIndexes["h"] = indexes.indexOf("h")
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
-                    2 -> toRemoves[2] = Regex("@hex").split(pattern) as MutableList
-                    3 -> {
-                        toRemoves[3] = Regex("@[rgb]").split(pattern) as MutableList
+                    CT.HEX -> toRemoves = Regex("@hex").split(pattern) as MutableList
+                    CT.RGB -> {
+                        toRemoves = Regex("@[rgb]").split(pattern) as MutableList
 
                         val indexes = Regex("(?<=@)[rgb]").findAll(pattern).map { it.value }
                         flagIndexes["r"] = indexes.indexOf("r")
                         flagIndexes["g"] = indexes.indexOf("g")
                         flagIndexes["b"] = indexes.indexOf("b")
                     }
-                    else -> {}
                 }
-
-                toRemoves[colorType]?.removeIf { it.isEmpty() }
             }
         }
 
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["hsv"] = "@h;@s;@v"
-        mqttData.payloads["hex"] = "#@hex"
-        mqttData.payloads["rgb"] = "@r;@g;@b"
+        mqttData.payloads["HSV"] = "@h;@s;@v"
+        mqttData.payloads["HEX"] = "#@hex"
+        mqttData.payloads["RGB"] = "@r;@g;@b"
 
         colorToHSV(theme.a.pallet.color, hsvPicked)
         colorType = colorType
@@ -126,18 +127,18 @@ class ColorTile : Tile() {
         binding.dcpConfirm.setOnClickListener {
             send(
                 when (colorType) {
-                    1 -> {
+                    CT.HSV -> {
                         (mqttData.payloads["hsv"] ?: "")
                             .replace("@h", hsvPickedTmp[0].toInt().toString())
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
-                    2 -> {
+                    CT.HEX -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqttData.payloads["hex"] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
-                    3 -> {
+                    CT.RGB -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqttData.payloads["rgb"] ?: "")
                             .replace("@r", c.red.toString())
@@ -172,7 +173,7 @@ class ColorTile : Tile() {
 
         var value = jsonResult["base"] ?: data.second.toString()
 
-        toRemoves[colorType]?.forEach {
+        toRemoves.forEach {
             value = value.replace(it, " ")
         }
 
@@ -180,15 +181,15 @@ class ColorTile : Tile() {
         v.removeIf { it.isEmpty() }
 
         when (colorType) {
-            1 -> colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
-            2 -> {
+            CT.HEX -> colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
+            CT.HSV -> {
                 hsvPicked = floatArrayOf(
                     v[flagIndexes["h"]!!].toFloat(),
                     v[flagIndexes["s"]!!].toFloat() / 100,
                     v[flagIndexes["v"]!!].toFloat() / 100
                 )
             }
-            3 -> {
+            CT.RGB -> {
                 colorToHSV(
                     Color.rgb(
                         v[flagIndexes["r"]!!].toInt(),

@@ -37,6 +37,11 @@ import com.alteratom.dashboard.G.settings
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.*
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.compose.EditText
@@ -104,7 +109,6 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {

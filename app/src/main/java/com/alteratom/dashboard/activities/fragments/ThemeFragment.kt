@@ -41,6 +41,7 @@ class ThemeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        theme.apply(context = requireContext())
         return ComposeView(requireContext()).apply {
             setContent {
                 var hueAngle by remember { mutableStateOf(theme.a.hsv[0].toDouble()) }

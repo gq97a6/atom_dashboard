@@ -2,9 +2,11 @@
 
 package com.alteratom.dashboard
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Handler
@@ -29,9 +31,13 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
+import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.activities.PayActivity
+import kotlinx.coroutines.delay
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.*
+import kotlin.math.roundToInt
 
 val screenHeight
     get() = Resources.getSystem().displayMetrics.heightPixels
@@ -96,8 +102,8 @@ fun Float.dezero(): String {
     }.toString()
 }
 
-fun Int.roundCloser(step: Int): Int {
-    return this / step * step
+fun Float.roundCloser(step: Int): Int {
+    return (this / step).roundToInt() * step
 }
 
 fun createNotification(
@@ -238,5 +244,23 @@ inline infix fun <reified T> (() -> T).IfShitHitsTheFan(catch: () -> T): T {
         this()
     } catch (e: Exception) {
         catch()
+    }
+}
+
+fun Context.proAlert(activity: Activity) {
+    with(this) {
+        buildConfirm(
+            "This feature requires pro\n\nNote: free of charge\nfor beta testers",
+            "UNLOCK"
+        ) {
+            activity.apply {
+                Intent(
+                    this,
+                    PayActivity::class.java
+                ).also {
+                    startActivity(it)
+                }
+            }
+        }
     }
 }

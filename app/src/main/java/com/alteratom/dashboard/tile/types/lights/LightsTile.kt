@@ -268,9 +268,9 @@ class LightsTile : Tile() {
 
             if (mqttData.doConfirmPub) {
                 with(adapter.context) {
-                    buildConfirm("Confirm publishing", "PUBLISH", {
+                    buildConfirm("Confirm publishing", "PUBLISH") {
                         send()
-                    })
+                    }
                 }
             } else send()
 

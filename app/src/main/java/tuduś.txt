@@ -2,3 +2,17 @@ POST DEVELOPMENT
 tests
 publish
 hardcoded text
+
+How to ...
+    add dashboards?
+    remove dashboards?
+    rearrange dashboards?
+    edit dashboards
+
+How to ...
+    add tiles?
+    remove tiles?
+    rearrange tiles?
+    edit tiles?
+    display log?
+    navigate?

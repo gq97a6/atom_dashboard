@@ -29,7 +29,7 @@ object SliderTileCompose : DaemonBasedCompose {
             TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
-                var pub by remember { mutableStateOf("false") }
+                var pub by remember { mutableStateOf(tile.mqttData.payloads["base"] ?: "@value") }
                 EditText(
                     label = { Text("Publish payload") },
                     value = pub,

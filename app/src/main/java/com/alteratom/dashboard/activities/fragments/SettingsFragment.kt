@@ -52,7 +52,6 @@ import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
 
-
 class SettingsFragment : Fragment() {
 
     private lateinit var open: ActivityResultLauncher<Intent>

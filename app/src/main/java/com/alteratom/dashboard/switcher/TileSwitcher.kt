@@ -27,6 +27,6 @@ object TileSwitcher : Switcher() {
         )
     }
 
-    fun handle(e: MotionEvent?) = handle(e, { r -> switch(r) })
-    fun handle(e: PointerEvent) = handle(e, { r -> switch(r) })
+    fun handle(e: MotionEvent?) = handle(e) { r -> switch(r) }
+    fun handle(e: PointerEvent) = handle(e) { r -> switch(r) }
 }

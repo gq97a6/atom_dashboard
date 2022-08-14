@@ -42,15 +42,17 @@ import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.toPx
 import java.util.*
 
-lateinit var setIconHSV: (FloatArray) -> Unit
-lateinit var setIconKey: (String) -> Unit
-lateinit var getIconRes: () -> Int
-lateinit var getIconHSV: () -> FloatArray
-lateinit var getIconColorPallet: () -> Theme.ColorPallet
-
 class TileIconFragment : Fragment() {
 
-    val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
+    companion object {
+        lateinit var setIconHSV: (FloatArray) -> Unit
+        lateinit var setIconKey: (String) -> Unit
+        lateinit var getIconRes: () -> Int
+        lateinit var getIconHSV: () -> FloatArray
+        lateinit var getIconColorPallet: () -> Theme.ColorPallet
+    }
+
+    private val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
         for (i in 40..100 step 20) {
             for (ii in 0..300 step 60) {
                 val hsv = if (theme.a.isDark) floatArrayOf(
@@ -64,14 +66,14 @@ class TileIconFragment : Fragment() {
         }
     }.toList()
 
-    val icons = Icons.cats.map { c ->
+    private val icons = Icons.cats.associate { c ->
         val catUp = c.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase(
                 Locale.getDefault()
             ) else it.toString()
         }
         catUp to Icons.icons.filter { it.value.cat == c }.values.toList()
-    }.toMap()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

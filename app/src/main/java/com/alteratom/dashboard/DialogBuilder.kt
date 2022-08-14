@@ -9,11 +9,11 @@ import com.alteratom.R
 import com.alteratom.databinding.DialogConfirmBinding
 
 object DialogBuilder {
-    fun Context.buildConfirm(
+    inline fun Context.buildConfirm(
         message: String,
         label: String,
-        onConfirm: () -> Unit,
-        onDeny: () -> Unit = {}
+        crossinline onDeny: () -> Unit = {},
+        crossinline onConfirm: () -> Unit
     ) {
         val dialog = Dialog(this)
 

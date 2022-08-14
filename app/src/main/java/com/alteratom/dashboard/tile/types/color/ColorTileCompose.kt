@@ -1,3 +1,4 @@
+import ColorTile.Companion.CT
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -6,13 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 import com.alteratom.dashboard.compose.*
+import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 
 object ColorTileCompose : DaemonBasedCompose {
     @Composable
@@ -35,16 +36,15 @@ object ColorTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.mqttData.payloads[type.toString()] = it
+                        tile.mqttData.payloads[type.name] = it
                     }
                 )
                 Text(
                     "Use ${
                         when (type) {
-                            0 -> "@h, @s, @v"
-                            1 -> "@hex"
-                            2 -> "@r, @g, @b"
-                            else -> "@hex"
+                            CT.HSV -> "@h, @s, @v"
+                            CT.HEX -> "@hex"
+                            CT.RGB -> "@r, @g, @b"
                         }
                     } to insert current value.",
                     fontSize = 13.sp,
@@ -99,18 +99,20 @@ object ColorTileCompose : DaemonBasedCompose {
                         }
                     }
 
+                    val list = listOf(
+                        CT.HSV.name,
+                        CT.HEX.name,
+                        CT.RGB.name
+                    )
+
                     HorizontalRadioGroup(
-                        listOf(
-                            "HSV",
-                            "HEX",
-                            "RGB",
-                        ),
+                        list,
                         "Type:",
-                        type,
+                        list.indexOf(type.name),
                         {
-                            type = it
-                            tile.colorType = it
-                            pub = tile.mqttData.payloads[tile.colorType.toString()] ?: ""
+                            type = CT.values()[it]
+                            tile.colorType = CT.values()[it]
+                            pub = tile.mqttData.payloads[tile.colorType.name] ?: ""
                         },
                     )
                 }

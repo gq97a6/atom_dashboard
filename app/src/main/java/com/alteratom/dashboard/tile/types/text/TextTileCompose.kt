@@ -71,7 +71,7 @@ object TextTileCompose : DaemonBasedCompose {
                         checked = big,
                         onCheckedChange = {
                             big = it
-                            tile.isBig
+                            tile.isBig = it
                         }
                     )
                 }

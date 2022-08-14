@@ -157,16 +157,237 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/d_log" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/d_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:elevation="1dp"
-        android:gravity="center"
-        android:tag="colorC"
-        android:text="Add your first tile\nUse left icon to access edit mode"
-        android:textSize="20dp"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/d_recycler_view"
+        app:layout_constraintTop_toTopOf="@id/d_recycler_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorB"
+                android:layout_weight="1"
+                android:text="Toolbar"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorB"
+                android:text="Properties"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:layout_marginTop="30dp"
+            android:text="How to add tiles"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text="Click "
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:tag="colorAIcon"
+                android:background="@drawable/bt_add"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text=" icon in toolbar"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:text="How to remove tiles"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text="1. Click "
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:tag="colorAIcon"
+                android:background="@drawable/bt_trashcan"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text=" icon in toolbar"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="2. Select one or more tiles"
+            android:textSize="18dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text="3. Click "
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:tag="colorAIcon"
+                android:background="@drawable/bt_trashcan"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text=" icon again"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:paddingTop="15dp"
+            android:text="How to rearrange tiles"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text="1. Click "
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:tag="colorAIcon"
+                android:background="@drawable/bt_swap"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text=" icon in toolbar"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="2. Slide selected tile"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:paddingTop="15dp"
+            android:text="How to edit tiles"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="Hide toolbar then hold selected tile"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:paddingTop="15dp"
+            android:text="Slide down from the top"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="Press and hold selected tile"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:paddingTop="15dp"
+            android:text="How to navigate"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="Use navigation arrows or slide to the side"
+            android:textSize="18dp" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/d_bar"

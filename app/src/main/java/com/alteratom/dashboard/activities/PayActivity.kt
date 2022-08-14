@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,7 +34,7 @@ import kotlinx.coroutines.launch
 
 class PayActivity : AppCompatActivity() {
 
-    lateinit var billingHandler: BillingHandler
+    private lateinit var billingHandler: BillingHandler
 
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -220,66 +219,6 @@ class PayActivity : AppCompatActivity() {
                         }
 
                         Text(
-                            "Due to Google's policy\nthe price of the product cannot be 0$." +
-                                    "\nHowever, send an e-mail to dev@alteratom.com,\nopinions welcome, to get a -100% promo code in return.",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 10.dp),
-                            color = Color.Red
-                        )
-
-                        Text(
-                            "\nNote: free pro upgrade for beta testers, does NOT include final version of the app, local only.",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(top = 10.dp),
-                            color = Theme.colors.color
-                        )
-
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-
-                            BasicButton(
-                                contentPadding = PaddingValues(13.dp),
-                                border = BorderStroke(2.dp, Theme.colors.b),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 12.dp),
-                                onClick = {
-                                    if (!showLoading) {
-                                        showLoading = true
-                                        scaleInitialValue = 1f
-                                        scaleTargetValue = .8f
-                                        scaleDuration = 3000
-
-                                        Pro.createLocalLicence()
-
-                                        lifecycleScope.launch {
-                                            delay(8000)
-                                            createToast(
-                                                this@PayActivity,
-                                                "Temporary license created"
-                                            )
-                                            scaleInitialValue = scale.value
-                                            scaleTargetValue = 0f
-                                            scaleDuration = 1000
-                                            delay(1000)
-                                            showLoading = false
-                                        }
-                                    }
-                                }
-                            ) {
-                                Text(
-                                    "GET PRO TEMPORARILY",
-                                    fontSize = 10.sp,
-                                    color = Theme.colors.b
-                                )
-                            }
-                        }
-
-                        Text(
                             "For delayed payment process use button\nbelow to process purchase after it succeeds",
                             fontSize = 12.sp,
                             modifier = Modifier.padding(top = 30.dp),
@@ -306,7 +245,7 @@ class PayActivity : AppCompatActivity() {
 
                                         lifecycleScope.launch {
                                             billingHandler.checkPendingPurchases {
-                                                if (it?.isEmpty() != false == true)
+                                                if (it?.isEmpty() != false)
                                                     createToast(
                                                         this@PayActivity,
                                                         "No pending purchase found"

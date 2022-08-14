@@ -107,8 +107,7 @@ class SliderTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        (jsonResult["base"] ?: data.second.toString()).toIntOrNull()
-            ?.let { this.value = it.roundCloser(range[2]) }
+        (jsonResult["base"] ?: data.second.toString()).toFloatOrNull()?.let { this.value = it.roundCloser(range[2]) }
     }
 
     private fun control(e: MotionEvent, v: View?): Pair<Int, Boolean> {
@@ -117,13 +116,13 @@ class SliderTile : Tile() {
         if (p < 0) p = 0f
         else if (p > 100) p = 100f
 
-        val value = (range[0] + p * (range[1] - range[0]) / 100).toInt().roundCloser(range[2])
+        val value = (range[0] + p * (range[1] - range[0]) / 100).roundCloser(range[2])
 
         when (e.action) {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send((mqttData.payloads["base"] ?: "").replace("@value", value.toString()))
+                send((mqttData.payloads["base"] ?: "@value").replace("@value", value.toString()))
                 return Pair(value, true)
             }
         }

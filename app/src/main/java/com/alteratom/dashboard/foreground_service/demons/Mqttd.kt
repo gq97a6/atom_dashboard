@@ -287,7 +287,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                         asyncActionToken: IMqttToken?,
                         exception: Throwable?
                     ) {
-                        run {}
                     }
                 })
             } catch (e: MqttException) {

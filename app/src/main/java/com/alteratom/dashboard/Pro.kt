@@ -7,7 +7,7 @@ object Pro {
     var status = false
 
     fun updateStatus() {
-        status = true//File("$rootFolder/license").exists()
+        status = File("$rootFolder/license").exists()
     }
 
     fun createLocalLicence() {

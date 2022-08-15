@@ -1,7 +1,9 @@
+import ColorTile.Companion.ColorTypes
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Color.HSVToColor
+import android.graphics.Color.colorToHSV
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
@@ -47,7 +50,7 @@ class LightsTile : Tile() {
     var mode: String? = null
     private var hsvPicked = floatArrayOf(0f, 0f, 0f)
     private var brightness: Int? = null
-    private var toRemoves = mutableMapOf<Int, MutableList<String>>()
+    private var toRemoves = mutableListOf<String>()
     private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
@@ -58,18 +61,18 @@ class LightsTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res
             ?: R.drawable.il_interface_toggle_on
 
-    var iconKeyFalse = "il_interface_toggle_off"
+    private var iconKeyFalse = "il_interface_toggle_off"
     val iconResFalse: Int
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
 
     var hsvTrue = floatArrayOf(179f, 1f, 1f)
     val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
-        get() = com.alteratom.dashboard.G.theme.a.getColorPallet(hsvTrue, true)
+        get() = theme.a.getColorPallet(hsvTrue, true)
 
-    var hsvFalse = floatArrayOf(0f, 0f, 0f)
+    private var hsvFalse = floatArrayOf(0f, 0f, 0f)
     val palletFalse: com.alteratom.dashboard.Theme.ColorPallet
-        get() = com.alteratom.dashboard.G.theme.a.getColorPallet(hsvFalse, true)
+        get() = theme.a.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {
@@ -96,44 +99,43 @@ class LightsTile : Tile() {
     var paintRaw = true
     var doPaint = false
 
-    var colorType = 1 //0-HSV 1-HEX 2-RGB
+    var colorType = ColorTypes.HSV
         set(value) {
             field = value
 
-            mqttData.payloads[colorType.toString()]?.let { pattern ->
+            mqttData.payloads[colorType.name]?.let { pattern ->
                 when (colorType) {
-                    1 -> {
-                        toRemoves[1] = Regex("@[hsv]").split(pattern) as MutableList
+                    ColorTypes.HSV -> {
+                        toRemoves = Regex("@[hsv]").split(pattern).toMutableList()
 
                         val indexes = Regex("(?<=@)[hsv]").findAll(pattern).map { it.value }
                         flagIndexes["h"] = indexes.indexOf("h")
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
-                    2 -> toRemoves[2] = Regex("@hex").split(pattern) as MutableList
-                    3 -> {
-                        toRemoves[3] = Regex("@[rgb]").split(pattern) as MutableList
+                    ColorTypes.HEX -> toRemoves = Regex("@hex").split(pattern).toMutableList()
+                    ColorTypes.RGB -> {
+                        toRemoves = Regex("@[rgb]").split(pattern).toMutableList()
 
                         val indexes = Regex("(?<=@)[rgb]").findAll(pattern).map { it.value }
                         flagIndexes["r"] = indexes.indexOf("r")
                         flagIndexes["g"] = indexes.indexOf("g")
                         flagIndexes["b"] = indexes.indexOf("b")
                     }
-                    else -> {}
                 }
 
-                toRemoves[colorType]?.removeIf { it.isEmpty() }
+                toRemoves.removeIf { it.isEmpty() }
             }
         }
 
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["hsv"] = "@h;@s;@v"
-        mqttData.payloads["hex"] = "#@hex"
-        mqttData.payloads["rgb"] = "@r;@g;@b"
+        mqttData.payloads[ColorTypes.HSV.name] = "@h;@s;@v"
+        mqttData.payloads[ColorTypes.HEX.name] = "#@hex"
+        mqttData.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
 
-        Color.colorToHSV(com.alteratom.dashboard.G.theme.a.pallet.color, hsvPicked)
+        colorToHSV(theme.a.pallet.color, hsvPicked)
         colorType = colorType
     }
 
@@ -150,11 +152,11 @@ class LightsTile : Tile() {
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
-        com.alteratom.dashboard.G.theme.apply(
+        theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
             colorPallet = if (!doPaint) colorPalletState
-            else com.alteratom.dashboard.G.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+            else theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
         )
     }
 
@@ -198,7 +200,7 @@ class LightsTile : Tile() {
         var brightnessTmp = brightness
 
         fun onColorChange() {
-            Color.colorToHSV(binding.dlPicker.color, hsvPickedTmp)
+            colorToHSV(binding.dlPicker.color, hsvPickedTmp)
 
             (binding.dlColor.background as? GradientDrawable?)?.setStroke(
                 10f.toPx(),
@@ -233,34 +235,26 @@ class LightsTile : Tile() {
                 send("$brightnessTmp", mqttData.pubs["bright"], retain = retain[1], raw = true)
                 if (includePicker) send(
                     when (colorType) {
-                        0 -> {
-                            (mqttData.payloads["hsv"] ?: "")
+                        ColorTypes.HSV -> {
+                            (mqttData.payloads[ColorTypes.HSV.name] ?: "")
                                 .replace("@h", hsvPickedTmp[0].toInt().toString())
                                 .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                                 .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                         }
-                        1 -> {
+                        ColorTypes.HEX -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["hex"] ?: "")
+                            (mqttData.payloads[ColorTypes.HEX.name] ?: "")
                                 .replace(
                                     "@hex",
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                        2 -> {
+                        ColorTypes.RGB -> {
                             val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["rgb"] ?: "")
+                            (mqttData.payloads[ColorTypes.RGB.name] ?: "")
                                 .replace("@r", c.red.toString())
                                 .replace("@g", c.green.toString())
                                 .replace("@b", c.blue.toString())
-                        }
-                        else -> {
-                            val c = HSVToColor(hsvPickedTmp)
-                            (mqttData.payloads["hex"] ?: "")
-                                .replace(
-                                    "@hex",
-                                    String.format("%02x%02x%02x", c.red, c.green, c.blue)
-                                )
                         }
                     },
                     mqttData.pubs["color"],
@@ -300,7 +294,7 @@ class LightsTile : Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(com.alteratom.dashboard.G.theme.a.pallet.color)
+                            ColorStateList.valueOf(theme.a.pallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
@@ -330,7 +324,7 @@ class LightsTile : Tile() {
                 binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()
-                com.alteratom.dashboard.G.theme.apply(binding.root)
+                theme.apply(binding.root)
                 dialog.show()
             }
         }
@@ -356,7 +350,7 @@ class LightsTile : Tile() {
         onColorChange()
 
         dialog.dialogSetup()
-        com.alteratom.dashboard.G.theme.apply(binding.root, anim = false)
+        theme.apply(binding.root, anim = false)
         dialog.show()
     }
 
@@ -366,12 +360,12 @@ class LightsTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        fun parse(value: String, field: String?) {
+        fun parse(data: String, field: String?) {
             var hasReceived = true
 
             when (field) {
                 "state" -> {
-                    state = when (value) {
+                    state = when (data) {
                         mqttData.payloads["true"] -> true
                         mqttData.payloads["false"] -> false
                         else -> null
@@ -381,11 +375,11 @@ class LightsTile : Tile() {
                         ?.setBackgroundResource(iconResState)
 
                     holder?.itemView?.let {
-                        com.alteratom.dashboard.G.theme.apply(
+                        theme.apply(
                             it as ViewGroup,
                             anim = false,
                             colorPallet = if (!doPaint) colorPalletState
-                            else com.alteratom.dashboard.G.theme.a.getColorPallet(
+                            else theme.a.getColorPallet(
                                 hsvPicked,
                                 isRaw = paintRaw
                             )
@@ -393,30 +387,29 @@ class LightsTile : Tile() {
                     }
                 }
                 "color" -> {
-                    var value = value
+                    var data = data
 
-                    toRemoves[colorType]?.forEach {
-                        value = value.replace(it, " ")
-                    }
+                    toRemoves.forEach { data = data.replace(it, " ") }
 
-                    val v = value.split(" ") as MutableList
-                    v.removeIf { it.isEmpty() }
+                    val split = data.split(" ") as MutableList
+                    split.removeIf { it.isEmpty() }
 
                     when (colorType) {
-                        0 -> Color.colorToHSV(Integer.parseInt(v[0], 16), hsvPicked)
-                        1 -> {
+                        ColorTypes.HEX -> colorToHSV(Integer.parseInt(split[0], 16), hsvPicked)
+                        ColorTypes.HSV -> {
                             hsvPicked = floatArrayOf(
-                                v[flagIndexes["h"]!!].toFloat(),
-                                v[flagIndexes["s"]!!].toFloat() / 100,
-                                v[flagIndexes["v"]!!].toFloat() / 100
+                                split[flagIndexes["h"]!!].toFloat(),
+                                split[flagIndexes["s"]!!].toFloat() / 100,
+                                split[flagIndexes["v"]!!].toFloat() / 100
                             )
+                            run {}
                         }
-                        2 -> {
-                            Color.colorToHSV(
+                        ColorTypes.RGB -> {
+                            colorToHSV(
                                 Color.rgb(
-                                    v[flagIndexes["r"]!!].toInt(),
-                                    v[flagIndexes["g"]!!].toInt(),
-                                    v[flagIndexes["b"]!!].toInt()
+                                    split[flagIndexes["r"]!!].toInt(),
+                                    split[flagIndexes["g"]!!].toInt(),
+                                    split[flagIndexes["b"]!!].toInt()
                                 ), hsvPicked
                             )
                         }
@@ -424,10 +417,10 @@ class LightsTile : Tile() {
 
                     if (doPaint) {
                         holder?.itemView?.let {
-                            com.alteratom.dashboard.G.theme.apply(
+                            theme.apply(
                                 it as ViewGroup,
                                 anim = false,
-                                colorPallet = com.alteratom.dashboard.G.theme.a.getColorPallet(
+                                colorPallet = theme.a.getColorPallet(
                                     hsvPicked,
                                     isRaw = paintRaw
                                 )
@@ -435,8 +428,8 @@ class LightsTile : Tile() {
                         }
                     }
                 }
-                "bright" -> brightness = value.toIntOrNull()
-                "mode" -> (modes.find { it.second == value })?.let {
+                "bright" -> brightness = data.toIntOrNull()
+                "mode" -> (modes.find { it.second == data })?.let {
                     mode = it.second
                 }
                 else -> hasReceived = false
@@ -456,10 +449,6 @@ class LightsTile : Tile() {
                     else -> null
                 }
             )
-        } else {
-            for (e in jsonResult) {
-                parse(e.value, e.key)
-            }
-        }
+        } else for (e in jsonResult) parse(e.value, e.key)
     }
 }

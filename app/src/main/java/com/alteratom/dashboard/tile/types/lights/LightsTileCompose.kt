@@ -25,6 +25,7 @@ import com.alteratom.dashboard.activities.fragments.tile_properties.TileProperti
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import ColorTile.Companion.ColorTypes
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable
@@ -127,10 +128,9 @@ object LightsTileCompose : DaemonBasedCompose {
                 Text(
                     "Use ${
                         when (type) {
-                            0 -> "@h, @s, @v"
-                            1 -> "@hex"
-                            2 -> "@r, @g, @b"
-                            else -> "@hex"
+                            ColorTypes.HSV -> "@h, @s, @v"
+                            ColorTypes.HEX -> "@hex"
+                            ColorTypes.RGB -> "@r, @g, @b"
                         }
                     } to insert current value.",
                     fontSize = 13.sp,
@@ -150,6 +150,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         stateSub = it
                         tile.mqttData.subs["state"] = it
+                        G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
@@ -188,6 +189,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         brightSub = it
                         tile.mqttData.subs["bright"] = it
+                        G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
@@ -226,6 +228,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         colorSub = it
                         tile.mqttData.subs["color"] = it
+                        G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
@@ -264,6 +267,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         modeSub = it
                         tile.mqttData.subs["mode"] = it
+                        G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
@@ -384,18 +388,20 @@ object LightsTileCompose : DaemonBasedCompose {
                         },
                     )
 
+                    val list = listOf(
+                        ColorTypes.HSV.name,
+                        ColorTypes.HEX.name,
+                        ColorTypes.RGB.name
+                    )
+
                     HorizontalRadioGroup(
-                        listOf(
-                            "HSV",
-                            "HEX",
-                            "RGB",
-                        ),
+                        list,
                         "Type:",
-                        type,
+                        list.indexOf(type.name),
                         {
-                            type = it
-                            tile.colorType = it
-                            pub = tile.mqttData.payloads[tile.colorType.toString()] ?: ""
+                            type = ColorTypes.values()[it]
+                            tile.colorType = ColorTypes.values()[it]
+                            pub = tile.mqttData.payloads[tile.colorType.name] ?: ""
                         },
                     )
 

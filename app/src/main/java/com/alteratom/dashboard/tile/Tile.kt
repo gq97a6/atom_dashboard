@@ -45,7 +45,7 @@ abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
         get() = theme.a.getColorPallet(hsv, true)
 
     @JsonAlias("mqtt")
-    override val mqttData = Mqttd.ClientData()
+    override val mqttData = Mqttd.SubjectData()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =

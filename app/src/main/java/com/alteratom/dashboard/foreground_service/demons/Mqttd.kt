@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.Pro
 import com.alteratom.dashboard.Storage
+import com.alteratom.dashboard.Storage.parseSave
+import com.alteratom.dashboard.Storage.prepareSave
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser
@@ -166,7 +169,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: Dashboard.MqttBrokerData
+        var conProp: BrokerData
     ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 
         private var isBusy = false
@@ -301,7 +304,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             try {
                 client.disconnect(null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
-
                         unregisterResources()
                         setCallback(null)
                         topics = mutableListOf()
@@ -327,35 +329,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
-    class ClientData(
-        var isEnabled: Boolean = true,
-        var lastReceive: Date? = null,
-        val subs: MutableMap<String, String> = mutableMapOf(),
-        val pubs: MutableMap<String, String> = mutableMapOf(),
-        val jsonPaths: MutableMap<String, String> = mutableMapOf(),
-        var payloads: MutableMap<String, String> = mutableMapOf(
-            "base" to "",
-            "true" to "1",
-            "false" to "0"
-        ),
-        private var _qos: Int = 0,
-        var payloadIsVar: Boolean = true,
-        var payloadIsJson: Boolean = false,
-        var doConfirmPub: Boolean = false,
-        var doRetain: Boolean = false,
-        var doLog: Boolean = false,
-        var doNotify: Boolean = false,
-        var silentNotify: Boolean = false
-    ) {
-        var qos
-            set(value) {
-                _qos = minOf(2, maxOf(0, value))
-            }
-            get() = _qos
-    }
-
     data class BrokerData(
-        var isEnabled: Boolean = true,
+        var isEnabled: Boolean = Pro.status,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
         @JsonIgnore
@@ -375,6 +350,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         var pass: String = "",
         var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
     ) {
+
         val uri
             get() = "$address:$port"
 
@@ -412,11 +388,40 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     null
                 }
             }
+
+        fun deepCopy(): BrokerData? = parseSave(this.prepareSave())
+    }
+
+    class SubjectData(
+        var isEnabled: Boolean = true,
+        var lastReceive: Date? = null,
+        val subs: MutableMap<String, String> = mutableMapOf(),
+        val pubs: MutableMap<String, String> = mutableMapOf(),
+        val jsonPaths: MutableMap<String, String> = mutableMapOf(),
+        var payloads: MutableMap<String, String> = mutableMapOf(
+            "base" to "",
+            "true" to "1",
+            "false" to "0"
+        ),
+        private var _qos: Int = 0,
+        var payloadIsVar: Boolean = true,
+        var payloadIsJson: Boolean = false,
+        var doConfirmPub: Boolean = false,
+        var doRetain: Boolean = false,
+        var doLog: Boolean = false,
+        var doNotify: Boolean = false,
+        var silentNotify: Boolean = false
+    ) {
+        var qos
+            set(value) {
+                _qos = minOf(2, maxOf(0, value))
+            }
+            get() = _qos
     }
 
     interface Subject {
         var dashboard: Dashboard?
-        val mqttData: ClientData
+        val mqttData: SubjectData
 
         fun onSend(
             topic: String?,
@@ -429,35 +434,24 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
         }
 
-        fun Mqttd.send(
-            msg: String,
-            topic: String? = mqttData.pubs["base"],
-            @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
-            retain: Boolean = false,
-            raw: Boolean = false
-        ) {
-            if (topic.isNullOrEmpty()) return
-
-            {
-                this.publish(topic, msg, qos, retain)
-                onSend(topic, msg, qos, retain)
-            }.let {
-                if (!mqttData.doConfirmPub || raw) it()
-                else dashboard?.tiles?.first()?.adapter?.context?.let {
-                    with(it) { buildConfirm("Confirm publishing", "PUBLISH") { it() } }
-                }
-            }
-        }
-
         fun send(
             msg: String,
             topic: String? = mqttData.pubs["base"],
             @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
-            retain: Boolean = false,
+            retain: Boolean = mqttData.doRetain,
             raw: Boolean = false
         ) {
-            when (dashboard?.daemon) {
-                is Mqttd -> (dashboard?.daemon as? Mqttd)?.send(msg, topic, qos, retain, raw)
+            if (dashboard?.daemon !is Mqttd) return
+            if (topic.isNullOrEmpty()) return
+
+            var commit = {
+                (dashboard?.daemon as Mqttd).publish(topic, msg, qos, retain)
+                onSend(topic, msg, qos, retain)
+            }
+
+            if (!mqttData.doConfirmPub || raw) commit()
+            else dashboard?.tiles?.first()?.adapter?.context?.let {
+                with(it) { buildConfirm("Confirm publishing", "PUBLISH") { commit() } }
             }
         }
 

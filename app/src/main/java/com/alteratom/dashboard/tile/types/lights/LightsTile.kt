@@ -138,7 +138,7 @@ class LightsTile : Tile() {
     }
 
     override fun onBindViewHolder(
-        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        holder: RecyclerViewAdapter.ViewHolder,
         position: Int
     ) {
         super.onBindViewHolder(holder, position)
@@ -147,7 +147,7 @@ class LightsTile : Tile() {
         holder.itemView.findViewById<View>(R.id.t_icon).setBackgroundResource(iconResState)
     }
 
-    override fun onSetTheme(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder) {
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
         com.alteratom.dashboard.G.theme.apply(
@@ -230,7 +230,7 @@ class LightsTile : Tile() {
 
         binding.dlConfirm.setOnClickListener {
             fun send() {
-                send("$brightnessTmp", mqttData.pubs["bright"], mqttData.qos, retain[1], true)
+                send("$brightnessTmp", mqttData.pubs["bright"], retain = retain[1], raw = true)
                 if (includePicker) send(
                     when (colorType) {
                         0 -> {
@@ -262,7 +262,10 @@ class LightsTile : Tile() {
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
-                    }, mqttData.pubs["color"], mqttData.qos, retain[2], true
+                    },
+                    mqttData.pubs["color"],
+                    retain = retain[2],
+                    raw = true
                 )
             }
 
@@ -308,8 +311,7 @@ class LightsTile : Tile() {
                     send(
                         this.modes[pos].second,
                         mqttData.pubs["mode"],
-                        mqttData.qos,
-                        retain[3]
+                        retain = retain[3]
                     )
 
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -337,8 +339,7 @@ class LightsTile : Tile() {
             send(
                 mqttData.payloads[if (state == false) "true" else "false"] ?: "",
                 mqttData.pubs["state"],
-                mqttData.qos,
-                retain[0]
+                retain = retain[0]
             )
         }
 

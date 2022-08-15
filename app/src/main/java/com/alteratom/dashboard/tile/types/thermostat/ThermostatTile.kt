@@ -211,8 +211,8 @@ class ThermostatTile : Tile() {
 
         binding.dtConfirm.setOnClickListener {
             fun send() {
-                send("$tempSetpointTmp", mqttData.pubs["temp_set"], mqttData.qos, retain[0], true)
-                send("$humiSetpointTmp", mqttData.pubs["humi_set"], mqttData.qos, retain[1], true)
+                send("$tempSetpointTmp", mqttData.pubs["temp_set"], retain = retain[0], raw = true)
+                send("$humiSetpointTmp", mqttData.pubs["humi_set"], retain = retain[1], raw = true)
             }
 
             if (mqttData.doConfirmPub) {
@@ -258,8 +258,7 @@ class ThermostatTile : Tile() {
                     send(
                         this.modes[pos].second,
                         mqttData.pubs["mode"],
-                        mqttData.qos,
-                        retain[2]
+                        retain = retain[2]
                     )
 
                     Handler(Looper.getMainLooper()).postDelayed({

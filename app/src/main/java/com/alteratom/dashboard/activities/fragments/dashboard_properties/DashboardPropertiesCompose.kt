@@ -176,7 +176,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                             .padding(top = 15.dp)
                                             .height(50.dp)
                                             .clickable {
-                                                dashboard.mqttData = it.mqttData.copy()
+                                                dashboard.mqttData =
+                                                    it.mqttData.deepCopy() ?: Mqttd.BrokerData()
                                                 dashboard.mqttData.clientId =
                                                     abs(Random.nextInt()).toString()
                                                 dashboard.daemon.notifyOptionsChanged()

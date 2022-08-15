@@ -1,4 +1,4 @@
-import ColorTile.Companion.CT
+import ColorTile.Companion.ColorTypes
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -42,9 +42,9 @@ object ColorTileCompose : DaemonBasedCompose {
                 Text(
                     "Use ${
                         when (type) {
-                            CT.HSV -> "@h, @s, @v"
-                            CT.HEX -> "@hex"
-                            CT.RGB -> "@r, @g, @b"
+                            ColorTypes.HSV -> "@h, @s, @v"
+                            ColorTypes.HEX -> "@hex"
+                            ColorTypes.RGB -> "@r, @g, @b"
                         }
                     } to insert current value.",
                     fontSize = 13.sp,
@@ -100,9 +100,9 @@ object ColorTileCompose : DaemonBasedCompose {
                     }
 
                     val list = listOf(
-                        CT.HSV.name,
-                        CT.HEX.name,
-                        CT.RGB.name
+                        ColorTypes.HSV.name,
+                        ColorTypes.HEX.name,
+                        ColorTypes.RGB.name
                     )
 
                     HorizontalRadioGroup(
@@ -110,8 +110,8 @@ object ColorTileCompose : DaemonBasedCompose {
                         "Type:",
                         list.indexOf(type.name),
                         {
-                            type = CT.values()[it]
-                            tile.colorType = CT.values()[it]
+                            type = ColorTypes.values()[it]
+                            tile.colorType = ColorTypes.values()[it]
                             pub = tile.mqttData.payloads[tile.colorType.name] ?: ""
                         },
                     )

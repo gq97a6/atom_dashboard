@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.foreground_service.demons.Daemon
+import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
@@ -46,7 +47,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     var log = Log()
 
     @JsonAlias("mqtt")
-    var mqttData = MqttBrokerData()
+    var mqttData = Mqttd.BrokerData()
 
     @JsonIgnore
     lateinit var daemon: Daemon
@@ -86,65 +87,5 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
             anim = false,
             colorPallet = pallet
         )
-    }
-
-    data class MqttBrokerData(
-        var isEnabled: Boolean = Pro.status,
-        var ssl: Boolean = false,
-        var sslTrustAll: Boolean = false,
-        @JsonIgnore
-        var caCert: X509Certificate? = null,
-        var caFileName: String = "",
-        @JsonIgnore
-        var clientCert: X509Certificate? = null,
-        var clientFileName: String = "",
-        @JsonIgnore
-        var clientKey: KeyPair? = null,
-        var keyFileName: String = "",
-        var clientKeyPassword: String = "",
-        var address: String = "tcp://",
-        var port: Int = 1883,
-        var includeCred: Boolean = false,
-        var username: String = "",
-        var pass: String = "",
-        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
-    ) {
-        val uri
-            get() = "$address:$port"
-
-        var caCertStr: String? = null
-            set(value) {
-                field = value
-                caCert = try {
-                    val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
-
-        var clientCertStr: String? = null
-            set(value) {
-                field = value
-                clientCert = try {
-                    val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
-
-        var clientKeyStr: String? = null
-            set(value) {
-                field = value
-                clientKey = try {
-                    JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value?.byteInputStream())).readObject() as PEMKeyPair)
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
     }
 }

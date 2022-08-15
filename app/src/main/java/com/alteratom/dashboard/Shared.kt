@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.annotation.FloatRange
 import androidx.annotation.IntRange
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color.Companion.hsv
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.core.app.NotificationCompat
@@ -33,7 +34,6 @@ import androidx.core.graphics.red
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.activities.PayActivity
-import kotlinx.coroutines.delay
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.*
@@ -246,6 +246,12 @@ inline infix fun <reified T> (() -> T).IfShitHitsTheFan(catch: () -> T): T {
         catch()
     }
 }
+
+fun pHsv(h: Float, s: Float, v: Float) = hsv(
+    if (h.isNaN()) 180f else h,
+    if (s.isNaN()) .5f else s,
+    if (v.isNaN()) .5f else v
+)
 
 fun Context.proAlert(activity: Activity) {
     with(this) {

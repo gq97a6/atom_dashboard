@@ -19,21 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.compose.ArcSlider
 import com.alteratom.dashboard.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.compose.ArcSlider
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.compose.SwitchColors
-import com.alteratom.dashboard.hsv
+import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 
 class ThemeFragment : Fragment() {
@@ -107,8 +105,8 @@ class ThemeFragment : Fragment() {
                                     pointerStyle = Stroke(width = 1.dp.toPx()),
                                     pointerColor = Color.Gray,
                                     colorList = listOf(
-                                        hsv(hue, 1f, 1f),
-                                        hsv(hue, 0f, 1f),
+                                        pHsv(hue, 1f, 1f),
+                                        pHsv(hue, 0f, 1f),
                                     ).asReversed(),
                                     onChange = { a, v ->
                                         saturationDarkAngle = a
@@ -130,8 +128,8 @@ class ThemeFragment : Fragment() {
                                     pointerStyle = Stroke(width = 1.dp.toPx()),
                                     pointerColor = Color.Gray,
                                     colorList = listOf(
-                                        hsv(hue, 1f, value),
-                                        hsv(hue, 0f, value),
+                                        pHsv(hue, 1f, value),
+                                        pHsv(hue, 0f, value),
                                     ).asReversed(),
                                     onChange = { a, v ->
                                         saturationAngle = a
@@ -153,8 +151,8 @@ class ThemeFragment : Fragment() {
                                     pointerStyle = Stroke(width = 1.dp.toPx()),
                                     pointerColor = Color.Gray,
                                     colorList = listOf(
-                                        hsv(hue, saturation, 1f),
-                                        hsv(hue, saturation, 0f)
+                                        pHsv(hue, saturation, 1f),
+                                        pHsv(hue, saturation, 0f)
                                     ),
                                     onChange = { a, v ->
                                         valueAngle = a
@@ -169,7 +167,7 @@ class ThemeFragment : Fragment() {
                                     .fillMaxSize(.4f)
                                     .clip(CircleShape)
                                     .background(
-                                        hsv(
+                                        pHsv(
                                             hue,
                                             saturation,
                                             if (isDark) 1f else value

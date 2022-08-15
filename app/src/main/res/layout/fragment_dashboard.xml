@@ -354,7 +354,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="Hide toolbar then hold selected tile"
+            android:text="Click and hold selected tile"
             android:textSize="18dp" />
 
         <TextView

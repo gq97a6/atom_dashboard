@@ -73,11 +73,11 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         if (!client.isConnected) return
 
         try {
-            val message = MqttMessage()
-
-            message.payload = msg.toByteArray()
-            message.qos = qos
-            message.isRetained = retained
+            val message = MqttMessage().apply {
+                payload = msg.toByteArray()
+                this.qos = qos
+                isRetained = retained
+            }
 
             client.publish(topic, message, null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {

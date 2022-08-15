@@ -283,7 +283,7 @@ class ThermostatTile : Tile() {
         }
 
         if (!includeHumiditySetpoint) {
-            binding.dtHumiCurrent.text = "--%"
+            binding.dtHumiText.visibility = INVISIBLE
             binding.dtHumi.visibility = INVISIBLE
         } else {
             abs(100 / humidityStep).let {

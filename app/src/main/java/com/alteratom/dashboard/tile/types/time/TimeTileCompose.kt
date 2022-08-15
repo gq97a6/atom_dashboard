@@ -19,17 +19,18 @@ object TimeTileCompose : DaemonBasedCompose {
     override fun Mqttd() {
         val tile = tile as TimeTile
 
-        var type by remember { mutableStateOf(if (tile.isDate) 0 else 1) }
+        var type by remember { mutableStateOf(if (tile.isDate) 1 else 0) }
+
+        var pub by remember {
+            mutableStateOf(
+                tile.mqttData.payloads[if (type == 0) "time" else "date"] ?: ""
+            )
+        }
 
         TilePropertiesCompose.Box {
             TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
-                var pub by remember {
-                    mutableStateOf(
-                        tile.mqttData.payloads[if (type == 0) "time" else "date"] ?: ""
-                    )
-                }
                 EditText(
                     label = { Text("Publish payload") },
                     value = pub,
@@ -84,7 +85,8 @@ object TimeTileCompose : DaemonBasedCompose {
                         type,
                         {
                             type = it
-                            tile.isDate = it == 1
+                            tile.isDate = (it == 1)
+                            pub = tile.mqttData.payloads[if (type == 0) "time" else "date"] ?: ""
                         },
                     )
                 }

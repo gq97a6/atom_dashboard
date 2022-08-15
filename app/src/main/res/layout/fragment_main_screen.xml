@@ -271,7 +271,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="Hide toolbar then hold selected dashboard"
+            android:text="Click and hold selected dashboard"
             android:textSize="18dp" />
 
     </LinearLayout>

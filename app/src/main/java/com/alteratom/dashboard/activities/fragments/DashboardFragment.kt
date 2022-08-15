@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
+import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -31,7 +32,6 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentDashboardBinding
-import SliderTile
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -146,7 +146,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             b.dRemove,
             b.dAdd,
             addOnClick,
-            onUiChange
+            onUiChange,
+            { b.dSwap.callOnClick() },
         )
 
         b.dMore.setOnClickListener {

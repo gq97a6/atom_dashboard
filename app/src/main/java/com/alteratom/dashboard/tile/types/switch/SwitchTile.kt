@@ -30,7 +30,7 @@ class SwitchTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
 
-    var hsvTrue = floatArrayOf(179f, 1f, 1f)
+    var hsvTrue = theme.a.hsv
     val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
         get() = theme.a.getColorPallet(hsvTrue, true)
 

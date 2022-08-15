@@ -37,6 +37,7 @@ object ColorTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         pub = it
                         tile.mqttData.payloads[type.name] = it
+                        tile.colorType = tile.colorType
                     }
                 )
                 Text(

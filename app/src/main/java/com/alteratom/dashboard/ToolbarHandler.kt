@@ -20,7 +20,8 @@ class ToolbarHandler(
     private val remove: Button,
     add: Button,
     private val onAdd: () -> Unit,
-    private val onUiChange: () -> Unit
+    private val onUiChange: () -> Unit,
+    private val setDefault: () -> Unit = { (if (Pro.status) swap else remove).callOnClick() },
 ) {
     private fun highlightOnly(button: Button) {
         remove.alpha = 0.4f
@@ -31,8 +32,7 @@ class ToolbarHandler(
 
     fun toggleTools() {
         if (adapter.editMode.isNone) {
-            adapter.editMode.setSwap()
-            highlightOnly(swap)
+            setDefault()
 
             bar.animate()
                 .translationY(-1.5f * bar[0].height.toFloat())

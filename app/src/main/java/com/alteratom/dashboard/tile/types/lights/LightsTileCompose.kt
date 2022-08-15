@@ -123,6 +123,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         pub = it
                         tile.mqttData.payloads[type.toString()] = it
+                        tile.colorType = tile.colorType
                     }
                 )
                 Text(
@@ -223,7 +224,7 @@ object LightsTileCompose : DaemonBasedCompose {
 
                 var colorSub by remember { mutableStateOf(tile.mqttData.subs["color"] ?: "") }
                 EditText(
-                    label = { Text("Brightness subscribe topic") },
+                    label = { Text("Color subscribe topic") },
                     value = colorSub,
                     onValueChange = {
                         colorSub = it
@@ -234,7 +235,7 @@ object LightsTileCompose : DaemonBasedCompose {
 
                 var colorPub by remember { mutableStateOf(tile.mqttData.pubs["color"] ?: "") }
                 EditText(
-                    label = { Text("Brightness publish topic") },
+                    label = { Text("Color publish topic") },
                     value = colorPub,
                     onValueChange = {
                         colorPub = it

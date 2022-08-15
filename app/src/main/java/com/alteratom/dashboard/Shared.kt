@@ -256,7 +256,7 @@ fun pHsv(h: Float, s: Float, v: Float) = hsv(
 fun Context.proAlert(activity: Activity) {
     with(this) {
         buildConfirm(
-            "This feature requires pro\n\nNote: free of charge\nfor beta testers",
+            "This feature requires pro",
             "UNLOCK"
         ) {
             activity.apply {

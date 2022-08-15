@@ -13,6 +13,7 @@ import androidx.core.graphics.red
 import com.alteratom.R
 import com.alteratom.dashboard.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogColorPickerBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -35,9 +36,9 @@ class ColorTile : Tile() {
 
     var paintRaw = true
     var doPaint = true
-    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    private var toRemoves = mutableListOf<String>()
-    private var flagIndexes = mutableMapOf<String, Int>()
+    var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    var toRemoves = mutableListOf<String>()
+    var flagIndexes = mutableMapOf<String, Int>()
 
     var colorType = ColorTypes.HSV
         set(value) {
@@ -80,7 +81,7 @@ class ColorTile : Tile() {
     }
 
     override fun onBindViewHolder(
-        holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder,
+        holder: RecyclerViewAdapter.ViewHolder,
         position: Int
     ) {
         super.onBindViewHolder(holder, position)
@@ -89,7 +90,7 @@ class ColorTile : Tile() {
             View.GONE
     }
 
-    override fun onSetTheme(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder) {
+    override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
         if (doPaint) {
@@ -179,18 +180,18 @@ class ColorTile : Tile() {
             ColorTypes.HEX -> colorToHSV(Integer.parseInt(split[0], 16), hsvPicked)
             ColorTypes.HSV -> {
                 hsvPicked = floatArrayOf(
-                    split[flagIndexes["h"]!!].toFloat(),
-                    split[flagIndexes["s"]!!].toFloat() / 100,
-                    split[flagIndexes["v"]!!].toFloat() / 100
+                    split[flagIndexes["h"] ?: 0].toFloat(),
+                    split[flagIndexes["s"] ?: 0].toFloat() / 100,
+                    split[flagIndexes["v"] ?: 0].toFloat() / 100
                 )
                 run {}
             }
             ColorTypes.RGB -> {
                 colorToHSV(
                     Color.rgb(
-                        split[flagIndexes["r"]!!].toInt(),
-                        split[flagIndexes["g"]!!].toInt(),
-                        split[flagIndexes["b"]!!].toInt()
+                        split[flagIndexes["r"] ?: 0].toInt(),
+                        split[flagIndexes["g"] ?: 0].toInt(),
+                        split[flagIndexes["b"] ?: 0].toInt()
                     ), hsvPicked
                 )
             }

@@ -346,7 +346,7 @@ class SettingsFragment : Fragment() {
                         val pro by pro.observeAsState()
 
                         Text(
-                            "beta ${if (pro ?: Pro.status) "pro" else "free"} 1.0.0",
+                            " ${if (pro ?: Pro.status) "pro" else "free"} | 1.0.0 | stable",
                             Modifier.padding(bottom = 5.dp),
                             fontSize = 10.sp,
                             color = colors.c

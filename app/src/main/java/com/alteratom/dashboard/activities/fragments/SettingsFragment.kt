@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import com.alteratom.BuildConfig
 import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.dashboards
@@ -349,7 +350,7 @@ class SettingsFragment : Fragment() {
                         val pro by pro.observeAsState()
 
                         Text(
-                            "${if (pro ?: Pro.status) "pro" else "free"} | 1.0.1 | stable",
+                            "${if (pro ?: Pro.status) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
                             Modifier.padding(bottom = 5.dp),
                             fontSize = 10.sp,
                             color = colors.c

@@ -11,8 +11,8 @@ android {
         applicationId "com.alteratom.dashboard"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 16
-        versionName "1.0-stable"
+        versionCode 18
+        versionName "1.0.1 | stable"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

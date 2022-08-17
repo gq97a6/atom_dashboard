@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.G.dashboards
 import com.alteratom.dashboard.Storage.rootFolder
 import com.alteratom.dashboard.Theme.Companion.colors
@@ -87,7 +88,10 @@ class SetupActivity : AppCompatActivity() {
         GlobalScope.launch {
             BillingHandler(this@SetupActivity).apply {
                 enable()
-                checkPendingPurchases(0) {}
+                checkPurchases(
+                    0,
+                    { !it.isAcknowledged || (!Pro.status && it.products.contains(PRO)) }
+                )
                 disable()
             }
 

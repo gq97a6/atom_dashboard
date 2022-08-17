@@ -194,15 +194,15 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    suspend inline fun checkPendingPurchases(
+    suspend inline fun checkPurchases(
         eta: Long = 10000,
-        timeout: Long = 2000,
-        onDone: (List<Purchase>?) -> Unit
+        filter: (Purchase) -> Boolean = { !it.isAcknowledged },
+        onDone: (List<Purchase>?) -> Unit = {}
     ) {
         var result: List<Purchase>? = null
 
         measureTimeMillis {
-            getPurchases()?.filter { !it.isAcknowledged }?.let {
+            getPurchases()?.filter(filter)?.let {
                 result = it
                 for (purchase in it) onPurchased(purchase)
             }

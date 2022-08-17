@@ -43,7 +43,10 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.activities.SetupActivity
-import com.alteratom.dashboard.compose.*
+import com.alteratom.dashboard.compose.BasicButton
+import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose.FrameBox
+import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import java.io.BufferedReader
 import java.io.FileOutputStream
@@ -346,7 +349,7 @@ class SettingsFragment : Fragment() {
                         val pro by pro.observeAsState()
 
                         Text(
-                            " ${if (pro ?: Pro.status) "pro" else "free"} | 1.0.0 | stable",
+                            "${if (pro ?: Pro.status) "pro" else "free"} | 1.0.1 | stable",
                             Modifier.padding(bottom = 5.dp),
                             fontSize = 10.sp,
                             color = colors.c

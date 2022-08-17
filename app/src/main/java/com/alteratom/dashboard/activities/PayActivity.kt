@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -184,12 +183,6 @@ class PayActivity : AppCompatActivity() {
                             fontSize = 13.sp,
                             color = Theme.colors.a
                         )
-                        Text(
-                            "\nNote: includes final version of the app",
-                            fontSize = 13.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Theme.colors.color
-                        )
 
                         Row(
                             horizontalArrangement = Arrangement.Center,
@@ -244,7 +237,7 @@ class PayActivity : AppCompatActivity() {
                                         scaleDuration = 3000
 
                                         lifecycleScope.launch {
-                                            billingHandler.checkPendingPurchases {
+                                            billingHandler.checkPurchases {
                                                 if (it?.isEmpty() != false)
                                                     createToast(
                                                         this@PayActivity,

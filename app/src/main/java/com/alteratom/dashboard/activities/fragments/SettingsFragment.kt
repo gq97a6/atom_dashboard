@@ -41,9 +41,9 @@ import com.alteratom.dashboard.Storage.parseSave
 import com.alteratom.dashboard.Storage.prepareSave
 import com.alteratom.dashboard.Storage.saveToFile
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
-import com.alteratom.dashboard.activities.SetupActivity
 import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.compose.FrameBox
@@ -137,7 +137,7 @@ class SettingsFragment : Fragment() {
                                 activity?.startActivity(
                                     Intent(
                                         requireContext(),
-                                        SetupActivity::class.java
+                                        MainActivity::class.java
                                     )
                                 )
                                 activity?.finish()

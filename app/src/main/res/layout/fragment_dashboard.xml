@@ -339,7 +339,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="2. Slide selected tile"
+            android:text="2. Move selected tile"
             android:textSize="18dp" />
 
         <TextView
@@ -354,21 +354,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="Click and hold selected tile"
-            android:textSize="18dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="colorA"
-            android:paddingTop="15dp"
-            android:text="Slide down from the top"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:tag="colorC"
             android:text="Press and hold selected tile"
             android:textSize="18dp" />
 
@@ -377,7 +362,22 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:paddingTop="15dp"
-            android:text="How to navigate"
+            android:text="How to access logs"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorC"
+            android:text="Slide down from the top of the screen"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="colorA"
+            android:paddingTop="15dp"
+            android:text="How to navigate\nbetween dashboards"
             android:textSize="20dp" />
 
         <TextView

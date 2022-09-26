@@ -6,8 +6,8 @@ import com.alteratom.dashboard.G.dashboard
 import com.alteratom.dashboard.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
-import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.slideLeft as slideLeftAnimation
-import com.alteratom.dashboard.activities.MainActivity.FragmentManager.Animations.slideRight as slideRightAnimation
+import com.alteratom.dashboard.activities.fragments.FragmentManager.Animations.slideLeft as slideLeftAnimation
+import com.alteratom.dashboard.activities.fragments.FragmentManager.Animations.slideRight as slideRightAnimation
 
 object TileSwitcher : Switcher() {
 

@@ -101,10 +101,8 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemClick = { item ->
-            if (adapter.editMode.isNone) {
-                setCurrentDashboard(item.id)
+            if (adapter.editMode.isNone && setCurrentDashboard(item.id))
                 fm.replaceWith(DashboardFragment())
-            }
         }
 
         adapter.onItemLongClick = { item ->

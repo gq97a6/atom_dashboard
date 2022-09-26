@@ -23,9 +23,11 @@
         android:theme="@style/theme">
 
         <activity
-            android:name=".dashboard.activities.SetupActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:name=".dashboard.activities.MainActivity"
+            android:configChanges="screenSize|keyboardHidden"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,17 +36,7 @@
         </activity>
 
         <activity
-            android:name=".dashboard.activities.MainActivity"
-            android:configChanges="screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".dashboard.activities.PayActivity"
-            android:configChanges="screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".dashboard.activities.TestActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 

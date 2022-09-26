@@ -185,7 +185,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="2. Select one or more tiles"
+            android:text="2. Select one or more dashboards"
             android:textSize="18dp" />
 
         <LinearLayout
@@ -256,7 +256,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:tag="colorC"
-            android:text="2. Slide selected tile"
+            android:text="2. Move selected dashboard"
             android:textSize="18dp" />
 
         <TextView

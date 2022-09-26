@@ -21,7 +21,7 @@ import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 class ForegroundService : LifecycleService() {
 
     var finishAffinity: () -> Unit = {}
-    var isRunning = false
+    var isStarted = false
 
     companion object {
         var service: ForegroundService? = null
@@ -56,14 +56,14 @@ class ForegroundService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == "STOP") {
-            isRunning = false
+            isStarted = false
             DaemonsManager.notifyAllDischarged()
 
-            stopForeground(true)
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
 
             finishAffinity()
-        } else if (!isRunning) isRunning = true
+        } else isStarted = true
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -71,7 +71,7 @@ class ForegroundService : LifecycleService() {
     override fun onDestroy() {
         ActivityHandler.onDestroy()
 
-        if (isRunning) {
+        if (isStarted) {
             val foregroundServiceHandler = ForegroundServiceHandler(this)
             foregroundServiceHandler.start()
         }

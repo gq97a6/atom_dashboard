@@ -79,14 +79,3 @@ object Storage {
         return s
     }
 }
-
-//com.alteratom.tile.types.button
-//com.alteratom.tile.types.thermostat
-//com.alteratom.tile.types.time
-//com.alteratom.tile.types.button
-//com.alteratom.tile.types.pick
-//com.alteratom.tile.types.lights
-//com.alteratom.tile.types.color
-//com.alteratom.tile.types.switch
-//com.alteratom.tile.types.slider
-//com.alteratom.tile.types.terminal

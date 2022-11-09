@@ -85,6 +85,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
         currentItem.onViewAttachedToWindow(holder)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { //3 (order of execution)
         currentItem.onBindViewHolder(holder, position)
         currentItem.onSetTheme(holder)

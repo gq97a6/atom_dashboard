@@ -90,7 +90,6 @@ class ForegroundService : LifecycleService() {
         return binder
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
         val channel = NotificationChannel(
             "foreground_service_id",

@@ -239,7 +239,7 @@ fun Certificate.toPem(): String {
     return BEGIN_CERT + LINE_SEPARATOR + encodedCertText + LINE_SEPARATOR + END_CERT
 }
 
-inline infix fun <reified T> (() -> T).IfShitHitsTheFan(catch: () -> T): T {
+inline infix fun <reified T> (() -> T).ifShitHitsTheFan(catch: () -> T): T {
     return try {
         this()
     } catch (e: Exception) {

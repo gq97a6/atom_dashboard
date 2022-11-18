@@ -30,7 +30,6 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     override val layout
         get() = R.layout.item_dashboard
 
-
     var iconKey = "il_interface_plus_circle"
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus_circle

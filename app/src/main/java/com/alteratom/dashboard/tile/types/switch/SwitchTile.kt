@@ -89,7 +89,7 @@ class SwitchTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        state = when (data.second.toString()) {
+        state = when (jsonResult["base"] ?: data.second.toString()) {
             mqttData.payloads["true"] -> true
             mqttData.payloads["false"] -> false
             else -> null

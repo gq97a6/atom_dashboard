@@ -29,7 +29,7 @@ object DaemonsManager {
         dashboards.forEach {
             try {
                 it.daemon.notifyDischarged()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
     }

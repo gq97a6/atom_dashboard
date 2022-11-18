@@ -47,7 +47,7 @@ class TextTile : Tile() {
 
         if (mqttData.pubs["base"].isNullOrEmpty()) return
         (dashboard?.daemon as? Mqttd?)?.let {
-            if (it.client.isConnected != true) return
+            if (!it.client.isConnected) return
         }
 
         if (mqttData.payloadIsVar) {

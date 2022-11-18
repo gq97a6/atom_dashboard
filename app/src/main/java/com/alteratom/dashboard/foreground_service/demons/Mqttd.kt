@@ -478,7 +478,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
             try {
                 onReceive(data, jsonResult)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
     }

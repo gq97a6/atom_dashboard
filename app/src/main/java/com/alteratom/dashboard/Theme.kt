@@ -34,7 +34,6 @@ class Theme {
 
     val a = Artist()
 
-
     companion object {
         val colors
             get() = theme.a.pallet.cc

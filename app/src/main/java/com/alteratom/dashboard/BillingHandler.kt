@@ -70,7 +70,7 @@ class BillingHandler(val activity: Activity) {
             .let { client.acknowledgePurchase(it) {} }
     }
 
-    internal fun Purchase.consume() {
+    private fun Purchase.consume() {
         ConsumeParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)

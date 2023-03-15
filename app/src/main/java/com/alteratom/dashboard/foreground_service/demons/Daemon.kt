@@ -16,7 +16,7 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerato
     abstract val status: Any
 
     companion object {
-        inline operator fun invoke(context: Context, dashboard: Dashboard, type: Type) =
+        operator fun invoke(context: Context, dashboard: Dashboard, type: Type) =
             when (type) {
                 Type.MQTTD -> Mqttd::class
                 Type.BLUETOOTHD -> Bluetoothd::class

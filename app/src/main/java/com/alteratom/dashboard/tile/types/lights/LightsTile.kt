@@ -47,12 +47,12 @@ class LightsTile : Tile() {
 
     private var hasReceived = MutableLiveData("")
 
-    var state: Boolean? = null
-    var mode: String? = null
-    var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    var brightness: Int? = null
-    var toRemoves = mutableListOf<String>()
-    var flagIndexes = mutableMapOf<String, Int>()
+    private var state: Boolean? = null
+    private var mode: String? = null
+    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    private var brightness: Int? = null
+    private var toRemoves = mutableListOf<String>()
+    private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
     val retain = mutableListOf(false, false, false, false) //state, brightness, color, mode

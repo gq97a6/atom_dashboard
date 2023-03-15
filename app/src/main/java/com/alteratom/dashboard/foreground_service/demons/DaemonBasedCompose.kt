@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 
 interface DaemonBasedCompose {
     @Composable
-    fun compose(type: Daemon.Type, fragment: Fragment) {
+    fun Compose(type: Daemon.Type, fragment: Fragment) {
         when (type) {
             Daemon.Type.MQTTD -> Mqttd(fragment)
             Daemon.Type.BLUETOOTHD -> Bluetoothd(fragment)
@@ -13,7 +13,7 @@ interface DaemonBasedCompose {
     }
 
     @Composable
-    fun compose(type: Daemon.Type) {
+    fun Compose(type: Daemon.Type) {
         when (type) {
             Daemon.Type.MQTTD -> Mqttd()
             Daemon.Type.BLUETOOTHD -> Bluetoothd()

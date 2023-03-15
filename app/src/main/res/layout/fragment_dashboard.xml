@@ -217,7 +217,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:tag="colorAIcon"
-                android:background="@drawable/bt_add"/>
+                android:background="@drawable/bt_add" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -253,7 +253,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:tag="colorAIcon"
-                android:background="@drawable/bt_trashcan"/>
+                android:background="@drawable/bt_trashcan" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -288,7 +288,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:tag="colorAIcon"
-                android:background="@drawable/bt_trashcan"/>
+                android:background="@drawable/bt_trashcan" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -324,7 +324,7 @@
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:tag="colorAIcon"
-                android:background="@drawable/bt_swap"/>
+                android:background="@drawable/bt_swap" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -211,7 +211,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 EditText(
                     label = { Text("Address") },
                     value = address,
-                    onValueChange = {
+                    onValueChange = { it ->
                         address = it
                         it.trim().let {
                             if (dashboard.mqttData.address != it) {
@@ -231,7 +231,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     label = { Text("Port") },
                     value = port,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    onValueChange = {
+                    onValueChange = { it ->
                         port = it
                         (it.trim().toIntOrNull() ?: (-1)).let {
                             if (dashboard.mqttData.port != it) {
@@ -246,7 +246,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 EditText(
                     label = { Text("Unique client ID") },
                     value = id,
-                    onValueChange = {
+                    onValueChange = { it ->
                         id = it
                         it.trim().let {
                             when {
@@ -515,7 +515,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 modifier = Modifier.padding(top = 5.dp),
                                 value = password,
                                 textStyle = TextStyle(fontStyle = if (passwordHidden) Italic else Normal),
-                                onValueChange = {
+                                onValueChange = { it ->
                                     if (passwordHidden) {
                                         password = ""
                                         passwordHidden = false
@@ -609,7 +609,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             label = { Text("User name") },
                             value = user,
                             textStyle = TextStyle(fontStyle = if (userHidden) Italic else Normal),
-                            onValueChange = {
+                            onValueChange = { it ->
                                 if (userHidden) {
                                     user = ""
                                     userHidden = false
@@ -643,7 +643,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             label = { Text("Password") },
                             value = pass,
                             textStyle = TextStyle(fontStyle = if (passHidden) Italic else Normal),
-                            onValueChange = {
+                            onValueChange = { it ->
                                 if (passHidden) {
                                     pass = ""
                                     passHidden = false

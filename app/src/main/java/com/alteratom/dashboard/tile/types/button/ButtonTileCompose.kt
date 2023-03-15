@@ -31,7 +31,11 @@ object ButtonTileCompose : DaemonBasedCompose {
                     }
                 )
 
-                var pubPayload by remember { mutableStateOf(tile.mqttData.payloads["base"] ?: "err") }
+                var pubPayload by remember {
+                    mutableStateOf(
+                        tile.mqttData.payloads["base"] ?: "err"
+                    )
+                }
                 EditText(
                     label = { Text("Publish payload") },
                     value = pubPayload,
@@ -69,7 +73,13 @@ object ButtonTileCompose : DaemonBasedCompose {
 
                 var conf by remember { mutableStateOf(G.tile.mqttData.doConfirmPub) }
                 LabeledSwitch(
-                    label = { Text("Confirm publishing:", fontSize = 15.sp, color = Theme.colors.a) },
+                    label = {
+                        Text(
+                            "Confirm publishing:",
+                            fontSize = 15.sp,
+                            color = Theme.colors.a
+                        )
+                    },
                     checked = conf,
                     onCheckedChange = {
                         conf = it

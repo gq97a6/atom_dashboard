@@ -107,7 +107,8 @@ class SliderTile : Tile() {
     ) {
         super.onReceive(data, jsonResult)
 
-        (jsonResult["base"] ?: data.second.toString()).toFloatOrNull()?.let { this.value = it.roundCloser(range[2]) }
+        (jsonResult["base"] ?: data.second.toString()).toFloatOrNull()
+            ?.let { this.value = it.roundCloser(range[2]) }
     }
 
     private fun control(e: MotionEvent, v: View?): Pair<Int, Boolean> {

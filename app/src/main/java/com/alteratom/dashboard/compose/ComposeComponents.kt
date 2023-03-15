@@ -39,10 +39,6 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.compose.CheckBoxColors
-import com.alteratom.dashboard.compose.EditTextColors
-import com.alteratom.dashboard.compose.RadioButtonColors
-import com.alteratom.dashboard.compose.SwitchColors
 import com.alteratom.dashboard.toDp
 import com.alteratom.dashboard.toPx
 import kotlin.math.acos
@@ -78,7 +74,7 @@ fun LabeledSwitch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             enabled = enabled,
-            colors = SwitchColors(),
+            colors = switchColors(),
             interactionSource = interactionSource,
             modifier = Modifier
                 .wrapContentSize()
@@ -130,7 +126,7 @@ fun EditText(
         maxLines = maxLines ?: 1,
         interactionSource = interactionSource,
         shape = shape,
-        colors = EditTextColors()
+        colors = editTextColors()
     )
 }
 
@@ -155,7 +151,7 @@ fun RadioGroup(
                     modifier = Modifier
                         .width(20.dp)
                         .height(25.dp),
-                    colors = RadioButtonColors()
+                    colors = radioButtonColors()
                 )
 
                 val annotatedText = buildAnnotatedString {
@@ -202,7 +198,7 @@ fun HorizontalRadioGroup(
                     modifier = Modifier
                         .width(20.dp)
                         .height(25.dp),
-                    colors = RadioButtonColors()
+                    colors = radioButtonColors()
                 )
 
                 val annotatedText = buildAnnotatedString {
@@ -252,7 +248,7 @@ fun LabeledCheckbox(
             checked = checked,
             enabled = enabled,
             interactionSource = interactionSource,
-            colors = CheckBoxColors(),
+            colors = checkBoxColors(),
             onCheckedChange = onCheckedChange
         )
         Spacer(modifier = Modifier.padding(5.dp))
@@ -349,15 +345,15 @@ fun ArcSlider(
     pointerRadius: Float = 15.dp.toPx(),
     colorList: List<Color>
 ) {
-    var brush by remember(startAngle, sweepAngle, colorList) {
+    val brush by remember(startAngle, sweepAngle, colorList) {
         mutableStateOf(
             if (startAngle > (startAngle + sweepAngle) % 360) {
                 var start = startAngle / 360
                 val range = sweepAngle / 360
                 val step = range / (colorList.size - 1)
 
-                var colorList = colorList.toMutableList()
-                var colors: MutableList<Pair<Float, Color>> = mutableListOf()
+                val colorList = colorList.toMutableList()
+                val colors: MutableList<Pair<Float, Color>> = mutableListOf()
 
                 while (start < 1 && colorList.isNotEmpty()) {
                     colors.add(Pair(start.toFloat(), colorList[0]))
@@ -382,7 +378,7 @@ fun ArcSlider(
                 val range = sweepAngle / 360
                 val step = range / (colorList.size - 1)
 
-                var colors = Array(colorList.size) {
+                val colors = Array(colorList.size) {
                     Pair((start + step * it).toFloat(), colorList[it])
                 }
 
@@ -439,8 +435,8 @@ fun ArcSlider(
     var isSliding by remember { mutableStateOf(false) }
 
     fun calculateAngle(d: Offset) {
-        var x = d.x - radius
-        var y = d.y - radius
+        val x = d.x - radius
+        val y = d.y - radius
         val c = sqrt((x * x + y * y).toDouble())
 
         var angle = Math.toDegrees(acos(x / c))

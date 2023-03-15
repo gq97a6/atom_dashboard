@@ -43,7 +43,7 @@ class ToolbarHandler(
                     )
                     onUiChange()
                 }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+                .setInterpolator(AccelerateDecelerateInterpolator()).duration = 300
         } else {
             adapter.editMode.setNone()
 
@@ -57,7 +57,7 @@ class ToolbarHandler(
                     )
                     onUiChange()
                 }
-                .setInterpolator(AccelerateDecelerateInterpolator())?.duration = 300
+                .setInterpolator(AccelerateDecelerateInterpolator()).duration = 300
         }
     }
 

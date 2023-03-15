@@ -1,15 +1,24 @@
 package com.alteratom.dashboard.activities.fragments.tile_properties
 
+import ButtonTile
 import ButtonTileCompose
+import ColorTile
 import ColorTileCompose
+import LightsTile
 import LightsTileCompose
+import SelectTile
 import SelectTileCompose
+import SliderTile
 import SliderTileCompose
+import SwitchTile
 import SwitchTileCompose
+import TerminalTile
 import TerminalTileCompose
 import TextTile
 import TextTileCompose
+import ThermostatTile
 import ThermostatTileCompose
+import TimeTile
 import TimeTileCompose
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,15 +38,6 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.switcher.TileSwitcher
-import ButtonTile
-import ColorTile
-import LightsTile
-import SelectTile
-import SliderTile
-import SwitchTile
-import TerminalTile
-import ThermostatTile
-import TimeTile
 
 class TilePropertiesFragment : Fragment() {
 
@@ -77,7 +77,7 @@ class TilePropertiesFragment : Fragment() {
                                 is ThermostatTile -> ThermostatTileCompose
                                 is TimeTile -> TimeTileCompose
                                 else -> ButtonTileCompose
-                            }.compose(it)
+                            }.Compose(it)
                         }
                     }
                 }

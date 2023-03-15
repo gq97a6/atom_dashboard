@@ -1,3 +1,4 @@
+import ColorTile.Companion.ColorTypes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
@@ -11,10 +12,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.G
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.*
+import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
@@ -25,7 +27,6 @@ import com.alteratom.dashboard.activities.fragments.tile_properties.TileProperti
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.compose.*
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import ColorTile.Companion.ColorTypes
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable

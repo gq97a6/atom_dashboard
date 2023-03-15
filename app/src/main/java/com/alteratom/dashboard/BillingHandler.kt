@@ -21,7 +21,7 @@ class BillingHandler(val activity: Activity) {
 
     internal lateinit var client: BillingClient
 
-    val connectionHandler = BillingConnectionHandler()
+    private val connectionHandler = BillingConnectionHandler()
 
     companion object {
         //Products ids
@@ -165,7 +165,7 @@ class BillingHandler(val activity: Activity) {
     suspend fun getPriceTags(ids: List<String>): Map<String, String>? = withTimeoutOrNull(2000) {
         List(ids.size) {
             getProductDetails(ids[it])?.first() ?: return@withTimeoutOrNull null
-        }.let {
+        }.let { it ->
             it.map {
                 it.productId to
                         (it.oneTimePurchaseOfferDetails?.formattedPrice

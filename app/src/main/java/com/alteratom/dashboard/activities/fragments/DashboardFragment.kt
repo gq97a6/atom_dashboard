@@ -147,8 +147,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             b.dAdd,
             addOnClick,
             onUiChange,
-            { b.dSwap.callOnClick() },
-        )
+        ) { b.dSwap.callOnClick() }
 
         b.dMore.setOnClickListener {
             propertiesOnClick()

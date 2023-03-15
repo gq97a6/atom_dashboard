@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,13 +40,13 @@ import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SetupFragment : Fragment() {
 
-    var ready = MutableLiveData(false)
+    private var ready = MutableLiveData(false)
 
     @SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType")
     override fun onCreateView(
@@ -125,14 +124,14 @@ class SetupFragment : Fragment() {
         startService()
     }
 
-    fun startService() = (activity as MainActivity).apply {
+    private fun startService() = (activity as MainActivity).apply {
         if (ForegroundService.service?.isStarted == true) onServiceStarted()
         else {
             val handler = ForegroundServiceHandler(this@apply)
             handler.service.observe(this@apply) { service ->
                 if (service != null) {
                     ForegroundService.service?.finishAffinity = { finishAffinity() }
-                    DaemonsManager.initialize()
+                    DaemonsManager.notifyAllAdded()
                     TileSwitcher.activity = this
                     FragmentSwitcher.activity = this
 
@@ -145,6 +144,7 @@ class SetupFragment : Fragment() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun onServiceStarted() {
         //Background billing check
         GlobalScope.launch {

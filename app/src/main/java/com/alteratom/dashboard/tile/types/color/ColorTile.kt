@@ -36,9 +36,9 @@ class ColorTile : Tile() {
 
     var paintRaw = true
     var doPaint = true
-    var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    var toRemoves = mutableListOf<String>()
-    var flagIndexes = mutableMapOf<String, Int>()
+    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    private var toRemoves = mutableListOf<String>()
+    private var flagIndexes = mutableMapOf<String, Int>()
 
     var colorType = ColorTypes.HSV
         set(value) {

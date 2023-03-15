@@ -1,6 +1,15 @@
 package com.alteratom.dashboard.activities.fragments
 
+import ButtonTile
+import ColorTile
+import LightsTile
+import SelectTile
+import SliderTile
+import SwitchTile
+import TerminalTile
 import TextTile
+import ThermostatTile
+import TimeTile
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,15 +44,6 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.tile.Tile
-import ButtonTile
-import ColorTile
-import LightsTile
-import SelectTile
-import SliderTile
-import SwitchTile
-import TerminalTile
-import ThermostatTile
-import TimeTile
 
 class TileNewFragment : Fragment() {
 

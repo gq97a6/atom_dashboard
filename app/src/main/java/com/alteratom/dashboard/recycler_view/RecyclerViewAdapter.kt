@@ -32,7 +32,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
     var editMode = Modes()
 
     var list: MutableList<item> = mutableListOf()
-    lateinit var currentItem: item
+    private lateinit var currentItem: item
     private lateinit var touchHelper: ItemTouchHelper
 
     var onBindViewHolder: (item, ViewHolder, Int) -> Unit = { _, _, _ -> }

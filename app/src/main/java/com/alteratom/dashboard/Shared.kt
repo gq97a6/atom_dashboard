@@ -2,11 +2,13 @@
 
 package com.alteratom.dashboard
 
+import android.Manifest
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Handler
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color.Companion.hsv
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.ColorUtils
@@ -113,6 +116,12 @@ fun createNotification(
     isSilent: Boolean = false,
     id: Int = Random().nextInt()
 ) {
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) return
+
     createNotificationChannel(context)
 
     val notification = NotificationCompat.Builder(context, "notification_id")
@@ -202,7 +211,7 @@ fun View.click() {
 }
 
 
-fun String.digitsOnly(): String = Regex("[^0-9]").replace(this, "")
+fun String.digitsOnly(): String = Regex("\\D").replace(this, "")
 
 infix fun Int.rangedIn(r: kotlin.ranges.IntRange): Int =
     minOf(r.first, maxOf(r.last, this))

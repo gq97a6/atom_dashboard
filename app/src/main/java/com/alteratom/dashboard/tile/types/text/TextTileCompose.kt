@@ -7,8 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.*
 import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1

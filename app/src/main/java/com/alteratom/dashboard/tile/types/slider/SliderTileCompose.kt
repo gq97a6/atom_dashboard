@@ -10,14 +10,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.compose.FrameBox
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose.EditText
+import com.alteratom.dashboard.compose.FrameBox
+import com.alteratom.dashboard.compose.LabeledSwitch
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 
 object SliderTileCompose : DaemonBasedCompose {
@@ -83,7 +83,7 @@ object SliderTileCompose : DaemonBasedCompose {
                         label = { Text("From value") },
                         value = from,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
+                        onValueChange = { it ->
                             from = it
                             it.toIntOrNull()?.let {
                                 tile.range[0] = it
@@ -104,7 +104,7 @@ object SliderTileCompose : DaemonBasedCompose {
                         label = { Text("To value") },
                         value = to,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
+                        onValueChange = { it ->
                             to = it
                             it.toIntOrNull()?.let {
                                 tile.range[1] = it
@@ -125,7 +125,7 @@ object SliderTileCompose : DaemonBasedCompose {
                         label = { Text("Step value") },
                         value = step,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = {
+                        onValueChange = { it ->
                             step = it
                             it.toIntOrNull()?.let {
                                 tile.range[2] = it

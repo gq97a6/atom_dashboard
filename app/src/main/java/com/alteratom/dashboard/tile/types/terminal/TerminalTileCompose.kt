@@ -5,12 +5,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.compose.EditText
 import com.alteratom.dashboard.G.tile
-import com.alteratom.dashboard.compose.RadioGroup
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose.EditText
+import com.alteratom.dashboard.compose.RadioGroup
 import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
 
 object TerminalTileCompose : DaemonBasedCompose {

@@ -2,7 +2,8 @@ package com.alteratom.dashboard.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.ActivityHandler
+import com.alteratom.dashboard.G
 import com.alteratom.dashboard.Storage.rootFolder
 import com.alteratom.dashboard.activities.fragments.FragmentManager
 import com.alteratom.dashboard.activities.fragments.SetupFragment

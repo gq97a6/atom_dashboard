@@ -96,7 +96,7 @@ class DashboardNewFragment : Fragment() {
                                         dashboards.add(dashboard)
                                         dashboards.saveToFile()
 
-                                        DaemonsManager.notifyDashboardAdded(dashboard)
+                                        DaemonsManager.notifyAdded(dashboard)
 
                                         if (setCurrentDashboard(dashboard.id)) fm.replaceWith(
                                             DashboardPropertiesFragment(), false

@@ -121,11 +121,9 @@ class SettingsFragment : Fragment() {
                                 val s = parseSave<Settings>(backup[1])
                                 val t = parseSave<Theme>(backup[2])
 
-                                if (d != null) {
-                                    DaemonsManager.notifyAllDischarged()
-                                    dashboards = d
-                                    DaemonsManager.initialize()
-                                }
+                                DaemonsManager.notifyAllRemoved()
+                                dashboards = d
+                                DaemonsManager.notifyAllAdded()
 
                                 if (s != null) settings = s
                                 if (t != null) theme = t

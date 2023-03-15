@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper.*
 import java.util.*
 
 class ItemTouchCallback(private val adapter: RecyclerViewAdapter<*>) :
-    ItemTouchHelper.Callback() {
+    Callback() {
 
     var onMove = {}
 

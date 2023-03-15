@@ -14,15 +14,7 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.bouncycastle.openssl.PEMKeyPair
-import org.bouncycastle.openssl.PEMParser
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
-import java.io.InputStreamReader
-import java.security.KeyPair
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
 import java.util.*
-import kotlin.random.Random
 
 open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) :
     RecyclerViewItem() {

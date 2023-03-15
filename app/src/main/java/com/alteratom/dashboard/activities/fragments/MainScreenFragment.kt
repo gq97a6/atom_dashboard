@@ -88,7 +88,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = VISIBLE
             b.msRemove.clearAnimation()
-            DaemonsManager.notifyDashboardRemoved(it)
+            DaemonsManager.notifyRemoved(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

@@ -7,39 +7,21 @@ import com.alteratom.dashboard.foreground_service.ForegroundService
 
 object DaemonsManager {
 
-    fun initialize() {
-        dashboards.forEach {
-            notifyDashboardAdded(it)
-        }
-    }
+    fun notifyAllAdded() = dashboards.forEach { notifyAdded(it) }
 
-    fun notifyAssigned(dashboard: Dashboard) =
-        dashboard.daemon.notifyAssigned()
+    fun notifyAllRemoved() = dashboards.forEach { it.daemon.notifyDischarged() }
 
-    fun notifyDischarged(dashboard: Dashboard) =
-        dashboard.daemon.notifyDischarged()
-
-    fun notifyAllAssigned() {
-        dashboards.forEach {
-            it.daemon.notifyAssigned()
-        }
-    }
-
-    fun notifyAllDischarged() {
-        dashboards.forEach {
-            try {
-                it.daemon.notifyDischarged()
-            } catch (_: Exception) {
-            }
-        }
-    }
-
-    fun notifyDashboardAdded(dashboard: Dashboard) {
+    fun notifyAdded(dashboard: Dashboard) = try {
         dashboard.apply {
             daemon = Daemon(ForegroundService.service as Context, this, type)
-            notifyAssigned(this)
+            daemon.notifyAssigned()
         }
+    } catch (_: Exception) {
     }
 
-    fun notifyDashboardRemoved(dashboard: Dashboard) = notifyDischarged(dashboard)
+    fun notifyRemoved(dashboard: Dashboard) = try {
+        dashboard.daemon.notifyDischarged()
+    } catch (_: Exception) {
+    }
+
 }

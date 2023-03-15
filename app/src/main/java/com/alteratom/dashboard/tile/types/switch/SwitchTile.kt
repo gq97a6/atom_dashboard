@@ -18,7 +18,7 @@ class SwitchTile : Tile() {
 
     override var iconKey = "il_interface_toggle_on"
 
-    var state: Boolean? = false
+    private var state: Boolean? = false
 
     var iconKeyTrue = "il_interface_toggle_on"
     val iconResTrue: Int

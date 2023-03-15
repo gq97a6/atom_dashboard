@@ -91,7 +91,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
-    fun subscribe(topic: String, qos: Int) {
+    private fun subscribe(topic: String, qos: Int) {
 
         if (!client.isConnected) return
 
@@ -315,7 +315,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     ) {
                     }
                 })
-            } catch (e: MqttException) {
+            } catch (_: MqttException) {
             }
 
             isBusy = false
@@ -443,7 +443,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             if (dashboard?.daemon !is Mqttd) return
             if (topic.isNullOrEmpty()) return
 
-            var commit = {
+            val commit = {
                 (dashboard?.daemon as Mqttd).publish(topic, msg, qos, retain)
                 onSend(topic, msg, qos, retain)
             }
@@ -462,7 +462,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             val jsonResult = mutableMapOf<String, String>()
             if (mqttData.payloadIsJson) {
                 for (p in mqttData.jsonPaths) {
-                    data.second.toString().let {
+                    data.second.toString().let { it ->
                         try {
                             Storage.mapper.readTree(it).at(p.value).asText()
                         } catch (e: Exception) {

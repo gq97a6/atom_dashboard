@@ -1,13 +1,14 @@
 package com.alteratom.dashboard
 
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import java.io.FileReader
 import kotlin.reflect.KClass
 
 object Storage {
-    val mapper = jacksonObjectMapper()
+    val mapper: ObjectMapper = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     var rootFolder: String = ""
@@ -28,7 +29,7 @@ object Storage {
         try {
             val path = path[this::class]
             File(path).writeText(save)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
     }
 
@@ -36,7 +37,7 @@ object Storage {
         try {
             val path = path[T::class]
             File(path).writeText(save)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
     }
 

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import com.alteratom.dashboard.Theme.Companion.colors
 
 @Composable
-fun EditTextColors() = TextFieldDefaults.outlinedTextFieldColors(
+fun editTextColors() = TextFieldDefaults.outlinedTextFieldColors(
     textColor = colors.b,
     cursorColor = colors.b,
     focusedBorderColor = colors.a,
@@ -20,7 +20,7 @@ fun EditTextColors() = TextFieldDefaults.outlinedTextFieldColors(
 )
 
 @Composable
-fun SwitchColors() = SwitchDefaults.colors(
+fun switchColors() = SwitchDefaults.colors(
     checkedThumbColor = colors.a,
     checkedTrackColor = colors.b,
     uncheckedThumbColor = colors.b,
@@ -28,13 +28,13 @@ fun SwitchColors() = SwitchDefaults.colors(
 )
 
 @Composable
-fun RadioButtonColors() = RadioButtonDefaults.colors(
+fun radioButtonColors() = RadioButtonDefaults.colors(
     selectedColor = colors.a,
     unselectedColor = colors.c,
 )
 
 @Composable
-fun CheckBoxColors() = CheckboxDefaults.colors(
+fun checkBoxColors() = CheckboxDefaults.colors(
     checkedColor = colors.b,
     uncheckedColor = colors.a,
     checkmarkColor = colors.background

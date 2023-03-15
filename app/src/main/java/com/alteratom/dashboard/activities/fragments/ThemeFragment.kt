@@ -30,7 +30,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.ArcSlider
 import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.compose.SwitchColors
+import com.alteratom.dashboard.compose.switchColors
 import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 
@@ -199,7 +199,7 @@ class ThemeFragment : Fragment() {
                                     .scale(2f)
                                     .padding(20.dp),
                                 checked = isDark,
-                                colors = SwitchColors(),
+                                colors = switchColors(),
                                 onCheckedChange = {
                                     theme.a.isDark = it
                                     isDark = it

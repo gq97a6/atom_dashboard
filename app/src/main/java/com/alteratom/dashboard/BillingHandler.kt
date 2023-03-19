@@ -1,6 +1,8 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
+import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
 import com.android.billingclient.api.*
@@ -9,9 +11,7 @@ import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 import com.android.billingclient.api.BillingClient.ConnectionState.*
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.coroutines.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
@@ -30,6 +30,32 @@ class BillingHandler(val activity: Activity) {
         var DON1 = "atom_dashboard_don1"
         var DON5 = "atom_dashboard_don5"
         var DON25 = "atom_dashboard_don25"
+
+        fun MainActivity.checkBilling() {
+            CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+                BillingHandler(this@checkBilling).apply {
+                    enable()
+                    checkPurchases(
+                        0,
+                        {
+                            !it.isAcknowledged || (!Pro.status && it.products.contains(
+                                BillingHandler.PRO
+                            ))
+                        }
+                    )
+                    disable()
+                }
+
+                if (!Pro.status) {
+                    for (e in G.dashboards.slice(2 until G.dashboards.size)) {
+                        e.mqttData.isEnabled = false
+                        e.daemon.notifyOptionsChanged()
+                    }
+                }
+
+                cancel()
+            }
+        }
     }
 
     init {

@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,24 +25,20 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.R
-import com.alteratom.dashboard.BillingHandler
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.setCurrentDashboard
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.BillingHandler.Companion.checkBilling
+import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.compose.ComposeTheme
 import com.alteratom.dashboard.foreground_service.ForegroundService
-import com.alteratom.dashboard.foreground_service.ForegroundServiceHandler
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
-import com.alteratom.dashboard.switcher.FragmentSwitcher
-import com.alteratom.dashboard.switcher.TileSwitcher
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.objects.G.setCurrentDashboard
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.G.theme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class SetupFragment : Fragment() {
@@ -121,53 +118,29 @@ class SetupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        startService()
-    }
-
-    private fun startService() = (activity as MainActivity).apply {
-        if (ForegroundService.service?.isStarted == true) onServiceStarted()
-        else {
-            val handler = ForegroundServiceHandler(this@apply)
-            handler.service.observe(this@apply) { service ->
-                if (service != null) {
-                    ForegroundService.service?.finishAffinity = { finishAffinity() }
-                    DaemonsManager.notifyAllAdded()
-                    TileSwitcher.activity = this
-                    FragmentSwitcher.activity = this
-
-                    onServiceStarted()
+        CoroutineScope(Dispatchers.Default).launch {
+            if (service?.isStarted == true) onServiceStarted()
+            else (activity as MainActivity).apply {
+                //Create a service
+                Intent(this@apply, ForegroundService::class.java).also {
+                    it.action = "DASH"
+                    this@apply.startForegroundService(it)
                 }
+
+                //Wait for service
+                while (service?.isStarted != true) service?.finishAffinity = { finishAffinity() }
+
+                //Exit
+                onServiceStarted()
             }
 
-            handler.start()
-            handler.bind()
+            cancel()
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    fun onServiceStarted() {
+    private fun onServiceStarted() {
         //Background billing check
-        GlobalScope.launch {
-            BillingHandler(activity as MainActivity).apply {
-                enable()
-                checkPurchases(
-                    0,
-                    {
-                        !it.isAcknowledged || (!Pro.status && it.products.contains(
-                            BillingHandler.PRO
-                        ))
-                    }
-                )
-                disable()
-            }
-
-            if (!Pro.status) {
-                for (e in G.dashboards.slice(2 until G.dashboards.size)) {
-                    e.mqttData.isEnabled = false
-                    e.daemon.notifyOptionsChanged()
-                }
-            }
-        }
+        (activity as MainActivity).checkBilling()
 
         //Exit
         ready.postValue(true)

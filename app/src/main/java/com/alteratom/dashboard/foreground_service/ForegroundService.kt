@@ -12,8 +12,9 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
-import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import com.alteratom.dashboard.objects.ActivityHandler
+import com.alteratom.dashboard.objects.G.initializeGlobals
 
 
 class ForegroundService : LifecycleService() {
@@ -27,7 +28,6 @@ class ForegroundService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-
         createNotificationChannel()
 
         val intent = Intent(this, ForegroundService::class.java)
@@ -37,15 +37,12 @@ class ForegroundService : LifecycleService() {
             this, 0, intent, PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = NotificationCompat.Builder(this, "foreground_service_id")
-            .setAutoCancel(false)
-            .setOngoing(true)
-            .setContentTitle("Server working in background")
-            .setSmallIcon(R.mipmap.ic_icon_bold_round)
-            .setPriority(PRIORITY_MIN)
-            .addAction(R.drawable.ic_trashcan, "stop working in background", pendingIntent)
-            .setVisibility(VISIBILITY_SECRET)
-            .setSilent(true)
+        val notification =
+            NotificationCompat.Builder(this, "foreground_service_id").setAutoCancel(false)
+                .setOngoing(true).setContentTitle("Server working in background")
+                .setSmallIcon(R.mipmap.ic_icon_bold_round).setPriority(PRIORITY_MIN)
+                .addAction(R.drawable.ic_trashcan, "stop working in background", pendingIntent)
+                .setVisibility(VISIBILITY_SECRET).setSilent(true)
 
         startForeground(1, notification.build())
 
@@ -53,7 +50,10 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action == "STOP") {
+        val action = intent?.action ?: ""
+
+        //Stop service and close the app
+        if (action == "STOP") {
             isStarted = false
             DaemonsManager.notifyAllRemoved()
 
@@ -61,7 +61,10 @@ class ForegroundService : LifecycleService() {
             stopSelf()
 
             finishAffinity()
-        } else isStarted = true
+        } else { //Initialize globals based on action
+            initializeGlobals(if (action == "ALL") 0 else if (action == "DASH") 2 else 0)
+            isStarted = true
+        }
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -69,23 +72,19 @@ class ForegroundService : LifecycleService() {
     override fun onDestroy() {
         ActivityHandler.onDestroy()
 
-        if (isStarted) {
-            val foregroundServiceHandler = ForegroundServiceHandler(this)
-            foregroundServiceHandler.start()
-        }
+        //Restart service if it has not been stopped
+        //if (isStarted) {
+        //    Intent(this, ForegroundService::class.java).also {
+        //        it.action = "ALL"
+        //        this.startForegroundService(it)
+        //    }
+        //}
 
         super.onDestroy()
     }
 
-    private val binder = ForegroundServiceBinder()
-
-    inner class ForegroundServiceBinder : Binder() {
-        fun getService(): ForegroundService = this@ForegroundService
-    }
-
-    override fun onBind(intent: Intent): IBinder {
-        super.onBind(intent)
-        return binder
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
     }
 
     private fun createNotificationChannel() {

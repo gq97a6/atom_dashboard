@@ -1,30 +1,15 @@
 package com.alteratom.dashboard.objects
 
-import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.Settings
-import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.objects.G.path
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import java.io.File
 import java.io.FileReader
-import kotlin.reflect.KClass
 
 object Storage {
     val mapper: ObjectMapper = jacksonObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-
-    var rootFolder: String = ""
-        set(value) {
-            field = value
-            path = mapOf(
-                Theme::class to "$value/theme",
-                Settings::class to "$value/settings",
-                Dashboard::class to "$value/dashboards"
-            )
-        }
-
-    lateinit var path: Map<KClass<out Any>, String>
 
     fun Any.prepareSave(): String = mapper.writeValueAsString(this)
 

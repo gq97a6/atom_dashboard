@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
-import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment

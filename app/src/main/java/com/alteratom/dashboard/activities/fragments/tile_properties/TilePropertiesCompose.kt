@@ -20,9 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.G
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment

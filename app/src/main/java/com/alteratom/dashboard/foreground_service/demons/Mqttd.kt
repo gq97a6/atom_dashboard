@@ -5,11 +5,11 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.Pro
-import com.alteratom.dashboard.Storage
-import com.alteratom.dashboard.Storage.parseSave
-import com.alteratom.dashboard.Storage.prepareSave
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.objects.Storage
+import com.alteratom.dashboard.objects.Storage.parseSave
+import com.alteratom.dashboard.objects.Storage.prepareSave
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser

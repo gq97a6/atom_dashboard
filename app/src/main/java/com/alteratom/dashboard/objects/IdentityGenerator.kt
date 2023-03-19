@@ -1,4 +1,4 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.objects
 
 import java.util.*
 

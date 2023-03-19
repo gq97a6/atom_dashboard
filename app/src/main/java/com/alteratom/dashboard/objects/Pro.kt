@@ -1,6 +1,6 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.objects
 
-import com.alteratom.dashboard.Storage.rootFolder
+import com.alteratom.dashboard.objects.Storage.rootFolder
 import java.io.File
 
 object Pro {

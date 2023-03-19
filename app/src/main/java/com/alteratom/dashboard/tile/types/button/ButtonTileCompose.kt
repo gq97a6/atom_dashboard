@@ -4,8 +4,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.G
-import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.compose.EditText

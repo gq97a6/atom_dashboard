@@ -1,7 +1,8 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
-import com.alteratom.dashboard.G.settings
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.Pro
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK

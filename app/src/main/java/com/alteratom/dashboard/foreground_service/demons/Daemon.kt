@@ -3,7 +3,7 @@ package com.alteratom.dashboard.foreground_service.demons
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.IdentityGenerator
+import com.alteratom.dashboard.objects.IdentityGenerator
 
 abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerator.Indexed {
 

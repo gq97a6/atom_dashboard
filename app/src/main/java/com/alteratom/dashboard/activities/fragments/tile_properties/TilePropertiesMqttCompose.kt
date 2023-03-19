@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.G
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose.EditText
 import com.alteratom.dashboard.compose.LabeledSwitch

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.click
 import com.alteratom.dashboard.iterate
 

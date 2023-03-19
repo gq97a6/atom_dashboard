@@ -30,10 +30,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment

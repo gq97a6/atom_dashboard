@@ -3,7 +3,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.G.tile
+import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
 import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0

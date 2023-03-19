@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.roundCloser
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding

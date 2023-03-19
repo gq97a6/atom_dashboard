@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.G.settings
-import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
 import com.alteratom.dashboard.foreground_service.demons.Mqttd

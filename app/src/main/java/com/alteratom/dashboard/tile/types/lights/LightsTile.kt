@@ -20,9 +20,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.G.theme
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem

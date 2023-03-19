@@ -1,7 +1,10 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.objects
 
-import com.alteratom.dashboard.Storage.parseListSave
-import com.alteratom.dashboard.Storage.parseSave
+import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.Settings
+import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.objects.Storage.parseListSave
+import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.tile.Tile
 
 object G {

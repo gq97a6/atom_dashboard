@@ -1,10 +1,11 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 
 
 class FragmentManager(private val mainActivity: MainActivity) {

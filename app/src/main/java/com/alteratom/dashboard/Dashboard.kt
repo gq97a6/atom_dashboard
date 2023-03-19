@@ -9,6 +9,8 @@ import com.alteratom.dashboard.foreground_service.demons.Daemon
 import com.alteratom.dashboard.foreground_service.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile

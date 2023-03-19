@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
-import com.alteratom.dashboard.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.G.dashboard
-import com.alteratom.dashboard.G.dashboardIndex
-import com.alteratom.dashboard.G.dashboards
-import com.alteratom.dashboard.Pro
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboardIndex
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose.*

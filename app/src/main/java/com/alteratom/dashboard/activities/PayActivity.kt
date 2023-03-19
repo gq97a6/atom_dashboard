@@ -28,6 +28,8 @@ import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.compose.BasicButton
 import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.objects.ActivityHandler
+import com.alteratom.dashboard.objects.G
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

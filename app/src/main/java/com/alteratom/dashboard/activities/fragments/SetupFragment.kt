@@ -30,9 +30,9 @@ import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.foreground_service.ForegroundService
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
+import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.ForegroundService
+import com.alteratom.dashboard.ForegroundService.Companion.service
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme

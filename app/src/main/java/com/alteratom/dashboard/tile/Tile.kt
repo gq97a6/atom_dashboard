@@ -9,8 +9,8 @@ import com.alteratom.dashboard.*
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme.ColorPallet
-import com.alteratom.dashboard.foreground_service.ForegroundService.Companion.service
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import com.alteratom.dashboard.ForegroundService.Companion.service
+import com.alteratom.dashboard.demons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem

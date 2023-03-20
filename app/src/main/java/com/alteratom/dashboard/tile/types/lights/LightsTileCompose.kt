@@ -22,11 +22,11 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose.PairList
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.compose.*
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose.PairList
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_global.*
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable

@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments.tile_properties
+package com.alteratom.dashboard.compose_daemon
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.Column
@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.R
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.compose.LabeledSwitch
-import com.alteratom.dashboard.compose.RadioGroup
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.LabeledSwitch
+import com.alteratom.dashboard.compose_global.RadioGroup
 
 object TilePropertiesMqttCompose {
 

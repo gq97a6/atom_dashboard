@@ -36,8 +36,8 @@ import com.alteratom.R
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.compose.ArcSlider
-import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose_global.ArcSlider
+import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.toPx
 import java.util.*

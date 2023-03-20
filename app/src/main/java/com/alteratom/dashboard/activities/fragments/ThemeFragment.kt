@@ -28,9 +28,9 @@ import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.compose.ArcSlider
-import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.compose.switchColors
+import com.alteratom.dashboard.compose_global.ArcSlider
+import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.compose_global.switchColors
 import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 

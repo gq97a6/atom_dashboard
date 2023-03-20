@@ -7,11 +7,11 @@ import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.compose.LabeledSwitch
-import com.alteratom.dashboard.compose.RadioGroup
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.LabeledSwitch
+import com.alteratom.dashboard.compose_global.RadioGroup
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 
 object ButtonTileCompose : DaemonBasedCompose {
     @Composable

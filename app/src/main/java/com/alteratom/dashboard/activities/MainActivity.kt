@@ -1,20 +1,13 @@
 package com.alteratom.dashboard.activities
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.FragmentManager
-import com.alteratom.dashboard.Settings
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.SetupFragment
-import com.alteratom.dashboard.foreground_service.ForegroundService
+import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
-import com.alteratom.dashboard.objects.G.rootFolder
-import com.alteratom.dashboard.objects.Storage
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.ActivityMainBinding

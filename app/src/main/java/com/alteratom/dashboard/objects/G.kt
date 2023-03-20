@@ -4,7 +4,6 @@ import android.content.Context
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
 import com.alteratom.dashboard.objects.Storage.parseListSave
 import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.tile.Tile

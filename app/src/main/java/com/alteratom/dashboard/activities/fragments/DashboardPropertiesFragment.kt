@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments.dashboard_properties
+package com.alteratom.dashboard.activities.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -36,16 +36,16 @@ import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.compose.BasicButton
-import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.compose.NavigationArrows
+import com.alteratom.dashboard.compose_daemon.DashboardPropertiesCompose
+import com.alteratom.dashboard.compose_global.BasicButton
+import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream

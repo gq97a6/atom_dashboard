@@ -18,11 +18,11 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication
-import com.alteratom.dashboard.compose.BasicButton
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.compose_global.BasicButton
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

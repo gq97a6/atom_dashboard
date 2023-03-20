@@ -6,12 +6,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.alteratom.dashboard.objects.G.tile
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.compose.EditText
-import com.alteratom.dashboard.compose.RadioGroup
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.RadioGroup
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 
 object TerminalTileCompose : DaemonBasedCompose {
     @Composable

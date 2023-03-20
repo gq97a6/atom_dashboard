@@ -9,11 +9,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesCompose
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication0
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesMqttCompose.Communication1
-import com.alteratom.dashboard.compose.*
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication0
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_global.*
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 
 object ColorTileCompose : DaemonBasedCompose {
     @Composable

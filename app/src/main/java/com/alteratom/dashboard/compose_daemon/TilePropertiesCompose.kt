@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments.tile_properties
+package com.alteratom.dashboard.compose_daemon
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
@@ -31,7 +31,7 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.compose.*
+import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 

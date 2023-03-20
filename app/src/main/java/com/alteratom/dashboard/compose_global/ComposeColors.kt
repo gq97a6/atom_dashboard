@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.compose
+package com.alteratom.dashboard.compose_global
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable

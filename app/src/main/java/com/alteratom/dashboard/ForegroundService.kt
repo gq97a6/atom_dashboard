@@ -1,18 +1,16 @@
-package com.alteratom.dashboard.foreground_service
+package com.alteratom.dashboard
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Binder
-import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import com.alteratom.dashboard.objects.DaemonsManager
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G.initializeGlobals
 

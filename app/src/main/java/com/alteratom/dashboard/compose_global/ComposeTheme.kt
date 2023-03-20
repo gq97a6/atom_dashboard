@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.compose
+package com.alteratom.dashboard.compose_global
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*

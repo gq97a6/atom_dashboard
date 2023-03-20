@@ -34,10 +34,9 @@ import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.dashboard_properties.DashboardPropertiesFragment
-import com.alteratom.dashboard.compose.ComposeTheme
-import com.alteratom.dashboard.foreground_service.demons.Daemon
-import com.alteratom.dashboard.foreground_service.demons.DaemonsManager
+import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.demons.Daemon
+import com.alteratom.dashboard.objects.DaemonsManager
 import kotlin.random.Random
 
 class DashboardNewFragment : Fragment() {

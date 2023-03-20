@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments.dashboard_properties
+package com.alteratom.dashboard.compose_daemon
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -38,10 +38,10 @@ import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.compose.*
+import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
+import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.foreground_service.demons.DaemonBasedCompose
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import com.alteratom.dashboard.demons.Mqttd
 import com.alteratom.dashboard.proAlert
 import java.util.*
 import kotlin.math.abs

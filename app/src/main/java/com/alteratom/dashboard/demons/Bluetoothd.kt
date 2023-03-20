@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.foreground_service.demons
+package com.alteratom.dashboard.demons
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

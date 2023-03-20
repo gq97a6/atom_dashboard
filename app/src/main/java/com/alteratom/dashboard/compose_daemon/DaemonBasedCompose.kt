@@ -1,7 +1,8 @@
-package com.alteratom.dashboard.foreground_service.demons
+package com.alteratom.dashboard.compose_daemon
 
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.Fragment
+import com.alteratom.dashboard.demons.Daemon
 
 interface DaemonBasedCompose {
     @Composable

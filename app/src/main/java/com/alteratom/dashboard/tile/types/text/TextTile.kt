@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.foreground_service.demons.Mqttd
+import com.alteratom.dashboard.demons.Mqttd
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore

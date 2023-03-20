@@ -41,8 +41,7 @@ import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.tile_properties.TilePropertiesFragment
-import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.tile.Tile
 
 class TileNewFragment : Fragment() {

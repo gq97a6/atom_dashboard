@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments.tile_properties
+package com.alteratom.dashboard.activities.fragments
 
 import ButtonTile
 import ButtonTileCompose
@@ -36,7 +36,7 @@ import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
-import com.alteratom.dashboard.compose.ComposeTheme
+import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.switcher.TileSwitcher
 
 class TilePropertiesFragment : Fragment() {

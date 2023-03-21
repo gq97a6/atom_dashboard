@@ -1,8 +1,10 @@
-package com.alteratom.dashboard.demons
+package com.alteratom.dashboard.daemon
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.daemon.daemons.Bluetoothd
+import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.objects.IdentityGenerator
 
 abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerator.Indexed {

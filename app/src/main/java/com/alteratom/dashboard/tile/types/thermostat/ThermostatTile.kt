@@ -211,11 +211,11 @@ class ThermostatTile : Tile() {
 
         binding.dtConfirm.setOnClickListener {
             fun send() {
-                send("$tempSetpointTmp", mqttData.pubs["temp_set"], retain = retain[0], raw = true)
-                send("$humiSetpointTmp", mqttData.pubs["humi_set"], retain = retain[1], raw = true)
+                send("$tempSetpointTmp", data.pubs["temp_set"], retain = retain[0], raw = true)
+                send("$humiSetpointTmp", data.pubs["humi_set"], retain = retain[1], raw = true)
             }
 
-            if (mqttData.doConfirmPub) {
+            if (data.doConfirmPub) {
                 with(adapter.context) {
                     buildConfirm("Confirm publishing", "PUBLISH") {
                         send()
@@ -232,7 +232,7 @@ class ThermostatTile : Tile() {
 
         binding.dtMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.isNotEmpty() && !mqttData.pubs["mode"].isNullOrEmpty()) {
+            if (notEmpty.isNotEmpty() && !data.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
                 modeAdapter = RecyclerViewAdapter(adapter.context)
@@ -257,7 +257,7 @@ class ThermostatTile : Tile() {
 
                     send(
                         this.modes[pos].second,
-                        mqttData.pubs["mode"],
+                        data.pubs["mode"],
                         retain = retain[2]
                     )
 
@@ -341,11 +341,11 @@ class ThermostatTile : Tile() {
             val value = data.second.toString()
             parse(
                 value, when (data.first) {
-                    mqttData.subs["temp"] -> "temp"
-                    mqttData.subs["temp_set"] -> "temp_set"
-                    mqttData.subs["humi"] -> "humi"
-                    mqttData.subs["humi_set"] -> "humi_set"
-                    mqttData.subs["mode"] -> "mode"
+                    this.data.subs["temp"] -> "temp"
+                    this.data.subs["temp_set"] -> "temp_set"
+                    this.data.subs["humi"] -> "humi"
+                    this.data.subs["humi_set"] -> "humi_set"
+                    this.data.subs["mode"] -> "mode"
                     else -> null
                 }
             )

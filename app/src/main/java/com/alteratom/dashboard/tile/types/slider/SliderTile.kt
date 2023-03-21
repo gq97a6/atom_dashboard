@@ -49,7 +49,7 @@ class SliderTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        mqttData.payloads["base"] = "@value"
+        data.payloads["base"] = "@value"
     }
 
     override fun onBindViewHolder(
@@ -123,7 +123,7 @@ class SliderTile : Tile() {
             ACTION_DOWN -> (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(true)
             ACTION_UP -> {
                 (v as ViewGroup?)?.requestDisallowInterceptTouchEvent(false)
-                send((mqttData.payloads["base"] ?: "@value").replace("@value", value.toString()))
+                send((data.payloads["base"] ?: "@value").replace("@value", value.toString()))
                 return Pair(value, true)
             }
         }

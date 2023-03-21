@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
-import com.alteratom.dashboard.objects.DaemonsManager
+import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G.initializeGlobals
 

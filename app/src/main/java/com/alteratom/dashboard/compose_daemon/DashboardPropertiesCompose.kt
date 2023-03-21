@@ -41,7 +41,7 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.demons.Mqttd
+import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.proAlert
 import java.util.*
 import kotlin.math.abs

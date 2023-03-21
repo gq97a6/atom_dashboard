@@ -160,17 +160,17 @@ object TilePropertiesCompose {
 
         FrameBox(a = "Notifications and log") {
             Column {
-                var log by remember { mutableStateOf(G.tile.mqttData.doLog) }
+                var log by remember { mutableStateOf(G.tile.data.doLog) }
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = log,
                     onCheckedChange = {
                         log = it
-                        G.tile.mqttData.doLog = it
+                        G.tile.data.doLog = it
                     },
                 )
 
-                var notify by remember { mutableStateOf(G.tile.mqttData.doNotify) }
+                var notify by remember { mutableStateOf(G.tile.data.doNotify) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -182,11 +182,11 @@ object TilePropertiesCompose {
                     checked = notify,
                     onCheckedChange = {
                         notify = it
-                        G.tile.mqttData.doNotify = it
+                        G.tile.data.doNotify = it
                     },
                 )
 
-                var quiet by remember { mutableStateOf(G.tile.mqttData.silentNotify) }
+                var quiet by remember { mutableStateOf(G.tile.data.silentNotify) }
                 AnimatedVisibility(visible = notify) {
                     LabeledCheckbox(
                         label = {
@@ -199,7 +199,7 @@ object TilePropertiesCompose {
                         checked = quiet,
                         onCheckedChange = {
                             quiet = it
-                            G.tile.mqttData.silentNotify = it
+                            G.tile.data.silentNotify = it
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )

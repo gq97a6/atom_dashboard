@@ -22,7 +22,7 @@ object ColorTileCompose : DaemonBasedCompose {
 
         var pub by remember {
             mutableStateOf(
-                tile.mqttData.payloads[tile.colorType.toString()] ?: ""
+                tile.data.payloads[tile.colorType.toString()] ?: ""
             )
         }
         var type by remember { mutableStateOf(tile.colorType) }
@@ -36,7 +36,7 @@ object ColorTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.mqttData.payloads[type.name] = it
+                        tile.data.payloads[type.name] = it
                         tile.colorType = tile.colorType
                     }
                 )
@@ -113,7 +113,7 @@ object ColorTileCompose : DaemonBasedCompose {
                         {
                             type = ColorTypes.values()[it]
                             tile.colorType = ColorTypes.values()[it]
-                            pub = tile.mqttData.payloads[tile.colorType.name] ?: ""
+                            pub = tile.data.payloads[tile.colorType.name] ?: ""
                         },
                     )
                 }

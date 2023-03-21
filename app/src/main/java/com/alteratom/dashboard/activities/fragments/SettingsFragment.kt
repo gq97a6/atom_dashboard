@@ -48,7 +48,7 @@ import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.objects.DaemonsManager
+import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.objects.Pro
 import java.io.BufferedReader
 import java.io.FileOutputStream

@@ -5,8 +5,8 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.demons.Daemon
-import com.alteratom.dashboard.demons.Mqttd
+import com.alteratom.dashboard.daemon.Daemon
+import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.objects.G

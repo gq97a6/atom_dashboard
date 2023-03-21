@@ -65,13 +65,13 @@ class TerminalTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.payloadIsVar) {
+        if (data.payloadIsVar) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.dtTopic.text = mqttData.pubs["base"].toString()
+            binding.dtTopic.text = data.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
                 send(binding.dtPayload.text.toString())
@@ -85,7 +85,7 @@ class TerminalTile : Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(mqttData.payloads["base"] ?: "err")
+        } else send(data.payloads["base"] ?: "err")
     }
 
     override fun onReceive(

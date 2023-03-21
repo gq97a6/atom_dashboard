@@ -10,7 +10,8 @@ import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.Theme.ColorPallet
 import com.alteratom.dashboard.ForegroundService.Companion.service
-import com.alteratom.dashboard.demons.Mqttd
+import com.alteratom.dashboard.daemon.Daemonized
+import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
@@ -22,7 +23,7 @@ import java.util.*
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
+abstract class Tile : RecyclerViewItem(), Daemonized {
 
     @JsonIgnore
     override var dashboard: Dashboard? = null
@@ -45,7 +46,7 @@ abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
         get() = theme.a.getColorPallet(hsv, true)
 
     @JsonAlias("mqtt")
-    override val mqttData = Mqttd.SubjectData()
+    override val data = Mqttd.MqttDaemonizedData()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -87,7 +88,7 @@ abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
     ) {
         super.onReceive(data, jsonResult)
 
-        if (mqttData.doNotify) {
+        if (this.data.doNotify) {
             service?.let { s ->
                 dashboard?.let { d ->
                     createNotification(
@@ -96,14 +97,14 @@ abstract class Tile : RecyclerViewItem(), Mqttd.Subject {
                         if (tag.isBlank() || data.second.toString().isBlank())
                             "New value for: ${data.first}"
                         else "$tag: ${data.second.toString()}",
-                        mqttData.silentNotify,
+                        this.data.silentNotify,
                         d.id.toInt()
                     )
                 }
             }
         }
 
-        if (mqttData.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (this.data.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }

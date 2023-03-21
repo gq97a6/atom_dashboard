@@ -35,8 +35,8 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
-import com.alteratom.dashboard.demons.Daemon
-import com.alteratom.dashboard.objects.DaemonsManager
+import com.alteratom.dashboard.daemon.Daemon
+import com.alteratom.dashboard.daemon.DaemonsManager
 import kotlin.random.Random
 
 class DashboardNewFragment : Fragment() {

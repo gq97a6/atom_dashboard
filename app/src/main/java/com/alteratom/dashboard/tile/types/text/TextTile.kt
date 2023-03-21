@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.demons.Mqttd
+import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -45,18 +45,18 @@ class TextTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        if (mqttData.pubs["base"].isNullOrEmpty()) return
+        if (data.pubs["base"].isNullOrEmpty()) return
         (dashboard?.daemon as? Mqttd?)?.let {
             if (!it.client.isConnected) return
         }
 
-        if (mqttData.payloadIsVar) {
+        if (data.payloadIsVar) {
             val dialog = Dialog(adapter.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
 
-            binding.dtTopic.text = mqttData.pubs["base"].toString()
+            binding.dtTopic.text = data.pubs["base"].toString()
 
             binding.dtConfirm.setOnClickListener {
                 send(binding.dtPayload.text.toString())
@@ -70,7 +70,7 @@ class TextTile : Tile() {
             dialog.dialogSetup()
             theme.apply(binding.root)
             dialog.show()
-        } else send(mqttData.payloads["base"] ?: "err")
+        } else send(data.payloads["base"] ?: "err")
     }
 
     override fun onReceive(

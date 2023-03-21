@@ -1,13 +1,11 @@
-package com.alteratom.dashboard.demons
+package com.alteratom.dashboard.daemon.daemons
 
 import android.content.Context
-import androidx.annotation.IntRange
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.objects.Pro
-import com.alteratom.dashboard.objects.Storage
 import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.objects.Storage.prepareSave
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -130,9 +128,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
 
-        for (tile in d.tiles.filter { it.mqttData.isEnabled }) {
-            for (t in tile.mqttData.subs) {
-                Pair(t.value, tile.mqttData.qos).let {
+        for (tile in d.tiles.filter { it.data.isEnabled }) {
+            for (t in tile.data.subs) {
+                Pair(t.value, tile.data.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
                         topics.add(it)
                     }
@@ -392,7 +390,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         fun deepCopy(): BrokerData? = parseSave(this.prepareSave())
     }
 
-    class SubjectData(
+    class MqttDaemonizedData(
         var isEnabled: Boolean = true,
         var lastReceive: Date? = null,
         val subs: MutableMap<String, String> = mutableMapOf(),
@@ -419,68 +417,4 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             get() = _qos
     }
 
-    interface Subject {
-        var dashboard: Dashboard?
-        val mqttData: SubjectData
-
-        fun onSend(
-            topic: String?,
-            msg: String,
-            @IntRange(from = 0, to = 2) qos: Int,
-            retained: Boolean = false
-        ) {
-        }
-
-        fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
-        }
-
-        fun send(
-            msg: String,
-            topic: String? = mqttData.pubs["base"],
-            @IntRange(from = 0, to = 2) qos: Int = mqttData.qos,
-            retain: Boolean = mqttData.doRetain,
-            raw: Boolean = false
-        ) {
-            if (dashboard?.daemon !is Mqttd) return
-            if (topic.isNullOrEmpty()) return
-
-            val commit = {
-                (dashboard?.daemon as Mqttd).publish(topic, msg, qos, retain)
-                onSend(topic, msg, qos, retain)
-            }
-
-            if (!mqttData.doConfirmPub || raw) commit()
-            else dashboard?.tiles?.first()?.adapter?.context?.let {
-                with(it) { buildConfirm("Confirm publishing", "PUBLISH") { commit() } }
-            }
-        }
-
-        fun receive(data: Pair<String?, MqttMessage?>) {
-            if (!mqttData.isEnabled) return
-            if (!mqttData.subs.containsValue(data.first)) return
-
-            //Build map of jsonPath key and value. Null on absence or fail.
-            val jsonResult = mutableMapOf<String, String>()
-            if (mqttData.payloadIsJson) {
-                for (p in mqttData.jsonPaths) {
-                    data.second.toString().let { it ->
-                        try {
-                            Storage.mapper.readTree(it).at(p.value).asText()
-                        } catch (e: Exception) {
-                            null
-                        }?.let {
-                            jsonResult[p.key] = it
-                        }
-                    }
-                }
-            }
-
-            mqttData.lastReceive = Date()
-
-            try {
-                onReceive(data, jsonResult)
-            } catch (_: Exception) {
-            }
-        }
-    }
 }

@@ -2,7 +2,7 @@ package com.alteratom.dashboard.compose_daemon
 
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.demons.Daemon
+import com.alteratom.dashboard.daemon.Daemon
 
 interface DaemonBasedCompose {
     @Composable

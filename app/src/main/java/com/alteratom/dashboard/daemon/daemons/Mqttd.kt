@@ -28,7 +28,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqtt.copy())
 
-    var conHandler = MqttdConnectionHandler()
+    var handler = MqttdHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
@@ -36,7 +36,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         get() = d.mqtt.isEnabled && !isDischarged
 
     override val isDone: MutableLiveData<Boolean>
-        get() = conHandler.isDone
+        get() = handler.isDone
 
     override val status: Status
         get() =
@@ -46,23 +46,23 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 if (client.isConnected)
                     if (d.mqtt.ssl && !d.mqtt.sslTrustAll) Status.CONNECTED_SSL
                     else Status.CONNECTED
-                else if (conHandler.isDone.value != true) Status.ATTEMPTING
+                else if (handler.isDone.value != true) Status.ATTEMPTING
                 else Status.FAILED
             }
 
     override fun notifyAssigned() {
         super.notifyAssigned()
-        conHandler.dispatch("assign")
+        handler.dispatch("assign")
     }
 
     override fun notifyDischarged() {
         super.notifyDischarged()
-        if (client.isConnected) conHandler.dispatch("discharge")
+        if (client.isConnected) handler.dispatch("discharge")
         else client.unregisterResources()
     }
 
     override fun notifyOptionsChanged() {
-        conHandler.dispatch("opt_change")
+        handler.dispatch("opt_change")
         if (client.isConnected && isEnabled) topicCheck()
     }
 
@@ -125,6 +125,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
+    //Manage subscriptions at topic list change
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
 
@@ -145,7 +146,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         for (t in subTopics) subscribe(t.first, t.second)
     }
 
-    inner class MqttdConnectionHandler : ConnectionHandler() {
+    //Class that manages server client class
+    inner class MqttdHandler : ConnectionHandler() {
         override fun isDoneCheck(): Boolean =
             client.isConnected == isEnabled && (client.conProp == d.mqtt || !isEnabled)
 
@@ -165,6 +167,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
+    //Server client class
     inner class MqttAndroidClientExtended(
         context: Context,
         var conProp: Config
@@ -197,7 +200,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
                 override fun connectionLost(cause: Throwable?) {
                     topics = mutableListOf()
-                    conHandler.dispatch("con_lost")
+                    handler.dispatch("con_lost")
                 }
 
                 override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -278,7 +281,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 connect(options, null, object : IMqttActionListener {
                     override fun onSuccess(asyncActionToken: IMqttToken?) {
                         topicCheck()
-                        conHandler.dispatch("con")
+                        handler.dispatch("con")
                     }
 
                     override fun onFailure(

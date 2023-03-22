@@ -45,7 +45,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     val pallet: ColorPallet
         get() = theme.a.getColorPallet(hsv, true)
 
-    @JsonAlias("mqtt")
+    @JsonAlias("mqttData")
     override val mqtt = Mqttd.DaemonizedConfig()
 
     companion object {

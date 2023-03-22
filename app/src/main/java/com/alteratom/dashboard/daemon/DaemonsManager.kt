@@ -5,6 +5,7 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.ForegroundService
 
+//Manages creation and assignment of daemons
 object DaemonsManager {
 
     fun notifyAllAdded() = dashboards.forEach { notifyAdded(it) }

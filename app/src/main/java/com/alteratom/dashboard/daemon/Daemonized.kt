@@ -8,6 +8,7 @@ import com.alteratom.dashboard.objects.Storage
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
+//For targets of daemons
 interface Daemonized {
     var dashboard: Dashboard?
 

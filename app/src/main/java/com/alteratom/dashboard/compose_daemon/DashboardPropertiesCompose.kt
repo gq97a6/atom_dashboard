@@ -63,7 +63,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     Arrangement.SpaceBetween,
                     Alignment.CenterVertically
                 ) {
-                    var enabled by remember { mutableStateOf(dashboard.mqttData.isEnabled) }
+                    var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
                     LabeledSwitch(
                         label = {
                             Text(
@@ -76,7 +76,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         onCheckedChange = {
                             if (Pro.status || dashboardIndex < 2) {
                                 enabled = it
-                                dashboard.mqttData.isEnabled = it
+                                dashboard.mqtt.isEnabled = it
                                 dashboard.daemon.notifyOptionsChanged()
                             } else {
                                 with(fragment) { requireContext().proAlert(requireActivity()) }
@@ -176,9 +176,9 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                             .padding(top = 15.dp)
                                             .height(50.dp)
                                             .clickable {
-                                                dashboard.mqttData =
-                                                    it.mqttData.deepCopy() ?: Mqttd.BrokerData()
-                                                dashboard.mqttData.clientId =
+                                                dashboard.mqtt =
+                                                    it.mqtt.deepCopy() ?: Mqttd.Config()
+                                                dashboard.mqtt.clientId =
                                                     abs(Random.nextInt()).toString()
                                                 dashboard.daemon.notifyOptionsChanged()
 
@@ -207,15 +207,15 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 }
 
-                var address by remember { mutableStateOf(dashboard.mqttData.address) }
+                var address by remember { mutableStateOf(dashboard.mqtt.address) }
                 EditText(
                     label = { Text("Address") },
                     value = address,
                     onValueChange = { it ->
                         address = it
                         it.trim().let {
-                            if (dashboard.mqttData.address != it) {
-                                dashboard.mqttData.address = it
+                            if (dashboard.mqtt.address != it) {
+                                dashboard.mqtt.address = it
                                 dashboard.daemon.notifyOptionsChanged()
                             }
                         }
@@ -223,7 +223,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 )
 
                 var port by remember {
-                    mutableStateOf(dashboard.mqttData.port.let {
+                    mutableStateOf(dashboard.mqtt.port.let {
                         if (it != -1) it.toString() else ""
                     })
                 }
@@ -234,15 +234,15 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     onValueChange = { it ->
                         port = it
                         (it.trim().toIntOrNull() ?: (-1)).let {
-                            if (dashboard.mqttData.port != it) {
-                                dashboard.mqttData.port = it
+                            if (dashboard.mqtt.port != it) {
+                                dashboard.mqtt.port = it
                                 dashboard.daemon.notifyOptionsChanged()
                             }
                         }
                     }
                 )
 
-                var id by remember { mutableStateOf(dashboard.mqttData.clientId) }
+                var id by remember { mutableStateOf(dashboard.mqtt.clientId) }
                 EditText(
                     label = { Text("Unique client ID") },
                     value = id,
@@ -251,13 +251,13 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         it.trim().let {
                             when {
                                 it.isBlank() -> {
-                                    dashboard.mqttData.clientId =
+                                    dashboard.mqtt.clientId =
                                         abs(Random.nextInt()).toString()
-                                    id = dashboard.mqttData.clientId
+                                    id = dashboard.mqtt.clientId
                                     dashboard.daemon.notifyOptionsChanged()
                                 }
-                                dashboard.mqttData.clientId != it -> {
-                                    dashboard.mqttData.clientId = it
+                                dashboard.mqtt.clientId != it -> {
+                                    dashboard.mqtt.clientId = it
                                     dashboard.daemon.notifyOptionsChanged()
                                 }
                             }
@@ -292,20 +292,20 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .background(colors.background.copy(.9f))
                                 .padding(15.dp),
                         ) {
-                            var enable by remember { mutableStateOf(dashboard.mqttData.ssl) }
-                            var trust by remember { mutableStateOf(dashboard.mqttData.sslTrustAll) }
+                            var enable by remember { mutableStateOf(dashboard.mqtt.ssl) }
+                            var trust by remember { mutableStateOf(dashboard.mqtt.sslTrustAll) }
 
-                            var ca by remember { mutableStateOf(dashboard.mqttData.caFileName) }
-                            var client by remember { mutableStateOf(dashboard.mqttData.clientFileName) }
-                            var key by remember { mutableStateOf(dashboard.mqttData.keyFileName) }
+                            var ca by remember { mutableStateOf(dashboard.mqtt.caFileName) }
+                            var client by remember { mutableStateOf(dashboard.mqtt.clientFileName) }
+                            var key by remember { mutableStateOf(dashboard.mqtt.keyFileName) }
 
                             fun getCaCert() =
                                 fragment.openFile { str, file ->
-                                    dashboard.mqttData.let { m ->
+                                    dashboard.mqtt.let { m ->
                                         m.caCertStr = str
                                         if (m.caCert != null) {
                                             m.caFileName = file ?: "ca.crt"
-                                            ca = dashboard.mqttData.caFileName
+                                            ca = dashboard.mqtt.caFileName
                                             dashboard.daemon.notifyOptionsChanged()
                                         } else createToast(
                                             fragment.requireContext(),
@@ -316,11 +316,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                             fun getClientCert() =
                                 fragment.openFile { str, file ->
-                                    dashboard.mqttData.let { m ->
+                                    dashboard.mqtt.let { m ->
                                         m.clientCertStr = str
                                         if (m.clientCert != null) {
                                             m.clientFileName = file ?: "client.crt"
-                                            client = dashboard.mqttData.clientFileName
+                                            client = dashboard.mqtt.clientFileName
                                             dashboard.daemon.notifyOptionsChanged()
                                         } else createToast(
                                             fragment.requireContext(),
@@ -331,11 +331,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                             fun getClientKey() =
                                 fragment.openFile { str, file ->
-                                    dashboard.mqttData.let { m ->
+                                    dashboard.mqtt.let { m ->
                                         m.clientKeyStr = str
                                         if (m.clientKey != null) {
                                             m.keyFileName = file ?: "client.key"
-                                            key = dashboard.mqttData.keyFileName
+                                            key = dashboard.mqtt.keyFileName
                                             dashboard.daemon.notifyOptionsChanged()
                                         } else createToast(
                                             fragment.requireContext(),
@@ -355,7 +355,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 checked = enable,
                                 onCheckedChange = {
                                     enable = it
-                                    dashboard.mqttData.ssl = it
+                                    dashboard.mqtt.ssl = it
                                     dashboard.daemon.notifyOptionsChanged()
                                 },
                                 modifier = Modifier.padding(vertical = 10.dp)
@@ -384,12 +384,12 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                     "Confirm override", "CONFIRM"
                                                 ) {
                                                     trust = it
-                                                    dashboard.mqttData.sslTrustAll = it
+                                                    dashboard.mqtt.sslTrustAll = it
                                                     dashboard.daemon.notifyOptionsChanged()
                                                 }
                                         } else {
                                             trust = it
-                                            dashboard.mqttData.sslTrustAll = it
+                                            dashboard.mqtt.sslTrustAll = it
                                             dashboard.daemon.notifyOptionsChanged()
                                         }
                                     }
@@ -422,17 +422,17 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 onValueChange = {},
                                 modifier = Modifier
                                     .nrClickable {
-                                        if (dashboard.mqttData.caCert == null) getCaCert()
+                                        if (dashboard.mqtt.caCert == null) getCaCert()
                                     }
                                     .padding(top = 10.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {
-                                            if (dashboard.mqttData.caCert == null) getCaCert()
+                                            if (dashboard.mqtt.caCert == null) getCaCert()
                                             else {
                                                 ca = ""
-                                                dashboard.mqttData.caFileName = ""
-                                                dashboard.mqttData.caCertStr = null
+                                                dashboard.mqtt.caFileName = ""
+                                                dashboard.mqtt.caCertStr = null
                                                 dashboard.daemon.notifyOptionsChanged()
                                             }
                                         }
@@ -453,17 +453,17 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 onValueChange = {},
                                 modifier = Modifier
                                     .nrClickable {
-                                        if (dashboard.mqttData.clientCert == null) getClientCert()
+                                        if (dashboard.mqtt.clientCert == null) getClientCert()
                                     }
                                     .padding(top = 5.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {
-                                            if (dashboard.mqttData.clientCert == null) getClientCert()
+                                            if (dashboard.mqtt.clientCert == null) getClientCert()
                                             else {
                                                 client = ""
-                                                dashboard.mqttData.clientFileName = ""
-                                                dashboard.mqttData.clientCertStr = null
+                                                dashboard.mqtt.clientFileName = ""
+                                                dashboard.mqtt.clientCertStr = null
                                                 dashboard.daemon.notifyOptionsChanged()
                                             }
                                         }
@@ -484,17 +484,17 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 onValueChange = {},
                                 modifier = Modifier
                                     .nrClickable {
-                                        if (dashboard.mqttData.clientKey == null) getClientKey()
+                                        if (dashboard.mqtt.clientKey == null) getClientKey()
                                     }
                                     .padding(top = 5.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {
-                                            if (dashboard.mqttData.clientKey == null) getClientKey()
+                                            if (dashboard.mqtt.clientKey == null) getClientKey()
                                             else {
                                                 key = ""
-                                                dashboard.mqttData.keyFileName = ""
-                                                dashboard.mqttData.clientKeyStr = null
+                                                dashboard.mqtt.keyFileName = ""
+                                                dashboard.mqtt.clientKeyStr = null
                                                 dashboard.daemon.notifyOptionsChanged()
                                             }
                                         }
@@ -508,7 +508,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 }
                             )
 
-                            var passwordHidden by remember { mutableStateOf(dashboard.mqttData.clientKeyPassword.isNotEmpty()) }
+                            var passwordHidden by remember { mutableStateOf(dashboard.mqtt.clientKeyPassword.isNotEmpty()) }
                             var password by remember { mutableStateOf(if (passwordHidden) "hidden" else "") }
                             EditText(
                                 label = { Text("Key password") },
@@ -522,8 +522,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     } else password = it
 
                                     password.trim().let {
-                                        if (dashboard.mqttData.clientKeyPassword != it) {
-                                            dashboard.mqttData.clientKeyPassword = it
+                                        if (dashboard.mqtt.clientKeyPassword != it) {
+                                            dashboard.mqtt.clientKeyPassword = it
                                             dashboard.daemon.notifyOptionsChanged()
                                         }
                                     }
@@ -532,7 +532,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     IconButton(onClick = {
                                         password = ""
                                         passwordHidden = false
-                                        dashboard.mqttData.clientKeyPassword = ""
+                                        dashboard.mqtt.clientKeyPassword = ""
                                     }) {
                                         Icon(
                                             painterResource(R.drawable.il_interface_multiply),
@@ -546,7 +546,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 }
 
-                var cred by remember { mutableStateOf(dashboard.mqttData.includeCred) }
+                var cred by remember { mutableStateOf(dashboard.mqtt.includeCred) }
                 var show by remember { mutableStateOf(false) }
 
                 val rotation = if (show) 0f else 180f
@@ -576,7 +576,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         onCheckedChange = {
                             cred = it
                             show = it
-                            dashboard.mqttData.includeCred = it
+                            dashboard.mqtt.includeCred = it
                             dashboard.daemon.notifyOptionsChanged()
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
@@ -603,7 +603,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     exit = fadeOut() + shrinkVertically()
                 ) {
                     Column {
-                        var userHidden by remember { mutableStateOf(dashboard.mqttData.username.isNotEmpty()) }
+                        var userHidden by remember { mutableStateOf(dashboard.mqtt.username.isNotEmpty()) }
                         var user by remember { mutableStateOf(if (userHidden) "hidden" else "") }
                         EditText(
                             label = { Text("User name") },
@@ -616,8 +616,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 } else user = it
 
                                 user.trim().let {
-                                    if (dashboard.mqttData.username != it) {
-                                        dashboard.mqttData.username = it
+                                    if (dashboard.mqtt.username != it) {
+                                        dashboard.mqtt.username = it
                                         dashboard.daemon.notifyOptionsChanged()
                                     }
                                 }
@@ -626,7 +626,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 IconButton(onClick = {
                                     user = ""
                                     userHidden = false
-                                    dashboard.mqttData.username = ""
+                                    dashboard.mqtt.username = ""
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),
@@ -637,7 +637,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             }
                         )
 
-                        var passHidden by remember { mutableStateOf(dashboard.mqttData.pass.isNotEmpty()) }
+                        var passHidden by remember { mutableStateOf(dashboard.mqtt.pass.isNotEmpty()) }
                         var pass by remember { mutableStateOf(if (passHidden) "hidden" else "") }
                         EditText(
                             label = { Text("Password") },
@@ -650,8 +650,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 } else pass = it
 
                                 pass.trim().let {
-                                    if (dashboard.mqttData.pass != it) {
-                                        dashboard.mqttData.pass = it
+                                    if (dashboard.mqtt.pass != it) {
+                                        dashboard.mqtt.pass = it
                                         dashboard.daemon.notifyOptionsChanged()
                                     }
                                 }
@@ -660,7 +660,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 IconButton(onClick = {
                                     pass = ""
                                     passHidden = false
-                                    dashboard.mqttData.pass = ""
+                                    dashboard.mqtt.pass = ""
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),

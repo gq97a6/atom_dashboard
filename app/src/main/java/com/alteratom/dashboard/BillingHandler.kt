@@ -48,7 +48,7 @@ class BillingHandler(val activity: Activity) {
 
                 if (!Pro.status) {
                     for (e in G.dashboards.slice(2 until G.dashboards.size)) {
-                        e.mqttData.isEnabled = false
+                        e.mqtt.isEnabled = false
                         e.daemon.notifyOptionsChanged()
                     }
                 }

@@ -101,7 +101,7 @@ object TilePropertiesCompose {
         crossinline content: @Composable () -> Unit
     ) {
         var show by remember { mutableStateOf(settings.mqttTabShow) }
-        var enabled by remember { mutableStateOf(dashboard.mqttData.isEnabled) }
+        var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
         val rotation = if (show) 0f else 180f
 
         val angle: Float by animateFloatAsState(
@@ -124,7 +124,7 @@ object TilePropertiesCompose {
                         onCheckedChange = {
                             enabled = it
                             show = it
-                            dashboard.mqttData.isEnabled = it
+                            dashboard.mqtt.isEnabled = it
                             dashboard.daemon.notifyOptionsChanged()
                         }
                     )
@@ -160,17 +160,17 @@ object TilePropertiesCompose {
 
         FrameBox(a = "Notifications and log") {
             Column {
-                var log by remember { mutableStateOf(G.tile.data.doLog) }
+                var log by remember { mutableStateOf(G.tile.mqtt.doLog) }
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = log,
                     onCheckedChange = {
                         log = it
-                        G.tile.data.doLog = it
+                        G.tile.mqtt.doLog = it
                     },
                 )
 
-                var notify by remember { mutableStateOf(G.tile.data.doNotify) }
+                var notify by remember { mutableStateOf(G.tile.mqtt.doNotify) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -182,11 +182,11 @@ object TilePropertiesCompose {
                     checked = notify,
                     onCheckedChange = {
                         notify = it
-                        G.tile.data.doNotify = it
+                        G.tile.mqtt.doNotify = it
                     },
                 )
 
-                var quiet by remember { mutableStateOf(G.tile.data.silentNotify) }
+                var quiet by remember { mutableStateOf(G.tile.mqtt.silentNotify) }
                 AnimatedVisibility(visible = notify) {
                     LabeledCheckbox(
                         label = {
@@ -199,7 +199,7 @@ object TilePropertiesCompose {
                         checked = quiet,
                         onCheckedChange = {
                             quiet = it
-                            G.tile.data.silentNotify = it
+                            G.tile.mqtt.silentNotify = it
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )

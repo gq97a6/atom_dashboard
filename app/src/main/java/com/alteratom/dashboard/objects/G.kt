@@ -56,9 +56,9 @@ object G {
 
         when (mode) {
             0 -> { //All - when service starts without activity
-                dashboards = parseListSave()
                 G.theme = parseSave() ?: Theme()
                 settings = parseSave() ?: Settings()
+                dashboards = parseListSave()
                 DaemonsManager.notifyAllAdded()
             }
             1 -> { //Skip dashboards - when activity starts without service

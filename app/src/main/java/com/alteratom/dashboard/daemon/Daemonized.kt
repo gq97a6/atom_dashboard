@@ -10,7 +10,9 @@ import java.util.*
 
 interface Daemonized {
     var dashboard: Dashboard?
-    val data: Mqttd.MqttDaemonizedData
+
+    //Configuration for each daemon
+    val mqtt: Mqttd.DaemonizedConfig
 
     fun onSend(
         topic: String?,
@@ -25,9 +27,9 @@ interface Daemonized {
 
     fun send(
         msg: String,
-        topic: String? = data.pubs["base"],
-        @IntRange(from = 0, to = 2) qos: Int = data.qos,
-        retain: Boolean = data.doRetain,
+        topic: String? = mqtt.pubs["base"],
+        @IntRange(from = 0, to = 2) qos: Int = mqtt.qos,
+        retain: Boolean = mqtt.doRetain,
         raw: Boolean = false
     ) {
         if (dashboard?.daemon !is Mqttd) return
@@ -38,20 +40,20 @@ interface Daemonized {
             onSend(topic, msg, qos, retain)
         }
 
-        if (!data.doConfirmPub || raw) commit()
+        if (!mqtt.doConfirmPub || raw) commit()
         else dashboard?.tiles?.first()?.adapter?.context?.let {
             with(it) { buildConfirm("Confirm publishing", "PUBLISH") { commit() } }
         }
     }
 
     fun receive(data: Pair<String?, MqttMessage?>) {
-        if (!this.data.isEnabled) return
-        if (!this.data.subs.containsValue(data.first)) return
+        if (!this.mqtt.isEnabled) return
+        if (!this.mqtt.subs.containsValue(data.first)) return
 
         //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
-        if (this.data.payloadIsJson) {
-            for (p in this.data.jsonPaths) {
+        if (this.mqtt.payloadIsJson) {
+            for (p in this.mqtt.jsonPaths) {
                 data.second.toString().let { it ->
                     try {
                         Storage.mapper.readTree(it).at(p.value).asText()
@@ -64,7 +66,7 @@ interface Daemonized {
             }
         }
 
-        this.data.lastReceive = Date()
+        this.mqtt.lastReceive = Date()
 
         try {
             onReceive(data, jsonResult)

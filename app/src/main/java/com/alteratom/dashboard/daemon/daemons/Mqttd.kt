@@ -26,14 +26,14 @@ import kotlin.random.Random
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqttData.copy())
+    var client: MqttAndroidClientExtended = MqttAndroidClientExtended(context, d.mqtt.copy())
 
     var conHandler = MqttdConnectionHandler()
 
     var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     override val isEnabled
-        get() = d.mqttData.isEnabled && !isDischarged
+        get() = d.mqtt.isEnabled && !isDischarged
 
     override val isDone: MutableLiveData<Boolean>
         get() = conHandler.isDone
@@ -44,7 +44,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 Status.DISCONNECTED
             } else {
                 if (client.isConnected)
-                    if (d.mqttData.ssl && !d.mqttData.sslTrustAll) Status.CONNECTED_SSL
+                    if (d.mqtt.ssl && !d.mqtt.sslTrustAll) Status.CONNECTED_SSL
                     else Status.CONNECTED
                 else if (conHandler.isDone.value != true) Status.ATTEMPTING
                 else Status.FAILED
@@ -128,9 +128,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     fun topicCheck() {
         val topics: MutableList<Pair<String, Int>> = mutableListOf()
 
-        for (tile in d.tiles.filter { it.data.isEnabled }) {
-            for (t in tile.data.subs) {
-                Pair(t.value, tile.data.qos).let {
+        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
+            for (t in tile.mqtt.subs) {
+                Pair(t.value, tile.mqtt.qos).let {
                     if (!topics.contains(it) && t.value.isNotBlank()) {
                         topics.add(it)
                     }
@@ -147,16 +147,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     inner class MqttdConnectionHandler : ConnectionHandler() {
         override fun isDoneCheck(): Boolean =
-            client.isConnected == isEnabled && (client.conProp == d.mqttData || !isEnabled)
+            client.isConnected == isEnabled && (client.conProp == d.mqtt || !isEnabled)
 
         override fun handleDispatch() {
             if (isEnabled) {
                 if (client.isConnected) client.closeAttempt()
                 else {
-                    if (client.conProp.clientId != d.mqttData.clientId || client.conProp.uri != d.mqttData.uri)
-                        client = MqttAndroidClientExtended(context, d.mqttData.copy())
+                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.uri != d.mqtt.uri)
+                        client = MqttAndroidClientExtended(context, d.mqtt.copy())
 
-                    client.conProp = d.mqttData.copy()
+                    client.conProp = d.mqtt.copy()
                     client.connectAttempt()
                 }
             } else {
@@ -167,7 +167,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: BrokerData
+        var conProp: Config
     ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 
         private var isBusy = false
@@ -327,7 +327,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
-    data class BrokerData(
+    data class Config(
         var isEnabled: Boolean = Pro.status,
         var ssl: Boolean = false,
         var sslTrustAll: Boolean = false,
@@ -387,10 +387,10 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 }
             }
 
-        fun deepCopy(): BrokerData? = parseSave(this.prepareSave())
+        fun deepCopy(): Config? = parseSave(this.prepareSave())
     }
 
-    class MqttDaemonizedData(
+    class DaemonizedConfig(
         var isEnabled: Boolean = true,
         var lastReceive: Date? = null,
         val subs: MutableMap<String, String> = mutableMapOf(),
@@ -416,5 +416,4 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
             get() = _qos
     }
-
 }

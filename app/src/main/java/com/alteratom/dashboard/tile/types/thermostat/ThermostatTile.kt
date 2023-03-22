@@ -211,11 +211,11 @@ class ThermostatTile : Tile() {
 
         binding.dtConfirm.setOnClickListener {
             fun send() {
-                send("$tempSetpointTmp", data.pubs["temp_set"], retain = retain[0], raw = true)
-                send("$humiSetpointTmp", data.pubs["humi_set"], retain = retain[1], raw = true)
+                send("$tempSetpointTmp", mqtt.pubs["temp_set"], retain = retain[0], raw = true)
+                send("$humiSetpointTmp", mqtt.pubs["humi_set"], retain = retain[1], raw = true)
             }
 
-            if (data.doConfirmPub) {
+            if (mqtt.doConfirmPub) {
                 with(adapter.context) {
                     buildConfirm("Confirm publishing", "PUBLISH") {
                         send()
@@ -232,7 +232,7 @@ class ThermostatTile : Tile() {
 
         binding.dtMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
-            if (notEmpty.isNotEmpty() && !data.pubs["mode"].isNullOrEmpty()) {
+            if (notEmpty.isNotEmpty() && !mqtt.pubs["mode"].isNullOrEmpty()) {
 
                 val dialog = Dialog(adapter.context)
                 modeAdapter = RecyclerViewAdapter(adapter.context)
@@ -257,7 +257,7 @@ class ThermostatTile : Tile() {
 
                     send(
                         this.modes[pos].second,
-                        data.pubs["mode"],
+                        mqtt.pubs["mode"],
                         retain = retain[2]
                     )
 
@@ -341,11 +341,11 @@ class ThermostatTile : Tile() {
             val value = data.second.toString()
             parse(
                 value, when (data.first) {
-                    this.data.subs["temp"] -> "temp"
-                    this.data.subs["temp_set"] -> "temp_set"
-                    this.data.subs["humi"] -> "humi"
-                    this.data.subs["humi_set"] -> "humi_set"
-                    this.data.subs["mode"] -> "mode"
+                    this.mqtt.subs["temp"] -> "temp"
+                    this.mqtt.subs["temp_set"] -> "temp_set"
+                    this.mqtt.subs["humi"] -> "humi"
+                    this.mqtt.subs["humi_set"] -> "humi_set"
+                    this.mqtt.subs["mode"] -> "mode"
                     else -> null
                 }
             )

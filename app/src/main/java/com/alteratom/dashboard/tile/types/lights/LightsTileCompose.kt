@@ -36,7 +36,7 @@ object LightsTileCompose : DaemonBasedCompose {
         var type by remember { mutableStateOf(tile.colorType) }
         var pub by remember {
             mutableStateOf(
-                tile.data.payloads[tile.colorType.toString()] ?: ""
+                tile.mqtt.payloads[tile.colorType.toString()] ?: ""
             )
         }
 
@@ -70,13 +70,13 @@ object LightsTileCompose : DaemonBasedCompose {
                         )
                     }
 
-                    var off by remember { mutableStateOf(tile.data.payloads["false"] ?: "") }
+                    var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
                     EditText(
                         label = { Text("Off payload") },
                         value = off,
                         onValueChange = {
                             off = it
-                            tile.data.payloads["false"] = it
+                            tile.mqtt.payloads["false"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )
@@ -106,13 +106,13 @@ object LightsTileCompose : DaemonBasedCompose {
                         Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
                     }
 
-                    var on by remember { mutableStateOf(tile.data.payloads["true"] ?: "") }
+                    var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
                     EditText(
                         label = { Text("On payload") },
                         value = on,
                         onValueChange = {
                             on = it
-                            tile.data.payloads["true"] = it
+                            tile.mqtt.payloads["true"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )
@@ -123,7 +123,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.data.payloads[type.toString()] = it
+                        tile.mqtt.payloads[type.toString()] = it
                         tile.colorType = tile.colorType
                     }
                 )
@@ -145,29 +145,29 @@ object LightsTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var stateSub by remember { mutableStateOf(tile.data.subs["state"] ?: "") }
+                var stateSub by remember { mutableStateOf(tile.mqtt.subs["state"] ?: "") }
                 EditText(
                     label = { Text("State subscribe topic") },
                     value = stateSub,
                     onValueChange = {
                         stateSub = it
-                        tile.data.subs["state"] = it
+                        tile.mqtt.subs["state"] = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
-                var statePub by remember { mutableStateOf(tile.data.pubs["state"] ?: "") }
+                var statePub by remember { mutableStateOf(tile.mqtt.pubs["state"] ?: "") }
                 EditText(
                     label = { Text("State publish topic") },
                     value = statePub,
                     onValueChange = {
                         statePub = it
-                        tile.data.pubs["state"] = it
+                        tile.mqtt.pubs["state"] = it
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             statePub = stateSub
-                            tile.data.pubs["state"] = stateSub
+                            tile.mqtt.pubs["state"] = stateSub
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
@@ -184,29 +184,29 @@ object LightsTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var brightSub by remember { mutableStateOf(tile.data.subs["bright"] ?: "") }
+                var brightSub by remember { mutableStateOf(tile.mqtt.subs["bright"] ?: "") }
                 EditText(
                     label = { Text("Brightness subscribe topic") },
                     value = brightSub,
                     onValueChange = {
                         brightSub = it
-                        tile.data.subs["bright"] = it
+                        tile.mqtt.subs["bright"] = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
-                var brightPub by remember { mutableStateOf(tile.data.pubs["bright"] ?: "") }
+                var brightPub by remember { mutableStateOf(tile.mqtt.pubs["bright"] ?: "") }
                 EditText(
                     label = { Text("Brightness publish topic") },
                     value = brightPub,
                     onValueChange = {
                         brightPub = it
-                        tile.data.pubs["bright"] = it
+                        tile.mqtt.pubs["bright"] = it
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             brightPub = brightSub
-                            tile.data.pubs["bright"] = brightSub
+                            tile.mqtt.pubs["bright"] = brightSub
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
@@ -223,29 +223,29 @@ object LightsTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var colorSub by remember { mutableStateOf(tile.data.subs["color"] ?: "") }
+                var colorSub by remember { mutableStateOf(tile.mqtt.subs["color"] ?: "") }
                 EditText(
                     label = { Text("Color subscribe topic") },
                     value = colorSub,
                     onValueChange = {
                         colorSub = it
-                        tile.data.subs["color"] = it
+                        tile.mqtt.subs["color"] = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
-                var colorPub by remember { mutableStateOf(tile.data.pubs["color"] ?: "") }
+                var colorPub by remember { mutableStateOf(tile.mqtt.pubs["color"] ?: "") }
                 EditText(
                     label = { Text("Color publish topic") },
                     value = colorPub,
                     onValueChange = {
                         colorPub = it
-                        tile.data.pubs["color"] = it
+                        tile.mqtt.pubs["color"] = it
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             colorPub = colorSub
-                            tile.data.pubs["color"] = colorSub
+                            tile.mqtt.pubs["color"] = colorSub
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
@@ -262,29 +262,29 @@ object LightsTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var modeSub by remember { mutableStateOf(tile.data.subs["mode"] ?: "") }
+                var modeSub by remember { mutableStateOf(tile.mqtt.subs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode subscribe topic") },
                     value = modeSub,
                     onValueChange = {
                         modeSub = it
-                        tile.data.subs["mode"] = it
+                        tile.mqtt.subs["mode"] = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
-                var modePub by remember { mutableStateOf(tile.data.pubs["mode"] ?: "") }
+                var modePub by remember { mutableStateOf(tile.mqtt.pubs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode publish topic") },
                     value = modePub,
                     onValueChange = {
                         modePub = it
-                        tile.data.pubs["mode"] = it
+                        tile.mqtt.pubs["mode"] = it
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             modePub = modeSub
-                            tile.data.pubs["mode"] = modeSub
+                            tile.mqtt.pubs["mode"] = modeSub
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
@@ -298,7 +298,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 Communication1(retain = false, pointer = {
                     var stateJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["state"] ?: ""
+                            tile.mqtt.jsonPaths["state"] ?: ""
                         )
                     }
                     EditText(
@@ -306,13 +306,13 @@ object LightsTileCompose : DaemonBasedCompose {
                         value = stateJson,
                         onValueChange = {
                             stateJson = it
-                            tile.data.jsonPaths["state"] = it
+                            tile.mqtt.jsonPaths["state"] = it
                         }
                     )
 
                     var brightJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["bright"] ?: ""
+                            tile.mqtt.jsonPaths["bright"] ?: ""
                         )
                     }
                     EditText(
@@ -320,13 +320,13 @@ object LightsTileCompose : DaemonBasedCompose {
                         value = brightJson,
                         onValueChange = {
                             brightJson = it
-                            tile.data.jsonPaths["bright"] = it
+                            tile.mqtt.jsonPaths["bright"] = it
                         }
                     )
 
                     var colorJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["color"] ?: ""
+                            tile.mqtt.jsonPaths["color"] ?: ""
                         )
                     }
                     EditText(
@@ -334,13 +334,13 @@ object LightsTileCompose : DaemonBasedCompose {
                         value = colorJson,
                         onValueChange = {
                             colorJson = it
-                            tile.data.jsonPaths["color"] = it
+                            tile.mqtt.jsonPaths["color"] = it
                         }
                     )
 
                     var modeJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["mode"] ?: ""
+                            tile.mqtt.jsonPaths["mode"] ?: ""
                         )
                     }
                     EditText(
@@ -348,7 +348,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         value = modeJson,
                         onValueChange = {
                             modeJson = it
-                            tile.data.jsonPaths["mode"] = it
+                            tile.mqtt.jsonPaths["mode"] = it
                         }
                     )
                 })
@@ -403,7 +403,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         {
                             type = ColorTypes.values()[it]
                             tile.colorType = ColorTypes.values()[it]
-                            pub = tile.data.payloads[tile.colorType.name] ?: ""
+                            pub = tile.mqtt.payloads[tile.colorType.name] ?: ""
                         },
                     )
 

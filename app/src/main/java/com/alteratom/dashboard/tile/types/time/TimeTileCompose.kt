@@ -23,7 +23,7 @@ object TimeTileCompose : DaemonBasedCompose {
 
         var pub by remember {
             mutableStateOf(
-                tile.data.payloads[if (type == 0) "time" else "date"] ?: ""
+                tile.mqtt.payloads[if (type == 0) "time" else "date"] ?: ""
             )
         }
 
@@ -36,7 +36,7 @@ object TimeTileCompose : DaemonBasedCompose {
                     value = pub,
                     onValueChange = {
                         pub = it
-                        tile.data.payloads[if (type == 0) "time" else "date"] = it
+                        tile.mqtt.payloads[if (type == 0) "time" else "date"] = it
                     }
                 )
                 Text(
@@ -86,7 +86,7 @@ object TimeTileCompose : DaemonBasedCompose {
                         {
                             type = it
                             tile.isDate = (it == 1)
-                            pub = tile.data.payloads[if (type == 0) "time" else "date"] ?: ""
+                            pub = tile.mqtt.payloads[if (type == 0) "time" else "date"] ?: ""
                         },
                     )
                 }

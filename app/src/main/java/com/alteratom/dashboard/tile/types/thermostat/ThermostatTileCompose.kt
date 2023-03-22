@@ -34,20 +34,20 @@ object ThermostatTileCompose : DaemonBasedCompose {
         TilePropertiesCompose.Box {
             TilePropertiesCompose.CommunicationBox {
 
-                var tempSub by remember { mutableStateOf(tile.data.subs["temp"] ?: "") }
+                var tempSub by remember { mutableStateOf(tile.mqtt.subs["temp"] ?: "") }
                 EditText(
                     label = { Text("Temperature subscribe topic") },
                     value = tempSub,
                     onValueChange = {
                         tempSub = it
-                        tile.data.subs["temp"] = it
+                        tile.mqtt.subs["temp"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
                 var tempSetSub by remember {
                     mutableStateOf(
-                        tile.data.subs["temp_set"] ?: ""
+                        tile.mqtt.subs["temp_set"] ?: ""
                     )
                 }
                 EditText(
@@ -55,14 +55,14 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     value = tempSetSub,
                     onValueChange = {
                         tempSetSub = it
-                        tile.data.subs["temp_set"] = it
+                        tile.mqtt.subs["temp_set"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
                 var tempSetPub by remember {
                     mutableStateOf(
-                        tile.data.pubs["temp_set"] ?: ""
+                        tile.mqtt.pubs["temp_set"] ?: ""
                     )
                 }
                 EditText(
@@ -70,13 +70,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     value = tempSetPub,
                     onValueChange = {
                         tempSetPub = it
-                        tile.data.pubs["temp_set"] = it
+                        tile.mqtt.pubs["temp_set"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             tempSetPub = tempSetSub
-                            tile.data.pubs["temp_set"] = tempSetSub
+                            tile.mqtt.pubs["temp_set"] = tempSetSub
                             dashboard.daemon.notifyOptionsChanged()
                         }) {
                             Icon(
@@ -94,13 +94,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var humiSub by remember { mutableStateOf(tile.data.subs["humi"] ?: "") }
+                var humiSub by remember { mutableStateOf(tile.mqtt.subs["humi"] ?: "") }
                 EditText(
                     label = { Text("Humidity subscribe topic") },
                     value = humiSub,
                     onValueChange = {
                         humiSub = it
-                        tile.data.subs["humi"] = it
+                        tile.mqtt.subs["humi"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     }
                 )
@@ -112,7 +112,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     Column {
                         var humiSetSub by remember {
                             mutableStateOf(
-                                tile.data.subs["humi_set"] ?: ""
+                                tile.mqtt.subs["humi_set"] ?: ""
                             )
                         }
                         EditText(
@@ -120,14 +120,14 @@ object ThermostatTileCompose : DaemonBasedCompose {
                             value = humiSetSub,
                             onValueChange = {
                                 humiSetSub = it
-                                tile.data.subs["humi_set"] = it
+                                tile.mqtt.subs["humi_set"] = it
                                 dashboard.daemon.notifyOptionsChanged()
                             }
                         )
 
                         var humiSetPub by remember {
                             mutableStateOf(
-                                tile.data.pubs["humi_set"] ?: ""
+                                tile.mqtt.pubs["humi_set"] ?: ""
                             )
                         }
                         EditText(
@@ -135,13 +135,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                             value = humiSetPub,
                             onValueChange = {
                                 humiSetPub = it
-                                tile.data.pubs["humi_set"] = it
+                                tile.mqtt.pubs["humi_set"] = it
                                 dashboard.daemon.notifyOptionsChanged()
                             },
                             trailingIcon = {
                                 IconButton(onClick = {
                                     humiSetPub = humiSetSub
-                                    tile.data.pubs["humi_set"] = humiSetSub
+                                    tile.mqtt.pubs["humi_set"] = humiSetSub
                                     dashboard.daemon.notifyOptionsChanged()
                                 }) {
                                     Icon(
@@ -161,30 +161,30 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         .padding(vertical = 10.dp)
                 )
 
-                var modeSub by remember { mutableStateOf(tile.data.subs["mode"] ?: "") }
+                var modeSub by remember { mutableStateOf(tile.mqtt.subs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode subscribe topic") },
                     value = modeSub,
                     onValueChange = {
                         modeSub = it
-                        tile.data.subs["mode"] = it
+                        tile.mqtt.subs["mode"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
-                var modePub by remember { mutableStateOf(tile.data.pubs["mode"] ?: "") }
+                var modePub by remember { mutableStateOf(tile.mqtt.pubs["mode"] ?: "") }
                 EditText(
                     label = { Text("Mode publish topic") },
                     value = modePub,
                     onValueChange = {
                         modePub = it
-                        tile.data.pubs["mode"] = it
+                        tile.mqtt.pubs["mode"] = it
                         dashboard.daemon.notifyOptionsChanged()
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             modePub = modeSub
-                            tile.data.pubs["mode"] = modeSub
+                            tile.mqtt.pubs["mode"] = modeSub
                             dashboard.daemon.notifyOptionsChanged()
                         }) {
                             Icon(
@@ -200,7 +200,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
 
                     var tempJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["temp"] ?: ""
+                            tile.mqtt.jsonPaths["temp"] ?: ""
                         )
                     }
                     EditText(
@@ -208,13 +208,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         value = tempJson,
                         onValueChange = {
                             tempJson = it
-                            tile.data.jsonPaths["temp"] = it
+                            tile.mqtt.jsonPaths["temp"] = it
                         }
                     )
 
                     var tempSetJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["temp_set"] ?: ""
+                            tile.mqtt.jsonPaths["temp_set"] ?: ""
                         )
                     }
                     EditText(
@@ -222,7 +222,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         value = tempSetJson,
                         onValueChange = {
                             tempSetJson = it
-                            tile.data.jsonPaths["temp_set"] = it
+                            tile.mqtt.jsonPaths["temp_set"] = it
                         }
                     )
 
@@ -234,7 +234,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
 
                     var humiJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["humi"] ?: ""
+                            tile.mqtt.jsonPaths["humi"] ?: ""
                         )
                     }
                     EditText(
@@ -242,13 +242,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         value = humiJson,
                         onValueChange = {
                             humiJson = it
-                            tile.data.jsonPaths["humi"] = it
+                            tile.mqtt.jsonPaths["humi"] = it
                         }
                     )
 
                     var humiSetJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["humi_set"] ?: ""
+                            tile.mqtt.jsonPaths["humi_set"] ?: ""
                         )
                     }
                     AnimatedVisibility(
@@ -261,7 +261,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                                 value = humiSetJson,
                                 onValueChange = {
                                     humiSetJson = it
-                                    tile.data.jsonPaths["humi_set"] = it
+                                    tile.mqtt.jsonPaths["humi_set"] = it
                                 }
                             )
                         }
@@ -275,7 +275,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
 
                     var modeJson by remember {
                         mutableStateOf(
-                            tile.data.jsonPaths["mode"] ?: ""
+                            tile.mqtt.jsonPaths["mode"] ?: ""
                         )
                     }
                     EditText(
@@ -283,7 +283,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                         value = modeJson,
                         onValueChange = {
                             modeJson = it
-                            tile.data.jsonPaths["mode"] = it
+                            tile.mqtt.jsonPaths["mode"] = it
                         }
                     )
 

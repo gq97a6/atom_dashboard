@@ -20,20 +20,20 @@ object ButtonTileCompose : DaemonBasedCompose {
 
         TilePropertiesCompose.Box {
             TilePropertiesCompose.CommunicationBox {
-                var pub by remember { mutableStateOf(G.tile.data.pubs["base"] ?: "") }
+                var pub by remember { mutableStateOf(G.tile.mqtt.pubs["base"] ?: "") }
                 EditText(
                     label = { Text("Publish topic") },
                     value = pub,
                     onValueChange = {
                         pub = it
-                        G.tile.data.pubs["base"] = it
+                        G.tile.mqtt.pubs["base"] = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     }
                 )
 
                 var pubPayload by remember {
                     mutableStateOf(
-                        tile.data.payloads["base"] ?: "err"
+                        tile.mqtt.payloads["base"] ?: "err"
                     )
                 }
                 EditText(
@@ -41,11 +41,11 @@ object ButtonTileCompose : DaemonBasedCompose {
                     value = pubPayload,
                     onValueChange = {
                         pubPayload = it
-                        tile.data.payloads["base"] = it
+                        tile.mqtt.payloads["base"] = it
                     }
                 )
 
-                var qos by remember { mutableStateOf(G.tile.data.qos) }
+                var qos by remember { mutableStateOf(G.tile.mqtt.qos) }
                 RadioGroup(
                     listOf(
                         "QoS 0: At most once. No guarantee.",
@@ -55,23 +55,23 @@ object ButtonTileCompose : DaemonBasedCompose {
                     qos,
                     {
                         qos = it
-                        G.tile.data.qos = it
+                        G.tile.mqtt.qos = it
                         G.dashboard.daemon.notifyOptionsChanged()
                     },
                     modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
                 )
 
-                var ret by remember { mutableStateOf(G.tile.data.doRetain) }
+                var ret by remember { mutableStateOf(G.tile.mqtt.doRetain) }
                 LabeledSwitch(
                     label = { Text("Retain massages:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = ret,
                     onCheckedChange = {
                         ret = it
-                        G.tile.data.doRetain = it
+                        G.tile.mqtt.doRetain = it
                     }
                 )
 
-                var conf by remember { mutableStateOf(G.tile.data.doConfirmPub) }
+                var conf by remember { mutableStateOf(G.tile.mqtt.doConfirmPub) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -83,7 +83,7 @@ object ButtonTileCompose : DaemonBasedCompose {
                     checked = conf,
                     onCheckedChange = {
                         conf = it
-                        G.tile.data.doConfirmPub = it
+                        G.tile.mqtt.doConfirmPub = it
                     }
                 )
             }

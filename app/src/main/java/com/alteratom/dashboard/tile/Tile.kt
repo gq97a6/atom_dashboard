@@ -46,7 +46,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
         get() = theme.a.getColorPallet(hsv, true)
 
     @JsonAlias("mqtt")
-    override val data = Mqttd.MqttDaemonizedData()
+    override val mqtt = Mqttd.DaemonizedConfig()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =
@@ -88,7 +88,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     ) {
         super.onReceive(data, jsonResult)
 
-        if (this.data.doNotify) {
+        if (this.mqtt.doNotify) {
             service?.let { s ->
                 dashboard?.let { d ->
                     createNotification(
@@ -97,14 +97,14 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
                         if (tag.isBlank() || data.second.toString().isBlank())
                             "New value for: ${data.first}"
                         else "$tag: ${data.second.toString()}",
-                        this.data.silentNotify,
+                        this.mqtt.silentNotify,
                         d.id.toInt()
                     )
                 }
             }
         }
 
-        if (this.data.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }

@@ -44,7 +44,7 @@ class ColorTile : Tile() {
         set(value) {
             field = value
 
-            data.payloads[colorType.name]?.let { pattern ->
+            mqtt.payloads[colorType.name]?.let { pattern ->
                 when (colorType) {
                     ColorTypes.HSV -> {
                         toRemoves = Regex("@[hsv]").split(pattern).toMutableList()
@@ -72,9 +72,9 @@ class ColorTile : Tile() {
     override fun onCreateTile() {
         super.onCreateTile()
 
-        data.payloads[ColorTypes.HSV.name] = "@h;@s;@v"
-        data.payloads[ColorTypes.HEX.name] = "#@hex"
-        data.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
+        mqtt.payloads[ColorTypes.HSV.name] = "@h;@s;@v"
+        mqtt.payloads[ColorTypes.HEX.name] = "#@hex"
+        mqtt.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
 
         colorToHSV(theme.a.pallet.color, hsvPicked)
         colorType = colorType
@@ -131,19 +131,19 @@ class ColorTile : Tile() {
             send(
                 when (colorType) {
                     ColorTypes.HSV -> {
-                        (data.payloads[ColorTypes.HSV.name] ?: "")
+                        (mqtt.payloads[ColorTypes.HSV.name] ?: "")
                             .replace("@h", hsvPickedTmp[0].toInt().toString())
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
                     ColorTypes.HEX -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (data.payloads[ColorTypes.HEX.name] ?: "")
+                        (mqtt.payloads[ColorTypes.HEX.name] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
                     ColorTypes.RGB -> {
                         val c = HSVToColor(hsvPickedTmp)
-                        (data.payloads[ColorTypes.RGB.name] ?: "")
+                        (mqtt.payloads[ColorTypes.RGB.name] ?: "")
                             .replace("@r", c.red.toString())
                             .replace("@g", c.green.toString())
                             .replace("@b", c.blue.toString())

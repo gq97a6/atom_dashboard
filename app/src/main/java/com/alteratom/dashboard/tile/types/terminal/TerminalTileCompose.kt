@@ -20,8 +20,8 @@ object TerminalTileCompose : DaemonBasedCompose {
             TilePropertiesCompose.CommunicationBox {
                 Communication0()
 
-                var pub by remember { mutableStateOf(tile.data.payloads["base"] ?: "") }
-                var type by remember { mutableStateOf(if (tile.data.payloadIsVar) 0 else 1) }
+                var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
+                var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
 
                 AnimatedVisibility(
                     visible = type == 1, enter = fadeIn() + expandVertically(),
@@ -33,7 +33,7 @@ object TerminalTileCompose : DaemonBasedCompose {
                             value = pub,
                             onValueChange = {
                                 pub = it
-                                tile.data.payloads["base"] = it
+                                tile.mqtt.payloads["base"] = it
                             }
                         )
                     }
@@ -47,7 +47,7 @@ object TerminalTileCompose : DaemonBasedCompose {
                     type,
                     {
                         type = it
-                        tile.data.payloadIsVar = it == 0
+                        tile.mqtt.payloadIsVar = it == 0
                     },
                     modifier = Modifier.padding(top = 20.dp)
                 )

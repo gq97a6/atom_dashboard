@@ -23,30 +23,30 @@ object TilePropertiesMqttCompose {
     @Composable
     fun Communication0() {
 
-        var sub by remember { mutableStateOf(G.tile.data.subs["base"] ?: "") }
+        var sub by remember { mutableStateOf(G.tile.mqtt.subs["base"] ?: "") }
         EditText(
             label = { Text("Subscribe topic") },
             value = sub,
             onValueChange = {
                 sub = it
-                G.tile.data.subs["base"] = it
+                G.tile.mqtt.subs["base"] = it
                 G.dashboard.daemon.notifyOptionsChanged()
             }
         )
 
-        var pub by remember { mutableStateOf(G.tile.data.pubs["base"] ?: "") }
+        var pub by remember { mutableStateOf(G.tile.mqtt.pubs["base"] ?: "") }
         EditText(
             label = { Text("Publish topic") },
             value = pub,
             onValueChange = {
                 pub = it
-                G.tile.data.pubs["base"] = it
+                G.tile.mqtt.pubs["base"] = it
                 G.dashboard.daemon.notifyOptionsChanged()
             },
             trailingIcon = {
                 IconButton(onClick = {
                     pub = sub
-                    G.tile.data.pubs["base"] = sub
+                    G.tile.mqtt.pubs["base"] = sub
                     G.dashboard.daemon.notifyOptionsChanged()
                 }) {
                     Icon(painterResource(R.drawable.il_file_copy), "", tint = Theme.colors.b)
@@ -59,19 +59,19 @@ object TilePropertiesMqttCompose {
     fun Communication1(
         retain: Boolean = true,
         pointer: @Composable () -> Unit = {
-            var json by remember { mutableStateOf(G.tile.data.jsonPaths["base"] ?: "") }
+            var json by remember { mutableStateOf(G.tile.mqtt.jsonPaths["base"] ?: "") }
             EditText(
                 label = { Text("Payload JSON pointer") },
                 value = json,
                 onValueChange = {
                     json = it
-                    G.tile.data.jsonPaths["base"] = it
+                    G.tile.mqtt.jsonPaths["base"] = it
                 }
             )
         }
     ) {
 
-        var qos by remember { mutableStateOf(G.tile.data.qos) }
+        var qos by remember { mutableStateOf(G.tile.mqtt.qos) }
         RadioGroup(
             listOf(
                 "QoS 0: At most once. No guarantee.",
@@ -81,41 +81,41 @@ object TilePropertiesMqttCompose {
             qos,
             {
                 qos = it
-                G.tile.data.qos = it
+                G.tile.mqtt.qos = it
                 G.dashboard.daemon.notifyOptionsChanged()
             },
             modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
         )
 
         if (retain) {
-            var ret by remember { mutableStateOf(G.tile.data.doRetain) }
+            var ret by remember { mutableStateOf(G.tile.mqtt.doRetain) }
             LabeledSwitch(
                 label = { Text("Retain massages:", fontSize = 15.sp, color = Theme.colors.a) },
                 checked = ret,
                 onCheckedChange = {
                     ret = it
-                    G.tile.data.doRetain = it
+                    G.tile.mqtt.doRetain = it
                 }
             )
         }
 
-        var conf by remember { mutableStateOf(G.tile.data.doConfirmPub) }
+        var conf by remember { mutableStateOf(G.tile.mqtt.doConfirmPub) }
         LabeledSwitch(
             label = { Text("Confirm publishing:", fontSize = 15.sp, color = Theme.colors.a) },
             checked = conf,
             onCheckedChange = {
                 conf = it
-                G.tile.data.doConfirmPub = it
+                G.tile.mqtt.doConfirmPub = it
             }
         )
 
-        var json by remember { mutableStateOf(G.tile.data.payloadIsJson) }
+        var json by remember { mutableStateOf(G.tile.mqtt.payloadIsJson) }
         LabeledSwitch(
             label = { Text("Payload is JSON:", fontSize = 15.sp, color = Theme.colors.a) },
             checked = json,
             onCheckedChange = {
                 json = it
-                G.tile.data.payloadIsJson = it
+                G.tile.mqtt.payloadIsJson = it
             }
         )
 

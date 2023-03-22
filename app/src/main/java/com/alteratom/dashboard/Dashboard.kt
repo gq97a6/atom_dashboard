@@ -14,7 +14,6 @@ import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.*
 
@@ -39,8 +38,8 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     var securityLevel = 0
     var log = Log()
 
-    @JsonAlias("mqtt")
-    var mqttData = Mqttd.BrokerData()
+    //Configuration for each daemon
+    var mqtt = Mqttd.Config()
 
     @JsonIgnore
     lateinit var daemon: Daemon

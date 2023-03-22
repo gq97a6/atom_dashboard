@@ -57,13 +57,13 @@ object SwitchTileCompose : DaemonBasedCompose {
                         )
                     }
 
-                    var off by remember { mutableStateOf(tile.data.payloads["false"] ?: "") }
+                    var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
                     EditText(
                         label = { Text("Off payload") },
                         value = off,
                         onValueChange = {
                             off = it
-                            tile.data.payloads["false"] = it
+                            tile.mqtt.payloads["false"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )
@@ -92,13 +92,13 @@ object SwitchTileCompose : DaemonBasedCompose {
                         Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
                     }
 
-                    var on by remember { mutableStateOf(tile.data.payloads["true"] ?: "") }
+                    var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
                     EditText(
                         label = { Text("On payload") },
                         value = on,
                         onValueChange = {
                             on = it
-                            tile.data.payloads["true"] = it
+                            tile.mqtt.payloads["true"] = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )

@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.daemon.daemons
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
@@ -84,7 +85,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                 }
             })
-        } catch (e: MqttException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -102,7 +103,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                 }
             })
-        } catch (e: MqttException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -120,7 +121,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
                 }
             })
-        } catch (e: MqttException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -153,7 +154,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
         override fun handleDispatch() {
             if (isEnabled) {
-                if (client.isConnected) client.closeAttempt()
+                if (client.isConnected) client.disconnectAttempt(true)
                 else {
                     if (client.conProp.clientId != d.mqtt.clientId || client.conProp.uri != d.mqtt.uri)
                         client = MqttAndroidClientExtended(context, d.mqtt.copy())
@@ -189,8 +190,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         override fun getInFlightMessageCount(): Int = 0
 
         fun connectAttempt() {
-            if (isBusy) return
-            isBusy = true
+            //if (isBusy) return
+            //isBusy = true
 
             setCallback(object : MqttCallback {
                 override fun messageArrived(t: String?, m: MqttMessage) {
@@ -255,21 +256,27 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
                         trustManagerFactory.trustManagers
                     } else { //TRUST ALL CERTS
-                        arrayOf<TrustManager>(object : X509TrustManager {
-                            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+                        arrayOf<TrustManager>(
+                            @SuppressLint("CustomX509TrustManager")
+                            object : X509TrustManager {
+                                override fun getAcceptedIssuers(): Array<X509Certificate> =
+                                    emptyArray()
 
-                            override fun checkClientTrusted(
-                                chain: Array<X509Certificate>,
-                                authType: String
-                            ) {
-                            }
+                                @SuppressLint("TrustAllX509TrustManager")
+                                override fun checkClientTrusted(
+                                    chain: Array<X509Certificate>,
+                                    authType: String
+                                ) {
+                                }
 
-                            override fun checkServerTrusted(
-                                chain: Array<X509Certificate>,
-                                authType: String
-                            ) {
+                                @SuppressLint("TrustAllX509TrustManager")
+                                override fun checkServerTrusted(
+                                    chain: Array<X509Certificate>,
+                                    authType: String
+                                ) {
+                                }
                             }
-                        })
+                        )
                     },
                     java.security.SecureRandom()
                 )
@@ -291,16 +298,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                         run {}
                     }
                 })
-            } catch (e: MqttException) {
+            } catch (e: Exception) {
                 run {}
             }
 
-            isBusy = false
+            //isBusy = false
         }
 
-        fun disconnectAttempt(toClose: Boolean = false) {
-            if (isBusy) return
-            isBusy = true
+        fun disconnectAttempt(close: Boolean = false) {
+            //if (isBusy) return
+            //isBusy = true
 
             try {
                 client.disconnect(null, object : IMqttActionListener {
@@ -308,7 +315,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                         unregisterResources()
                         setCallback(null)
                         topics = mutableListOf()
-                        if (toClose) close()
                     }
 
                     override fun onFailure(
@@ -317,14 +323,12 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     ) {
                     }
                 })
-            } catch (_: MqttException) {
+
+                if (close) close()
+            } catch (_: Exception) {
             }
 
-            isBusy = false
-        }
-
-        fun closeAttempt() {
-            disconnectAttempt(true)
+            //isBusy = false
         }
     }
 

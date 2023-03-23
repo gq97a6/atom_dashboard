@@ -85,7 +85,7 @@ class SettingsFragment : Fragment() {
                             Handler(Looper.getMainLooper()).postDelayed({
                                 createToast(requireContext(), "Backup successful")
                             }, 100)
-                        } catch (e: java.lang.Exception) {
+                        } catch (e: Exception) {
                             createToast(requireContext(), "Backup failed")
                         }
                     }

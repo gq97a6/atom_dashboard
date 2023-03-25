@@ -31,17 +31,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboardIndex
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.daemons.Mqttd
+import com.alteratom.dashboard.daemon.daemons.mqttdd.MqttConfig
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboardIndex
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.proAlert
 import java.util.*
 import kotlin.math.abs
@@ -177,7 +178,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                             .height(50.dp)
                                             .clickable {
                                                 dashboard.mqtt =
-                                                    it.mqtt.deepCopy() ?: Mqttd.Config()
+                                                    it.mqtt.deepCopy() ?: MqttConfig()
                                                 dashboard.mqtt.clientId =
                                                     abs(Random.nextInt()).toString()
                                                 dashboard.daemon.notifyConfigChanged()
@@ -383,13 +384,13 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 .buildConfirm(
                                                     "Confirm override", "CONFIRM"
                                                 ) {
-                                                    trust = it
-                                                    dashboard.mqtt.sslTrustAll = it
+                                                    trust = true
+                                                    dashboard.mqtt.sslTrustAll = true
                                                     dashboard.daemon.notifyConfigChanged()
                                                 }
                                         } else {
-                                            trust = it
-                                            dashboard.mqtt.sslTrustAll = it
+                                            trust = false
+                                            dashboard.mqtt.sslTrustAll = false
                                             dashboard.daemon.notifyConfigChanged()
                                         }
                                     }

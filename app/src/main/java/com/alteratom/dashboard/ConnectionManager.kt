@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 
-//TODO: remove
 abstract class ConnectionManager(private var interval: Long = 500) {
 
     val isDone = MutableLiveData(false)

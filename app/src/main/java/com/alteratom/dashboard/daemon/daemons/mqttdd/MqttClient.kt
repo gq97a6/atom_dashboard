@@ -10,7 +10,7 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.*
 
 //Server client class
-class MqttClientExtended(
+class MqttClient(
     context: Context,
     var server: MqttdAsync,
     var conProp: MqttConfig = server.d.mqtt.copy()
@@ -29,7 +29,6 @@ class MqttClientExtended(
     override fun reconnect() {}
 
     fun connectAttempt() {
-
         setCallback(object : MqttCallback {
             override fun messageArrived(t: String?, m: MqttMessage) {
                 for (tile in server.d.tiles) tile.receive(Pair(t ?: "", m))
@@ -38,7 +37,7 @@ class MqttClientExtended(
 
             override fun connectionLost(cause: Throwable?) {
                 topics = mutableListOf()
-                server.handler.dispatch("con_lost")
+                server.manager.dispatch("lost")
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -59,47 +58,40 @@ class MqttClientExtended(
 
         if (conProp.ssl) setupSSL(options)
 
-        try {
-            connect(options, null, object : IMqttActionListener {
-                override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    server.topicCheck()
-                    server.handler.dispatch("con")
-                }
+        connect(options, null, object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken?) {
+                server.topicCheck()
+                server.manager.dispatch("success")
+            }
 
-                override fun onFailure(
-                    asyncActionToken: IMqttToken?,
-                    exception: Throwable?
-                ) {
-                    run {}
-                }
-            })
-        } catch (e: Exception) {
-            run {}
-        }
+            override fun onFailure(
+                asyncActionToken: IMqttToken?,
+                exception: Throwable?
+            ) {
+                run {}
+            }
+        })
     }
 
     fun disconnectAttempt(close: Boolean = false) {
-        try {
-            server.client.disconnect(null, object : IMqttActionListener {
-                override fun onSuccess(asyncActionToken: IMqttToken?) {
-                    unregisterResources()
-                    setCallback(null)
-                    topics = mutableListOf()
-                }
+        server.client.disconnect(null, object : IMqttActionListener {
+            override fun onSuccess(asyncActionToken: IMqttToken?) {
+                unregisterResources()
+                setCallback(null)
+                topics = mutableListOf()
+            }
 
-                override fun onFailure(
-                    asyncActionToken: IMqttToken?,
-                    exception: Throwable?
-                ) {
-                }
-            })
+            override fun onFailure(
+                asyncActionToken: IMqttToken?,
+                exception: Throwable?
+            ) {
+            }
+        })
 
-            if (close) close()
-        } catch (_: Exception) {
-        }
+        if (close) close()
     }
 
-    fun setupSSL(options: MqttConnectOptions) {
+    private fun setupSSL(options: MqttConnectOptions) {
         val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
         kmfStore.load(null, null)
         kmfStore.setCertificateEntry("cc", conProp.clientCert)

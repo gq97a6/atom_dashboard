@@ -82,7 +82,7 @@ class FragmentManager(private val mainActivity: MainActivity) {
                 currentFragment = fragment
             }
 
-            onBackPressedBoolean = { false }
+            doOverrideOnBackPress = { false }
         }
     }
 

@@ -1,10 +1,11 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
 import com.alteratom.dashboard.activities.fragments.SetupFragment
-import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
@@ -16,8 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var b: ActivityMainBinding
 
-    //TODO
-    var onBackPressedBoolean: () -> Boolean = { false }
+    var doOverrideOnBackPress: () -> Boolean = { false }
 
     companion object {
         lateinit var fm: FragmentManager
@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         fm.replaceWith(SetupFragment(), false, null)
         TileSwitcher.activity = this
         FragmentSwitcher.activity = this
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (!doOverrideOnBackPress() && !fm.popBackStack()) finish()
+        }
     }
 
     override fun onDestroy() {
@@ -49,11 +53,5 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         ActivityHandler.onPause()
-    }
-
-    override fun onBackPressed() {
-        if (!onBackPressedBoolean()) {
-            if (!fm.popBackStack()) super.onBackPressed()
-        }
     }
 }

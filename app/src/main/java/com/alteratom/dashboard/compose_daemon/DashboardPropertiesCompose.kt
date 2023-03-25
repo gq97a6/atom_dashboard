@@ -77,7 +77,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             if (Pro.status || dashboardIndex < 2) {
                                 enabled = it
                                 dashboard.mqtt.isEnabled = it
-                                dashboard.daemon.notifyOptionsChanged()
+                                dashboard.daemon.notifyConfigChanged()
                             } else {
                                 with(fragment) { requireContext().proAlert(requireActivity()) }
                             }
@@ -180,7 +180,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                     it.mqtt.deepCopy() ?: Mqttd.Config()
                                                 dashboard.mqtt.clientId =
                                                     abs(Random.nextInt()).toString()
-                                                dashboard.daemon.notifyOptionsChanged()
+                                                dashboard.daemon.notifyConfigChanged()
 
                                                 copyShow = false
                                                 MainActivity.fm.replaceWith(
@@ -216,7 +216,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         it.trim().let {
                             if (dashboard.mqtt.address != it) {
                                 dashboard.mqtt.address = it
-                                dashboard.daemon.notifyOptionsChanged()
+                                dashboard.daemon.notifyConfigChanged()
                             }
                         }
                     }
@@ -236,7 +236,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         (it.trim().toIntOrNull() ?: (-1)).let {
                             if (dashboard.mqtt.port != it) {
                                 dashboard.mqtt.port = it
-                                dashboard.daemon.notifyOptionsChanged()
+                                dashboard.daemon.notifyConfigChanged()
                             }
                         }
                     }
@@ -254,11 +254,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     dashboard.mqtt.clientId =
                                         abs(Random.nextInt()).toString()
                                     id = dashboard.mqtt.clientId
-                                    dashboard.daemon.notifyOptionsChanged()
+                                    dashboard.daemon.notifyConfigChanged()
                                 }
                                 dashboard.mqtt.clientId != it -> {
                                     dashboard.mqtt.clientId = it
-                                    dashboard.daemon.notifyOptionsChanged()
+                                    dashboard.daemon.notifyConfigChanged()
                                 }
                             }
                         }
@@ -306,7 +306,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         if (m.caCert != null) {
                                             m.caFileName = file ?: "ca.crt"
                                             ca = dashboard.mqtt.caFileName
-                                            dashboard.daemon.notifyOptionsChanged()
+                                            dashboard.daemon.notifyConfigChanged()
                                         } else createToast(
                                             fragment.requireContext(),
                                             "Certificate error"
@@ -321,7 +321,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         if (m.clientCert != null) {
                                             m.clientFileName = file ?: "client.crt"
                                             client = dashboard.mqtt.clientFileName
-                                            dashboard.daemon.notifyOptionsChanged()
+                                            dashboard.daemon.notifyConfigChanged()
                                         } else createToast(
                                             fragment.requireContext(),
                                             "Certificate error"
@@ -336,7 +336,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         if (m.clientKey != null) {
                                             m.keyFileName = file ?: "client.key"
                                             key = dashboard.mqtt.keyFileName
-                                            dashboard.daemon.notifyOptionsChanged()
+                                            dashboard.daemon.notifyConfigChanged()
                                         } else createToast(
                                             fragment.requireContext(),
                                             "Key error"
@@ -356,7 +356,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 onCheckedChange = {
                                     enable = it
                                     dashboard.mqtt.ssl = it
-                                    dashboard.daemon.notifyOptionsChanged()
+                                    dashboard.daemon.notifyConfigChanged()
                                 },
                                 modifier = Modifier.padding(vertical = 10.dp)
                             )
@@ -385,12 +385,12 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 ) {
                                                     trust = it
                                                     dashboard.mqtt.sslTrustAll = it
-                                                    dashboard.daemon.notifyOptionsChanged()
+                                                    dashboard.daemon.notifyConfigChanged()
                                                 }
                                         } else {
                                             trust = it
                                             dashboard.mqtt.sslTrustAll = it
-                                            dashboard.daemon.notifyOptionsChanged()
+                                            dashboard.daemon.notifyConfigChanged()
                                         }
                                     }
                                 )
@@ -433,7 +433,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 ca = ""
                                                 dashboard.mqtt.caFileName = ""
                                                 dashboard.mqtt.caCertStr = null
-                                                dashboard.daemon.notifyOptionsChanged()
+                                                dashboard.daemon.notifyConfigChanged()
                                             }
                                         }
                                     ) {
@@ -464,7 +464,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 client = ""
                                                 dashboard.mqtt.clientFileName = ""
                                                 dashboard.mqtt.clientCertStr = null
-                                                dashboard.daemon.notifyOptionsChanged()
+                                                dashboard.daemon.notifyConfigChanged()
                                             }
                                         }
                                     ) {
@@ -495,7 +495,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 key = ""
                                                 dashboard.mqtt.keyFileName = ""
                                                 dashboard.mqtt.clientKeyStr = null
-                                                dashboard.daemon.notifyOptionsChanged()
+                                                dashboard.daemon.notifyConfigChanged()
                                             }
                                         }
                                     ) {
@@ -524,7 +524,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     password.trim().let {
                                         if (dashboard.mqtt.clientKeyPassword != it) {
                                             dashboard.mqtt.clientKeyPassword = it
-                                            dashboard.daemon.notifyOptionsChanged()
+                                            dashboard.daemon.notifyConfigChanged()
                                         }
                                     }
                                 },
@@ -577,7 +577,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             cred = it
                             show = it
                             dashboard.mqtt.includeCred = it
-                            dashboard.daemon.notifyOptionsChanged()
+                            dashboard.daemon.notifyConfigChanged()
                         },
                         modifier = Modifier.padding(vertical = 10.dp)
                     )
@@ -618,7 +618,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 user.trim().let {
                                     if (dashboard.mqtt.username != it) {
                                         dashboard.mqtt.username = it
-                                        dashboard.daemon.notifyOptionsChanged()
+                                        dashboard.daemon.notifyConfigChanged()
                                     }
                                 }
                             },
@@ -652,7 +652,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 pass.trim().let {
                                     if (dashboard.mqtt.pass != it) {
                                         dashboard.mqtt.pass = it
-                                        dashboard.daemon.notifyOptionsChanged()
+                                        dashboard.daemon.notifyConfigChanged()
                                     }
                                 }
                             },

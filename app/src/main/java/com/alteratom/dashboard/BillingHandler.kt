@@ -16,6 +16,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
 
+//TODO: rewrite
 class BillingHandler(val activity: Activity) {
 
     internal var isEnabled = false
@@ -49,7 +50,7 @@ class BillingHandler(val activity: Activity) {
                 if (!Pro.status) {
                     for (e in G.dashboards.slice(2 until G.dashboards.size)) {
                         e.mqtt.isEnabled = false
-                        e.daemon.notifyOptionsChanged()
+                        e.daemon.notifyConfigChanged()
                     }
                 }
 
@@ -240,6 +241,7 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
+    //TODO: rewrite
     inner class BillingConnectionHandler : ConnectionHandler() {
 
         override fun isDoneCheck(): Boolean = when (client.connectionState) {

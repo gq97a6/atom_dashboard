@@ -18,12 +18,4 @@ object IdentityGenerator {
             }
         }
     }
-
-    interface Indexed {
-        val id: Long
-
-        fun reportTakenId() = reportTakenId(id)
-
-        fun obtainNewId(): Long = IdentityGenerator.obtainNewId()
-    }
 }

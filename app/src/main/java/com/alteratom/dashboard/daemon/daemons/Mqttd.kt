@@ -6,24 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.ConnectionHandler
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.objects.Pro
-import com.alteratom.dashboard.objects.Storage.parseSave
-import com.alteratom.dashboard.objects.Storage.prepareSave
-import com.fasterxml.jackson.annotation.JsonIgnore
-import org.bouncycastle.openssl.PEMKeyPair
-import org.bouncycastle.openssl.PEMParser
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter
+import com.alteratom.dashboard.daemon.daemons.mqttdd.MqttConfig
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
-import java.io.InputStreamReader
-import java.security.KeyPair
 import java.security.KeyStore
 import java.security.cert.Certificate
-import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.util.*
 import javax.net.ssl.*
-import kotlin.random.Random
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
@@ -62,7 +52,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         else client.unregisterResources()
     }
 
-    override fun notifyOptionsChanged() {
+    override fun notifyConfigChanged() {
         handler.dispatch("opt_change")
         if (client.isConnected && isEnabled) topicCheck()
     }
@@ -171,7 +161,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     //Server client class
     inner class MqttAndroidClientExtended(
         context: Context,
-        var conProp: Config
+        var conProp: MqttConfig
     ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 
         private var isBusy = false
@@ -333,69 +323,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
-
-    data class Config(
-        var isEnabled: Boolean = Pro.status,
-        var ssl: Boolean = false,
-        var sslTrustAll: Boolean = false,
-        @JsonIgnore
-        var caCert: X509Certificate? = null,
-        var caFileName: String = "",
-        @JsonIgnore
-        var clientCert: X509Certificate? = null,
-        var clientFileName: String = "",
-        @JsonIgnore
-        var clientKey: KeyPair? = null,
-        var keyFileName: String = "",
-        var clientKeyPassword: String = "",
-        var address: String = "tcp://",
-        var port: Int = 1883,
-        var includeCred: Boolean = false,
-        var username: String = "",
-        var pass: String = "",
-        var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
-    ) {
-
-        val uri
-            get() = "$address:$port"
-
-        var caCertStr: String? = null
-            set(value) {
-                field = value
-                caCert = try {
-                    val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
-
-        var clientCertStr: String? = null
-            set(value) {
-                field = value
-                clientCert = try {
-                    val cf = CertificateFactory.getInstance("X.509")
-                    cf.generateCertificate(value?.byteInputStream()) as X509Certificate
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
-
-        var clientKeyStr: String? = null
-            set(value) {
-                field = value
-                clientKey = try {
-                    JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value?.byteInputStream())).readObject() as PEMKeyPair)
-                } catch (e: Exception) {
-                    field = null
-                    null
-                }
-            }
-
-        fun deepCopy(): Config? = parseSave(this.prepareSave())
-    }
 
     class DaemonizedConfig(
         var isEnabled: Boolean = true,

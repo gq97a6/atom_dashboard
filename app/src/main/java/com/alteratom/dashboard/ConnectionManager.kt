@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.lifecycle.MutableLiveData
 
 //TODO: remove
-abstract class ConnectionHandler(private var interval: Long = 500) {
+abstract class ConnectionManager(private var interval: Long = 500) {
 
     val isDone = MutableLiveData(false)
     private var isDispatchScheduled = false
@@ -28,4 +28,8 @@ abstract class ConnectionHandler(private var interval: Long = 500) {
 
     protected abstract fun isDoneCheck(): Boolean
     protected abstract fun handleDispatch()
+
+    fun dismiss() {
+
+    }
 }

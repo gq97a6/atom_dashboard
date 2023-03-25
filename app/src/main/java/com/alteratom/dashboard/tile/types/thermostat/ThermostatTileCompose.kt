@@ -41,7 +41,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         tempSub = it
                         tile.mqtt.subs["temp"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -56,7 +56,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         tempSetSub = it
                         tile.mqtt.subs["temp_set"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -71,13 +71,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         tempSetPub = it
                         tile.mqtt.pubs["temp_set"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             tempSetPub = tempSetSub
                             tile.mqtt.pubs["temp_set"] = tempSetSub
-                            dashboard.daemon.notifyOptionsChanged()
+                            dashboard.daemon.notifyConfigChanged()
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),
@@ -101,7 +101,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         humiSub = it
                         tile.mqtt.subs["humi"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -121,7 +121,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                             onValueChange = {
                                 humiSetSub = it
                                 tile.mqtt.subs["humi_set"] = it
-                                dashboard.daemon.notifyOptionsChanged()
+                                dashboard.daemon.notifyConfigChanged()
                             }
                         )
 
@@ -136,13 +136,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                             onValueChange = {
                                 humiSetPub = it
                                 tile.mqtt.pubs["humi_set"] = it
-                                dashboard.daemon.notifyOptionsChanged()
+                                dashboard.daemon.notifyConfigChanged()
                             },
                             trailingIcon = {
                                 IconButton(onClick = {
                                     humiSetPub = humiSetSub
                                     tile.mqtt.pubs["humi_set"] = humiSetSub
-                                    dashboard.daemon.notifyOptionsChanged()
+                                    dashboard.daemon.notifyConfigChanged()
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.il_file_copy),
@@ -168,7 +168,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         modeSub = it
                         tile.mqtt.subs["mode"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -179,13 +179,13 @@ object ThermostatTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         modePub = it
                         tile.mqtt.pubs["mode"] = it
-                        dashboard.daemon.notifyOptionsChanged()
+                        dashboard.daemon.notifyConfigChanged()
                     },
                     trailingIcon = {
                         IconButton(onClick = {
                             modePub = modeSub
                             tile.mqtt.pubs["mode"] = modeSub
-                            dashboard.daemon.notifyOptionsChanged()
+                            dashboard.daemon.notifyConfigChanged()
                         }) {
                             Icon(
                                 painterResource(R.drawable.il_file_copy),

@@ -6,10 +6,12 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.Bluetoothd
 import com.alteratom.dashboard.daemon.daemons.Mqttd
 import com.alteratom.dashboard.objects.IdentityGenerator
+import com.alteratom.dashboard.objects.IdentityGenerator.obtainNewId
+import com.alteratom.dashboard.objects.IdentityGenerator.reportTakenId
 
-abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerator.Indexed {
+abstract class Daemon(val context: Context, var d: Dashboard) {
 
-    override val id = obtainNewId()
+    val id = obtainNewId()
 
     var isDischarged = false
     protected abstract val isEnabled: Boolean
@@ -29,18 +31,21 @@ abstract class Daemon(val context: Context, var d: Dashboard) : IdentityGenerato
     }
 
     init {
-        reportTakenId()
+        reportTakenId(id)
     }
 
+    //Notify daemon when it is assigned to a dashboard
     open fun notifyAssigned() {
         isDischarged = false
     }
 
+    //Notify daemon when it is discharged from
     open fun notifyDischarged() {
         isDischarged = true
     }
 
-    open fun notifyOptionsChanged() {}
+    //Notify daemon when it's config has changed
+    open fun notifyConfigChanged() {}
 
     enum class Type { MQTTD, BLUETOOTHD }
 }

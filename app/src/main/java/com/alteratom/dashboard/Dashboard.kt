@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.daemon.daemons.Mqttd
+import com.alteratom.dashboard.daemon.daemons.mqttdd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.objects.G
@@ -41,7 +41,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
     //Configuration for each daemon
     @JsonAlias("mqttData")
-    var mqtt = Mqttd.Config()
+    var mqtt = MqttConfig()
 
     @JsonIgnore
     lateinit var daemon: Daemon

@@ -152,7 +152,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         stateSub = it
                         tile.mqtt.subs["state"] = it
-                        G.dashboard.daemon.notifyOptionsChanged()
+                        G.dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -191,7 +191,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         brightSub = it
                         tile.mqtt.subs["bright"] = it
-                        G.dashboard.daemon.notifyOptionsChanged()
+                        G.dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -230,7 +230,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         colorSub = it
                         tile.mqtt.subs["color"] = it
-                        G.dashboard.daemon.notifyOptionsChanged()
+                        G.dashboard.daemon.notifyConfigChanged()
                     }
                 )
 
@@ -269,7 +269,7 @@ object LightsTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         modeSub = it
                         tile.mqtt.subs["mode"] = it
-                        G.dashboard.daemon.notifyOptionsChanged()
+                        G.dashboard.daemon.notifyConfigChanged()
                     }
                 )
 

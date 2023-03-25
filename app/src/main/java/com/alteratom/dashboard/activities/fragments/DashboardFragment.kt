@@ -58,7 +58,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
 
-        (activity as MainActivity).onBackPressedBoolean = {
+        (activity as MainActivity).doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
                 toolBarHandler.toggleTools()
                 true

@@ -40,7 +40,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         setupRecyclerView()
 
-        (activity as MainActivity).onBackPressedBoolean = {
+        (activity as MainActivity).doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
                 toolBarHandler.toggleTools()
                 true

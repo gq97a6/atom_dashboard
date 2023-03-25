@@ -58,8 +58,8 @@ class Theme {
                 ).isAppearanceLightStatusBars = !isDark
 
                 it.window.statusBarColor = colorPallet.background
-            } catch (_: Exception) {
-
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 

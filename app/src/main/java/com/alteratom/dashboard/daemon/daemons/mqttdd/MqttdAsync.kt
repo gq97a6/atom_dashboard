@@ -122,22 +122,20 @@ class MqttdAsync(context: Context, dashboard: Dashboard) : Daemon(context, dashb
         override fun isDoneCheck(): Boolean =
             client.isConnected == isEnabled && (client.conProp == d.mqtt || !isEnabled)
 
-        override fun handleDispatch() {
+        override fun handleDispatch(reason: String) {
             if (isEnabled) {
-                if (client.isConnected) client.disconnectAttempt(true)
+                if (client.isConnected || reason == "success") client.disconnectAttempt(true)
                 else {
-                    if (client.conProp.clientId != d.mqtt.clientId || client.conProp.uri != d.mqtt.uri)
-                        client =
-                            MqttClient(
-                                context,
-                                this@MqttdAsync
-                            )
+                    if (client.conProp.clientId != d.mqtt.clientId ||
+                        client.conProp.uri != d.mqtt.uri ||
+                        client.isClosed
+                    ) client = MqttClient(context, this@MqttdAsync)
+                    else client.conProp = d.mqtt.copy()
 
-                    client.conProp = d.mqtt.copy()
                     client.connectAttempt()
                 }
-            } else {
-                client.disconnectAttempt()
+            } else if (!client.isClosed || client.isConnected) {
+                client.disconnectAttempt(true)
             }
         }
     }

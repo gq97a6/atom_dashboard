@@ -289,7 +289,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     }
                 })
             } catch (e: Exception) {
-                run {}
+                e.printStackTrace()
             }
 
             //isBusy = false
@@ -315,7 +315,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 })
 
                 if (close) close()
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             //isBusy = false

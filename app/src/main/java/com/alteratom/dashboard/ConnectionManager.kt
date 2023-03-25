@@ -16,7 +16,12 @@ abstract class ConnectionManager(private var interval: Long = 500) {
         if (isDone.value != isDoneResult) isDone.postValue(isDoneResult)
 
         if (!isDoneResult && !isDispatchScheduled) {
-            handleDispatch()
+            try {
+                handleDispatch(reason)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             Handler(Looper.getMainLooper()).postDelayed({
                 isDispatchScheduled = false
                 dispatch("internal")
@@ -26,7 +31,7 @@ abstract class ConnectionManager(private var interval: Long = 500) {
     }
 
     protected abstract fun isDoneCheck(): Boolean
-    protected abstract fun handleDispatch()
+    protected abstract fun handleDispatch(reason: String)
 
     fun dismiss() {
 

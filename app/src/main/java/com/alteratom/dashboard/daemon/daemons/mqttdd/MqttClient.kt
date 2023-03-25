@@ -17,6 +17,7 @@ class MqttClient(
 ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 
     var topics: MutableList<Pair<String, Int>> = mutableListOf()
+    var isClosed = false
 
     override fun isConnected() = try {
         super.isConnected()
@@ -85,10 +86,14 @@ class MqttClient(
                 asyncActionToken: IMqttToken?,
                 exception: Throwable?
             ) {
+                run {}
             }
         })
 
-        if (close) close()
+        if (close) {
+            close()
+            isClosed = true
+        }
     }
 
     private fun setupSSL(options: MqttConnectOptions) {

@@ -71,7 +71,7 @@ interface Daemonized {
 
         try {
             onReceive(data, jsonResult)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
         }
     }
 

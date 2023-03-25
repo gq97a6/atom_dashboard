@@ -17,12 +17,14 @@ object DaemonsManager {
             daemon = Daemon(ForegroundService.service as Context, this, type)
             daemon.notifyAssigned()
         }
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 
     fun notifyRemoved(dashboard: Dashboard) = try {
         dashboard.daemon.notifyDischarged()
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 
 }

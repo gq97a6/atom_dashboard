@@ -14,7 +14,8 @@ object Pro {
         try {
             File("$rootFolder/license").writeText("")
             updateStatus()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -22,7 +23,8 @@ object Pro {
         try {
             File("$rootFolder/license").delete()
             updateStatus()
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

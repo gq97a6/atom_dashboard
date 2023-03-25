@@ -17,7 +17,8 @@ object Storage {
         try {
             val path = path[this::class]
             File(path).writeText(save)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -25,7 +26,8 @@ object Storage {
         try {
             val path = path[T::class]
             File(path).writeText(save)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

@@ -36,8 +36,8 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.daemon.daemons.Mqttd
-import com.alteratom.dashboard.daemon.daemons.mqttdd.MqttConfig
+import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
+import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboardIndex

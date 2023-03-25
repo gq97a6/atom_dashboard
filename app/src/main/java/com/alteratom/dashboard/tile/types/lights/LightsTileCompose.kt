@@ -12,8 +12,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
@@ -22,11 +20,13 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose.PairList
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.compose_global.*
-import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.tile
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable

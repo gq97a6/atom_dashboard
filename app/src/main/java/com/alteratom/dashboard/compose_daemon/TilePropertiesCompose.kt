@@ -20,9 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alteratom.R
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
@@ -32,6 +29,9 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_global.*
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 

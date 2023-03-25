@@ -35,8 +35,8 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.activities.PayActivity
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.*

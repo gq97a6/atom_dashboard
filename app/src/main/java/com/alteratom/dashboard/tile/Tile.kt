@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.*
+import com.alteratom.dashboard.ForegroundService.Companion.service
+import com.alteratom.dashboard.Theme.ColorPallet
+import com.alteratom.dashboard.daemon.Daemonized
+import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
+import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.Theme.ColorPallet
-import com.alteratom.dashboard.ForegroundService.Companion.service
-import com.alteratom.dashboard.daemon.Daemonized
-import com.alteratom.dashboard.daemon.daemons.Mqttd
-import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.fasterxml.jackson.annotation.JsonAlias
@@ -46,7 +46,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
         get() = theme.a.getColorPallet(hsv, true)
 
     @JsonAlias("mqttData")
-    override val mqtt = Mqttd.DaemonizedConfig()
+    override val mqtt: MqttDaemonizedConfig = MqttDaemonizedConfig()
 
     companion object {
         fun MutableList<Tile>.byId(id: Long): Tile? =

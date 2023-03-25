@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.daemon.daemons.mqttdd
+package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,7 +12,7 @@ import javax.net.ssl.*
 //Server client class
 class MqttClient(
     context: Context,
-    var server: MqttdAsync,
+    var server: Mqttd,
     var conProp: MqttConfig = server.d.mqtt.copy()
 ) : MqttAndroidClient(context, conProp.uri, conProp.clientId) {
 

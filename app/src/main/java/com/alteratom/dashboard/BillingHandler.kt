@@ -40,7 +40,7 @@ class BillingHandler(val activity: Activity) {
                         0,
                         {
                             !it.isAcknowledged || (!Pro.status && it.products.contains(
-                                BillingHandler.PRO
+                                PRO
                             ))
                         }
                     )

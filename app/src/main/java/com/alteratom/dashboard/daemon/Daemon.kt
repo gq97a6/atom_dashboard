@@ -4,8 +4,7 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.Bluetoothd
-import com.alteratom.dashboard.daemon.daemons.Mqttd
-import com.alteratom.dashboard.objects.IdentityGenerator
+import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.IdentityGenerator.obtainNewId
 import com.alteratom.dashboard.objects.IdentityGenerator.reportTakenId
 

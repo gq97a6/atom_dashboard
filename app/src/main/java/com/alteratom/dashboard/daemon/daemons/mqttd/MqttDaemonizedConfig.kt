@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.daemon.daemons.mqttdd
+package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import java.util.*
 

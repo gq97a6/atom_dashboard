@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.TileIconFragment
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
@@ -18,11 +17,12 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
-import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
+import com.alteratom.dashboard.objects.G.tile
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

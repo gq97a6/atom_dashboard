@@ -1,11 +1,11 @@
 package com.alteratom.dashboard.objects
 
 import android.app.Activity
+import com.alteratom.dashboard.ForegroundService.Companion.service
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Storage.saveToFile
-import com.alteratom.dashboard.ForegroundService.Companion.service
 
 object ActivityHandler {
 

@@ -7,13 +7,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication0
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
 import com.alteratom.dashboard.compose_global.*
-import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
+import com.alteratom.dashboard.objects.G.tile
 
 object ColorTileCompose : DaemonBasedCompose {
     @Composable

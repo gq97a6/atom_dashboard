@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.daemon.daemons.mqttdd.MqttConfig
+import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
 import com.alteratom.dashboard.objects.G

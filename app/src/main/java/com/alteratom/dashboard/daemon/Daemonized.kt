@@ -2,7 +2,8 @@ package com.alteratom.dashboard.daemon
 
 import androidx.annotation.IntRange
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.daemon.daemons.Mqttd
+import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
+import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.Storage
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -13,7 +14,7 @@ interface Daemonized {
     var dashboard: Dashboard?
 
     //Configuration for each daemon
-    val mqtt: Mqttd.DaemonizedConfig
+    val mqtt: MqttDaemonizedConfig
 
     fun onSend(
         topic: String?,
@@ -75,7 +76,5 @@ interface Daemonized {
         }
     }
 
-    class Data {
-
-    }
+    class Data
 }

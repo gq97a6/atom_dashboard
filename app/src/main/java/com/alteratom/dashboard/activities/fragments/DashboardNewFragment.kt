@@ -28,15 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.setCurrentDashboard
-import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.setCurrentDashboard
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import kotlin.random.Random
 
 class DashboardNewFragment : Fragment() {

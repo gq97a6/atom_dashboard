@@ -32,11 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.switcher.TileSwitcher
 
 class TilePropertiesFragment : Fragment() {

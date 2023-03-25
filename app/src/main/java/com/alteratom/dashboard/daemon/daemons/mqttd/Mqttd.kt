@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.daemon.daemons.mqttdd
+package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttToken
 import org.eclipse.paho.client.mqttv3.MqttMessage
 
-class MqttdAsync(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
+class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
     var manager = Manager()
     var client: MqttClient = MqttClient(context, this)
@@ -129,7 +129,7 @@ class MqttdAsync(context: Context, dashboard: Dashboard) : Daemon(context, dashb
                     if (client.conProp.clientId != d.mqtt.clientId ||
                         client.conProp.uri != d.mqtt.uri ||
                         client.isClosed
-                    ) client = MqttClient(context, this@MqttdAsync)
+                    ) client = MqttClient(context, this@Mqttd)
                     else client.conProp = d.mqtt.copy()
 
                     client.connectAttempt()

@@ -39,6 +39,7 @@ class MqttClient(
             override fun connectionLost(cause: Throwable?) {
                 topics = mutableListOf()
                 server.manager.dispatch("lost")
+                server.d.log.newEntry("lost")//TODO: remove
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -63,13 +64,14 @@ class MqttClient(
             override fun onSuccess(asyncActionToken: IMqttToken?) {
                 server.topicCheck()
                 server.manager.dispatch("success")
+                server.d.log.newEntry("con_succ")//TODO: remove
             }
 
             override fun onFailure(
                 asyncActionToken: IMqttToken?,
                 exception: Throwable?
             ) {
-                run {}
+                server.d.log.newEntry("con_fail")//TODO: remove
             }
         })
     }
@@ -80,13 +82,14 @@ class MqttClient(
                 unregisterResources()
                 setCallback(null)
                 topics = mutableListOf()
+                server.d.log.newEntry("disc_succ")//TODO: remove
             }
 
             override fun onFailure(
                 asyncActionToken: IMqttToken?,
                 exception: Throwable?
             ) {
-                run {}
+                server.d.log.newEntry("disc_fail")//TODO: remove
             }
         })
 

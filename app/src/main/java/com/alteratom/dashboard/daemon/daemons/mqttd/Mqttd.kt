@@ -124,17 +124,25 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
         override fun handleDispatch(reason: String) {
             if (isEnabled) {
-                if (client.isConnected || reason == "success") client.disconnectAttempt(true)
+                if (client.isConnected || reason == "success") {
+                    d.log.newEntry("close")//TODO: remove
+                    client.disconnectAttempt(true)
+                }
                 else {
                     if (client.conProp.clientId != d.mqtt.clientId ||
                         client.conProp.uri != d.mqtt.uri ||
                         client.isClosed
-                    ) client = MqttClient(context, this@Mqttd)
+                    ) {
+                        client = MqttClient(context, this@Mqttd)
+                        d.log.newEntry("new_client")//TODO: remove
+                    }
                     else client.conProp = d.mqtt.copy()
 
+                    d.log.newEntry("con")//TODO: remove
                     client.connectAttempt()
                 }
             } else if (!client.isClosed || client.isConnected) {
+                d.log.newEntry("close")//TODO: remove
                 client.disconnectAttempt(true)
             }
         }

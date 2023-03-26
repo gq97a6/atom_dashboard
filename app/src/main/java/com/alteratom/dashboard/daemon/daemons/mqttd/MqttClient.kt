@@ -49,6 +49,7 @@ class MqttClient(
         val options = MqttConnectOptions()
 
         options.isCleanSession = true
+        options.keepAliveInterval = 30
 
         if (conProp.includeCred) {
             options.userName = conProp.username

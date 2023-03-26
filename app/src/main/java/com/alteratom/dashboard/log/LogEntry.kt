@@ -3,6 +3,7 @@ package com.alteratom.dashboard.log
 import android.annotation.SuppressLint
 import android.widget.TextView
 import com.alteratom.R
+import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -17,7 +18,8 @@ class LogEntry(
     @JsonIgnore
     override val layout = R.layout.item_log
 
-    private val time = SimpleDateFormat("hh:mm:ss").format(Date())
+    private val time =
+        SimpleDateFormat(if (settings.militaryTime) "HH:mm:ss" else "hh:mm:ss").format(Date())
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)

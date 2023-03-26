@@ -5,6 +5,7 @@ import android.view.View.VISIBLE
 import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTimeBinding
@@ -22,7 +23,7 @@ class TimeTile : Tile() {
     override var iconKey = "il_time_clock"
 
     var isDate = false
-    var isMilitary = true
+    var isMilitary = settings.militaryTime
 
     var value = ""
         set(value) {

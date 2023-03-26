@@ -64,7 +64,7 @@ class MqttClient(
             override fun onSuccess(asyncActionToken: IMqttToken?) {
                 server.topicCheck()
                 server.manager.dispatch("success")
-                server.d.log.newEntry("con_succ")//TODO: remove
+                server.d.log.newEntry("con_ok")//TODO: remove
             }
 
             override fun onFailure(
@@ -82,7 +82,7 @@ class MqttClient(
                 unregisterResources()
                 setCallback(null)
                 topics = mutableListOf()
-                server.d.log.newEntry("disc_succ")//TODO: remove
+                server.d.log.newEntry("disc_ok")//TODO: remove
             }
 
             override fun onFailure(

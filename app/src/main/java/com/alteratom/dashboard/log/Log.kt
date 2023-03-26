@@ -6,7 +6,7 @@ class Log {
 
     fun newEntry(text: String) {
         list.add(0, LogEntry(text))
-        if (list.size > 30) list.removeLast()
+        if (list.size > 100) list.removeLast()
     }
 
     fun flush() = list.clear()

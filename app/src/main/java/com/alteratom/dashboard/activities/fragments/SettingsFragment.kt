@@ -242,6 +242,22 @@ class SettingsFragment : Fragment() {
                                             settings.hideNav = it
                                         },
                                     )
+
+                                    var military by remember { mutableStateOf(settings.militaryTime) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "24-hour log time format:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = switch,
+                                        onCheckedChange = {
+                                            military = it
+                                            settings.militaryTime = military
+                                        },
+                                    )
                                 }
                             }
 

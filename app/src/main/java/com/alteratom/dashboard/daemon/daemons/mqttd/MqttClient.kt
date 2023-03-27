@@ -39,7 +39,7 @@ class MqttClient(
             override fun connectionLost(cause: Throwable?) {
                 topics = mutableListOf()
                 server.manager.dispatch("lost")
-                server.d.log.newEntry("lost")//TODO: remove
+                server.d.log.newEntry("lost: ${cause?.message + "||" + cause?.cause}")//TODO: remove
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {

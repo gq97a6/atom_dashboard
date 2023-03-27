@@ -150,3 +150,66 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 }
+
+//val sslConfig = MqttClientSslConfig.builder()
+//.mqttConnectTimeout(10000, TimeUnit.MILLISECONDS)
+//.socketConnectTimeout(10000, TimeUnit.MILLISECONDS)
+//.webSocketConfig(ws)
+//.sslConfig(sslConfig)
+//val use5 = false
+//
+//val transportConfig = MqttClientTransportConfig.builder()
+//    .serverAddress(InetSocketAddress("alteratom.com", 1883))
+//    .build()
+//
+//val client = MqttClient.builder()
+//    .identifier(UUID.randomUUID().toString())
+//    .transportConfig(transportConfig)
+//    .addDisconnectedListener {
+//        println("disconnected!")
+//    }
+//    .addConnectedListener {
+//        println("connected!")
+//    }
+//    .useMqttVersion5()
+//    .buildAsync()
+//
+//client.connectWith()
+//.simpleAuth()
+//.username("user")
+//.password("abc".toByteArray())
+//.applySimpleAuth()
+//.send()
+//
+//client.subscribeWith()
+//.topicFilter("gda_switch0s")
+//.qos(MqttQos.AT_LEAST_ONCE)
+//.callback { x: Mqtt5Publish? -> println(x) }
+//.send()
+//
+//runBlocking {
+//    client.publishWith()
+//        .topic("gda_switch0s")
+//        .qos(MqttQos.AT_MOST_ONCE)
+//        .payload("1".toByteArray())
+//        .retain(true)
+//        .send()
+//
+//    delay(3000)
+//
+//    client.publishWith()
+//        .topic("gda_switch0s")
+//        .qos(MqttQos.AT_LEAST_ONCE)
+//        .payload("1".toByteArray())
+//        .retain(false)
+//        .send()
+//
+//    delay(3000)
+//
+//    client.publishWith()
+//        .topic("gda_switch0s")
+//        .qos(MqttQos.EXACTLY_ONCE)
+//        .payload("1".toByteArray())
+//        .retain(true)
+//        .send()
+//}

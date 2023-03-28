@@ -88,7 +88,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     var conStatus by remember { mutableStateOf("") }
 
                     dashboard.daemon.let {
-                        it.isDone.observe(fragment.viewLifecycleOwner) { _ ->
+                        it.isStable.observe(fragment.viewLifecycleOwner) { _ ->
                             when (it) {
                                 is Mqttd -> {
                                     conStatus = when (it.status) {

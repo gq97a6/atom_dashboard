@@ -71,8 +71,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
         //Set dashboard status
+        //TODO: rewrite|check
         dashboard.daemon.let {
-            it.isDone.observe(viewLifecycleOwner) { isDone ->
+            it.isStable.observe(viewLifecycleOwner) { isDone ->
                 b.dSslStatus.visibility = GONE
 
                 when (it) {

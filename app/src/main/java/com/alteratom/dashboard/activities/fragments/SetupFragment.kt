@@ -118,6 +118,7 @@ class SetupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //TODO: check if has to be cancelled
         CoroutineScope(Dispatchers.Default).launch {
             if (service?.isStarted == true) onServiceStarted()
             else (activity as MainActivity).apply {
@@ -133,8 +134,6 @@ class SetupFragment : Fragment() {
                 //Exit
                 onServiceStarted()
             }
-
-            cancel()
         }
     }
 

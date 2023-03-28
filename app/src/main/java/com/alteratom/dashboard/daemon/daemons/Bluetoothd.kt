@@ -7,6 +7,6 @@ import com.alteratom.dashboard.daemon.Daemon
 
 class Bluetoothd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
     override var isEnabled = false
-    override val isDone = MutableLiveData(false)
+    override val isStable = MutableLiveData(false)
     override val status = MutableLiveData(false)
 }

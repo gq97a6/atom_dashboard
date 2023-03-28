@@ -46,8 +46,10 @@ class TextTile : Tile() {
         super.onClick(v, e)
 
         if (mqtt.pubs["base"].isNullOrEmpty()) return
+
+        //TODO: check if needed
         (dashboard?.daemon as? Mqttd?)?.let {
-            if (!it.client.isConnected) return
+            if (it.status != Mqttd.Status.CONNECTED) return
         }
 
         if (mqtt.payloadIsVar) {

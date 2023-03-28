@@ -15,7 +15,7 @@ abstract class Daemon(val context: Context, var d: Dashboard) {
     var isDischarged = false
     protected abstract val isEnabled: Boolean
 
-    abstract val isDone: MutableLiveData<Boolean>
+    abstract val isStable: MutableLiveData<Boolean>
     abstract val status: Any
 
     companion object {

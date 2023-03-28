@@ -30,10 +30,7 @@ abstract class ConnectionManager(private var interval: Long = 500) {
         }
     }
 
+    //Check if stable or dispatch is needed
     protected abstract fun isDoneCheck(): Boolean
     protected abstract fun handleDispatch(reason: String)
-
-    fun dismiss() {
-
-    }
 }

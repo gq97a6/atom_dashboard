@@ -1,14 +1,5 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
-import android.annotation.SuppressLint
-import android.content.Context
-import org.eclipse.paho.android.service.MqttAndroidClient
-import org.eclipse.paho.client.mqttv3.*
-import java.security.KeyStore
-import java.security.cert.Certificate
-import java.security.cert.X509Certificate
-import javax.net.ssl.*
-
 //Server client class
 //class MqttClient(
 //    context: Context,

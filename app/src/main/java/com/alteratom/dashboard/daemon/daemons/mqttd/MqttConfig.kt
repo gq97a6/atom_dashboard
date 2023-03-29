@@ -27,14 +27,13 @@ data class MqttConfig(
     var clientKey: KeyPair? = null,
     var keyFileName: String = "",
     var clientKeyPassword: String = "",
-    var address: String = "tcp://",
+    var address: String = "",
     var port: Int = 1883,
     var includeCred: Boolean = false,
     var username: String = "",
     var pass: String = "",
     var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
 ) {
-
     val uri
         get() = "$address:$port"
 
@@ -72,6 +71,16 @@ data class MqttConfig(
                 null
             }
         }
+
+    init {
+        //TODO: temporary fix
+        try {
+            address = address.replace("tcp://", "")
+            address = address.replace("ssl://", "")
+            address = address.replace("mqtt://", "")
+        }catch (_:Exception) {
+        }
+    }
 
     fun deepCopy(): MqttConfig? = Storage.parseSave(this.prepareSave())
 }

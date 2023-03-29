@@ -49,7 +49,7 @@ class TextTile : Tile() {
 
         //TODO: check if needed
         (dashboard?.daemon as? Mqttd?)?.let {
-            if (it.status != Mqttd.Status.CONNECTED) return
+            if (it.state != Mqttd.State.CONNECTED) return
         }
 
         if (mqtt.payloadIsVar) {

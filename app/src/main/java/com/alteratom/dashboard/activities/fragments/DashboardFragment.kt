@@ -19,6 +19,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.*
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.objects.G.dashboard
@@ -51,12 +52,20 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         return b.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
+
+        //Override onBackPress if required
+        //(activity as MainActivity).doOverrideOnBackPress = {
+        //    !adapter.editMode.isNone.apply {
+        //        if (this) toolBarHandler.toggleTools()
+        //    }
+        //}
 
         (activity as MainActivity).doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
@@ -70,62 +79,19 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         //Set dashboard name
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
-        //Set dashboard status
-        //TODO: rewrite|check
-        dashboard.daemon.let {
-            it.isStable.observe(viewLifecycleOwner) { isDone ->
-                b.dSslStatus.visibility = GONE
-
-                when (it) {
-                    is Mqttd -> {
-                        b.dStatus.text = when (it.status) {
-                            Mqttd.Status.DISCONNECTED -> "DISCONNECTED"
-                            Mqttd.Status.FAILED -> "FAILED TO CONNECT"
-                            Mqttd.Status.ATTEMPTING -> "ATTEMPTING"
-                            Mqttd.Status.CONNECTED -> "CONNECTED"
-                            Mqttd.Status.CONNECTED_SSL -> {
-                                b.dSslStatus.visibility = VISIBLE
-                                "CONNECTED"
-                            }
-                        }
-                    }
-                }
-            }
+        //Update dashboard status on change
+        dashboard.daemon.statePing.observe(viewLifecycleOwner) {
+            updateStatus(dashboard.daemon)
         }
 
+        //Hide navigation arrows if required
         if (dashboards.size < 2 || settings.hideNav) {
             b.dLeft.visibility = GONE
             b.dRight.visibility = GONE
         }
 
-        lifecycleScope.launch {
-            delay(100)
-            while (true) {
-                for (tile in adapter.list) {
-                    tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.let {
-                        tile.mqtt.lastReceive?.time.let { lr ->
-                            val t = Date().time - (lr ?: 0)
-                            if (lr != null) it.text = (t / 1000).let { s ->
-                                if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
-                                else (t / 60000).let { m ->
-                                    if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
-                                    else (t / 3600000).let { h ->
-                                        if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
-                                        else (t / 86400000).let { d ->
-                                            if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
-                                            else (t / 31536000000).let { y ->
-                                                if (y == 1L) "$y year ago" else "$y years ago"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                delay(1000)
-            }
-        }
+        //Update tile timers
+        lifecycleScope.launch { updateTileTimers() }
 
         val addOnClick: () -> Unit = {
             fm.replaceWith(TileNewFragment())
@@ -306,6 +272,59 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 }
                 logBarAnimator.start()
             }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun updateStatus(daemon: Daemon) {
+        b.dSslStatus.visibility = GONE
+        when (daemon) {
+            is Mqttd -> daemon.updateStatus()
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private fun Mqttd.updateStatus() {
+        b.dStatus.text = when (this.state) {
+            Mqttd.State.DISCONNECTED -> "DISCONNECTED"
+            Mqttd.State.FAILED -> "FAILED TO CONNECT"
+            Mqttd.State.ATTEMPTING -> "ATTEMPTING"
+            Mqttd.State.CONNECTED -> "CONNECTED"
+            Mqttd.State.CONNECTED_SSL -> {
+                b.dSslStatus.visibility = VISIBLE
+                "CONNECTED"
+            }
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    private suspend fun updateTileTimers() {
+        while (true) {
+            for (tile in adapter.list) {
+                val time = Date().time - (tile.mqtt.lastReceive?.time ?: return)
+
+                (time / 1000).let { s ->
+                    if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
+                    else (time / 60000).let { m ->
+                        if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
+                        else (time / 3600000).let { h ->
+                            if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
+                            else (time / 86400000).let { d ->
+                                if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
+                                else (time / 31536000000).let { y ->
+                                    if (y == 1L) "$y year ago" else "$y years ago"
+                                }
+                            }
+                        }
+                    }
+                }.apply {
+                    tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.text = this
+                }
+            }
+            delay(1000)
         }
     }
 }

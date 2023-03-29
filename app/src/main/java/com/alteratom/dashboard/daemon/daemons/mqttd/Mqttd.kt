@@ -4,27 +4,25 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
-import com.hivemq.client.mqtt.MqttClientState
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    var server: Mqtt3Server = Mqtt3Server(this)
-    var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
+    private var server: Mqtt3Server = Mqtt3Server(this)
+    //var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
 
     public override val isEnabled
         get() = d.mqtt.isEnabled && !isDischarged
 
-    override val isStable: MutableLiveData<Boolean>
-        get() = server.isStable
+    override val statePing: MutableLiveData<Nothing?>
+        get() = server.statePing
 
-    override val status: Status
-        get() = when (server.client.state) {
-            MqttClientState.CONNECTED -> Status.CONNECTED
-            MqttClientState.DISCONNECTED -> Status.DISCONNECTED
-            MqttClientState.CONNECTING -> Status.ATTEMPTING
-            MqttClientState.DISCONNECTED_RECONNECT -> Status.ATTEMPTING
-            MqttClientState.CONNECTING_RECONNECT -> Status.ATTEMPTING
+    override val state: State
+        get() = when (server.state) {
+            Mqtt3Server.State.CONNECTED -> State.CONNECTED
+            Mqtt3Server.State.CONNECTED_SSL -> State.CONNECTED_SSL
+            Mqtt3Server.State.ATTEMPTING -> State.ATTEMPTING
+            Mqtt3Server.State.DISCONNECTED -> State.DISCONNECTED
+            Mqtt3Server.State.FAILED -> State.FAILED
         }
 
     //if (!isEnabled) Status.DISCONNECTED
@@ -126,5 +124,5 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         //for (t in subTopics) subscribe(t.first, t.second)
     }
 
-    enum class Status { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
+    enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 }

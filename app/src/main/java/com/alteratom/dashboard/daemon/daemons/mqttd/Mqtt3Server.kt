@@ -8,14 +8,23 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3Client
 import kotlinx.coroutines.*
 import java.net.InetSocketAddress
 
-//Server client class
-class Mqtt3Server(
-    private var daemon: Mqttd
-) {
+//Server class
+class Mqtt3Server(private var daemon: Mqttd) {
 
     var client: Mqtt3AsyncClient = Mqtt3Client.builder().buildAsync()
     var currentConfig = MqttConfig()
-    var isStable: MutableLiveData<Boolean> = MutableLiveData(true)
+
+    var statePing = MutableLiveData(null)
+
+    val state: State
+        get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
+                else when (client.state) {
+                    MqttClientState.CONNECTED -> State.CONNECTED
+                    MqttClientState.DISCONNECTED -> State.DISCONNECTED
+                    MqttClientState.CONNECTING -> State.ATTEMPTING
+                    MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
+                    MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
+                }
 
     private fun connectAttempt() {
         val config = daemon.d.mqtt.copy()
@@ -27,12 +36,11 @@ class Mqtt3Server(
             .identifier(config.clientId)
             .transportConfig(transportConfig)
             .addDisconnectedListener {
-                run {}
-                isStable.postValue(true)
+                statePing.postValue(null)
             }
             .addConnectedListener {
+                statePing.postValue(null)
                 currentConfig = config
-                isStable.postValue(true)
             }
             .buildAsync()
 
@@ -66,10 +74,8 @@ class Mqtt3Server(
 
         dispatchJob = GlobalScope.launch(Dispatchers.IO) {
             try {
-                isStable.postValue(false)
                 //withTimeout(10000) { handleDispatch() }
                 handleDispatch()
-                isStable.postValue(true)
             } catch (e: Exception) { //Create another coroutine after a delay
                 e.printStackTrace()
                 delay(1000)
@@ -79,6 +85,7 @@ class Mqtt3Server(
     }
 
     private suspend fun handleDispatch() {
+        statePing.postValue(null)
         while (true) {
             if (daemon.d.mqtt.isEnabled && !daemon.isDischarged) when (client.state) {
                 MqttClientState.CONNECTED -> { //check correct config and disconnect if wrong
@@ -88,9 +95,9 @@ class Mqtt3Server(
                 MqttClientState.DISCONNECTED -> { //set config and connect
                     connectAttempt()
                 }
-                MqttClientState.CONNECTING -> {}
-                MqttClientState.DISCONNECTED_RECONNECT -> {}
-                MqttClientState.CONNECTING_RECONNECT -> {}
+                MqttClientState.CONNECTING -> {} //recheck
+                MqttClientState.DISCONNECTED_RECONNECT -> {} //recheck
+                MqttClientState.CONNECTING_RECONNECT -> {} //recheck
             } else when (client.state) {
                 MqttClientState.CONNECTED -> disconnectAttempt()
                 MqttClientState.DISCONNECTED -> break
@@ -101,7 +108,10 @@ class Mqtt3Server(
 
             delay(1000)
         }
+        statePing.postValue(null)
     }
+
+    enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
     //val sslConfig = MqttClientSslConfig.builder()
     //.mqttConnectTimeout(10000, TimeUnit.MILLISECONDS)

@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
@@ -88,15 +89,15 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     var conStatus by remember { mutableStateOf("") }
 
                     dashboard.daemon.let {
-                        it.isStable.observe(fragment.viewLifecycleOwner) { _ ->
+                        it.statePing.observe(fragment.viewLifecycleOwner) { _ ->
                             when (it) {
                                 is Mqttd -> {
-                                    conStatus = when (it.status) {
-                                        Mqttd.Status.DISCONNECTED -> "DISCONNECTED"
-                                        Mqttd.Status.FAILED -> "FAILED"
-                                        Mqttd.Status.ATTEMPTING -> "ATTEMPTING"
-                                        Mqttd.Status.CONNECTED -> "CONNECTED"
-                                        Mqttd.Status.CONNECTED_SSL -> "CONNECTED"
+                                    conStatus = when (it.state) {
+                                        Mqttd.State.DISCONNECTED -> "DISCONNECTED"
+                                        Mqttd.State.FAILED -> "FAILED"
+                                        Mqttd.State.ATTEMPTING -> "ATTEMPTING"
+                                        Mqttd.State.CONNECTED -> "CONNECTED"
+                                        Mqttd.State.CONNECTED_SSL -> "CONNECTED"
                                     }
                                 }
                             }
@@ -222,6 +223,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     }
                 )
+
+                Text(text = "Do not add protocol prefix (eg. tcp://)", fontSize = 12.sp, color = colors.b)
 
                 var port by remember {
                     mutableStateOf(dashboard.mqtt.port.let {

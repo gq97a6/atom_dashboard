@@ -3,10 +3,15 @@ package com.alteratom.dashboard.daemon.daemons.mqttd
 import androidx.lifecycle.MutableLiveData
 import com.hivemq.client.mqtt.MqttClientState
 import com.hivemq.client.mqtt.MqttClientTransportConfig
+import com.hivemq.client.mqtt.MqttClientTransportConfigBuilder
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client
 import kotlinx.coroutines.*
 import java.net.InetSocketAddress
+import java.security.KeyStore
+import java.security.cert.Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.*
 
 //Server class
 class Mqtt3Server(private var daemon: Mqttd) {
@@ -18,23 +23,26 @@ class Mqtt3Server(private var daemon: Mqttd) {
 
     val state: State
         get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
-                else when (client.state) {
-                    MqttClientState.CONNECTED -> State.CONNECTED
-                    MqttClientState.DISCONNECTED -> State.DISCONNECTED
-                    MqttClientState.CONNECTING -> State.ATTEMPTING
-                    MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
-                    MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
-                }
+        else when (client.state) {
+            MqttClientState.CONNECTED -> State.CONNECTED
+            MqttClientState.DISCONNECTED -> State.DISCONNECTED
+            MqttClientState.CONNECTING -> State.ATTEMPTING
+            MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
+            MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
+        }
 
     private fun connectAttempt() {
         val config = daemon.d.mqtt.copy()
-        val transportConfig = MqttClientTransportConfig.builder()
+
+        var transportConfig = MqttClientTransportConfig.builder()
+            //.protocols()
             .serverAddress(InetSocketAddress(config.address, config.port))
-            .build()
+
+        if (config.ssl) transportConfig = setupSSL(transportConfig, config)
 
         client = Mqtt3Client.builder()
             .identifier(config.clientId)
-            .transportConfig(transportConfig)
+            .transportConfig(transportConfig.build())
             .addDisconnectedListener {
                 statePing.postValue(null)
             }
@@ -113,22 +121,96 @@ class Mqtt3Server(private var daemon: Mqttd) {
 
     enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 
-    //val sslConfig = MqttClientSslConfig.builder()
-    //.mqttConnectTimeout(10000, TimeUnit.MILLISECONDS)
-    //.socketConnectTimeout(10000, TimeUnit.MILLISECONDS)
-    //.webSocketConfig(ws)
-    //.sslConfig(sslConfig)
+    private fun setupSSL(
+        transportConfig: MqttClientTransportConfigBuilder,
+        config: MqttConfig
+    ): MqttClientTransportConfigBuilder {
 
-    //client.subscribeWith()
-    //.topicFilter("gda_switch0s")
-    //.qos(MqttQos.AT_LEAST_ONCE)
-    //.callback { x: Mqtt5Publish? -> println(x) }
-    //.send()
+        val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+        kmfStore.load(null, null)
+        kmfStore.setCertificateEntry("cc", config.clientCert)
+        config.clientKey?.let {
+            kmfStore.setKeyEntry(
+                "k",
+                it.private,
+                config.clientKeyPassword.toCharArray(),
+                arrayOf<Certificate?>(config.clientCert)
+            )
+        }
 
-    //client.publishWith()
-    //.topic("gda_switch0s")
-    //.qos(MqttQos.AT_MOST_ONCE)
-    //.payload("1".toByteArray())
-    //.retain(true)
-    //.send()
+        val kmf = KeyManagerFactory.getInstance(
+            KeyManagerFactory.getDefaultAlgorithm()
+        )
+
+        kmf.init(kmfStore, config.clientKeyPassword.toCharArray())
+
+        val tmf = TrustManagerFactory.getInstance(
+            TrustManagerFactory.getDefaultAlgorithm()
+        )
+
+        tmf.init(
+            if (config.caCert != null) {
+                KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                    load(null, null)
+                    setCertificateEntry("c", config.caCert)
+                }
+            } else null
+        )
+
+        //if (!config.sslTrustAll) { //TRUST ONLY IMPORTED
+        //
+        //} else { //TRUST ALL CERTS
+        //arrayOf<TrustManager>(
+        //    @SuppressLint("CustomX509TrustManager")
+        //    object : X509TrustManager {
+        //        override fun getAcceptedIssuers(): Array<X509Certificate> =
+        //            emptyArray()
+//
+        //        @SuppressLint("TrustAllX509TrustManager")
+        //        override fun checkClientTrusted(
+        //            chain: Array<X509Certificate>,
+        //            authType: String
+        //        ) {
+        //        }
+//
+        //        @SuppressLint("TrustAllX509TrustManager")
+        //        override fun checkServerTrusted(
+        //            chain: Array<X509Certificate>,
+        //            authType: String
+        //        ) {
+        //        }
+        //    }
+        //)
+        //}
+
+        //options.socketFactory = tlsContext.socketFactory
+
+        return transportConfig
+            .sslConfig()
+            .handshakeTimeout(1, TimeUnit.SECONDS)
+            //.hostnameVerifier()
+            .keyManagerFactory(kmf)
+            .trustManagerFactory(tmf)
+            .applySslConfig()
+    }
 }
+
+//val sslConfig = MqttClientSslConfig.builder()
+//.mqttConnectTimeout(10000, TimeUnit.MILLISECONDS)
+//.socketConnectTimeout(10000, TimeUnit.MILLISECONDS)
+//.webSocketConfig(ws)
+//.sslConfig(sslConfig)
+
+//client.subscribeWith()
+//.topicFilter("gda_switch0s")
+//.qos(MqttQos.AT_LEAST_ONCE)
+//.callback { x: Mqtt5Publish? -> println(x) }
+//.send()
+
+//client.publishWith()
+//.topic("gda_switch0s")
+//.qos(MqttQos.AT_MOST_ONCE)
+//.payload("1".toByteArray())
+//.retain(true)
+//.send()
+//}

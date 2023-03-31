@@ -9,8 +9,11 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3Client
 import kotlinx.coroutines.*
 import java.net.InetSocketAddress
 import java.security.KeyStore
+import java.security.SecureRandom
 import java.security.cert.Certificate
-import java.util.concurrent.TimeUnit
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import java.util.*
 import javax.net.ssl.*
 
 //Server class
@@ -128,7 +131,7 @@ class Mqtt3Server(private var daemon: Mqttd) {
 
         val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
         kmfStore.load(null, null)
-        kmfStore.setCertificateEntry("cc", config.clientCert)
+        kmfStore.setCertificateEntry("", config.clientCert)
         config.clientKey?.let {
             kmfStore.setKeyEntry(
                 "k",
@@ -138,62 +141,92 @@ class Mqtt3Server(private var daemon: Mqttd) {
             )
         }
 
-        val kmf = KeyManagerFactory.getInstance(
-            KeyManagerFactory.getDefaultAlgorithm()
-        )
-
+        val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
         kmf.init(kmfStore, config.clientKeyPassword.toCharArray())
 
-        val tmf = TrustManagerFactory.getInstance(
-            TrustManagerFactory.getDefaultAlgorithm()
-        )
+        val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        tmf.init(if (config.caCert != null) {
+            KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                load(null, null)
+                setCertificateEntry("", config.caCert)
+            }
+        } else null)
 
-        tmf.init(
-            if (config.caCert != null) {
-                KeyStore.getInstance(KeyStore.getDefaultType()).apply {
-                    load(null, null)
-                    setCertificateEntry("c", config.caCert)
-                }
-            } else null
-        )
-
-        //if (!config.sslTrustAll) { //TRUST ONLY IMPORTED
-        //
-        //} else { //TRUST ALL CERTS
-        //arrayOf<TrustManager>(
-        //    @SuppressLint("CustomX509TrustManager")
-        //    object : X509TrustManager {
-        //        override fun getAcceptedIssuers(): Array<X509Certificate> =
-        //            emptyArray()
-//
-        //        @SuppressLint("TrustAllX509TrustManager")
-        //        override fun checkClientTrusted(
-        //            chain: Array<X509Certificate>,
-        //            authType: String
-        //        ) {
-        //        }
-//
-        //        @SuppressLint("TrustAllX509TrustManager")
-        //        override fun checkServerTrusted(
-        //            chain: Array<X509Certificate>,
-        //            authType: String
-        //        ) {
-        //        }
-        //    }
-        //)
+        //val hv = HostnameVerifier { hostname, session ->
+        //    true
         //}
-
-        //options.socketFactory = tlsContext.socketFactory
 
         return transportConfig
             .sslConfig()
-            .handshakeTimeout(1, TimeUnit.SECONDS)
-            //.hostnameVerifier()
+            //.handshakeTimeout(1, TimeUnit.SECONDS)
+            //.hostnameVerifier(hv)
             .keyManagerFactory(kmf)
             .trustManagerFactory(tmf)
             .applySslConfig()
     }
 }
+
+//private fun setupSSL(options: MqttConnectOptions) {
+//    val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+//    kmfStore.load(null, null)
+//    kmfStore.setCertificateEntry("cc", conProp.clientCert)
+//    conProp.clientKey?.let {
+//        kmfStore.setKeyEntry(
+//            "k",
+//            it.private,
+//            conProp.clientKeyPassword.toCharArray(),
+//            arrayOf<Certificate?>(conProp.clientCert)
+//        )
+//    }
+//
+//    val kmf: KeyManagerFactory =
+//        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+//    kmf.init(kmfStore, conProp.clientKeyPassword.toCharArray())
+//
+//    val trustManager = if (!conProp.sslTrustAll) { //TRUST ONLY IMPORTED
+//        val trustManagerFactory = TrustManagerFactory.getInstance(
+//            TrustManagerFactory.getDefaultAlgorithm()
+//        )
+//
+//        trustManagerFactory.init(
+//            if (conProp.caCert != null) {
+//                KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+//                    load(null, null)
+//                    setCertificateEntry("c", conProp.caCert)
+//                }
+//            } else null
+//        )
+//
+//        trustManagerFactory.trustManagers
+//    } else { //TRUST ALL CERTS
+//        arrayOf<TrustManager>(
+//            @SuppressLint("CustomX509TrustManager")
+//            object : X509TrustManager {
+//                override fun getAcceptedIssuers(): Array<X509Certificate> =
+//                    emptyArray()
+//
+//                @SuppressLint("TrustAllX509TrustManager")
+//                override fun checkClientTrusted(
+//                    chain: Array<X509Certificate>,
+//                    authType: String
+//                ) {
+//                }
+//
+//                @SuppressLint("TrustAllX509TrustManager")
+//                override fun checkServerTrusted(
+//                    chain: Array<X509Certificate>,
+//                    authType: String
+//                ) {
+//                }
+//            }
+//        )
+//    }
+//
+//    val tlsContext = SSLContext.getInstance("TLS")
+//    tlsContext.init(kmf.keyManagers, trustManager, java.security.SecureRandom())
+//
+//    options.socketFactory = tlsContext.socketFactory
+//}
 
 //val sslConfig = MqttClientSslConfig.builder()
 //.mqttConnectTimeout(10000, TimeUnit.MILLISECONDS)

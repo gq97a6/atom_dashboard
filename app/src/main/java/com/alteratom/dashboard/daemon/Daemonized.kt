@@ -6,6 +6,7 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.Storage
+import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
@@ -24,6 +25,7 @@ interface Daemonized {
     ) {
     }
 
+    //TODO: change so its not dependent on mqtt implementation
     fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
     }
 
@@ -48,15 +50,15 @@ interface Daemonized {
         }
     }
 
-    fun receive(data: Pair<String?, MqttMessage?>) {
-        if (!this.mqtt.isEnabled) return
-        if (!this.mqtt.subs.containsValue(data.first)) return
+    //data: Pair<String?, MqttMessage?>
+    fun receive(data: Mqtt3Publish) {
+        if (!this.mqtt.subs.containsValue(data.topic.toString())) return
 
         //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
         if (this.mqtt.payloadIsJson) {
             for (p in this.mqtt.jsonPaths) {
-                data.second.toString().let { it ->
+                data.payload.toString().let { it ->
                     try {
                         Storage.mapper.readTree(it).at(p.value).asText()
                     } catch (e: Exception) {
@@ -71,10 +73,8 @@ interface Daemonized {
         this.mqtt.lastReceive = Date()
 
         try {
-            onReceive(data, jsonResult)
+            onReceive(Pair(data.topic.toString(), MqttMessage(data.payloadAsBytes)), jsonResult)
         } catch (e: Exception) {
         }
     }
-
-    class Data
 }

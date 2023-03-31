@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment

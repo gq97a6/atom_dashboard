@@ -42,8 +42,8 @@ android {
         sourceCompatibility "1.5.10"
         targetCompatibility "1.5.10"
 
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_9
+        targetCompatibility JavaVersion.VERSION_1_9
     }
 
     kotlinOptions {

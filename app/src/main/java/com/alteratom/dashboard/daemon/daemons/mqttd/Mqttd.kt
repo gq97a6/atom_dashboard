@@ -4,25 +4,40 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
+import com.hivemq.client.mqtt.MqttClientState
+import com.hivemq.client.mqtt.MqttClientTransportConfig
+import com.hivemq.client.mqtt.MqttClientTransportConfigBuilder
+import com.hivemq.client.mqtt.datatypes.MqttQos
+import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient
+import com.hivemq.client.mqtt.mqtt3.Mqtt3Client
+import kotlinx.coroutines.*
+import java.net.InetSocketAddress
+import java.security.KeyStore
+import java.security.cert.Certificate
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.TrustManagerFactory
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    private var server: Mqtt3Server = Mqtt3Server(this)
+    var client: Mqtt3AsyncClient = Mqtt3Client.builder().buildAsync()
+    var currentConfig = MqttConfig()
+
     //var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
+    var topics: MutableList<Pair<String, Int>> = mutableListOf()
 
     public override val isEnabled
         get() = d.mqtt.isEnabled && !isDischarged
 
-    override val statePing: MutableLiveData<Nothing?>
-        get() = server.statePing
+    override val statePing: MutableLiveData<Nothing?> = MutableLiveData(null)
 
     override val state: State
-        get() = when (server.state) {
-            Mqtt3Server.State.CONNECTED -> State.CONNECTED
-            Mqtt3Server.State.CONNECTED_SSL -> State.CONNECTED_SSL
-            Mqtt3Server.State.ATTEMPTING -> State.ATTEMPTING
-            Mqtt3Server.State.DISCONNECTED -> State.DISCONNECTED
-            Mqtt3Server.State.FAILED -> State.FAILED
+        get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
+        else when (client.state) {
+            MqttClientState.CONNECTED -> State.CONNECTED
+            MqttClientState.DISCONNECTED -> State.DISCONNECTED
+            MqttClientState.CONNECTING -> State.ATTEMPTING
+            MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
+            MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
         }
 
     //if (!isEnabled) Status.DISCONNECTED
@@ -34,95 +49,275 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     //    else Status.FAILED
     //}
 
+    //Daemon notify response methods -------------------------------------------------------------
+
     override fun notifyAssigned() {
         super.notifyAssigned()
-        //manager.dispatch("assign")
-        server.dispatch()
+        dispatch()
     }
 
     override fun notifyDischarged() {
         super.notifyDischarged()
-        //if (server.isConnected) manager.dispatch("discharge")
-        //else server.unregisterResources()
-        server.dispatch()
+        if (client.state.isConnected) dispatch()
     }
 
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
-        //manager.dispatch("change")
-        //if (server.isConnected && isEnabled) topicCheck()
-        server.dispatch()
+        dispatch()
+        if (client.state.isConnected && isEnabled) topicCheck()
     }
 
-    fun publish(topic: String, msg: String, qos: Int = 0, retained: Boolean = false) {
-        //if (!server.isConnected) return
-        //try {
-        //    val message = MqttMessage().apply {
-        //        payload = msg.toByteArray()
-        //        this.qos = qos
-        //        isRetained = retained
-        //    }
-        //    server.publish(topic, message, null, object : IMqttActionListener {
-        //        override fun onSuccess(asyncActionToken: IMqttToken?) {
-        //        }
-//
-        //        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-        //        }
-        //    })
-        //} catch (e: Exception) {
-        //    e.printStackTrace()
+    // Status manger ------------------------------------------------------------------------------
+
+    //Current job
+    private var dispatchJob: Job? = null
+
+    //Start the manager if not already running
+    @OptIn(DelicateCoroutinesApi::class)
+    fun dispatch(cancel: Boolean = false) {
+        if (cancel) {
+            dispatchJob?.cancel()
+        }
+
+        //Return if already dispatched
+        if (dispatchJob != null && dispatchJob?.isActive == true) {
+            return
+        }
+
+        dispatchJob = GlobalScope.launch(Dispatchers.IO) {
+            try {
+                //withTimeout(10000) { handleDispatch() }
+                handleDispatch()
+            } catch (e: Exception) { //Create another coroutine after a delay
+                e.printStackTrace()
+                delay(1000)
+                dispatch(true)
+            }
+        }
+    }
+
+    //Try to stabilize the connection
+    private suspend fun handleDispatch() {
+        statePing.postValue(null)
+        while (true) {
+            if (d.mqtt.isEnabled && !isDischarged) when (client.state) {
+                MqttClientState.CONNECTED -> { //check correct config and disconnect if wrong
+                    if (currentConfig == d.mqtt) break
+                    else disconnectAttempt()
+                }
+                MqttClientState.DISCONNECTED -> { //set config and connect
+                    connectAttempt()
+                }
+                MqttClientState.CONNECTING -> {} //recheck
+                MqttClientState.DISCONNECTED_RECONNECT -> {} //recheck
+                MqttClientState.CONNECTING_RECONNECT -> {} //recheck
+            } else when (client.state) {
+                MqttClientState.CONNECTED -> disconnectAttempt()
+                MqttClientState.DISCONNECTED -> break
+                MqttClientState.CONNECTING -> {} //recheck
+                MqttClientState.DISCONNECTED_RECONNECT -> {} //recheck
+                MqttClientState.CONNECTING_RECONNECT -> {} //recheck
+            }
+
+            delay(1000)
+        }
+        statePing.postValue(null)
+    }
+
+    // Connection methods -------------------------------------------------------------------------
+
+    private fun disconnectAttempt() = client.disconnect()
+
+    private fun connectAttempt() {
+        val config = d.mqtt.copy()
+
+        var transportConfig = MqttClientTransportConfig.builder()
+            //.protocols()
+            .serverAddress(InetSocketAddress(config.address, config.port))
+
+        if (config.ssl) transportConfig = setupSSL(transportConfig, config)
+
+        client = Mqtt3Client.builder()
+            .identifier(config.clientId)
+            .transportConfig(transportConfig.build())
+            .addDisconnectedListener {
+                statePing.postValue(null)
+                topics = mutableListOf()
+                dispatch()
+            }
+            .addConnectedListener {
+                statePing.postValue(null)
+                currentConfig = config
+                topicCheck()
+            }
+            .buildAsync()
+
+        client.state
+        client.connectWith()
+            .simpleAuth()
+            .username(config.username)
+            .password(config.pass.toByteArray())
+            .applySimpleAuth()
+            .keepAlive(30)
+            .cleanSession(true)
+            .send()
+    }
+
+    private fun setupSSL(
+        transportConfig: MqttClientTransportConfigBuilder,
+        config: MqttConfig
+    ): MqttClientTransportConfigBuilder {
+
+        val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+        kmfStore.load(null, null)
+        kmfStore.setCertificateEntry("", config.clientCert)
+        config.clientKey?.let {
+            kmfStore.setKeyEntry(
+                "k",
+                it.private,
+                config.clientKeyPassword.toCharArray(),
+                arrayOf<Certificate?>(config.clientCert)
+            )
+        }
+
+        val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+        kmf.init(kmfStore, config.clientKeyPassword.toCharArray())
+
+        val tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
+        tmf.init(if (config.caCert != null) {
+            KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                load(null, null)
+                setCertificateEntry("", config.caCert)
+            }
+        } else null)
+
+        //val hv = HostnameVerifier { hostname, session ->
+        //    true
         //}
+
+        return transportConfig
+            .sslConfig()
+            //.handshakeTimeout(1, TimeUnit.SECONDS)
+            //.hostnameVerifier(hv)
+            .keyManagerFactory(kmf)
+            .trustManagerFactory(tmf)
+            .applySslConfig()
+    }
+
+    // MQTT methods ------------------------------------------------------------------------------
+
+    fun publish(topic: String, msg: String, qos: Int = 0, retain: Boolean = false) {
+        if (!client.state.isConnected) return
+        client.publishWith()
+            .topic(topic)
+            .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
+            .payload(msg.toByteArray())
+            .retain(retain)
+            .send()
     }
 
     private fun subscribe(topic: String, qos: Int) {
-        //if (!server.isConnected) return
-        //try {
-        //    server.subscribe(topic, qos, null, object : IMqttActionListener {
-        //        override fun onSuccess(asyncActionToken: IMqttToken?) {
-        //            server.topics.add(Pair(topic, qos))
-        //        }
-//
-        //        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-        //        }
-        //    })
-        //} catch (e: Exception) {
-        //    e.printStackTrace()
-        //}
+        if (!client.state.isConnected) return
+        client.subscribeWith()
+            .topicFilter(topic)
+            .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
+            .callback {
+                for (tile in d.tiles) tile.receive(it)
+                //data.postValue(Pair(t ?: "", m))
+            }
+            .send()
+            .whenCompleteAsync { _, u -> if (u != null) topics.add(Pair(topic, qos)) }
     }
 
     private fun unsubscribe(topic: String, qos: Int) {
-        //if (!server.isConnected) return
-        //try {
-        //    server.unsubscribe(topic, null, object : IMqttActionListener {
-        //        override fun onSuccess(asyncActionToken: IMqttToken?) {
-        //            server.topics.remove(Pair(topic, qos))
-        //        }
-//
-        //        override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
-        //        }
-        //    })
-        //} catch (e: Exception) {
-        //    e.printStackTrace()
-        //}
+        if (!client.state.isConnected) return
+        client.unsubscribeWith()
+            .topicFilter(topic)
+            .send()
+            .whenCompleteAsync { _, u -> if (u != null) topics.remove(Pair(topic, qos)) }
     }
 
     //Manage subscriptions at topic list change
-    fun topicCheck() {
-        //val topics: MutableList<Pair<String, Int>> = mutableListOf()
-        //for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
-        //    for (t in tile.mqtt.subs) {
-        //        Pair(t.value, tile.mqtt.qos).let {
-        //            if (!topics.contains(it) && t.value.isNotBlank()) {
-        //                topics.add(it)
-        //            }
-        //        }
-        //    }
-        //}
-        //val unsubTopics = server.topics - topics.toSet()
-        //val subTopics = topics - server.topics.toSet()
-        //for (t in unsubTopics) unsubscribe(t.first, t.second)
-        //for (t in subTopics) subscribe(t.first, t.second)
+    private fun topicCheck() {
+        val list: MutableList<Pair<String, Int>> = mutableListOf()
+        for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
+            for (t in tile.mqtt.subs) {
+                Pair(t.value, tile.mqtt.qos).let {
+                    if (!list.contains(it) && t.value.isNotBlank()) {
+                        list.add(it)
+                    }
+                }
+            }
+        }
+
+        val unsubTopics = topics - list.toSet()
+        val subTopics = list - topics.toSet()
+
+        for (t in unsubTopics) unsubscribe(t.first, t.second)
+        for (t in subTopics) subscribe(t.first, t.second)
     }
 
     enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
 }
+
+//private fun setupSSL(options: MqttConnectOptions) {
+//    val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+//    kmfStore.load(null, null)
+//    kmfStore.setCertificateEntry("cc", conProp.clientCert)
+//    conProp.clientKey?.let {
+//        kmfStore.setKeyEntry(
+//            "k",
+//            it.private,
+//            conProp.clientKeyPassword.toCharArray(),
+//            arrayOf<Certificate?>(conProp.clientCert)
+//        )
+//    }
+//
+//    val kmf: KeyManagerFactory =
+//        KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+//    kmf.init(kmfStore, conProp.clientKeyPassword.toCharArray())
+//
+//    val trustManager = if (!conProp.sslTrustAll) { //TRUST ONLY IMPORTED
+//        val trustManagerFactory = TrustManagerFactory.getInstance(
+//            TrustManagerFactory.getDefaultAlgorithm()
+//        )
+//
+//        trustManagerFactory.init(
+//            if (conProp.caCert != null) {
+//                KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+//                    load(null, null)
+//                    setCertificateEntry("c", conProp.caCert)
+//                }
+//            } else null
+//        )
+//
+//        trustManagerFactory.trustManagers
+//    } else { //TRUST ALL CERTS
+//        arrayOf<TrustManager>(
+//            @SuppressLint("CustomX509TrustManager")
+//            object : X509TrustManager {
+//                override fun getAcceptedIssuers(): Array<X509Certificate> =
+//                    emptyArray()
+//
+//                @SuppressLint("TrustAllX509TrustManager")
+//                override fun checkClientTrusted(
+//                    chain: Array<X509Certificate>,
+//                    authType: String
+//                ) {
+//                }
+//
+//                @SuppressLint("TrustAllX509TrustManager")
+//                override fun checkServerTrusted(
+//                    chain: Array<X509Certificate>,
+//                    authType: String
+//                ) {
+//                }
+//            }
+//        )
+//    }
+//
+//    val tlsContext = SSLContext.getInstance("TLS")
+//    tlsContext.init(kmf.keyManagers, trustManager, java.security.SecureRandom())
+//
+//    options.socketFactory = tlsContext.socketFactory
+//}

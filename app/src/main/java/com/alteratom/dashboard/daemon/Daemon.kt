@@ -15,6 +15,7 @@ abstract class Daemon(val context: Context, var d: Dashboard) {
     var isDischarged = false
     protected abstract val isEnabled: Boolean
 
+    //Publish on state change
     abstract val statePing: MutableLiveData<Nothing?>
     abstract val state: Any
 

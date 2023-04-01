@@ -7,7 +7,7 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.Storage
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish
-import org.eclipse.paho.client.mqttv3.MqttMessage
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 //For targets of daemons
@@ -25,8 +25,7 @@ interface Daemonized {
     ) {
     }
 
-    //TODO: change so its not dependent on mqtt implementation
-    fun onReceive(data: Pair<String?, MqttMessage?>, jsonResult: MutableMap<String, String>) {
+    fun onReceive(data: Pair<String, String>, jsonResult: MutableMap<String, String>) {
     }
 
     fun send(
@@ -73,8 +72,9 @@ interface Daemonized {
         this.mqtt.lastReceive = Date()
 
         try {
-            onReceive(Pair(data.topic.toString(), MqttMessage(data.payloadAsBytes)), jsonResult)
+            onReceive(Pair(data.topic.toString(), String(data.payloadAsBytes, StandardCharsets.UTF_8)), jsonResult)
         } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

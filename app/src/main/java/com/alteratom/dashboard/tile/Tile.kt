@@ -18,7 +18,6 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 @Suppress("UNUSED")
@@ -83,7 +82,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     }
 
     override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
+        data: Pair<String, String>,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(data, jsonResult)
@@ -94,9 +93,9 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
                     createNotification(
                         s,
                         d.name.uppercase(Locale.getDefault()),
-                        if (tag.isBlank() || data.second.toString().isBlank())
+                        if (tag.isBlank() || data.second.isBlank())
                             "New value for: ${data.first}"
-                        else "$tag: ${data.second.toString()}",
+                        else "$tag: ${data.second}",
                         this.mqtt.silentNotify,
                         d.id.toInt()
                     )

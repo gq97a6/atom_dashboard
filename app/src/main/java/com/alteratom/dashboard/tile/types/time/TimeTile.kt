@@ -10,7 +10,6 @@ import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTimeBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class TimeTile : Tile() {
 
@@ -84,13 +83,13 @@ class TimeTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
+        data: Pair<String, String>,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(data, jsonResult)
 
         //"12+20*/2-4".split(Regex("\\D+"))
-        value = jsonResult["base"] ?: data.second.toString()
+        value = jsonResult["base"] ?: data.second
     }
 
     override fun onCreateTile() {

@@ -46,7 +46,6 @@
         <service
             android:name=".dashboard.ForegroundService"
             android:enabled="true" />
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
     </application>
 
 </manifest>

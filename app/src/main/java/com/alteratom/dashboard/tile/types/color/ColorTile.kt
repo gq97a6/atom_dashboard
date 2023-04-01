@@ -17,7 +17,6 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogColorPickerBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 class ColorTile : Tile() {
@@ -164,16 +163,16 @@ class ColorTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
+        data: Pair<String, String>,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(data, jsonResult)
 
-        var data = jsonResult["base"] ?: data.second.toString()
+        var payload = jsonResult["base"] ?: data.second
 
-        toRemoves.forEach { data = data.replace(it, " ") }
+        toRemoves.forEach { payload = payload.replace(it, " ") }
 
-        val split = data.split(" ") as MutableList
+        val split = payload.split(" ") as MutableList
         split.removeIf { it.isEmpty() }
 
         when (colorType) {

@@ -1,3 +1,4 @@
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.res.ColorStateList
 import android.os.Handler
@@ -23,7 +24,6 @@ import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
-import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -113,6 +113,7 @@ class ThermostatTile : Tile() {
         humiSetpoint = humiSetpoint
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
@@ -314,7 +315,7 @@ class ThermostatTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String?, MqttMessage?>,
+        data: Pair<String, String>,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(data, jsonResult)
@@ -338,7 +339,7 @@ class ThermostatTile : Tile() {
         }
 
         if (jsonResult.isEmpty()) {
-            val value = data.second.toString()
+            val value = data.second
             parse(
                 value, when (data.first) {
                     this.mqtt.subs["temp"] -> "temp"

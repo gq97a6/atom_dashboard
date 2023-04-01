@@ -63,8 +63,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
-        dispatch()
-        if (client.state.isConnected && isEnabled) topicCheck()
+        if (client.state.isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()
+        else dispatch()
     }
 
     // Status manger ------------------------------------------------------------------------------

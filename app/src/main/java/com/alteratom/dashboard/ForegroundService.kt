@@ -71,6 +71,7 @@ class ForegroundService : LifecycleService() {
     override fun onDestroy() {
         ActivityHandler.onDestroy()
         DaemonsManager.notifyAllRemoved()
+        createNotification(this, "Service", "service destroyed")
 
         //Restart service if it has not been stopped
         //if (isStarted) {

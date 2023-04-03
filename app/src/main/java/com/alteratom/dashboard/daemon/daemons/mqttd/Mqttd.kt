@@ -2,7 +2,9 @@ package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.daemon.Daemon
 import com.hivemq.client.mqtt.MqttClientState
 import com.hivemq.client.mqtt.MqttClientTransportConfig
@@ -84,14 +86,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             return
         }
 
-        dispatchJob = GlobalScope.launch(Dispatchers.IO) {
-            try {
-                //withTimeout(10000) { handleDispatch() }
-                handleDispatch()
-            } catch (e: Exception) { //Create another coroutine after a delay
-                e.printStackTrace()
-                delay(1000)
-                dispatch(true)
+        (context as ForegroundService).apply {
+            dispatchJob = lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    //withTimeout(10000) { handleDispatch() }
+                    handleDispatch()
+                } catch (e: Exception) { //Create another coroutine after a delay
+                    e.printStackTrace()
+                    delay(1000)
+                    dispatch(true)
+                }
             }
         }
     }

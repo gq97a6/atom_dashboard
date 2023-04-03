@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.objects.ActivityHandler
@@ -60,7 +61,7 @@ class ForegroundService : LifecycleService() {
 
             finishAffinity()
         } else { //Initialize globals based on action
-            initializeGlobals(if (action == "ALL") 0 else if (action == "DASH") 2 else 0)
+            initializeGlobals(if (action == "DASH") 2 else 0)
             isStarted = true
         }
 

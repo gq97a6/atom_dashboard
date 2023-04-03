@@ -35,10 +35,10 @@ class MainActivity : AppCompatActivity() {
         G.theme.apply(b.root, this, false)
 
         //Setup fragment manager and switchers
-        fm = FragmentManager(this)
-        fm.replaceWith(SetupFragment(), false, null)
         TileSwitcher.activity = this
         FragmentSwitcher.activity = this
+        fm = FragmentManager(this)
+        fm.replaceWith(SetupFragment(), false, null)
 
         onBackPressedDispatcher.addCallback(this) {
             if (!doOverrideOnBackPress() && !fm.popBackStack()) finish()

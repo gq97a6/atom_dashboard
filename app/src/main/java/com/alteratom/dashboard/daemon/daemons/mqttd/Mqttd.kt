@@ -22,15 +22,23 @@ import javax.net.ssl.TrustManagerFactory
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
     var client: Mqtt3AsyncClient = Mqtt3Client.builder().buildAsync()
-    var currentConfig = MqttConfig()
+    private var currentConfig = MqttConfig()
 
     //var data: MutableLiveData<Pair<String?, MqttMessage?>> = MutableLiveData(Pair(null, null))
-    var topics: MutableList<Pair<String, Int>> = mutableListOf()
+    private var topics: MutableList<Pair<String, Int>> = mutableListOf()
 
     public override val isEnabled
         get() = d.mqtt.isEnabled && !isDischarged
 
     override val statePing: MutableLiveData<Nothing?> = MutableLiveData(null)
+
+    private val isConnected: Boolean
+        get() = try {
+            client.state.isConnected
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            false
+        }
 
     override val state: State
         get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
@@ -60,12 +68,12 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     override fun notifyDischarged() {
         super.notifyDischarged()
-        if (client.state.isConnected) dispatch()
+        if (isConnected) dispatch()
     }
 
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
-        if (client.state.isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()
+        if (isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()
         else dispatch()
     }
 
@@ -211,7 +219,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     // MQTT methods ------------------------------------------------------------------------------
 
     fun publish(topic: String, msg: String, qos: Int = 0, retain: Boolean = false) {
-        if (!client.state.isConnected) return
+        if (!isConnected) return
         client.publishWith()
             .topic(topic)
             .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
@@ -221,7 +229,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     private fun subscribe(topic: String, qos: Int) {
-        if (!client.state.isConnected) return
+        if (!isConnected) return
         client.subscribeWith()
             .topicFilter(topic)
             .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
@@ -234,7 +242,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     private fun unsubscribe(topic: String, qos: Int) {
-        if (!client.state.isConnected) return
+        if (!isConnected) return
         client.unsubscribeWith()
             .topicFilter(topic)
             .send()

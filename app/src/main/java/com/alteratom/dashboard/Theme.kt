@@ -59,7 +59,7 @@ class Theme {
 
                 it.window.statusBarColor = colorPallet.background
             } catch (e: Exception) {
-                e.printStackTrace()
+                 Log.e("ALTER", e.stackTraceToString())
             }
         }
 

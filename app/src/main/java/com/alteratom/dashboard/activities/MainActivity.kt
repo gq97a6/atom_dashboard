@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService

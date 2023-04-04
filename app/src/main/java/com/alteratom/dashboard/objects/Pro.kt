@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.objects
 
+import android.util.Log
 import com.alteratom.dashboard.objects.G.rootFolder
 import java.io.File
 
@@ -15,7 +16,7 @@ object Pro {
             File("$rootFolder/license").writeText("")
             updateStatus()
         } catch (e: Exception) {
-            e.printStackTrace()
+             Log.e("ALTER", e.stackTraceToString())
         }
     }
 
@@ -24,7 +25,7 @@ object Pro {
             File("$rootFolder/license").delete()
             updateStatus()
         } catch (e: Exception) {
-            e.printStackTrace()
+             Log.e("ALTER", e.stackTraceToString())
         }
     }
 }

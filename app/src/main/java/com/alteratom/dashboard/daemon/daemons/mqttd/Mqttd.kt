@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
@@ -35,8 +36,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     private val isConnected: Boolean
         get() = try {
             client.state.isConnected
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+        } catch (e: Exception) {
+             Log.e("ALTER", e.stackTraceToString())
             false
         }
 
@@ -85,6 +86,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     //Start the manager if not already running
     @OptIn(DelicateCoroutinesApi::class)
     fun dispatch(cancel: Boolean = false) {
+        Log.d("ALTER", "mqttd dispatch")
         if (cancel) {
             dispatchJob?.cancel()
         }
@@ -100,7 +102,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     //withTimeout(10000) { handleDispatch() }
                     handleDispatch()
                 } catch (e: Exception) { //Create another coroutine after a delay
-                    e.printStackTrace()
+                     Log.e("ALTER", e.stackTraceToString())
                     delay(1000)
                     dispatch(true)
                 }
@@ -110,6 +112,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     //Try to stabilize the connection
     private suspend fun handleDispatch() {
+        Log.d("ALTER", "mqttd handle")
         statePing.postValue(null)
         while (true) {
             if (d.mqtt.isEnabled && !isDischarged) when (client.state) {
@@ -153,11 +156,13 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .identifier(config.clientId)
             .transportConfig(transportConfig.build())
             .addDisconnectedListener {
+                Log.d("ALTER", "mqttd disconnected")
                 statePing.postValue(null)
                 topics = mutableListOf()
                 dispatch()
             }
             .addConnectedListener {
+                Log.d("ALTER", "mqttd connected")
                 statePing.postValue(null)
                 currentConfig = config
                 topicCheck()

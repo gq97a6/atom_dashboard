@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.daemon
 
 import android.content.Context
+import android.util.Log
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.objects.G.dashboards
@@ -18,13 +19,13 @@ object DaemonsManager {
             daemon.notifyAssigned()
         }
     } catch (e: Exception) {
-        e.printStackTrace()
+         Log.e("ALTER", e.stackTraceToString())
     }
 
     fun notifyRemoved(dashboard: Dashboard) = try {
         dashboard.daemon.notifyDischarged()
     } catch (e: Exception) {
-        e.printStackTrace()
+         Log.e("ALTER", e.stackTraceToString())
     }
 
 }

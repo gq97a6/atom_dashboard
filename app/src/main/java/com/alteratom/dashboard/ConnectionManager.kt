@@ -4,6 +4,7 @@ package com.alteratom.dashboard
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 
 abstract class ConnectionManager(private var interval: Long = 500) {
@@ -19,7 +20,7 @@ abstract class ConnectionManager(private var interval: Long = 500) {
             try {
                 handleDispatch(reason)
             } catch (e: Exception) {
-                e.printStackTrace()
+                 Log.e("ALTER", e.stackTraceToString())
             }
 
             Handler(Looper.getMainLooper()).postDelayed({

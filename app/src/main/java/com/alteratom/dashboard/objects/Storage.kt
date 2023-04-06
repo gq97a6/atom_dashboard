@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.objects
 
 import android.util.Log
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.objects.G.path
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,7 +20,7 @@ object Storage {
             val path = path[this::class]
             File(path).writeText(save)
         } catch (e: Exception) {
-             Log.e("ALTER", e.stackTraceToString())
+             Logger.log(e.stackTraceToString())
         }
     }
 
@@ -28,7 +29,7 @@ object Storage {
             val path = path[T::class]
             File(path).writeText(save)
         } catch (e: Exception) {
-             Log.e("ALTER", e.stackTraceToString())
+             Logger.log(e.stackTraceToString())
         }
     }
 

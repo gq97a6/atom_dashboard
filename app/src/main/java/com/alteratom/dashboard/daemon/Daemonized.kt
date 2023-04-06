@@ -3,6 +3,7 @@ package com.alteratom.dashboard.daemon
 import android.util.Log
 import androidx.annotation.IntRange
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
@@ -75,7 +76,7 @@ interface Daemonized {
         try {
             onReceive(Pair(data.topic.toString(), String(data.payloadAsBytes, StandardCharsets.UTF_8)), jsonResult)
         } catch (e: Exception) {
-             Log.e("ALTER", e.stackTraceToString())
+             Logger.log(e.stackTraceToString())
         }
     }
 }

@@ -59,7 +59,7 @@ class Theme {
 
                 it.window.statusBarColor = colorPallet.background
             } catch (e: Exception) {
-                 Log.e("ALTER", e.stackTraceToString())
+                 Logger.log(e.stackTraceToString())
             }
         }
 
@@ -114,7 +114,7 @@ class Theme {
             is CircularSeekBar -> this.applyTheme(p)
             else -> {
                 if (this.javaClass == View::class.java) this.applyTheme(p)
-                else Log.i("OUY", "View type not specified: ${this.javaClass}")
+                else Logger.log("View type not specified: ${this.javaClass}")
             }
         }
     }
@@ -417,7 +417,7 @@ class Theme {
 
     private fun onUnknownTag(tag: Any?, type: String) {
         tag?.toString()?.let {
-            if (it.isNotBlank()) Log.i("OUY", "Unknown $type tag: $it")
+            if (it.isNotBlank()) Logger.log("Unknown $type tag: $it")
         }
     }
 

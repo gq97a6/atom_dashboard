@@ -2,6 +2,7 @@ package com.alteratom.dashboard.objects
 
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.daemon.DaemonsManager
@@ -53,6 +54,8 @@ object G {
                 Dashboard::class to "$rootFolder/dashboards"
             )
         }
+
+        Logger.log("init globals $mode")
 
         when (mode) {
             0 -> { //All - when service starts without activity

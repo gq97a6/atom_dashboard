@@ -29,6 +29,7 @@ import com.alteratom.dashboard.BillingHandler.Companion.checkBilling
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.ForegroundService.Companion.service
 import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
@@ -121,6 +122,7 @@ class SetupFragment : Fragment() {
         CoroutineScope(Dispatchers.Default).launch {
             if (service?.isStarted == true) onServiceStarted()
             else (activity as MainActivity).apply {
+                Logger.log("create service")
                 //Create a service
                 Intent(this@apply, ForegroundService::class.java).also {
                     it.action = "DASH"
@@ -137,6 +139,7 @@ class SetupFragment : Fragment() {
     }
 
     private fun onServiceStarted() {
+        Logger.log("onServiceStarted")
         //Background billing check
         (activity as MainActivity).checkBilling()
 

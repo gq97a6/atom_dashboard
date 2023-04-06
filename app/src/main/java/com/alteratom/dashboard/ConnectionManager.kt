@@ -20,7 +20,7 @@ abstract class ConnectionManager(private var interval: Long = 500) {
             try {
                 handleDispatch(reason)
             } catch (e: Exception) {
-                 Log.e("ALTER", e.stackTraceToString())
+                 Logger.log(e.stackTraceToString())
             }
 
             Handler(Looper.getMainLooper()).postDelayed({

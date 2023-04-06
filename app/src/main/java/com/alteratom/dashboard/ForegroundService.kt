@@ -15,6 +15,8 @@ import com.alteratom.R
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G.initializeGlobals
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class ForegroundService : LifecycleService() {
@@ -46,11 +48,21 @@ class ForegroundService : LifecycleService() {
 
         startForeground(1, notification.build())
 
+        lifecycleScope.launch {
+            var i = 0
+            while (true) {
+                Logger.log("fg: $i")
+                i++
+                delay(10000)
+            }
+        }
+
         service = this
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ""
+        Logger.log("Service onStartCommand: $action")
 
         //Stop service and close the app
         if (action == "STOP") {
@@ -70,7 +82,7 @@ class ForegroundService : LifecycleService() {
     }
 
     override fun onDestroy() {
-        Log.d("ALTER", "Service destroyed")
+        Logger.log("Service destroyed")
         ActivityHandler.onDestroy()
         DaemonsManager.notifyAllRemoved()
         createNotification(this, "Service", "service destroyed")

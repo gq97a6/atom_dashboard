@@ -465,7 +465,6 @@ fun ArcSlider(
             }
         }
 
-        //Log.i("OUY", "$angle $startAngle $sweepAngle")
         onChange(angle, ((angle + 360 - startAngle) % 360) / sweepAngle)
     }
 

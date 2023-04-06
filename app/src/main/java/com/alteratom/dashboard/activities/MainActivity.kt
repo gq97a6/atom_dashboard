@@ -6,6 +6,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Logger.log("main activity")
         super.onCreate(savedInstanceState)
         ActivityHandler.onCreate(this)
 

@@ -158,7 +158,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .identifier(config.clientId)
             .transportConfig(transportConfig.build())
             .addDisconnectedListener {
-                Logger.log("mqttd disconnected")
+                Logger.log("mqttd disconnected(${it.source} || ${it.cause})")
                 statePing.postValue(null)
                 topics = mutableListOf()
                 dispatch()

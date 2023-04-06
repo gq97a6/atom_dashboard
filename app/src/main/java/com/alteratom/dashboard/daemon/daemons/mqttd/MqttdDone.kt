@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
+import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.daemon.Daemon
 import com.hivemq.client.mqtt.MqttClientState
 import com.hivemq.client.mqtt.MqttClientTransportConfig
@@ -37,7 +38,7 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
         get() = try {
             client.state.isConnected
         } catch (e: Exception) {
-             Log.e("ALTER", e.stackTraceToString())
+            Logger.log(e.stackTraceToString())
             false
         }
 
@@ -86,13 +87,14 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
     //Start the manager if not already running
     @OptIn(DelicateCoroutinesApi::class)
     fun dispatch(cancel: Boolean = false) {
-        Log.d("ALTER", "mqttd dispatch")
+        Logger.log("mqttd dispatch")
         if (cancel) {
             dispatchJob?.cancel()
         }
 
         //Return if already dispatched
         if (dispatchJob != null && dispatchJob?.isActive == true) {
+            Logger.log("mqttd dispatched already")
             return
         }
 
@@ -102,7 +104,7 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
                     //withTimeout(10000) { handleDispatch() }
                     handleDispatch()
                 } catch (e: Exception) { //Create another coroutine after a delay
-                     Log.e("ALTER", e.stackTraceToString())
+                    Logger.log(e.stackTraceToString())
                     delay(1000)
                     dispatch(true)
                 }
@@ -112,7 +114,7 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
 
     //Try to stabilize the connection
     private suspend fun handleDispatch() {
-        Log.d("ALTER", "mqttd handle")
+        Logger.log("mqttd handle")
         statePing.postValue(null)
         while (true) {
             if (d.mqtt.isEnabled && !isDischarged) when (client.state) {
@@ -156,13 +158,13 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
             .identifier(config.clientId)
             .transportConfig(transportConfig.build())
             .addDisconnectedListener {
-                Log.d("ALTER", "mqttd disconnected")
+                Logger.log("mqttd disconnected(${it.source} || ${it.cause})")
                 statePing.postValue(null)
                 topics = mutableListOf()
                 dispatch()
             }
             .addConnectedListener {
-                Log.d("ALTER", "mqttd connected")
+                Logger.log("mqttd connected")
                 statePing.postValue(null)
                 currentConfig = config
                 topicCheck()
@@ -256,6 +258,7 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
 
     //Manage subscriptions at topic list change
     private fun topicCheck() {
+        Logger.log("topic check")
         val list: MutableList<Pair<String, Int>> = mutableListOf()
         for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
             for (t in tile.mqtt.subs) {

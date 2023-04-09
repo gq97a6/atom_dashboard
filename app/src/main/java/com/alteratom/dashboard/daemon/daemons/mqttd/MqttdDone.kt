@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
@@ -44,12 +43,16 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
 
     override val state: State
         get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
-        else when (client.state) {
-            MqttClientState.CONNECTED -> State.CONNECTED
-            MqttClientState.DISCONNECTED -> State.DISCONNECTED
-            MqttClientState.CONNECTING -> State.ATTEMPTING
-            MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
-            MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
+        else try {
+            when (client.state) {
+                MqttClientState.CONNECTED -> State.CONNECTED
+                MqttClientState.DISCONNECTED -> State.DISCONNECTED
+                MqttClientState.CONNECTING -> State.ATTEMPTING
+                MqttClientState.DISCONNECTED_RECONNECT -> State.ATTEMPTING
+                MqttClientState.CONNECTING_RECONNECT -> State.ATTEMPTING
+            }
+        } catch (e: Exception) {
+            State.FAILED
         }
 
     //if (!isEnabled) Status.DISCONNECTED
@@ -86,7 +89,7 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
 
     //Start the manager if not already running
     @OptIn(DelicateCoroutinesApi::class)
-    fun dispatch(cancel: Boolean = false) {
+    private fun dispatch(cancel: Boolean = false) {
         Logger.log("mqttd dispatch")
         if (cancel) {
             dispatchJob?.cancel()
@@ -227,12 +230,16 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
 
     fun publish(topic: String, msg: String, qos: Int = 0, retain: Boolean = false) {
         if (!isConnected) return
-        client.publishWith()
-            .topic(topic)
-            .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
-            .payload(msg.toByteArray())
-            .retain(retain)
-            .send()
+        try {
+            client.publishWith()
+                .topic(topic)
+                .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
+                .payload(msg.toByteArray())
+                .retain(retain)
+                .send()
+        } catch (e: Exception) {
+            Logger.log(e.stackTraceToString())
+        }
     }
 
     private fun subscribe(topic: String, qos: Int) {
@@ -273,8 +280,12 @@ class MqttdDone(context: Context, dashboard: Dashboard) : Daemon(context, dashbo
         val unsubTopics = topics - list.toSet()
         val subTopics = list - topics.toSet()
 
-        for (t in unsubTopics) unsubscribe(t.first, t.second)
-        for (t in subTopics) subscribe(t.first, t.second)
+        try {
+            for (t in unsubTopics) unsubscribe(t.first, t.second)
+            for (t in subTopics) subscribe(t.first, t.second)
+        } catch (e: Exception) {
+            Logger.log(e.stackTraceToString())
+        }
     }
 
     enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }

@@ -34,12 +34,14 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.initializeGlobals
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SetupFragment : Fragment() {
@@ -120,17 +122,40 @@ class SetupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         CoroutineScope(Dispatchers.Default).launch {
-            if (service?.isStarted == true) onServiceStarted()
+            if (service?.isStarted == true) (activity as MainActivity).apply {
+                if (!G.areInitialized) { //Restart if globals are not initialized
+                    Logger.log("restart not initialized")
+
+                    Intent(this@apply, ForegroundService::class.java).also {
+                        it.action = "STOP"
+                        this@apply.startForegroundService(it)
+                    }
+
+                    //Restart in three seconds
+                    delay(3000)
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
+
+                    //Stab it
+                    finish()
+
+                    //Kill it
+                    finishAffinity()
+                } else onServiceStarted()
+            }
             else (activity as MainActivity).apply {
                 Logger.log("create service")
+
                 //Create a service
                 Intent(this@apply, ForegroundService::class.java).also {
-                    it.action = "DASH"
+                    it.action = "START"
                     this@apply.startForegroundService(it)
                 }
 
                 //Wait for service
                 while (service?.isStarted != true) service?.finishAffinity = { finishAffinity() }
+
+                //TODO: test if globals persists even if they are initialized outside service
+                service?.apply { initializeGlobals(1) }
 
                 //Exit
                 onServiceStarted()

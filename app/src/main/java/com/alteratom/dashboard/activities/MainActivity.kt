@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         ActivityHandler.onCreate(this)
 
         //Partially initialize globals if service has not been started
-        if (ForegroundService.service?.isStarted != true) initializeGlobals(1)
+        if (ForegroundService.service?.isStarted != true) initializeGlobals(0)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)

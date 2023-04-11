@@ -12,6 +12,8 @@ import com.alteratom.dashboard.tile.Tile
 import kotlin.reflect.KClass
 
 object G {
+    var areInitialized = false
+
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
@@ -58,19 +60,14 @@ object G {
         Logger.log("init globals $mode")
 
         when (mode) {
-            0 -> { //All - when service starts without activity
-                G.theme = parseSave() ?: Theme()
-                settings = parseSave() ?: Settings()
-                dashboards = parseListSave()
-                DaemonsManager.notifyAllAdded()
-            }
-            1 -> { //Skip dashboards - when activity starts without service
+            0 -> { //Skip dashboards - when activity starts without service
                 G.theme = parseSave() ?: Theme()
                 settings = parseSave() ?: Settings()
             }
-            2 -> { //Only dashboards - when service starts after activity
+            1 -> { //Only dashboards - when service starts after activity
                 dashboards = parseListSave()
                 DaemonsManager.notifyAllAdded()
+                areInitialized = true
             }
         }
 

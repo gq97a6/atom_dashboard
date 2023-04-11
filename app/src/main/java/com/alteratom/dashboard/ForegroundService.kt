@@ -48,15 +48,6 @@ class ForegroundService : LifecycleService() {
 
         startForeground(1, notification.build())
 
-        lifecycleScope.launch {
-            var i = 0
-            while (true) {
-                Logger.log("fg: $i")
-                i++
-                delay(10000)
-            }
-        }
-
         service = this
     }
 
@@ -67,14 +58,16 @@ class ForegroundService : LifecycleService() {
         //Stop service and close the app
         if (action == "STOP") {
             isStarted = false
-            DaemonsManager.notifyAllRemoved()
+            //TODO: test if globals persists even if they are not used in service
+            //DaemonsManager.notifyAllRemoved()
 
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
 
             finishAffinity()
         } else { //Initialize globals based on action
-            initializeGlobals(if (action == "DASH") 2 else 0)
+            //TODO: test if globals persists even if they are initialized outside service
+            //initializeGlobals(1)
             isStarted = true
         }
 
@@ -83,23 +76,10 @@ class ForegroundService : LifecycleService() {
 
     override fun onDestroy() {
         Logger.log("Service destroyed")
-        ActivityHandler.onDestroy()
-        DaemonsManager.notifyAllRemoved()
-        createNotification(this, "Service", "service destroyed")
-
-        //Restart service if it has not been stopped
-        //if (isStarted) {
-        //    Intent(this, ForegroundService::class.java).also {
-        //        it.action = "ALL"
-        //        this.startForegroundService(it)
-        //    }
-        //}
-
+        //TODO: test if globals persists even if they are not used in service
+        //ActivityHandler.onDestroy()
+        //DaemonsManager.notifyAllRemoved()
         super.onDestroy()
-    }
-
-    override fun onTaskRemoved(rootIntent: Intent?) {
-        super.onTaskRemoved(rootIntent)
     }
 
     private fun createNotificationChannel() {

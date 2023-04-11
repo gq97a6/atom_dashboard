@@ -174,13 +174,12 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
             .buildAsync()
 
-        client.state
         client.connectWith()
             .simpleAuth()
             .username(config.username)
             .password(config.pass.toByteArray())
             .applySimpleAuth()
-            .keepAlive(30)
+            .keepAlive(60)
             .cleanSession(true)
             .send()
     }

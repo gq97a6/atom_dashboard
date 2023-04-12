@@ -179,7 +179,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .username(config.username)
             .password(config.pass.toByteArray())
             .applySimpleAuth()
-            .keepAlive(60)
+            .keepAlive(30)
             .cleanSession(true)
             .send()
     }

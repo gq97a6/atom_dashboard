@@ -34,15 +34,13 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.objects.ActivityHandler.restart
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class SetupFragment : Fragment() {
 
@@ -133,13 +131,7 @@ class SetupFragment : Fragment() {
 
                     //Restart in three seconds
                     delay(3000)
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-
-                    //Stab it
-                    finish()
-
-                    //Kill it
-                    finishAffinity()
+                    restart()
                 } else onServiceStarted()
             }
             else (activity as MainActivity).apply {
@@ -151,14 +143,21 @@ class SetupFragment : Fragment() {
                     this@apply.startForegroundService(it)
                 }
 
-                //Wait for service
-                while (service?.isStarted != true) service?.finishAffinity = { finishAffinity() }
+                withTimeoutOrNull(10000) {
+                    //Wait for service
+                    while (true) {
+                        if (service?.isStarted == true) break
+                        else delay(50)
+                    }
 
-                //TODO: test if globals persists even if they are initialized outside service
-                service?.apply { initializeGlobals(1) }
+                    service?.finishAffinity = { finishAffinity() }
 
-                //Exit
-                onServiceStarted()
+                    //TODO: test if globals persists even if they are initialized outside service
+                    service?.apply { initializeGlobals(1) }
+
+                    //Exit
+                    onServiceStarted()
+                } ?: restart()
             }
         }
     }

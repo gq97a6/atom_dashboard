@@ -247,7 +247,14 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .topicFilter(topic)
             .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_LEAST_ONCE)
             .callback {
-                for (tile in d.tiles) tile.receive(it)
+                for (tile in d.tiles) {
+                    tile.receive(it)
+
+                    //TODO: DEBUG CONNECTION
+                    if (it.topic.toString() == "DEBUGAPP") {
+                        Logger.log("DEBUG MQTT PING")
+                    }
+                }
                 //data.postValue(Pair(t ?: "", m))
             }
             .send()

@@ -1,16 +1,15 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
-import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
+import com.alteratom.dashboard.objects.Logger
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.ActivityMainBinding

@@ -10,7 +10,6 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
 import android.os.Build
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -22,6 +21,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.objects.Logger
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
@@ -59,7 +59,7 @@ class Theme {
 
                 it.window.statusBarColor = colorPallet.background
             } catch (e: Exception) {
-                 Logger.log(e.stackTraceToString())
+                Logger.log(e.stackTraceToString())
             }
         }
 

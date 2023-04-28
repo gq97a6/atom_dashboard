@@ -2,7 +2,6 @@ package com.alteratom.dashboard.objects
 
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.daemon.DaemonsManager

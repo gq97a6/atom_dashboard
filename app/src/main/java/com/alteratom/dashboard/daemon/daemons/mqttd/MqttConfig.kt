@@ -72,15 +72,5 @@ data class MqttConfig(
             }
         }
 
-    init {
-        //TODO: temporary fix
-        try {
-            address = address.replace("tcp://", "")
-            address = address.replace("ssl://", "")
-            address = address.replace("mqtt://", "")
-        }catch (_:Exception) {
-        }
-    }
-
     fun deepCopy(): MqttConfig? = Storage.parseSave(this.prepareSave())
 }

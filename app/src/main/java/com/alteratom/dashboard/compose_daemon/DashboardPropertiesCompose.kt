@@ -223,7 +223,11 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 )
 
-                Text(text = "Do not add protocol prefix (eg. tcp://)", fontSize = 12.sp, color = colors.b)
+                Text(
+                    text = "Do not add protocol prefix (eg. tcp://)",
+                    fontSize = 12.sp,
+                    color = colors.b
+                )
 
                 var port by remember {
                     mutableStateOf(dashboard.mqtt.port.let {

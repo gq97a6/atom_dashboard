@@ -29,7 +29,6 @@ import com.alteratom.dashboard.BillingHandler.Companion.checkBilling
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.ForegroundService.Companion.service
 import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
-import com.alteratom.dashboard.Logger
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
@@ -40,6 +39,7 @@ import com.alteratom.dashboard.objects.G.initializeGlobals
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.objects.Logger
 import kotlinx.coroutines.*
 
 class SetupFragment : Fragment() {

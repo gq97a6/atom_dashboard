@@ -1,4 +1,4 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.objects
 
 import android.os.Environment
 import java.io.File
@@ -23,8 +23,7 @@ object Logger {
 
     fun log(s: String) {
         try {
-
-            file.appendText("\n[$now]: $s")
+            //file.appendText("[$now]: $s\n")
         } catch (_: Exception) {
         }
     }

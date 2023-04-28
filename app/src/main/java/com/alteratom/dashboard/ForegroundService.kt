@@ -5,18 +5,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
-import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.objects.ActivityHandler
-import com.alteratom.dashboard.objects.G.initializeGlobals
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.alteratom.dashboard.objects.Logger
 
 
 class ForegroundService : LifecycleService() {

@@ -100,9 +100,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         statePing.postValue(null)
 
         while (true) {
-            var A = client.isConnected == isEnabled
-            var B = currentConfig == d.mqtt
-            if (A && (B || !isEnabled)) break
+            if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) break
 
             if (isEnabled) {
                 if (client.isConnected) disconnectAttempt(true)

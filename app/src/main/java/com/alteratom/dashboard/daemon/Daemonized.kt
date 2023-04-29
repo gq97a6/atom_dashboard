@@ -75,7 +75,7 @@ interface Daemonized {
             onReceive(
                 Pair(
                     topic,
-                    msg.payload.toString()
+                    msg.toString()
                 ), jsonResult
             )
         } catch (e: Exception) {

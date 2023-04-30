@@ -10,10 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
@@ -23,17 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.BuildConfig
 import com.alteratom.R
-import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.Settings
-import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.*
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
@@ -42,8 +41,8 @@ import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
+import com.alteratom.dashboard.objects.ActivityHandler.restart
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
@@ -127,7 +126,7 @@ class SettingsFragment : Fragment() {
 
                                 DaemonsManager.notifyAllRemoved()
                                 dashboards = d
-                                DaemonsManager.notifyAllAdded()
+                                DaemonsManager.notifyAllAdded(requireContext())
 
                                 if (s != null) settings = s
                                 if (t != null) theme = t
@@ -257,6 +256,100 @@ class SettingsFragment : Fragment() {
                                             military = it
                                             settings.militaryTime = military
                                         },
+                                    )
+                                }
+                            }
+
+                            var workShow by remember { mutableStateOf(false) }
+                            var hasChanged by remember { mutableStateOf(false) }
+
+                            if (workShow) {
+                                Dialog({ workShow = false }) {
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(bottom = 20.dp)
+                                            .padding(horizontal = 20.dp)
+                                            .clip(RoundedCornerShape(6.dp))
+                                            .border(
+                                                BorderStroke(1.dp, colors.color),
+                                                RoundedCornerShape(6.dp)
+                                            )
+                                            .background(colors.background.copy(.8f))
+                                            .padding(15.dp),
+                                    ) {
+                                        Text(
+                                            "Battery optimization must be disabled to use this option",
+                                            fontSize = 18.sp,
+                                            color = colors.a
+                                        )
+
+                                        BasicButton(
+                                            contentPadding = PaddingValues(13.dp),
+                                            border = BorderStroke(2.dp, colors.b),
+                                            onClick = {
+                                                openBatterySettings(requireContext())
+                                                workShow = false
+                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(vertical = 14.dp)
+                                        ) {
+                                            Text(
+                                                "BATTERY OPTIMIZATION SETTINGS",
+                                                fontSize = 10.sp,
+                                                color = colors.a
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
+                            FrameBox("Background work") {
+                                Column {
+                                    var foregroundService by remember { mutableStateOf(settings.foregroundService) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "Enable background work:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = foregroundService,
+                                        onCheckedChange = {
+                                            if (!isBatteryOptimized(requireContext()) || !it) {
+                                                hasChanged = true
+                                                foregroundService = it
+                                                settings.foregroundService = foregroundService
+                                            } else workShow = true
+                                        },
+                                    )
+
+                                    if (hasChanged) {
+                                        BasicButton(
+                                            contentPadding = PaddingValues(13.dp),
+                                            border = BorderStroke(2.dp, colors.b),
+                                            onClick = {
+                                                requireActivity().restart()
+                                            },
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(top = 10.dp, bottom = 20.dp)
+                                        ) {
+                                            Text(
+                                                "RESTART TO APPLY CHANGES",
+                                                fontSize = 10.sp,
+                                                color = colors.a
+                                            )
+                                        }
+                                    }
+
+                                    Text(
+                                        "This option allows app to work after being closed." +
+                                                " To do so persistent notification is created due to Android requirements." +
+                                                "\nIt is not guaranteed that the app will not be killed by system.",
+                                        fontSize = 13.sp,
+                                        color = colors.b
                                     )
                                 }
                             }

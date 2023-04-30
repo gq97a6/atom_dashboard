@@ -8,4 +8,5 @@ class Settings {
     var mqttTabShow = true
     var animateUpdate = true
     var pendingPurchase = false
+    var foregroundService = true
 }

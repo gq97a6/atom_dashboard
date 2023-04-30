@@ -5,7 +5,6 @@ package com.alteratom.dashboard
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import com.alteratom.dashboard.objects.Logger
 
 abstract class ConnectionManager(private var interval: Long = 500) {
 
@@ -19,8 +18,7 @@ abstract class ConnectionManager(private var interval: Long = 500) {
         if (!isDoneResult && !isDispatchScheduled) {
             try {
                 handleDispatch(reason)
-            } catch (e: Exception) {
-                Logger.log(e.stackTraceToString())
+            } catch (_: Exception) {
             }
 
             Handler(Looper.getMainLooper()).postDelayed({

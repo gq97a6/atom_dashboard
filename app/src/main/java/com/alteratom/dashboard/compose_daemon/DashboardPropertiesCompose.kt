@@ -161,7 +161,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     BorderStroke(1.dp, colors.color),
                                     RoundedCornerShape(6.dp)
                                 )
-                                .background(colors.background.copy(.9f))
+                                .background(colors.background.copy(.8f))
                                 .padding(15.dp),
                         ) {
                             Text(

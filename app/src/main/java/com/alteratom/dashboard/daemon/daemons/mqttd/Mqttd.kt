@@ -2,12 +2,11 @@ package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.objects.Logger
 import kotlinx.coroutines.*
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.*
@@ -30,7 +29,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         get() = try {
             client.isConnected
         } catch (e: Exception) {
-            Logger.log(e.stackTraceToString())
             false
         }
 
@@ -70,22 +68,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     //Start the manager if not already running
     private fun dispatch(cancel: Boolean = false) {
-        Logger.log("mqttd dispatch")
-
         if (cancel) dispatchJob?.cancel()
 
         //Return if already dispatched
-        if (dispatchJob != null && dispatchJob?.isActive == true) {
-            Logger.log("mqttd dispatched already")
-            return
-        }
+        if (dispatchJob != null && dispatchJob?.isActive == true) return
 
-        (context as ForegroundService).apply {
+        (context as LifecycleOwner).apply {
             dispatchJob = lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     handleDispatch()
                 } catch (e: Exception) { //Create another coroutine after a delay
-                    Logger.log(e.stackTraceToString())
                     delay(1000)
                     dispatch(true)
                 }
@@ -93,10 +85,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
-    //TODO
     //Try to stabilize the connection
     private suspend fun handleDispatch() {
-        Logger.log("mqttd handle")
         statePing.postValue(null)
 
         while (true) {
@@ -120,7 +110,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     // Connection methods -------------------------------------------------------------------------
 
-    //TODO
     private fun disconnectAttempt(close: Boolean = false) {
         try {
             client.disconnect(null, object : IMqttActionListener {
@@ -143,7 +132,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         }
     }
 
-    //TODO
     private fun connectAttempt(config: MqttConfig) {
         client.setCallback(object : MqttCallback {
             override fun messageArrived(topic: String?, msg: MqttMessage) {
@@ -153,7 +141,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             override fun connectionLost(cause: Throwable?) {
                 topics = mutableListOf()
                 dispatch()
-                Logger.log("mqttd disconnected")
             }
 
             override fun deliveryComplete(token: IMqttDeliveryToken?) {
@@ -179,7 +166,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     topicCheck()
                     currentConfig = config
-                    Logger.log("mqttd connected")
                 }
 
                 override fun onFailure(
@@ -317,8 +303,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     //Manage subscriptions at topic list change
     private fun topicCheck() {
-        Logger.log("topic check")
-
         val list: MutableList<Pair<String, Int>> = mutableListOf()
         for (tile in d.tiles.filter { it.mqtt.isEnabled }) {
             for (t in tile.mqtt.subs) {
@@ -330,16 +314,13 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
         }
 
-        list.add(Pair("DEBUGAPP", 1))
-
         val unsubTopics = topics - list.toSet()
         val subTopics = list - topics.toSet()
 
         try {
             for (t in unsubTopics) unsubscribe(t.first, t.second)
             for (t in subTopics) subscribe(t.first, t.second)
-        } catch (e: Exception) {
-            Logger.log(e.stackTraceToString())
+        } catch (_: Exception) {
         }
     }
 

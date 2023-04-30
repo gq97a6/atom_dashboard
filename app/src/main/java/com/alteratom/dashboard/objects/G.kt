@@ -44,7 +44,7 @@ object G {
         return true
     }
 
-    fun Context.initializeGlobals(mode: Int) {
+    fun Context.initializeGlobals(stage: Int) {
         //Setup paths if empty
         if (rootFolder == "") {
             rootFolder = filesDir.canonicalPath.toString()
@@ -56,16 +56,14 @@ object G {
             )
         }
 
-        Logger.log("init globals $mode")
-
-        when (mode) {
+        when (stage) {
             0 -> { //Skip dashboards - when activity starts without service
                 G.theme = parseSave() ?: Theme()
                 settings = parseSave() ?: Settings()
             }
             1 -> { //Only dashboards - when service starts after activity
                 dashboards = parseListSave()
-                DaemonsManager.notifyAllAdded()
+                DaemonsManager.notifyAllAdded(this)
                 areInitialized = true
             }
         }

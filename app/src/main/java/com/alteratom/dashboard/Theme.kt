@@ -21,7 +21,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.Logger
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
@@ -58,8 +57,7 @@ class Theme {
                 ).isAppearanceLightStatusBars = !isDark
 
                 it.window.statusBarColor = colorPallet.background
-            } catch (e: Exception) {
-                Logger.log(e.stackTraceToString())
+            } catch (_: Exception) {
             }
         }
 
@@ -112,10 +110,7 @@ class Theme {
             is ConstraintLayout -> this.applyTheme(p)
             is RecyclerView -> this.applyTheme(p)
             is CircularSeekBar -> this.applyTheme(p)
-            else -> {
-                if (this.javaClass == View::class.java) this.applyTheme(p)
-                else Logger.log("View type not specified: ${this.javaClass}")
-            }
+            else -> if (this.javaClass == View::class.java) this.applyTheme(p)
         }
     }
 
@@ -417,7 +412,7 @@ class Theme {
 
     private fun onUnknownTag(tag: Any?, type: String) {
         tag?.toString()?.let {
-            if (it.isNotBlank()) Logger.log("Unknown $type tag: $it")
+            //if (it.isNotBlank())
         }
     }
 

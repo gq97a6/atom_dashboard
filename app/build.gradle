@@ -13,8 +13,6 @@ android {
         targetSdkVersion 33
         versionCode 21
         versionName "1.0.4 | stable" //stable or beta
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures {

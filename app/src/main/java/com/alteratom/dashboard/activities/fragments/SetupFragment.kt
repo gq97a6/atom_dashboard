@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,14 +32,18 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.objects.ActivityHandler.restart
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.Logger
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 
 class SetupFragment : Fragment() {
 
@@ -120,50 +123,52 @@ class SetupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         CoroutineScope(Dispatchers.Default).launch {
-            if (service?.isStarted == true) (activity as MainActivity).apply {
-                if (!G.areInitialized) { //Restart if globals are not initialized
-                    Logger.log("restart not initialized")
+            //Disable foreground service if battery is optimized
+            if (isBatteryOptimized(requireContext())) settings.foregroundService = false
 
-                    Intent(this@apply, ForegroundService::class.java).also {
-                        it.action = "STOP"
-                        this@apply.startForegroundService(it)
-                    }
-
-                    //Restart in three seconds
-                    delay(3000)
-                    restart()
-                } else onServiceStarted()
-            }
-            else (activity as MainActivity).apply {
-                Logger.log("create service")
-
-                //Create a service
-                Intent(this@apply, ForegroundService::class.java).also {
-                    it.action = "START"
-                    this@apply.startForegroundService(it)
-                }
-
-                withTimeoutOrNull(10000) {
-                    //Wait for service
-                    while (true) {
-                        if (service?.isStarted == true) break
-                        else delay(50)
-                    }
-
-                    service?.finishAffinity = { finishAffinity() }
-
-                    //TODO: test if globals persists even if they are initialized outside service
-                    service?.apply { initializeGlobals(1) }
-
-                    //Exit
-                    onServiceStarted()
-                } ?: restart()
-            }
+            //Foreground service enabled by settings and battery usage is not optimised
+            if (settings.foregroundService) foregroundServiceAllowed()
+            else foregroundServiceDisallowed()
+            //Foreground service disabled by settings or battery usage is optimised
         }
     }
 
-    private fun onServiceStarted() {
-        Logger.log("onServiceStarted")
+    private suspend fun foregroundServiceDisallowed() {
+        //Disable foreground service as it should be
+        if (service?.isStarted == true) ForegroundService.stop(activity as MainActivity)
+
+        //Initialize globals if not already
+        if (!G.areInitialized) (activity as MainActivity).apply { initializeGlobals(1) }
+
+        onSetupDone()
+    }
+
+    private suspend fun foregroundServiceAllowed() {
+        if (service?.isStarted == true) (activity as MainActivity).apply { //Service already launched
+            if (G.areInitialized) onSetupDone()
+            else { //Something went wrong | Globals should be initialized as service is
+                //Stop foreground service
+                ForegroundService.stop(this@apply)
+
+                //Restart in three seconds
+                delay(3000)
+                restart()
+            }
+        } else (activity as MainActivity).apply { //Service not launched
+            //Start foreground service
+            ForegroundService.start(this@apply)
+            ForegroundService.haltForService()
+
+            //Configure
+            service?.finishAffinity = { finishAffinity() }
+
+            initializeGlobals(1)
+
+            onSetupDone()
+        }
+    }
+
+    private fun onSetupDone() {
         //Background billing check
         (activity as MainActivity).checkBilling()
 

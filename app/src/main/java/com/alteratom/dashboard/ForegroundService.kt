@@ -10,7 +10,9 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
-import com.alteratom.dashboard.objects.Logger
+import com.alteratom.dashboard.activities.MainActivity
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withTimeoutOrNull
 
 
 class ForegroundService : LifecycleService() {
@@ -20,6 +22,29 @@ class ForegroundService : LifecycleService() {
 
     companion object {
         var service: ForegroundService? = null
+
+        fun stop(activity: MainActivity) {
+            Intent(activity, ForegroundService::class.java).also {
+                it.action = "STOP"
+                activity.startForegroundService(it)
+            }
+        }
+
+        fun start(activity: MainActivity) {
+            Intent(activity, ForegroundService::class.java).also {
+                it.action = "START"
+                activity.startForegroundService(it)
+            }
+
+        }
+
+        suspend fun haltForService() = withTimeoutOrNull(10000) {
+            //Wait for service
+            while (true) {
+                if (service?.isStarted == true) break
+                else delay(50)
+            }
+        }
     }
 
     override fun onCreate() {
@@ -47,18 +72,15 @@ class ForegroundService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ""
-        Logger.log("Service onStartCommand: $action")
 
         //Stop service and close the app
         if (action == "STOP") {
             isStarted = false
-            //TODO: test if globals persists even if they are not used in service
-            //DaemonsManager.notifyAllRemoved()
 
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
 
-            finishAffinity()
+            //finishAffinity()
         } else { //Initialize globals based on action
             //TODO: test if globals persists even if they are initialized outside service
             //initializeGlobals(1)
@@ -66,14 +88,6 @@ class ForegroundService : LifecycleService() {
         }
 
         return super.onStartCommand(intent, flags, startId)
-    }
-
-    override fun onDestroy() {
-        Logger.log("Service destroyed")
-        //TODO: test if globals persists even if they are not used in service
-        //ActivityHandler.onDestroy()
-        //DaemonsManager.notifyAllRemoved()
-        super.onDestroy()
     }
 
     private fun createNotificationChannel() {

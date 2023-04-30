@@ -9,7 +9,6 @@ import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
-import com.alteratom.dashboard.objects.Logger
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.ActivityMainBinding
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Logger.log("main activity")
         super.onCreate(savedInstanceState)
         ActivityHandler.onCreate(this)
 

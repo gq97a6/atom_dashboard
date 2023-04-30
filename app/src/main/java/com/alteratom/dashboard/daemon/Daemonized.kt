@@ -5,7 +5,6 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.Logger
 import com.alteratom.dashboard.objects.Storage
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
@@ -78,8 +77,7 @@ interface Daemonized {
                     msg.toString()
                 ), jsonResult
             )
-        } catch (e: Exception) {
-            Logger.log(e.stackTraceToString())
+        } catch (_: Exception) {
         }
     }
 }

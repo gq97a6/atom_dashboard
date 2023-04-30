@@ -11,10 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
-import android.os.Handler
-import android.os.Looper
-import android.os.VibrationEffect
-import android.os.Vibrator
+import android.os.*
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -278,4 +275,13 @@ fun Context.proAlert(activity: Activity) {
             }
         }
     }
+}
+
+fun isBatteryOptimized(context: Context): Boolean =
+    !(context.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager)
+        .isIgnoringBatteryOptimizations(context.applicationContext.packageName)
+
+fun openBatterySettings(context: Context) {
+    val intent = Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+    context.startActivity(intent)
 }

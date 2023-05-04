@@ -68,6 +68,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     //Start the manager if not already running
     private fun dispatch(cancel: Boolean = false) {
+        //TODO: LOG
+        d.log.newEntry("dispatch")
+
         if (cancel) dispatchJob?.cancel()
 
         //Return if already dispatched
@@ -90,13 +93,25 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         statePing.postValue(null)
 
         while (true) {
-            if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) break
+            if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) {
+                //TODO: LOG
+                d.log.newEntry("done{ " +
+                        "c${if (client.isConnected) "1" else "0"} | " +
+                        "e${if (isEnabled) "1" else "0"} | " +
+                        "f${if (currentConfig == d.mqtt) "1" else "0"} }")
+                break
+            }
 
             if (isEnabled) {
                 if (client.isConnected) disconnectAttempt(true)
                 else {
-                    if (client.clientId != d.mqtt.clientId || client.serverURI != d.mqtt.uri)
+                    if (client.clientId != d.mqtt.clientId || client.serverURI != d.mqtt.uri) {
+
+                        //TODO: LOG
+                        d.log.newEntry("new client")
+
                         client = MqttAndroidClient(context, d.mqtt.uri, d.mqtt.clientId)
+                    }
 
                     connectAttempt(d.mqtt.copy())
                 }
@@ -111,28 +126,40 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     // Connection methods -------------------------------------------------------------------------
 
     private fun disconnectAttempt(close: Boolean = false) {
+        //TODO: LOG
+        d.log.newEntry("disconn{$close}")
+
         try {
             client.disconnect(null, object : IMqttActionListener {
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     client.unregisterResources()
                     client.setCallback(null)
                     topics = mutableListOf()
+
+                    //TODO: LOG
+                    d.log.newEntry("disconn succ")
                 }
 
                 override fun onFailure(
                     asyncActionToken: IMqttToken?,
                     exception: Throwable?
                 ) {
-                    run {}
+                    //TODO: LOG
+                    d.log.newEntry("disconn failure")
                 }
             })
 
             if (close) client.close()
         } catch (_: Exception) {
+            //TODO: LOG
+            d.log.newEntry("disconn exception")
         }
     }
 
     private fun connectAttempt(config: MqttConfig) {
+        //TODO: LOG
+        d.log.newEntry("con")
+
         client.setCallback(object : MqttCallback {
             override fun messageArrived(topic: String?, msg: MqttMessage) {
                 for (tile in d.tiles) tile.receive(topic ?: "", msg)
@@ -159,6 +186,8 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             options.password = charArrayOf()
         }
 
+        options.keepAliveInterval = 0
+
         if (config.ssl) setupSSL(config, options)
 
         try {
@@ -166,16 +195,22 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 override fun onSuccess(asyncActionToken: IMqttToken?) {
                     topicCheck()
                     currentConfig = config
+
+                    //TODO: LOG
+                    d.log.newEntry("con succ")
                 }
 
                 override fun onFailure(
                     asyncActionToken: IMqttToken?,
                     exception: Throwable?
                 ) {
-                    run {}
+                    //TODO: LOG
+                    d.log.newEntry("con failure")
                 }
             })
         } catch (_: Exception) {
+            //TODO: LOG
+            d.log.newEntry("con exception")
         }
     }
 

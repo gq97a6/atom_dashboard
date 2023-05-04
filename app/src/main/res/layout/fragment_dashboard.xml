@@ -61,7 +61,7 @@
 
     <FrameLayout
         android:id="@+id/d_toolbar"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,7 +83,7 @@
 
     <FrameLayout
         android:id="@+id/d_more"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +123,7 @@
 
     <TextView
         android:id="@+id/d_status"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingBottom="10dp"

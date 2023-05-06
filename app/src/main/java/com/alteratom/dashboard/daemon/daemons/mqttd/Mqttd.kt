@@ -74,13 +74,21 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         if (cancel) dispatchJob?.cancel()
 
         //Return if already dispatched
-        if (dispatchJob != null && dispatchJob?.isActive == true) return
+        if (dispatchJob != null && dispatchJob?.isActive == true) {
+            //TODO: LOG
+            d.log.newEntry("already dispatch")
+
+            return
+        }
 
         (context as LifecycleOwner).apply {
             dispatchJob = lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     handleDispatch()
                 } catch (e: Exception) { //Create another coroutine after a delay
+                    //TODO: LOG
+                    d.log.newEntry("dispatch exception")
+
                     delay(1000)
                     dispatch(true)
                 }
@@ -92,13 +100,18 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     private suspend fun handleDispatch() {
         statePing.postValue(null)
 
+        //TODO: LOG
+        d.log.newEntry("handle dispatch")
+
         while (true) {
             if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) {
                 //TODO: LOG
-                d.log.newEntry("done{ " +
-                        "c${if (client.isConnected) "1" else "0"} | " +
-                        "e${if (isEnabled) "1" else "0"} | " +
-                        "f${if (currentConfig == d.mqtt) "1" else "0"} }")
+                d.log.newEntry(
+                    "done{ " +
+                            "c${if (client.isConnected) "1" else "0"} | " +
+                            "e${if (isEnabled) "1" else "0"} | " +
+                            "f${if (currentConfig == d.mqtt) "1" else "0"} }"
+                )
                 break
             }
 
@@ -106,7 +119,6 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 if (client.isConnected) disconnectAttempt(true)
                 else {
                     if (client.clientId != d.mqtt.clientId || client.serverURI != d.mqtt.uri) {
-
                         //TODO: LOG
                         d.log.newEntry("new client")
 

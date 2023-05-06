@@ -1,8 +1,6 @@
-if service does not require globals usage to keep them in use
-create option do disable background work (do not use service as it is not required)
-enforce battery optimization off to use background service
 add notification of changes to dashboard (top bar and popup)
 add notification question
-check ssl connection
 add connect QoS
 add keep alive frequency option
+add max log size
+remove/lock popping buttons for log

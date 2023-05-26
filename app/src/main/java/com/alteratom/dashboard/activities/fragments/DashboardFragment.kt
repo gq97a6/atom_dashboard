@@ -246,7 +246,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 b.dLog.layoutParams = lp
                 b.dLogBar.layoutParams = ldp
             }
-            else -> {
+            1 -> {
                 val logAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
                 logAnimator.duration = 500L
 

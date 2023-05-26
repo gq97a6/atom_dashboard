@@ -43,8 +43,10 @@ class TerminalTile : Tile() {
         terminalAdapter.setHasStableIds(true)
 
         terminalAdapter.onBindViewHolder = { _, holder, pos ->
-            val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
-            text.text = log[pos]
+            if (pos < log.size) {
+                val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
+                text.text = log[pos]
+            }
         }
 
         terminalAdapter.submitList(MutableList(log.size) {

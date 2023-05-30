@@ -60,20 +60,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
 
-        //Override onBackPress if required
-        //(activity as MainActivity).doOverrideOnBackPress = {
-        //    !adapter.editMode.isNone.apply {
-        //        if (this) toolBarHandler.toggleTools()
-        //    }
-        //}
-
         (activity as MainActivity).doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
                 toolBarHandler.toggleTools()
                 true
-            } else {
-                false
-            }
+            } else false
         }
 
         //Set dashboard name

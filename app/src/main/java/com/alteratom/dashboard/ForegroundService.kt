@@ -86,10 +86,9 @@ class ForegroundService : LifecycleService() {
         else {
             isStarted = false
 
+            if (action == "SHUT") finishAffinity()
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
-
-            if (action == "SHUT") finishAffinity()
         }
 
         return super.onStartCommand(intent, flags, startId)

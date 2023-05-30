@@ -23,6 +23,15 @@ class ForegroundService : LifecycleService() {
     companion object {
         var service: ForegroundService? = null
 
+        //Stop service and activity
+        fun shut(activity: MainActivity) {
+            Intent(activity, ForegroundService::class.java).also {
+                it.action = "SHUT"
+                activity.startForegroundService(it)
+            }
+        }
+
+        //Stop service but not the activity
         fun stop(activity: MainActivity) {
             Intent(activity, ForegroundService::class.java).also {
                 it.action = "STOP"
@@ -38,11 +47,11 @@ class ForegroundService : LifecycleService() {
 
         }
 
+        //Wait for service
         suspend fun haltForService() = withTimeoutOrNull(10000) {
-            //Wait for service
             while (true) {
                 if (service?.isStarted == true) break
-                else delay(50)
+                else delay(100)
             }
         }
     }
@@ -52,7 +61,7 @@ class ForegroundService : LifecycleService() {
         createNotificationChannel()
 
         val intent = Intent(this, ForegroundService::class.java)
-        intent.action = "STOP"
+        intent.action = "SHUT"
 
         val pendingIntent = PendingIntent.getService(
             this, 0, intent, PendingIntent.FLAG_IMMUTABLE
@@ -73,18 +82,14 @@ class ForegroundService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action ?: ""
 
-        //Stop service and close the app
-        if (action == "STOP") {
+        if (action == "START") isStarted = true
+        else {
             isStarted = false
 
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
 
-            //finishAffinity()
-        } else { //Initialize globals based on action
-            //TODO: test if globals persists even if they are initialized outside service
-            //initializeGlobals(1)
-            isStarted = true
+            if (action == "SHUT") finishAffinity()
         }
 
         return super.onStartCommand(intent, flags, startId)

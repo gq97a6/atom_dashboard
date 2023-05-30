@@ -68,40 +68,16 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     //Start the manager if not already running
     private fun dispatch(cancel: Boolean = false) {
-        //TODO: LOG
-        d.log.newEntry("dispatch")
-
         if (cancel) dispatchJob?.cancel()
 
-        //TODO: LOG
-        d.log.newEntry("ds1")
-
         //Return if already dispatched
-        if (dispatchJob != null && dispatchJob?.isActive == true) {
-            //TODO: LOG
-            d.log.newEntry("already dispatch")
-
-            return
-        }
-
-        //TODO: LOG
-        d.log.newEntry("ds2")
+        if (dispatchJob != null && dispatchJob?.isActive == true) return
 
         (context as LifecycleOwner).apply {
-
-            //TODO: LOG
-            d.log.newEntry("ds3")
-
             dispatchJob = lifecycleScope.launch(Dispatchers.IO) {
                     try {
-                        //TODO: LOG
-                        d.log.newEntry("ds4")
-
                         handleDispatch()
                     } catch (e: Exception) { //Create another coroutine after a delay
-                        //TODO: LOG
-                        d.log.newEntry("dispatch exception")
-
                         delay(1000)
                         dispatch(true)
                     }
@@ -113,28 +89,13 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 private suspend fun handleDispatch() {
     statePing.postValue(null)
 
-    //TODO: LOG
-    d.log.newEntry("handle dispatch")
-
     while (true) {
-        if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) {
-            //TODO: LOG
-            d.log.newEntry(
-                "done{ " +
-                        "c${if (client.isConnected) "1" else "0"} | " +
-                        "e${if (isEnabled) "1" else "0"} | " +
-                        "f${if (currentConfig == d.mqtt) "1" else "0"} }"
-            )
-            break
-        }
+        if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) break
 
         if (isEnabled) {
             if (client.isConnected) disconnectAttempt(true)
             else {
                 if (client.clientId != d.mqtt.clientId || client.serverURI != d.mqtt.uri) {
-                    //TODO: LOG
-                    d.log.newEntry("new client")
-
                     client = MqttAndroidClient(context, d.mqtt.uri, d.mqtt.clientId)
                 }
 
@@ -151,40 +112,27 @@ private suspend fun handleDispatch() {
 // Connection methods -------------------------------------------------------------------------
 
 private fun disconnectAttempt(close: Boolean = false) {
-    //TODO: LOG
-    d.log.newEntry("disconn{$close}")
-
     try {
         client.disconnect(null, object : IMqttActionListener {
             override fun onSuccess(asyncActionToken: IMqttToken?) {
                 client.unregisterResources()
                 client.setCallback(null)
                 topics = mutableListOf()
-
-                //TODO: LOG
-                d.log.newEntry("disconn succ")
             }
 
             override fun onFailure(
                 asyncActionToken: IMqttToken?,
                 exception: Throwable?
             ) {
-                //TODO: LOG
-                d.log.newEntry("disconn failure")
             }
         })
 
         if (close) client.close()
     } catch (_: Exception) {
-        //TODO: LOG
-        d.log.newEntry("disconn exception")
     }
 }
 
 private fun connectAttempt(config: MqttConfig) {
-    //TODO: LOG
-    d.log.newEntry("con")
-
     client.setCallback(object : MqttCallback {
         override fun messageArrived(topic: String?, msg: MqttMessage) {
             for (tile in d.tiles) tile.receive(topic ?: "", msg)
@@ -220,22 +168,15 @@ private fun connectAttempt(config: MqttConfig) {
             override fun onSuccess(asyncActionToken: IMqttToken?) {
                 topicCheck()
                 currentConfig = config
-
-                //TODO: LOG
-                d.log.newEntry("con succ")
             }
 
             override fun onFailure(
                 asyncActionToken: IMqttToken?,
                 exception: Throwable?
             ) {
-                //TODO: LOG
-                d.log.newEntry("con failure")
             }
         })
     } catch (_: Exception) {
-        //TODO: LOG
-        d.log.newEntry("con exception")
     }
 }
 

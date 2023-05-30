@@ -133,11 +133,11 @@ class SetupFragment : Fragment() {
         }
     }
 
-    private suspend fun foregroundServiceDisallowed() {
+    private fun foregroundServiceDisallowed() {
         //Disable foreground service as it should be
         if (service?.isStarted == true) ForegroundService.stop(activity as MainActivity)
 
-        //Initialize globals if not already
+        //Initialize globals with activity as context if not already
         if (!G.areInitialized) (activity as MainActivity).apply { initializeGlobals(1) }
 
         onSetupDone()
@@ -151,20 +151,24 @@ class SetupFragment : Fragment() {
                 ForegroundService.stop(this@apply)
 
                 //Restart in three seconds
-                delay(3000)
+                delay(1000)
                 restart()
             }
         } else (activity as MainActivity).apply { //Service not launched
             //Start foreground service
             ForegroundService.start(this@apply)
-            ForegroundService.haltForService()
 
-            //Configure
-            service?.finishAffinity = { finishAffinity() }
+            //Wait for service
+            if (ForegroundService.haltForService() == null) restart() //restart if failed
+            else {
+                //Configure service
+                service?.finishAffinity = { finishAffinity() }
 
-            initializeGlobals(1)
+                //Initialize globals with service as context
+                service?.initializeGlobals(1)
 
-            onSetupDone()
+                onSetupDone()
+            }
         }
     }
 

@@ -322,6 +322,24 @@ inline fun FrameBox(
     }
 }
 
+@Composable
+inline fun FrameBox(
+    label: @Composable () -> Unit,
+    modifier: Modifier = Modifier.fillMaxSize(),
+    crossinline content: @Composable () -> Unit
+) {
+    Column {
+        label()
+
+        Surface(
+            modifier = modifier
+                .border(BorderStroke(1.dp, colors.color), RoundedCornerShape(10.dp))
+                .padding(12.dp)
+        ) {
+            content()
+        }
+    }
+}
 
 /**
  * Create round slider, pass list of colors to be its gradient stroke.

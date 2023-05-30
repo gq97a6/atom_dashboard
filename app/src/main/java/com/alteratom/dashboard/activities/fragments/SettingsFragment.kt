@@ -10,21 +10,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -304,7 +304,47 @@ class SettingsFragment : Fragment() {
                                 }
                             }
 
-                            FrameBox("Background work") {
+                            val tmpAlpha = rememberInfiniteTransition().animateFloat(
+                                initialValue = 1f,
+                                targetValue = 0f,
+                                animationSpec = infiniteRepeatable(
+                                    animation = tween(500, 500),
+                                    repeatMode = RepeatMode.Reverse,
+                                )
+                            )
+
+                            @Composable
+                            fun tmpLabel() {
+                                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                                    Text(
+                                        text = "Background work",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp,
+                                        color = colors.a,
+                                        modifier = Modifier.padding(
+                                            start = 5.dp,
+                                            bottom = 3.dp,
+                                            top = 15.dp
+                                        )
+                                    )
+
+                                    Text(
+                                        text = "IMPORTANT",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp,
+                                        color = colors.a,
+                                        modifier = Modifier
+                                            .padding(
+                                                end = 5.dp,
+                                                bottom = 3.dp,
+                                                top = 15.dp
+                                            )
+                                            .alpha(tmpAlpha.value)
+                                    )
+                                }
+                            }
+
+                            FrameBox({ tmpLabel() }) {
                                 Column {
                                     var foregroundService by remember { mutableStateOf(settings.foregroundService) }
                                     LabeledSwitch(
@@ -345,9 +385,9 @@ class SettingsFragment : Fragment() {
                                     }
 
                                     Text(
-                                        "This option allows app to work after being closed." +
-                                                " To do so persistent notification is created due to Android requirements." +
-                                                "\nIt is not guaranteed that the app will not be killed by system.",
+                                        "This option allows app to work in the background after being closed." +
+                                                "\nTo do so persistent notification is created\ndue to Android requirements." +
+                                                "\nStill it is not guaranteed that the app will not be killed by system.",
                                         fontSize = 13.sp,
                                         color = colors.b
                                     )

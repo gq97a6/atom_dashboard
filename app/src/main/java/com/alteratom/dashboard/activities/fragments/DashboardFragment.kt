@@ -295,7 +295,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private suspend fun updateTileTimers() {
         while (true) {
             for (tile in adapter.list) {
-                val time = Date().time - (tile.mqtt.lastReceive?.time ?: return)
+                val time = Date().time - (tile.mqtt.lastReceive?.time ?: continue)
 
                 (time / 1000).let { s ->
                     if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"

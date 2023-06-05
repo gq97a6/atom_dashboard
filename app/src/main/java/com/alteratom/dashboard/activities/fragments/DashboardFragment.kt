@@ -82,7 +82,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         //Update tile timers
-        lifecycleScope.launch { updateTileTimers() }
+        lifecycleScope.launch {
+            while (true) {
+                for (tile in adapter.list) tile.updateTimer()
+                delay(1000)
+            }
+        }
 
         val addOnClick: () -> Unit = {
             fm.replaceWith(TileNewFragment())
@@ -291,31 +296,4 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     }
 
     //----------------------------------------------------------------------------------------------
-
-    private suspend fun updateTileTimers() {
-        while (true) {
-            for (tile in adapter.list) {
-                val time = Date().time - (tile.mqtt.lastReceive?.time ?: continue)
-
-                (time / 1000).let { s ->
-                    if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
-                    else (time / 60000).let { m ->
-                        if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
-                        else (time / 3600000).let { h ->
-                            if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
-                            else (time / 86400000).let { d ->
-                                if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
-                                else (time / 31536000000).let { y ->
-                                    if (y == 1L) "$y year ago" else "$y years ago"
-                                }
-                            }
-                        }
-                    }
-                }.apply {
-                    tile.holder?.itemView?.findViewById<TextView>(R.id.t_status)?.text = this
-                }
-            }
-            delay(1000)
-        }
-    }
 }

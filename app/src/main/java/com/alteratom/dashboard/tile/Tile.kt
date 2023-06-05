@@ -71,6 +71,8 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
 
         holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)
         holder.itemView.findViewById<TextView>(R.id.t_tag)?.text = tag.ifBlank { "???" }
+
+        updateTimer()
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
@@ -106,6 +108,28 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
         if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
+        }
+    }
+
+    fun updateTimer() {
+        val time = Date().time - (mqtt.lastReceive?.time ?: return)
+
+        (time / 1000).let { s ->
+            if (s < 60) if (s == 1L) "$s second ago" else "$s seconds ago"
+            else (time / 60000).let { m ->
+                if (m < 60) if (m == 1L) "$m minute ago" else "$m minutes ago"
+                else (time / 3600000).let { h ->
+                    if (h < 24) if (h == 1L) "$h hour ago" else "$h hours ago"
+                    else (time / 86400000).let { d ->
+                        if (d < 365) if (d == 1L) "$d day ago" else "$d days ago"
+                        else (time / 31536000000).let { y ->
+                            if (y == 1L) "$y year ago" else "$y years ago"
+                        }
+                    }
+                }
+            }
+        }.apply {
+            holder?.itemView?.findViewById<TextView>(R.id.t_status)?.text = this
         }
     }
 }

@@ -12,7 +12,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 33
         versionCode 21
-        versionName "1.0.6 | beta" //stable or beta
+        versionName "1.0.7 | beta" //stable or beta
     }
 
     buildFeatures {

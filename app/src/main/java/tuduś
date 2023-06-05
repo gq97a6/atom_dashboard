@@ -3,4 +3,4 @@ add notification question
 add connect QoS
 add keep alive frequency option
 add max log size
-remove/lock popping buttons for log
+add stop app when background work disabled

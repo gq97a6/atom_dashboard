@@ -4,10 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -15,10 +14,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
@@ -32,6 +33,7 @@ import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.openBatterySettings
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 
@@ -169,6 +171,10 @@ object TilePropertiesCompose {
                         G.tile.mqtt.doLog = it
                     },
                 )
+                //if (false) {
+                //    Dialog({}) {
+                //    }
+                //}
 
                 var notify by remember { mutableStateOf(G.tile.mqtt.doNotify) }
                 LabeledSwitch(
@@ -181,6 +187,14 @@ object TilePropertiesCompose {
                     },
                     checked = notify,
                     onCheckedChange = {
+                        //TODO
+                        //check for permissions
+                        //val not = registerForActivityResult(RequestPermission()) { granted ->
+                        //    viewModel.inputs.onTurnOnNotificationsClicked(granted)
+                        //}
+                        //not.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+
+
                         notify = it
                         G.tile.mqtt.doNotify = it
                     },

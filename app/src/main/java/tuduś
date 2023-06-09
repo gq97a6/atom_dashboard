@@ -1,6 +1,3 @@
 add notification of changes to dashboard (top bar and popup)
 add notification question
-add connect QoS
-add keep alive frequency option
-add max log size
 add stop app when background work disabled

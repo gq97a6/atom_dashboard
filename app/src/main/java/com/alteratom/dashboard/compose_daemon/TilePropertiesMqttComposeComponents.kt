@@ -18,7 +18,7 @@ import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
 import com.alteratom.dashboard.objects.G
 
-object TilePropertiesMqttCompose {
+object TilePropertiesMqttComposeComponents {
 
     @Composable
     fun Communication0() {

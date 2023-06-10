@@ -12,12 +12,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose.PairList
-import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.PairList
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
@@ -27,12 +28,12 @@ import com.alteratom.dashboard.objects.G.tile
 
 object ThermostatTileCompose : DaemonBasedCompose {
     @Composable
-    override fun Mqttd() {
+    override fun Mqttd(fragment: Fragment) {
         val tile = tile as ThermostatTile
         var incHumi by remember { mutableStateOf(tile.includeHumiditySetpoint) }
 
-        TilePropertiesCompose.Box {
-            TilePropertiesCompose.CommunicationBox {
+        TilePropertiesComposeComponents.Box {
+            TilePropertiesComposeComponents.CommunicationBox {
 
                 var tempSub by remember { mutableStateOf(tile.mqtt.subs["temp"] ?: "") }
                 EditText(
@@ -290,7 +291,7 @@ object ThermostatTileCompose : DaemonBasedCompose {
                 })
             }
 
-            TilePropertiesCompose.Notification()
+            TilePropertiesComposeComponents.Notification(fragment)
 
             FrameBox(a = "Type specific: ", b = "thermostat") {
                 Column {
@@ -463,6 +464,6 @@ object ThermostatTileCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

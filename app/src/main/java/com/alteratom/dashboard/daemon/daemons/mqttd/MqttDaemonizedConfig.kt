@@ -20,7 +20,9 @@ class MqttDaemonizedConfig(
     var doRetain: Boolean = false,
     var doLog: Boolean = false,
     var doNotify: Boolean = false,
-    var silentNotify: Boolean = false
+    var silentNotify: Boolean = false,
+    var notifyTitle: String = "Title",
+    var notifyPayload: String = "New value for tile"
 ) {
     var qos
         set(value) {

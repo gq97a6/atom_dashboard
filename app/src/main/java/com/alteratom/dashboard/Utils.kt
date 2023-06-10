@@ -2,7 +2,7 @@
 
 package com.alteratom.dashboard
 
-import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,6 +12,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.*
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.TIRAMISU
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -104,50 +106,6 @@ fun Float.dezero(): String {
 
 fun Float.roundCloser(step: Int): Int {
     return (this / step).roundToInt() * step
-}
-
-fun createNotification(
-    context: Context,
-    title: String = "Title",
-    text: String = "Text",
-    isSilent: Boolean = false,
-    id: Int = Random().nextInt()
-) {
-    if (ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.POST_NOTIFICATIONS
-        ) != PackageManager.PERMISSION_GRANTED
-    ) return
-
-    createNotificationChannel(context)
-
-    val notification = NotificationCompat.Builder(context, "notification_id")
-        .setAutoCancel(true)
-        .setContentTitle(title)
-        .setContentText(text)
-        .setSmallIcon(R.mipmap.ic_icon_bold_round)
-        .setPriority(NotificationCompat.PRIORITY_MIN)
-        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-
-    if (isSilent) notification.setSilent(true)
-
-    with(NotificationManagerCompat.from(context)) {
-        notify(id, notification.build())
-    }
-}
-
-internal fun createNotificationChannel(context: Context) {
-    val channel = NotificationChannel(
-        "notification_id",
-        "Other notification",
-        NotificationManager.IMPORTANCE_DEFAULT
-    ).apply {
-        description = "com/alteratom/notification_channel"
-    }
-
-    val notificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.createNotificationChannel(channel)
 }
 
 fun performClick(context: Context) {
@@ -277,11 +235,73 @@ fun Context.proAlert(activity: Activity) {
     }
 }
 
-fun isBatteryOptimized(context: Context): Boolean =
-    !(context.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager)
-        .isIgnoringBatteryOptimizations(context.applicationContext.packageName)
+fun Context.isBatteryOptimized(): Boolean =
+    !(this.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager)
+        .isIgnoringBatteryOptimizations(this.applicationContext.packageName)
 
-fun openBatterySettings(context: Context) {
+fun Context.openBatterySettings() {
     val intent = Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
-    context.startActivity(intent)
+    this.startActivity(intent)
+}
+
+fun Activity.areNotificationsAllowed() =
+    with(this) { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }.let { manager ->
+        when {
+            !manager.areNotificationsEnabled() -> false
+            SDK_INT >= TIRAMISU -> manager.notificationChannels.none {
+                it.importance == NotificationManager.IMPORTANCE_NONE
+            }
+            else -> true
+        }
+    }
+
+fun Activity.requestNotifications() {
+    this.apply {
+        if (SDK_INT >= TIRAMISU) requestPermissions(arrayOf(POST_NOTIFICATIONS), 1)
+    }
+}
+
+internal fun createNotificationChannel(context: Context) {
+    val channel = NotificationChannel(
+        "notification_id",
+        "Other notification",
+        NotificationManager.IMPORTANCE_DEFAULT
+    ).apply {
+        description = "com/alteratom/notification_channel"
+    }
+
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.createNotificationChannel(channel)
+}
+
+fun createNotification(
+    context: Context,
+    title: String = "Title",
+    text: String = "Text",
+    isSilent: Boolean = false,
+    id: Int = Random().nextInt()
+) {
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            POST_NOTIFICATIONS
+        ) != PackageManager.PERMISSION_GRANTED
+    ) return
+
+    createNotificationChannel(context)
+
+    val notification = NotificationCompat.Builder(context, "notification_id")
+        .setAutoCancel(true)
+        .setContentTitle(title)
+        .setContentText(text)
+        //.setLargeIcon(R.mipmap.ic_icon_bold_round)
+        .setSmallIcon(R.drawable.ic_icon)
+        .setPriority(NotificationCompat.PRIORITY_MIN)
+        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+
+    if (isSilent) notification.setSilent(true)
+
+    with(NotificationManagerCompat.from(context)) {
+        notify(id, notification.build())
+    }
 }

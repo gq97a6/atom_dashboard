@@ -94,12 +94,10 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
                 dashboard?.let { d ->
                     createNotification(
                         s,
-                        d.name.uppercase(Locale.getDefault()),
-                        if (tag.isBlank() || data.second.isBlank())
-                            "New value for: ${data.first}"
-                        else "$tag: ${data.second}",
+                        mqtt.notifyTitle.replace("@v", data.second),
+                        mqtt.notifyPayload.replace("@v", data.second),
                         this.mqtt.silentNotify,
-                        d.id.toInt()
+                        if(settings.notifyStack) 1 else Random().nextInt()
                     )
                 }
             }

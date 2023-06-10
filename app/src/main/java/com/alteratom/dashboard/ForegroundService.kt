@@ -70,7 +70,8 @@ class ForegroundService : LifecycleService() {
         val notification =
             NotificationCompat.Builder(this, "foreground_service_id").setAutoCancel(false)
                 .setContentTitle("Server working in background")
-                .setSmallIcon(R.mipmap.ic_icon_bold_round).setPriority(PRIORITY_MIN)
+                .setSmallIcon(R.drawable.ic_icon)
+                .setPriority(PRIORITY_MIN)
                 .addAction(R.drawable.ic_trashcan, "stop working in background", pendingIntent)
                 .setVisibility(VISIBILITY_SECRET).setSilent(true)
 

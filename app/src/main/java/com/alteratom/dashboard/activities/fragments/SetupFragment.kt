@@ -124,8 +124,7 @@ class SetupFragment : Fragment() {
 
         CoroutineScope(Dispatchers.Default).launch {
             //Disable foreground service if battery is optimized
-            if (isBatteryOptimized(requireContext())) settings.foregroundService = false
-
+            if (context?.isBatteryOptimized() == true) settings.foregroundService = false
             //Foreground service enabled by settings and battery usage is not optimised
             if (settings.foregroundService) foregroundServiceAllowed()
             else foregroundServiceDisallowed()

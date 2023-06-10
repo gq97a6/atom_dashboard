@@ -257,6 +257,22 @@ class SettingsFragment : Fragment() {
                                             settings.militaryTime = military
                                         },
                                     )
+
+                                    var notifyStack by remember { mutableStateOf(settings.notifyStack) }
+                                    LabeledSwitch(
+                                        label = {
+                                            Text(
+                                                "New notifications\noverwrite previous:",
+                                                fontSize = 15.sp,
+                                                color = colors.a
+                                            )
+                                        },
+                                        checked = notifyStack,
+                                        onCheckedChange = {
+                                            notifyStack = it
+                                            settings.notifyStack = notifyStack
+                                        },
+                                    )
                                 }
                             }
 
@@ -287,7 +303,7 @@ class SettingsFragment : Fragment() {
                                             contentPadding = PaddingValues(13.dp),
                                             border = BorderStroke(2.dp, colors.b),
                                             onClick = {
-                                                openBatterySettings(requireContext())
+                                                context.openBatterySettings()
                                                 workShow = false
                                             },
                                             modifier = Modifier
@@ -303,15 +319,6 @@ class SettingsFragment : Fragment() {
                                     }
                                 }
                             }
-
-                            val tmpAlpha = rememberInfiniteTransition().animateFloat(
-                                initialValue = 1f,
-                                targetValue = 0f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(500, 500),
-                                    repeatMode = RepeatMode.Reverse,
-                                )
-                            )
 
                             @Composable
                             fun tmpLabel() {
@@ -329,17 +336,16 @@ class SettingsFragment : Fragment() {
                                     )
 
                                     Text(
-                                        text = "IMPORTANT",
+                                        text = "NEW",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 15.sp,
-                                        color = colors.a,
+                                        color = colors.b,
                                         modifier = Modifier
                                             .padding(
                                                 end = 5.dp,
                                                 bottom = 3.dp,
                                                 top = 15.dp
                                             )
-                                            .alpha(tmpAlpha.value)
                                     )
                                 }
                             }
@@ -357,7 +363,7 @@ class SettingsFragment : Fragment() {
                                         },
                                         checked = foregroundService,
                                         onCheckedChange = {
-                                            if (!isBatteryOptimized(requireContext()) || !it) {
+                                            if (!context.isBatteryOptimized() || !it) {
                                                 hasChanged = true
                                                 foregroundService = it
                                                 settings.foregroundService = foregroundService

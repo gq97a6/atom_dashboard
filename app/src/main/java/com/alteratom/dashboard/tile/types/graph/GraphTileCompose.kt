@@ -1,22 +1,23 @@
 package com.alteratom.tile.types.color.compose
 
 import androidx.compose.runtime.Composable
+import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication
 
 object GraphTileCompose : DaemonBasedCompose {
     @Composable
-    override fun Mqttd() {
-        TilePropertiesCompose.Box {
-            TilePropertiesCompose.CommunicationBox {
+    override fun Mqttd(fragment: Fragment) {
+        TilePropertiesComposeComponents.Box {
+            TilePropertiesComposeComponents.CommunicationBox {
                 Communication()
             }
-            TilePropertiesCompose.Notification()
+            TilePropertiesComposeComponents.Notification(fragment)
         }
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

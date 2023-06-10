@@ -4,9 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -14,12 +15,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
+import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
@@ -29,15 +29,17 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.openBatterySettings
+import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.*
 
-object TilePropertiesCompose {
+object TilePropertiesComposeComponents {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
 
@@ -158,9 +160,9 @@ object TilePropertiesCompose {
     }
 
     @Composable
-    fun Notification() {
+    fun Notification(fragment: Fragment) {
 
-        FrameBox(a = "Notifications and log") {
+        FrameBox(a = "Logging") {
             Column {
                 var log by remember { mutableStateOf(G.tile.mqtt.doLog) }
                 LabeledSwitch(
@@ -171,10 +173,17 @@ object TilePropertiesCompose {
                         G.tile.mqtt.doLog = it
                     },
                 )
-                //if (false) {
-                //    Dialog({}) {
-                //    }
-                //}
+            }
+        }
+
+        FrameBox(a = "Notifications") {
+            Column {
+                Text(
+                    "This function requires notifications and background work to be allowed. Background work can be enabled in settings.",
+                    fontSize = 12.sp,
+                    color = Theme.colors.b,
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
 
                 var notify by remember { mutableStateOf(G.tile.mqtt.doNotify) }
                 LabeledSwitch(
@@ -187,36 +196,64 @@ object TilePropertiesCompose {
                     },
                     checked = notify,
                     onCheckedChange = {
-                        //TODO
-                        //check for permissions
-                        //val not = registerForActivityResult(RequestPermission()) { granted ->
-                        //    viewModel.inputs.onTurnOnNotificationsClicked(granted)
-                        //}
-                        //not.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-
-
-                        notify = it
-                        G.tile.mqtt.doNotify = it
+                        if (fragment.activity?.areNotificationsAllowed() == true || !it) {
+                            notify = it
+                            G.tile.mqtt.doNotify = it
+                        } else fragment.activity?.requestNotifications()
                     },
                 )
 
                 var quiet by remember { mutableStateOf(G.tile.mqtt.silentNotify) }
                 AnimatedVisibility(visible = notify) {
-                    LabeledCheckbox(
-                        label = {
-                            Text(
-                                "Make notification quiet",
-                                fontSize = 15.sp,
-                                color = Theme.colors.a
-                            )
-                        },
-                        checked = quiet,
-                        onCheckedChange = {
-                            quiet = it
-                            G.tile.mqtt.silentNotify = it
-                        },
-                        modifier = Modifier.padding(vertical = 10.dp)
-                    )
+                    Column {
+                        LabeledCheckbox(
+                            label = {
+                                Text(
+                                    "Make notification quiet",
+                                    fontSize = 15.sp,
+                                    color = Theme.colors.a
+                                )
+                            },
+                            checked = quiet,
+                            onCheckedChange = {
+                                quiet = it
+                                G.tile.mqtt.silentNotify = it
+                            },
+                            modifier = Modifier.padding(vertical = 10.dp)
+                        )
+
+                        var notifyPayload by remember { mutableStateOf(tile.mqtt.notifyPayload) }
+                        EditText(
+                            label = { Text("Notification payload") },
+                            value = notifyPayload,
+                            onValueChange = {
+                                notifyPayload = it
+                                tile.mqtt.notifyPayload = it
+                            },
+                            modifier = Modifier.padding(top = 0.dp)
+                        )
+
+                        var notifyTitle by remember { mutableStateOf(tile.mqtt.notifyTitle) }
+                        EditText(
+                            label = { Text("Notification title") },
+                            value = notifyTitle,
+                            onValueChange = {
+                                notifyTitle = it
+                                tile.mqtt.notifyTitle = it
+                            },
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+
+                        Spacer(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(14.dp))
+
+                        Text(
+                            "Use @v to insert current tile value",
+                            fontSize = 13.sp,
+                            color = Theme.colors.a
+                        )
+                    }
                 }
             }
         }

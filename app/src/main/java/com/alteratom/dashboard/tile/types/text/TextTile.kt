@@ -46,7 +46,6 @@ class TextTile : Tile() {
 
         if (mqtt.pubs["base"].isNullOrEmpty()) return
 
-        //TODO: check if needed
         (dashboard?.daemon as? Mqttd?)?.let {
             if (it.state != Mqttd.State.CONNECTED) return
         }

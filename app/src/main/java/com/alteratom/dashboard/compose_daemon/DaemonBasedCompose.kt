@@ -14,26 +14,8 @@ interface DaemonBasedCompose {
     }
 
     @Composable
-    fun Compose(type: Daemon.Type) {
-        when (type) {
-            Daemon.Type.MQTTD -> Mqttd()
-            Daemon.Type.BLUETOOTHD -> Bluetoothd()
-        }
-    }
+    fun Mqttd(fragment: Fragment)
 
     @Composable
-    fun Mqttd(fragment: Fragment) {
-    }
-
-    @Composable
-    fun Bluetoothd(fragment: Fragment) {
-    }
-
-    @Composable
-    fun Mqttd() {
-    }
-
-    @Composable
-    fun Bluetoothd() {
-    }
+    fun Bluetoothd(fragment: Fragment)
 }

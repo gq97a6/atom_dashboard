@@ -174,9 +174,7 @@ class DashboardPropertiesFragment : Fragment() {
                                         )
                                     }
 
-                                    var name by remember {
-                                        mutableStateOf(dashboard.name.lowercase(Locale.getDefault()))
-                                    }
+                                    var name by remember { mutableStateOf(dashboard.name) }
                                     EditText(
                                         label = { Text("Dashboard name") },
                                         value = name,

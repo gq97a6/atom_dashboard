@@ -77,7 +77,7 @@ class TilePropertiesFragment : Fragment() {
                                 is ThermostatTile -> ThermostatTileCompose
                                 is TimeTile -> TimeTileCompose
                                 else -> ButtonTileCompose
-                            }.Compose(it)
+                            }.Compose(it, this@TilePropertiesFragment)
                         }
                     }
                 }

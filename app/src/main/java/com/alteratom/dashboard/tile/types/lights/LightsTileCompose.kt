@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.MainActivity
@@ -21,16 +22,16 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose.PairList
-import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.PairList
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
 import com.alteratom.dashboard.compose_global.*
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.tile
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable
-    override fun Mqttd() {
+    override fun Mqttd(fragment: Fragment) {
         val tile = tile as LightsTile
 
         var type by remember { mutableStateOf(tile.colorType) }
@@ -40,8 +41,8 @@ object LightsTileCompose : DaemonBasedCompose {
             )
         }
 
-        TilePropertiesCompose.Box {
-            TilePropertiesCompose.CommunicationBox {
+        TilePropertiesComposeComponents.Box {
+            TilePropertiesComposeComponents.CommunicationBox {
                 Row(
                     modifier = Modifier.padding(top = 5.dp),
                     verticalAlignment = Alignment.Bottom
@@ -354,7 +355,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 })
             }
 
-            TilePropertiesCompose.Notification()
+            TilePropertiesComposeComponents.Notification(fragment)
 
             FrameBox(a = "Type specific: ", b = "lights") {
                 Column {
@@ -529,6 +530,6 @@ object LightsTileCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

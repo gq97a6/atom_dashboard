@@ -1,6 +1,7 @@
 package com.alteratom.dashboard
 
 class Settings {
+    var notifyStack = true
     var hideNav = false
     var lastDashboardId = 0L
     var militaryTime = true

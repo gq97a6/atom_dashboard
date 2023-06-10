@@ -3,11 +3,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication0
-import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttCompose.Communication1
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication0
+import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
@@ -16,7 +17,7 @@ import com.alteratom.dashboard.objects.G.tile
 
 object TimeTileCompose : DaemonBasedCompose {
     @Composable
-    override fun Mqttd() {
+    override fun Mqttd(fragment: Fragment) {
         val tile = tile as TimeTile
 
         var type by remember { mutableStateOf(if (tile.isDate) 1 else 0) }
@@ -27,8 +28,8 @@ object TimeTileCompose : DaemonBasedCompose {
             )
         }
 
-        TilePropertiesCompose.Box {
-            TilePropertiesCompose.CommunicationBox {
+        TilePropertiesComposeComponents.Box {
+            TilePropertiesComposeComponents.CommunicationBox {
                 Communication0()
 
                 EditText(
@@ -48,7 +49,7 @@ object TimeTileCompose : DaemonBasedCompose {
                 Communication1()
             }
 
-            TilePropertiesCompose.Notification()
+            TilePropertiesComposeComponents.Notification(fragment)
 
             FrameBox(a = "Type specific: ", b = "time") {
                 Column {
@@ -95,6 +96,6 @@ object TimeTileCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

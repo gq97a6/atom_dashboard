@@ -4,9 +4,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
-import com.alteratom.dashboard.compose_daemon.TilePropertiesCompose
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
@@ -15,11 +16,11 @@ import com.alteratom.dashboard.objects.G.tile
 
 object ButtonTileCompose : DaemonBasedCompose {
     @Composable
-    override fun Mqttd() {
+    override fun Mqttd(fragment: Fragment) {
         val tile = tile as ButtonTile
 
-        TilePropertiesCompose.Box {
-            TilePropertiesCompose.CommunicationBox {
+        TilePropertiesComposeComponents.Box {
+            TilePropertiesComposeComponents.CommunicationBox {
                 var pub by remember { mutableStateOf(G.tile.mqtt.pubs["base"] ?: "") }
                 EditText(
                     label = { Text("Publish topic") },
@@ -91,6 +92,6 @@ object ButtonTileCompose : DaemonBasedCompose {
     }
 
     @Composable
-    override fun Bluetoothd() {
+    override fun Bluetoothd(fragment: Fragment) {
     }
 }

@@ -112,9 +112,45 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:tag="colorA"
-            android:text="How to add dashboards"
+            android:paddingTop="30dp"
+            android:text="How to edit theme or enable background work?"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text="Visit settings using "
+                android:textSize="18dp" />
+
+            <View
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:tag="colorAIcon"
+                android:background="@drawable/bt_edit" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="colorC"
+                android:text=" in main menu"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:tag="colorA"
+            android:text="How to add dashboards?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -150,7 +186,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:tag="colorA"
-            android:text="How to remove dashboards"
+            android:text="How to remove dashboards?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -221,7 +257,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:tag="colorA"
-            android:text="How to rearrange dashboards"
+            android:text="How to rearrange dashboards?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -264,7 +300,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="15dp"
             android:tag="colorA"
-            android:text="How to edit dashboards"
+            android:text="How to edit dashboards?"
             android:textSize="20dp" />
 
         <TextView

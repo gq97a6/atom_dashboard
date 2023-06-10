@@ -197,7 +197,7 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:layout_marginTop="30dp"
-            android:text="How to add tiles"
+            android:text="How to add tiles?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -233,7 +233,7 @@
             android:paddingTop="15dp"
             android:layout_height="wrap_content"
             android:tag="colorA"
-            android:text="How to remove tiles"
+            android:text="How to remove tiles?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -304,7 +304,7 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:paddingTop="15dp"
-            android:text="How to rearrange tiles"
+            android:text="How to rearrange tiles?"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -347,7 +347,7 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:paddingTop="15dp"
-            android:text="How to edit tiles"
+            android:text="How to edit tiles?"
             android:textSize="20dp" />
 
         <TextView
@@ -362,7 +362,7 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:paddingTop="15dp"
-            android:text="How to access logs"
+            android:text="How to access logs?"
             android:textSize="20dp" />
 
         <TextView
@@ -377,7 +377,7 @@
             android:layout_height="wrap_content"
             android:tag="colorA"
             android:paddingTop="15dp"
-            android:text="How to navigate\nbetween dashboards"
+            android:text="How to navigate\nbetween dashboards?"
             android:textSize="20dp" />
 
         <TextView

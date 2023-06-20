@@ -9,6 +9,7 @@ import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.initializeGlobals
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import com.alteratom.databinding.ActivityMainBinding
@@ -18,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var b: ActivityMainBinding
 
     var doOverrideOnBackPress: () -> Boolean = { false }
+    private var hasBooted = false
+    private var hasShutdown = false
 
     companion object {
         lateinit var fm: FragmentManager
@@ -25,7 +28,38 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityHandler.onCreate(this)
+        boot()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!hasBooted) boot()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!hasBooted) boot()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (!hasShutdown) shutdown()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!hasShutdown) shutdown()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!hasShutdown) shutdown()
+    }
+
+    private fun boot() {
+        hasShutdown = false
+
+        ForegroundService.service?.finishAffinity = { finishAffinity() }
 
         //Partially initialize globals if service has not been started
         if (ForegroundService.service?.isStarted != true) initializeGlobals(0)
@@ -43,15 +77,19 @@ class MainActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this) {
             if (!doOverrideOnBackPress() && !fm.popBackStack()) finish()
         }
+
+        hasBooted = true
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        ActivityHandler.onDestroy()
+    private fun shutdown() {
+        hasBooted = false
+
+        G.dashboards.saveToFile()
+        G.settings.saveToFile()
+        G.theme.saveToFile()
+
+        hasShutdown = true
     }
 
-    override fun onPause() {
-        super.onPause()
-        ActivityHandler.onPause()
-    }
+    //
 }

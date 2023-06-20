@@ -40,8 +40,6 @@ class PayActivity : AppCompatActivity() {
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityHandler.onCreate(this, false)
-
         G.theme.apply(context = this)
 
         billingHandler = BillingHandler(this)

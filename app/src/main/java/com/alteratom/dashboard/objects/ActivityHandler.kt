@@ -10,24 +10,6 @@ import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Storage.saveToFile
 
 object ActivityHandler {
-
-    fun onCreate(activity: Activity, finish: Boolean = true) {
-        if (finish) service?.finishAffinity = { activity.finishAffinity() }
-    }
-
-    fun onDestroy() {
-        dashboards.saveToFile()
-        settings.saveToFile()
-        theme.saveToFile()
-    }
-
-    fun onPause() {
-        G.unlockedDashboards.clear()
-        dashboards.saveToFile()
-        settings.saveToFile()
-        theme.saveToFile()
-    }
-
     fun Activity.restart() = this.apply {
         startActivity(Intent(this, MainActivity::class.java))
 

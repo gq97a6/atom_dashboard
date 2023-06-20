@@ -21,7 +21,6 @@ object G {
     lateinit var dashboard: Dashboard
     lateinit var tile: Tile
     var dashboardIndex = -2
-    val unlockedDashboards = mutableListOf<Long>()
 
     //Path to root folder
     var rootFolder: String = ""

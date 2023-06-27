@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService
@@ -28,35 +29,42 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("TAG", "MainActivity: onCreate")
         boot()
     }
 
     override fun onStart() {
         super.onStart()
+        Log.i("TAG", "MainActivity: onStart")
         if (!hasBooted) boot()
     }
 
     override fun onResume() {
         super.onResume()
+        Log.i("TAG", "MainActivity: onResume")
         if (!hasBooted) boot()
     }
 
     override fun onPause() {
         super.onPause()
+        Log.i("TAG", "MainActivity: onPause")
         if (!hasShutdown) shutdown()
     }
 
     override fun onStop() {
         super.onStop()
+        Log.i("TAG", "MainActivity: onStop")
         if (!hasShutdown) shutdown()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.i("TAG", "MainActivity: onDestroy")
         if (!hasShutdown) shutdown()
     }
 
     private fun boot() {
+        Log.i("TAG", "MainActivity: boot")
         hasShutdown = false
 
         ForegroundService.service?.finishAffinity = { finishAffinity() }
@@ -82,6 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun shutdown() {
+        Log.i("TAG", "MainActivity: shutdown")
         hasBooted = false
 
         G.dashboards.saveToFile()
@@ -90,6 +99,4 @@ class MainActivity : AppCompatActivity() {
 
         hasShutdown = true
     }
-
-    //
 }

@@ -18,7 +18,7 @@ class LogEntry(
     @JsonIgnore
     override val layout = R.layout.item_log
 
-    val time = SimpleDateFormat(if (settings.militaryTime) "HH:mm:ss" else "hh:mm:ss")
+    val time: String = SimpleDateFormat(if (settings.militaryTime) "HH:mm:ss" else "hh:mm:ss")
         .format(Date())
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {

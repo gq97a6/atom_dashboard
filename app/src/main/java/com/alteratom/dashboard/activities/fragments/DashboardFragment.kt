@@ -46,8 +46,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        settings.lastDashboardId = dashboard.id
-
         b = FragmentDashboardBinding.inflate(inflater, container, false)
         return b.root
     }
@@ -142,6 +140,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
+        settings.lastDashboardId = dashboard.id
     }
 
     //----------------------------------------------------------------------------------------------

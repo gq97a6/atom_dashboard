@@ -29,42 +29,42 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("TAG", "MainActivity: onCreate")
+        Log.i("ALTER", "MainActivity: onCreate")
         boot()
     }
 
     override fun onStart() {
         super.onStart()
-        Log.i("TAG", "MainActivity: onStart")
+        Log.i("ALTER", "MainActivity: onStart")
         if (!hasBooted) boot()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i("TAG", "MainActivity: onResume")
+        Log.i("ALTER", "MainActivity: onResume")
         if (!hasBooted) boot()
     }
 
     override fun onPause() {
         super.onPause()
-        Log.i("TAG", "MainActivity: onPause")
+        Log.i("ALTER", "MainActivity: onPause")
         if (!hasShutdown) shutdown()
     }
 
     override fun onStop() {
         super.onStop()
-        Log.i("TAG", "MainActivity: onStop")
+        Log.i("ALTER", "MainActivity: onStop")
         if (!hasShutdown) shutdown()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("TAG", "MainActivity: onDestroy")
+        Log.i("ALTER", "MainActivity: onDestroy")
         if (!hasShutdown) shutdown()
     }
 
     private fun boot() {
-        Log.i("TAG", "MainActivity: boot")
+        Log.i("ALTER", "MainActivity: boot")
         hasShutdown = false
 
         ForegroundService.service?.finishAffinity = { finishAffinity() }
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun shutdown() {
-        Log.i("TAG", "MainActivity: shutdown")
+        Log.i("ALTER", "MainActivity: shutdown")
         hasBooted = false
 
         G.dashboards.saveToFile()

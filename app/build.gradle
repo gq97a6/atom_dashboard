@@ -22,21 +22,18 @@ android {
         release {
             //shrinkResources true
             //minifyEnabled true
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
             //shrinkResources true
             //minifyEnabled true
-            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable true
         }
     }
 
     compileOptions {
-        sourceCompatibility "1.9"
-        targetCompatibility "1.9"
-
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -49,7 +46,7 @@ android {
         main {
             res {
                 srcDirs 'src\\main\\res',
-                        file('src\\main\\kotlin\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
+                        file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
                         file('src\\main\\res\\icons')
 
             }

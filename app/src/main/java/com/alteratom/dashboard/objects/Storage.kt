@@ -46,25 +46,26 @@ object Storage {
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
-            try {
-                mapper.readerForListOf(T::class.java).readValue(save.fixSave())
-            } catch (e: Exception) {
-                mutableListOf()
-            }
+            mutableListOf()
+            //try {
+            //    mapper.readerForListOf(T::class.java).readValue(save.fixSave())
+            //} catch (e: Exception) {
+            //    mutableListOf()
+            //}
         }
 
-    fun String.fixSave(): String {
-        var s = this.replace("com.alteratom.tile.types.button.", "")
-        s = s.replace("com.alteratom.tile.types.button.", "")
-        s = s.replace("com.alteratom.tile.types.thermostat.", "")
-        s = s.replace("com.alteratom.tile.types.time.", "")
-        s = s.replace("com.alteratom.tile.types.button.", "")
-        s = s.replace("com.alteratom.tile.types.pick.", "")
-        s = s.replace("com.alteratom.tile.types.lights.", "")
-        s = s.replace("com.alteratom.tile.types.color.", "")
-        s = s.replace("com.alteratom.tile.types.switch.", "")
-        s = s.replace("com.alteratom.tile.types.slider.", "")
-        s = s.replace("com.alteratom.tile.types.terminal.", "")
-        return s
-    }
+    //fun String.fixSave(): String {
+    //    var s = this.replace("com.alteratom.tile.types.button.", "")
+    //    s = s.replace("com.alteratom.tile.types.button.", "")
+    //    s = s.replace("com.alteratom.tile.types.thermostat.", "")
+    //    s = s.replace("com.alteratom.tile.types.time.", "")
+    //    s = s.replace("com.alteratom.tile.types.button.", "")
+    //    s = s.replace("com.alteratom.tile.types.pick.", "")
+    //    s = s.replace("com.alteratom.tile.types.lights.", "")
+    //    s = s.replace("com.alteratom.tile.types.color.", "")
+    //    s = s.replace("com.alteratom.tile.types.switch.", "")
+    //    s = s.replace("com.alteratom.tile.types.slider.", "")
+    //    s = s.replace("com.alteratom.tile.types.terminal.", "")
+    //    return s
+    //}
 }

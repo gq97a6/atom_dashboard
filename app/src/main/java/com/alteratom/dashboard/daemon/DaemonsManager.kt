@@ -2,6 +2,7 @@ package com.alteratom.dashboard.daemon
 
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.G.dashboards
 
 //Manages creation and assignment of daemons
@@ -13,10 +14,13 @@ object DaemonsManager {
 
     fun notifyAdded(dashboard: Dashboard, context: Context) = try {
         dashboard.apply {
-            daemon = Daemon(context, this, type)
+            run {}
+            daemon = Mqttd(context, this)//Daemon(context, this, type)
             daemon.notifyAssigned()
         }
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        println(e.toString())
+        run {}
     }
 
     fun notifyRemoved(dashboard: Dashboard) = try {

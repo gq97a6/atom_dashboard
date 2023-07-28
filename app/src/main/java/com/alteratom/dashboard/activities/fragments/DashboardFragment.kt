@@ -4,6 +4,7 @@ import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -136,11 +137,27 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.i("ALTER", "DashboardFragment: onStart")
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
+        Log.i("ALTER", "DashboardFragment: onResume")
         adapter.notifyDataSetChanged()
         settings.lastDashboardId = dashboard.id
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.i("ALTER", "DashboardFragment: onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("ALTER", "DashboardFragment: onStop")
     }
 
     //----------------------------------------------------------------------------------------------

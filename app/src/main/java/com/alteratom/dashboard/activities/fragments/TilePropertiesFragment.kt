@@ -20,6 +20,7 @@ import ThermostatTile
 import ThermostatTileCompose
 import TimeTile
 import TimeTileCompose
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,11 +36,21 @@ import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.isDark
 import com.alteratom.dashboard.compose_global.ComposeTheme
+import com.alteratom.dashboard.objects.G.areInitialized
+import com.alteratom.dashboard.objects.G.dashboardIndex
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.restart
 import com.alteratom.dashboard.switcher.TileSwitcher
 
 class TilePropertiesFragment : Fragment() {
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

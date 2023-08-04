@@ -1,15 +1,24 @@
 package com.alteratom.dashboard.color_picker.components
 
-import android.graphics.*
+import android.graphics.Canvas
 import android.graphics.Color.WHITE
+import android.graphics.Matrix
 import android.graphics.Paint.Cap.ROUND
 import android.graphics.Paint.Style.FILL
 import android.graphics.Paint.Style.STROKE
+import android.graphics.PointF
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.SweepGradient
 import android.view.MotionEvent
 import com.alteratom.dashboard.color_picker.Metrics
 import com.alteratom.dashboard.color_picker.Paints
 import com.alteratom.dashboard.color_picker.listeners.OnColorSelectionListener
-import kotlin.math.*
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 internal abstract class ArcComponent(
     private val metrics: Metrics,

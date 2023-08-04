@@ -1,11 +1,20 @@
 package com.alteratom.dashboard.activities.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
@@ -30,11 +39,21 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.switchColors
+import com.alteratom.dashboard.objects.G.areInitialized
+import com.alteratom.dashboard.objects.G.dashboardIndex
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.pHsv
+import com.alteratom.dashboard.restart
 import com.alteratom.dashboard.toPx
 
 class ThemeFragment : Fragment() {
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

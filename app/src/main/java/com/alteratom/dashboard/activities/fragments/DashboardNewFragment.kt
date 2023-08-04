@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,13 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
@@ -34,12 +41,19 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.restart
 import kotlin.random.Random
 
 class DashboardNewFragment : Fragment() {
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (G.dashboardIndex < 0 || !G.areInitialized || !G.hasBooted || G.hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

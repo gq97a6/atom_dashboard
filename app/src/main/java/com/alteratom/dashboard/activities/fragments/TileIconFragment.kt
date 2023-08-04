@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,16 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -38,11 +48,21 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.icon.Icons
+import com.alteratom.dashboard.objects.G.areInitialized
+import com.alteratom.dashboard.objects.G.dashboardIndex
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.restart
 import com.alteratom.dashboard.toPx
-import java.util.*
+import java.util.Locale
 
 class TileIconFragment : Fragment() {
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     companion object {
         lateinit var setIconHSV: (FloatArray) -> Unit

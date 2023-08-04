@@ -7,7 +7,7 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.Storage
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.util.*
+import java.util.Date
 
 //For targets of daemons
 interface Daemonized {

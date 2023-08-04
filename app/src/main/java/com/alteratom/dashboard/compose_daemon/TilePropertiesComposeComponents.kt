@@ -5,14 +5,28 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -30,14 +44,20 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.g
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.areNotificationsAllowed
-import com.alteratom.dashboard.compose_global.*
-import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.compose_global.BasicButton
+import com.alteratom.dashboard.compose_global.BoldStartText
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.FrameBox
+import com.alteratom.dashboard.compose_global.LabeledCheckbox
+import com.alteratom.dashboard.compose_global.LabeledSwitch
+import com.alteratom.dashboard.compose_global.NavigationArrows
+import com.alteratom.dashboard.compose_global.nrClickable
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.TileSwitcher
-import java.util.*
+import java.util.Locale
 
 object TilePropertiesComposeComponents {
     @Composable
@@ -53,32 +73,32 @@ object TilePropertiesComposeComponents {
                     BasicButton(
                         contentPadding = PaddingValues(13.dp),
                         onClick = {
-                            getIconHSV = { G.tile.hsv }
-                            getIconRes = { G.tile.iconRes }
-                            getIconColorPallet = { G.tile.pallet }
+                            getIconHSV = { tile.hsv }
+                            getIconRes = { tile.iconRes }
+                            getIconColorPallet = { tile.pallet }
 
-                            setIconHSV = { hsv -> G.tile.hsv = hsv }
-                            setIconKey = { key -> G.tile.iconKey = key }
+                            setIconHSV = { hsv -> tile.hsv = hsv }
+                            setIconKey = { key -> tile.iconKey = key }
 
                             MainActivity.fm.replaceWith(TileIconFragment())
                         },
-                        border = BorderStroke(1.dp, G.tile.pallet.cc.color),
+                        border = BorderStroke(1.dp, tile.pallet.cc.color),
                         modifier = Modifier.size(52.dp)
                     ) {
-                        Icon(painterResource(G.tile.iconRes), "", tint = G.tile.pallet.cc.color)
+                        Icon(painterResource(tile.iconRes), "", tint = tile.pallet.cc.color)
                     }
 
-                    val typeTag = G.tile.typeTag.replaceFirstChar {
+                    val typeTag = tile.typeTag.replaceFirstChar {
                         if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                     }
 
-                    var tag by remember { mutableStateOf(G.tile.tag) }
+                    var tag by remember { mutableStateOf(tile.tag) }
                     EditText(
                         label = { BoldStartText("$typeTag ", "tile tag") },
                         value = tag,
                         onValueChange = {
                             tag = it
-                            G.tile.tag = it
+                            tile.tag = it
                         },
                         modifier = Modifier.padding(start = 12.dp)
                     )
@@ -164,13 +184,13 @@ object TilePropertiesComposeComponents {
 
         FrameBox(a = "Logging") {
             Column {
-                var log by remember { mutableStateOf(G.tile.mqtt.doLog) }
+                var log by remember { mutableStateOf(tile.mqtt.doLog) }
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = log,
                     onCheckedChange = {
                         log = it
-                        G.tile.mqtt.doLog = it
+                        tile.mqtt.doLog = it
                     },
                 )
             }
@@ -185,7 +205,7 @@ object TilePropertiesComposeComponents {
                     modifier = Modifier.padding(vertical = 10.dp)
                 )
 
-                var notify by remember { mutableStateOf(G.tile.mqtt.doNotify) }
+                var notify by remember { mutableStateOf(tile.mqtt.doNotify) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -198,12 +218,12 @@ object TilePropertiesComposeComponents {
                     onCheckedChange = {
                         if (fragment.activity?.areNotificationsAllowed() == true || !it) {
                             notify = it
-                            G.tile.mqtt.doNotify = it
+                            tile.mqtt.doNotify = it
                         } else fragment.activity?.requestNotifications()
                     },
                 )
 
-                var quiet by remember { mutableStateOf(G.tile.mqtt.silentNotify) }
+                var quiet by remember { mutableStateOf(tile.mqtt.silentNotify) }
                 AnimatedVisibility(visible = notify) {
                     Column {
                         LabeledCheckbox(
@@ -217,7 +237,7 @@ object TilePropertiesComposeComponents {
                             checked = quiet,
                             onCheckedChange = {
                                 quiet = it
-                                G.tile.mqtt.silentNotify = it
+                                tile.mqtt.silentNotify = it
                             },
                             modifier = Modifier.padding(vertical = 10.dp)
                         )
@@ -244,9 +264,11 @@ object TilePropertiesComposeComponents {
                             modifier = Modifier.padding(top = 10.dp)
                         )
 
-                        Spacer(modifier = Modifier
-                            .fillMaxWidth()
-                            .height(14.dp))
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(14.dp)
+                        )
 
                         Text(
                             "Use @v to insert current tile value",

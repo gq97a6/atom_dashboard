@@ -49,9 +49,11 @@ class SwitchTile : Tile() {
             true -> {
                 iconResTrue
             }
+
             false -> {
                 iconResFalse
             }
+
             null -> {
                 iconRes
             }

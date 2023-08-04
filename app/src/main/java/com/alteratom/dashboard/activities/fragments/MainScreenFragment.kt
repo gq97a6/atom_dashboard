@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,15 +9,23 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.ToolbarHandler
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.blink
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
+import com.alteratom.dashboard.objects.G.areInitialized
 import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.proAlert
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.restart
 import com.alteratom.databinding.FragmentMainScreenBinding
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
@@ -24,6 +33,11 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
     private lateinit var adapter: RecyclerViewAdapter<Dashboard>
     private lateinit var toolBarHandler: ToolbarHandler
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (!areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

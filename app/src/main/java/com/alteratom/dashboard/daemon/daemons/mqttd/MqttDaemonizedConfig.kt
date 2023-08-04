@@ -1,6 +1,6 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
-import java.util.*
+import java.util.Date
 
 class MqttDaemonizedConfig(
     var isEnabled: Boolean = true,

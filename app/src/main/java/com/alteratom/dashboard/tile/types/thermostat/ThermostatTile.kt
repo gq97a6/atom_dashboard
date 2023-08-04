@@ -139,17 +139,21 @@ class ThermostatTile : Tile() {
                 "temp" -> temp?.let {
                     binding.dtTempCurrent.text = "${it.round(3)}°C"
                 }
+
                 "humi" -> humi?.let {
                     binding.dtHumiCurrent.text = "${it.round(3)}%"
                 }
+
                 "temp_set" -> tempSetpoint?.let {
                     binding.dtTemp.progress = (it - temperatureRange[0]) / temperatureStep
                 }
+
                 "humi_set" -> if (includeHumiditySetpoint) {
                     humiSetpoint?.let {
                         binding.dtHumi.progress = it / humidityStep
                     }
                 }
+
                 "mode" -> modeAdapter.notifyDataSetChanged()
             }
         }
@@ -332,6 +336,7 @@ class ThermostatTile : Tile() {
                 "mode" -> (modes.find { it.second == value })?.let {
                     mode = it.second
                 }
+
                 else -> hasReceived = false
             }
 

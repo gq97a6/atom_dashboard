@@ -17,9 +17,7 @@ internal class Metrics(
         if (centerX != other.centerX) return false
         if (centerY != other.centerY) return false
         if (!color.contentEquals(other.color)) return false
-        if (density != other.density) return false
-
-        return true
+        return density == other.density
     }
 
     override fun hashCode(): Int {

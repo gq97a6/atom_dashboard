@@ -11,9 +11,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
-import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.TIRAMISU
+import android.os.Handler
+import android.os.Looper
+import android.os.PowerManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -34,11 +38,13 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import java.math.RoundingMode
 import java.security.cert.Certificate
-import java.util.*
+import java.util.Base64
+import java.util.Random
 import kotlin.math.roundToInt
 
 val screenHeight
@@ -251,6 +257,7 @@ fun Activity.areNotificationsAllowed() =
             SDK_INT >= TIRAMISU -> manager.notificationChannels.none {
                 it.importance == NotificationManager.IMPORTANCE_NONE
             }
+
             else -> true
         }
     }
@@ -304,4 +311,17 @@ fun createNotification(
     with(NotificationManagerCompat.from(context)) {
         notify(id, notification.build())
     }
+}
+
+fun Activity.restart() = this.apply {
+    Intent(this, MainActivity::class.java).apply {
+        action = Intent.ACTION_MAIN
+        startActivity(this)
+    }
+
+    //Stab it
+    finish()
+
+    //Kill it
+    finishAffinity()
 }

@@ -12,6 +12,8 @@ import kotlin.reflect.KClass
 
 object G {
     var areInitialized = false
+    var hasBooted = false
+    var hasShutdown = false
 
     var settings = Settings()
     var theme = Theme()
@@ -60,6 +62,7 @@ object G {
                 G.theme = parseSave() ?: Theme()
                 settings = parseSave() ?: Settings()
             }
+
             1 -> { //Only dashboards - when service starts after activity
                 dashboards = parseListSave()
                 DaemonsManager.notifyAllAdded(this)

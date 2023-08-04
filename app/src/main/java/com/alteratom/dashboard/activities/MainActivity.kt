@@ -1,14 +1,14 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
 import com.alteratom.dashboard.activities.fragments.SetupFragment
-import com.alteratom.dashboard.objects.ActivityHandler
 import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.initializeGlobals
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.switcher.FragmentSwitcher
@@ -20,51 +20,40 @@ class MainActivity : AppCompatActivity() {
     lateinit var b: ActivityMainBinding
 
     var doOverrideOnBackPress: () -> Boolean = { false }
-    private var hasBooted = false
-    private var hasShutdown = false
 
     companion object {
         lateinit var fm: FragmentManager
     }
 
+    //Is always called only once at the start
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("ALTER", "MainActivity: onCreate")
+
+        b = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(b.root)
+
         boot()
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i("ALTER", "MainActivity: onStart")
-        if (!hasBooted) boot()
-    }
-
+    //Is always called when the app comes into the foreground
     override fun onResume() {
         super.onResume()
-        Log.i("ALTER", "MainActivity: onResume")
         if (!hasBooted) boot()
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.i("ALTER", "MainActivity: onPause")
-        if (!hasShutdown) shutdown()
-    }
-
+    //Might be called without onDestroy when the app closes
     override fun onStop() {
         super.onStop()
-        Log.i("ALTER", "MainActivity: onStop")
         if (!hasShutdown) shutdown()
     }
 
+    //Might be called directly without onStop
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("ALTER", "MainActivity: onDestroy")
         if (!hasShutdown) shutdown()
     }
 
     private fun boot() {
-        Log.i("ALTER", "MainActivity: boot")
         hasShutdown = false
 
         ForegroundService.service?.finishAffinity = { finishAffinity() }
@@ -72,8 +61,7 @@ class MainActivity : AppCompatActivity() {
         //Partially initialize globals if service has not been started
         if (ForegroundService.service?.isStarted != true) initializeGlobals(0)
 
-        b = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(b.root)
+        //Apply theme
         G.theme.apply(b.root, this, false)
 
         //Setup fragment manager and switchers
@@ -90,7 +78,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun shutdown() {
-        Log.i("ALTER", "MainActivity: shutdown")
         hasBooted = false
 
         G.dashboards.saveToFile()

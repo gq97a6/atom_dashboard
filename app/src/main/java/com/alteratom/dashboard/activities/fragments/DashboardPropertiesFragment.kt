@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +13,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
@@ -43,13 +51,17 @@ import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.objects.G.areInitialized
 import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.restart
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
-import java.util.*
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -57,6 +69,11 @@ class DashboardPropertiesFragment : Fragment() {
 
     lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
     lateinit var request: ActivityResultLauncher<Intent>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

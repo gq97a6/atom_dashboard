@@ -12,7 +12,13 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.ColorUtils
@@ -129,6 +135,7 @@ class Theme {
                 drawable.cornerRadius = 15f
                 this.background = drawable
             }
+
             "colorIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.color)
             "colorAIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.a)
             "colorCIcon" -> this.backgroundTintList = ColorStateList.valueOf(p.c)
@@ -137,15 +144,18 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.color)
             }
+
             "sliderPopupFrame" -> {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(10, p.color)
                 drawable?.cornerRadius = 25f
             }
+
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
                 background.setColor(ColorStateList.valueOf(theme.a.pallet.background.alpha(150)))
             }
+
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 background.setColor(
@@ -156,11 +166,13 @@ class Theme {
                     )
                 )
             }
+
             "splashIcon" -> {
                 this.setBackgroundResource(if (isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
                 this.background.colorFilter =
                     PorterDuffColorFilter(a.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
             }
+
             else -> onUnknownTag(this.tag, "view")
         }
     }
@@ -180,6 +192,7 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.color)
             }
+
             "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 100))
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
@@ -192,8 +205,10 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.color)
             }
+
             "backgroundTint" -> this.backgroundTintList =
                 ColorStateList.valueOf(p.background)
+
             "groupBar" -> this.setBackgroundColor(Color.TRANSPARENT)
             "group" -> this.setBackgroundColor(Color.TRANSPARENT)
             else -> onUnknownTag(this.tag, "linearLayout")
@@ -211,6 +226,7 @@ class Theme {
                     this.verticalScrollbarThumbDrawable = bar
                 }
             }
+
             else -> onUnknownTag(this.tag, "recyclerView")
         }
     }
@@ -269,6 +285,7 @@ class Theme {
                 this.buttonTintList = colorStateList
                 this.background = null
             }
+
             else -> onUnknownTag(this.tag, "radioButton")
         }
     }
@@ -288,6 +305,7 @@ class Theme {
                 this.buttonTintList = colorStateList
                 this.background = null
             }
+
             else -> onUnknownTag(this.tag, "radioButton")
         }
     }
@@ -305,15 +323,18 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.color)
             }
+
             "insert" -> {
                 this.setTextColor(p.b)
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.c)
             }
+
             "log" -> {
                 this.setTextColor(p.color)
                 this.setBackgroundColor(p.background)
             }
+
             else -> onUnknownTag(this.tag, "textView")
         }
     }
@@ -326,6 +347,7 @@ class Theme {
                 val drawable = this.background as? GradientDrawable
                 drawable?.setStroke(3, p.c)
             }
+
             else -> onUnknownTag(this.tag, "editText")
         }
     }
@@ -356,6 +378,7 @@ class Theme {
                 this.tickInactiveTintList = ColorStateList.valueOf(p.c)
                 this.thumbTintList = ColorStateList.valueOf(p.color)
             }
+
             "disabled" -> {
                 this.trackActiveTintList = ColorStateList.valueOf(p.c)
                 this.tickActiveTintList = ColorStateList.valueOf(p.c)
@@ -363,6 +386,7 @@ class Theme {
                 this.tickInactiveTintList = ColorStateList.valueOf(p.d)
                 this.thumbTintList = ColorStateList.valueOf(p.b)
             }
+
             else -> onUnknownTag(this.tag, "slider")
         }
     }
@@ -373,15 +397,19 @@ class Theme {
                 this.circleProgressColor = p.b
                 this.pointerColor = p.color
             }
+
             "goal" -> {
                 this.circleProgressColor = p.b
             }
+
             "progress" -> {
                 this.circleProgressColor = p.color
             }
+
             "track" -> {
                 this.circleColor = p.c
             }
+
             else -> onUnknownTag(this.tag, "crcularSeekBar")
         }
     }
@@ -406,6 +434,7 @@ class Theme {
                 this.chipBackgroundColor = colorStateListBackground
                 this.setTextColor(colorStateListText)
             }
+
             else -> onUnknownTag(this.tag, "chip")
         }
     }

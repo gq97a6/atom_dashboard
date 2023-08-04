@@ -86,9 +86,11 @@ class LightsTile : Tile() {
             true -> {
                 iconResTrue
             }
+
             false -> {
                 iconResFalse
             }
+
             null -> {
                 iconRes
             }
@@ -113,6 +115,7 @@ class LightsTile : Tile() {
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
+
                     ColorTypes.HEX -> toRemoves = Regex("@hex").split(pattern).toMutableList()
                     ColorTypes.RGB -> {
                         toRemoves = Regex("@[rgb]").split(pattern).toMutableList()
@@ -174,6 +177,7 @@ class LightsTile : Tile() {
                 "state" -> state?.let {
                     binding.dlSwitch.text = if (it) "ON" else "OFF"
                 }
+
                 "color" -> binding.dlPicker.setColor(HSVToColor(hsvPicked))
                 "bright" -> brightness?.let { binding.dlBright.progress = it.toFloat() }
                 "mode" -> modeAdapter.notifyDataSetChanged()
@@ -241,6 +245,7 @@ class LightsTile : Tile() {
                                 .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                                 .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                         }
+
                         ColorTypes.HEX -> {
                             val c = HSVToColor(hsvPickedTmp)
                             (mqtt.payloads[ColorTypes.HEX.name] ?: "")
@@ -249,6 +254,7 @@ class LightsTile : Tile() {
                                     String.format("%02x%02x%02x", c.red, c.green, c.blue)
                                 )
                         }
+
                         ColorTypes.RGB -> {
                             val c = HSVToColor(hsvPickedTmp)
                             (mqtt.payloads[ColorTypes.RGB.name] ?: "")
@@ -386,6 +392,7 @@ class LightsTile : Tile() {
                         )
                     }
                 }
+
                 "color" -> {
                     var payload = data
 
@@ -404,6 +411,7 @@ class LightsTile : Tile() {
                             )
                             run {}
                         }
+
                         ColorTypes.RGB -> {
                             colorToHSV(
                                 Color.rgb(
@@ -428,10 +436,12 @@ class LightsTile : Tile() {
                         }
                     }
                 }
+
                 "bright" -> brightness = data.toIntOrNull()
                 "mode" -> (modes.find { it.second == data })?.let {
                     mode = it.second
                 }
+
                 else -> hasReceived = false
             }
 

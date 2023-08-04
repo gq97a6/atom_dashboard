@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,17 +11,32 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
@@ -32,7 +48,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.BuildConfig
 import com.alteratom.R
-import com.alteratom.dashboard.*
+import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.Settings
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
@@ -41,9 +59,14 @@ import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.objects.ActivityHandler.restart
+import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.objects.G.areInitialized
+import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Pro
@@ -52,6 +75,8 @@ import com.alteratom.dashboard.objects.Storage.parseListSave
 import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.objects.Storage.prepareSave
 import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.openBatterySettings
+import com.alteratom.dashboard.restart
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -62,6 +87,11 @@ class SettingsFragment : Fragment() {
     private lateinit var create: ActivityResultLauncher<Intent>
 
     var pro = MutableLiveData(Pro.status)
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -322,7 +352,10 @@ class SettingsFragment : Fragment() {
 
                             @Composable
                             fun tmpLabel() {
-                                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
                                     Text(
                                         text = "Background work",
                                         fontWeight = FontWeight.Bold,

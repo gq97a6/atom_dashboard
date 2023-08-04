@@ -5,13 +5,32 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
-import com.android.billingclient.api.*
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
-import com.android.billingclient.api.BillingClient.ConnectionState.*
+import com.android.billingclient.api.BillingClient.ConnectionState.CLOSED
+import com.android.billingclient.api.BillingClient.ConnectionState.CONNECTED
+import com.android.billingclient.api.BillingClient.ConnectionState.CONNECTING
+import com.android.billingclient.api.BillingClient.ConnectionState.DISCONNECTED
 import com.android.billingclient.api.BillingClient.ProductType.INAPP
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.ProductDetails
+import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
-import kotlinx.coroutines.*
+import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
@@ -118,6 +137,7 @@ class BillingHandler(val activity: Activity) {
                     Pro.createLocalLicence()
                     if (!purchase.isAcknowledged) purchase.acknowledge()
                 }
+
                 DON1, DON5, DON25 -> {
                     if (!purchase.isAcknowledged) purchase.consume()
                 }
@@ -258,6 +278,7 @@ class BillingHandler(val activity: Activity) {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {}
                     override fun onBillingServiceDisconnected() {}
                 })
+
                 CLOSED -> {
                     createClient()
                     handleDispatch()

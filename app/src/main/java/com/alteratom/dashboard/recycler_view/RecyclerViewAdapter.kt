@@ -118,6 +118,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
                             markItemRemove(position)
                             //removeMarkedItems()
                         }
+
                         editMode.isEdit -> onItemEdit(list[position])
                     }
                 }

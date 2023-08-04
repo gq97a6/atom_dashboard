@@ -3,15 +3,14 @@ package com.alteratom.dashboard.activities.fragments
 import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +22,12 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
+import com.alteratom.dashboard.objects.G.areInitialized
 import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.hasBooted
+import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.G.tile
@@ -42,6 +45,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var adapter: RecyclerViewAdapter<Tile>
     private lateinit var toolBarHandler: ToolbarHandler
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,6 +61,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
@@ -137,27 +146,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.i("ALTER", "DashboardFragment: onStart")
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        Log.i("ALTER", "DashboardFragment: onResume")
         adapter.notifyDataSetChanged()
         settings.lastDashboardId = dashboard.id
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.i("ALTER", "DashboardFragment: onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.i("ALTER", "DashboardFragment: onStop")
     }
 
     //----------------------------------------------------------------------------------------------
@@ -251,6 +244,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                             val per = it / max
                             (screenWidth * 0.8 - (screenWidth * 0.8 * per)).toInt()
                         }
+
                         else -> 0
                     }
                 }
@@ -258,6 +252,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 b.dLog.layoutParams = lp
                 b.dLogBar.layoutParams = ldp
             }
+
             1 -> {
                 val logAnimator = ValueAnimator.ofInt(b.dLog.measuredHeight, 0)
                 logAnimator.duration = 500L

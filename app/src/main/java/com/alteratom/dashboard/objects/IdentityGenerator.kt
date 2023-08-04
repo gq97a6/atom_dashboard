@@ -1,6 +1,6 @@
 package com.alteratom.dashboard.objects
 
-import java.util.*
+import java.util.Random
 
 object IdentityGenerator {
 

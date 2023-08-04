@@ -1,6 +1,10 @@
 package com.alteratom.dashboard.compose_global
 
-import androidx.compose.material.*
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material.SwitchDefaults
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import com.alteratom.dashboard.Theme.Companion.colors
 

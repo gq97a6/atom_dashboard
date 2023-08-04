@@ -53,6 +53,7 @@ class ColorTile : Tile() {
                         flagIndexes["s"] = indexes.indexOf("s")
                         flagIndexes["v"] = indexes.indexOf("v")
                     }
+
                     ColorTypes.HEX -> toRemoves = Regex("@hex").split(pattern).toMutableList()
                     ColorTypes.RGB -> {
                         toRemoves = Regex("@[rgb]").split(pattern).toMutableList()
@@ -135,11 +136,13 @@ class ColorTile : Tile() {
                             .replace("@s", (hsvPickedTmp[1] * 100).toInt().toString())
                             .replace("@v", (hsvPickedTmp[2] * 100).toInt().toString())
                     }
+
                     ColorTypes.HEX -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqtt.payloads[ColorTypes.HEX.name] ?: "")
                             .replace("@hex", String.format("%02x%02x%02x", c.red, c.green, c.blue))
                     }
+
                     ColorTypes.RGB -> {
                         val c = HSVToColor(hsvPickedTmp)
                         (mqtt.payloads[ColorTypes.RGB.name] ?: "")
@@ -185,6 +188,7 @@ class ColorTile : Tile() {
                 )
                 run {}
             }
+
             ColorTypes.RGB -> {
                 colorToHSV(
                     Color.rgb(

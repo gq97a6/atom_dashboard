@@ -24,6 +24,7 @@ abstract class Switcher {
                 touchdownOffset = e.changes[0].position
                 touchdownMillis = e.changes[0].uptimeMillis
             }
+
             PointerEventType.Release -> {
                 val flingLen = (touchdownOffset.x - e.changes[0].position.x) / screenWidth
                 if (abs(touchdownOffset.y - e.changes[0].position.y) < 120 &&
@@ -46,6 +47,7 @@ abstract class Switcher {
                     touchdownX = e.x
                     touchdownY = e.y
                 }
+
                 KeyEvent.ACTION_UP -> {
                     val flingLen = (touchdownX - e.x) / screenWidth
                     if (abs(touchdownY - e.y) < 120 &&

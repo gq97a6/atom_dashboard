@@ -97,7 +97,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
                         mqtt.notifyTitle.replace("@v", data.second),
                         mqtt.notifyPayload.replace("@v", data.second),
                         this.mqtt.silentNotify,
-                        if(settings.notifyStack) 1 else Random().nextInt()
+                        if (settings.notifyStack) 1 else Random().nextInt()
                     )
                 }
             }

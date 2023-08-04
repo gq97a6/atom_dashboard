@@ -1,11 +1,20 @@
 import ColorTile.Companion.ColorTypes
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +34,12 @@ import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.PairList
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
-import com.alteratom.dashboard.compose_global.*
+import com.alteratom.dashboard.compose_global.BasicButton
+import com.alteratom.dashboard.compose_global.EditText
+import com.alteratom.dashboard.compose_global.FrameBox
+import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
+import com.alteratom.dashboard.compose_global.LabeledCheckbox
+import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.tile
 

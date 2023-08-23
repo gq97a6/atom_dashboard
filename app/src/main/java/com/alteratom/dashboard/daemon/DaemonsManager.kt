@@ -14,13 +14,11 @@ object DaemonsManager {
 
     fun notifyAdded(dashboard: Dashboard, context: Context) = try {
         dashboard.apply {
-            run {}
-            daemon = Mqttd(context, this)//Daemon(context, this, type)
+            daemon = Daemon(context, this, type)
             daemon.notifyAssigned()
         }
     } catch (e: Exception) {
         println(e.toString())
-        run {}
     }
 
     fun notifyRemoved(dashboard: Dashboard) = try {

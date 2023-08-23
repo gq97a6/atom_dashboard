@@ -58,7 +58,6 @@ class PayActivity : AppCompatActivity() {
 
     private lateinit var billingHandler: BillingHandler
 
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         G.theme.apply(context = this)
@@ -72,22 +71,22 @@ class PayActivity : AppCompatActivity() {
             var scaleTargetValue by remember { mutableStateOf(.8f) }
             var scaleDuration by remember { mutableStateOf(3000) }
 
-            val scale = rememberInfiniteTransition().animateFloat(
+            val scale = rememberInfiniteTransition(label = "").animateFloat(
                 initialValue = scaleInitialValue,
                 targetValue = scaleTargetValue,
                 animationSpec = infiniteRepeatable(
                     animation = tween(scaleDuration),
                     repeatMode = RepeatMode.Reverse,
-                )
+                ), label = ""
             )
 
-            val rotation = rememberInfiniteTransition().animateFloat(
+            val rotation = rememberInfiniteTransition(label = "").animateFloat(
                 initialValue = 0f,
                 targetValue = 360f,
                 animationSpec = infiniteRepeatable(
                     animation = tween(3000),
                     repeatMode = RepeatMode.Reverse,
-                )
+                ), label = ""
             )
 
             var priceTags by remember { mutableStateOf(mapOf<String, String>()) }
@@ -103,14 +102,15 @@ class PayActivity : AppCompatActivity() {
                             BillingHandler.DON25
                         )
                     ).let {
+                        delay(500)
                         if (it != null) {
                             priceTags = it
                             scaleInitialValue = scale.value
                             scaleTargetValue = 0f
-                            scaleDuration = 500
+                            scaleDuration = 1000
                             delay(500)
                             showLoading = false
-                        } else MainActivity.fm.popBackStack()
+                        } else finishAndRemoveTask()
                     }
                 }
             }
@@ -267,7 +267,7 @@ class PayActivity : AppCompatActivity() {
                                                 scaleInitialValue = scale.value
                                                 scaleTargetValue = 0f
                                                 scaleDuration = 1000
-                                                delay(1000)
+                                                delay(500)
                                                 showLoading = false
                                             }
                                         }

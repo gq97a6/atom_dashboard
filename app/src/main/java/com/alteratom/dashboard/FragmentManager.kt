@@ -86,7 +86,7 @@ class FragmentManager(private val mainActivity: MainActivity) {
         }
     }
 
-    fun popBackStack(
+    fun popBackstack(
         stack: Boolean = false,
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ): Boolean {
@@ -95,7 +95,7 @@ class FragmentManager(private val mainActivity: MainActivity) {
             replaceWith(backstack.removeLast(), stack, animation)
             true
         }
-
-        //mainActivity.apply { onBackPressedBoolean = { false } }
     }
+
+    fun addBackstack(fragment: Fragment) = backstack.add(fragment)
 }

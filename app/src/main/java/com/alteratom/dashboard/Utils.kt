@@ -4,10 +4,18 @@ package com.alteratom.dashboard
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.AlarmManager.ELAPSED_REALTIME
+import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
+import android.app.AlarmManager.RTC
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_CANCEL_CURRENT
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.ACTION_MAIN
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
@@ -18,6 +26,7 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -40,12 +49,15 @@ import androidx.core.graphics.red
 import com.alteratom.R
 import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.PayActivity
+import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import org.bouncycastle.crypto.params.Blake3Parameters.context
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.Base64
 import java.util.Random
 import kotlin.math.roundToInt
+
 
 val screenHeight
     get() = Resources.getSystem().displayMetrics.heightPixels
@@ -313,15 +325,7 @@ fun createNotification(
     }
 }
 
-fun Activity.restart() = this.apply {
-    Intent(this, MainActivity::class.java).apply {
-        action = Intent.ACTION_MAIN
-        startActivity(this)
-    }
-
-    //Stab it
-    finish()
-
-    //Kill it
-    finishAffinity()
+fun Activity.restart(reason: String = "onAttach") = this.apply {
+    Log.i("ALTER_ATOM", "RESTART: $reason")
+    recreate()
 }

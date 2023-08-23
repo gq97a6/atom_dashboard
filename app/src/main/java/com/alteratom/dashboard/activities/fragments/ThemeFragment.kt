@@ -52,7 +52,7 @@ class ThemeFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+        if (!areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
     }
 
     override fun onCreateView(

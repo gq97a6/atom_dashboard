@@ -17,7 +17,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 
 class ForegroundService : LifecycleService() {
 
-    var finishAffinity: () -> Unit = {}
+    var finishAndRemoveTask: () -> Unit = {}
     var isStarted = false
 
     companion object {
@@ -87,7 +87,7 @@ class ForegroundService : LifecycleService() {
         else {
             isStarted = false
 
-            if (action == "SHUT") finishAffinity()
+            if (action == "SHUT") finishAndRemoveTask()
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }

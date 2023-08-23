@@ -1,10 +1,12 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
+import com.alteratom.dashboard.activities.fragments.DashboardFragment
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.hasBooted
@@ -25,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         lateinit var fm: FragmentManager
     }
 
-    //Is always called only once at the start
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,12 +34,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(b.root)
 
         boot()
-    }
-
-    //Is always called when the app comes into the foreground
-    override fun onResume() {
-        super.onResume()
-        if (!hasBooted) boot()
     }
 
     //Might be called without onDestroy when the app closes
@@ -54,9 +49,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun boot() {
-        hasShutdown = false
+        Log.i("ALTER_ATOM", "BOOT")
 
-        ForegroundService.service?.finishAffinity = { finishAffinity() }
+        hasShutdown = false
 
         //Partially initialize globals if service has not been started
         if (ForegroundService.service?.isStarted != true) initializeGlobals(0)
@@ -64,20 +59,16 @@ class MainActivity : AppCompatActivity() {
         //Apply theme
         G.theme.apply(b.root, this, false)
 
-        //Setup fragment manager and switchers
-        TileSwitcher.activity = this
-        FragmentSwitcher.activity = this
+        //Setup fragment manager and start setup fragment
         fm = FragmentManager(this)
         fm.replaceWith(SetupFragment(), false, null)
-
-        onBackPressedDispatcher.addCallback(this) {
-            if (!doOverrideOnBackPress() && !fm.popBackStack()) finish()
-        }
 
         hasBooted = true
     }
 
     private fun shutdown() {
+        Log.i("ALTER_ATOM", "SHUTDOWN")
+
         hasBooted = false
 
         G.dashboards.saveToFile()

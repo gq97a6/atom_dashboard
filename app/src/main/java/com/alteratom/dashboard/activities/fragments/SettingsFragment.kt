@@ -90,7 +90,7 @@ class SettingsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+        if (!areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,14 +165,7 @@ class SettingsFragment : Fragment() {
                                 settings.saveToFile()
                                 theme.saveToFile()
 
-                                activity?.startActivity(
-                                    Intent(
-                                        requireContext(),
-                                        MainActivity::class.java
-                                    )
-                                )
-                                activity?.finish()
-                                activity?.finishAffinity()
+                                fm.replaceWith(SetupFragment(), animation = null)
                             } else {
                                 createToast(requireContext(), "Backup restore failed")
                             }
@@ -397,31 +390,12 @@ class SettingsFragment : Fragment() {
                                         checked = foregroundService,
                                         onCheckedChange = {
                                             if (!context.isBatteryOptimized() || !it) {
-                                                hasChanged = true
                                                 foregroundService = it
                                                 settings.foregroundService = foregroundService
+                                                fm.replaceWith(SetupFragment(), animation = null)
                                             } else workShow = true
                                         },
                                     )
-
-                                    if (hasChanged) {
-                                        BasicButton(
-                                            contentPadding = PaddingValues(13.dp),
-                                            border = BorderStroke(2.dp, colors.b),
-                                            onClick = {
-                                                requireActivity().restart()
-                                            },
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(top = 10.dp, bottom = 20.dp)
-                                        ) {
-                                            Text(
-                                                "RESTART TO APPLY CHANGES",
-                                                fontSize = 10.sp,
-                                                color = colors.a
-                                            )
-                                        }
-                                    }
 
                                     Text(
                                         "This option allows app to work in the background after being closed." +
@@ -479,6 +453,7 @@ class SettingsFragment : Fragment() {
                                                     this,
                                                     PayActivity::class.java
                                                 ).also {
+                                                    it.action = Intent.ACTION_VIEW
                                                     startActivity(it)
                                                 }
                                             }

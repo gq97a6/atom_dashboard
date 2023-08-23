@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 //TODO: remove
 abstract class ConnectionHandler(private var interval: Long = 500) {
 
-    val isDone = MutableLiveData(false)
+    private val isDone = MutableLiveData(false)
     private var isDispatchScheduled = false
 
     fun dispatch(reason: String) {

@@ -3,9 +3,11 @@ package com.alteratom.dashboard.activities.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -49,6 +51,8 @@ import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.restart
+import com.alteratom.dashboard.switcher.FragmentSwitcher
+import com.alteratom.dashboard.switcher.TileSwitcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -62,6 +66,7 @@ class SetupFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (hasShutdown) requireActivity().restart()
+        (activity as MainActivity).doOverrideOnBackPress = { true }
     }
 
     @SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType")
@@ -134,12 +139,33 @@ class SetupFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
         CoroutineScope(Dispatchers.Default).launch {
+            Log.i("ALTER_ATOM", "SETUP_FRAGMENT")
+
+            //LEAVE IT THERE
+            delay(50)
+
+            (activity as? MainActivity)?.apply {
+                service?.finishAndRemoveTask = { finishAndRemoveTask() }
+
+                //Setup switchers
+                TileSwitcher.activity = this
+                FragmentSwitcher.activity = this
+
+                //Setup on back press callback
+                runOnUiThread {
+                    onBackPressedDispatcher.addCallback(this) {
+                        if (!doOverrideOnBackPress() && !fm.popBackstack()) finishAndRemoveTask()
+                    }
+                }
+            }
+
             //Disable foreground service if battery is optimized
-            if (context?.isBatteryOptimized() == true) settings.foregroundService = false
+            if (context?.isBatteryOptimized() != false) settings.foregroundService = false
+
             //Foreground service enabled by settings and battery usage is not optimised
             if (settings.foregroundService) foregroundServiceAllowed()
             else foregroundServiceDisallowed()
@@ -148,35 +174,56 @@ class SetupFragment : Fragment() {
     }
 
     private fun foregroundServiceDisallowed() {
+        Log.i("ALTER_ATOM", "SERVICE_DISALLOWED")
+
         //Disable foreground service as it should be
         if (service?.isStarted == true) ForegroundService.stop(activity as MainActivity)
 
         //Initialize globals with activity as context if not already
-        if (!G.areInitialized) (activity as MainActivity).apply { initializeGlobals(1) }
+        if (!G.areInitialized) {
+            (activity as MainActivity).apply { initializeGlobals(1) }
+
+            if (settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {
+                fm.addBackstack(DashboardFragment())
+            }
+        }
 
         onSetupDone()
     }
 
     private suspend fun foregroundServiceAllowed() {
+        Log.i("ALTER_ATOM", "SERVICE_ALLOWED")
+
         if (service?.isStarted == true) (activity as MainActivity).apply { //Service already launched
+            Log.i("ALTER_ATOM", "SERVICE_ALREADY_RUNNING")
+
             if (G.areInitialized) onSetupDone()
             else { //Something went wrong | Globals should be initialized as service is
+
+                Log.i("ALTER_ATOM", "NOT_INITIALIZED_ERROR")
+
                 //Stop foreground service
                 ForegroundService.stop(this@apply)
 
                 //Restart in three seconds
                 delay(1000)
-                restart()
+                restart("STARTUP_ERROR_01")
             }
         } else (activity as MainActivity).apply { //Service not launched
+            Log.i("ALTER_ATOM", "SERVICE_NOT_RUNNING")
+
             //Start foreground service
             ForegroundService.start(this@apply)
 
             //Wait for service
-            if (ForegroundService.haltForService() == null) restart() //restart if failed
+            if (ForegroundService.haltForService() == null) restart("STARTUP_ERROR_02") //restart if failed
             else {
                 //Configure service
-                service?.finishAffinity = { finishAffinity() }
+                service?.finishAndRemoveTask = { finishAndRemoveTask() }
+
+                if (G.areInitialized && settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {
+                    fm.addBackstack(DashboardFragment())
+                }
 
                 //Initialize globals with service as context
                 service?.initializeGlobals(1)
@@ -192,8 +239,6 @@ class SetupFragment : Fragment() {
 
         //Exit
         ready.postValue(true)
-        if (settings.startFromLast && setCurrentDashboard(settings.lastDashboardId)) {
-            fm.replaceWith(DashboardFragment(), false, fadeLong)
-        } else fm.popBackStack(false, fadeLong)
+        fm.popBackstack(false, fadeLong)
     }
 }

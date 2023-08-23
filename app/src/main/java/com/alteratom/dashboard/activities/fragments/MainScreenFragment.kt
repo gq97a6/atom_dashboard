@@ -36,7 +36,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (!areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+        if (!areInitialized) requireActivity().restart()
     }
 
     override fun onCreateView(

@@ -47,7 +47,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
+        if (dashboardIndex < 0 || !areInitialized) requireActivity().restart()
     }
 
     override fun onCreateView(

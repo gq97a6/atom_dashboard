@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.objects
 
 import android.content.Context
+import android.util.Log
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
@@ -46,6 +47,8 @@ object G {
     }
 
     fun Context.initializeGlobals(stage: Int) {
+        Log.i("ALTER_ATOM", "INIT_GLOB: $stage")
+
         //Setup paths if empty
         if (rootFolder == "") {
             rootFolder = filesDir.canonicalPath.toString()

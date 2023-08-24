@@ -11,6 +11,7 @@ import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 class FragmentManager(private val mainActivity: MainActivity) {
     private var backstack = mutableListOf<Fragment>(MainScreenFragment())
     private var currentFragment: Fragment = MainScreenFragment()
+    var doOverrideOnBackPress: () -> Boolean = { false }
 
     companion object Animations {
         val swap: (FragmentTransaction) -> Unit = {
@@ -81,9 +82,9 @@ class FragmentManager(private val mainActivity: MainActivity) {
                 if (stack) backstack.add(currentFragment)
                 currentFragment = fragment
             }
-
-            doOverrideOnBackPress = { false }
         }
+
+        doOverrideOnBackPress = { false }
     }
 
     fun popBackstack(

@@ -149,7 +149,7 @@ object TilePropertiesComposeComponents {
                             enabled = it
                             show = it
                             dashboard.mqtt.isEnabled = it
-                            dashboard.daemon.notifyConfigChanged()
+                            dashboard.daemon?.notifyConfigChanged()
                         }
                     )
 

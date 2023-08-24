@@ -44,7 +44,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     var mqtt = MqttConfig()
 
     @JsonIgnore
-    lateinit var daemon: Daemon
+    var daemon: Daemon? = null
 
     var tiles: MutableList<Tile> = mutableListOf()
         set(value) {

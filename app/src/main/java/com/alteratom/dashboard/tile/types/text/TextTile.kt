@@ -10,6 +10,7 @@ import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class TextTile : Tile() {
 
@@ -74,10 +75,11 @@ class TextTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String, String>,
+        topic: String,
+        msg: MqttMessage,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(data, jsonResult)
-        value = jsonResult["base"] ?: data.second
+        super.onReceive(topic, msg, jsonResult)
+        value = jsonResult["base"] ?: msg.toString()
     }
 }

@@ -32,7 +32,7 @@ object ButtonTileCompose : DaemonBasedCompose {
                     onValueChange = {
                         pub = it
                         G.tile.mqtt.pubs["base"] = it
-                        G.dashboard.daemon.notifyConfigChanged()
+                        G.dashboard.daemon?.notifyConfigChanged()
                     }
                 )
 
@@ -61,7 +61,7 @@ object ButtonTileCompose : DaemonBasedCompose {
                     {
                         qos = it
                         G.tile.mqtt.qos = it
-                        G.dashboard.daemon.notifyConfigChanged()
+                        G.dashboard.daemon?.notifyConfigChanged()
                     },
                     modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
                 )

@@ -24,7 +24,7 @@ interface Daemonized {
     ) {
     }
 
-    fun onReceive(data: Pair<String, String>, jsonResult: MutableMap<String, String>) {
+    fun onReceive(topic: String, msg: MqttMessage, jsonResult: MutableMap<String, String>) {
     }
 
     fun send(
@@ -71,12 +71,7 @@ interface Daemonized {
         this.mqtt.lastReceive = Date()
 
         try {
-            onReceive(
-                Pair(
-                    topic,
-                    msg.toString()
-                ), jsonResult
-            )
+            onReceive(topic, msg, jsonResult)
         } catch (_: Exception) {
         }
     }

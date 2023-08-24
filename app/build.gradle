@@ -6,9 +6,9 @@ plugins {
 android {
     defaultConfig {
         applicationId "com.alteratom.dashboard"
-        compileSdk 33
+        compileSdk 34
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 21
         versionName "1.0.10 | beta" //stable or beta
     }
@@ -29,7 +29,7 @@ android {
             //shrinkResources true
             //minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //debuggable true
+            debuggable true
         }
     }
 
@@ -70,10 +70,10 @@ android {
 
 dependencies {
     implementation 'com.android.support:localbroadcastmanager:33.0.0'
-    implementation 'androidx.compose.runtime:runtime-livedata:1.4.3'
-    implementation 'androidx.compose.material:material:1.4.3'
-    implementation 'androidx.compose.animation:animation:1.4.3'
-    implementation 'androidx.compose.ui:ui-tooling:1.4.3'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.5.0'
+    implementation 'androidx.compose.material:material:1.5.0'
+    implementation 'androidx.compose.animation:animation:1.5.0'
+    implementation 'androidx.compose.ui:ui-tooling:1.5.0'
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     implementation 'com.android.billingclient:billing:6.0.1'
@@ -89,8 +89,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation 'androidx.activity:activity-ktx:1.7.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.1'
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }

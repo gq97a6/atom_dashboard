@@ -13,6 +13,7 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
+import org.eclipse.paho.client.mqttv3.MqttMessage
 
 
 class TerminalTile : Tile() {
@@ -90,12 +91,13 @@ class TerminalTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String, String>,
+        topic: String,
+        msg: MqttMessage,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(data, jsonResult)
+        super.onReceive(topic, msg, jsonResult)
 
-        val entry = jsonResult["base"] ?: data.second
+        val entry = jsonResult["base"] ?: msg.toString()
         log.add(0, entry)
 
         terminalAdapter.let {

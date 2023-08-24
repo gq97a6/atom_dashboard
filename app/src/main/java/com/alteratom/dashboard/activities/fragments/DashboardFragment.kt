@@ -3,7 +3,6 @@ package com.alteratom.dashboard.activities.fragments
 import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -22,12 +21,8 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
-import com.alteratom.dashboard.objects.G.areInitialized
 import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.hasBooted
-import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.G.tile
@@ -44,11 +39,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
     private lateinit var adapter: RecyclerViewAdapter<Tile>
     private lateinit var toolBarHandler: ToolbarHandler
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (dashboardIndex < 0 || !areInitialized) requireActivity().restart()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +58,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         setupLogRecyclerView()
         theme.apply(b.root, requireContext(), false)
 
-        (activity as MainActivity).doOverrideOnBackPress = {
+        fm.doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
                 toolBarHandler.toggleTools()
                 true
@@ -79,8 +69,8 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
 
         //Update dashboard status on change
-        dashboard.daemon.statePing.observe(viewLifecycleOwner) {
-            updateStatus(dashboard.daemon)
+        dashboard.daemon?.statePing?.observe(viewLifecycleOwner) {
+            dashboard.daemon?.let { updateStatus(it) }
         }
 
         //Hide navigation arrows if required

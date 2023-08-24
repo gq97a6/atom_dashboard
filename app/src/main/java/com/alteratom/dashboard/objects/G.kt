@@ -13,9 +13,6 @@ import kotlin.reflect.KClass
 
 object G {
     var areInitialized = false
-    var hasBooted = false
-    var hasShutdown = false
-
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
@@ -44,36 +41,6 @@ object G {
         dashboard = dashboards.find { it.id == id } ?: return false
         dashboardIndex = dashboards.indexOf(dashboard)
         return true
-    }
-
-    fun Context.initializeGlobals(stage: Int) {
-        Log.i("ALTER_ATOM", "INIT_GLOB: $stage")
-
-        //Setup paths if empty
-        if (rootFolder == "") {
-            rootFolder = filesDir.canonicalPath.toString()
-
-            path = mapOf(
-                Theme::class to "$rootFolder/theme",
-                Settings::class to "$rootFolder/settings",
-                Dashboard::class to "$rootFolder/dashboards"
-            )
-        }
-
-        when (stage) {
-            0 -> { //Skip dashboards - when activity starts without service
-                G.theme = parseSave() ?: Theme()
-                settings = parseSave() ?: Settings()
-            }
-
-            1 -> { //Only dashboards - when service starts after activity
-                dashboards = parseListSave()
-                DaemonsManager.notifyAllAdded(this)
-                areInitialized = true
-            }
-        }
-
-        Pro.updateStatus()
     }
 }
 

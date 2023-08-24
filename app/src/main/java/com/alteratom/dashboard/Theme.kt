@@ -537,16 +537,6 @@ class Theme {
 
             return ColorPallet(color, colorBackground, a, b, c, d)
         }
-
-        fun getComposeColorPallet(): ComposeColorPallet =
-            ComposeColorPallet(
-                ComposeColor(pallet.color),
-                ComposeColor(pallet.background),
-                ComposeColor(pallet.a),
-                ComposeColor(pallet.b),
-                ComposeColor(pallet.c),
-                ComposeColor(pallet.d),
-            )
     }
 
     class ComposeColorPallet(

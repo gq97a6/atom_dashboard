@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.activities.fragments
 
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -33,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,19 +45,13 @@ import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.s
 import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DashboardPropertiesCompose
 import com.alteratom.dashboard.compose_global.BasicButton
-import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
+import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.objects.G.areInitialized
 import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.hasBooted
-import com.alteratom.dashboard.objects.G.hasShutdown
 import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.restart
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import kotlin.math.abs
@@ -69,11 +61,6 @@ class DashboardPropertiesFragment : Fragment() {
 
     lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
     lateinit var request: ActivityResultLauncher<Intent>
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (dashboardIndex < 0 || !areInitialized || !hasBooted || hasShutdown) requireActivity().restart()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,148 +113,98 @@ class DashboardPropertiesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        theme.apply(context = requireContext())
-        return ComposeView(requireContext()).apply {
-            setContent {
-                //Background
-                Box(modifier = Modifier.background(Theme.colors.background))
+    ): View = composeConstruct(requireContext()) {
 
-                ComposeTheme(Theme.isDark) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                awaitPointerEventScope {
-                                    while (true) {
-                                        FragmentSwitcher.handle(
-                                            awaitPointerEvent(),
-                                            DashboardPropertiesFragment()
-                                        )
-                                    }
-                                }
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Surface(modifier = Modifier.padding(16.dp)) {
-                            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                                Text(
-                                    text = "Dashboard",
-                                    fontSize = 45.sp,
-                                    color = Theme.colors.color
+        //Background
+        Box(modifier = Modifier.background(Theme.colors.background))
 
-                                )
-                                Text(
-                                    modifier = Modifier.offset(y = (-10).dp),
-                                    text = "properties",
-                                    fontSize = 35.sp,
-                                    color = Theme.colors.a
-
-                                )
-
-                                Row(
-                                    modifier = Modifier.padding(top = 5.dp),
-                                    verticalAlignment = Alignment.Bottom
-                                ) {
-                                    BasicButton(
-                                        contentPadding = PaddingValues(13.dp),
-                                        onClick = {
-                                            getIconHSV = { dashboard.hsv }
-                                            getIconRes = { dashboard.iconRes }
-                                            getIconColorPallet = { dashboard.pallet }
-
-                                            setIconHSV = { hsv -> dashboard.hsv = hsv }
-                                            setIconKey = { key -> dashboard.iconKey = key }
-
-                                            MainActivity.fm.replaceWith(TileIconFragment())
-                                        },
-                                        border = BorderStroke(1.dp, dashboard.pallet.cc.color),
-                                        modifier = Modifier.size(52.dp)
-                                    ) {
-                                        Icon(
-                                            painterResource(dashboard.iconRes),
-                                            "",
-                                            tint = dashboard.pallet.cc.color
-                                        )
-                                    }
-
-                                    var name by remember { mutableStateOf(dashboard.name) }
-                                    EditText(
-                                        label = { Text("Dashboard name") },
-                                        value = name,
-                                        onValueChange = { it ->
-                                            name = it
-                                            it.trim().let {
-                                                dashboard.name =
-                                                    it.ifBlank {
-                                                        abs(Random.nextInt(0, 100)).toString()
-                                                    }
-                                            }
-                                        },
-                                        modifier = Modifier.padding(start = 12.dp)
-                                    )
-                                }
-
-                                DashboardPropertiesCompose.Compose(
-                                    dashboard.type,
-                                    this@DashboardPropertiesFragment
-                                )
-
-                                //var securityLevel by remember { mutableStateOf(dashboard.securityLevel) }
-                                //var excludeNavigation by remember { mutableStateOf(dashboard.excludeNavigation) }
-//
-                                //FrameBox("Security") {
-                                //    Column {
-                                //        LabeledCheckbox(
-                                //            label = {
-                                //                Text(
-                                //                    "Exclude from quick navigation",
-                                //                    fontSize = 15.sp,
-                                //                    color = Theme.colors.a
-                                //                )
-                                //            },
-                                //            checked = excludeNavigation,
-                                //            onCheckedChange = {
-                                //                excludeNavigation = it
-                                //                dashboard.excludeNavigation = it
-                                //            },
-                                //            modifier = Modifier.padding(vertical = 10.dp)
-                                //        )
-//
-                                //        RadioGroup(
-                                //            listOf(
-                                //                "Never",
-                                //                "Once (unlock until app minimized)",
-                                //                "Every time",
-                                //            ),
-                                //            "Access authentication level",
-                                //            securityLevel,
-                                //            {
-                                //                requireContext().buildConfirm(
-                                //                    "Confirm change",
-                                //                    "CONFIRM",
-                                //                    {
-                                //                        securityLevel = it
-                                //                        dashboard.securityLevel = it
-                                //                    }
-                                //                )
-                                //            },
-                                //            modifier = Modifier.padding(top = 5.dp)
-                                //        )
-                                //    }
-                                //}
-                            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            FragmentSwitcher.handle(
+                                awaitPointerEvent(),
+                                DashboardPropertiesFragment()
+                            )
                         }
                     }
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Surface(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Text(
+                        text = "Dashboard",
+                        fontSize = 45.sp,
+                        color = Theme.colors.color
 
-                    if (!settings.hideNav && dashboards.size > 1) {
-                        NavigationArrows(
-                            { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) },
-                            { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) }
+                    )
+                    Text(
+                        modifier = Modifier.offset(y = (-10).dp),
+                        text = "properties",
+                        fontSize = 35.sp,
+                        color = Theme.colors.a
+
+                    )
+
+                    Row(
+                        modifier = Modifier.padding(top = 5.dp),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        BasicButton(
+                            contentPadding = PaddingValues(13.dp),
+                            onClick = {
+                                getIconHSV = { dashboard.hsv }
+                                getIconRes = { dashboard.iconRes }
+                                getIconColorPallet = { dashboard.pallet }
+
+                                setIconHSV = { hsv -> dashboard.hsv = hsv }
+                                setIconKey = { key -> dashboard.iconKey = key }
+
+                                MainActivity.fm.replaceWith(TileIconFragment())
+                            },
+                            border = BorderStroke(1.dp, dashboard.pallet.cc.color),
+                            modifier = Modifier.size(52.dp)
+                        ) {
+                            Icon(
+                                painterResource(dashboard.iconRes),
+                                "",
+                                tint = dashboard.pallet.cc.color
+                            )
+                        }
+
+                        var name by remember { mutableStateOf(dashboard.name) }
+                        EditText(
+                            label = { Text("Dashboard name") },
+                            value = name,
+                            onValueChange = { it ->
+                                name = it
+                                it.trim().let {
+                                    dashboard.name =
+                                        it.ifBlank {
+                                            abs(Random.nextInt(0, 100)).toString()
+                                        }
+                                }
+                            },
+                            modifier = Modifier.padding(start = 12.dp)
                         )
                     }
+
+                    DashboardPropertiesCompose.Compose(
+                        dashboard.type,
+                        this@DashboardPropertiesFragment
+                    )
                 }
             }
+        }
+
+        if (!settings.hideNav && dashboards.size > 1) {
+            NavigationArrows(
+                { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) },
+                { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) }
+            )
         }
     }
 }

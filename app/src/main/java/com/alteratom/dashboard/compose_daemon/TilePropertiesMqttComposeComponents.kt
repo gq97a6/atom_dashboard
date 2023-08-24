@@ -38,7 +38,7 @@ object TilePropertiesMqttComposeComponents {
             onValueChange = {
                 sub = it
                 G.tile.mqtt.subs["base"] = it
-                G.dashboard.daemon.notifyConfigChanged()
+                G.dashboard.daemon?.notifyConfigChanged()
             }
         )
 
@@ -49,13 +49,13 @@ object TilePropertiesMqttComposeComponents {
             onValueChange = {
                 pub = it
                 G.tile.mqtt.pubs["base"] = it
-                G.dashboard.daemon.notifyConfigChanged()
+                G.dashboard.daemon?.notifyConfigChanged()
             },
             trailingIcon = {
                 IconButton(onClick = {
                     pub = sub
                     G.tile.mqtt.pubs["base"] = sub
-                    G.dashboard.daemon.notifyConfigChanged()
+                    G.dashboard.daemon?.notifyConfigChanged()
                 }) {
                     Icon(painterResource(R.drawable.il_file_copy), "", tint = Theme.colors.b)
                 }
@@ -90,7 +90,7 @@ object TilePropertiesMqttComposeComponents {
             {
                 qos = it
                 G.tile.mqtt.qos = it
-                G.dashboard.daemon.notifyConfigChanged()
+                G.dashboard.daemon?.notifyConfigChanged()
             },
             modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
         )

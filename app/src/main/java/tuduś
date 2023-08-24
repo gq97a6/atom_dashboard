@@ -1,14 +1,11 @@
 add notification of changes to dashboard (top bar and popup)
-add stop app when background work disabled
+fix notification does not clear
 
-//Activity
-onStart {
-    if (!G.areInitialized) {
-        initializeGlobalsFromStorage()
-        G.areInitialized = true
-    }
-}
-
-onClose {
-    saveGlobalsToStorage()
-}
+DashboardNew        // Column
+DashboardProps      // Box + Box
+Settings            // Box( Column + Text )
+Setup               // Box
+Theme               // Column
+TileIcon            // Box
+TileNew             // Column
+TileProperties      // Surface + Box

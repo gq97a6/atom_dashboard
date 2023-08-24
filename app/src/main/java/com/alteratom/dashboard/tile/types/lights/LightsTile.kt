@@ -32,6 +32,7 @@ import com.alteratom.databinding.DialogLightsBinding
 import com.alteratom.databinding.DialogSelectBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.roundToInt
 
 class LightsTile : Tile() {
@@ -361,10 +362,11 @@ class LightsTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String, String>,
+        topic: String,
+        msg: MqttMessage,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(data, jsonResult)
+        super.onReceive(topic, msg, jsonResult)
 
         fun parse(data: String, field: String?) {
             var hasReceived = true
@@ -449,9 +451,9 @@ class LightsTile : Tile() {
         }
 
         if (jsonResult.isEmpty()) {
-            val value = data.second.toString()
+            val value = msg.toString().toString()
             parse(
-                value, when (data.first) {
+                value, when (topic) {
                     this.mqtt.subs["state"] -> "state"
                     this.mqtt.subs["color"] -> "color"
                     this.mqtt.subs["bright"] -> "bright"

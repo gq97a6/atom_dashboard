@@ -18,6 +18,7 @@ import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.*
 
 @Suppress("UNUSED")
@@ -84,18 +85,19 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     }
 
     override fun onReceive(
-        data: Pair<String, String>,
+        topic: String,
+        msg: MqttMessage,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(data, jsonResult)
+        super.onReceive(topic, msg, jsonResult)
 
-        if (this.mqtt.doNotify) {
-            service?.let { s ->
-                dashboard?.let { d ->
+        if (this.mqtt.doNotify && !msg.isRetained)  {
+            service?.let { service ->
+                dashboard?.let { _ ->
                     createNotification(
-                        s,
-                        mqtt.notifyTitle.replace("@v", data.second),
-                        mqtt.notifyPayload.replace("@v", data.second),
+                        service,
+                        mqtt.notifyTitle.replace("@v", msg.toString()),
+                        mqtt.notifyPayload.replace("@v", msg.toString()),
                         this.mqtt.silentNotify,
                         if (settings.notifyStack) 1 else Random().nextInt()
                     )
@@ -103,7 +105,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
             }
         }
 
-        if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { data.first }}: ${data.second}")
+        if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { topic }}: ${msg.toString()}")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }

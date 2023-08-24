@@ -12,8 +12,8 @@ import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.unit.dp
+import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.Theme.Companion.isDark
 import androidx.compose.ui.graphics.Color as C
 
 val DarkColorPalette: Colors
@@ -46,11 +46,11 @@ val LightColorPalette: Colors
 
 @Composable
 fun ComposeTheme(
-    darkTheme: Boolean = isDark,
+    isDark: Boolean = Theme.isDark,
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colors = if (darkTheme) DarkColorPalette else LightColorPalette,
+        colors = if (isDark) DarkColorPalette else LightColorPalette,
         shapes = Shapes(
             small = RoundedCornerShape(4.dp),
             medium = RoundedCornerShape(4.dp),

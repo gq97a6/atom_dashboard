@@ -4,18 +4,10 @@ package com.alteratom.dashboard
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.AlarmManager.ELAPSED_REALTIME
-import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
-import android.app.AlarmManager.RTC
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_CANCEL_CURRENT
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_MAIN
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
@@ -47,11 +39,8 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.PayActivity
-import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import org.bouncycastle.crypto.params.Blake3Parameters.context
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.Base64

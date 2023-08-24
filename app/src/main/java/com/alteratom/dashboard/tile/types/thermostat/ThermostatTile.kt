@@ -24,6 +24,7 @@ import com.alteratom.databinding.DialogSelectBinding
 import com.alteratom.databinding.DialogThermostatBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
 import me.tankery.lib.circularseekbar.CircularSeekBar
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -319,10 +320,11 @@ class ThermostatTile : Tile() {
     }
 
     override fun onReceive(
-        data: Pair<String, String>,
+        topic: String,
+        msg: MqttMessage,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(data, jsonResult)
+        super.onReceive(topic, msg, jsonResult)
 
         fun parse(value: String, field: String?) {
             var hasReceived = true
@@ -344,9 +346,9 @@ class ThermostatTile : Tile() {
         }
 
         if (jsonResult.isEmpty()) {
-            val value = data.second
+            val value = msg.toString()
             parse(
-                value, when (data.first) {
+                value, when (topic) {
                     this.mqtt.subs["temp"] -> "temp"
                     this.mqtt.subs["temp_set"] -> "temp_set"
                     this.mqtt.subs["humi"] -> "humi"

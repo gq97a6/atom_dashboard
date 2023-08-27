@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ToolbarHandler
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
@@ -90,7 +89,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = VISIBLE
             b.msRemove.clearAnimation()
-            DaemonsManager.notifyRemoved(it)
+            DaemonsManager.notifyDischarged(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

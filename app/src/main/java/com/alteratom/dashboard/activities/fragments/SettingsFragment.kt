@@ -50,6 +50,7 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.compose_global.BasicButton
@@ -59,16 +60,21 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.objects.Setup
 import com.alteratom.dashboard.objects.Storage.mapper
 import com.alteratom.dashboard.objects.Storage.parseListSave
 import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.objects.Storage.prepareSave
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.openBatterySettings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -141,9 +147,9 @@ class SettingsFragment : Fragment() {
                                 val s = parseSave<Settings>(backup[1])
                                 val t = parseSave<Theme>(backup[2])
 
-                                DaemonsManager.notifyAllRemoved()
+                                DaemonsManager.notifyAllDischarged()
                                 dashboards = d
-                                DaemonsManager.notifyAllAdded(requireContext())
+                                DaemonsManager.notifyAllAssigned(requireContext())
 
                                 if (s != null) settings = s
                                 if (t != null) theme = t
@@ -152,7 +158,20 @@ class SettingsFragment : Fragment() {
                                 settings.saveToFile()
                                 theme.saveToFile()
 
-                                fm.replaceWith(SetupFragment(), animation = null)
+                                //Rerun setup
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    Setup.apply {
+                                        val a = requireActivity() as MainActivity
+                                        showFragment()
+                                        proStatus()
+                                        billing(a)
+                                        batteryCheck(a)
+                                        service(a)
+                                        globals()
+                                        daemons(a)
+                                        hideFragment()
+                                    }
+                                }
                             } else {
                                 createToast(requireContext(), "Backup restore failed")
                             }
@@ -373,7 +392,19 @@ class SettingsFragment : Fragment() {
                                 if (context?.isBatteryOptimized() == false || !it) {
                                     fgEnabled = it
                                     settings.fgEnabled = fgEnabled
-                                    fm.replaceWith(SetupFragment(), animation = null)
+
+                                    //Rerun setup
+                                    CoroutineScope(Dispatchers.Default).launch {
+                                        Setup.apply {
+                                            val a = requireActivity() as MainActivity
+                                            showFragment()
+                                            batteryCheck(a)
+                                            service(a)
+                                            daemons(a)
+                                            hideFragment()
+                                        }
+                                    }
+
                                 } else workShow = true
                             },
                         )

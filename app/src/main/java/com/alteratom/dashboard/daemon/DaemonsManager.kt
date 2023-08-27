@@ -7,11 +7,11 @@ import com.alteratom.dashboard.objects.G.dashboards
 //Manages creation and assignment of daemons
 object DaemonsManager {
 
-    fun notifyAllAdded(context: Context) = dashboards.forEach { notifyAdded(it, context) }
+    fun notifyAllAssigned(context: Context) = dashboards.forEach { notifyAssigned(it, context) }
 
-    fun notifyAllRemoved() = dashboards.forEach { it.daemon?.notifyDischarged() }
+    fun notifyAllDischarged() = dashboards.forEach { notifyDischarged(it) }
 
-    fun notifyAdded(dashboard: Dashboard, context: Context) = try {
+    fun notifyAssigned(dashboard: Dashboard, context: Context) = try {
         dashboard.apply {
             daemon = Daemon(context, this, type)
             daemon?.notifyAssigned()
@@ -20,7 +20,7 @@ object DaemonsManager {
         println(e.toString())
     }
 
-    fun notifyRemoved(dashboard: Dashboard) = try {
+    fun notifyDischarged(dashboard: Dashboard) = try {
         dashboard.daemon?.notifyDischarged()
     } catch (_: Exception) {
     }

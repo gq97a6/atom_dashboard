@@ -1,17 +1,24 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.FragmentManager
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activities.fragments.DashboardFragment
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Setup.setupPaths
+import com.alteratom.dashboard.objects.Setup
 import com.alteratom.dashboard.objects.Storage
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,28 +34,40 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        setupPaths(this)
+        val a = this@MainActivity
+        Setup.apply {
+            paths(a)
+            basicGlobals()
 
-        //Test
-        G.theme = Storage.parseSave() ?: Theme()
-        G.settings = Storage.parseSave() ?: Settings()
+            //Apply theme
+            G.theme.apply(b.root, a, false)
 
-        //Apply theme
-        G.theme.apply(b.root, this, false)
+            CoroutineScope(Dispatchers.Default).launch {
+                fragmentManager(a)
+                showFragment()
+                proStatus()
+                billing(a)
+                switchers(a)
+                batteryCheck(a)
+                service(a)
+                globals()
+                daemons(a)
 
-        fm = FragmentManager(this)
-        fm.replaceWith(SetupFragment(), false, null)
+                //Go straight to the dashboard
+                if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
+                    fm.addBackstack(DashboardFragment())
+                }
 
-        Log.i("ALTER_ATOM", "TEEEEEEEEST")
+                hideFragment()
+            }
+        }
     }
 
-    //Might be called without onDestroy when the app closes
     override fun onStop() {
-        super.onStop()
-    }
+        G.dashboards.saveToFile()
+        G.settings.saveToFile()
+        G.theme.saveToFile()
 
-    //Might be called directly without onStop
-    override fun onDestroy() {
-        super.onDestroy()
+        super.onStop()
     }
 }

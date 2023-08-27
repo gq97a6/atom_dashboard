@@ -41,7 +41,9 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 
 class SetupFragment : Fragment() {
 
-    var ready = MutableLiveData(false)
+    companion object {
+        var ready = MutableLiveData(false)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -58,6 +60,11 @@ class SetupFragment : Fragment() {
         var scaleTargetValue by remember { mutableFloatStateOf(.8f) }
         var scaleDuration by remember { mutableIntStateOf(2500) }
 
+        var rotationInitialValue by remember { mutableFloatStateOf(0f) }
+        var rotationTargetValue by remember { mutableFloatStateOf(360f) }
+
+
+
         val scale = rememberInfiniteTransition(label = "").animateFloat(
             initialValue = scaleInitialValue,
             targetValue = scaleTargetValue,
@@ -68,8 +75,8 @@ class SetupFragment : Fragment() {
         )
 
         val rotation = rememberInfiniteTransition(label = "").animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
+            initialValue = rotationInitialValue,
+            targetValue = rotationTargetValue,
             animationSpec = infiniteRepeatable(
                 animation = tween(2500),
                 repeatMode = RepeatMode.Reverse,
@@ -102,7 +109,10 @@ class SetupFragment : Fragment() {
         remember {
             ready.observe(activity as MainActivity) {
                 if (it == true) {
-                    scaleDuration = 1000
+                    rotationInitialValue = rotation.value
+                    rotationTargetValue = rotation.value
+
+                    scaleDuration = 1600
                     scaleInitialValue = scale.value
                     scaleTargetValue = 0f
                 }

@@ -25,7 +25,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,10 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
@@ -98,7 +95,7 @@ class DashboardNewFragment : Fragment() {
                             dashboards.add(dashboard)
                             dashboards.saveToFile()
 
-                            DaemonsManager.notifyAdded(dashboard, requireContext())
+                            DaemonsManager.notifyAssigned(dashboard, requireContext())
 
                             if (setCurrentDashboard(dashboard.id)) fm.replaceWith(
                                 DashboardPropertiesFragment(), false

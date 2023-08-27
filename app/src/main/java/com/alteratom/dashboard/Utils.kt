@@ -299,10 +299,8 @@ fun createNotification(
     createNotificationChannel(context)
 
     val notification = NotificationCompat.Builder(context, "notification_id")
-        .setAutoCancel(true)
         .setContentTitle(title)
         .setContentText(text)
-        //.setLargeIcon(R.mipmap.ic_icon_bold_round)
         .setSmallIcon(R.drawable.ic_icon)
         .setPriority(NotificationCompat.PRIORITY_MIN)
         .setVisibility(NotificationCompat.VISIBILITY_SECRET)

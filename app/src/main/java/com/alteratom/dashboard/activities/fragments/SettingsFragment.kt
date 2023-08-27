@@ -168,6 +168,7 @@ class SettingsFragment : Fragment() {
                                         batteryCheck(a)
                                         service(a)
                                         globals()
+                                        permissions(a)
                                         daemons(a)
                                         hideFragment()
                                     }

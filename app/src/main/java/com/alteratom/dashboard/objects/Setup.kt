@@ -12,15 +12,13 @@ import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.activities.fragments.SetupFragment.Companion.ready
+import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 //Sorted by order of execution setup sequence
 object Setup {
@@ -89,6 +87,10 @@ object Setup {
             G.dashboards = Storage.parseListSave()
             G.areInitialized = true
         }
+    }
+
+    fun permissions(activity: MainActivity) {
+        activity.apply { if (!areNotificationsAllowed()) requestNotifications() }
     }
 
     fun daemons(activity: MainActivity) {

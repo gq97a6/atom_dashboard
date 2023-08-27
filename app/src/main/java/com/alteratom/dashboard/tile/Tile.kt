@@ -92,16 +92,14 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
         super.onReceive(topic, msg, jsonResult)
 
         if (this.mqtt.doNotify && !msg.isRetained)  {
-            service?.let { service ->
-                dashboard?.let { _ ->
-                    createNotification(
-                        service,
-                        mqtt.notifyTitle.replace("@v", msg.toString()),
-                        mqtt.notifyPayload.replace("@v", msg.toString()),
-                        this.mqtt.silentNotify,
-                        if (settings.notifyStack) 1 else Random().nextInt()
-                    )
-                }
+            dashboard?.daemon?.context?.let {context ->
+                createNotification(
+                    context,
+                    mqtt.notifyTitle.replace("@v", msg.toString()),
+                    mqtt.notifyPayload.replace("@v", msg.toString()),
+                    this.mqtt.silentNotify,
+                    if (settings.notifyStack) 999 else Random().nextInt()
+                )
             }
         }
 

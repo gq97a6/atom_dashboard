@@ -1,5 +1,5 @@
 add notification of changes to dashboard (top bar and popup)
-fix notification does not clear
+rewrite billing client
 
 DashboardNew        // Column
 DashboardProps      // Box + Box

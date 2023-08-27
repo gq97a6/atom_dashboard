@@ -1,24 +1,16 @@
 package com.alteratom.dashboard.activities
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.FragmentManager
-import com.alteratom.dashboard.Settings
-import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activities.fragments.DashboardFragment
-import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.Setup
-import com.alteratom.dashboard.objects.Storage
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.system.measureTimeMillis
 
 class MainActivity : AppCompatActivity() {
 

@@ -9,7 +9,7 @@ import com.alteratom.dashboard.activities.fragments.MainScreenFragment
 
 
 class FragmentManager(private val mainActivity: MainActivity) {
-    private var backstack = mutableListOf<Fragment>(MainScreenFragment())
+    private var backstack = mutableListOf<Fragment>()
     private var currentFragment: Fragment = MainScreenFragment()
     var doOverrideOnBackPress: () -> Boolean = { false }
 

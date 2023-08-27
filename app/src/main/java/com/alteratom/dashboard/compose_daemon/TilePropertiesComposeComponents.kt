@@ -132,7 +132,7 @@ object TilePropertiesComposeComponents {
             targetValue = if (rotation > 360 - rotation) {
                 -(360 - rotation)
             } else rotation,
-            animationSpec = tween(durationMillis = 200, easing = LinearEasing)
+            animationSpec = tween(durationMillis = 200, easing = LinearEasing), label = ""
         )
 
         FrameBox(a = "Communication: ", b = type) {
@@ -198,13 +198,6 @@ object TilePropertiesComposeComponents {
 
         FrameBox(a = "Notifications") {
             Column {
-                Text(
-                    "This function requires notifications and background work to be allowed. Background work can be enabled in settings.",
-                    fontSize = 12.sp,
-                    color = Theme.colors.b,
-                    modifier = Modifier.padding(vertical = 10.dp)
-                )
-
                 var notify by remember { mutableStateOf(tile.mqtt.doNotify) }
                 LabeledSwitch(
                     label = {

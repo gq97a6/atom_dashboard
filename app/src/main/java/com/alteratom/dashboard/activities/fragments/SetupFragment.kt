@@ -87,23 +87,21 @@ class SetupFragment : Fragment() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column {
-                Image(
-                    painterResource(
-                        if (Theme.isDark) R.drawable.ic_icon_light
-                        else R.drawable.ic_icon
-                    ), "",
-                    modifier = Modifier
-                        .padding(bottom = 100.dp)
-                        .scale(scale.value)
-                        .rotate(rotation.value)
-                        .size(300.dp),
-                    colorFilter = ColorFilter.tint(
-                        Theme.colors.color.copy(alpha = .4f),
-                        BlendMode.SrcAtop
-                    )
+            Image(
+                painterResource(
+                    if (Theme.isDark) R.drawable.ic_icon_light
+                    else R.drawable.ic_icon
+                ), "",
+                modifier = Modifier
+                    .padding(bottom = 100.dp)
+                    .scale(scale.value)
+                    .rotate(rotation.value)
+                    .size(300.dp),
+                colorFilter = ColorFilter.tint(
+                    Theme.colors.color.copy(alpha = .4f),
+                    BlendMode.SrcAtop
                 )
-            }
+            )
         }
 
         remember {

@@ -6,12 +6,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -79,7 +82,7 @@ object TilePropertiesMqttComposeComponents {
         }
     ) {
 
-        var qos by remember { mutableStateOf(G.tile.mqtt.qos) }
+        var qos by remember { mutableIntStateOf(G.tile.mqtt.qos) }
         RadioGroup(
             listOf(
                 "QoS 0: At most once. No guarantee.",
@@ -133,6 +136,7 @@ object TilePropertiesMqttComposeComponents {
         ) {
             Column {
                 pointer()
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

@@ -25,46 +25,45 @@ import com.alteratom.dashboard.objects.G.tile
 object TerminalTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Communication0()
+        TilePropertiesComposeComponents.CommunicationBox {
+            Communication0()
 
-                var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
-                var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
+            var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
+            var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
 
-                AnimatedVisibility(
-                    visible = type == 1, enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    Column {
-                        EditText(
-                            label = { Text("Publish payload") },
-                            value = pub,
-                            onValueChange = {
-                                pub = it
-                                tile.mqtt.payloads["base"] = it
-                            }
-                        )
-                    }
+            AnimatedVisibility(
+                visible = type == 1, enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    EditText(
+                        label = { Text("Publish payload") },
+                        value = pub,
+                        onValueChange = {
+                            pub = it
+                            tile.mqtt.payloads["base"] = it
+                        }
+                    )
                 }
-
-                RadioGroup(
-                    listOf(
-                        "Variable (set on send)",
-                        "Static (always the same)",
-                    ), "Payload setting type",
-                    type,
-                    {
-                        type = it
-                        tile.mqtt.payloadIsVar = it == 0
-                    },
-                    modifier = Modifier.padding(top = 20.dp)
-                )
-
-                Communication1()
             }
-            TilePropertiesComposeComponents.Notification(fragment)
+
+            RadioGroup(
+                listOf(
+                    "Variable (set on send)",
+                    "Static (always the same)",
+                ), "Payload setting type",
+                type,
+                {
+                    type = it
+                    tile.mqtt.payloadIsVar = it == 0
+                },
+                modifier = Modifier.padding(top = 20.dp)
+            )
+
+            Communication1()
         }
+
+        TilePropertiesComposeComponents.Notification(fragment)
     }
 
     @Composable

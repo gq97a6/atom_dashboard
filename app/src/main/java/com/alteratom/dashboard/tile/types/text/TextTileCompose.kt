@@ -31,59 +31,58 @@ object TextTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
         val tile = tile as TextTile
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Communication0()
 
-                var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
-                var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
+        TilePropertiesComposeComponents.CommunicationBox {
+            Communication0()
 
-                AnimatedVisibility(
-                    visible = type == 1, enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically()
-                ) {
-                    Column {
-                        EditText(
-                            label = { Text("Publish payload") },
-                            value = pub,
-                            onValueChange = {
-                                pub = it
-                                tile.mqtt.payloads["base"] = it
-                            }
-                        )
-                    }
-                }
+            var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
+            var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
 
-                RadioGroup(
-                    listOf(
-                        "Variable (set on send)",
-                        "Static (always the same)",
-                    ), "Payload setting type",
-                    type,
-                    {
-                        type = it
-                        tile.mqtt.payloadIsVar = it == 0
-                    },
-                    modifier = Modifier.padding(top = 20.dp)
-                )
-
-                Communication1()
-            }
-
-            TilePropertiesComposeComponents.Notification(fragment)
-
-            FrameBox(a = "Type specific: ", b = "text") {
-                Row {
-                    var big by remember { mutableStateOf(tile.isBig) }
-                    LabeledSwitch(
-                        label = { Text("Full width:", fontSize = 15.sp, color = Theme.colors.a) },
-                        checked = big,
-                        onCheckedChange = {
-                            big = it
-                            tile.isBig = it
+            AnimatedVisibility(
+                visible = type == 1, enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column {
+                    EditText(
+                        label = { Text("Publish payload") },
+                        value = pub,
+                        onValueChange = {
+                            pub = it
+                            tile.mqtt.payloads["base"] = it
                         }
                     )
                 }
+            }
+
+            RadioGroup(
+                listOf(
+                    "Variable (set on send)",
+                    "Static (always the same)",
+                ), "Payload setting type",
+                type,
+                {
+                    type = it
+                    tile.mqtt.payloadIsVar = it == 0
+                },
+                modifier = Modifier.padding(top = 20.dp)
+            )
+
+            Communication1()
+        }
+
+        TilePropertiesComposeComponents.Notification(fragment)
+
+        FrameBox(a = "Type specific: ", b = "text") {
+            Row {
+                var big by remember { mutableStateOf(tile.isBig) }
+                LabeledSwitch(
+                    label = { Text("Full width:", fontSize = 15.sp, color = Theme.colors.a) },
+                    checked = big,
+                    onCheckedChange = {
+                        big = it
+                        tile.isBig = it
+                    }
+                )
             }
         }
     }

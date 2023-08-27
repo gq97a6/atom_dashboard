@@ -30,122 +30,121 @@ object SliderTileCompose : DaemonBasedCompose {
     override fun Mqttd(fragment: Fragment) {
         val tile = tile as SliderTile
 
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Communication0()
 
-                var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "@value") }
-                EditText(
-                    label = { Text("Publish payload") },
-                    value = pub,
-                    onValueChange = {
-                        pub = it
-                        tile.mqtt.payloads["base"] = it
-                    }
-                )
-                Text(
-                    "Use @value to insert current tile value",
-                    fontSize = 13.sp,
-                    color = colors.a
-                )
+        TilePropertiesComposeComponents.CommunicationBox {
+            Communication0()
 
-                Communication1()
-            }
+            var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "@value") }
+            EditText(
+                label = { Text("Publish payload") },
+                value = pub,
+                onValueChange = {
+                    pub = it
+                    tile.mqtt.payloads["base"] = it
+                }
+            )
+            Text(
+                "Use @value to insert current tile value",
+                fontSize = 13.sp,
+                color = colors.a
+            )
 
-            TilePropertiesComposeComponents.Notification(fragment)
+            Communication1()
+        }
 
-            FrameBox(a = "Type specific: ", b = "slider") {
-                Column {
-                    var drag by remember { mutableStateOf(tile.dragCon) }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        LabeledSwitch(
-                            label = {
-                                Text(
-                                    "Drag to control:",
-                                    fontSize = 15.sp,
-                                    color = colors.a
-                                )
-                            },
-                            checked = drag,
-                            onCheckedChange = {
-                                drag = it
-                                tile.dragCon = it
-                            }
-                        )
+        TilePropertiesComposeComponents.Notification(fragment)
 
-                        Text(
-                            "EXPERIMENTAL",
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.a,
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    var from by remember { mutableStateOf(tile.range[0].toString()) }
-                    EditText(
-                        label = { Text("From value") },
-                        value = from,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = { it ->
-                            from = it
-                            it.toIntOrNull()?.let {
-                                tile.range[0] = it
-                            }
-                            //it.let { raw ->
-                            //    it.digitsOnly().let { parsed ->
-                            //        if (raw != parsed) from = parsed
-                            //        else parsed.toIntOrNull()?.let {
-                            //            tile.range[0] = it
-                            //        }
-                            //    }
-                            //}
+        FrameBox(a = "Type specific: ", b = "slider") {
+            Column {
+                var drag by remember { mutableStateOf(tile.dragCon) }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    LabeledSwitch(
+                        label = {
+                            Text(
+                                "Drag to control:",
+                                fontSize = 15.sp,
+                                color = colors.a
+                            )
+                        },
+                        checked = drag,
+                        onCheckedChange = {
+                            drag = it
+                            tile.dragCon = it
                         }
                     )
 
-                    var to by remember { mutableStateOf(tile.range[1].toString()) }
-                    EditText(
-                        label = { Text("To value") },
-                        value = to,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = { it ->
-                            to = it
-                            it.toIntOrNull()?.let {
-                                tile.range[1] = it
-                            }
-                            //it.let { raw ->
-                            //    it.digitsOnly().let { parsed ->
-                            //        if (raw != parsed) to = parsed
-                            //        else parsed.toIntOrNull()?.let {
-                            //            tile.range[1] = it
-                            //        }
-                            //    }
-                            //}
-                        }
-                    )
-
-                    var step by remember { mutableStateOf(tile.range[2].toString()) }
-                    EditText(
-                        label = { Text("Step value") },
-                        value = step,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        onValueChange = { it ->
-                            step = it
-                            it.toIntOrNull()?.let {
-                                tile.range[2] = it
-                            }
-                            //it.let { raw ->
-                            //    it.digitsOnly().let { parsed ->
-                            //        if (raw != parsed) step = parsed
-                            //        else parsed.toIntOrNull()?.let {
-                            //            tile.range[2] = it
-                            //        }
-                            //    }
-                            //}
-                        }
+                    Text(
+                        "EXPERIMENTAL",
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.a,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
                     )
                 }
+
+                var from by remember { mutableStateOf(tile.range[0].toString()) }
+                EditText(
+                    label = { Text("From value") },
+                    value = from,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { it ->
+                        from = it
+                        it.toIntOrNull()?.let {
+                            tile.range[0] = it
+                        }
+                        //it.let { raw ->
+                        //    it.digitsOnly().let { parsed ->
+                        //        if (raw != parsed) from = parsed
+                        //        else parsed.toIntOrNull()?.let {
+                        //            tile.range[0] = it
+                        //        }
+                        //    }
+                        //}
+                    }
+                )
+
+                var to by remember { mutableStateOf(tile.range[1].toString()) }
+                EditText(
+                    label = { Text("To value") },
+                    value = to,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { it ->
+                        to = it
+                        it.toIntOrNull()?.let {
+                            tile.range[1] = it
+                        }
+                        //it.let { raw ->
+                        //    it.digitsOnly().let { parsed ->
+                        //        if (raw != parsed) to = parsed
+                        //        else parsed.toIntOrNull()?.let {
+                        //            tile.range[1] = it
+                        //        }
+                        //    }
+                        //}
+                    }
+                )
+
+                var step by remember { mutableStateOf(tile.range[2].toString()) }
+                EditText(
+                    label = { Text("Step value") },
+                    value = step,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { it ->
+                        step = it
+                        it.toIntOrNull()?.let {
+                            tile.range[2] = it
+                        }
+                        //it.let { raw ->
+                        //    it.digitsOnly().let { parsed ->
+                        //        if (raw != parsed) step = parsed
+                        //        else parsed.toIntOrNull()?.let {
+                        //            tile.range[2] = it
+                        //        }
+                        //    }
+                        //}
+                    }
+                )
             }
         }
     }

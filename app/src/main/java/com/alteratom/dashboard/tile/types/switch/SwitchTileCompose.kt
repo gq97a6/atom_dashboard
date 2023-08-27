@@ -33,86 +33,85 @@ object SwitchTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
         val tile = tile as SwitchTile
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Row(
-                    modifier = Modifier.padding(top = 5.dp),
-                    verticalAlignment = Alignment.Bottom
+
+        TilePropertiesComposeComponents.CommunicationBox {
+            Row(
+                modifier = Modifier.padding(top = 5.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                BasicButton(
+                    onClick = {
+                        getIconHSV = { tile.hsvFalse }
+                        getIconRes = { tile.iconResFalse }
+                        getIconColorPallet = { tile.palletFalse }
+
+                        setIconHSV = { hsv -> tile.hsvFalse = hsv }
+                        setIconKey = { key -> tile.iconKeyFalse = key }
+
+                        fm.replaceWith(TileIconFragment())
+                    },
+                    border = BorderStroke(1.dp, tile.palletFalse.cc.color),
+                    modifier = Modifier
+                        .height(52.dp)
+                        .width(52.dp)
                 ) {
-                    BasicButton(
-                        onClick = {
-                            getIconHSV = { tile.hsvFalse }
-                            getIconRes = { tile.iconResFalse }
-                            getIconColorPallet = { tile.palletFalse }
-
-                            setIconHSV = { hsv -> tile.hsvFalse = hsv }
-                            setIconKey = { key -> tile.iconKeyFalse = key }
-
-                            fm.replaceWith(TileIconFragment())
-                        },
-                        border = BorderStroke(1.dp, tile.palletFalse.cc.color),
-                        modifier = Modifier
-                            .height(52.dp)
-                            .width(52.dp)
-                    ) {
-                        Icon(
-                            painterResource(tile.iconResFalse),
-                            "",
-                            tint = tile.palletFalse.cc.color
-                        )
-                    }
-
-                    var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
-                    EditText(
-                        label = { Text("Off payload") },
-                        value = off,
-                        onValueChange = {
-                            off = it
-                            tile.mqtt.payloads["false"] = it
-                        },
-                        modifier = Modifier.padding(start = 12.dp)
+                    Icon(
+                        painterResource(tile.iconResFalse),
+                        "",
+                        tint = tile.palletFalse.cc.color
                     )
                 }
 
-                Row(
-                    modifier = Modifier.padding(top = 5.dp),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    BasicButton(
-                        onClick = {
-                            getIconHSV = { tile.hsvTrue }
-                            getIconRes = { tile.iconResTrue }
-                            getIconColorPallet = { tile.palletTrue }
-
-                            setIconHSV = { hsv -> tile.hsvTrue = hsv }
-                            setIconKey = { key -> tile.iconKeyTrue = key }
-
-                            fm.replaceWith(TileIconFragment())
-                        },
-                        border = BorderStroke(1.dp, tile.palletTrue.cc.color),
-                        modifier = Modifier
-                            .height(52.dp)
-                            .width(52.dp)
-                    ) {
-                        Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
-                    }
-
-                    var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
-                    EditText(
-                        label = { Text("On payload") },
-                        value = on,
-                        onValueChange = {
-                            on = it
-                            tile.mqtt.payloads["true"] = it
-                        },
-                        modifier = Modifier.padding(start = 12.dp)
-                    )
-                }
-
-                Communication()
+                var off by remember { mutableStateOf(tile.mqtt.payloads["false"] ?: "") }
+                EditText(
+                    label = { Text("Off payload") },
+                    value = off,
+                    onValueChange = {
+                        off = it
+                        tile.mqtt.payloads["false"] = it
+                    },
+                    modifier = Modifier.padding(start = 12.dp)
+                )
             }
-            TilePropertiesComposeComponents.Notification(fragment)
+
+            Row(
+                modifier = Modifier.padding(top = 5.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                BasicButton(
+                    onClick = {
+                        getIconHSV = { tile.hsvTrue }
+                        getIconRes = { tile.iconResTrue }
+                        getIconColorPallet = { tile.palletTrue }
+
+                        setIconHSV = { hsv -> tile.hsvTrue = hsv }
+                        setIconKey = { key -> tile.iconKeyTrue = key }
+
+                        fm.replaceWith(TileIconFragment())
+                    },
+                    border = BorderStroke(1.dp, tile.palletTrue.cc.color),
+                    modifier = Modifier
+                        .height(52.dp)
+                        .width(52.dp)
+                ) {
+                    Icon(painterResource(tile.iconResTrue), "", tint = tile.palletTrue.cc.color)
+                }
+
+                var on by remember { mutableStateOf(tile.mqtt.payloads["true"] ?: "") }
+                EditText(
+                    label = { Text("On payload") },
+                    value = on,
+                    onValueChange = {
+                        on = it
+                        tile.mqtt.payloads["true"] = it
+                    },
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
+
+            Communication()
         }
+        TilePropertiesComposeComponents.Notification(fragment)
     }
 
     @Composable

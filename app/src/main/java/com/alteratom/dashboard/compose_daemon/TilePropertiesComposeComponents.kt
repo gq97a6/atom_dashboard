@@ -63,55 +63,53 @@ object TilePropertiesComposeComponents {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
 
-        Surface(modifier = Modifier.padding(16.dp)) {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
-                Row(
-                    modifier = Modifier.padding(top = 5.dp),
-                    verticalAlignment = Alignment.Bottom
+        Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+            Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
+            Row(
+                modifier = Modifier.padding(top = 5.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                BasicButton(
+                    contentPadding = PaddingValues(13.dp),
+                    onClick = {
+                        getIconHSV = { tile.hsv }
+                        getIconRes = { tile.iconRes }
+                        getIconColorPallet = { tile.pallet }
+
+                        setIconHSV = { hsv -> tile.hsv = hsv }
+                        setIconKey = { key -> tile.iconKey = key }
+
+                        MainActivity.fm.replaceWith(TileIconFragment())
+                    },
+                    border = BorderStroke(1.dp, tile.pallet.cc.color),
+                    modifier = Modifier.size(52.dp)
                 ) {
-                    BasicButton(
-                        contentPadding = PaddingValues(13.dp),
-                        onClick = {
-                            getIconHSV = { tile.hsv }
-                            getIconRes = { tile.iconRes }
-                            getIconColorPallet = { tile.pallet }
-
-                            setIconHSV = { hsv -> tile.hsv = hsv }
-                            setIconKey = { key -> tile.iconKey = key }
-
-                            MainActivity.fm.replaceWith(TileIconFragment())
-                        },
-                        border = BorderStroke(1.dp, tile.pallet.cc.color),
-                        modifier = Modifier.size(52.dp)
-                    ) {
-                        Icon(painterResource(tile.iconRes), "", tint = tile.pallet.cc.color)
-                    }
-
-                    val typeTag = tile.typeTag.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                    }
-
-                    var tag by remember { mutableStateOf(tile.tag) }
-                    EditText(
-                        label = { BoldStartText("$typeTag ", "tile tag") },
-                        value = tag,
-                        onValueChange = {
-                            tag = it
-                            tile.tag = it
-                        },
-                        modifier = Modifier.padding(start = 12.dp)
-                    )
+                    Icon(painterResource(tile.iconRes), "", tint = tile.pallet.cc.color)
                 }
 
-                content()
+                val typeTag = tile.typeTag.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                }
 
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
+                var tag by remember { mutableStateOf(tile.tag) }
+                EditText(
+                    label = { BoldStartText("$typeTag ", "tile tag") },
+                    value = tag,
+                    onValueChange = {
+                        tag = it
+                        tile.tag = it
+                    },
+                    modifier = Modifier.padding(start = 12.dp)
                 )
             }
+
+            content()
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp)
+            )
         }
 
         if (!settings.hideNav && dashboard.tiles.size > 1) NavigationArrows(

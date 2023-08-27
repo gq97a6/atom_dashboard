@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -114,11 +115,7 @@ class DashboardPropertiesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = composeConstruct(requireContext()) {
-
-        //Background
-        Box(modifier = Modifier.background(Theme.colors.background))
-
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(Unit) {
@@ -130,74 +127,72 @@ class DashboardPropertiesFragment : Fragment() {
                             )
                         }
                     }
-                },
-            contentAlignment = Alignment.Center
+                }
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Surface(modifier = Modifier.padding(16.dp)) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Text(
-                        text = "Dashboard",
-                        fontSize = 45.sp,
-                        color = Theme.colors.color
+            Text(
+                text = "Dashboard",
+                fontSize = 45.sp,
+                color = Theme.colors.color
 
-                    )
-                    Text(
-                        modifier = Modifier.offset(y = (-10).dp),
-                        text = "properties",
-                        fontSize = 35.sp,
-                        color = Theme.colors.a
+            )
+            Text(
+                modifier = Modifier.offset(y = (-10).dp),
+                text = "properties",
+                fontSize = 35.sp,
+                color = Theme.colors.a
 
-                    )
+            )
 
-                    Row(
-                        modifier = Modifier.padding(top = 5.dp),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        BasicButton(
-                            contentPadding = PaddingValues(13.dp),
-                            onClick = {
-                                getIconHSV = { dashboard.hsv }
-                                getIconRes = { dashboard.iconRes }
-                                getIconColorPallet = { dashboard.pallet }
+            Row(
+                modifier = Modifier.padding(top = 5.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                BasicButton(
+                    contentPadding = PaddingValues(13.dp),
+                    onClick = {
+                        getIconHSV = { dashboard.hsv }
+                        getIconRes = { dashboard.iconRes }
+                        getIconColorPallet = { dashboard.pallet }
 
-                                setIconHSV = { hsv -> dashboard.hsv = hsv }
-                                setIconKey = { key -> dashboard.iconKey = key }
+                        setIconHSV = { hsv -> dashboard.hsv = hsv }
+                        setIconKey = { key -> dashboard.iconKey = key }
 
-                                MainActivity.fm.replaceWith(TileIconFragment())
-                            },
-                            border = BorderStroke(1.dp, dashboard.pallet.cc.color),
-                            modifier = Modifier.size(52.dp)
-                        ) {
-                            Icon(
-                                painterResource(dashboard.iconRes),
-                                "",
-                                tint = dashboard.pallet.cc.color
-                            )
-                        }
-
-                        var name by remember { mutableStateOf(dashboard.name) }
-                        EditText(
-                            label = { Text("Dashboard name") },
-                            value = name,
-                            onValueChange = { it ->
-                                name = it
-                                it.trim().let {
-                                    dashboard.name =
-                                        it.ifBlank {
-                                            abs(Random.nextInt(0, 100)).toString()
-                                        }
-                                }
-                            },
-                            modifier = Modifier.padding(start = 12.dp)
-                        )
-                    }
-
-                    DashboardPropertiesCompose.Compose(
-                        dashboard.type,
-                        this@DashboardPropertiesFragment
+                        MainActivity.fm.replaceWith(TileIconFragment())
+                    },
+                    border = BorderStroke(1.dp, dashboard.pallet.cc.color),
+                    modifier = Modifier.size(52.dp)
+                ) {
+                    Icon(
+                        painterResource(dashboard.iconRes),
+                        "",
+                        tint = dashboard.pallet.cc.color
                     )
                 }
+
+                var name by remember { mutableStateOf(dashboard.name) }
+                EditText(
+                    label = { Text("Dashboard name") },
+                    value = name,
+                    onValueChange = { it ->
+                        name = it
+                        it.trim().let {
+                            dashboard.name =
+                                it.ifBlank {
+                                    abs(Random.nextInt(0, 100)).toString()
+                                }
+                        }
+                    },
+                    modifier = Modifier.padding(start = 12.dp)
+                )
             }
+
+            DashboardPropertiesCompose.Compose(
+                dashboard.type,
+                this@DashboardPropertiesFragment
+            )
         }
 
         if (!settings.hideNav && dashboards.size > 1) {

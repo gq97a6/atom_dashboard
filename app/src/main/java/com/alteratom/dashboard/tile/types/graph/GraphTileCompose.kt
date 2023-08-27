@@ -9,12 +9,10 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponent
 object GraphTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Communication()
-            }
-            TilePropertiesComposeComponents.Notification(fragment)
+        TilePropertiesComposeComponents.CommunicationBox {
+            Communication()
         }
+        TilePropertiesComposeComponents.Notification(fragment)
     }
 
     @Composable

@@ -1,11 +1,2 @@
 add notification of changes to dashboard (top bar and popup)
 rewrite billing client
-
-DashboardNew        // Column
-DashboardProps      // Box + Box
-Settings            // Box( Column + Text )
-Setup               // Box
-Theme               // Column
-TileIcon            // Box
-TileNew             // Column
-TileProperties      // Surface + Box

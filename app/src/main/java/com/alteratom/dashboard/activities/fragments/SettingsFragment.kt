@@ -497,10 +497,11 @@ class SettingsFragment : Fragment() {
             }
 
             val pro by pro.observeAsState()
-
             Text(
                 "${if (pro ?: Pro.status) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
-                Modifier.padding(bottom = 5.dp),
+                Modifier
+                    .padding(bottom = 5.dp)
+                    .align(Alignment.BottomCenter),
                 fontSize = 10.sp,
                 color = colors.c
             )

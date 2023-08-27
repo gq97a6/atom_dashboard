@@ -21,43 +21,42 @@ object SelectTileCompose : DaemonBasedCompose {
     override fun Mqttd(fragment: Fragment) {
         val tile = tile as SelectTile
 
-        TilePropertiesComposeComponents.Box {
-            TilePropertiesComposeComponents.CommunicationBox {
-                Communication()
-            }
 
-            TilePropertiesComposeComponents.Notification(fragment)
-
-            FrameBox(a = "Type specific: ", b = "select") {
-                Row {
-
-                    var show by remember { mutableStateOf(tile.showPayload) }
-                    LabeledSwitch(
-                        label = {
-                            Text(
-                                "Show payload on list:",
-                                fontSize = 15.sp,
-                                color = colors.a
-                            )
-                        },
-                        checked = show,
-                        onCheckedChange = {
-                            show = it
-                            tile.showPayload = it
-                        }
-                    )
-                }
-            }
-
-            val o = tile.options
-            PairList(
-                o,
-                { o.removeAt(it) },
-                { o.add(Pair("", "")) },
-                { i, v -> o[i] = o[i].copy(first = v) },
-                { i, v -> o[i] = o[i].copy(second = v) },
-            )
+        TilePropertiesComposeComponents.CommunicationBox {
+            Communication()
         }
+
+        TilePropertiesComposeComponents.Notification(fragment)
+
+        FrameBox(a = "Type specific: ", b = "select") {
+            Row {
+
+                var show by remember { mutableStateOf(tile.showPayload) }
+                LabeledSwitch(
+                    label = {
+                        Text(
+                            "Show payload on list:",
+                            fontSize = 15.sp,
+                            color = colors.a
+                        )
+                    },
+                    checked = show,
+                    onCheckedChange = {
+                        show = it
+                        tile.showPayload = it
+                    }
+                )
+            }
+        }
+
+        val o = tile.options
+        PairList(
+            o,
+            { o.removeAt(it) },
+            { o.add(Pair("", "")) },
+            { i, v -> o[i] = o[i].copy(first = v) },
+            { i, v -> o[i] = o[i].copy(second = v) },
+        )
     }
 
     @Composable

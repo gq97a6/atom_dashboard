@@ -15,6 +15,13 @@ import com.alteratom.dashboard.activities.fragments.SetupFragment.Companion.read
 import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_COLD
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
@@ -22,6 +29,10 @@ import kotlinx.coroutines.delay
 
 //Sorted by order of execution setup sequence
 object Setup {
+
+    private var case = SetupCase.ACTIVITY
+
+    enum class SetupCase { SERVICE, SERVICE_COLD, SERVICE_TO_ACTIVITY, ACTIVITY, ACTIVITY_COLD, ACTIVITY_TO_SERVICE }
 
     fun paths(activity: MainActivity) {
         G.rootFolder = activity.filesDir.canonicalPath.toString()
@@ -65,26 +76,50 @@ object Setup {
         if (activity.isBatteryOptimized()) G.settings.fgEnabled = false
     }
 
+    fun setCase() {
+        case = if (ForegroundService.service?.isStarted == true) {
+            if (G.settings.fgEnabled) SERVICE
+            else SERVICE_TO_ACTIVITY
+        } else {
+            if (G.settings.fgEnabled) {
+                if (G.areInitialized) ACTIVITY_TO_SERVICE
+                else SERVICE_COLD
+            } else {
+                if (G.areInitialized) ACTIVITY
+                else ACTIVITY_COLD
+            }
+        }
+    }
+
     suspend fun service(activity: MainActivity) {
-        //Discharge all daemons
-        DaemonsManager.notifyAllDischarged()
+        when (case) {
+            SERVICE_TO_ACTIVITY -> {
+                //Discharge all daemons
+                DaemonsManager.notifyAllDischarged()
 
-        if (!G.settings.fgEnabled && ForegroundService.service?.isStarted == true) {
-            //Foreground service enabled by settings and battery usage is not optimised
-            ForegroundService.stop(activity)
-        } else if (G.settings.fgEnabled && ForegroundService.service?.isStarted != true) {
-            //Foreground service disabled by settings or battery usage is optimised
-            ForegroundService.start(activity)
-            ForegroundService.haltForService()
+                //Foreground service enabled by settings and battery usage is not optimised
+                ForegroundService.stop(activity)
+            }
 
-            //Configure service
-            ForegroundService.service?.finishAndRemoveTask = { activity.finishAndRemoveTask() }
+            ACTIVITY_TO_SERVICE, SERVICE_COLD -> {
+                //Discharge all daemons
+                DaemonsManager.notifyAllDischarged()
+
+                //Foreground service disabled by settings or battery usage is optimised
+                ForegroundService.start(activity)
+                ForegroundService.haltForService()
+
+                //Configure service
+                ForegroundService.service?.finishAndRemoveTask = { activity.finishAndRemoveTask() }
+            }
+
+            else -> {}
         }
     }
 
     fun globals() {
         if (!G.areInitialized) {
-            G.dashboards = Storage.parseListSave()
+            dashboards = Storage.parseListSave()
             G.areInitialized = true
         }
     }
@@ -94,8 +129,14 @@ object Setup {
     }
 
     fun daemons(activity: MainActivity) {
-        if (!G.settings.fgEnabled) DaemonsManager.notifyAllAssigned(activity)
-        else ForegroundService.service?.let { DaemonsManager.notifyAllAssigned(it) }
+        when (case) {
+            SERVICE_COLD, ACTIVITY_TO_SERVICE -> ForegroundService.service?.let {
+                DaemonsManager.notifyAllAssigned(it)
+            }
+
+            SERVICE_TO_ACTIVITY, ACTIVITY_COLD -> DaemonsManager.notifyAllAssigned(activity)
+            else -> {}
+        }
     }
 
     suspend fun hideFragment() {

@@ -166,6 +166,7 @@ class SettingsFragment : Fragment() {
                                         proStatus()
                                         billing(a)
                                         batteryCheck(a)
+                                        setCase()
                                         service(a)
                                         globals()
                                         permissions(a)
@@ -400,6 +401,7 @@ class SettingsFragment : Fragment() {
                                             val a = requireActivity() as MainActivity
                                             showFragment()
                                             batteryCheck(a)
+                                            setCase()
                                             service(a)
                                             daemons(a)
                                             hideFragment()

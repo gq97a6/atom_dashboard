@@ -26,7 +26,6 @@ import com.android.billingclient.api.QueryPurchasesParams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -42,7 +41,7 @@ class BillingHandler(val activity: Activity) {
 
     internal lateinit var client: BillingClient
 
-    private val connectionHandler = BillingConnectionHandler()
+    private val manager = Manager()
 
     companion object {
         //Products ids
@@ -72,8 +71,6 @@ class BillingHandler(val activity: Activity) {
                         dash.daemon?.notifyConfigChanged()
                     }
                 }
-
-                cancel()
             }
         }
     }
@@ -101,12 +98,12 @@ class BillingHandler(val activity: Activity) {
 
     fun enable() {
         isEnabled = true
-        connectionHandler.dispatch("enable")
+        manager.dispatch(reason = "enable")
     }
 
     fun disable() {
         isEnabled = false
-        connectionHandler.dispatch("disable")
+        manager.dispatch(reason = "disable")
     }
 
     private fun Purchase.acknowledge() {
@@ -160,7 +157,7 @@ class BillingHandler(val activity: Activity) {
 
     private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
         coroutineScope {
-            return@coroutineScope if (!connectionHandler.awaitDone()) {
+            return@coroutineScope if (!manager.awaitDone()) {
                 //createToast(activity, "Failed to connect")
                 null
             } else withTimeoutOrNull(2000) {
@@ -184,7 +181,7 @@ class BillingHandler(val activity: Activity) {
         }
 
     suspend fun getPurchases(timeout: Long = 2000): MutableList<Purchase>? = coroutineScope {
-        return@coroutineScope if (!connectionHandler.awaitDone()) {
+        return@coroutineScope if (!manager.awaitDone()) {
             //createToast(activity, "Failed to connect")
             null
         } else withTimeoutOrNull(timeout) {
@@ -261,17 +258,15 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    //TODO: rewrite
-    inner class BillingConnectionHandler : ConnectionHandler() {
-
-        override fun isDoneCheck(): Boolean = when (client.connectionState) {
+    inner class Manager : StatusManager(activity) {
+        override fun check(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false
             DISCONNECTED, CLOSED -> !isEnabled
             else -> true
         }
 
-        override fun handleDispatch() {
+        override fun handle() {
             when (client.connectionState) {
                 CONNECTED -> client.endConnection()
                 DISCONNECTED -> client.startConnection(object : BillingClientStateListener {
@@ -281,14 +276,14 @@ class BillingHandler(val activity: Activity) {
 
                 CLOSED -> {
                     createClient()
-                    handleDispatch()
+                    handle()
                 }
             }
         }
 
         //Wait for connectionHandler to settle down
         suspend fun awaitDone(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
-            while (!isDoneCheck()) delay(50)
+            while (!check()) delay(100)
             return@withTimeoutOrNull client.isReady
         } ?: false
     }

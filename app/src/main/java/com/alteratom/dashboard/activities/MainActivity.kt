@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 billing(a)
                 switchers(a)
                 batteryCheck(a)
+                setCase()
                 service(a)
                 globals()
                 daemons(a)

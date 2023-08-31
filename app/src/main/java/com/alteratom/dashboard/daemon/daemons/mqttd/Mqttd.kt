@@ -2,10 +2,9 @@ package com.alteratom.dashboard.daemon.daemons.mqttd
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.Dashboard
+import com.alteratom.dashboard.StatusManager
 import com.alteratom.dashboard.daemon.Daemon
 import kotlinx.coroutines.*
 import org.eclipse.paho.android.service.MqttAndroidClient
@@ -34,7 +33,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     override val statePing: MutableLiveData<Nothing?> = MutableLiveData(null)
     override val state: State
-        get() = if (dispatchJob != null && dispatchJob?.isActive == true) State.ATTEMPTING
+        get() = if (manager.isWorking) State.ATTEMPTING
         else try {
             if (!client.isConnected) State.DISCONNECTED
             else if (d.mqtt.ssl && !d.mqtt.sslTrustAll) State.CONNECTED_SSL
@@ -47,51 +46,30 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     override fun notifyAssigned() {
         super.notifyAssigned()
-        dispatch()
+        manager.dispatch(reason = "assigned")
     }
 
     override fun notifyDischarged() {
         super.notifyDischarged()
-        if (isConnected) dispatch()
+        if (isConnected) manager.dispatch(reason = "discharged")
     }
 
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
         if (isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()
-        else dispatch()
+        else manager.dispatch(reason = "config")
     }
 
-    // Status manger ------------------------------------------------------------------------------
+    // Status manager ------------------------------------------------------------------------------
 
-    //Current job
-    private var dispatchJob: Job? = null
+    val manager = Manager()
 
-    //Start the manager if not already running
-    private fun dispatch(cancel: Boolean = false) {
-        if (cancel) dispatchJob?.cancel()
-
-        //Return if already dispatched
-        if (dispatchJob != null && dispatchJob?.isActive == true) return
-
-        (context as LifecycleOwner).apply {
-            dispatchJob = lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    handleDispatch()
-                } catch (e: Exception) { //Create another coroutine after a delay
-                    delay(1000)
-                    dispatch(true)
-                }
-            }
+    inner class Manager : StatusManager(context) {
+        override fun check(): Boolean {
+            return client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)
         }
-    }
 
-    //Try to stabilize the connection
-    private suspend fun handleDispatch() {
-        statePing.postValue(null)
-
-        while (true) {
-            if (client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)) break
-
+        override fun handle() {
             if (isEnabled) {
                 if (client.isConnected) disconnectAttempt(true)
                 else {
@@ -102,14 +80,13 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     connectAttempt(d.mqtt.copy())
                 }
             } else disconnectAttempt()
-
-            delay(1000)
         }
 
-        statePing.postValue(null)
+        override fun onJobDone() = statePing.postValue(null)
+        override fun onJobStart() = statePing.postValue(null)
     }
 
-// Connection methods -------------------------------------------------------------------------
+    // Connection methods -------------------------------------------------------------------------
 
     private fun disconnectAttempt(close: Boolean = false) {
         try {
@@ -142,7 +119,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
             override fun connectionLost(cause: Throwable?) {
                 topics = mutableListOf()
-                dispatch()
+                manager.dispatch(reason = "connection")
                 statePing.postValue(null)
             }
 
@@ -249,7 +226,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         options.socketFactory = tlsContext.socketFactory
     }
 
-// MQTT methods ------------------------------------------------------------------------------
+    // MQTT methods ------------------------------------------------------------------------------
 
     fun publish(topic: String, msg: String, qos: Int = 0, retain: Boolean = false) {
         if (!client.isConnected) return

@@ -50,6 +50,7 @@ import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.ComposeTheme
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.Pro
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -222,9 +223,8 @@ class PayActivity : AppCompatActivity() {
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    priceTags[BillingHandler.PRO] ?: "99.99$",
-                                    //if (ProVersion.status) "OWNED"
-                                    //else priceTags[BillingHandler.PRO] ?: "99.99$",
+                                    if (Pro.status) "OWNED"
+                                    else priceTags[BillingHandler.PRO] ?: "99.99$",
                                     fontSize = 10.sp,
                                     color = Theme.colors.a
                                 )

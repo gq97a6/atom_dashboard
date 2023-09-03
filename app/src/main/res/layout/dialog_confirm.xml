@@ -8,6 +8,7 @@
     android:layout_marginBottom="20dp"
     android:background="@drawable/bg_frame"
     android:gravity="center"
+    android:layout_marginHorizontal="20dp"
     android:orientation="vertical"
     android:padding="20dp"
     android:tag="frame">
@@ -19,7 +20,7 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:tag="colorA"
-        android:text="Confirm publishing"
+        android:text="Confirm publish"
         android:textSize="20dp"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"

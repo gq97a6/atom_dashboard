@@ -9,6 +9,35 @@ import com.alteratom.R
 import com.alteratom.databinding.DialogConfirmBinding
 
 object DialogBuilder {
+    inline fun Context.buildChanges(
+        message: String,
+        label: String,
+        crossinline onDeny: () -> Unit = {},
+        crossinline onConfirm: () -> Unit
+    ) {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_confirm)
+        val binding = DialogConfirmBinding.bind(dialog.findViewById(R.id.root))
+
+        binding.dcConfirm.setOnClickListener {
+            onConfirm()
+            dialog.dismiss()
+        }
+
+        binding.dcDeny.setOnClickListener {
+            onDeny()
+            dialog.dismiss()
+        }
+
+        binding.dcConfirm.text = label
+        binding.dcText.text = message
+
+        dialog.dialogSetup()
+        G.theme.apply(binding.root)
+        dialog.show()
+    }
+
     inline fun Context.buildConfirm(
         message: String,
         label: String,

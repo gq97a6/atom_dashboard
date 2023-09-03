@@ -380,7 +380,7 @@ class SettingsFragment : Fragment() {
 
                 FrameBox({ tmpLabel() }) {
                     Column {
-                        var fgEnabled by remember { mutableStateOf(settings.fgEnabled) }
+                        var fgEnabled by remember { mutableStateOf(settings.fgEnabled ?: false) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -413,9 +413,9 @@ class SettingsFragment : Fragment() {
                         )
 
                         Text(
-                            "This option allows app to work in the background after being closed." +
-                                    "\nTo do so persistent notification is created\ndue to Android requirements." +
-                                    "\nStill it is not guaranteed that the app will not be killed by system.",
+                            "This option allows the app to work in the background. " +
+                                    "To do so persistent notification is created. " +
+                                    "It is not guaranteed that the app won't be killed by the system.",
                             fontSize = 13.sp,
                             color = colors.b
                         )

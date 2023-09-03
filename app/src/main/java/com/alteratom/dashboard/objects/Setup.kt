@@ -78,10 +78,10 @@ object Setup {
 
     fun setCase() {
         case = if (ForegroundService.service?.isStarted == true) {
-            if (G.settings.fgEnabled) SERVICE
+            if (G.settings.fgEnabled == true) SERVICE
             else SERVICE_TO_ACTIVITY
         } else {
-            if (G.settings.fgEnabled) {
+            if (G.settings.fgEnabled == true) {
                 if (G.areInitialized) ACTIVITY_TO_SERVICE
                 else SERVICE_COLD
             } else {

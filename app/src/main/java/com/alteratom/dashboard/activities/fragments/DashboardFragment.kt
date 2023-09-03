@@ -3,6 +3,7 @@ package com.alteratom.dashboard.activities.fragments
 import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -14,13 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.alteratom.BuildConfig
 import com.alteratom.R
 import com.alteratom.dashboard.*
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
@@ -133,6 +135,21 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         b.dRoot.onInterceptTouch = { e ->
             if (adapter.editMode.isNone) FragmentSwitcher.handle(e)
             else false
+        }
+
+        if (settings.version < BuildConfig.VERSION_CODE) {
+            with(activity as Context) {
+                buildConfirm(
+                    "We've made changes to how the app works in the background. Please check your settings for more information.",
+                    "SETTINGS",
+                    {
+                        settings.version = BuildConfig.VERSION_CODE
+                    },
+                    {
+                        settings.version = BuildConfig.VERSION_CODE
+                        fm.replaceWith(SettingsFragment())
+                    })
+            }
         }
     }
 

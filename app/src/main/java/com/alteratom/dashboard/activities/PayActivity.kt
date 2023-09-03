@@ -28,6 +28,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -62,14 +64,11 @@ class PayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         G.theme.apply(context = this)
 
-        billingHandler = BillingHandler(this)
-        billingHandler.enable()
-
         setContent {
             var showLoading by remember { mutableStateOf(false) }
-            var scaleInitialValue by remember { mutableStateOf(1f) }
-            var scaleTargetValue by remember { mutableStateOf(.8f) }
-            var scaleDuration by remember { mutableStateOf(3000) }
+            var scaleInitialValue by remember { mutableFloatStateOf(1f) }
+            var scaleTargetValue by remember { mutableFloatStateOf(.8f) }
+            var scaleDuration by remember { mutableIntStateOf(3000) }
 
             val scale = rememberInfiniteTransition(label = "").animateFloat(
                 initialValue = scaleInitialValue,
@@ -94,6 +93,10 @@ class PayActivity : AppCompatActivity() {
             remember {
                 lifecycleScope.launch {
                     showLoading = true
+
+                    billingHandler = BillingHandler(this@PayActivity)
+                    billingHandler.enable()
+                    delay(1000)
                     billingHandler.getPriceTags(
                         listOf(
                             BillingHandler.PRO,

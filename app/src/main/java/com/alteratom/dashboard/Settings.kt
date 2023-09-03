@@ -1,6 +1,7 @@
 package com.alteratom.dashboard
 
 class Settings {
+    var version = 21
     var notifyStack = true
     var hideNav = false
     var lastDashboardId = 0L
@@ -9,5 +10,5 @@ class Settings {
     var mqttTabShow = true
     var animateUpdate = true
     var pendingPurchase = false
-    var fgEnabled = true
+    var fgEnabled = null as Boolean?
 }

@@ -258,7 +258,7 @@ class BillingHandler(val activity: Activity) {
         }
     }
 
-    inner class Manager : StatusManager(activity) {
+    inner class Manager : StatusManager(activity, 100) {
         override fun check(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false
@@ -267,18 +267,13 @@ class BillingHandler(val activity: Activity) {
         }
 
         override fun handle() {
-            when (client.connectionState) {
-                CONNECTED -> client.endConnection()
-                DISCONNECTED -> client.startConnection(object : BillingClientStateListener {
+            if (client.connectionState == CLOSED) createClient()
+            else if (isEnabled) {
+                client.startConnection(object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {}
                     override fun onBillingServiceDisconnected() {}
                 })
-
-                CLOSED -> {
-                    createClient()
-                    handle()
-                }
-            }
+            } else client.endConnection()
         }
 
         //Wait for connectionHandler to settle down

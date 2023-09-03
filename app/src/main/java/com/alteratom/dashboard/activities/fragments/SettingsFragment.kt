@@ -380,7 +380,7 @@ class SettingsFragment : Fragment() {
 
                 FrameBox({ tmpLabel() }) {
                     Column {
-                        var fgEnabled by remember { mutableStateOf(settings.fgEnabled ?: false) }
+                        var fgEnabled by remember { mutableStateOf(settings.fgEnabled) }
                         LabeledSwitch(
                             label = {
                                 Text(

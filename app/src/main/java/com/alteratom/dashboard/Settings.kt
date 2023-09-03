@@ -10,5 +10,5 @@ class Settings {
     var mqttTabShow = true
     var animateUpdate = true
     var pendingPurchase = false
-    var fgEnabled = null as Boolean?
+    var fgEnabled = false
 }

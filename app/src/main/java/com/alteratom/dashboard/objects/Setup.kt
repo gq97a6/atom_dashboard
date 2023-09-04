@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.objects
 
 import androidx.activity.addCallback
-import com.alteratom.dashboard.BillingHandler.Companion.checkBilling
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.FragmentManager
@@ -13,6 +12,7 @@ import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.activities.fragments.SetupFragment
 import com.alteratom.dashboard.activities.fragments.SetupFragment.Companion.ready
 import com.alteratom.dashboard.areNotificationsAllowed
+import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.objects.G.dashboards
@@ -30,7 +30,7 @@ import kotlinx.coroutines.delay
 //Sorted by order of execution setup sequence
 object Setup {
 
-    private var case = SetupCase.ACTIVITY
+    private var case = ACTIVITY
 
     enum class SetupCase { SERVICE, SERVICE_COLD, SERVICE_TO_ACTIVITY, ACTIVITY, ACTIVITY_COLD, ACTIVITY_TO_SERVICE }
 

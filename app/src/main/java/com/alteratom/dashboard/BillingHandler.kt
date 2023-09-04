@@ -1,8 +1,6 @@
 package com.alteratom.dashboard
 
 import android.app.Activity
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -23,24 +21,17 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
 
-//TODO: rewrite
 class BillingHandler(val activity: Activity) {
 
     internal var isEnabled = false
-
     internal lateinit var client: BillingClient
-
     private val manager = Manager()
 
     companion object {
@@ -49,34 +40,20 @@ class BillingHandler(val activity: Activity) {
         var DON1 = "atom_dashboard_don1"
         var DON5 = "atom_dashboard_don5"
         var DON25 = "atom_dashboard_don25"
-
-        fun MainActivity.checkBilling() {
-            CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
-                BillingHandler(this@checkBilling).apply {
-                    enable()
-                    checkPurchases(
-                        0,
-                        {
-                            !it.isAcknowledged || (!Pro.status && it.products.contains(
-                                PRO
-                            ))
-                        }
-                    )
-                    disable()
-                }
-
-                if (!Pro.status) {
-                    for (dash in G.dashboards.slice(2 until G.dashboards.size)) {
-                        dash.mqtt.isEnabled = false
-                        dash.daemon?.notifyConfigChanged()
-                    }
-                }
-            }
-        }
     }
 
     init {
         createClient()
+    }
+
+    fun enable() {
+        isEnabled = true
+        manager.dispatch(reason = "enable")
+    }
+
+    fun disable() {
+        isEnabled = false
+        manager.dispatch(reason = "disable")
     }
 
     internal fun createClient() {
@@ -96,17 +73,8 @@ class BillingHandler(val activity: Activity) {
             .build()
     }
 
-    fun enable() {
-        isEnabled = true
-        manager.dispatch(reason = "enable")
-    }
-
-    fun disable() {
-        isEnabled = false
-        manager.dispatch(reason = "disable")
-    }
-
     private fun Purchase.acknowledge() {
+        return
         AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -115,6 +83,7 @@ class BillingHandler(val activity: Activity) {
     }
 
     private fun Purchase.consume() {
+        return
         ConsumeParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -123,6 +92,7 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun onPurchased(purchase: Purchase) {
+        return
         settings.pendingPurchase = false
         if (purchase.purchaseState != PURCHASED) {
             settings.pendingPurchase = true
@@ -143,6 +113,7 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun onPurchaseProcessed(purchase: Purchase) {
+        return
         if (purchase.purchaseState != PURCHASED) {
             createToast(activity, "Payment in process, please wait")
             return
@@ -157,6 +128,7 @@ class BillingHandler(val activity: Activity) {
 
     private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
         coroutineScope {
+            return@coroutineScope mutableListOf()
             return@coroutineScope if (!manager.awaitDone()) {
                 //createToast(activity, "Failed to connect")
                 null
@@ -181,6 +153,7 @@ class BillingHandler(val activity: Activity) {
         }
 
     suspend fun getPurchases(timeout: Long = 2000): MutableList<Purchase>? = coroutineScope {
+        return@coroutineScope mutableListOf()
         return@coroutineScope if (!manager.awaitDone()) {
             //createToast(activity, "Failed to connect")
             null
@@ -208,6 +181,7 @@ class BillingHandler(val activity: Activity) {
     }
 
     suspend fun getPriceTags(ids: List<String>): Map<String, String>? = withTimeoutOrNull(2000) {
+        return@withTimeoutOrNull mapOf()
         List(ids.size) {
             getProductDetails(ids[it])?.first() ?: return@withTimeoutOrNull null
         }.let { it ->
@@ -220,6 +194,7 @@ class BillingHandler(val activity: Activity) {
     }
 
     suspend fun lunchPurchaseFlow(id: String) {
+        return
         getProductDetails(id)?.let {
             if (it.isEmpty()) return
             client.launchBillingFlow(
@@ -244,6 +219,7 @@ class BillingHandler(val activity: Activity) {
         filter: (Purchase) -> Boolean = { !it.isAcknowledged },
         onDone: (List<Purchase>?) -> Unit = {}
     ) {
+        return
         var result: List<Purchase>? = null
 
         measureTimeMillis {
@@ -267,13 +243,17 @@ class BillingHandler(val activity: Activity) {
         }
 
         override fun handle() {
-            if (client.connectionState == CLOSED) createClient()
+            if (client.connectionState == CLOSED) {
+                createClient()
+            }
             else if (isEnabled) {
                 client.startConnection(object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {}
                     override fun onBillingServiceDisconnected() {}
                 })
-            } else client.endConnection()
+            } else {
+                client.endConnection()
+            }
         }
 
         //Wait for connectionHandler to settle down

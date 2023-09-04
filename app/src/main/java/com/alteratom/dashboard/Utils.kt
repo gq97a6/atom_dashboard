@@ -39,8 +39,15 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
+import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.activities.PayActivity
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.Pro
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.security.cert.Certificate
 import java.util.Base64
@@ -235,6 +242,7 @@ fun Context.proAlert(activity: Activity) {
                     this,
                     PayActivity::class.java
                 ).also {
+                    it.action = Intent.ACTION_VIEW
                     startActivity(it)
                 }
             }
@@ -312,7 +320,26 @@ fun createNotification(
     }
 }
 
-fun Activity.restart(reason: String = "onAttach") = this.apply {
-    Log.i("ALTER_ATOM", "RESTART: $reason")
-    recreate()
+fun MainActivity.checkBilling() {
+    CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+        BillingHandler(this@checkBilling).apply {
+            enable()
+            checkPurchases(
+                0,
+                {
+                    !it.isAcknowledged || (!Pro.status && it.products.contains(
+                        BillingHandler.PRO
+                    ))
+                }
+            )
+            disable()
+        }
+
+        if (!Pro.status) {
+            for (dash in G.dashboards.slice(2 until G.dashboards.size)) {
+                dash.mqtt.isEnabled = false
+                dash.daemon?.notifyConfigChanged()
+            }
+        }
+    }
 }

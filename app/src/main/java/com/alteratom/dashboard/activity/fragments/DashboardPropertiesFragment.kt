@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -11,9 +11,7 @@ import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,7 +22,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,21 +35,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DashboardPropertiesCompose
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboard
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.G.settings
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import kotlin.math.abs
@@ -160,7 +157,7 @@ class DashboardPropertiesFragment : Fragment() {
                         setIconHSV = { hsv -> dashboard.hsv = hsv }
                         setIconKey = { key -> dashboard.iconKey = key }
 
-                        MainActivity.fm.replaceWith(TileIconFragment())
+                        fm.replaceWith(TileIconFragment())
                     },
                     border = BorderStroke(1.dp, dashboard.pallet.cc.color),
                     modifier = Modifier.size(52.dp)

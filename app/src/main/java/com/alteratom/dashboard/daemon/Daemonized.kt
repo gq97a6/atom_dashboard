@@ -4,8 +4,8 @@ import androidx.annotation.IntRange
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.Storage
+import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.`object`.Storage
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.Date
 

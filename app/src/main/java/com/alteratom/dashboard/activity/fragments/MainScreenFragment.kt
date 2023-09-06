@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,15 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.ToolbarHandler
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.setCurrentDashboard
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.manager.ToolbarManager
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.G.setCurrentDashboard
+import com.alteratom.dashboard.`object`.G.theme
+import com.alteratom.dashboard.`object`.Pro
 import com.alteratom.dashboard.proAlert
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
@@ -26,7 +26,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Dashboard>
-    private lateinit var toolBarHandler: ToolbarHandler
+    private lateinit var toolBarManager: ToolbarManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +45,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
         fm.doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
-                toolBarHandler.toggleTools()
+                toolBarManager.toggleTools()
                 true
             } else false
         }
@@ -62,7 +62,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
             theme.apply(b.msToolbar, requireContext(), false)
         }
 
-        toolBarHandler = ToolbarHandler(
+        toolBarManager = ToolbarManager(
             adapter,
             b.msBar,
             b.msToolbar,

@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat.PRIORITY_MIN
 import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.lifecycle.LifecycleService
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activity.MainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeoutOrNull
 

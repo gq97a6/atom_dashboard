@@ -18,7 +18,6 @@ import android.os.Looper
 import android.os.PowerManager
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -39,11 +38,12 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.PayActivity
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.PayActivity
+import com.alteratom.dashboard.manager.BillingManager
+import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.Pro
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -322,13 +322,13 @@ fun createNotification(
 
 fun MainActivity.checkBilling() {
     CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
-        BillingHandler(this@checkBilling).apply {
+        BillingManager(this@checkBilling).apply {
             enable()
             checkPurchases(
                 0,
                 {
                     !it.isAcknowledged || (!Pro.status && it.products.contains(
-                        BillingHandler.PRO
+                        BillingManager.PRO
                     ))
                 }
             )

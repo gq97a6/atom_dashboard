@@ -1,9 +1,17 @@
 package com.alteratom.dashboard.recycler_view
 
 import android.annotation.SuppressLint
-import androidx.recyclerview.widget.*
-import androidx.recyclerview.widget.ItemTouchHelper.*
-import java.util.*
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
+import androidx.recyclerview.widget.ItemTouchHelper.Callback
+import androidx.recyclerview.widget.ItemTouchHelper.DOWN
+import androidx.recyclerview.widget.ItemTouchHelper.LEFT
+import androidx.recyclerview.widget.ItemTouchHelper.RIGHT
+import androidx.recyclerview.widget.ItemTouchHelper.UP
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import java.util.Collections
 
 class ItemTouchCallback(private val adapter: RecyclerViewAdapter<*>) :
     Callback() {

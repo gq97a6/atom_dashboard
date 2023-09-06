@@ -1,6 +1,6 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.`object`
 
-import com.alteratom.dashboard.objects.G.rootFolder
+import com.alteratom.dashboard.`object`.G.rootFolder
 import java.io.File
 
 object Pro {

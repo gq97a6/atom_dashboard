@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,7 +13,6 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,9 +33,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.compose_global.composeConstruct
+import com.alteratom.dashboard.`object`.FragmentManager.fm
 
 
 class SetupFragment : Fragment() {
@@ -62,7 +61,6 @@ class SetupFragment : Fragment() {
 
         var rotationInitialValue by remember { mutableFloatStateOf(0f) }
         var rotationTargetValue by remember { mutableFloatStateOf(360f) }
-
 
 
         val scale = rememberInfiniteTransition(label = "").animateFloat(

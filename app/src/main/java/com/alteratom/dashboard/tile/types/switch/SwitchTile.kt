@@ -3,7 +3,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.`object`.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.eclipse.paho.client.mqttv3.MqttMessage

@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import ButtonTile
 import ButtonTileCompose
@@ -51,14 +51,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.BoldStartText
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.G.tile
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
@@ -102,7 +102,7 @@ class TilePropertiesFragment : Fragment() {
                         TileIconFragment.setIconHSV = { hsv -> tile.hsv = hsv }
                         TileIconFragment.setIconKey = { key -> tile.iconKey = key }
 
-                        MainActivity.fm.replaceWith(TileIconFragment())
+                        fm.replaceWith(TileIconFragment())
                     },
                     border = BorderStroke(1.dp, tile.pallet.cc.color),
                     modifier = Modifier.size(52.dp)

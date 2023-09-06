@@ -1,8 +1,9 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.manager
 
 import android.app.Activity
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.`object`.G.settings
+import com.alteratom.dashboard.`object`.Pro
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
@@ -28,7 +29,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
 
-class BillingHandler(val activity: Activity) {
+class BillingManager(val activity: Activity) {
 
     internal var isEnabled = false
     internal lateinit var client: BillingClient
@@ -74,7 +75,6 @@ class BillingHandler(val activity: Activity) {
     }
 
     private fun Purchase.acknowledge() {
-        return
         AcknowledgePurchaseParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -83,7 +83,6 @@ class BillingHandler(val activity: Activity) {
     }
 
     private fun Purchase.consume() {
-        return
         ConsumeParams
             .newBuilder()
             .setPurchaseToken(this.purchaseToken)
@@ -92,7 +91,6 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun onPurchased(purchase: Purchase) {
-        return
         settings.pendingPurchase = false
         if (purchase.purchaseState != PURCHASED) {
             settings.pendingPurchase = true
@@ -113,7 +111,6 @@ class BillingHandler(val activity: Activity) {
     }
 
     fun onPurchaseProcessed(purchase: Purchase) {
-        return
         if (purchase.purchaseState != PURCHASED) {
             createToast(activity, "Payment in process, please wait")
             return
@@ -128,7 +125,6 @@ class BillingHandler(val activity: Activity) {
 
     private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
         coroutineScope {
-            return@coroutineScope mutableListOf()
             return@coroutineScope if (!manager.awaitDone()) {
                 //createToast(activity, "Failed to connect")
                 null
@@ -153,7 +149,6 @@ class BillingHandler(val activity: Activity) {
         }
 
     suspend fun getPurchases(timeout: Long = 2000): MutableList<Purchase>? = coroutineScope {
-        return@coroutineScope mutableListOf()
         return@coroutineScope if (!manager.awaitDone()) {
             //createToast(activity, "Failed to connect")
             null
@@ -181,37 +176,37 @@ class BillingHandler(val activity: Activity) {
     }
 
     suspend fun getPriceTags(ids: List<String>): Map<String, String>? = withTimeoutOrNull(2000) {
-        return@withTimeoutOrNull mapOf()
+        if (!manager.awaitDone()) return@withTimeoutOrNull null
+
         List(ids.size) {
-            getProductDetails(ids[it])?.first() ?: return@withTimeoutOrNull null
-        }.let { it ->
-            it.map {
-                it.productId to
-                        (it.oneTimePurchaseOfferDetails?.formattedPrice
-                            ?: return@withTimeoutOrNull null)
-            }.toMap()
-        }
+            getProductDetails(ids[it])?.firstOrNull() ?: return@withTimeoutOrNull null
+        }.map {
+            it.productId to
+                    (it.oneTimePurchaseOfferDetails?.formattedPrice
+                        ?: return@withTimeoutOrNull null)
+        }.toMap()
     }
 
     suspend fun lunchPurchaseFlow(id: String) {
-        return
-        getProductDetails(id)?.let {
-            if (it.isEmpty()) return
-            client.launchBillingFlow(
-                activity,
-                BillingFlowParams
-                    .newBuilder()
-                    .setProductDetailsParamsList(
-                        listOf(
-                            BillingFlowParams.ProductDetailsParams
-                                .newBuilder()
-                                .setProductDetails(it.first())
-                                .build()
-                        )
+        if (!manager.awaitDone()) return
+
+        val productDetails = getProductDetails(id)
+        if (productDetails.isNullOrEmpty()) return
+
+        client.launchBillingFlow(
+            activity,
+            BillingFlowParams
+                .newBuilder()
+                .setProductDetailsParamsList(
+                    listOf(
+                        BillingFlowParams.ProductDetailsParams
+                            .newBuilder()
+                            .setProductDetails(productDetails.first())
+                            .build()
                     )
-                    .build()
-            )
-        }
+                )
+                .build()
+        )
     }
 
     suspend inline fun checkPurchases(
@@ -219,7 +214,6 @@ class BillingHandler(val activity: Activity) {
         filter: (Purchase) -> Boolean = { !it.isAcknowledged },
         onDone: (List<Purchase>?) -> Unit = {}
     ) {
-        return
         var result: List<Purchase>? = null
 
         measureTimeMillis {
@@ -243,16 +237,13 @@ class BillingHandler(val activity: Activity) {
         }
 
         override fun handle() {
-            if (client.connectionState == CLOSED) {
-                createClient()
-            }
-            else if (isEnabled) {
+            if (client.connectionState == CLOSED) createClient()
+            else if (!isEnabled) client.endConnection()
+            else if (client.connectionState != CONNECTING) {
                 client.startConnection(object : BillingClientStateListener {
                     override fun onBillingSetupFinished(billingResult: BillingResult) {}
                     override fun onBillingServiceDisconnected() {}
                 })
-            } else {
-                client.endConnection()
             }
         }
 

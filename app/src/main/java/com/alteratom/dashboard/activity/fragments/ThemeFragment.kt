@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,11 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.compose_global.switchColors
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.`object`.G.theme
 import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 

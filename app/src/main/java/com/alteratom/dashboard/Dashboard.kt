@@ -9,14 +9,14 @@ import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.Pro
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.util.*
+import java.util.Locale
 
 open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) :
     RecyclerViewItem() {

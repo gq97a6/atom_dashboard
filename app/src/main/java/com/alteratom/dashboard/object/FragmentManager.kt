@@ -1,19 +1,22 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.`object`
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.alteratom.R
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.MainScreenFragment
+import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.fragments.MainScreenFragment
+import com.alteratom.dashboard.`object`.FragmentManager.Animations.swap
 
+object FragmentManager {
 
-class FragmentManager(private val mainActivity: MainActivity) {
     private var backstack = mutableListOf<Fragment>()
     private var currentFragment: Fragment = MainScreenFragment()
     var doOverrideOnBackPress: () -> Boolean = { false }
+    var mainActivity: MainActivity? = null
+    var fm = FragmentManager
 
-    companion object Animations {
+    object Animations {
         val swap: (FragmentTransaction) -> Unit = {
             it.apply {
                 setCustomAnimations(
@@ -75,7 +78,7 @@ class FragmentManager(private val mainActivity: MainActivity) {
         stack: Boolean = true,
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ) {
-        mainActivity.apply {
+        mainActivity?.apply {
             supportFragmentManager.commit {
                 animation?.invoke(this)
                 replace(R.id.m_fragment, fragment)

@@ -1,12 +1,12 @@
-package com.alteratom.dashboard.activities
+package com.alteratom.dashboard.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.alteratom.dashboard.FragmentManager
-import com.alteratom.dashboard.activities.fragments.DashboardFragment
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Setup
-import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.activity.fragments.DashboardFragment
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.Setup
+import com.alteratom.dashboard.`object`.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +15,6 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     lateinit var b: ActivityMainBinding
-
-    companion object {
-        lateinit var fm: FragmentManager
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

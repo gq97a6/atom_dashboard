@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.`object`
 
 import java.util.Random
 

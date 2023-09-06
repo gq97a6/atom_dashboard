@@ -3,12 +3,12 @@ package com.alteratom.dashboard.log
 import android.annotation.SuppressLint
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.`object`.G.settings
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 @SuppressLint("SimpleDateFormat")
 class LogEntry(

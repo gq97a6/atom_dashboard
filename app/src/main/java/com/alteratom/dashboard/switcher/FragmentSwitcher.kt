@@ -3,11 +3,11 @@ package com.alteratom.dashboard.switcher
 import android.view.MotionEvent
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.DashboardFragment
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.FragmentManager.Animations.slideLeft as slideLeftAnimation
-import com.alteratom.dashboard.FragmentManager.Animations.slideRight as slideRightAnimation
+import com.alteratom.dashboard.activity.fragments.DashboardFragment
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.FragmentManager.Animations.slideLeft as slideLeftAnimation
+import com.alteratom.dashboard.`object`.FragmentManager.Animations.slideRight as slideRightAnimation
 
 object FragmentSwitcher : Switcher() {
 

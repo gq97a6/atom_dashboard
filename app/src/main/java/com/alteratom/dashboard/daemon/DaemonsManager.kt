@@ -2,7 +2,7 @@ package com.alteratom.dashboard.daemon
 
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.`object`.G.dashboards
 
 //Manages creation and assignment of daemons
 object DaemonsManager {

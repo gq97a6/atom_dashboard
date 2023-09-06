@@ -1,4 +1,4 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.manager
 
 import android.graphics.drawable.RippleDrawable
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -8,10 +8,10 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.alteratom.R
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.`object`.Pro
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 
-class ToolbarHandler(
+class ToolbarManager(
     private val adapter: RecyclerViewAdapter<*>,
     private val bar: ConstraintLayout,
     toolbar: FrameLayout,

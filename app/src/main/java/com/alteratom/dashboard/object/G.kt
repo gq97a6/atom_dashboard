@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.`object`
 
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings

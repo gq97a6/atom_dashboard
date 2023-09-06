@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:tag="background"
-    tools:context=".dashboard.activities.fragments.TileNewFragment">
+    tools:context=".dashboard.activity.fragments.TileNewFragment">
 
     <TextView
         android:layout_width="match_parent"

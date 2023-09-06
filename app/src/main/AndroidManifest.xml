@@ -24,7 +24,7 @@
         tools:targetApi="s">
 
         <activity
-            android:name=".dashboard.activities.MainActivity"
+            android:name=".dashboard.activity.MainActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".dashboard.activities.PayActivity"
+            android:name=".dashboard.activity.PayActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustResize" />
 

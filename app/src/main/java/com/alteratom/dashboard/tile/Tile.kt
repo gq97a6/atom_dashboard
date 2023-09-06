@@ -5,21 +5,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.*
-import com.alteratom.dashboard.ForegroundService.Companion.service
+import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Theme.ColorPallet
+import com.alteratom.dashboard.attentate
+import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.daemon.Daemonized
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.`object`.G.settings
+import com.alteratom.dashboard.`object`.G.theme
+import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
+import com.alteratom.dashboard.screenWidth
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.eclipse.paho.client.mqttv3.MqttMessage
-import java.util.*
+import java.util.Date
+import java.util.Random
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
@@ -91,8 +95,8 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     ) {
         super.onReceive(topic, msg, jsonResult)
 
-        if (this.mqtt.doNotify && !msg.isRetained)  {
-            dashboard?.daemon?.context?.let {context ->
+        if (this.mqtt.doNotify && !msg.isRetained) {
+            dashboard?.daemon?.context?.let { context ->
                 createNotification(
                     context,
                     mqtt.notifyTitle.replace("@v", msg.toString()),
@@ -103,7 +107,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
             }
         }
 
-        if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { topic }}: ${msg.toString()}")
+        if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { topic }}: $msg")
         if (settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }

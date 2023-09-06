@@ -4,15 +4,23 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.StatusManager
 import com.alteratom.dashboard.daemon.Daemon
-import kotlinx.coroutines.*
+import com.alteratom.dashboard.manager.StatusManager
 import org.eclipse.paho.android.service.MqttAndroidClient
-import org.eclipse.paho.client.mqttv3.*
+import org.eclipse.paho.client.mqttv3.IMqttActionListener
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.IMqttToken
+import org.eclipse.paho.client.mqttv3.MqttCallback
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
-import javax.net.ssl.*
+import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 

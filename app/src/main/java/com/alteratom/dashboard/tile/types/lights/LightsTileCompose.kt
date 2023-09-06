@@ -23,13 +23,12 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.activity.fragments.TileIconFragment
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.PairList
@@ -40,8 +39,9 @@ import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.G.tile
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable
@@ -70,7 +70,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         setIconHSV = { hsv -> tile.hsvTrue = hsv }
                         setIconKey = { key -> tile.iconKeyTrue = key }
 
-                        MainActivity.fm.replaceWith(TileIconFragment())
+                        fm.replaceWith(TileIconFragment())
                     },
                     border = BorderStroke(1.dp, Theme.colors.color),
                     modifier = Modifier
@@ -110,7 +110,7 @@ object LightsTileCompose : DaemonBasedCompose {
                         setIconHSV = { hsv -> tile.hsvTrue = hsv }
                         setIconKey = { key -> tile.iconKeyTrue = key }
 
-                        MainActivity.fm.replaceWith(TileIconFragment())
+                        fm.replaceWith(TileIconFragment())
                     },
                     border = BorderStroke(1.dp, Theme.colors.color),
                     modifier = Modifier

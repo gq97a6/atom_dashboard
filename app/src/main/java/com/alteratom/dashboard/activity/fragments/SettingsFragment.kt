@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -50,9 +50,8 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.PayActivity
+import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
@@ -60,17 +59,17 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.Pro
-import com.alteratom.dashboard.objects.Setup
-import com.alteratom.dashboard.objects.Storage.mapper
-import com.alteratom.dashboard.objects.Storage.parseListSave
-import com.alteratom.dashboard.objects.Storage.parseSave
-import com.alteratom.dashboard.objects.Storage.prepareSave
-import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.G.settings
+import com.alteratom.dashboard.`object`.G.theme
+import com.alteratom.dashboard.`object`.Pro
+import com.alteratom.dashboard.`object`.Setup
+import com.alteratom.dashboard.`object`.Storage.mapper
+import com.alteratom.dashboard.`object`.Storage.parseListSave
+import com.alteratom.dashboard.`object`.Storage.parseSave
+import com.alteratom.dashboard.`object`.Storage.prepareSave
+import com.alteratom.dashboard.`object`.Storage.saveToFile
 import com.alteratom.dashboard.openBatterySettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

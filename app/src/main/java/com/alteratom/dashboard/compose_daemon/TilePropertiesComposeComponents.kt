@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,13 +35,12 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.activity.fragments.TileIconFragment
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.BoldStartText
@@ -52,9 +50,10 @@ import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.nrClickable
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboard
+import com.alteratom.dashboard.`object`.G.settings
+import com.alteratom.dashboard.`object`.G.tile
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
@@ -63,7 +62,11 @@ object TilePropertiesComposeComponents {
     @Composable
     inline fun Box(crossinline content: @Composable () -> Unit) {
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
             Text(text = "Tile properties", fontSize = 45.sp, color = Theme.colors.color)
             Row(
                 modifier = Modifier.padding(top = 5.dp),
@@ -79,7 +82,7 @@ object TilePropertiesComposeComponents {
                         setIconHSV = { hsv -> tile.hsv = hsv }
                         setIconKey = { key -> tile.iconKey = key }
 
-                        MainActivity.fm.replaceWith(TileIconFragment())
+                        fm.replaceWith(TileIconFragment())
                     },
                     border = BorderStroke(1.dp, tile.pallet.cc.color),
                     modifier = Modifier.size(52.dp)

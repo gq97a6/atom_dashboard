@@ -15,19 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.TileIconFragment
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.activities.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.activity.fragments.TileIconFragment
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.tile
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

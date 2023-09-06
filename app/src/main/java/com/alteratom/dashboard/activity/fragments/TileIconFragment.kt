@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,7 +49,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.`object`.G.theme
 import com.alteratom.dashboard.toPx
 import java.util.Locale
 

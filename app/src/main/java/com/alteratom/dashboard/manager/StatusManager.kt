@@ -1,4 +1,4 @@
-package com.alteratom.dashboard
+package com.alteratom.dashboard.manager
 
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner

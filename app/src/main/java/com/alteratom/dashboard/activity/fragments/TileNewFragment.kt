@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import ButtonTile
 import ColorTile
@@ -44,10 +44,10 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.`object`.G.dashboard
 import com.alteratom.dashboard.tile.Tile
 
 class TileNewFragment : Fragment() {

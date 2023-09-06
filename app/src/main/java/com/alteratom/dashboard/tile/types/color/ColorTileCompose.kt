@@ -26,7 +26,7 @@ import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.`object`.G.tile
 
 object ColorTileCompose : DaemonBasedCompose {
     @Composable

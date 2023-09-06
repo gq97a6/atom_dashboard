@@ -1,6 +1,6 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.`object`
 
-import com.alteratom.dashboard.objects.G.path
+import com.alteratom.dashboard.`object`.G.path
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activities.fragments
+package com.alteratom.dashboard.activity.fragments
 
 import SliderTile
 import android.animation.ValueAnimator
@@ -17,30 +17,34 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.BuildConfig
 import com.alteratom.R
-import com.alteratom.dashboard.*
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
+import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.manager.ToolbarManager
+import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboard
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.G.settings
+import com.alteratom.dashboard.`object`.G.theme
+import com.alteratom.dashboard.`object`.G.tile
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
+import com.alteratom.dashboard.screenHeight
+import com.alteratom.dashboard.screenVertical
+import com.alteratom.dashboard.screenWidth
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.FragmentDashboardBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Locale
 
 class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private lateinit var b: FragmentDashboardBinding
 
     private lateinit var adapter: RecyclerViewAdapter<Tile>
-    private lateinit var toolBarHandler: ToolbarHandler
+    private lateinit var toolBarManager: ToolbarManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,7 +66,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         fm.doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
-                toolBarHandler.toggleTools()
+                toolBarManager.toggleTools()
                 true
             } else false
         }
@@ -97,7 +101,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             theme.apply(b.dToolbar, requireContext(), false)
         }
 
-        toolBarHandler = ToolbarHandler(
+        toolBarManager = ToolbarManager(
             adapter,
             b.dBar,
             b.dToolbar,

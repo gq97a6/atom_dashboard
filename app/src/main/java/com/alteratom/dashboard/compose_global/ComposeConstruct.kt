@@ -4,9 +4,13 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.`object`.G
 
-fun composeConstruct(context: Context, isDark: Boolean = Theme.isDark, content: @Composable () -> Unit): ComposeView {
+fun composeConstruct(
+    context: Context,
+    isDark: Boolean = Theme.isDark,
+    content: @Composable () -> Unit
+): ComposeView {
     G.theme.apply(context = context)
     return ComposeView(context).apply { setContent { ComposeTheme(isDark, content) } }
 }

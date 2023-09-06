@@ -56,8 +56,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
+import com.alteratom.dashboard.activity.fragments.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
@@ -67,11 +66,12 @@ import com.alteratom.dashboard.compose_global.nrClickable
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboardIndex
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboard
+import com.alteratom.dashboard.`object`.G.dashboardIndex
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.Pro
 import com.alteratom.dashboard.proAlert
 import java.util.Locale
 import kotlin.math.abs
@@ -213,7 +213,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                                 dashboard.daemon?.notifyConfigChanged()
 
                                                 copyShow = false
-                                                MainActivity.fm.replaceWith(
+                                                fm.replaceWith(
                                                     DashboardPropertiesFragment(),
                                                     false
                                                 )
@@ -585,7 +585,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     targetValue = if (rotation > 360 - rotation) {
                         -(360 - rotation)
                     } else rotation,
-                    animationSpec = tween(durationMillis = 200, easing = LinearEasing), label = "")
+                    animationSpec = tween(durationMillis = 200, easing = LinearEasing), label = ""
+                )
 
                 Row(
                     Modifier

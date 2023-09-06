@@ -1,27 +1,26 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.`object`
 
 import androidx.activity.addCallback
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
-import com.alteratom.dashboard.FragmentManager
-import com.alteratom.dashboard.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.MainActivity
-import com.alteratom.dashboard.activities.MainActivity.Companion.fm
-import com.alteratom.dashboard.activities.fragments.SetupFragment
-import com.alteratom.dashboard.activities.fragments.SetupFragment.Companion.ready
+import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.fragments.SetupFragment
+import com.alteratom.dashboard.activity.fragments.SetupFragment.Companion.ready
 import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_COLD
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
+import com.alteratom.dashboard.`object`.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.`object`.FragmentManager.fm
+import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY
+import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY_COLD
+import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY_TO_SERVICE
+import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE
+import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE_COLD
+import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
@@ -51,9 +50,8 @@ object Setup {
     }
 
     fun fragmentManager(activity: MainActivity) {
-        fm = FragmentManager(activity)
-
         activity.apply {
+            fm.mainActivity = this
             onBackPressedDispatcher.addCallback {
                 if (!fm.doOverrideOnBackPress() && !fm.popBackstack()) finishAndRemoveTask()
             }

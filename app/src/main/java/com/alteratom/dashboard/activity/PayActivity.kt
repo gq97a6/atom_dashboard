@@ -1,7 +1,6 @@
-package com.alteratom.dashboard.activities
+package com.alteratom.dashboard.activity
 
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -10,6 +9,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,30 +44,28 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
-import com.alteratom.dashboard.BillingHandler
-import com.alteratom.dashboard.BillingHandler.Companion.DON1
-import com.alteratom.dashboard.BillingHandler.Companion.DON25
-import com.alteratom.dashboard.BillingHandler.Companion.DON5
-import com.alteratom.dashboard.BillingHandler.Companion.PRO
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activities.fragments.DashboardPropertiesFragment
+import com.alteratom.dashboard.activity.fragments.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.BasicButton
+import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.manager.BillingManager
+import com.alteratom.dashboard.manager.BillingManager.Companion.DON1
+import com.alteratom.dashboard.manager.BillingManager.Companion.DON25
+import com.alteratom.dashboard.manager.BillingManager.Companion.DON5
+import com.alteratom.dashboard.manager.BillingManager.Companion.PRO
+import com.alteratom.dashboard.`object`.Pro
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PayActivity : AppCompatActivity() {
 
-    private lateinit var billingHandler: BillingHandler
+    private lateinit var billingManager: BillingManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        G.theme.apply(context = this)
-
-        setContent {
+        setContentView(composeConstruct(this) {
             var showLoading by remember { mutableStateOf(false) }
             var scaleInitialValue by remember { mutableFloatStateOf(1f) }
             var scaleTargetValue by remember { mutableFloatStateOf(.8f) }
@@ -112,7 +110,7 @@ class PayActivity : AppCompatActivity() {
                 scaleDuration = 3000
 
                 lifecycleScope.launch {
-                    billingHandler.checkPurchases {
+                    billingManager.checkPurchases {
                         if (it?.isEmpty() != false) {
                             createToast(this@PayActivity, "No pending purchase found")
                         }
@@ -125,15 +123,19 @@ class PayActivity : AppCompatActivity() {
             remember {
                 lifecycleScope.launch {
                     showLoading()
-                    billingHandler = BillingHandler(this@PayActivity)
-                    billingHandler.enable()
-                    delay(1000)
-                    hideLoading()
-                    billingHandler.getPriceTags(listOf(PRO, DON1, DON5, DON25)).let {
+                    billingManager = BillingManager(this@PayActivity)
+                    billingManager.enable()
+
+                    billingManager.getPriceTags(listOf(PRO, DON1, DON5, DON25)).let {
                         delay(500)
                         if (it != null) priceTags = it
-                        else finishAndRemoveTask()
+                        else {
+                            createToast(this@PayActivity, "Error occurred!")
+                            finishAndRemoveTask()
+                        }
                     }
+
+                    hideLoading()
                 }
             }
 
@@ -150,6 +152,7 @@ class PayActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    .background(color = Theme.colors.background)
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center
@@ -170,7 +173,7 @@ class PayActivity : AppCompatActivity() {
                 ) {
                     BasicButton(onClick = {
                         lifecycleScope.launch {
-                            billingHandler.lunchPurchaseFlow(DON1)
+                            billingManager.lunchPurchaseFlow(DON1)
                         }
                     }, Modifier.weight(1f)) {
                         Text(
@@ -184,7 +187,7 @@ class PayActivity : AppCompatActivity() {
 
                     BasicButton(onClick = {
                         lifecycleScope.launch {
-                            billingHandler.lunchPurchaseFlow(DON5)
+                            billingManager.lunchPurchaseFlow(DON5)
                         }
                     }, Modifier.weight(1f)) {
                         Text(
@@ -198,7 +201,7 @@ class PayActivity : AppCompatActivity() {
 
                     BasicButton(onClick = {
                         lifecycleScope.launch {
-                            billingHandler.lunchPurchaseFlow(DON25)
+                            billingManager.lunchPurchaseFlow(DON25)
                         }
                     }, Modifier.weight(1f)) {
                         Text(
@@ -233,7 +236,7 @@ class PayActivity : AppCompatActivity() {
                     BasicButton(
                         onClick = {
                             lifecycleScope.launch {
-                                billingHandler.lunchPurchaseFlow(PRO)
+                                billingManager.lunchPurchaseFlow(PRO)
                             }
                         },
                         enabled = !Pro.status,
@@ -300,11 +303,11 @@ class PayActivity : AppCompatActivity() {
                         .height(60.dp)
                 )
             }
-        }
+        })
     }
 
     override fun onStop() {
-        billingHandler.disable()
+        billingManager.disable()
         super.onStop()
     }
 }

@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activity.fragments
+package com.alteratom.dashboard.activity.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context

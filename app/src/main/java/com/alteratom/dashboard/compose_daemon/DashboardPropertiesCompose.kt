@@ -56,7 +56,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activity.fragments.DashboardPropertiesFragment
+import com.alteratom.dashboard.activity.fragment.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox

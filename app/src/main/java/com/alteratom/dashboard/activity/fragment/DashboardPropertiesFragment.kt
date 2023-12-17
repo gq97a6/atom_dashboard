@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activity.fragments
+package com.alteratom.dashboard.activity.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -35,11 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.activity.fragments.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.compose_daemon.DashboardPropertiesCompose
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText

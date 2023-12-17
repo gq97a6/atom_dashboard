@@ -6,8 +6,8 @@ import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activity.MainActivity
-import com.alteratom.dashboard.activity.fragments.SetupFragment
-import com.alteratom.dashboard.activity.fragments.SetupFragment.Companion.ready
+import com.alteratom.dashboard.activity.fragment.SetupFragment
+import com.alteratom.dashboard.activity.fragment.SetupFragment.Companion.ready
 import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager

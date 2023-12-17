@@ -37,6 +37,8 @@ import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -474,10 +476,10 @@ fun ArcSlider(
 ) {
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
     var pointerOffset by remember { mutableStateOf(Offset.Zero) }
-    var radius by remember { mutableStateOf(0f) }
+    var radius by remember { mutableFloatStateOf(0f) }
 
-    val endAngle by remember { mutableStateOf((startAngle + sweepAngle) % 360) }
-    val midAngle by remember { mutableStateOf(endAngle + (360.0 - sweepAngle) / 2.0) }
+    val endAngle by remember { mutableDoubleStateOf((startAngle + sweepAngle) % 360) }
+    val midAngle by remember { mutableDoubleStateOf(endAngle + (360.0 - sweepAngle) / 2.0) }
 
     var isSliding by remember { mutableStateOf(false) }
 

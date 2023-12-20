@@ -10,7 +10,7 @@ import com.alteratom.dashboard.`object`.FragmentManager.Animations.swap
 
 object FragmentManager {
 
-    private var backstack = mutableListOf<Fragment>()
+    var backstack = mutableListOf<Fragment>()
     private var currentFragment: Fragment = MainScreenFragment()
     var doOverrideOnBackPress: () -> Boolean = { false }
     var mainActivity: MainActivity? = null

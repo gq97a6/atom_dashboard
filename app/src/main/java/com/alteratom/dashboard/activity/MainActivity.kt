@@ -3,6 +3,7 @@ package com.alteratom.dashboard.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.activity.fragment.DashboardFragment
+import com.alteratom.dashboard.activity.fragment.MainScreenFragment
 import com.alteratom.dashboard.`object`.FragmentManager.fm
 import com.alteratom.dashboard.`object`.G
 import com.alteratom.dashboard.`object`.Setup
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity() {
                 //Go straight to the dashboard
                 if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
                     fm.addBackstack(DashboardFragment())
+
+                    //Force fix of DashboardFragment stacking in backstack
+                    fm.backstack = mutableListOf(MainScreenFragment(), DashboardFragment())
                 }
 
                 hideFragment()

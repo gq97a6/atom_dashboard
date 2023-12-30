@@ -106,7 +106,7 @@
     <TextView
         android:id="@+id/d_tag"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:autoSizeMaxTextSize="18dp"
         android:autoSizeMinTextSize="15dp"
         android:autoSizeStepGranularity="1dp"
@@ -116,35 +116,36 @@
         android:tag="colorA"
         android:text="EMPTY"
         android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@id/d_status"
+        app:layout_constraintBottom_toTopOf="@+id/d_status"
         app:layout_constraintEnd_toStartOf="@+id/d_more"
         app:layout_constraintStart_toEndOf="@+id/d_toolbar"
-        app:layout_constraintTop_toBottomOf="@+id/d_log" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/d_status"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="10dp"
         android:tag="colorB"
         android:text="DISCONNECTED"
         android:textSize="12dp"
-        app:layout_constraintBottom_toTopOf="@id/d_recycler_view"
+        app:layout_constraintBottom_toTopOf="@+id/d_recycler_view"
         app:layout_constraintEnd_toStartOf="@+id/d_more"
-        app:layout_constraintStart_toEndOf="@+id/d_toolbar" />
+        app:layout_constraintStart_toEndOf="@+id/d_toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/d_tag" />
 
     <View
         android:id="@+id/d_ssl_status"
         android:layout_width="11dp"
         android:layout_height="11dp"
         android:layout_marginStart="2.5dp"
-        android:layout_marginTop="2.5dp"
         android:background="@drawable/bt_locked"
         android:tag="colorAIcon"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/d_status"
-        app:layout_constraintTop_toTopOf="@+id/d_status" />
+        app:layout_constraintTop_toTopOf="@+id/d_status"
+        app:layout_constraintBottom_toBottomOf="@+id/d_status"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/d_recycler_view"
@@ -155,7 +156,7 @@
         android:paddingTop="5dp"
         android:touchscreenBlocksFocus="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/d_log" />
+        app:layout_constraintTop_toBottomOf="@id/d_log"/>
 
     <LinearLayout
         android:id="@+id/d_placeholder"

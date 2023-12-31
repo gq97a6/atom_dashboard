@@ -21,7 +21,6 @@ import com.alteratom.dashboard.screenWidth
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.util.Date
 import java.util.Random
 
@@ -90,17 +89,17 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
 
     override fun onReceive(
         topic: String,
-        msg: MqttMessage,
+        msg: String,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(topic, msg, jsonResult)
 
-        if (this.mqtt.doNotify && !msg.isRetained) {
+        if (this.mqtt.doNotify) { // && !msg.isRetained
             dashboard?.daemon?.context?.let { context ->
                 createNotification(
                     context,
-                    mqtt.notifyTitle.replace("@v", msg.toString()),
-                    mqtt.notifyPayload.replace("@v", msg.toString()),
+                    mqtt.notifyTitle.replace("@v", msg),
+                    mqtt.notifyPayload.replace("@v", msg),
                     this.mqtt.silentNotify,
                     if (settings.notifyStack) 999 else Random().nextInt()
                 )

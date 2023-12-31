@@ -6,7 +6,6 @@ import com.alteratom.R
 import com.alteratom.dashboard.`object`.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.eclipse.paho.client.mqttv3.MqttMessage
 
 class SwitchTile : Tile() {
 
@@ -87,12 +86,12 @@ class SwitchTile : Tile() {
 
     override fun onReceive(
         topic: String,
-        msg: MqttMessage,
+        msg: String,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(topic, msg, jsonResult)
 
-        state = when (jsonResult["base"] ?: msg.toString()) {
+        state = when (jsonResult["base"] ?: msg) {
             this.mqtt.payloads["true"] -> true
             this.mqtt.payloads["false"] -> false
             else -> null

@@ -14,7 +14,6 @@ import com.alteratom.dashboard.roundCloser
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
-import org.eclipse.paho.client.mqttv3.MqttMessage
 import kotlin.math.abs
 
 class SliderTile : Tile() {
@@ -103,12 +102,12 @@ class SliderTile : Tile() {
 
     override fun onReceive(
         topic: String,
-        msg: MqttMessage,
+        msg: String,
         jsonResult: MutableMap<String, String>
     ) {
         super.onReceive(topic, msg, jsonResult)
 
-        (jsonResult["base"] ?: msg.toString()).toFloatOrNull()
+        (jsonResult["base"] ?: msg).toFloatOrNull()
             ?.let { this.value = it.roundCloser(range[2]) }
     }
 

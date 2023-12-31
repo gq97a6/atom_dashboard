@@ -6,9 +6,10 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.`object`.Storage
-import org.eclipse.paho.client.mqttv3.MqttMessage
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
 import java.util.Date
 
+//TODO: send and receive pairs should be more generic
 //For targets of daemons
 interface Daemonized {
     var dashboard: Dashboard?
@@ -24,7 +25,7 @@ interface Daemonized {
     ) {
     }
 
-    fun onReceive(topic: String, msg: MqttMessage, jsonResult: MutableMap<String, String>) {
+    fun onReceive(topic: String, msg: String, jsonResult: MutableMap<String, String>) {
     }
 
     fun send(
@@ -48,22 +49,21 @@ interface Daemonized {
         }
     }
 
-    //data: Pair<String?, MqttMessage?>
-    fun receive(topic: String, msg: MqttMessage) {
+    fun receive(topic: String, msg: Mqtt5Publish) {
         if (!this.mqtt.subs.containsValue(topic)) return
+
+        val str = msg.payloadAsBytes.toString()
 
         //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
         if (this.mqtt.payloadIsJson) {
             for (p in this.mqtt.jsonPaths) {
-                msg.toString().let { it ->
-                    try {
-                        Storage.mapper.readTree(it).at(p.value).asText()
-                    } catch (e: Exception) {
-                        null
-                    }?.let {
-                        jsonResult[p.key] = it
-                    }
+                try {
+                    Storage.mapper.readTree(str).at(p.value).asText()
+                } catch (e: Exception) {
+                    null
+                }?.let {
+                    jsonResult[p.key] = str
                 }
             }
         }
@@ -71,7 +71,7 @@ interface Daemonized {
         this.mqtt.lastReceive = Date()
 
         try {
-            onReceive(topic, msg, jsonResult)
+            onReceive(topic, str, jsonResult)
         } catch (_: Exception) {
         }
     }

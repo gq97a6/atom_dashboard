@@ -44,14 +44,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontStyle.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -711,23 +709,5 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
     @Composable
     override fun Bluetoothd(fragment: Fragment) {
-    }
-}
-
-
-
-@Composable
-@Preview(apiLevel = 33)
-fun Test() {
-    IconButton(
-        onClick = {
-        }
-    ) {
-        Icon(
-            painterResource(R.drawable.il_interface_paperclip),
-            "",
-            tint = Color.Black,
-            modifier = Modifier.size(24.dp)
-        )
     }
 }

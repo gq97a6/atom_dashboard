@@ -52,7 +52,7 @@ interface Daemonized {
     fun receive(topic: String, msg: Mqtt5Publish) {
         if (!this.mqtt.subs.containsValue(topic)) return
 
-        val str = msg.payloadAsBytes.toString()
+        val str = String(msg.payloadAsBytes)
 
         //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()

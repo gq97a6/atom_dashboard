@@ -119,7 +119,7 @@
         app:layout_constraintBottom_toTopOf="@+id/d_status"
         app:layout_constraintEnd_toStartOf="@+id/d_more"
         app:layout_constraintStart_toEndOf="@+id/d_toolbar"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/d_log"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView

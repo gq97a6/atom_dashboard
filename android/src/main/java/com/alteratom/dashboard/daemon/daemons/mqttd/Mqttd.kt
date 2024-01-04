@@ -64,7 +64,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     // Status manager ------------------------------------------------------------------------------
 
-    val manager = Manager()
+    private val manager = Manager()
 
     inner class Manager : StatusManager(context) {
         override fun check(): Boolean {

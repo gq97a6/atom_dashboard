@@ -42,17 +42,15 @@ class TerminalTile : Tile() {
         terminalAdapter = RecyclerViewAdapter(adapter.context)
         terminalAdapter.setHasStableIds(true)
 
-        terminalAdapter.onBindViewHolder = { _, holder, pos ->
+        terminalAdapter.onBindViewHolder = { _, terminalHolder, pos ->
             if (pos < log.size) {
-                val text = holder.itemView.findViewById<TextView>(R.id.ite_text)
+                val text = terminalHolder.itemView.findViewById<TextView>(R.id.ite_text)
                 text.text = log[pos]
             }
         }
 
         terminalAdapter.submitList(MutableList(log.size) {
-            RecyclerViewItem(
-                R.layout.item_terminal_entry
-            )
+            RecyclerViewItem(R.layout.item_terminal_entry)
         })
 
         val layoutManager = LinearLayoutManager(adapter.context)
@@ -94,20 +92,21 @@ class TerminalTile : Tile() {
         msg: String,
         jsonResult: MutableMap<String, String>
     ) {
-        super.onReceive(topic, msg, jsonResult)
-
-        val entry = jsonResult["base"] ?: msg
-        log.add(0, entry)
-
-        terminalAdapter.let {
-            it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
-
-            if (log.size > 10) {
-                log.removeLast()
-                it.removeItemAt(it.list.lastIndex, false)
-            }
-
-            it.notifyDataSetChanged()
-        }
+        //TODO: FIX THIS
+        //super.onReceive(topic, msg, jsonResult)
+//
+        //val entry = jsonResult["base"] ?: msg
+        //log.add(0, entry)
+//
+        //terminalAdapter.let {
+        //    it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
+//
+        //    if (log.size > 10) {
+        //        log.removeLast()
+        //        it.removeItemAt(it.list.lastIndex, false)
+        //    }
+//
+        //    it.notifyDataSetChanged()
+        //}
     }
 }

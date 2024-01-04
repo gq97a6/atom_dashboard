@@ -149,7 +149,6 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun removeMarkedItems() {
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
@@ -166,7 +165,6 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
                     }
                     i++
                 }
-                notifyDataSetChanged()
             }
         }
     }
@@ -181,7 +179,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
             it.iterate(callback)
             list.removeAt(pos)
 
-            if (notify) notifyDataSetChanged()
+            if (notify) notifyItemRemoved(pos)
         }
     }
 

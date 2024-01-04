@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "742685809772",
+    "project_id": "atom-dashboard-1d8eb",
+    "storage_bucket": "atom-dashboard-1d8eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742685809772:android:c2d3a6a77ae1d5dba2cc49",
+        "android_client_info": {
+          "package_name": "com.alteratom.dashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZrKRBu3C1yko4e8itIyXtnqS56VeaNiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

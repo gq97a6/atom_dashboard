@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.`object`.FragmentManager.fm
 import com.alteratom.dashboard.`object`.G.dashboards
+import com.alteratom.dashboard.`object`.G.fc
 import com.alteratom.dashboard.`object`.G.settings
 import com.alteratom.dashboard.`object`.G.theme
 import com.alteratom.dashboard.`object`.Pro
@@ -71,6 +73,7 @@ import com.alteratom.dashboard.`object`.Storage.parseSave
 import com.alteratom.dashboard.`object`.Storage.prepareSave
 import com.alteratom.dashboard.`object`.Storage.saveToFile
 import com.alteratom.dashboard.openBatterySettings
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

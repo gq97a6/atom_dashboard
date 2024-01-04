@@ -4,6 +4,7 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.tile.Tile
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlin.reflect.KClass
 
 object G {
@@ -19,6 +20,9 @@ object G {
 
     //Path to root folder
     var rootFolder: String = ""
+
+    //Firebase Crashlytics
+    //val fc = FirebaseCrashlytics.getInstance()
 
     //Map of paths to serialized objects
     lateinit var path: Map<KClass<out Any>, String>

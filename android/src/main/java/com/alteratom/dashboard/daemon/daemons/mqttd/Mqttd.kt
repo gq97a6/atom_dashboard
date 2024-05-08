@@ -6,10 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.manager.StatusManager
-import com.hivemq.client.internal.mqtt.util.MqttChecks.topic
-import com.hivemq.client.mqtt.mqtt5.message.Mqtt5Message
-import com.hivemq.client.mqtt.mqtt5.message.Mqtt5MessageType
-import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
 import org.eclipse.paho.android.service.MqttAndroidClient
 import org.eclipse.paho.client.mqttv3.IMqttActionListener
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken

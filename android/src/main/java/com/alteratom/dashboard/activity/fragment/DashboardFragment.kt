@@ -140,21 +140,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             if (adapter.editMode.isNone) FragmentSwitcher.handle(e)
             else false
         }
-
-        if (settings.version < BuildConfig.VERSION_CODE) {
-            with(activity as Context) {
-                buildConfirm(
-                    "We've made changes to how the app works in the background. Please check your settings for more information.",
-                    "SETTINGS",
-                    {
-                        settings.version = BuildConfig.VERSION_CODE
-                    },
-                    {
-                        settings.version = BuildConfig.VERSION_CODE
-                        fm.replaceWith(SettingsFragment())
-                    })
-            }
-        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

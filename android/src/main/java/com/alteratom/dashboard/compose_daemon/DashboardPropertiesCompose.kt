@@ -313,7 +313,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     onValueChange = {
                         keepAliveInterval = it.filter { it.isDigit() }.take(5)
                         dashboard.mqtt.keepAlive =
-                            (it.trim().take(5).toIntOrNull() ?: 50).coerceIn(1..65535)
+                            (it.trim().take(5).toIntOrNull() ?: 60).coerceIn(0..65535)
                         dashboard.daemon?.notifyConfigChanged()
                     },
                     modifier = Modifier

@@ -1,7 +1,9 @@
 package com.alteratom.dashboard
 
+import com.alteratom.BuildConfig
+
 class Settings {
-    var version = 21
+    var version = BuildConfig.VERSION_CODE
     var notifyStack = true
     var hideNav = false
     var lastDashboardId = 0L

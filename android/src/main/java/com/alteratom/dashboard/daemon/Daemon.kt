@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.Bluetoothd
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.`object`.IdentityGenerator.obtainNewId
-import com.alteratom.dashboard.`object`.IdentityGenerator.reportTakenId
+import com.alteratom.dashboard.objects.IdentityGenerator.obtainNewId
+import com.alteratom.dashboard.objects.IdentityGenerator.reportTakenId
 
 abstract class Daemon(val context: Context, var d: Dashboard) {
 

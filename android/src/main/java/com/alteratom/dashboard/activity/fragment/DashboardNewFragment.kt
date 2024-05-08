@@ -37,10 +37,10 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.`object`.FragmentManager.fm
-import com.alteratom.dashboard.`object`.G.dashboards
-import com.alteratom.dashboard.`object`.G.setCurrentDashboard
-import com.alteratom.dashboard.`object`.Storage.saveToFile
+import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.G.setCurrentDashboard
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import kotlin.math.abs
 import kotlin.random.Random
 

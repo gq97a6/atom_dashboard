@@ -54,7 +54,7 @@ import com.alteratom.dashboard.manager.BillingManager.Companion.DON1
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON25
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON5
 import com.alteratom.dashboard.manager.BillingManager.Companion.PRO
-import com.alteratom.dashboard.`object`.Pro
+import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

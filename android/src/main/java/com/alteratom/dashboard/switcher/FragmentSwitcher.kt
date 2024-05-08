@@ -4,10 +4,10 @@ import android.view.MotionEvent
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.activity.fragment.DashboardFragment
-import com.alteratom.dashboard.`object`.FragmentManager.fm
-import com.alteratom.dashboard.`object`.G
-import com.alteratom.dashboard.`object`.FragmentManager.Animations.slideLeft as slideLeftAnimation
-import com.alteratom.dashboard.`object`.FragmentManager.Animations.slideRight as slideRightAnimation
+import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.FragmentManager.Animations.slideLeft as slideLeftAnimation
+import com.alteratom.dashboard.objects.FragmentManager.Animations.slideRight as slideRightAnimation
 
 object FragmentSwitcher : Switcher() {
 

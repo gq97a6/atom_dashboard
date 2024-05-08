@@ -1,44 +1,54 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.manager.StatusManager
-import com.hivemq.client.mqtt.datatypes.MqttQos
-import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient
-import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
-import com.hivemq.client.mqtt.mqtt5.Mqtt5ClientBuilder
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory
+import com.hivemq.client.internal.mqtt.util.MqttChecks.topic
+import com.hivemq.client.mqtt.mqtt5.message.Mqtt5Message
+import com.hivemq.client.mqtt.mqtt5.message.Mqtt5MessageType
+import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
+import org.eclipse.paho.android.service.MqttAndroidClient
+import org.eclipse.paho.client.mqttv3.IMqttActionListener
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.IMqttToken
+import org.eclipse.paho.client.mqttv3.MqttCallback
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions
+import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.security.KeyStore
 import java.security.cert.Certificate
+import java.security.cert.X509Certificate
 import javax.net.ssl.KeyManagerFactory
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
 
 class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard) {
 
-    private lateinit var client: Mqtt5AsyncClient
+    var client = MqttAndroidClient(context, d.mqtt.uri, d.mqtt.clientId)
 
-    //Current config (assigned after successful connection)
     private var currentConfig = MqttConfig()
-
-    //List of subscribed topics
     private var topics: MutableList<Pair<String, Int>> = mutableListOf()
 
     public override val isEnabled
         get() = d.mqtt.isEnabled && !isDischarged
 
-    private var isConnected = false
+    private val isConnected: Boolean
+        get() = try {
+            client.isConnected
+        } catch (e: Exception) {
+            false
+        }
 
-    //Ping send on state change
     override val statePing: MutableLiveData<Nothing?> = MutableLiveData(null)
-
-    //Current state
     override val state: State
         get() = if (manager.isWorking) State.ATTEMPTING
         else try {
-            if (!isConnected) State.DISCONNECTED
-            else if (currentConfig.ssl && !currentConfig.sslTrustAll) State.CONNECTED_SSL
+            if (!client.isConnected) State.DISCONNECTED
+            else if (d.mqtt.ssl && !d.mqtt.sslTrustAll) State.CONNECTED_SSL
             else State.CONNECTED
         } catch (e: Exception) {
             State.FAILED
@@ -64,21 +74,24 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     // Status manager ------------------------------------------------------------------------------
 
-    private val manager = Manager()
+    val manager = Manager()
 
     inner class Manager : StatusManager(context) {
         override fun check(): Boolean {
-            return isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)
+            return client.isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)
         }
 
         override fun handle() {
             if (isEnabled) {
-                if (isConnected) client.disconnect()
+                if (client.isConnected) disconnectAttempt(true)
                 else {
-                    if (currentConfig != d.mqtt) buildClient(d.mqtt.copy())
-                    client.connect()
+                    if (client.clientId != d.mqtt.clientId || client.serverURI != d.mqtt.uri) {
+                        client = MqttAndroidClient(context, d.mqtt.uri, d.mqtt.clientId)
+                    }
+
+                    connectAttempt(d.mqtt.copy())
                 }
-            } else client.disconnect()
+            } else disconnectAttempt()
         }
 
         override fun onJobDone() = statePing.postValue(null)
@@ -87,40 +100,81 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     // Connection methods -------------------------------------------------------------------------
 
-    fun buildClient(config: MqttConfig) {
-        var c = Mqtt5Client.builder()
-            .identifier(config.clientId)
-            .serverHost(config.address)
-            .serverPort(config.port)
+    private fun disconnectAttempt(close: Boolean = false) {
+        try {
+            client.disconnect(null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    client.unregisterResources()
+                    client.setCallback(null)
+                    topics = mutableListOf()
+                    statePing.postValue(null)
+                }
 
-        c = c.addConnectedListener {
-            isConnected = true
-            currentConfig = config
-            topicCheck()
-            statePing.postValue(null)
+                override fun onFailure(
+                    asyncActionToken: IMqttToken?,
+                    exception: Throwable?
+                ) {
+                    statePing.postValue(null)
+                }
+            })
+
+            if (close) client.close()
+        } catch (_: Exception) {
         }
-
-        c = c.addDisconnectedListener {
-            isConnected = false
-            topics = mutableListOf()
-            manager.dispatch(reason = "connection")
-            statePing.postValue(null)
-        }
-
-        //Include credentials if required
-        if (config.includeCred) c = c.simpleAuth()
-            .username(config.username)
-            .password(config.pass.toByteArray())
-            .applySimpleAuth()
-
-        //Setup SSL if required
-        if (config.ssl) c = c.setupSSL(config)
-
-        //Build client
-        client = c.buildAsync()
     }
 
-    private fun Mqtt5ClientBuilder.setupSSL(config: MqttConfig): Mqtt5ClientBuilder {
+    private fun connectAttempt(config: MqttConfig) {
+        client.setCallback(object : MqttCallback {
+            override fun messageArrived(topic: String?, msg: MqttMessage) {
+                for (tile in d.tiles) tile.receive(topic ?: "", msg.toString())
+            }
+
+            override fun connectionLost(cause: Throwable?) {
+                topics = mutableListOf()
+                manager.dispatch(reason = "connection")
+                statePing.postValue(null)
+            }
+
+            override fun deliveryComplete(token: IMqttDeliveryToken?) {
+            }
+        })
+
+        val options = MqttConnectOptions()
+
+        options.isCleanSession = true
+
+        if (config.includeCred) {
+            options.userName = config.username
+            options.password = config.pass.toCharArray()
+        } else {
+            options.userName = ""
+            options.password = charArrayOf()
+        }
+
+        options.keepAliveInterval = 60
+
+        if (config.ssl) setupSSL(config, options)
+
+        try {
+            client.connect(options, null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    topicCheck()
+                    currentConfig = config
+                    statePing.postValue(null)
+                }
+
+                override fun onFailure(
+                    asyncActionToken: IMqttToken?,
+                    exception: Throwable?
+                ) {
+                    statePing.postValue(null)
+                }
+            })
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun setupSSL(config: MqttConfig, options: MqttConnectOptions) {
         val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
         kmfStore.load(null, null)
         kmfStore.setCertificateEntry("cc", config.clientCert)
@@ -133,68 +187,113 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             )
         }
 
-        var tmfStore: KeyStore? = null
-        if (config.caCert != null) {
-            tmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            tmfStore.load(null, null)
-            tmfStore.setCertificateEntry("c", config.caCert)
-        }
-
-        //Decides which authentication credentials should be sent to the remote host
-        val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
+        val kmf: KeyManagerFactory =
+            KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
         kmf.init(kmfStore, config.clientKeyPassword.toCharArray())
 
-        val alg = TrustManagerFactory.getDefaultAlgorithm()
+        val tlsContext = SSLContext.getInstance("TLS")
+        tlsContext.init(
+            kmf.keyManagers,
+            if (!config.sslTrustAll) { //TRUST ONLY IMPORTED
+                val trustManagerFactory = TrustManagerFactory.getInstance(
+                    TrustManagerFactory.getDefaultAlgorithm()
+                )
 
-        //Determines whether remote connection should be trusted or not
-        val tmf = if (!config.sslTrustAll) TrustManagerFactory.getInstance(alg)
-        else InsecureTrustManagerFactory.getInstance(alg)
-        tmf.init(tmfStore)
+                trustManagerFactory.init(
+                    if (config.caCert != null) {
+                        KeyStore.getInstance(KeyStore.getDefaultType()).apply {
+                            load(null, null)
+                            setCertificateEntry("c", config.caCert)
+                        }
+                    } else null
+                )
 
-        return this.sslConfig()
-            .keyManagerFactory(kmf)
-            .trustManagerFactory(tmf)
-            .applySslConfig()
+                trustManagerFactory.trustManagers
+            } else { //TRUST ALL CERTS
+                arrayOf<TrustManager>(
+                    @SuppressLint("CustomX509TrustManager")
+                    object : X509TrustManager {
+                        override fun getAcceptedIssuers(): Array<X509Certificate> =
+                            emptyArray()
+
+                        @SuppressLint("TrustAllX509TrustManager")
+                        override fun checkClientTrusted(
+                            chain: Array<X509Certificate>,
+                            authType: String
+                        ) {
+                        }
+
+                        @SuppressLint("TrustAllX509TrustManager")
+                        override fun checkServerTrusted(
+                            chain: Array<X509Certificate>,
+                            authType: String
+                        ) {
+                        }
+                    }
+                )
+            },
+            java.security.SecureRandom()
+        )
+
+        options.socketFactory = tlsContext.socketFactory
     }
 
     // MQTT methods ------------------------------------------------------------------------------
 
     fun publish(topic: String, msg: String, qos: Int = 0, retain: Boolean = false) {
-        if (!isConnected) return
+        if (!client.isConnected) return
 
-        client
-            .publishWith()
-            .topic(topic)
-            .payload(msg.toByteArray())
-            .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_MOST_ONCE)
-            .retain(retain)
-            .send()
+        try {
+            client.publish(
+                topic,
+                msg.toByteArray(),
+                qos,
+                retain,
+                null,
+                object : IMqttActionListener {
+                    override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    }
+
+                    override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                    }
+                })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun subscribe(topic: String, qos: Int) {
         if (!isConnected) return
 
-        client.subscribeWith()
-            .topicFilter(topic)
-            .qos(MqttQos.fromCode(qos) ?: MqttQos.AT_MOST_ONCE)
-            .callback {
-                for (tile in d.tiles) tile.receive(topic, it)
-            }
-            .send()
-            .thenAccept {
-                topics.add(Pair(topic, qos))
-            }
+        try {
+            client.subscribe(topic, qos, null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    topics.add(Pair(topic, qos))
+                }
+
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun unsubscribe(topic: String, qos: Int) {
         if (!isConnected) return
 
-        client.unsubscribeWith()
-            .topicFilter(topic)
-            .send()
-            .thenAccept {
-                topics.remove(Pair(topic, qos))
-            }
+        try {
+            client.unsubscribe(topic, null, object : IMqttActionListener {
+                override fun onSuccess(asyncActionToken: IMqttToken?) {
+                    topics.remove(Pair(topic, qos))
+                }
+
+                override fun onFailure(asyncActionToken: IMqttToken?, exception: Throwable?) {
+                }
+            })
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     //Manage subscriptions at topic list change
@@ -210,11 +309,11 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
         }
 
-        val unsTopics = topics - list.toSet()
+        val unsubTopics = topics - list.toSet()
         val subTopics = list - topics.toSet()
 
         try {
-            for (t in unsTopics) unsubscribe(t.first, t.second)
+            for (t in unsubTopics) unsubscribe(t.first, t.second)
             for (t in subTopics) subscribe(t.first, t.second)
         } catch (_: Exception) {
         }

@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.`object`
+package com.alteratom.dashboard.objects
 
 import androidx.activity.addCallback
 import com.alteratom.dashboard.Dashboard
@@ -12,15 +12,15 @@ import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.`object`.FragmentManager.Animations.fadeLong
-import com.alteratom.dashboard.`object`.FragmentManager.fm
-import com.alteratom.dashboard.`object`.G.dashboards
-import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY
-import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY_COLD
-import com.alteratom.dashboard.`object`.Setup.SetupCase.ACTIVITY_TO_SERVICE
-import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE
-import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE_COLD
-import com.alteratom.dashboard.`object`.Setup.SetupCase.SERVICE_TO_ACTIVITY
+import com.alteratom.dashboard.objects.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G.dashboards
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_COLD
+import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
+import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher

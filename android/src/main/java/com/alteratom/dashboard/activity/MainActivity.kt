@@ -4,10 +4,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.activity.fragment.DashboardFragment
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
-import com.alteratom.dashboard.`object`.FragmentManager.fm
-import com.alteratom.dashboard.`object`.G
-import com.alteratom.dashboard.`object`.Setup
-import com.alteratom.dashboard.`object`.Storage.saveToFile
+import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.Setup
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

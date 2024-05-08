@@ -16,8 +16,8 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
-import com.alteratom.dashboard.`object`.G
-import com.alteratom.dashboard.`object`.G.tile
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.tile
 
 object ButtonTileCompose : DaemonBasedCompose {
     @Composable

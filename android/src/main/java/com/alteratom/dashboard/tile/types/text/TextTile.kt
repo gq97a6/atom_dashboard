@@ -5,8 +5,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.`object`.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.`object`.G.theme
+import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore

@@ -5,8 +5,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.`object`.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.`object`.G
+import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile

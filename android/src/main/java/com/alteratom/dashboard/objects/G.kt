@@ -1,10 +1,9 @@
-package com.alteratom.dashboard.`object`
+package com.alteratom.dashboard.objects
 
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.tile.Tile
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlin.reflect.KClass
 
 object G {

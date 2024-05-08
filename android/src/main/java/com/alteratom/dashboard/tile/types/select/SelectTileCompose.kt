@@ -14,7 +14,7 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.Pa
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.`object`.G.tile
+import com.alteratom.dashboard.objects.G.tile
 
 object SelectTileCompose : DaemonBasedCompose {
     @Composable

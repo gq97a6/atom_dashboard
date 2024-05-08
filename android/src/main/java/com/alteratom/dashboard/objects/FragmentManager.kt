@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.`object`
+package com.alteratom.dashboard.objects
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -6,7 +6,7 @@ import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
-import com.alteratom.dashboard.`object`.FragmentManager.Animations.swap
+import com.alteratom.dashboard.objects.FragmentManager.Animations.swap
 
 object FragmentManager {
 

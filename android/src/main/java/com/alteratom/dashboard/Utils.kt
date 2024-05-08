@@ -41,9 +41,9 @@ import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.manager.BillingManager
-import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.`object`.G
-import com.alteratom.dashboard.`object`.Pro
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.Pro
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

@@ -2,8 +2,8 @@ package com.alteratom.dashboard.manager
 
 import android.app.Activity
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.`object`.G.settings
-import com.alteratom.dashboard.`object`.Pro
+import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.objects.Pro
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED

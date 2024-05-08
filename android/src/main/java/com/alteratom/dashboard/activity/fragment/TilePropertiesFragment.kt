@@ -56,9 +56,9 @@ import com.alteratom.dashboard.compose_global.BoldStartText
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.`object`.FragmentManager.fm
-import com.alteratom.dashboard.`object`.G
-import com.alteratom.dashboard.`object`.G.tile
+import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.tile
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale

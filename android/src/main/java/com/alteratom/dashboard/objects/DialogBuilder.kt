@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.`object`
+package com.alteratom.dashboard.objects
 
 import android.app.Dialog
 import android.content.Context

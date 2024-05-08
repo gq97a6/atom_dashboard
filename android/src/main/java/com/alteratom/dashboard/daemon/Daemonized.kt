@@ -4,9 +4,8 @@ import androidx.annotation.IntRange
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.`object`.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.`object`.Storage
-import com.hivemq.client.mqtt.mqtt5.message.publish.Mqtt5Publish
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.objects.Storage
 import java.util.Date
 
 //TODO: send and receive pairs should be more generic
@@ -49,21 +48,19 @@ interface Daemonized {
         }
     }
 
-    fun receive(topic: String, msg: Mqtt5Publish) {
+    fun receive(topic: String, msg: String) {
         if (!this.mqtt.subs.containsValue(topic)) return
-
-        val str = String(msg.payloadAsBytes)
 
         //Build map of jsonPath key and value. Null on absence or fail.
         val jsonResult = mutableMapOf<String, String>()
         if (this.mqtt.payloadIsJson) {
             for (p in this.mqtt.jsonPaths) {
                 try {
-                    Storage.mapper.readTree(str).at(p.value).asText()
+                    Storage.mapper.readTree(msg).at(p.value).asText()
                 } catch (e: Exception) {
                     null
                 }?.let {
-                    jsonResult[p.key] = str
+                    jsonResult[p.key] = msg
                 }
             }
         }
@@ -71,7 +68,7 @@ interface Daemonized {
         this.mqtt.lastReceive = Date()
 
         try {
-            onReceive(topic, str, jsonResult)
+            onReceive(topic, msg, jsonResult)
         } catch (_: Exception) {
         }
     }

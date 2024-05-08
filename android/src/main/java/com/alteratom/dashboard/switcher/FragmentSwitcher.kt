@@ -25,9 +25,9 @@ object FragmentSwitcher : Switcher() {
         )
     }
 
+    //For onInterceptTouch with XML layout
     fun handle(e: MotionEvent?) = handle(e) { r -> switch(r) }
-    //fun handle(e: MotionEvent?, target: Fragment) = handle(e, { r -> switch(r, target) })
 
-    //fun handle(e: PointerEvent) = handle(e, { r -> switch(r) })
+    //For awaitPointerEventScope with compose
     fun handle(e: PointerEvent, target: Fragment) = handle(e) { r -> switch(r, target) }
 }

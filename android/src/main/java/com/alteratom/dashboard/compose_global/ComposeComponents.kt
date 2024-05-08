@@ -174,7 +174,7 @@ fun RadioGroup(
         options.forEachIndexed { index, item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 15.dp)
+                modifier = Modifier.padding(top = 10.dp)
             ) {
                 RadioButton(
                     selected = index == selected,

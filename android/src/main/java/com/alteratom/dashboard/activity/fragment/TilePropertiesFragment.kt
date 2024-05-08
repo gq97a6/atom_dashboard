@@ -76,10 +76,7 @@ class TilePropertiesFragment : Fragment() {
                 .pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
-                            FragmentSwitcher.handle(
-                                awaitPointerEvent(),
-                                DashboardPropertiesFragment()
-                            )
+                            TileSwitcher.handle(awaitPointerEvent())
                         }
                     }
                 }
@@ -142,11 +139,7 @@ class TilePropertiesFragment : Fragment() {
                 }.Compose(it, this@TilePropertiesFragment)
             }
 
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-            )
+            if (!G.settings.hideNav && G.dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
         }
 
         if (!G.settings.hideNav && G.dashboard.tiles.size > 1) NavigationArrows(

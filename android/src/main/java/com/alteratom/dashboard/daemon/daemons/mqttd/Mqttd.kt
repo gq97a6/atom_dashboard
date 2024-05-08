@@ -147,7 +147,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             options.password = charArrayOf()
         }
 
-        options.keepAliveInterval = 60
+        options.keepAliveInterval = config.keepAlive
 
         if (config.ssl) setupSSL(config, options)
 

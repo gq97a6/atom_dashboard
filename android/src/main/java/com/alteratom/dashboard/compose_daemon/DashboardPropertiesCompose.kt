@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
@@ -167,7 +168,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     modifier = Modifier
                         .padding(top = 5.dp)
                         .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(.8f),
+                        .fillMaxWidth(1f),
                     border = BorderStroke(2.dp, colors.b),
                     onClick = {
                         if (dashboards.size <= 1)
@@ -251,6 +252,18 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     }
                 )
+                Text(
+                    "Including protocol (tcp:// ssl:// ws:// wss://)",
+                    fontSize = 11.sp,
+                    color = colors.b,
+                    modifier =  Modifier.padding(top = 3.dp)
+                )
+                Text(
+                    "Example: tcp://domain.com",
+                    fontSize = 11.sp,
+                    color = colors.b,
+                    modifier =  Modifier.padding(top = 3.dp)
+                )
 
                 var port by remember {
                     mutableStateOf(dashboard.mqtt.port.let {
@@ -262,8 +275,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     value = port,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = { it ->
-                        port = it
-                        (it.trim().toIntOrNull() ?: (-1)).let {
+                        port = it.filter { it.isDigit() }.take(5)
+                        (it.trim().take(5).toIntOrNull() ?: (-1)).let {
                             if (dashboard.mqtt.port != it) {
                                 dashboard.mqtt.port = it
                                 dashboard.daemon?.notifyConfigChanged()
@@ -276,24 +289,40 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 EditText(
                     label = { Text("Unique client ID") },
                     value = id,
-                    onValueChange = { it ->
+                    onValueChange = {
                         id = it
-                        it.trim().let {
-                            when {
-                                it.isBlank() -> {
-                                    dashboard.mqtt.clientId =
-                                        abs(Random.nextInt()).toString()
-                                    id = dashboard.mqtt.clientId
-                                    dashboard.daemon?.notifyConfigChanged()
-                                }
-
-                                dashboard.mqtt.clientId != it -> {
-                                    dashboard.mqtt.clientId = it
-                                    dashboard.daemon?.notifyConfigChanged()
-                                }
-                            }
+                        dashboard.mqtt.clientId = it.trim().ifBlank {
+                            abs(Random.nextInt(100000000, 999999999)).toString()
                         }
-                    }
+                        dashboard.daemon?.notifyConfigChanged()
+                    },
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .onFocusChanged {
+                            //Update field after unFocus in case user left it blank
+                            //and it got generated in the background
+                            if (!it.isFocused) id = dashboard.mqtt.clientId
+                        }
+                )
+
+                var keepAliveInterval by remember { mutableStateOf(dashboard.mqtt.keepAlive.toString()) }
+                EditText(
+                    label = { Text("Keep alive interval") },
+                    value = keepAliveInterval,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = {
+                        keepAliveInterval = it.filter { it.isDigit() }.take(5)
+                        dashboard.mqtt.keepAlive =
+                            (it.trim().take(5).toIntOrNull() ?: 50).coerceIn(1..65535)
+                        dashboard.daemon?.notifyConfigChanged()
+                    },
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .onFocusChanged {
+                            //Update field after unFocus in case user has left invalid value
+                            if (!it.isFocused) keepAliveInterval =
+                                dashboard.mqtt.keepAlive.toString()
+                        }
                 )
 
                 var sslShow by remember { mutableStateOf(false) }
@@ -658,6 +687,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     user = ""
                                     userHidden = false
                                     dashboard.mqtt.username = ""
+                                    dashboard.daemon?.notifyConfigChanged()
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),
@@ -692,6 +722,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     pass = ""
                                     passHidden = false
                                     dashboard.mqtt.pass = ""
+                                    dashboard.daemon?.notifyConfigChanged()
                                 }) {
                                     Icon(
                                         painterResource(R.drawable.il_interface_multiply),

@@ -142,16 +142,6 @@ class PayActivity : AppCompatActivity() {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .pointerInput(Unit) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                FragmentSwitcher.handle(
-                                    awaitPointerEvent(),
-                                    DashboardPropertiesFragment()
-                                )
-                            }
-                        }
-                    }
                     .background(color = Theme.colors.background)
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),

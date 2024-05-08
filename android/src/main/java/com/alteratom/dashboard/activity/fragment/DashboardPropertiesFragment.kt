@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -176,13 +179,16 @@ class DashboardPropertiesFragment : Fragment() {
                     onValueChange = { it ->
                         name = it
                         it.trim().let {
-                            dashboard.name =
-                                it.ifBlank {
-                                    abs(Random.nextInt(0, 100)).toString()
-                                }
+                            dashboard.name = it.ifBlank {
+                                abs(Random.nextInt(1000, 9999)).toString()
+                            }
                         }
                     },
-                    modifier = Modifier.padding(start = 12.dp)
+                    modifier = Modifier.padding(start = 12.dp).onFocusChanged {
+                        //Update field after unFocus in case user left it blank
+                        //and it got generated in the background
+                        if (!it.isFocused) name = dashboard.name
+                    }
                 )
             }
 
@@ -190,6 +196,8 @@ class DashboardPropertiesFragment : Fragment() {
                 dashboard.type,
                 this@DashboardPropertiesFragment
             )
+
+            if (!settings.hideNav && dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
         }
 
         if (!settings.hideNav && dashboards.size > 1) {

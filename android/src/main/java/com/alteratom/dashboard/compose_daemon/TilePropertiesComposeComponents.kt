@@ -288,25 +288,9 @@ object TilePropertiesComposeComponents {
         FrameBox(a = "Modes list") {
             Column {
                 Row(
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    BasicButton(
-                        contentPadding = PaddingValues(13.dp),
-                        onClick = {
-                            options.add("" to "")
-                            onAdd()
-                        },
-                        border = BorderStroke(1.dp, Theme.colors.color),
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Text("ADD OPTION", color = Theme.colors.a)
-                    }
-                }
-
-                Row(
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier
-                        .padding(end = 32.dp, top = 10.dp)
+                        .padding(end = 32.dp, top = 0.dp)
                         .fillMaxWidth()
                 ) {
                     Text(
@@ -324,10 +308,8 @@ object TilePropertiesComposeComponents {
                 }
 
                 options.forEachIndexed { index, pair ->
-
                     Row(
-                        verticalAlignment = Alignment.Bottom,
-                        modifier = Modifier.padding(top = 5.dp)
+                        verticalAlignment = Alignment.Bottom
                     ) {
                         EditText(
                             label = {},
@@ -367,6 +349,18 @@ object TilePropertiesComposeComponents {
                                 }
                         )
                     }
+                }
+
+                BasicButton(
+                    contentPadding = PaddingValues(13.dp),
+                    onClick = {
+                        options.add("" to "")
+                        onAdd()
+                    },
+                    border = BorderStroke(1.dp, Theme.colors.color),
+                    modifier = Modifier.fillMaxSize().padding(top = 12.dp)
+                ) {
+                    Text("ADD OPTION", color = Theme.colors.a)
                 }
             }
         }

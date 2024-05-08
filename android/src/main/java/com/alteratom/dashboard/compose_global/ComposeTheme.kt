@@ -44,12 +44,26 @@ val LightColorPalette: Colors
         onSurface = C.Black
     )
 
+//val Typo0
+//    @Composable
+//    get() = MaterialTheme.typography.copy(
+//        h1 = MaterialTheme.typography.h1.copy(platformStyle = PlatformTextStyle(includeFontPadding = false))
+//    )
+//
+//
+//val Typo = Typography(
+//    body1 = DefaultTextStyle.copy(
+//        platformStyle = PlatformTextStyle(includeFontPadding = false)
+//    )
+//)
+
 @Composable
 fun ComposeTheme(
     isDark: Boolean = Theme.isDark,
     content: @Composable () -> Unit
 ) = MaterialTheme(
     colors = if (isDark) DarkColorPalette else LightColorPalette,
+    //typography = Typo,
     shapes = Shapes(
         small = RoundedCornerShape(4.dp),
         medium = RoundedCornerShape(4.dp),

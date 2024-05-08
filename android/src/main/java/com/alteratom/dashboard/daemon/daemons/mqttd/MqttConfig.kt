@@ -29,6 +29,7 @@ data class MqttConfig(
     var clientKeyPassword: String = "",
     var address: String = "",
     var port: Int = 1883,
+    var keepAlive: Int = 50,
     var includeCred: Boolean = false,
     var username: String = "",
     var pass: String = "",

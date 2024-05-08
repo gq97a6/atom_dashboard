@@ -26,6 +26,11 @@ import java.util.Random
 
 @Suppress("UNUSED")
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
+//@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+//@JsonSubTypes(
+//    JsonSubTypes.Type(value = ButtonTile::class, name = "CommentNote"),
+//    JsonSubTypes.Type(value = SwitchTile::class, name = "PhotoNote")
+//)
 abstract class Tile : RecyclerViewItem(), Daemonized {
 
     @JsonIgnore

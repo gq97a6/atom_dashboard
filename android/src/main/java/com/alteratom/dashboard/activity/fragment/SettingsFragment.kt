@@ -28,7 +28,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -60,6 +58,7 @@ import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G.crashlytics
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
@@ -110,6 +109,8 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup successful")
                             }, 100)
                         } catch (e: Exception) {
+                            crashlytics.log("Backup failed")
+                            crashlytics.recordException(e)
                             createToast(requireContext(), "Backup failed")
                         }
                     }
@@ -138,6 +139,8 @@ class SettingsFragment : Fragment() {
                             val backup: List<String> = try {
                                 mapper.readerForListOf(String::class.java).readValue(backupString)
                             } catch (e: Exception) {
+                                crashlytics.log("Backup restore failed")
+                                crashlytics.recordException(e)
                                 listOf()
                             }
 
@@ -160,16 +163,16 @@ class SettingsFragment : Fragment() {
                                 //Rerun setup
                                 CoroutineScope(Dispatchers.Default).launch {
                                     Setup.apply {
-                                        val a = requireActivity() as MainActivity
+                                        val activity = requireActivity() as MainActivity
                                         showFragment()
                                         proStatus()
-                                        billing(a)
-                                        batteryCheck(a)
+                                        billing(activity)
+                                        batteryCheck(activity)
                                         setCase()
-                                        service(a)
+                                        service(activity)
                                         globals()
-                                        permissions(a)
-                                        daemons(a)
+                                        permissions(activity)
+                                        daemons(activity)
                                         hideFragment()
                                     }
                                 }
@@ -177,6 +180,8 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup restore failed")
                             }
                         } catch (e: Exception) {
+                            crashlytics.log("Backup restore failed")
+                            crashlytics.recordException(e)
                             createToast(requireContext(), "Backup restore failed")
                         }
                     }
@@ -270,13 +275,20 @@ class SettingsFragment : Fragment() {
                         var military by remember { mutableStateOf(settings.militaryTime) }
                         LabeledSwitch(
                             label = {
-                                Text(
-                                    "24-hour log time format:",
-                                    fontSize = 15.sp,
-                                    color = colors.a
-                                )
+                                Column {
+                                    Text(
+                                        "24-hour log time format:",
+                                        fontSize = 15.sp,
+                                        color = colors.a
+                                    )
+                                    Text(
+                                        "Applies for new entries",
+                                        fontSize = 10.sp,
+                                        color = colors.b
+                                    )
+                                }
                             },
-                            checked = switch,
+                            checked = military,
                             onCheckedChange = {
                                 military = it
                                 settings.militaryTime = military
@@ -288,7 +300,7 @@ class SettingsFragment : Fragment() {
                             label = {
                                 Text(
                                     "New notifications\noverwrite previous:",
-                                    fontSize = 15.sp,
+                                    fontSize = 14.sp,
                                     color = colors.a
                                 )
                             },
@@ -344,40 +356,7 @@ class SettingsFragment : Fragment() {
                     }
                 }
 
-                @Composable
-                fun tmpLabel() {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Background work",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = colors.a,
-                            modifier = Modifier.padding(
-                                start = 5.dp,
-                                bottom = 3.dp,
-                                top = 15.dp
-                            )
-                        )
-
-                        Text(
-                            text = "NEW",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp,
-                            color = colors.b,
-                            modifier = Modifier
-                                .padding(
-                                    end = 5.dp,
-                                    bottom = 3.dp,
-                                    top = 15.dp
-                                )
-                        )
-                    }
-                }
-
-                FrameBox({ tmpLabel() }) {
+                FrameBox("Background work") {
                     Column {
                         var fgEnabled by remember { mutableStateOf(settings.fgEnabled) }
                         LabeledSwitch(
@@ -397,12 +376,12 @@ class SettingsFragment : Fragment() {
                                     //Rerun setup
                                     CoroutineScope(Dispatchers.Default).launch {
                                         Setup.apply {
-                                            val a = requireActivity() as MainActivity
+                                            val activity = requireActivity() as MainActivity
                                             showFragment()
-                                            batteryCheck(a)
+                                            batteryCheck(activity)
                                             setCase()
-                                            service(a)
-                                            daemons(a)
+                                            service(activity)
+                                            daemons(activity)
                                             hideFragment()
                                         }
                                     }

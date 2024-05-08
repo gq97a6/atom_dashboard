@@ -6,9 +6,12 @@ import com.alteratom.dashboard.activity.fragment.DashboardFragment
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.objects.G.analytics
 import com.alteratom.dashboard.objects.Setup
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.logEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,25 +26,26 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        val a = this@MainActivity
+        val activity = this@MainActivity
         Setup.apply {
-            paths(a)
+
+            paths(activity)
             basicGlobals()
 
             //Apply theme
-            G.theme.apply(b.root, a, false)
+            G.theme.apply(b.root, activity, false)
 
             CoroutineScope(Dispatchers.Default).launch {
-                fragmentManager(a)
+                fragmentManager(activity)
                 showFragment()
                 proStatus()
-                billing(a)
-                switchers(a)
-                batteryCheck(a)
+                billing(activity)
+                switchers(activity)
+                batteryCheck(activity)
                 setCase()
-                service(a)
+                service(activity)
                 globals()
-                daemons(a)
+                daemons(activity)
 
                 //Go straight to the dashboard
                 if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {

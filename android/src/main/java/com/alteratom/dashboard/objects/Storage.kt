@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.objects
 
+import com.alteratom.dashboard.objects.G.crashlytics
 import com.alteratom.dashboard.objects.G.path
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,7 +20,9 @@ object Storage {
         try {
             val path = path[this::class]
             File(path!!).writeText(save)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            crashlytics.log("saveToFile failed")
+            crashlytics.recordException(e)
         }
     }
 
@@ -28,7 +31,9 @@ object Storage {
         try {
             val path = path[T::class]
             File(path!!).writeText(save)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            crashlytics.log("Collection.saveToFile failed")
+            crashlytics.recordException(e)
         }
     }
 
@@ -36,6 +41,8 @@ object Storage {
     inline fun <reified T> getSave() = try {
         FileReader(path[T::class]).readText()
     } catch (e: Exception) {
+        crashlytics.log("getSave failed")
+        crashlytics.recordException(e)
         ""
     }
 
@@ -44,6 +51,8 @@ object Storage {
         try {
             mapper.readValue(save, T::class.java)
         } catch (e: Exception) {
+            crashlytics.log("parseSave failed")
+            crashlytics.recordException(e)
             null
         }
 
@@ -52,26 +61,8 @@ object Storage {
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
+            crashlytics.log("parseListSave failed")
+            crashlytics.recordException(e)
             mutableListOf()
-            //try {
-            //    mapper.readerForListOf(T::class.java).readValue(save.fixSave())
-            //} catch (e: Exception) {
-            //    mutableListOf()
-            //}
         }
-
-    //fun String.fixSave(): String {
-    //    var s = this.replace("com.alteratom.tile.types.button.", "")
-    //    s = s.replace("com.alteratom.tile.types.button.", "")
-    //    s = s.replace("com.alteratom.tile.types.thermostat.", "")
-    //    s = s.replace("com.alteratom.tile.types.time.", "")
-    //    s = s.replace("com.alteratom.tile.types.button.", "")
-    //    s = s.replace("com.alteratom.tile.types.pick.", "")
-    //    s = s.replace("com.alteratom.tile.types.lights.", "")
-    //    s = s.replace("com.alteratom.tile.types.color.", "")
-    //    s = s.replace("com.alteratom.tile.types.switch.", "")
-    //    s = s.replace("com.alteratom.tile.types.slider.", "")
-    //    s = s.replace("com.alteratom.tile.types.terminal.", "")
-    //    return s
-    //}
 }

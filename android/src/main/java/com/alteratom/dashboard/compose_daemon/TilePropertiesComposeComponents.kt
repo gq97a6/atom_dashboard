@@ -358,7 +358,9 @@ object TilePropertiesComposeComponents {
                         onAdd()
                     },
                     border = BorderStroke(1.dp, Theme.colors.color),
-                    modifier = Modifier.fillMaxSize().padding(top = 12.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp)
                 ) {
                     Text("ADD OPTION", color = Theme.colors.a)
                 }

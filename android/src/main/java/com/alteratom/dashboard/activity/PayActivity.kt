@@ -36,7 +36,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,7 +44,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activity.fragment.DashboardPropertiesFragment
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
@@ -55,7 +53,6 @@ import com.alteratom.dashboard.manager.BillingManager.Companion.DON25
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON5
 import com.alteratom.dashboard.manager.BillingManager.Companion.PRO
 import com.alteratom.dashboard.objects.Pro
-import com.alteratom.dashboard.switcher.FragmentSwitcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -2,8 +2,6 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-
-        maven { url "https://repo.eclipse.org/content/repositories/paho-snapshots/" }
         maven { url 'https://storage.googleapis.com/r8-releases/raw' }
     }
 

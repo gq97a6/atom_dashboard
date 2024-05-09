@@ -1,6 +1,5 @@
-FIX BILLING HANDLER
-
-add note to mqtt address
-improve mqtt config
-tile properties empty screen bug
-terminal tile bug persists
+totally remove paho client
+test if foreground service works
+test and fix hive client
+update google ad_id developer statement
+push to prod

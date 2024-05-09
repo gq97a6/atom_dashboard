@@ -392,7 +392,7 @@ class SettingsFragment : Fragment() {
 
                         Text(
                             "This option enables the app to operate in " +
-                                    "the background by creating a persistent notification."+
+                                    "the background by creating a persistent notification." +
                                     "However this can affect battery life and it " +
                                     "does not guarantee that the app will not be terminated by the system.",
                             fontSize = 13.sp,

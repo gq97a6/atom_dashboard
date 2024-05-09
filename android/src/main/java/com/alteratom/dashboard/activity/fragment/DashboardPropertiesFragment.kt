@@ -184,11 +184,13 @@ class DashboardPropertiesFragment : Fragment() {
                             }
                         }
                     },
-                    modifier = Modifier.padding(start = 12.dp).onFocusChanged {
-                        //Update field after unFocus in case user left it blank
-                        //and it got generated in the background
-                        if (!it.isFocused) name = dashboard.name
-                    }
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .onFocusChanged {
+                            //Update field after unFocus in case user left it blank
+                            //and it got generated in the background
+                            if (!it.isFocused) name = dashboard.name
+                        }
                 )
             }
 

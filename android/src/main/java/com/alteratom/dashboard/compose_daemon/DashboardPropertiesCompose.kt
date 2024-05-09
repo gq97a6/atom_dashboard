@@ -256,13 +256,13 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     "Including protocol (tcp:// ssl:// ws:// wss://)",
                     fontSize = 11.sp,
                     color = colors.b,
-                    modifier =  Modifier.padding(top = 3.dp)
+                    modifier = Modifier.padding(top = 3.dp)
                 )
                 Text(
                     "Example: tcp://domain.com",
                     fontSize = 11.sp,
                     color = colors.b,
-                    modifier =  Modifier.padding(top = 3.dp)
+                    modifier = Modifier.padding(top = 3.dp)
                 )
 
                 var port by remember {

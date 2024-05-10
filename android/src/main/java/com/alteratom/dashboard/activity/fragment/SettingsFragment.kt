@@ -337,7 +337,6 @@ class SettingsFragment : Fragment() {
 
                             BasicButton(
                                 contentPadding = PaddingValues(13.dp),
-                                border = BorderStroke(2.dp, colors.b),
                                 onClick = {
                                     context?.openBatterySettings()
                                     workShow = false
@@ -404,7 +403,6 @@ class SettingsFragment : Fragment() {
                 FrameBox("Theme") {
                     BasicButton(
                         contentPadding = PaddingValues(13.dp),
-                        border = BorderStroke(2.dp, colors.b),
                         onClick = { fm.replaceWith(ThemeFragment()) }
                     ) {
                         Text("EDIT THEME", fontSize = 10.sp, color = colors.a)
@@ -415,7 +413,6 @@ class SettingsFragment : Fragment() {
                     Row {
                         BasicButton(
                             contentPadding = PaddingValues(13.dp),
-                            border = BorderStroke(2.dp, colors.b),
                             modifier = Modifier.weight(.47f),
                             onClick = { createFile() }
                         ) {
@@ -426,7 +423,6 @@ class SettingsFragment : Fragment() {
 
                         BasicButton(
                             contentPadding = PaddingValues(13.dp),
-                            border = BorderStroke(2.dp, colors.b),
                             modifier = Modifier.weight(.47f),
                             onClick = { openFile() }
                         ) {
@@ -439,7 +435,6 @@ class SettingsFragment : Fragment() {
                     Column {
                         BasicButton(
                             contentPadding = PaddingValues(13.dp),
-                            border = BorderStroke(2.dp, colors.b),
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 activity?.apply {

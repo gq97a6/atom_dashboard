@@ -43,6 +43,7 @@ abstract class StatusManager(val context: Context, private val interval: Long = 
                     isWorking = false
                     onJobDone()
                 } catch (e: Exception) { //Create another coroutine after a delay
+                    onException(e)
                     delay(1000)
                     dispatch(true)
                 }
@@ -59,4 +60,6 @@ abstract class StatusManager(val context: Context, private val interval: Long = 
     open fun onJobStart() {}
 
     open fun onJobDone() {}
+
+    open fun onException(e: Exception) {}
 }

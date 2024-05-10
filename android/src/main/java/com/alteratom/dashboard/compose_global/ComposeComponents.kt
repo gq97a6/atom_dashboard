@@ -587,7 +587,8 @@ fun BasicButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = MaterialTheme.shapes.small,
-    border: BorderStroke = BorderStroke(2.dp, colors.b),
+    border: BorderStroke? = null,
+    backgroundColor: Color = colors.d,
     contentPadding: PaddingValues = PaddingValues(13.dp),
     contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit
@@ -595,7 +596,10 @@ fun BasicButton(
     Box(
         modifier = modifier
             .clickable(enabled, role = Role.Button, onClick = onClick)
-            .border(border, shape)
+            .let {
+                if (border != null) it.border(border, shape)
+                else it.background(color = backgroundColor.copy(alpha = .6f), shape = shape)
+            }
             .padding(contentPadding),
         contentAlignment = contentAlignment
     ) {

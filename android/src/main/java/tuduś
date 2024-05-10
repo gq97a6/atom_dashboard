@@ -1,5 +1,11 @@
-totally remove paho client
-test if foreground service works
-test and fix hive client
-update google ad_id developer statement
-push to prod
+tests:
+- WebSockets
+- WebSockets TLS
+- TCP/SSL
+- custom port
+- self-signed cert
+- server with client cert
+- basic auth
+- keep alive
+- foreground service
+- 

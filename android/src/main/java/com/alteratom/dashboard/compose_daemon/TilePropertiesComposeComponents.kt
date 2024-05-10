@@ -357,7 +357,6 @@ object TilePropertiesComposeComponents {
                         options.add("" to "")
                         onAdd()
                     },
-                    border = BorderStroke(1.dp, Theme.colors.color),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = 12.dp)

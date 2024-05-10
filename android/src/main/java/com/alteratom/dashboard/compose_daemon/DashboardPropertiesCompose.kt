@@ -20,12 +20,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -45,12 +48,16 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.font.FontStyle.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -87,6 +94,9 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
         FrameBox("Communication:", " MQTT") {
             Column {
+                var conStatus by remember { mutableStateOf("") }
+                var conReason by remember { mutableStateOf("") }
+
                 Row(
                     Modifier
                         .fillMaxWidth()
@@ -115,19 +125,19 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     )
 
-                    var conStatus by remember { mutableStateOf("") }
-
-                    dashboard.daemon?.let {
-                        it.statePing.observe(fragment.viewLifecycleOwner) { _ ->
-                            when (it) {
+                    dashboard.daemon?.let { daemon ->
+                        daemon.statePing.observe(fragment.viewLifecycleOwner) { state ->
+                            when (daemon) {
                                 is Mqttd -> {
-                                    conStatus = when (it.state) {
+                                    conStatus = when (daemon.state) {
                                         Mqttd.State.DISCONNECTED -> "DISCONNECTED"
-                                        Mqttd.State.FAILED -> "FAILED"
+                                        Mqttd.State.FAILED -> "ATTEMPTING"
                                         Mqttd.State.ATTEMPTING -> "ATTEMPTING"
                                         Mqttd.State.CONNECTED -> "CONNECTED"
                                         Mqttd.State.CONNECTED_SSL -> "CONNECTED"
                                     }
+
+                                    conReason = state ?: ""
                                 }
                             }
                         }
@@ -162,81 +172,15 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 }
 
-                var copyShow by remember { mutableStateOf(false) }
-
-                BasicButton(
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .fillMaxWidth(1f),
-                    border = BorderStroke(2.dp, colors.b),
-                    onClick = {
-                        if (dashboards.size <= 1)
-                            createToast(fragment.requireContext(), "No dashboards to copy from")
-                        else if (Pro.status || dashboardIndex < 2) copyShow = true
-                        else with(fragment) { requireContext().proAlert(requireActivity()) }
-                    }
-                ) {
-                    Text("COPY PROPERTIES", fontSize = 10.sp, color = colors.a)
-                }
-
-                if (copyShow) {
-                    Dialog({ copyShow = false }) {
-                        Column(
-                            modifier = Modifier
-                                .padding(bottom = 20.dp)
-                                .padding(horizontal = 20.dp)
-                                .clip(RoundedCornerShape(6.dp))
-                                .border(
-                                    BorderStroke(1.dp, colors.color),
-                                    RoundedCornerShape(6.dp)
-                                )
-                                .background(colors.background.copy(.8f))
-                                .padding(15.dp),
-                        ) {
-                            Text(
-                                text = "Pick dashboard to copy from",
-                                fontSize = 35.sp,
-                                color = colors.color
-                            )
-                            LazyColumn(Modifier.fillMaxHeight(.8f)) {
-                                items(dashboards.filter { it != dashboard }) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 15.dp)
-                                            .height(50.dp)
-                                            .clickable {
-                                                dashboard.mqtt =
-                                                    it.mqtt.deepCopy() ?: MqttConfig()
-                                                dashboard.mqtt.clientId =
-                                                    abs(Random.nextInt()).toString()
-                                                dashboard.daemon?.notifyConfigChanged()
-
-                                                copyShow = false
-                                                fm.replaceWith(
-                                                    DashboardPropertiesFragment(),
-                                                    false
-                                                )
-                                            }
-                                            .border(
-                                                BorderStroke(1.dp, colors.color),
-                                                RoundedCornerShape(6.dp)
-                                            )
-                                            .padding(start = 10.dp),
-                                        contentAlignment = Alignment.CenterStart
-                                    ) {
-                                        Text(
-                                            it.name.uppercase(Locale.getDefault()),
-                                            fontSize = 20.sp,
-                                            color = colors.a
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                if (conReason.isNotEmpty()) Text(
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = colors.a)) { append("Details: ") }
+                        withStyle(style = SpanStyle(color = colors.b)) { append(conReason) }
+                    },
+                    fontSize = 11.sp,
+                    color = colors.b,
+                    modifier = Modifier.padding(vertical = 5.dp)
+                )
 
                 var address by remember { mutableStateOf(dashboard.mqtt.address) }
                 EditText(
@@ -253,13 +197,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 )
                 Text(
-                    "Including protocol (tcp:// ssl:// ws:// wss://)",
-                    fontSize = 11.sp,
-                    color = colors.b,
-                    modifier = Modifier.padding(top = 3.dp)
-                )
-                Text(
-                    "Example: tcp://domain.com",
+                    "Excluding protocol. Example: domain.com",
                     fontSize = 11.sp,
                     color = colors.b,
                     modifier = Modifier.padding(top = 3.dp)
@@ -326,16 +264,116 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                 )
 
                 var sslShow by remember { mutableStateOf(false) }
+                var copyShow by remember { mutableStateOf(false) }
 
                 BasicButton(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.Start)
                         .fillMaxWidth(.8f)
-                        .padding(top = 14.dp),
-                    border = BorderStroke(2.dp, colors.b),
+                        .padding(top = 12.dp),
                     onClick = { sslShow = true }
                 ) {
                     Text("CONFIGURE SSL", fontSize = 10.sp, color = colors.a)
+                }
+
+                BasicButton(
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .align(Alignment.Start)
+                        .fillMaxWidth(.6f),
+                    onClick = {
+                        if (dashboards.size <= 1)
+                            createToast(fragment.requireContext(), "No dashboards to copy from")
+                        else if (Pro.status || dashboardIndex < 2) copyShow = true
+                        else with(fragment) { requireContext().proAlert(requireActivity()) }
+                    }
+                ) {
+                    Text("COPY PROPERTIES", fontSize = 10.sp, color = colors.a)
+                }
+
+                if (copyShow) {
+                    Dialog({ copyShow = false }) {
+                        Column(
+                            modifier = Modifier
+                                .padding(bottom = 20.dp)
+                                .padding(horizontal = 20.dp)
+                                .heightIn(max = 500.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(colors.background.copy(.8f))
+                                .padding(15.dp),
+                        ) {
+                            Text(
+                                text = "Select dashboard\nto copy from",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.color
+                            )
+                            LazyColumn(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 5.dp)
+                            ) {
+                                items(dashboards.filter { it != dashboard }) {
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(top = 10.dp)
+                                            .fillMaxWidth()
+                                            .height(80.dp)
+                                            .clickable {
+                                                dashboard.apply {
+                                                    mqtt = it.mqtt.deepCopy() ?: MqttConfig()
+                                                    mqtt.clientId = abs(Random.nextInt()).toString()
+                                                    daemon?.notifyConfigChanged()
+                                                }
+                                                copyShow = false
+                                                fm.replaceWith(
+                                                    DashboardPropertiesFragment(),
+                                                    false
+                                                )
+                                            }
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .aspectRatio(1f)
+                                                .fillMaxSize()
+                                                .border(
+                                                    BorderStroke(1.dp, Color(it.pallet.color)),
+                                                    RoundedCornerShape(6.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Icon(
+                                                painterResource(it.iconRes),
+                                                contentDescription = "",
+                                                tint = Color(it.pallet.a),
+                                                modifier = Modifier
+                                                    .padding(15.dp)
+                                                    .fillMaxSize()
+                                            )
+                                        }
+
+                                        Spacer(modifier = Modifier.width(10.dp))
+
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .border(
+                                                    BorderStroke(1.dp, Color(it.pallet.color)),
+                                                    RoundedCornerShape(6.dp)
+                                                ),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            Text(
+                                                it.name.uppercase(Locale.getDefault()),
+                                                fontSize = 20.sp,
+                                                color = Color(it.pallet.a)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (sslShow) {
@@ -345,10 +383,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .padding(bottom = 20.dp)
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
-                                .border(
-                                    BorderStroke(1.dp, colors.color),
-                                    RoundedCornerShape(6.dp)
-                                )
                                 .background(colors.background.copy(.9f))
                                 .padding(15.dp),
                         ) {
@@ -418,17 +452,18 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     dashboard.mqtt.ssl = it
                                     dashboard.daemon?.notifyConfigChanged()
                                 },
-                                modifier = Modifier.padding(vertical = 10.dp)
+                                modifier = Modifier.padding(top = 5.dp)
                             )
 
                             Row(
                                 Modifier
                                     .fillMaxWidth()
-                                    .wrapContentHeight(),
+                                    .wrapContentHeight()
+                                    .padding(top = 20.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 LabeledCheckbox(
-                                    modifier = Modifier.padding(vertical = 10.dp),
+                                    modifier = Modifier,
                                     label = {
                                         Text(
                                             "Trust all certificates",
@@ -484,7 +519,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     .nrClickable {
                                         if (dashboard.mqtt.caCert == null) getCaCert()
                                     }
-                                    .padding(top = 10.dp),
+                                    .padding(top = 15.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {

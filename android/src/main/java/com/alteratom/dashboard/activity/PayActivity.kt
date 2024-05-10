@@ -251,13 +251,12 @@ class PayActivity : AppCompatActivity() {
                 ) {
                     BasicButton(
                         contentPadding = PaddingValues(13.dp),
-                        border = BorderStroke(2.dp, Theme.colors.b),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 12.dp),
                         onClick = { if (!showLoading) checkPending() }
                     ) {
-                        Text("CHECK PENDING", fontSize = 10.sp, color = Theme.colors.b)
+                        Text("CHECK PENDING", fontSize = 10.sp, color = Theme.colors.a)
                     }
                 }
 

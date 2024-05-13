@@ -41,9 +41,10 @@ data class MqttConfig(
     var caCertStr: String? = null
         set(value) {
             field = value
-            caCert = try {
+            caCert = if (value == null) null
+            else try {
                 val cf = CertificateFactory.getInstance("X.509")
-                cf.generateCertificate(value?.byteInputStream()) as X509Certificate
+                cf.generateCertificate(value.byteInputStream()) as X509Certificate
             } catch (e: Exception) {
                 field = null
                 null

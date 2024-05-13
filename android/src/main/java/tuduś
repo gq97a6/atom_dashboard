@@ -8,4 +8,6 @@ tests:
 - basic auth
 - keep alive
 - foreground service
-- 
+
+- dashboard remove bug
+- add reverse arrow direction

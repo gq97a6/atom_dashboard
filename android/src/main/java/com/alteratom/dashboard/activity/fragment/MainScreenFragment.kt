@@ -11,6 +11,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.manager.ToolbarManager
 import com.alteratom.dashboard.objects.FragmentManager.fm
@@ -18,9 +19,12 @@ import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.proAlert
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.databinding.FragmentMainScreenBinding
+import kotlin.math.abs
+import kotlin.random.Random
 
 class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
     private lateinit var b: FragmentMainScreenBinding
@@ -51,8 +55,18 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val addOnClick: () -> Unit = {
-            if (Pro.status || dashboards.size < 2) fm.replaceWith(DashboardNewFragment())
-            else {
+            if (Pro.status || dashboards.size < 2) {
+                //Temporarily skip dashboard type selection
+                val name = abs(Random.nextInt()).toString()
+                val dashboard = Dashboard(name, Daemon.Type.MQTTD)
+                dashboards.add(dashboard)
+                dashboards.saveToFile()
+                DaemonsManager.notifyAssigned(dashboard, requireContext())
+                if (setCurrentDashboard(dashboard.id)) {
+                    fm.replaceWith(DashboardPropertiesFragment())
+                }
+                //fm.replaceWith(DashboardNewFragment())
+            } else {
                 createToast(requireContext(), "Too many dashboards")
                 requireContext().proAlert(requireActivity())
             }

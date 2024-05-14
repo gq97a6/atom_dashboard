@@ -26,7 +26,6 @@ data class MqttConfig(
     @JsonIgnore
     var clientKey: KeyPair? = null,
     var keyFileName: String = "",
-    var clientKeyPassword: String = "",
     var address: String = "",
     var port: Int = 1883,
     var keepAlive: Int = 50,
@@ -54,9 +53,10 @@ data class MqttConfig(
     var clientCertStr: String? = null
         set(value) {
             field = value
-            clientCert = try {
+            clientCert = if (value == null) null
+            else try {
                 val cf = CertificateFactory.getInstance("X.509")
-                cf.generateCertificate(value?.byteInputStream()) as X509Certificate
+                cf.generateCertificate(value.byteInputStream()) as X509Certificate
             } catch (e: Exception) {
                 field = null
                 null
@@ -66,8 +66,9 @@ data class MqttConfig(
     var clientKeyStr: String? = null
         set(value) {
             field = value
-            clientKey = try {
-                JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value?.byteInputStream())).readObject() as PEMKeyPair)
+            clientKey = if (value == null) null
+            else try {
+                JcaPEMKeyConverter().getKeyPair(PEMParser(InputStreamReader(value.byteInputStream())).readObject() as PEMKeyPair)
             } catch (e: Exception) {
                 field = null
                 null

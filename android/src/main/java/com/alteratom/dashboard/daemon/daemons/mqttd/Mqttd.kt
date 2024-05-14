@@ -16,6 +16,7 @@ import io.netty.util.internal.EmptyArrays
 import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
+import java.util.UUID
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.ManagerFactoryParameters
 import javax.net.ssl.TrustManager
@@ -130,18 +131,20 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     private fun Mqtt5ClientBuilder.setupSSL(config: MqttConfig): Mqtt5ClientBuilder {
+        //---------------------------------------------------------------------------
         val kmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
+        val kmfKeyPassword = UUID.randomUUID().toString().toCharArray()
         kmfStore.load(null, null)
         kmfStore.setCertificateEntry("cc", config.clientCert)
         config.clientKey?.let {
             kmfStore.setKeyEntry(
                 "k",
                 it.private,
-                config.clientKeyPassword.toCharArray(),
+                kmfKeyPassword,
                 arrayOf<Certificate?>(config.clientCert)
             )
         }
-
+        //---------------------------------------------------------------------------
         var tmfStore: KeyStore? = null
         if (config.caCert != null) {
             tmfStore = KeyStore.getInstance(KeyStore.getDefaultType())
@@ -151,7 +154,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
         //Decides which authentication credentials should be sent to the remote host
         val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())
-        kmf.init(kmfStore, config.clientKeyPassword.toCharArray())
+        kmf.init(kmfStore, kmfKeyPassword)
 
         val alg = TrustManagerFactory.getDefaultAlgorithm()
 

@@ -509,6 +509,13 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         .size(20.dp)
                                 )
                             }
+                            Text(
+                                "This option disables server certificate verification. " +
+                                        "Proceed with caution as this makes your connection vulnerable to man-in-the-middle attacks.",
+                                fontSize = 11.sp,
+                                color = colors.b,
+                                modifier = Modifier.padding(top = 3.dp)
+                            )
 
                             EditText(
                                 enabled = false,
@@ -539,6 +546,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         )
                                     }
                                 }
+                            )
+                            Text(
+                                "Custom CA certificate that signed the server certificate. " +
+                                        "Supply if your server certificate is self-signed. " +
+                                        "Server address supplied in configuration must be included in SAN of server certificate.",
+                                fontSize = 11.sp,
+                                color = colors.b,
+                                modifier = Modifier.padding(top = 3.dp)
                             )
 
                             EditText(
@@ -596,41 +611,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     ) {
                                         Icon(
                                             painterResource(if (key.isEmpty()) R.drawable.il_interface_paperclip else R.drawable.il_interface_multiply),
-                                            "",
-                                            tint = colors.b
-                                        )
-                                    }
-                                }
-                            )
-
-                            var passwordHidden by remember { mutableStateOf(dashboard.mqtt.clientKeyPassword.isNotEmpty()) }
-                            var password by remember { mutableStateOf(if (passwordHidden) "hidden" else "") }
-                            EditText(
-                                label = { Text("Key password") },
-                                modifier = Modifier.padding(top = 5.dp),
-                                value = password,
-                                textStyle = TextStyle(fontStyle = if (passwordHidden) Italic else Normal),
-                                onValueChange = { it ->
-                                    if (passwordHidden) {
-                                        password = ""
-                                        passwordHidden = false
-                                    } else password = it
-
-                                    password.trim().let {
-                                        if (dashboard.mqtt.clientKeyPassword != it) {
-                                            dashboard.mqtt.clientKeyPassword = it
-                                            dashboard.daemon?.notifyConfigChanged()
-                                        }
-                                    }
-                                },
-                                trailingIcon = {
-                                    IconButton(onClick = {
-                                        password = ""
-                                        passwordHidden = false
-                                        dashboard.mqtt.clientKeyPassword = ""
-                                    }) {
-                                        Icon(
-                                            painterResource(R.drawable.il_interface_multiply),
                                             "",
                                             tint = colors.b
                                         )

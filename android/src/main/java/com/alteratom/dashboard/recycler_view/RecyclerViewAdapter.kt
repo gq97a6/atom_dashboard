@@ -116,7 +116,6 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
                         editMode.isNone -> list[position].onClick(v, e)
                         editMode.isRemove -> {
                             markItemRemove(position)
-                            //removeMarkedItems()
                         }
 
                         editMode.isEdit -> onItemEdit(list[position])
@@ -149,6 +148,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun removeMarkedItems() {
         if (list.none { item: item -> item.flag.isRemove } || itemCount == 0) return
 
@@ -165,6 +165,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
                     }
                     i++
                 }
+                notifyDataSetChanged()
             }
         }
     }
@@ -179,7 +180,7 @@ open class RecyclerViewAdapter<item : RecyclerViewItem>(
             it.iterate(callback)
             list.removeAt(pos)
 
-            if (notify) notifyItemRemoved(pos)
+            if (notify) notifyDataSetChanged()
         }
     }
 

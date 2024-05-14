@@ -22,10 +22,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +36,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -184,8 +187,9 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
 
                 var address by remember { mutableStateOf(dashboard.mqtt.address) }
                 EditText(
-                    label = { Text("Address") },
+                    label = { Text("Address and protocol") },
                     value = address,
+                    shape = RoundedCornerShape(6.dp, 6.dp, 0.dp, 0.dp),
                     onValueChange = { it ->
                         address = it
                         it.trim().let {
@@ -196,12 +200,89 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                     }
                 )
-                Text(
-                    "Excluding protocol. Example: domain.com",
-                    fontSize = 11.sp,
-                    color = colors.b,
-                    modifier = Modifier.padding(top = 3.dp)
-                )
+
+                var protocol by remember { mutableStateOf("TCP") }
+                Row(
+                    Modifier
+                        .offset(y = (-1).dp)
+                        .height(40.dp)
+                        .fillMaxWidth()
+                        .border(
+                            1.dp,
+                            color = colors.b,
+                            shape = RoundedCornerShape(bottomStart = 6.dp, bottomEnd = 6.dp)
+                        )
+                ) {
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(
+                                color = if (protocol == "TCP") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                shape = RoundedCornerShape(bottomStart = 6.dp)
+                            ).clickable { protocol = "TCP" },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("TCP", fontSize = 12.sp, color = colors.a)
+                    }
+
+                    Divider(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(1.dp), color = colors.b
+                    )
+
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(
+                                color = if (protocol == "SSL") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                shape = RoundedCornerShape(0.dp)
+                            ).clickable { protocol = "SSL" },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("SSL", fontSize = 12.sp, color = colors.a)
+                    }
+
+                    Divider(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(1.dp), color = colors.b
+                    )
+
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(
+                                color = if (protocol == "WS") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                shape = RoundedCornerShape(0.dp)
+                            ).clickable { protocol = "WS" },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("WS", fontSize = 12.sp, color = colors.a)
+                    }
+
+                    Divider(
+                        Modifier
+                            .fillMaxHeight()
+                            .width(1.dp), color = colors.b
+                    )
+
+                    Box(
+                        Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                            .background(
+                                color = if (protocol == "WSS") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                shape = RoundedCornerShape(bottomEnd = 6.dp)
+                            ).clickable { protocol = "WSS" },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("WSS", fontSize = 12.sp, color = colors.a)
+                    }
+                }
 
                 var port by remember {
                     mutableStateOf(dashboard.mqtt.port.let {

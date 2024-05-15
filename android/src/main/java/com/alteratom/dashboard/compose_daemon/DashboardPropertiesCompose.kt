@@ -388,6 +388,12 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         },
                         modifier = Modifier.padding(top = 6.dp)
                     )
+                    Text(
+                        "Example: mqtt",
+                        fontSize = 11.sp,
+                        color = colors.b,
+                        modifier = Modifier.padding(top = 3.dp)
+                    )
                 }
 
                 var sslShow by remember { mutableStateOf(false) }

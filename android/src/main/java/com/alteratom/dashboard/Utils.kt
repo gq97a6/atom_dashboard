@@ -234,8 +234,8 @@ fun pHsv(h: Float, s: Float, v: Float) = hsv(
 fun Context.proAlert(activity: Activity) {
     with(this) {
         buildConfirm(
-            "This feature requires pro",
-            "UNLOCK"
+            message = "This feature requires pro",
+            label = "UNLOCK"
         ) {
             activity.apply {
                 Intent(

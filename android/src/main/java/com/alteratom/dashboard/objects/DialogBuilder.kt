@@ -4,7 +4,13 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.TypedValue
+import android.view.Gravity
+import android.view.View
+import android.view.View.TEXT_ALIGNMENT_CENTER
+import android.view.View.TEXT_ALIGNMENT_VIEW_START
 import android.view.WindowManager
+import androidx.compose.ui.text.style.TextAlign
 import com.alteratom.R
 import com.alteratom.databinding.DialogConfirmBinding
 
@@ -41,6 +47,8 @@ object DialogBuilder {
     inline fun Context.buildConfirm(
         message: String,
         label: String,
+        textSize: Float = 20f,
+        textAlign: Int = TEXT_ALIGNMENT_CENTER,
         crossinline onDeny: () -> Unit = {},
         crossinline onConfirm: () -> Unit
     ) {
@@ -60,7 +68,10 @@ object DialogBuilder {
         }
 
         binding.dcConfirm.text = label
+
         binding.dcText.text = message
+        binding.dcText.textSize = textSize
+        binding.dcText.textAlignment = textAlign
 
         dialog.dialogSetup()
         G.theme.apply(binding.root)

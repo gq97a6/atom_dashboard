@@ -3,6 +3,7 @@ package com.alteratom.dashboard.activity.fragment
 import SliderTile
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -14,12 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.alteratom.BuildConfig
 import com.alteratom.R
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.manager.ToolbarManager
+import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboards
@@ -137,6 +140,21 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             if (adapter.editMode.isNone) FragmentSwitcher.handle(e)
             else false
         }
+
+        //if (settings.version < BuildConfig.VERSION_CODE) {
+        //    with(activity as Context) {
+        //        buildConfirm(
+        //            message = "This update pack a lot of changes under the hood. " +
+        //                    "Please check your configuration to make sure everything is in place.\n" +
+        //                    "E-mail us at dev@alteratom.com with bugs or ideas for improvement. " +
+        //                    "Top 300 e-mails will be rewarded with codes for free pro upgrade.",
+        //            label = "CONFIRM",
+        //            textSize = 15f,
+        //            onDeny = { settings.version = BuildConfig.VERSION_CODE },
+        //            onConfirm = { settings.version = BuildConfig.VERSION_CODE }
+        //        )
+        //    }
+        //}
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -590,7 +590,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         if (it) {
                                             fragment.requireContext()
                                                 .buildConfirm(
-                                                    "Confirm override", "CONFIRM"
+                                                    message = "Confirm override",
+                                                    label = "CONFIRM"
                                                 ) {
                                                     trust = true
                                                     dashboard.mqtt.sslTrustAll = true

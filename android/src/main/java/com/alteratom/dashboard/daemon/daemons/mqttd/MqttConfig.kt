@@ -80,7 +80,7 @@ data class MqttConfig(
         }
 
     init {
-        if (address.contains("://") && settings.version < BuildConfig.VERSION_CODE) {
+        if (address.contains("://")) {
             val parts = address.split("://")
             address = parts[1]
             protocol = when (parts[0].lowercase()) {

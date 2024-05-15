@@ -27,9 +27,5 @@ object TileSwitcher : Switcher() {
         )
     }
 
-    //For onInterceptTouch with XML layout
     fun handle(e: MotionEvent?) = handle(e) { r -> switch(r) }
-
-    //For awaitPointerEventScope with compose
-    fun handle(e: PointerEvent) = handle(e) { r -> switch(r) }
 }

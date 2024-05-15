@@ -85,10 +85,10 @@ data class MqttConfig(
             address = parts[1]
             protocol = when (parts[0].lowercase()) {
                 "tcp" -> Mqttd.Protocol.TCP
-                "ssl" -> Mqttd.Protocol.TCP
-                "tls" -> Mqttd.Protocol.TCP
-                "ws" -> Mqttd.Protocol.TCP
-                "wss" -> Mqttd.Protocol.TCP
+                "ssl" -> Mqttd.Protocol.SSL
+                "tls" -> Mqttd.Protocol.SSL
+                "ws" -> Mqttd.Protocol.WS
+                "wss" -> Mqttd.Protocol.WSS
                 "mqtt" -> Mqttd.Protocol.TCP
                 else -> Mqttd.Protocol.TCP
             }

@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
 import com.alteratom.dashboard.objects.FragmentManager.Animations.swap
 
@@ -79,6 +80,8 @@ object FragmentManager {
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ) {
         mainActivity?.apply {
+            //Reset onGlobalTouch action
+            onGlobalTouch = { false }
             supportFragmentManager.commit {
                 animation?.invoke(this)
                 replace(R.id.m_fragment, fragment)

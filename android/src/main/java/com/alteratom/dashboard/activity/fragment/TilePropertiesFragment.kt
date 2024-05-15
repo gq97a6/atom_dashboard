@@ -20,6 +20,7 @@ import ThermostatTile
 import ThermostatTileCompose
 import TimeTile
 import TimeTileCompose
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.BoldStartText
 import com.alteratom.dashboard.compose_global.EditText
@@ -58,10 +60,20 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
 
 class TilePropertiesFragment : Fragment() {
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        //Set gesture reaction
+        MainActivity.onGlobalTouch = { e ->
+            TileSwitcher.handle(e)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,13 +83,13 @@ class TilePropertiesFragment : Fragment() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            TileSwitcher.handle(awaitPointerEvent())
-                        }
-                    }
-                }
+                //.pointerInput(Unit) {
+                //    awaitPointerEventScope {
+                //        while (true) {
+                //            TileSwitcher.handle(awaitPointerEvent())
+                //        }
+                //    }
+                //}
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center

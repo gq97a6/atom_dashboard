@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activity.fragment
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconColorPallet
 import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconHSV
 import com.alteratom.dashboard.activity.fragment.TileIconFragment.Companion.getIconRes
@@ -54,6 +56,7 @@ import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.switcher.FragmentSwitcher
+import com.alteratom.dashboard.switcher.TileSwitcher
 import java.io.InputStream
 import kotlin.math.abs
 import kotlin.random.Random
@@ -62,6 +65,15 @@ class DashboardPropertiesFragment : Fragment() {
 
     lateinit var requestAction: (uri: Uri, inputStream: InputStream) -> Unit
     lateinit var request: ActivityResultLauncher<Intent>
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        //Set gesture reaction
+        MainActivity.onGlobalTouch = { e ->
+            FragmentSwitcher.handle(e, DashboardPropertiesFragment())
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,16 +130,6 @@ class DashboardPropertiesFragment : Fragment() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            FragmentSwitcher.handle(
-                                awaitPointerEvent(),
-                                DashboardPropertiesFragment()
-                            )
-                        }
-                    }
-                }
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
             verticalArrangement = Arrangement.Center

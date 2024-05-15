@@ -11,7 +11,7 @@ import com.alteratom.dashboard.objects.FragmentManager.Animations.slideRight as 
 
 object FragmentSwitcher : Switcher() {
 
-    fun switch(slideRight: Boolean, target: Fragment = DashboardFragment()) {
+    fun switch(slideRight: Boolean, target: Fragment) {
         if (G.dashboards.size < 2) return
 
         var index = G.dashboardIndex - if (slideRight) 1 else -1
@@ -25,9 +25,5 @@ object FragmentSwitcher : Switcher() {
         )
     }
 
-    //For onInterceptTouch with XML layout
-    fun handle(e: MotionEvent?) = handle(e) { r -> switch(r) }
-
-    //For awaitPointerEventScope with compose
-    fun handle(e: PointerEvent, target: Fragment) = handle(e) { r -> switch(r, target) }
+    fun handle(e: MotionEvent?, target: Fragment) = handle(e) { r -> switch(r, target) }
 }

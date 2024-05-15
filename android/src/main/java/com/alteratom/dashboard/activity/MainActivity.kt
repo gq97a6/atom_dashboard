@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.activity
 
 import android.os.Bundle
+import android.view.MotionEvent
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.activity.fragment.DashboardFragment
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
@@ -17,11 +18,18 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var b: ActivityMainBinding
 
+    companion object {
+        var onGlobalTouch: (ev: MotionEvent?) -> Boolean = { false }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        //Intercept touch to handle gestures in whole app excluding PayActivity
+        b.root.onInterceptTouch = { onGlobalTouch(it) }
 
         val activity = this@MainActivity
         Setup.apply {

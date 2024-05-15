@@ -13,6 +13,7 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.Mqtt5ClientBuilder
 import io.netty.handler.ssl.util.SimpleTrustManagerFactory
 import io.netty.util.internal.EmptyArrays
+import java.lang.IllegalArgumentException
 import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
@@ -47,7 +48,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         get() = if (manager.isWorking) State.ATTEMPTING
         else try {
             if (!isConnected) State.DISCONNECTED
-            else if (currentConfig.ssl && !currentConfig.sslTrustAll) State.CONNECTED_SSL
+            else if (currentConfig.sslRequired && !currentConfig.sslTrustAll) State.CONNECTED_SSL
             else State.CONNECTED
         } catch (e: Exception) {
             State.FAILED
@@ -68,7 +69,10 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
         if (isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()
-        else manager.dispatch(reason = "config")
+        else {
+            manager.dispatch(reason = "config")
+            statePing.postValue(null)
+        }
     }
 
     // Status manager ------------------------------------------------------------------------------
@@ -94,6 +98,9 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         override fun onJobStart() = statePing.postValue(null)
         override fun onException(e: Exception) {
             super.onException(e)
+            when(e) {
+                is IllegalArgumentException -> statePing.postValue(e.message)
+            }
         }
     }
 
@@ -122,8 +129,17 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .password(config.pass.toByteArray())
             .applySimpleAuth()
 
+        //Setup WebSocket if required
+        if (config.protocol == Protocol.WS || config.protocol == Protocol.WSS) {
+            client = client
+                .webSocketConfig()
+                .queryString(config.queryString)
+                .serverPath(config.serverPath)
+                .applyWebSocketConfig()
+        }
+
         //Setup SSL if required
-        if (config.ssl) client = client.setupSSL(config)
+        if (config.sslRequired) client = client.setupSSL(config)
 
         //Build client and update current config
         this.client = client.buildAsync()
@@ -234,9 +250,10 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
     }
 
     enum class State { DISCONNECTED, CONNECTED, CONNECTED_SSL, FAILED, ATTEMPTING }
+    enum class Protocol { TCP, SSL, WS, WSS }
 
     @SuppressLint("CustomX509TrustManager")
-    class TrustAllTrustManagerFactory: SimpleTrustManagerFactory() {
+    class TrustAllTrustManagerFactory : SimpleTrustManagerFactory() {
         override fun engineInit(keyStore: KeyStore) {}
         override fun engineInit(managerFactoryParameters: ManagerFactoryParameters) {}
         override fun engineGetTrustManagers(): Array<TrustManager> = arrayOf(tm)

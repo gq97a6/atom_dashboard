@@ -201,7 +201,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     }
                 )
 
-                var protocol by remember { mutableStateOf("TCP") }
+                var protocol by remember { mutableStateOf(dashboard.mqtt.protocol) }
                 Row(
                     Modifier
                         .offset(y = (-1).dp)
@@ -218,9 +218,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .fillMaxHeight()
                             .weight(1f)
                             .background(
-                                color = if (protocol == "TCP") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                color = if (protocol == Mqttd.Protocol.TCP) colors.d.copy(alpha = .4f) else Color.Transparent,
                                 shape = RoundedCornerShape(bottomStart = 6.dp)
-                            ).clickable { protocol = "TCP" },
+                            )
+                            .clickable {
+                                protocol = Mqttd.Protocol.TCP
+                                dashboard.mqtt.protocol = Mqttd.Protocol.TCP
+                                dashboard.daemon?.notifyConfigChanged()
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("TCP", fontSize = 12.sp, color = colors.a)
@@ -237,9 +242,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .fillMaxHeight()
                             .weight(1f)
                             .background(
-                                color = if (protocol == "SSL") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                color = if (protocol == Mqttd.Protocol.SSL) colors.d.copy(alpha = .4f) else Color.Transparent,
                                 shape = RoundedCornerShape(0.dp)
-                            ).clickable { protocol = "SSL" },
+                            )
+                            .clickable {
+                                protocol = Mqttd.Protocol.SSL
+                                dashboard.mqtt.protocol = Mqttd.Protocol.SSL
+                                dashboard.daemon?.notifyConfigChanged()
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("SSL", fontSize = 12.sp, color = colors.a)
@@ -256,9 +266,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .fillMaxHeight()
                             .weight(1f)
                             .background(
-                                color = if (protocol == "WS") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                color = if (protocol == Mqttd.Protocol.WS) colors.d.copy(alpha = .4f) else Color.Transparent,
                                 shape = RoundedCornerShape(0.dp)
-                            ).clickable { protocol = "WS" },
+                            )
+                            .clickable {
+                                protocol = Mqttd.Protocol.WS
+                                dashboard.mqtt.protocol = Mqttd.Protocol.WS
+                                dashboard.daemon?.notifyConfigChanged()
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("WS", fontSize = 12.sp, color = colors.a)
@@ -275,9 +290,14 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                             .fillMaxHeight()
                             .weight(1f)
                             .background(
-                                color = if (protocol == "WSS") colors.d.copy(alpha = .4f) else Color.Transparent,
+                                color = if (protocol == Mqttd.Protocol.WSS) colors.d.copy(alpha = .4f) else Color.Transparent,
                                 shape = RoundedCornerShape(bottomEnd = 6.dp)
-                            ).clickable { protocol = "WSS" },
+                            )
+                            .clickable {
+                                protocol = Mqttd.Protocol.WSS
+                                dashboard.mqtt.protocol = Mqttd.Protocol.WSS
+                                dashboard.daemon?.notifyConfigChanged()
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text("WSS", fontSize = 12.sp, color = colors.a)
@@ -344,10 +364,36 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                 )
 
+                var queryString by remember { mutableStateOf("") }
+                var serverPath by remember { mutableStateOf("") }
+                if (protocol == Mqttd.Protocol.WSS || protocol == Mqttd.Protocol.WS) {
+                    EditText(
+                        label = { Text("Query string") },
+                        value = queryString,
+                        onValueChange = {
+                            queryString = it.take(30)
+                            dashboard.mqtt.queryString = queryString
+                            dashboard.daemon?.notifyConfigChanged()
+                        },
+                        modifier = Modifier.padding(top = 6.dp)
+                    )
+
+                    EditText(
+                        label = { Text("Server path") },
+                        value = serverPath,
+                        onValueChange = {
+                            serverPath = it.take(30)
+                            dashboard.mqtt.serverPath = serverPath
+                            dashboard.daemon?.notifyConfigChanged()
+                        },
+                        modifier = Modifier.padding(top = 6.dp)
+                    )
+                }
+
                 var sslShow by remember { mutableStateOf(false) }
                 var copyShow by remember { mutableStateOf(false) }
 
-                BasicButton(
+                if (protocol == Mqttd.Protocol.SSL || protocol == Mqttd.Protocol.WSS) BasicButton(
                     modifier = Modifier
                         .align(Alignment.Start)
                         .fillMaxWidth(.8f)
@@ -467,7 +513,6 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                 .background(colors.background.copy(.9f))
                                 .padding(15.dp),
                         ) {
-                            var enable by remember { mutableStateOf(dashboard.mqtt.ssl) }
                             var trust by remember { mutableStateOf(dashboard.mqtt.sslTrustAll) }
 
                             var ca by remember { mutableStateOf(dashboard.mqtt.caFileName) }
@@ -504,43 +549,25 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                     }
                                 }
 
-                            fun getClientKey() =
-                                fragment.openFile { str, file ->
-                                    dashboard.mqtt.let { m ->
-                                        m.clientKeyStr = str
-                                        if (m.clientKey != null) {
-                                            m.keyFileName = file ?: "client.key"
-                                            key = dashboard.mqtt.keyFileName
-                                            dashboard.daemon?.notifyConfigChanged()
-                                        } else createToast(
-                                            fragment.requireContext(),
-                                            "Key error"
-                                        )
-                                    }
-                                }
-
-                            LabeledCheckbox(
-                                label = {
-                                    Text(
-                                        "Enable SSL",
-                                        fontSize = 15.sp,
-                                        color = colors.a
+                            fun getClientKey() = fragment.openFile { str, file ->
+                                dashboard.mqtt.let { m ->
+                                    m.clientKeyStr = str
+                                    if (m.clientKey != null) {
+                                        m.keyFileName = file ?: "client.key"
+                                        key = dashboard.mqtt.keyFileName
+                                        dashboard.daemon?.notifyConfigChanged()
+                                    } else createToast(
+                                        fragment.requireContext(),
+                                        "Key error"
                                     )
-                                },
-                                checked = enable,
-                                onCheckedChange = {
-                                    enable = it
-                                    dashboard.mqtt.ssl = it
-                                    dashboard.daemon?.notifyConfigChanged()
-                                },
-                                modifier = Modifier.padding(top = 5.dp)
-                            )
+                                }
+                            }
 
                             Row(
                                 Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
-                                    .padding(top = 20.dp),
+                                    .padding(top = 10.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 LabeledCheckbox(

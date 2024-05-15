@@ -44,7 +44,7 @@ abstract class StatusManager(val context: Context, private val interval: Long = 
                     onJobDone()
                 } catch (e: Exception) { //Create another coroutine after a delay
                     onException(e)
-                    delay(1000)
+                    delay(300)
                     dispatch(true)
                 }
             }

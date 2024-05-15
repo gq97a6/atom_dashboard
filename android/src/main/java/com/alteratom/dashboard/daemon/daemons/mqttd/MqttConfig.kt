@@ -1,5 +1,7 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
+import com.alteratom.BuildConfig
+import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.objects.Storage
 import com.alteratom.dashboard.objects.Storage.prepareSave
@@ -15,7 +17,6 @@ import kotlin.random.Random
 
 data class MqttConfig(
     var isEnabled: Boolean = Pro.status,
-    var ssl: Boolean = false,
     var sslTrustAll: Boolean = false,
     @JsonIgnore
     var caCert: X509Certificate? = null,
@@ -27,15 +28,18 @@ data class MqttConfig(
     var clientKey: KeyPair? = null,
     var keyFileName: String = "",
     var address: String = "",
+    var protocol: Mqttd.Protocol = Mqttd.Protocol.TCP,
     var port: Int = 1883,
     var keepAlive: Int = 50,
     var includeCred: Boolean = false,
+    var queryString: String = "",
+    var serverPath: String = "mqtt",
     var username: String = "",
     var pass: String = "",
     var clientId: String = kotlin.math.abs(Random.nextInt()).toString()
 ) {
-    val uri
-        get() = "$address:$port"
+    val sslRequired
+        get() = protocol == Mqttd.Protocol.SSL || protocol == Mqttd.Protocol.WSS
 
     var caCertStr: String? = null
         set(value) {
@@ -74,6 +78,22 @@ data class MqttConfig(
                 null
             }
         }
+
+    init {
+        if (address.contains("://") && settings.version < BuildConfig.VERSION_CODE) {
+            val parts = address.split("://")
+            address = parts[1]
+            protocol = when (parts[0].lowercase()) {
+                "tcp" -> Mqttd.Protocol.TCP
+                "ssl" -> Mqttd.Protocol.TCP
+                "tls" -> Mqttd.Protocol.TCP
+                "ws" -> Mqttd.Protocol.TCP
+                "wss" -> Mqttd.Protocol.TCP
+                "mqtt" -> Mqttd.Protocol.TCP
+                else -> Mqttd.Protocol.TCP
+            }
+        }
+    }
 
     fun deepCopy(): MqttConfig? = Storage.parseSave(this.prepareSave())
 }

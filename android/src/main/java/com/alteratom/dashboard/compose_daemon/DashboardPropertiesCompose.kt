@@ -364,8 +364,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         }
                 )
 
-                var queryString by remember { mutableStateOf("") }
-                var serverPath by remember { mutableStateOf("") }
+                var queryString by remember { mutableStateOf(dashboard.mqtt.queryString) }
+                var serverPath by remember { mutableStateOf(dashboard.mqtt.serverPath) }
                 if (protocol == Mqttd.Protocol.WSS || protocol == Mqttd.Protocol.WS) {
                     EditText(
                         label = { Text("Query string") },

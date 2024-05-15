@@ -64,11 +64,6 @@ object Setup {
 
     fun billing(activity: MainActivity) = activity.checkBilling()
 
-    fun switchers(activity: MainActivity) {
-        TileSwitcher.activity = activity
-        FragmentSwitcher.activity = activity
-    }
-
     fun batteryCheck(activity: MainActivity) {
         //Disable foreground service if battery is optimized
         if (activity.isBatteryOptimized()) G.settings.fgEnabled = false

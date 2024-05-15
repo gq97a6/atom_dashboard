@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
                 showFragment()
                 proStatus()
                 billing(activity)
-                switchers(activity)
                 batteryCheck(activity)
                 setCase()
                 service(activity)

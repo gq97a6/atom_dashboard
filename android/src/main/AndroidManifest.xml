@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -43,12 +44,7 @@
         <service
             android:name=".dashboard.ForegroundService"
             android:enabled="true"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Foreground service to keep persistent connection with data sources. Depending on dashboard type it might be various devices. Right now only one dashboard type is supported - MQTT.
-                Thus right now it is meant to allow persistent communication with MQTT servers. This is used only when user disables the battery optimization for the app and enables background work in the app settings." />
-        </service>
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

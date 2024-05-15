@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.objects.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
@@ -93,20 +94,21 @@ class TerminalTile : Tile() {
         jsonResult: MutableMap<String, String>
     ) {
         //TODO: FIX THIS
-        //super.onReceive(topic, msg, jsonResult)
-//
-        //val entry = jsonResult["base"] ?: msg
-        //log.add(0, entry)
-//
-        //terminalAdapter.let {
-        //    it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
-//
-        //    if (log.size > 10) {
-        //        log.removeLast()
-        //        it.removeItemAt(it.list.lastIndex, false)
-        //    }
-//
-        //    it.notifyDataSetChanged()
-        //}
+        super.onReceive(topic, msg, jsonResult)
+
+        val entry = jsonResult["base"] ?: msg
+        log.add(0, entry)
+
+        (adapter.context as MainActivity).runOnUiThread {
+            terminalAdapter.let {
+                if (log.size > 10) {
+                    log.removeLast()
+                    it.removeItemAt(it.list.lastIndex, false)
+                }
+
+                it.list.add(RecyclerViewItem(R.layout.item_terminal_entry))
+                it.notifyDataSetChanged()
+            }
+        }
     }
 }

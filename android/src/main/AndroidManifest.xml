@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -44,7 +43,11 @@
         <service
             android:name=".dashboard.ForegroundService"
             android:enabled="true"
-            android:foregroundServiceType="dataSync" />
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Our application utilizes the `FOREGROUND_SERVICE_SPECIAL_USE` permission to maintain a persistent connection with various data sources, ensuring seamless and reliable communication, particularly with MQTT servers. This capability is crucial for the application's core functionality, which involves real-time data updates, continuous monitoring, and immediate user notifications. The primary purpose of employing a foreground service is to facilitate uninterrupted communication with MQTT servers and other data sources (dependable on dashboard type), which is essential for the application's dashboard feature. The dashboard, currently supporting MQTT protocol, relies on a constant stream of data to provide accurate and timely updates. Given the real-time nature of the data being monitored and displayed, it is imperative that the activity starts immediately and cannot be paused or resumed without compromising the integrity and reliability of the information presented to the user. This functionality is only avaiable when user disables battery optimization for the app and enables background work in the app settings. Doing so users expect the application to function seamlessly in the background, without interruptions. The foreground service ensures that the connection to MQTT servers remains active, allowing the app to receive and process data continuously. This is particularly important for scenarios where timely notifications and updates are critical, such as monitoring environmental sensors, home automation systems, or other IoT devices connected via MQTT. The need for immediate activity start stems from the requirement to promptly establish and maintain the connection with the data sources as soon as the app is launched or when it resumes from a background state. Any delay in starting the activity could result in missed data packets, delayed notifications, or outdated information being displayed on the dashboard, which could significantly impact the user experience and the application's reliability. Moreover, the inability to pause or resume the service is crucial due to the continuous nature of data flow in real-time applications. Pausing the service could lead to gaps in data collection, loss of critical information, and potential synchronization issues when the service is resumed. This could undermine the application's ability to provide accurate and up-to-date information, which is essential for users who rely on the app for monitoring and managing their data sources. In summary, the `FOREGROUND_SERVICE_SPECIAL_USE` permission is vital for our application to maintain a persistent and reliable connection with data sources, ensuring real-time data updates, continuous monitoring, and immediate notifications. The immediate start and uninterrupted operation of the foreground service are essential to meet user expectations for a responsive and dependable application experience, especially when battery optimization is disabled. This permission allows us to deliver a seamless and efficient user experience, maintaining the integrity and reliability of the data provided by the application." />
+        </service>
     </application>
 
 </manifest>

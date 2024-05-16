@@ -33,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,7 +55,6 @@ import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.switcher.FragmentSwitcher
-import com.alteratom.dashboard.switcher.TileSwitcher
 import java.io.InputStream
 import kotlin.math.abs
 import kotlin.random.Random

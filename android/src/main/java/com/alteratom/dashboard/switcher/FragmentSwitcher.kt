@@ -1,9 +1,7 @@
 package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
-import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.fragment.app.Fragment
-import com.alteratom.dashboard.activity.fragment.DashboardFragment
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.FragmentManager.Animations.slideLeft as slideLeftAnimation

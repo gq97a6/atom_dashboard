@@ -22,8 +22,6 @@ import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
 import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
 import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import com.alteratom.dashboard.requestNotifications
-import com.alteratom.dashboard.switcher.FragmentSwitcher
-import com.alteratom.dashboard.switcher.TileSwitcher
 import kotlinx.coroutines.delay
 
 //Sorted by order of execution setup sequence

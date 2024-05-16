@@ -1,7 +1,5 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
-import com.alteratom.BuildConfig
-import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
 import com.alteratom.dashboard.objects.Storage
 import com.alteratom.dashboard.objects.Storage.prepareSave

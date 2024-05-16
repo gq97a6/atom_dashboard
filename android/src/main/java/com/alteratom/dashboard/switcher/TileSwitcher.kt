@@ -1,7 +1,6 @@
 package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
-import androidx.compose.ui.input.pointer.PointerEvent
 import com.alteratom.dashboard.activity.fragment.TilePropertiesFragment
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G.dashboard

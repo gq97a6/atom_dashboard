@@ -44,7 +44,12 @@ interface Daemonized {
 
         if (!mqtt.doConfirmPub || raw) commit()
         else dashboard?.tiles?.first()?.adapter?.context?.let {
-            with(it) { buildConfirm(message = "Confirm publishing", label = "PUBLISH") { commit() } }
+            with(it) {
+                buildConfirm(
+                    message = "Confirm publishing",
+                    label = "PUBLISH"
+                ) { commit() }
+            }
         }
     }
 

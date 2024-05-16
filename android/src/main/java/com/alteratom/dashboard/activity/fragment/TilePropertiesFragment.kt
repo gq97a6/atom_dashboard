@@ -45,7 +45,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -60,7 +59,6 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.tile
-import com.alteratom.dashboard.switcher.FragmentSwitcher
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
 

@@ -13,7 +13,6 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5Client
 import com.hivemq.client.mqtt.mqtt5.Mqtt5ClientBuilder
 import io.netty.handler.ssl.util.SimpleTrustManagerFactory
 import io.netty.util.internal.EmptyArrays
-import java.lang.IllegalArgumentException
 import java.security.KeyStore
 import java.security.cert.Certificate
 import java.security.cert.X509Certificate
@@ -98,7 +97,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         override fun onJobStart() = statePing.postValue(null)
         override fun onException(e: Exception) {
             super.onException(e)
-            when(e) {
+            when (e) {
                 is IllegalArgumentException -> statePing.postValue(e.message)
             }
         }

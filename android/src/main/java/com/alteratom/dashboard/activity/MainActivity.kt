@@ -64,11 +64,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
+    override fun onPause() {
         G.dashboards.saveToFile()
         G.settings.saveToFile()
         G.theme.saveToFile()
 
-        super.onStop()
+        super.onPause()
     }
 }

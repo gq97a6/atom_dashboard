@@ -57,8 +57,8 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.objects.Debug
 import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G.crashlytics
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
@@ -109,8 +109,7 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup successful")
                             }, 100)
                         } catch (e: Exception) {
-                            crashlytics.log("Backup failed")
-                            crashlytics.recordException(e)
+                            Debug.recordException("setFra1", e)
                             createToast(requireContext(), "Backup failed")
                         }
                     }
@@ -139,8 +138,7 @@ class SettingsFragment : Fragment() {
                             val backup: List<String> = try {
                                 mapper.readerForListOf(String::class.java).readValue(backupString)
                             } catch (e: Exception) {
-                                crashlytics.log("Backup restore failed")
-                                crashlytics.recordException(e)
+                                Debug.recordException("setFra2", e)
                                 listOf()
                             }
 
@@ -180,8 +178,7 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup restore failed")
                             }
                         } catch (e: Exception) {
-                            crashlytics.log("Backup restore failed")
-                            crashlytics.recordException(e)
+                            Debug.recordException("setFra3", e)
                             createToast(requireContext(), "Backup restore failed")
                         }
                     }

@@ -50,6 +50,7 @@ import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
+import com.alteratom.dashboard.objects.Debug
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboards
@@ -84,6 +85,7 @@ class DashboardPropertiesFragment : Fragment() {
                             requireContext().contentResolver.openInputStream(uri)
                                 ?.use { inputStream -> requestAction(uri, inputStream) }
                         } catch (e: Exception) {
+                            Debug.recordException("dasProFra1", e)
                             createToast(requireContext(), "Certificate error")
                         }
                     }

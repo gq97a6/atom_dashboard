@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.manager.StatusManager
+import com.alteratom.dashboard.objects.Debug
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.exceptions.ConnectionFailedException
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient
@@ -50,6 +51,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             else if (currentConfig.sslRequired && !currentConfig.sslTrustAll) State.CONNECTED_SSL
             else State.CONNECTED
         } catch (e: Exception) {
+            Debug.recordException("mqt1", e)
             State.FAILED
         }
 
@@ -85,12 +87,22 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
         override fun handle() {
             if (isEnabled) {
-                if (isConnected) client?.disconnect()
+                if (isConnected) {
+                    Debug.log("MQTT_DISCONNECT")
+                    client?.disconnect()
+                }
                 else {
-                    if (currentConfig != d.mqtt || client == null) buildClient(d.mqtt.copy())
+                    Debug.log("MQTT_CONNECT")
+                    if (currentConfig != d.mqtt || client == null) {
+                        Debug.log("MQTT_BUILD_NEW_CLIENT")
+                        buildClient(d.mqtt.copy())
+                    }
                     client?.connect()
                 }
-            } else client?.disconnect()
+            } else {
+                Debug.log("MQTT_CLOSE")
+                client?.disconnect()
+            }
         }
 
         override fun onJobDone() = statePing.postValue(null)

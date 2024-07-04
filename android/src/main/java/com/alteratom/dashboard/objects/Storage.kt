@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.objects
 
-import com.alteratom.dashboard.objects.G.crashlytics
 import com.alteratom.dashboard.objects.G.path
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -21,8 +20,7 @@ object Storage {
             val path = path[this::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
-            crashlytics.log("saveToFile failed")
-            crashlytics.recordException(e)
+            Debug.recordException("sto1", e)
         }
     }
 
@@ -32,8 +30,7 @@ object Storage {
             val path = path[T::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
-            crashlytics.log("Collection.saveToFile failed")
-            crashlytics.recordException(e)
+            Debug.recordException("sto2", e)
         }
     }
 
@@ -41,8 +38,7 @@ object Storage {
     inline fun <reified T> getSave() = try {
         FileReader(path[T::class]).readText()
     } catch (e: Exception) {
-        crashlytics.log("getSave failed")
-        crashlytics.recordException(e)
+        Debug.recordException("sto3", e)
         ""
     }
 
@@ -51,8 +47,7 @@ object Storage {
         try {
             mapper.readValue(save, T::class.java)
         } catch (e: Exception) {
-            crashlytics.log("parseSave failed")
-            crashlytics.recordException(e)
+            Debug.recordException("sto4", e)
             null
         }
 
@@ -61,8 +56,7 @@ object Storage {
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
-            crashlytics.log("parseListSave failed")
-            crashlytics.recordException(e)
+            Debug.recordException("sto5", e)
             mutableListOf()
         }
 }

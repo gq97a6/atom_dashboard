@@ -32,6 +32,7 @@ object Setup {
     enum class SetupCase { SERVICE, SERVICE_COLD, SERVICE_TO_ACTIVITY, ACTIVITY, ACTIVITY_COLD, ACTIVITY_TO_SERVICE }
 
     fun paths(activity: MainActivity) {
+        Debug.log("SETUP_PATHS")
         G.rootFolder = activity.filesDir.canonicalPath.toString()
         G.path = mapOf(
             Theme::class to "${G.rootFolder}/theme",
@@ -42,6 +43,7 @@ object Setup {
 
     fun basicGlobals() {
         if (!G.areInitialized) {
+            Debug.log("SETUP_BASIC_GLOBALS")
             G.theme = Storage.parseSave() ?: Theme()
             G.settings = Storage.parseSave() ?: Settings()
         }
@@ -80,6 +82,8 @@ object Setup {
                 else ACTIVITY_COLD
             }
         }
+
+        Debug.log("SETUP-CASE_${case.name}")
     }
 
     suspend fun service(activity: MainActivity) {
@@ -87,8 +91,6 @@ object Setup {
             SERVICE_TO_ACTIVITY -> {
                 //Discharge all daemons
                 DaemonsManager.notifyAllDischarged()
-
-                //Foreground service enabled by settings and battery usage is not optimised
                 ForegroundService.stop(activity)
             }
 

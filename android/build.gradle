@@ -5,6 +5,10 @@ plugins {
     //Firebase
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+
+    //Sentry
+    id "io.sentry.android.gradle" version "4.9.0"
+
 }
 
 android {

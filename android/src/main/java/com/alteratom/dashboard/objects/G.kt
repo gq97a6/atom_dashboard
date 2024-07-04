@@ -23,10 +23,6 @@ object G {
     //Path to root folder
     var rootFolder: String = ""
 
-    //Firebase
-    val crashlytics = Firebase.crashlytics
-    val analytics = Firebase.analytics
-
     //Map of paths to serialized objects
     lateinit var path: Map<KClass<out Any>, String>
 

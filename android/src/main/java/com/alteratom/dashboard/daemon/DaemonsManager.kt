@@ -4,7 +4,6 @@ import android.content.Context
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.objects.Debug
 import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.Setup
 
 //Manages creation and assignment of daemons
 object DaemonsManager {
@@ -24,14 +23,14 @@ object DaemonsManager {
             daemon?.notifyAssigned()
         }
     } catch (e: Exception) {
-        Debug.recordException("daeMan1", e)
+        Debug.recordException(e)
     }
 
     fun notifyDischarged(dashboard: Dashboard) = try {
         Debug.log("DM_DISCHARGE")
         dashboard.daemon?.notifyDischarged()
     } catch (e: Exception) {
-        Debug.recordException("daeMan2", e)
+        Debug.recordException(e)
     }
 
 }

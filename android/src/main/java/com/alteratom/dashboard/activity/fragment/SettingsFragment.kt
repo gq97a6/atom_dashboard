@@ -109,7 +109,7 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup successful")
                             }, 100)
                         } catch (e: Exception) {
-                            Debug.recordException("setFra1", e)
+                            Debug.recordException(e)
                             createToast(requireContext(), "Backup failed")
                         }
                     }
@@ -138,7 +138,7 @@ class SettingsFragment : Fragment() {
                             val backup: List<String> = try {
                                 mapper.readerForListOf(String::class.java).readValue(backupString)
                             } catch (e: Exception) {
-                                Debug.recordException("setFra2", e)
+                                Debug.recordException(e)
                                 listOf()
                             }
 
@@ -178,7 +178,7 @@ class SettingsFragment : Fragment() {
                                 createToast(requireContext(), "Backup restore failed")
                             }
                         } catch (e: Exception) {
-                            Debug.recordException("setFra3", e)
+                            Debug.recordException(e)
                             createToast(requireContext(), "Backup restore failed")
                         }
                     }

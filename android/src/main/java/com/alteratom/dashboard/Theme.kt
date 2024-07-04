@@ -65,7 +65,7 @@ class Theme {
 
                 it.window.statusBarColor = colorPallet.background
             } catch (e: Exception) {
-                Debug.recordException("the1", e)
+                Debug.recordException(e)
             }
         }
 

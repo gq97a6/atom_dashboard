@@ -51,7 +51,7 @@ abstract class StatusManager(val context: Context, private val interval: Long = 
                     isWorking = false
                     onJobDone()
                 } catch (e: Exception) { //Create another coroutine after a delay
-                    Debug.recordException("staMan1", e)
+                    Debug.recordException(e)
                     onException(e)
                     delay(interval)
                     dispatch(true)

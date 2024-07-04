@@ -51,7 +51,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             else if (currentConfig.sslRequired && !currentConfig.sslTrustAll) State.CONNECTED_SSL
             else State.CONNECTED
         } catch (e: Exception) {
-            Debug.recordException("mqt1", e)
+            Debug.recordException(e)
             State.FAILED
         }
 

@@ -85,7 +85,7 @@ class DashboardPropertiesFragment : Fragment() {
                             requireContext().contentResolver.openInputStream(uri)
                                 ?.use { inputStream -> requestAction(uri, inputStream) }
                         } catch (e: Exception) {
-                            Debug.recordException("dasProFra1", e)
+                            Debug.recordException(e)
                             createToast(requireContext(), "Certificate error")
                         }
                     }

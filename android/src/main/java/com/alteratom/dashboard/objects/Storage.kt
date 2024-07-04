@@ -20,7 +20,7 @@ object Storage {
             val path = path[this::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
-            Debug.recordException("sto1", e)
+            Debug.recordException(e)
         }
     }
 
@@ -30,7 +30,7 @@ object Storage {
             val path = path[T::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
-            Debug.recordException("sto2", e)
+            Debug.recordException(e)
         }
     }
 
@@ -38,7 +38,7 @@ object Storage {
     inline fun <reified T> getSave() = try {
         FileReader(path[T::class]).readText()
     } catch (e: Exception) {
-        Debug.recordException("sto3", e)
+        Debug.recordException(e)
         ""
     }
 
@@ -47,7 +47,7 @@ object Storage {
         try {
             mapper.readValue(save, T::class.java)
         } catch (e: Exception) {
-            Debug.recordException("sto4", e)
+            Debug.recordException(e)
             null
         }
 
@@ -56,7 +56,7 @@ object Storage {
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
         } catch (e: Exception) {
-            Debug.recordException("sto5", e)
+            Debug.recordException(e)
             mutableListOf()
         }
 }

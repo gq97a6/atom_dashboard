@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activity.fragment
+package com.alteratom.dashboard.fragment
 
 import SliderTile
 import android.animation.ValueAnimator

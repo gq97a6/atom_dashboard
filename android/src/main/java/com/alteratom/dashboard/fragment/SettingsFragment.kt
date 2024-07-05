@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activity.fragment
+package com.alteratom.dashboard.fragment
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent

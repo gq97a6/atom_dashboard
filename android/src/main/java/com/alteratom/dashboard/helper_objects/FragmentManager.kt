@@ -6,7 +6,7 @@ import androidx.fragment.app.commit
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
-import com.alteratom.dashboard.activity.fragment.MainScreenFragment
+import com.alteratom.dashboard.fragment.MainScreenFragment
 import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.swap
 
 object FragmentManager {

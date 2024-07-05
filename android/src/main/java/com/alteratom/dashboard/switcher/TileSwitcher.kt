@@ -1,7 +1,7 @@
 package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
-import com.alteratom.dashboard.activity.fragment.TilePropertiesFragment
+import com.alteratom.dashboard.fragment.TilePropertiesFragment
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.G.dashboard
 import com.alteratom.dashboard.helper_objects.G.tile

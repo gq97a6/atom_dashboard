@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.alteratom.dashboard.activity.fragment.LoadingFragment
+import com.alteratom.dashboard.fragment.LoadingFragment
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.G
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile

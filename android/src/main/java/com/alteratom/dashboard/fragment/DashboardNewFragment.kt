@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.activity.fragment
+package com.alteratom.dashboard.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -5,12 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.Bluetoothd
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.objects.IdentityGenerator.obtainNewId
-import com.alteratom.dashboard.objects.IdentityGenerator.reportTakenId
+import com.alteratom.dashboard.generateNewId
 
 abstract class Daemon(val context: Context, var d: Dashboard) {
 
-    val id = obtainNewId()
+    val id = generateNewId()
 
     var isDischarged = false
     protected abstract val isEnabled: Boolean
@@ -28,10 +27,6 @@ abstract class Daemon(val context: Context, var d: Dashboard) {
 
         inline operator fun <reified D : Daemon> invoke(context: Context, dashboard: Dashboard) =
             D::class.constructors.first().call(context, dashboard)
-    }
-
-    init {
-        reportTakenId(id)
     }
 
     //Notify daemon when it is assigned to a dashboard

@@ -320,7 +320,9 @@ fun createNotification(
     }
 }
 
-fun MainActivity.checkBilling() {
+fun generateNewId() = kotlin.math.abs(Random().nextLong())
+
+fun Context.checkBilling() {
     CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
         BillingManager(this@checkBilling).apply {
             enable()

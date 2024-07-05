@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.alteratom.R
 import com.alteratom.dashboard.alpha
+import com.alteratom.dashboard.generateNewId
 import com.alteratom.dashboard.objects.G.theme
-import com.alteratom.dashboard.objects.IdentityGenerator.obtainNewId
-import com.alteratom.dashboard.objects.IdentityGenerator.reportTakenId
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")
 abstract class RecyclerViewItem {
 
-    var id = obtainNewId()
+    var id = generateNewId()
 
     abstract val layout: Int
 
@@ -33,10 +32,6 @@ abstract class RecyclerViewItem {
                 override val layout: Int
                     get() = layout
             }
-    }
-
-    init {
-        reportTakenId(id)
     }
 
     fun <A : RecyclerViewItem> getItemViewType(adapter: RecyclerViewAdapter<A>): Int {

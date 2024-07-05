@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import kotlin.reflect.KClass
 
 object G {
+    var isLicensed = false
     var areInitialized = false
     var settings = Settings()
     var theme = Theme()

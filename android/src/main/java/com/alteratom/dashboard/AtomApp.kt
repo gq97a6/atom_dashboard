@@ -7,5 +7,6 @@ import com.alteratom.dashboard.objects.Setup
 class AtomApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        Setup.initialize(this)
     }
 }

@@ -4,16 +4,15 @@ import com.alteratom.dashboard.objects.G.rootFolder
 import java.io.File
 
 object Pro {
-    var status = false
 
-    fun updateStatus() {
-        status = File("$rootFolder/license").exists()
+    fun getLicenceStatus(): Boolean {
+        return File("$rootFolder/license").exists()
     }
 
     fun createLocalLicence() {
         try {
             File("$rootFolder/license").writeText("")
-            updateStatus()
+            getLicenceStatus()
         } catch (_: Exception) {
         }
     }
@@ -21,7 +20,7 @@ object Pro {
     fun removeLocalLicence() {
         try {
             File("$rootFolder/license").delete()
-            updateStatus()
+            getLicenceStatus()
         } catch (_: Exception) {
         }
     }

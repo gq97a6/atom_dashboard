@@ -51,6 +51,7 @@ import com.alteratom.dashboard.manager.BillingManager.Companion.DON1
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON25
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON5
 import com.alteratom.dashboard.manager.BillingManager.Companion.PRO
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.Pro
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -225,11 +226,11 @@ class PayActivity : AppCompatActivity() {
                                 billingManager.lunchPurchaseFlow(PRO)
                             }
                         },
-                        enabled = !Pro.status,
+                        enabled = !G.isLicensed,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            if (Pro.status) "OWNED"
+                            if (G.isLicensed) "OWNED"
                             else priceTags[PRO] ?: "99.99$",
                             fontSize = 10.sp,
                             color = Theme.colors.a

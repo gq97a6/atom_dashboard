@@ -38,7 +38,6 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
-import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.manager.BillingManager
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
@@ -329,7 +328,7 @@ fun Context.checkBilling() {
             checkPurchases(
                 0,
                 {
-                    !it.isAcknowledged || (!Pro.status && it.products.contains(
+                    !it.isAcknowledged || (!G.isLicensed && it.products.contains(
                         BillingManager.PRO
                     ))
                 }
@@ -337,7 +336,7 @@ fun Context.checkBilling() {
             disable()
         }
 
-        if (!Pro.status) {
+        if (!G.isLicensed) {
             for (dash in G.dashboards.slice(2 until G.dashboards.size)) {
                 dash.mqtt.isEnabled = false
                 dash.daemon?.notifyConfigChanged()

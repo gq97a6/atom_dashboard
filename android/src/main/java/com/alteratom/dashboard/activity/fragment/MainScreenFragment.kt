@@ -15,6 +15,7 @@ import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.manager.ToolbarManager
 import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.setCurrentDashboard
 import com.alteratom.dashboard.objects.G.theme
@@ -55,7 +56,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val addOnClick: () -> Unit = {
-            if (Pro.status || dashboards.size < 2) {
+            if (G.isLicensed || dashboards.size < 2) {
                 //Temporarily skip dashboard type selection
                 val name = abs(Random.nextInt()).toString()
                 val dashboard = Dashboard(name, Daemon.Type.MQTTD)
@@ -125,7 +126,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.editMode.onSet = {
-            if (!Pro.status && dashboards.size > 2 && adapter.editMode.isSwap) {
+            if (!G.isLicensed && dashboards.size > 2 && adapter.editMode.isSwap) {
                 b.msRemove.callOnClick()
                 createToast(requireContext(), "Too many dashboards")
                 requireContext().proAlert(requireActivity())

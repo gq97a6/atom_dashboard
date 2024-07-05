@@ -2,17 +2,13 @@ package com.alteratom.dashboard.activity
 
 import android.os.Bundle
 import android.view.MotionEvent
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import com.alteratom.dashboard.activity.fragment.DashboardFragment
-import com.alteratom.dashboard.activity.fragment.MainScreenFragment
+import com.alteratom.dashboard.activity.fragment.LoadingFragment
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Setup
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,40 +24,27 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
+        //Apply theme
+        G.theme.apply(b.root, this, false)
+
         //Intercept touch to handle gestures in whole app excluding PayActivity
         b.root.onInterceptTouch = { onGlobalTouch(it) }
 
-        val activity = this@MainActivity
-        Setup.apply {
+        //Setup fragment manager
+        fm.mainActivity = this
 
-            paths(activity)
-            basicGlobals()
-
-            //Apply theme
-            G.theme.apply(b.root, activity, false)
-
-            CoroutineScope(Dispatchers.Default).launch {
-                fragmentManager(activity)
-                showFragment()
-                proStatus()
-                billing(activity)
-                batteryCheck(activity)
-                setCase()
-                service(activity)
-                globals()
-                daemons(activity)
-
-                //Go straight to the dashboard
-                if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
-                    fm.addBackstack(DashboardFragment())
-
-                    //Force fix of DashboardFragment stacking in backstack
-                    fm.backstack = mutableListOf(MainScreenFragment(), DashboardFragment())
-                }
-
-                hideFragment()
-            }
+        //Setup onBackPressCallback
+        onBackPressedDispatcher.addCallback {
+            if (!fm.doOverrideOnBackPress() && !fm.popBackstack()) finishAndRemoveTask()
         }
+
+        fm.replaceWith(LoadingFragment())
+
+        //fm.replaceWith(SetupFragment(), animation = null)
+        //if (!areNotificationsAllowed()) requestNotifications()
+        //if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
+        //    fm.addBackstack(DashboardFragment())
+        //}
     }
 
     override fun onPause() {

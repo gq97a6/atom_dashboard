@@ -59,6 +59,7 @@ import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.objects.Debug
 import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.G.theme
@@ -70,9 +71,6 @@ import com.alteratom.dashboard.objects.Storage.parseSave
 import com.alteratom.dashboard.objects.Storage.prepareSave
 import com.alteratom.dashboard.objects.Storage.saveToFile
 import com.alteratom.dashboard.openBatterySettings
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -82,7 +80,7 @@ class SettingsFragment : Fragment() {
     private lateinit var open: ActivityResultLauncher<Intent>
     private lateinit var create: ActivityResultLauncher<Intent>
 
-    var pro = MutableLiveData(Pro.status)
+    var pro = MutableLiveData(G.isLicensed)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,22 +156,9 @@ class SettingsFragment : Fragment() {
                                 settings.saveToFile()
                                 theme.saveToFile()
 
-                                //Rerun setup
-                                CoroutineScope(Dispatchers.Default).launch {
-                                    Setup.apply {
-                                        val activity = requireActivity() as MainActivity
-                                        showFragment()
-                                        proStatus()
-                                        billing(activity)
-                                        batteryCheck(activity)
-                                        setCase()
-                                        service(activity)
-                                        globals()
-                                        permissions(activity)
-                                        daemons(activity)
-                                        hideFragment()
-                                    }
-                                }
+                                //Restart the app
+                                val activity = requireActivity() as MainActivity
+                                Setup.restart(activity.application)
                             } else {
                                 createToast(requireContext(), "Backup restore failed")
                             }
@@ -369,18 +354,21 @@ class SettingsFragment : Fragment() {
                                     fgEnabled = it
                                     settings.fgEnabled = fgEnabled
 
-                                    //Rerun setup
-                                    CoroutineScope(Dispatchers.Default).launch {
-                                        Setup.apply {
-                                            val activity = requireActivity() as MainActivity
-                                            showFragment()
-                                            batteryCheck(activity)
-                                            setCase()
-                                            service(activity)
-                                            daemons(activity)
-                                            hideFragment()
-                                        }
-                                    }
+                                    //Restart the app
+                                    val activity = requireActivity() as MainActivity
+                                    Setup.restart(activity.application)
+
+                                    //CoroutineScope(Dispatchers.Default).launch {
+                                    //    Setup.apply {
+                                    //
+                                    //        showFragment()
+                                    //        batteryCheck(activity)
+                                    //        setCase()
+                                    //        service(activity)
+                                    //        daemons(activity)
+                                    //        hideFragment()
+                                    //    }
+                                    //}
 
                                 } else workShow = true
                             },
@@ -471,7 +459,7 @@ class SettingsFragment : Fragment() {
 
             val pro by pro.observeAsState()
             Text(
-                "${if (pro ?: Pro.status) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
+                "${if (pro ?: G.isLicensed) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
                 Modifier
                     .padding(bottom = 5.dp)
                     .align(Alignment.BottomCenter),
@@ -484,6 +472,6 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        pro.postValue(Pro.status)
+        pro.postValue(G.isLicensed)
     }
 }

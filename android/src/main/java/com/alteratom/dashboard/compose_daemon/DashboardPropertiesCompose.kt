@@ -79,6 +79,7 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.objects.G
 import com.alteratom.dashboard.objects.G.dashboard
 import com.alteratom.dashboard.objects.G.dashboardIndex
 import com.alteratom.dashboard.objects.G.dashboards
@@ -118,7 +119,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                         },
                         checked = enabled,
                         onCheckedChange = {
-                            if (Pro.status || dashboardIndex < 2) {
+                            if (G.isLicensed || dashboardIndex < 2) {
                                 enabled = it
                                 dashboard.mqtt.isEnabled = it
                                 dashboard.daemon?.notifyConfigChanged()
@@ -417,7 +418,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     onClick = {
                         if (dashboards.size <= 1)
                             createToast(fragment.requireContext(), "No dashboards to copy from")
-                        else if (Pro.status || dashboardIndex < 2) copyShow = true
+                        else if (G.isLicensed || dashboardIndex < 2) copyShow = true
                         else with(fragment) { requireContext().proAlert(requireActivity()) }
                     }
                 ) {

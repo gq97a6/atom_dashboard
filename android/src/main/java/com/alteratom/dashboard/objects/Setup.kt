@@ -1,18 +1,14 @@
 package com.alteratom.dashboard.objects
 
-import androidx.activity.addCallback
+import android.app.Application
+import android.content.Context
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activity.MainActivity
-import com.alteratom.dashboard.activity.fragment.SetupFragment
-import com.alteratom.dashboard.activity.fragment.SetupFragment.Companion.ready
-import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.objects.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.objects.FragmentManager.fm
 import com.alteratom.dashboard.objects.G.dashboards
 import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY
@@ -21,19 +17,53 @@ import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
 import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
 import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
 import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
-import com.alteratom.dashboard.requestNotifications
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 //Sorted by order of execution setup sequence
 object Setup {
+    enum class SetupCase {
+        //------------------------------------------------------------
+        //Cases when background work is enabled
+        //------------------------------------------------------------
+        SERVICE, //When app starts WITH service running
+        SERVICE_COLD, //When app starts WITHOUT service running
+        ACTIVITY_TO_SERVICE, //When app starts WITH activity running
 
-    private var case = ACTIVITY
+        //------------------------------------------------------------
+        //Cases when background work is disabled
+        //------------------------------------------------------------
+        ACTIVITY, //When app starts WITH activity running
+        ACTIVITY_COLD, //When app starts WITHOUT activity running
+        SERVICE_TO_ACTIVITY, //When app starts WITH service running
+    }
 
-    enum class SetupCase { SERVICE, SERVICE_COLD, SERVICE_TO_ACTIVITY, ACTIVITY, ACTIVITY_COLD, ACTIVITY_TO_SERVICE }
+    fun restart(app: Application) {
+        //TODO: Clear up here
+        fm.backstack = mutableListOf()
+        initialize(app)
+    }
 
-    fun paths(activity: MainActivity) {
+    fun initialize(app: Application) {
+        setFilesPaths(app)
+        initializeBasicGlobals()
+
+        //Run rest in non-blocking way
+        CoroutineScope(Dispatchers.Default).launch {
+            updateProStatus()
+            checkBilling(app)
+            checkBatteryStatus(app)
+            val case = getSetupCase()
+            configureForegroundService(app, case)
+            initializeOtherGlobals()
+            assignDaemons(app, case)
+        }
+    }
+
+    private fun setFilesPaths(context: Context) {
         Debug.log("SETUP_PATHS")
-        G.rootFolder = activity.filesDir.canonicalPath.toString()
+        G.rootFolder = context.filesDir.canonicalPath.toString()
         G.path = mapOf(
             Theme::class to "${G.rootFolder}/theme",
             Settings::class to "${G.rootFolder}/settings",
@@ -41,7 +71,7 @@ object Setup {
         )
     }
 
-    fun basicGlobals() {
+    private fun initializeBasicGlobals() {
         if (!G.areInitialized) {
             Debug.log("SETUP_BASIC_GLOBALS")
             G.theme = Storage.parseSave() ?: Theme()
@@ -49,28 +79,21 @@ object Setup {
         }
     }
 
-    fun fragmentManager(activity: MainActivity) {
-        activity.apply {
-            fm.mainActivity = this
-            onBackPressedDispatcher.addCallback {
-                if (!fm.doOverrideOnBackPress() && !fm.popBackstack()) finishAndRemoveTask()
-            }
-        }
+    private fun updateProStatus() {
+        G.isLicensed = Pro.getLicenceStatus()
     }
 
-    fun showFragment() = fm.replaceWith(SetupFragment(), animation = null)
+    private fun checkBilling(context: Context) = context.checkBilling()
 
-    fun proStatus() = Pro.updateStatus()
-
-    fun billing(activity: MainActivity) = activity.checkBilling()
-
-    fun batteryCheck(activity: MainActivity) {
+    //Check if battery optimization is enabled
+    private fun checkBatteryStatus(context: Context) {
         //Disable foreground service if battery is optimized
-        if (activity.isBatteryOptimized()) G.settings.fgEnabled = false
+        if (context.isBatteryOptimized()) G.settings.fgEnabled = false
     }
 
-    fun setCase() {
-        case = if (ForegroundService.service?.isStarted == true) {
+    //Set setup case
+    private fun getSetupCase(): SetupCase {
+        val case = if (ForegroundService.service?.isStarted == true) {
             if (G.settings.fgEnabled) SERVICE
             else SERVICE_TO_ACTIVITY
         } else {
@@ -84,14 +107,16 @@ object Setup {
         }
 
         Debug.log("SETUP-CASE_${case.name}")
+        return case
     }
 
-    suspend fun service(activity: MainActivity) {
+    //Either stop foreground service if it is no longer used or set it up
+    private suspend fun configureForegroundService(context: Context, case: SetupCase) {
         when (case) {
             SERVICE_TO_ACTIVITY -> {
                 //Discharge all daemons
                 DaemonsManager.notifyAllDischarged()
-                ForegroundService.stop(activity)
+                ForegroundService.stop(context)
             }
 
             ACTIVITY_TO_SERVICE, SERVICE_COLD -> {
@@ -99,45 +124,34 @@ object Setup {
                 DaemonsManager.notifyAllDischarged()
 
                 //Foreground service disabled by settings or battery usage is optimised
-                ForegroundService.start(activity)
+                ForegroundService.start(context)
                 ForegroundService.haltForService()
 
                 //Configure service
-                ForegroundService.service?.finishAndRemoveTask = { activity.finishAndRemoveTask() }
+                ForegroundService.service?.finishAndRemoveTask = { /* TODO: KILL WHOLE APP HERE */ }
             }
 
             else -> {}
         }
     }
 
-    fun globals() {
+    //Setup required global variables
+    private fun initializeOtherGlobals() {
         if (!G.areInitialized) {
             dashboards = Storage.parseListSave()
             G.areInitialized = true
         }
     }
 
-    fun permissions(activity: MainActivity) {
-        activity.apply { if (!areNotificationsAllowed()) requestNotifications() }
-    }
-
-    fun daemons(activity: MainActivity) {
+    //Assign all daemons either to foreground service or application context
+    private fun assignDaemons(context: Context, case: SetupCase) {
         when (case) {
             SERVICE_COLD, ACTIVITY_TO_SERVICE -> ForegroundService.service?.let {
                 DaemonsManager.notifyAllAssigned(it)
             }
 
-            SERVICE_TO_ACTIVITY, ACTIVITY_COLD -> DaemonsManager.notifyAllAssigned(activity)
+            SERVICE_TO_ACTIVITY, ACTIVITY_COLD -> DaemonsManager.notifyAllAssigned(context)
             else -> {}
         }
-    }
-
-    suspend fun hideFragment() {
-        ready.postValue(true)
-
-        //Delay so fragment does not crash and animation runs smoothly
-        delay(100)
-
-        fm.popBackstack(false, fadeLong)
     }
 }

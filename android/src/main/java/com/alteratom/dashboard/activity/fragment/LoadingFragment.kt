@@ -38,7 +38,7 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.objects.FragmentManager.fm
 
 
-class SetupFragment : Fragment() {
+class LoadingFragment : Fragment() {
 
     companion object {
         var ready = MutableLiveData(false)

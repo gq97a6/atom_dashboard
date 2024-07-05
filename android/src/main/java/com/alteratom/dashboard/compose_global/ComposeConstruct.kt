@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.objects.G
+import com.alteratom.dashboard.helper_objects.G
 
 fun composeConstruct(
     context: Context,

@@ -31,8 +31,8 @@ import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.helper_objects.G.dashboard
+import com.alteratom.dashboard.helper_objects.G.tile
 
 object ThermostatTileCompose : DaemonBasedCompose {
     @Composable

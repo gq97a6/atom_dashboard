@@ -26,8 +26,8 @@ import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.dashboard.objects.Debug
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.Debug
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider

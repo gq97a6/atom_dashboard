@@ -5,9 +5,9 @@ import android.view.MotionEvent
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.activity.fragment.LoadingFragment
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Storage.saveToFile
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

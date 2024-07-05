@@ -4,9 +4,9 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.helper_objects.G.settings
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTimeBinding
 import com.fasterxml.jackson.annotation.JsonIgnore

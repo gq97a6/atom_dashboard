@@ -1,9 +1,8 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
-import com.alteratom.dashboard.objects.Storage
-import com.alteratom.dashboard.objects.Storage.prepareSave
+import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.helper_objects.Storage
+import com.alteratom.dashboard.helper_objects.Storage.prepareSave
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.bouncycastle.openssl.PEMKeyPair
 import org.bouncycastle.openssl.PEMParser

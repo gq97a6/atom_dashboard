@@ -26,8 +26,8 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G.tile
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

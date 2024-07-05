@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.BuildConfig
-import com.alteratom.dashboard.objects.Debug
+import com.alteratom.dashboard.helper_objects.Debug
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

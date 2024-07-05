@@ -9,8 +9,7 @@ import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.helper_objects.G
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile

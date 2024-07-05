@@ -49,7 +49,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.toPx
 import java.util.Locale
 

@@ -45,9 +45,9 @@ import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.G.dashboard
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.helper_objects.G.dashboard
 import com.alteratom.dashboard.tile.Tile
 
 class TileNewFragment : Fragment() {

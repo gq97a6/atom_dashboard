@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.manager.StatusManager
-import com.alteratom.dashboard.objects.Debug
+import com.alteratom.dashboard.helper_objects.Debug
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.exceptions.ConnectionFailedException
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient

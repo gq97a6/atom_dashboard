@@ -8,8 +8,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import com.alteratom.R
-import com.alteratom.dashboard.objects.G
-import com.alteratom.dashboard.objects.Pro
+import com.alteratom.dashboard.helper_objects.G
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 
 class ToolbarManager(

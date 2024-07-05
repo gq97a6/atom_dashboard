@@ -12,8 +12,8 @@ import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.daemon.Daemonized
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.objects.G.settings
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.G.settings
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem

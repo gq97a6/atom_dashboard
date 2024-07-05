@@ -4,8 +4,8 @@ import androidx.annotation.IntRange
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.objects.Storage
+import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.helper_objects.Storage
 import java.util.Date
 
 //TODO: send and receive pairs should be more generic

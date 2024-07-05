@@ -20,7 +20,7 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponent
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.RadioGroup
-import com.alteratom.dashboard.objects.G.tile
+import com.alteratom.dashboard.helper_objects.G.tile
 
 object TerminalTileCompose : DaemonBasedCompose {
     @Composable

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.alteratom.R
 import com.alteratom.dashboard.alpha
 import com.alteratom.dashboard.generateNewId
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")

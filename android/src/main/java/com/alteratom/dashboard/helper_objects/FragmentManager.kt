@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.helper_objects
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -7,7 +7,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.activity.fragment.MainScreenFragment
-import com.alteratom.dashboard.objects.FragmentManager.Animations.swap
+import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.swap
 
 object FragmentManager {
 

@@ -39,7 +39,7 @@ import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.compose_global.switchColors
-import com.alteratom.dashboard.objects.G.theme
+import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 

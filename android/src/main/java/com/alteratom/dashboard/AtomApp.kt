@@ -1,7 +1,7 @@
 package com.alteratom.dashboard
 
 import android.app.Application
-import com.alteratom.dashboard.objects.Setup
+import com.alteratom.dashboard.helper_objects.Setup
 
 
 class AtomApp : Application() {

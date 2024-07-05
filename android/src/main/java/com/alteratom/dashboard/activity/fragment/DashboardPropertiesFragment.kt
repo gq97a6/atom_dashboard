@@ -50,11 +50,11 @@ import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.objects.Debug
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.G.settings
+import com.alteratom.dashboard.helper_objects.Debug
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G.dashboard
+import com.alteratom.dashboard.helper_objects.G.dashboards
+import com.alteratom.dashboard.helper_objects.G.settings
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import kotlin.math.abs

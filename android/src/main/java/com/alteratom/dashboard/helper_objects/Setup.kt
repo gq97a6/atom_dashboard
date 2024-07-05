@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.objects
+package com.alteratom.dashboard.helper_objects
 
 import android.app.Application
 import android.content.Context
@@ -9,14 +9,14 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G.dashboards
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_COLD
-import com.alteratom.dashboard.objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_COLD
-import com.alteratom.dashboard.objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G.dashboards
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_COLD
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_COLD
+import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

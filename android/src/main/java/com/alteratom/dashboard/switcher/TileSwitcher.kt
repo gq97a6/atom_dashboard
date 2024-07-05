@@ -2,11 +2,11 @@ package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
 import com.alteratom.dashboard.activity.fragment.TilePropertiesFragment
-import com.alteratom.dashboard.objects.FragmentManager.fm
-import com.alteratom.dashboard.objects.G.dashboard
-import com.alteratom.dashboard.objects.G.tile
-import com.alteratom.dashboard.objects.FragmentManager.Animations.slideLeft as slideLeftAnimation
-import com.alteratom.dashboard.objects.FragmentManager.Animations.slideRight as slideRightAnimation
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.G.dashboard
+import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.slideLeft as slideLeftAnimation
+import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.slideRight as slideRightAnimation
 
 object TileSwitcher : Switcher() {
 

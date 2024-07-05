@@ -35,7 +35,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.objects.FragmentManager.fm
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 
 
 class LoadingFragment : Fragment() {

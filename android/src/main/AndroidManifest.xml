@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name=".dashboard.AtomApp"
         android:allowBackup="true"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_icon"
@@ -27,6 +28,7 @@
             android:name=".dashboard.activity.MainActivity"
             android:configChanges="screenSize|keyboardHidden"
             android:exported="true"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
 
             <intent-filter>
@@ -38,7 +40,8 @@
         <activity
             android:name=".dashboard.activity.PayActivity"
             android:configChanges="screenSize|keyboardHidden"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTask" />
 
         <service
             android:name=".dashboard.ForegroundService"

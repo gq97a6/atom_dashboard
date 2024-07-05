@@ -34,17 +34,17 @@ class ForegroundService : LifecycleService() {
         }
 
         //Stop service but not the activity
-        fun stop(activity: MainActivity) {
-            Intent(activity, ForegroundService::class.java).also {
+        fun stop(context: Context) {
+            Intent(context, ForegroundService::class.java).also {
                 it.action = "STOP"
-                activity.startForegroundService(it)
+                context.startForegroundService(it)
             }
         }
 
-        fun start(activity: MainActivity) {
-            Intent(activity, ForegroundService::class.java).also {
+        fun start(context: Context) {
+            Intent(context, ForegroundService::class.java).also {
                 it.action = "START"
-                activity.startForegroundService(it)
+                context.startForegroundService(it)
             }
 
         }

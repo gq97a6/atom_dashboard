@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.manager
 
 import android.app.Activity
+import android.content.Context
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.objects.G.settings
 import com.alteratom.dashboard.objects.Pro
@@ -29,7 +30,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.system.measureTimeMillis
 
-class BillingManager(val activity: Activity) {
+class BillingManager(val context: Context) {
 
     internal var isEnabled = false
     internal lateinit var client: BillingClient
@@ -58,7 +59,7 @@ class BillingManager(val activity: Activity) {
     }
 
     internal fun createClient() {
-        client = BillingClient.newBuilder(activity)
+        client = BillingClient.newBuilder(context)
             .setListener { billingResult, purchases ->
                 if (purchases != null &&
                     (billingResult.responseCode == OK ||
@@ -112,13 +113,13 @@ class BillingManager(val activity: Activity) {
 
     fun onPurchaseProcessed(purchase: Purchase) {
         if (purchase.purchaseState != PURCHASED) {
-            createToast(activity, "Payment in process, please wait")
+            createToast(context, "Payment in process, please wait")
             return
         }
         for (product in purchase.products) {
             when (product) {
-                PRO -> createToast(activity, "Thanks for buying Pro!")
-                DON1, DON5, DON25 -> createToast(activity, "Thanks for the donation!")
+                PRO -> createToast(context, "Thanks for buying Pro!")
+                DON1, DON5, DON25 -> createToast(context, "Thanks for the donation!")
             }
         }
     }
@@ -188,13 +189,14 @@ class BillingManager(val activity: Activity) {
     }
 
     suspend fun lunchPurchaseFlow(id: String) {
+        if (context !is Activity) return
         if (!manager.awaitDone()) return
 
         val productDetails = getProductDetails(id)
         if (productDetails.isNullOrEmpty()) return
 
         client.launchBillingFlow(
-            activity,
+            context,
             BillingFlowParams
                 .newBuilder()
                 .setProductDetailsParamsList(
@@ -228,7 +230,7 @@ class BillingManager(val activity: Activity) {
         }
     }
 
-    inner class Manager : StatusManager(activity, 100) {
+    inner class Manager : StatusManager(context, 100) {
         override fun check(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false

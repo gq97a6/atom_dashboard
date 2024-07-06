@@ -49,18 +49,18 @@ class ThemeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = composeConstruct(requireContext(), aps.theme.a.isDark) {
+    ): View = composeConstruct(requireContext(), aps.theme.artist.isDark) {
 
-        var hueAngle by remember { mutableDoubleStateOf(aps.theme.a.hsv[0].toDouble()) }
-        var saturationAngle by remember { mutableDoubleStateOf(100 + 160.0 * aps.theme.a.hsv[1]) }
-        var saturationDarkAngle by remember { mutableDoubleStateOf(110 + 320.0 * aps.theme.a.hsv[1]) }
-        var valueAngle by remember { mutableDoubleStateOf((440 - 160.0 * aps.theme.a.hsv[2]) % 360) }
+        var hueAngle by remember { mutableDoubleStateOf(aps.theme.artist.hsv[0].toDouble()) }
+        var saturationAngle by remember { mutableDoubleStateOf(100 + 160.0 * aps.theme.artist.hsv[1]) }
+        var saturationDarkAngle by remember { mutableDoubleStateOf(110 + 320.0 * aps.theme.artist.hsv[1]) }
+        var valueAngle by remember { mutableDoubleStateOf((440 - 160.0 * aps.theme.artist.hsv[2]) % 360) }
 
-        var hue by remember { mutableFloatStateOf(aps.theme.a.hsv[0]) }
-        var saturation by remember { mutableFloatStateOf(aps.theme.a.hsv[1]) }
-        var value by remember { mutableFloatStateOf(aps.theme.a.hsv[2]) }
+        var hue by remember { mutableFloatStateOf(aps.theme.artist.hsv[0]) }
+        var saturation by remember { mutableFloatStateOf(aps.theme.artist.hsv[1]) }
+        var value by remember { mutableFloatStateOf(aps.theme.artist.hsv[2]) }
 
-        var isDark by remember { mutableStateOf(aps.theme.a.isDark) }
+        var isDark by remember { mutableStateOf(aps.theme.artist.isDark) }
 
         Column(
             horizontalAlignment = CenterHorizontally,
@@ -94,7 +94,7 @@ class ThemeFragment : Fragment() {
                     onChange = { a, v ->
                         hueAngle = a
                         hue = (v * 360f).toFloat()
-                        aps.theme.a.hsv = floatArrayOf(hue, saturation, value)
+                        aps.theme.artist.hsv = floatArrayOf(hue, saturation, value)
                     }
                 )
 
@@ -118,7 +118,7 @@ class ThemeFragment : Fragment() {
                                 saturationAngle = 100 + 160.0 * it
                                 saturation = it
                             }
-                            aps.theme.a.hsv = floatArrayOf(hue, saturation, value)
+                            aps.theme.artist.hsv = floatArrayOf(hue, saturation, value)
                         }
                     )
                 } else {
@@ -141,7 +141,7 @@ class ThemeFragment : Fragment() {
                                 saturationDarkAngle = 110 + 320.0 * it
                                 saturation = it
                             }
-                            aps.theme.a.hsv = floatArrayOf(hue, saturation, value)
+                            aps.theme.artist.hsv = floatArrayOf(hue, saturation, value)
                         }
                     )
 
@@ -161,7 +161,7 @@ class ThemeFragment : Fragment() {
                         onChange = { a, v ->
                             valueAngle = a
                             value = (1 - v).toFloat()
-                            aps.theme.a.hsv = floatArrayOf(hue, saturation, value)
+                            aps.theme.artist.hsv = floatArrayOf(hue, saturation, value)
                         }
                     )
                 }
@@ -205,7 +205,7 @@ class ThemeFragment : Fragment() {
                     checked = isDark,
                     colors = switchColors(),
                     onCheckedChange = {
-                        aps.theme.a.isDark = it
+                        aps.theme.artist.isDark = it
                         isDark = it
 
                         aps.theme.apply((activity as MainActivity).b.root, requireContext())

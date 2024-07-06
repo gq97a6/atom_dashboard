@@ -76,7 +76,7 @@ class ColorTile : Tile() {
         mqtt.payloads[ColorTypes.HEX.name] = "#@hex"
         mqtt.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
 
-        colorToHSV(aps.theme.a.pallet.color, hsvPicked)
+        colorToHSV(aps.theme.artist.pallet.color, hsvPicked)
         colorType = colorType
     }
 
@@ -97,7 +97,7 @@ class ColorTile : Tile() {
             aps.theme.apply(
                 holder.itemView as ViewGroup,
                 anim = false,
-                colorPallet = aps.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                colorPallet = aps.theme.artist.getColorPallet(hsvPicked, isRaw = paintRaw)
             )
         }
     }
@@ -206,7 +206,7 @@ class ColorTile : Tile() {
                 aps.theme.apply(
                     it as ViewGroup,
                     anim = false,
-                    colorPallet = aps.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                    colorPallet = aps.theme.artist.getColorPallet(hsvPicked, isRaw = paintRaw)
                 )
             }
         }

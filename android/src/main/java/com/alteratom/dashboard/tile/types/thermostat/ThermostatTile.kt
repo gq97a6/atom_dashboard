@@ -252,7 +252,7 @@ class ThermostatTile : Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(aps.theme.a.pallet.color)
+                            ColorStateList.valueOf(aps.theme.artist.pallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }

@@ -45,12 +45,12 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus
 
-    var hsv = aps.theme.a.hsv.let {
+    var hsv = aps.theme.artist.hsv.let {
         floatArrayOf(it[0], it[1], it[2])
     }
 
     val pallet: ColorPallet
-        get() = aps.theme.a.getColorPallet(hsv, true)
+        get() = aps.theme.artist.getColorPallet(hsv, true)
 
     @JsonAlias("mqttData")
     override val mqtt: MqttDaemonizedConfig = MqttDaemonizedConfig()

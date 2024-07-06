@@ -29,13 +29,13 @@ class SwitchTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
 
-    var hsvTrue = aps.theme.a.hsv
+    var hsvTrue = aps.theme.artist.hsv
     val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
-        get() = aps.theme.a.getColorPallet(hsvTrue, true)
+        get() = aps.theme.artist.getColorPallet(hsvTrue, true)
 
     var hsvFalse = floatArrayOf(0f, 0f, 0f)
     val palletFalse: com.alteratom.dashboard.Theme.ColorPallet
-        get() = aps.theme.a.getColorPallet(hsvFalse, true)
+        get() = aps.theme.artist.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {

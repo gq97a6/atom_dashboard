@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.app
 
+import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
@@ -8,7 +9,7 @@ import kotlin.reflect.KClass
 
 class AtomAppState {
     var isLicensed = false
-    var areInitialized = false
+    var isInitialized = MutableLiveData(false)
     var settings = Settings()
     var theme = Theme()
     var dashboards = mutableListOf<Dashboard>()
@@ -22,7 +23,7 @@ class AtomAppState {
     var rootFolder: String = ""
 
     //Map of paths to serialized objects
-    lateinit var path: Map<KClass<out Any>, String>
+    var path: Map<KClass<out Any>, String> = mapOf()
 
     fun setCurrentDashboard(index: Int): Boolean {
         return if (index !in 0 until dashboards.size) false

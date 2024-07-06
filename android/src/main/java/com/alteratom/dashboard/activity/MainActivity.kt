@@ -3,12 +3,21 @@ package com.alteratom.dashboard.activity
 import android.os.Bundle
 import android.view.MotionEvent
 import androidx.activity.addCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.alteratom.dashboard.fragment.LoadingFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import androidx.compose.runtime.remember
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
+import com.alteratom.dashboard.fragment.DashboardFragment
+import com.alteratom.dashboard.fragment.LoadingFragment
+import com.alteratom.dashboard.fragment.MainScreenFragment
+import com.alteratom.dashboard.helper_objects.FragmentManager
+import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge()
+
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
@@ -30,21 +41,26 @@ class MainActivity : AppCompatActivity() {
         //Intercept touch to handle gestures in whole app excluding PayActivity
         b.root.onInterceptTouch = { onGlobalTouch(it) }
 
-        //Setup fragment manager
-        fm.mainActivity = this
-
         //Setup onBackPressCallback
         onBackPressedDispatcher.addCallback {
             if (!fm.doOverrideOnBackPress() && !fm.popBackstack()) finishAndRemoveTask()
         }
 
-        fm.replaceWith(LoadingFragment())
-        
-        //fm.replaceWith(SetupFragment(), animation = null)
+        //Setup fragment manager
+        fm.mainActivity = this
+        if (aps.settings.startFromLast && aps.setCurrentDashboard(aps.settings.lastDashboardId)) {
+            fm.addBackstack(DashboardFragment())
+        }
+
+        aps.isInitialized.observe(this) {
+            if (it == true) {
+                fm.popBackstack(false, fadeLong)
+            }
+        }
+
+        fm.replaceWith(LoadingFragment(), animation = null)
+
         //if (!areNotificationsAllowed()) requestNotifications()
-        //if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
-        //    fm.addBackstack(DashboardFragment())
-        //}
     }
 
     override fun onPause() {

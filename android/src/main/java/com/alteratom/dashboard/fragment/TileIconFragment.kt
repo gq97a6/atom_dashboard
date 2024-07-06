@@ -46,33 +46,33 @@ import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.toPx
 import java.util.Locale
 
 class TileIconFragment : Fragment() {
 
     companion object {
-        lateinit var setIconHSV: (FloatArray) -> Unit
-        lateinit var setIconKey: (String) -> Unit
-        lateinit var getIconRes: () -> Int
-        lateinit var getIconHSV: () -> FloatArray
-        lateinit var getIconColorPallet: () -> Theme.ColorPallet
+        var setIconHSV: (FloatArray) -> Unit = {}
+        var setIconKey: (String) -> Unit = {}
+        var getIconRes: () -> Int = { 0 }
+        var getIconHSV: () -> FloatArray = { floatArrayOf() }
+        var getIconColorPallet: () -> Theme.ColorPallet = { Theme.ColorPallet(0, 0, 0, 0, 0, 0) }
     }
 
     private val cols = mutableListOf<Pair<Color, FloatArray>>().apply {
         for (i in 40..100 step 20) {
             for (ii in 0..300 step 60) {
-                val hsv = if (aps.theme.a.isDark) floatArrayOf(
+                val hsv = if (aps.theme.artist.isDark) floatArrayOf(
                     ii.toFloat(),
                     i.toFloat() / 100,
                     1f
                 ) else floatArrayOf(ii.toFloat(), 1f, i.toFloat() / 100)
 
-                add(aps.theme.a.getColorPallet(hsv, true).cc.color to hsv)
+                add(aps.theme.artist.getColorPallet(hsv, true).cc.color to hsv)
             }
         }
     }.toList()
@@ -110,7 +110,7 @@ class TileIconFragment : Fragment() {
             value = hsv[2]
 
             hueAngle = hsv[0].toDouble()
-            saturationAngle = if (aps.theme.a.isDark) 110 + 320.0 * hsv[1]
+            saturationAngle = if (aps.theme.artist.isDark) 110 + 320.0 * hsv[1]
             else 100 + 160.0 * hsv[1]
             valueAngle = (440 - 160.0 * hsv[2]) % 360
         }
@@ -151,7 +151,7 @@ class TileIconFragment : Fragment() {
                             .padding(8.dp)
                             .height(45.dp)
                             .clip(RoundedCornerShape(6.dp))
-                            .background(if (aps.theme.a.isDark) Color.White else Color.Black)
+                            .background(if (aps.theme.artist.isDark) Color.White else Color.Black)
                             .clickable {
                                 setPickerColor(floatArrayOf(0f, 0f, 0f))
                                 setIconHSV(floatArrayOf(0f, 0f, 0f))
@@ -284,7 +284,7 @@ class TileIconFragment : Fragment() {
                             }
                         )
 
-                        if (aps.theme.a.isDark) {
+                        if (aps.theme.artist.isDark) {
                             ArcSlider(
                                 modifier = Modifier.fillMaxSize(.6f),
                                 angle = saturationAngle,
@@ -357,7 +357,7 @@ class TileIconFragment : Fragment() {
                                     Color.hsv(
                                         hue,
                                         saturation,
-                                        if (aps.theme.a.isDark) 1f else value
+                                        if (aps.theme.artist.isDark) 1f else value
                                     )
                                 )
                         )

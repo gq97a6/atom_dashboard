@@ -39,21 +39,21 @@ import androidx.compose.ui.graphics.Color as ComposeColor
 @Suppress("UNUSED")
 class Theme {
 
-    val a = Artist()
+    val artist = Artist()
 
     companion object {
         val colors
-            get() = AtomApp.aps.theme.a.pallet.cc
+            get() = aps.theme.artist.pallet.cc
 
         val isDark
-            get() = aps.theme.a.isDark
+            get() = aps.theme.artist.isDark
     }
 
     fun apply(
         viewGroup: ViewGroup? = null,
         context: Context? = null,
         anim: Boolean = true,
-        colorPallet: ColorPallet = a.pallet
+        colorPallet: ColorPallet = artist.pallet
     ) {
         (context as? Activity?)?.let {
             it.setTheme(R.style.theme)
@@ -64,7 +64,8 @@ class Theme {
                     it.window.decorView
                 ).isAppearanceLightStatusBars = !isDark
 
-                it.window.statusBarColor = colorPallet.background
+                //it.window.statusBarColor = colorPallet.background
+                //it.window.navigationBarColor = colorPallet.background
             } catch (e: Exception) {
                 Debug.recordException(e)
             }
@@ -158,14 +159,14 @@ class Theme {
 
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(aps.theme.a.pallet.background.alpha(150)))
+                background.setColor(ColorStateList.valueOf(aps.theme.artist.pallet.background.alpha(150)))
             }
 
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 background.setColor(
                     ColorStateList.valueOf(
-                        aps.theme.a.pallet.background.darkened(
+                        aps.theme.artist.pallet.background.darkened(
                             0.9f
                         ).alpha(150)
                     )
@@ -175,7 +176,7 @@ class Theme {
             "splashIcon" -> {
                 this.setBackgroundResource(if (isDark) R.drawable.ic_icon_light else R.drawable.ic_icon)
                 this.background.colorFilter =
-                    PorterDuffColorFilter(a.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
+                    PorterDuffColorFilter(artist.pallet.color.alpha(100), PorterDuff.Mode.SRC_ATOP)
             }
 
             else -> onUnknownTag(this.tag, "view")
@@ -198,7 +199,7 @@ class Theme {
                 drawable?.setStroke(3, p.color)
             }
 
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!a.isDark, 100))
+            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!artist.isDark, 100))
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
     }

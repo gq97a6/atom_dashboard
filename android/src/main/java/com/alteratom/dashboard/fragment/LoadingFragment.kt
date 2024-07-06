@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,18 +32,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.composeConstruct
+import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class LoadingFragment : Fragment() {
-
-    companion object {
-        var ready = MutableLiveData(false)
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -103,14 +105,16 @@ class LoadingFragment : Fragment() {
         }
 
         remember {
-            ready.observe(activity as MainActivity) {
-                if (it == true) {
-                    rotationInitialValue = rotation.value
-                    rotationTargetValue = rotation.value
+            lifecycleScope.launch {
+                aps.isInitialized.observe(activity as MainActivity) {
+                    if (it == true) {
+                        rotationInitialValue = rotation.value
+                        rotationTargetValue = rotation.value
 
-                    scaleDuration = 1600
-                    scaleInitialValue = scale.value
-                    scaleTargetValue = 0f
+                        scaleDuration = 1600
+                        scaleInitialValue = scale.value
+                        scaleTargetValue = 0f
+                    }
                 }
             }
         }

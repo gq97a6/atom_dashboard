@@ -1,5 +1,6 @@
 package com.alteratom.dashboard.helper_objects
 
+import ButtonTile
 import android.app.Application
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
@@ -72,8 +73,10 @@ object Setup {
     }
 
     private fun initializeBasicGlobals() {
-        if (!aps.areInitialized) {
+        if (aps.isInitialized.value == false) {
             Debug.log("SETUP_BASIC_GLOBALS")
+            aps.dashboard = Dashboard(name = "Error")
+            aps.tile = ButtonTile().apply {  }
             aps.theme = Storage.parseSave() ?: Theme()
             aps.settings = Storage.parseSave() ?: Settings()
         }
@@ -98,10 +101,10 @@ object Setup {
             else SERVICE_TO_ACTIVITY
         } else {
             if (aps.settings.fgEnabled) {
-                if (aps.areInitialized) ACTIVITY_TO_SERVICE
+                if (aps.isInitialized.value == true) ACTIVITY_TO_SERVICE
                 else SERVICE_COLD
             } else {
-                if (aps.areInitialized) ACTIVITY
+                if (aps.isInitialized.value == true) ACTIVITY
                 else ACTIVITY_COLD
             }
         }
@@ -137,9 +140,9 @@ object Setup {
 
     //Setup required global variables
     private fun initializeOtherGlobals() {
-        if (!aps.areInitialized) {
+        if (aps.isInitialized.value == false) {
             aps.dashboards = Storage.parseListSave()
-            aps.areInitialized = true
+            aps.isInitialized.postValue(true)
         }
     }
 

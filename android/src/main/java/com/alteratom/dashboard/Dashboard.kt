@@ -5,11 +5,11 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
@@ -17,8 +17,10 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.Locale
 
-open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.MQTTD) :
-    RecyclerViewItem() {
+open class Dashboard(
+    var name: String = "",
+    var type: Daemon.Type = Daemon.Type.MQTTD
+) : RecyclerViewItem() {
 
     override val layout
         get() = R.layout.item_dashboard
@@ -27,12 +29,12 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus_circle
 
-    var hsv = aps.theme.a.hsv.let {
+    var hsv = aps.theme.artist.hsv.let {
         floatArrayOf(it[0], it[1], it[2])
     }
 
     val pallet: Theme.ColorPallet
-        get() = aps.theme.a.getColorPallet(hsv, true)
+        get() = aps.theme.artist.getColorPallet(hsv, true)
 
     var excludeNavigation = false
     var securityLevel = 0
@@ -64,7 +66,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
         view.layoutParams = params
 
         holder.itemView.findViewById<View>(R.id.id_icon)?.setBackgroundResource(iconRes)
-        
+
         if (!aps.isLicensed && position > 1) {
             holder.itemView.alpha = .5f
             holder.itemView.findViewById<TextView>(R.id.id_pro).visibility = VISIBLE

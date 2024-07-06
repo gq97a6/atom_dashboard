@@ -77,7 +77,7 @@ class TimeTile : Tile() {
         }
 
         dialog.dialogSetup()
-        aps.theme.apply(binding.root, colorPallet = aps.theme.a.getColorPallet(floatArrayOf(0f, 0f, 1f)))
+        aps.theme.apply(binding.root, colorPallet = aps.theme.artist.getColorPallet(floatArrayOf(0f, 0f, 1f)))
         dialog.show()
     }
 

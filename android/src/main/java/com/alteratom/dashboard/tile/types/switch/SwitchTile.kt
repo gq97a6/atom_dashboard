@@ -3,7 +3,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alteratom.R
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.tile.Tile
 import com.fasterxml.jackson.annotation.JsonIgnore
 
@@ -29,13 +29,13 @@ class SwitchTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
 
-    var hsvTrue = theme.a.hsv
+    var hsvTrue = aps.theme.a.hsv
     val palletTrue: com.alteratom.dashboard.Theme.ColorPallet
-        get() = theme.a.getColorPallet(hsvTrue, true)
+        get() = aps.theme.a.getColorPallet(hsvTrue, true)
 
     var hsvFalse = floatArrayOf(0f, 0f, 0f)
     val palletFalse: com.alteratom.dashboard.Theme.ColorPallet
-        get() = theme.a.getColorPallet(hsvFalse, true)
+        get() = aps.theme.a.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {
@@ -60,7 +60,7 @@ class SwitchTile : Tile() {
         }
 
     override fun onSetTheme(holder: com.alteratom.dashboard.recycler_view.RecyclerViewAdapter.ViewHolder) {
-        theme.apply(
+        aps.theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
             colorPallet = colorPalletState
@@ -100,7 +100,7 @@ class SwitchTile : Tile() {
         holder?.itemView?.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconResState)
 
         holder?.itemView?.let {
-            theme.apply(
+            aps.theme.apply(
                 it as ViewGroup,
                 anim = false,
                 colorPallet = colorPalletState

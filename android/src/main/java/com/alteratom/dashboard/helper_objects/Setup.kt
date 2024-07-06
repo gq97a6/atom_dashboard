@@ -6,11 +6,11 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.checkBilling
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.dashboards
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_COLD
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
@@ -63,24 +63,24 @@ object Setup {
 
     private fun setFilesPaths(context: Context) {
         Debug.log("SETUP_PATHS")
-        G.rootFolder = context.filesDir.canonicalPath.toString()
-        G.path = mapOf(
-            Theme::class to "${G.rootFolder}/theme",
-            Settings::class to "${G.rootFolder}/settings",
-            Dashboard::class to "${G.rootFolder}/dashboards"
+        aps.rootFolder = context.filesDir.canonicalPath.toString()
+        aps.path = mapOf(
+            Theme::class to "${aps.rootFolder}/theme",
+            Settings::class to "${aps.rootFolder}/settings",
+            Dashboard::class to "${aps.rootFolder}/dashboards"
         )
     }
 
     private fun initializeBasicGlobals() {
-        if (!G.areInitialized) {
+        if (!aps.areInitialized) {
             Debug.log("SETUP_BASIC_GLOBALS")
-            G.theme = Storage.parseSave() ?: Theme()
-            G.settings = Storage.parseSave() ?: Settings()
+            aps.theme = Storage.parseSave() ?: Theme()
+            aps.settings = Storage.parseSave() ?: Settings()
         }
     }
 
     private fun updateProStatus() {
-        G.isLicensed = Pro.getLicenceStatus()
+        aps.isLicensed = Pro.getLicenceStatus()
     }
 
     private fun checkBilling(context: Context) = context.checkBilling()
@@ -88,20 +88,20 @@ object Setup {
     //Check if battery optimization is enabled
     private fun checkBatteryStatus(context: Context) {
         //Disable foreground service if battery is optimized
-        if (context.isBatteryOptimized()) G.settings.fgEnabled = false
+        if (context.isBatteryOptimized()) aps.settings.fgEnabled = false
     }
 
     //Set setup case
     private fun getSetupCase(): SetupCase {
         val case = if (ForegroundService.service?.isStarted == true) {
-            if (G.settings.fgEnabled) SERVICE
+            if (aps.settings.fgEnabled) SERVICE
             else SERVICE_TO_ACTIVITY
         } else {
-            if (G.settings.fgEnabled) {
-                if (G.areInitialized) ACTIVITY_TO_SERVICE
+            if (aps.settings.fgEnabled) {
+                if (aps.areInitialized) ACTIVITY_TO_SERVICE
                 else SERVICE_COLD
             } else {
-                if (G.areInitialized) ACTIVITY
+                if (aps.areInitialized) ACTIVITY
                 else ACTIVITY_COLD
             }
         }
@@ -137,9 +137,9 @@ object Setup {
 
     //Setup required global variables
     private fun initializeOtherGlobals() {
-        if (!G.areInitialized) {
-            dashboards = Storage.parseListSave()
-            G.areInitialized = true
+        if (!aps.areInitialized) {
+            aps.dashboards = Storage.parseListSave()
+            aps.areInitialized = true
         }
     }
 

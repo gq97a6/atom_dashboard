@@ -52,9 +52,7 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.helper_objects.Debug
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.dashboard
-import com.alteratom.dashboard.helper_objects.G.dashboards
-import com.alteratom.dashboard.helper_objects.G.settings
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import kotlin.math.abs
@@ -155,33 +153,33 @@ class DashboardPropertiesFragment : Fragment() {
                 BasicButton(
                     contentPadding = PaddingValues(13.dp),
                     onClick = {
-                        getIconHSV = { dashboard.hsv }
-                        getIconRes = { dashboard.iconRes }
-                        getIconColorPallet = { dashboard.pallet }
+                        getIconHSV = { aps.dashboard.hsv }
+                        getIconRes = { aps.dashboard.iconRes }
+                        getIconColorPallet = { aps.dashboard.pallet }
 
-                        setIconHSV = { hsv -> dashboard.hsv = hsv }
-                        setIconKey = { key -> dashboard.iconKey = key }
+                        setIconHSV = { hsv -> aps.dashboard.hsv = hsv }
+                        setIconKey = { key -> aps.dashboard.iconKey = key }
 
                         fm.replaceWith(TileIconFragment())
                     },
-                    border = BorderStroke(1.dp, dashboard.pallet.cc.color),
+                    border = BorderStroke(1.dp, aps.dashboard.pallet.cc.color),
                     modifier = Modifier.size(52.dp)
                 ) {
                     Icon(
-                        painterResource(dashboard.iconRes),
+                        painterResource(aps.dashboard.iconRes),
                         "",
-                        tint = dashboard.pallet.cc.color
+                        tint = aps.dashboard.pallet.cc.color
                     )
                 }
 
-                var name by remember { mutableStateOf(dashboard.name) }
+                var name by remember { mutableStateOf(aps.dashboard.name) }
                 EditText(
                     label = { Text("Dashboard name") },
                     value = name,
                     onValueChange = { it ->
                         name = it
                         it.trim().let {
-                            dashboard.name = it.ifBlank {
+                            aps.dashboard.name = it.ifBlank {
                                 abs(Random.nextInt(1000, 9999)).toString()
                             }
                         }
@@ -191,20 +189,20 @@ class DashboardPropertiesFragment : Fragment() {
                         .onFocusChanged {
                             //Update field after unFocus in case user left it blank
                             //and it got generated in the background
-                            if (!it.isFocused) name = dashboard.name
+                            if (!it.isFocused) name = aps.dashboard.name
                         }
                 )
             }
 
             DashboardPropertiesCompose.Compose(
-                dashboard.type,
+                aps.dashboard.type,
                 this@DashboardPropertiesFragment
             )
 
-            if (!settings.hideNav && dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
+            if (!aps.settings.hideNav && aps.dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
         }
 
-        if (!settings.hideNav && dashboards.size > 1) {
+        if (!aps.settings.hideNav && aps.dashboards.size > 1) {
             NavigationArrows(
                 { FragmentSwitcher.switch(false, DashboardPropertiesFragment()) },
                 { FragmentSwitcher.switch(true, DashboardPropertiesFragment()) }

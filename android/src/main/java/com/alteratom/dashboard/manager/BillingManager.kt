@@ -3,7 +3,7 @@ package com.alteratom.dashboard.manager
 import android.app.Activity
 import android.content.Context
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.helper_objects.G.settings
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Pro
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -92,9 +92,9 @@ class BillingManager(val context: Context) {
     }
 
     fun onPurchased(purchase: Purchase) {
-        settings.pendingPurchase = false
+        aps.settings.pendingPurchase = false
         if (purchase.purchaseState != PURCHASED) {
-            settings.pendingPurchase = true
+            aps.settings.pendingPurchase = true
             return
         }
         for (product in purchase.products) {

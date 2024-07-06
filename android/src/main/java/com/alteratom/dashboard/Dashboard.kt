@@ -9,7 +9,7 @@ import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.icon.Icons
 import com.alteratom.dashboard.log.Log
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
@@ -27,12 +27,12 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus_circle
 
-    var hsv = G.theme.a.hsv.let {
+    var hsv = aps.theme.a.hsv.let {
         floatArrayOf(it[0], it[1], it[2])
     }
 
     val pallet: Theme.ColorPallet
-        get() = G.theme.a.getColorPallet(hsv, true)
+        get() = aps.theme.a.getColorPallet(hsv, true)
 
     var excludeNavigation = false
     var securityLevel = 0
@@ -65,7 +65,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
 
         holder.itemView.findViewById<View>(R.id.id_icon)?.setBackgroundResource(iconRes)
         
-        if (!G.isLicensed && position > 1) {
+        if (!aps.isLicensed && position > 1) {
             holder.itemView.alpha = .5f
             holder.itemView.findViewById<TextView>(R.id.id_pro).visibility = VISIBLE
         }
@@ -75,7 +75,7 @@ open class Dashboard(var name: String = "", var type: Daemon.Type = Daemon.Type.
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
-        G.theme.apply(
+        aps.theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
             colorPallet = pallet

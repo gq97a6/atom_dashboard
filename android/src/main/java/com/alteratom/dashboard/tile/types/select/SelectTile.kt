@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
@@ -67,7 +67,7 @@ class SelectTile : Tile() {
             binding.dsRecyclerView.adapter = adapter
 
             dialog.dialogSetup()
-            G.theme.apply(binding.root)
+            aps.theme.apply(binding.root)
             dialog.show()
         } else createToast(adapter.context, "Add options first")
     }

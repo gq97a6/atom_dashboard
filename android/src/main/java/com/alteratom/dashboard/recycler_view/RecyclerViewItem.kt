@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.alteratom.R
 import com.alteratom.dashboard.alpha
 import com.alteratom.dashboard.generateNewId
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")
@@ -60,7 +60,7 @@ abstract class RecyclerViewItem {
     }
 
     open fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) { //4 (order of execution)
-        theme.apply(holder.itemView as ViewGroup, anim = false)
+        aps.theme.apply(holder.itemView as ViewGroup, anim = false)
     }
 
     fun areItemsTheSame(oldItem: RecyclerViewItem, newItem: RecyclerViewItem): Boolean {
@@ -97,7 +97,7 @@ abstract class RecyclerViewItem {
             val foreground = holder?.itemView?.findViewById<View>(R.id.foreground)
 
             if (!isNone) {
-                foreground?.setBackgroundColor(theme.a.pallet.background.alpha(190))
+                foreground?.setBackgroundColor(aps.theme.a.pallet.background.alpha(190))
 
                 foreground?.animate()
                     ?.alpha(1f)

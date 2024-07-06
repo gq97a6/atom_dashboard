@@ -40,13 +40,12 @@ import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as LightsTile
+        val tile = aps.tile as LightsTile
 
         var type by remember { mutableStateOf(tile.colorType) }
         var pub by remember {
@@ -166,7 +165,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 onValueChange = {
                     stateSub = it
                     tile.mqtt.subs["state"] = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }
             )
 
@@ -205,7 +204,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 onValueChange = {
                     brightSub = it
                     tile.mqtt.subs["bright"] = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }
             )
 
@@ -244,7 +243,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 onValueChange = {
                     colorSub = it
                     tile.mqtt.subs["color"] = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }
             )
 
@@ -283,7 +282,7 @@ object LightsTileCompose : DaemonBasedCompose {
                 onValueChange = {
                     modeSub = it
                     tile.mqtt.subs["mode"] = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }
             )
 

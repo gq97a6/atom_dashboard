@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.fragment.TileIconFragment
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconColorPallet
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconHSV
@@ -27,12 +28,11 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponent
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.tile
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as SwitchTile
+        val tile = aps.tile as SwitchTile
 
         TilePropertiesComposeComponents.CommunicationBox {
             Row(

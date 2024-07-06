@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTextBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -68,7 +68,7 @@ class TextTile : Tile() {
             }
 
             dialog.dialogSetup()
-            theme.apply(binding.root)
+            aps.theme.apply(binding.root)
             dialog.show()
         } else send(mqtt.payloads["base"] ?: "err")
     }

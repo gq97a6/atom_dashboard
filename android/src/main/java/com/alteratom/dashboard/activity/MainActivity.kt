@@ -6,7 +6,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.alteratom.dashboard.fragment.LoadingFragment
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
 
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(b.root)
 
         //Apply theme
-        G.theme.apply(b.root, this, false)
+        aps.theme.apply(b.root, this, false)
 
         //Intercept touch to handle gestures in whole app excluding PayActivity
         b.root.onInterceptTouch = { onGlobalTouch(it) }
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fm.replaceWith(LoadingFragment())
-
+        
         //fm.replaceWith(SetupFragment(), animation = null)
         //if (!areNotificationsAllowed()) requestNotifications()
         //if (G.settings.startFromLast && G.setCurrentDashboard(G.settings.lastDashboardId)) {
@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
-        G.dashboards.saveToFile()
-        G.settings.saveToFile()
-        G.theme.saveToFile()
+        aps.dashboards.saveToFile()
+        aps.settings.saveToFile()
+        aps.theme.saveToFile()
 
         super.onPause()
     }

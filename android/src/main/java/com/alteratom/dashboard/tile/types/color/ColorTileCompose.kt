@@ -26,12 +26,12 @@ import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object ColorTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as ColorTile
+        val tile = aps.tile as ColorTile
 
         var pub by remember {
             mutableStateOf(

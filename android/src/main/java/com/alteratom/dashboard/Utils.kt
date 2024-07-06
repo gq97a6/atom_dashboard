@@ -41,7 +41,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.manager.BillingManager
 import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -327,7 +327,7 @@ fun Context.checkBilling() {
             checkPurchases(
                 0,
                 {
-                    !it.isAcknowledged || (!G.isLicensed && it.products.contains(
+                    !it.isAcknowledged || (!aps.isLicensed && it.products.contains(
                         BillingManager.PRO
                     ))
                 }
@@ -335,8 +335,8 @@ fun Context.checkBilling() {
             disable()
         }
 
-        if (!G.isLicensed) {
-            for (dash in G.dashboards.slice(2 until G.dashboards.size)) {
+        if (!aps.isLicensed) {
+            for (dash in aps.dashboards.slice(2 until aps.dashboards.size)) {
                 dash.mqtt.isEnabled = false
                 dash.daemon?.notifyConfigChanged()
             }

@@ -26,8 +26,9 @@ import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Debug
-import com.alteratom.dashboard.helper_objects.G.theme
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.google.android.material.chip.Chip
 import com.google.android.material.slider.Slider
@@ -42,10 +43,10 @@ class Theme {
 
     companion object {
         val colors
-            get() = theme.a.pallet.cc
+            get() = AtomApp.aps.theme.a.pallet.cc
 
         val isDark
-            get() = theme.a.isDark
+            get() = aps.theme.a.isDark
     }
 
     fun apply(
@@ -157,14 +158,14 @@ class Theme {
 
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(theme.a.pallet.background.alpha(150)))
+                background.setColor(ColorStateList.valueOf(aps.theme.a.pallet.background.alpha(150)))
             }
 
             "rippleForegroundDim" -> {
                 val background = this.background as RippleDrawable
                 background.setColor(
                     ColorStateList.valueOf(
-                        theme.a.pallet.background.darkened(
+                        aps.theme.a.pallet.background.darkened(
                             0.9f
                         ).alpha(150)
                     )

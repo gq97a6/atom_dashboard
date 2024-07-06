@@ -20,7 +20,7 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponent
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication1
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.RadioGroup
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object TerminalTileCompose : DaemonBasedCompose {
     @Composable
@@ -28,8 +28,8 @@ object TerminalTileCompose : DaemonBasedCompose {
         TilePropertiesComposeComponents.CommunicationBox {
             Communication0()
 
-            var pub by remember { mutableStateOf(tile.mqtt.payloads["base"] ?: "") }
-            var type by remember { mutableStateOf(if (tile.mqtt.payloadIsVar) 0 else 1) }
+            var pub by remember { mutableStateOf(aps.tile.mqtt.payloads["base"] ?: "") }
+            var type by remember { mutableStateOf(if (aps.tile.mqtt.payloadIsVar) 0 else 1) }
 
             AnimatedVisibility(
                 visible = type == 1, enter = fadeIn() + expandVertically(),
@@ -41,7 +41,7 @@ object TerminalTileCompose : DaemonBasedCompose {
                         value = pub,
                         onValueChange = {
                             pub = it
-                            tile.mqtt.payloads["base"] = it
+                            aps.tile.mqtt.payloads["base"] = it
                         }
                     )
                 }
@@ -55,7 +55,7 @@ object TerminalTileCompose : DaemonBasedCompose {
                 type,
                 {
                     type = it
-                    tile.mqtt.payloadIsVar = it == 0
+                    aps.tile.mqtt.payloadIsVar = it == 0
                 },
                 modifier = Modifier.padding(top = 20.dp)
             )

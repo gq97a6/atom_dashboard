@@ -57,8 +57,7 @@ import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
 
@@ -100,39 +99,39 @@ class TilePropertiesFragment : Fragment() {
                 BasicButton(
                     contentPadding = PaddingValues(13.dp),
                     onClick = {
-                        TileIconFragment.getIconHSV = { tile.hsv }
-                        TileIconFragment.getIconRes = { tile.iconRes }
-                        TileIconFragment.getIconColorPallet = { tile.pallet }
+                        TileIconFragment.getIconHSV = { aps.tile.hsv }
+                        TileIconFragment.getIconRes = { aps.tile.iconRes }
+                        TileIconFragment.getIconColorPallet = { aps.tile.pallet }
 
-                        TileIconFragment.setIconHSV = { hsv -> tile.hsv = hsv }
-                        TileIconFragment.setIconKey = { key -> tile.iconKey = key }
+                        TileIconFragment.setIconHSV = { hsv -> aps.tile.hsv = hsv }
+                        TileIconFragment.setIconKey = { key -> aps.tile.iconKey = key }
 
                         fm.replaceWith(TileIconFragment())
                     },
-                    border = BorderStroke(1.dp, tile.pallet.cc.color),
+                    border = BorderStroke(1.dp, aps.tile.pallet.cc.color),
                     modifier = Modifier.size(52.dp)
                 ) {
-                    Icon(painterResource(tile.iconRes), "", tint = tile.pallet.cc.color)
+                    Icon(painterResource(aps.tile.iconRes), "", tint = aps.tile.pallet.cc.color)
                 }
 
-                val typeTag = tile.typeTag.replaceFirstChar {
+                val typeTag = aps.tile.typeTag.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                 }
 
-                var tag by remember { mutableStateOf(tile.tag) }
+                var tag by remember { mutableStateOf(aps.tile.tag) }
                 EditText(
                     label = { BoldStartText("$typeTag ", "tile tag") },
                     value = tag,
                     onValueChange = {
                         tag = it
-                        tile.tag = it
+                        aps.tile.tag = it
                     },
                     modifier = Modifier.padding(start = 12.dp)
                 )
             }
 
-            tile.dashboard?.type?.let {
-                when (tile) {
+            aps.tile.dashboard?.type?.let {
+                when (aps.tile) {
                     is ButtonTile -> ButtonTileCompose
                     is ColorTile -> ColorTileCompose
                     is LightsTile -> LightsTileCompose
@@ -147,10 +146,10 @@ class TilePropertiesFragment : Fragment() {
                 }.Compose(it, this@TilePropertiesFragment)
             }
 
-            if (!G.settings.hideNav && G.dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
+            if (!aps.settings.hideNav && aps.dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
         }
 
-        if (!G.settings.hideNav && G.dashboard.tiles.size > 1) NavigationArrows(
+        if (!aps.settings.hideNav && aps.dashboard.tiles.size > 1) NavigationArrows(
             { TileSwitcher.switch(false) },
             { TileSwitcher.switch(true) })
     }

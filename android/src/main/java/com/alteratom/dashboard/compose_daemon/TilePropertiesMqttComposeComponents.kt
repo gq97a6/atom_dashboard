@@ -27,38 +27,38 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object TilePropertiesMqttComposeComponents {
 
     @Composable
     fun Communication0() {
 
-        var sub by remember { mutableStateOf(G.tile.mqtt.subs["base"] ?: "") }
+        var sub by remember { mutableStateOf(aps.tile.mqtt.subs["base"] ?: "") }
         EditText(
             label = { Text("Subscribe topic") },
             value = sub,
             onValueChange = {
                 sub = it
-                G.tile.mqtt.subs["base"] = it
-                G.dashboard.daemon?.notifyConfigChanged()
+                aps.tile.mqtt.subs["base"] = it
+                aps.dashboard.daemon?.notifyConfigChanged()
             }
         )
 
-        var pub by remember { mutableStateOf(G.tile.mqtt.pubs["base"] ?: "") }
+        var pub by remember { mutableStateOf(aps.tile.mqtt.pubs["base"] ?: "") }
         EditText(
             label = { Text("Publish topic") },
             value = pub,
             onValueChange = {
                 pub = it
-                G.tile.mqtt.pubs["base"] = it
-                G.dashboard.daemon?.notifyConfigChanged()
+                aps.tile.mqtt.pubs["base"] = it
+                aps.dashboard.daemon?.notifyConfigChanged()
             },
             trailingIcon = {
                 IconButton(onClick = {
                     pub = sub
-                    G.tile.mqtt.pubs["base"] = sub
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.tile.mqtt.pubs["base"] = sub
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }) {
                     Icon(painterResource(R.drawable.il_file_copy), "", tint = Theme.colors.b)
                 }
@@ -70,19 +70,19 @@ object TilePropertiesMqttComposeComponents {
     fun Communication1(
         retain: Boolean = true,
         pointer: @Composable () -> Unit = {
-            var json by remember { mutableStateOf(G.tile.mqtt.jsonPaths["base"] ?: "") }
+            var json by remember { mutableStateOf(aps.tile.mqtt.jsonPaths["base"] ?: "") }
             EditText(
                 label = { Text("Payload JSON pointer") },
                 value = json,
                 onValueChange = {
                     json = it
-                    G.tile.mqtt.jsonPaths["base"] = it
+                    aps.tile.mqtt.jsonPaths["base"] = it
                 }
             )
         }
     ) {
 
-        var qos by remember { mutableIntStateOf(G.tile.mqtt.qos) }
+        var qos by remember { mutableIntStateOf(aps.tile.mqtt.qos) }
         RadioGroup(
             listOf(
                 "QoS 0: At most once. No guarantee.",
@@ -92,41 +92,41 @@ object TilePropertiesMqttComposeComponents {
             qos,
             {
                 qos = it
-                G.tile.mqtt.qos = it
-                G.dashboard.daemon?.notifyConfigChanged()
+                aps.tile.mqtt.qos = it
+                aps.dashboard.daemon?.notifyConfigChanged()
             },
             modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
         )
 
         if (retain) {
-            var ret by remember { mutableStateOf(G.tile.mqtt.doRetain) }
+            var ret by remember { mutableStateOf(aps.tile.mqtt.doRetain) }
             LabeledSwitch(
                 label = { Text("Retain massages:", fontSize = 15.sp, color = Theme.colors.a) },
                 checked = ret,
                 onCheckedChange = {
                     ret = it
-                    G.tile.mqtt.doRetain = it
+                    aps.tile.mqtt.doRetain = it
                 }
             )
         }
 
-        var conf by remember { mutableStateOf(G.tile.mqtt.doConfirmPub) }
+        var conf by remember { mutableStateOf(aps.tile.mqtt.doConfirmPub) }
         LabeledSwitch(
             label = { Text("Confirm publishing:", fontSize = 15.sp, color = Theme.colors.a) },
             checked = conf,
             onCheckedChange = {
                 conf = it
-                G.tile.mqtt.doConfirmPub = it
+                aps.tile.mqtt.doConfirmPub = it
             }
         )
 
-        var json by remember { mutableStateOf(G.tile.mqtt.payloadIsJson) }
+        var json by remember { mutableStateOf(aps.tile.mqtt.payloadIsJson) }
         LabeledSwitch(
             label = { Text("Payload is JSON:", fontSize = 15.sp, color = Theme.colors.a) },
             checked = json,
             onCheckedChange = {
                 json = it
-                G.tile.mqtt.payloadIsJson = it
+                aps.tile.mqtt.payloadIsJson = it
             }
         )
 

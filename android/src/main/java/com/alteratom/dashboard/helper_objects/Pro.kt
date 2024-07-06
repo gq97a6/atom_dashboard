@@ -1,17 +1,17 @@
 package com.alteratom.dashboard.helper_objects
 
-import com.alteratom.dashboard.helper_objects.G.rootFolder
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import java.io.File
 
 object Pro {
 
     fun getLicenceStatus(): Boolean {
-        return File("$rootFolder/license").exists()
+        return File("${aps.rootFolder}/license").exists()
     }
 
     fun createLocalLicence() {
         try {
-            File("$rootFolder/license").writeText("")
+            File("${aps.rootFolder}/license").writeText("")
             getLicenceStatus()
         } catch (_: Exception) {
         }
@@ -19,7 +19,7 @@ object Pro {
 
     fun removeLocalLicence() {
         try {
-            File("$rootFolder/license").delete()
+            File("${aps.rootFolder}/license").delete()
             getLicenceStatus()
         } catch (_: Exception) {
         }

@@ -59,10 +59,7 @@ import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.helper_objects.Debug
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.dashboards
-import com.alteratom.dashboard.helper_objects.G.settings
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Setup
 import com.alteratom.dashboard.helper_objects.Storage.mapper
 import com.alteratom.dashboard.helper_objects.Storage.parseListSave
@@ -79,7 +76,7 @@ class SettingsFragment : Fragment() {
     private lateinit var open: ActivityResultLauncher<Intent>
     private lateinit var create: ActivityResultLauncher<Intent>
 
-    var pro = MutableLiveData(G.isLicensed)
+    var pro = MutableLiveData(aps.isLicensed)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +86,9 @@ class SettingsFragment : Fragment() {
                 if (result.resultCode == RESULT_OK) {
                     result.data?.data?.also { uri ->
                         val backup = arrayOf(
-                            dashboards.prepareSave(),
-                            settings.prepareSave(),
-                            theme.prepareSave()
+                            aps.dashboards.prepareSave(),
+                            aps.settings.prepareSave(),
+                            aps.theme.prepareSave()
                         )
 
                         try {
@@ -145,15 +142,15 @@ class SettingsFragment : Fragment() {
                                 val t = parseSave<Theme>(backup[2])
 
                                 DaemonsManager.notifyAllDischarged()
-                                dashboards = d
+                                aps.dashboards = d
                                 DaemonsManager.notifyAllAssigned(requireContext())
 
-                                if (s != null) settings = s
-                                if (t != null) theme = t
+                                if (s != null) aps.settings = s
+                                if (t != null) aps.theme = t
 
-                                dashboards.saveToFile()
-                                settings.saveToFile()
-                                theme.saveToFile()
+                                aps.dashboards.saveToFile()
+                                aps.settings.saveToFile()
+                                aps.theme.saveToFile()
 
                                 //Restart the app
                                 val activity = requireActivity() as MainActivity
@@ -205,7 +202,7 @@ class SettingsFragment : Fragment() {
 
                 FrameBox("Optionals") {
                     Column {
-                        var anim by remember { mutableStateOf(settings.animateUpdate) }
+                        var anim by remember { mutableStateOf(aps.settings.animateUpdate) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -217,11 +214,11 @@ class SettingsFragment : Fragment() {
                             checked = anim,
                             onCheckedChange = {
                                 anim = it
-                                settings.animateUpdate = it
+                                aps.settings.animateUpdate = it
                             },
                         )
 
-                        var last by remember { mutableStateOf(settings.startFromLast) }
+                        var last by remember { mutableStateOf(aps.settings.startFromLast) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -233,11 +230,11 @@ class SettingsFragment : Fragment() {
                             checked = last,
                             onCheckedChange = {
                                 last = it
-                                settings.startFromLast = it
+                                aps.settings.startFromLast = it
                             },
                         )
 
-                        var switch by remember { mutableStateOf(settings.hideNav) }
+                        var switch by remember { mutableStateOf(aps.settings.hideNav) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -249,11 +246,11 @@ class SettingsFragment : Fragment() {
                             checked = switch,
                             onCheckedChange = {
                                 switch = it
-                                settings.hideNav = it
+                                aps.settings.hideNav = it
                             },
                         )
 
-                        var military by remember { mutableStateOf(settings.militaryTime) }
+                        var military by remember { mutableStateOf(aps.settings.militaryTime) }
                         LabeledSwitch(
                             label = {
                                 Column {
@@ -272,11 +269,11 @@ class SettingsFragment : Fragment() {
                             checked = military,
                             onCheckedChange = {
                                 military = it
-                                settings.militaryTime = military
+                                aps.settings.militaryTime = military
                             },
                         )
 
-                        var notifyStack by remember { mutableStateOf(settings.notifyStack) }
+                        var notifyStack by remember { mutableStateOf(aps.settings.notifyStack) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -288,7 +285,7 @@ class SettingsFragment : Fragment() {
                             checked = notifyStack,
                             onCheckedChange = {
                                 notifyStack = it
-                                settings.notifyStack = notifyStack
+                                aps.settings.notifyStack = notifyStack
                             },
                         )
                     }
@@ -338,7 +335,7 @@ class SettingsFragment : Fragment() {
 
                 FrameBox("Background work") {
                     Column {
-                        var fgEnabled by remember { mutableStateOf(settings.fgEnabled) }
+                        var fgEnabled by remember { mutableStateOf(aps.settings.fgEnabled) }
                         LabeledSwitch(
                             label = {
                                 Text(
@@ -351,7 +348,7 @@ class SettingsFragment : Fragment() {
                             onCheckedChange = {
                                 if (context?.isBatteryOptimized() == false || !it) {
                                     fgEnabled = it
-                                    settings.fgEnabled = fgEnabled
+                                    aps.settings.fgEnabled = fgEnabled
 
                                     //Restart the app
                                     val activity = requireActivity() as MainActivity
@@ -458,7 +455,7 @@ class SettingsFragment : Fragment() {
 
             val pro by pro.observeAsState()
             Text(
-                "${if (pro ?: G.isLicensed) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
+                "${if (pro ?: aps.isLicensed) "pro" else "free"} | ${BuildConfig.VERSION_NAME}",
                 Modifier
                     .padding(bottom = 5.dp)
                     .align(Alignment.BottomCenter),
@@ -471,6 +468,6 @@ class SettingsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        pro.postValue(G.isLicensed)
+        pro.postValue(aps.isLicensed)
     }
 }

@@ -15,7 +15,7 @@ import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.round
@@ -252,7 +252,7 @@ class ThermostatTile : Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(theme.a.pallet.color)
+                            ColorStateList.valueOf(aps.theme.a.pallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
@@ -282,7 +282,7 @@ class ThermostatTile : Tile() {
                 binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()
-                theme.apply(binding.root)
+                aps.theme.apply(binding.root)
                 dialog.show()
             } else createToast(modeAdapter.context, "Check setup")
         }
@@ -314,7 +314,7 @@ class ThermostatTile : Tile() {
         temp?.let { binding.dtTempCurrent.text = "${it.round(3)}°C" }
 
         dialog.dialogSetup()
-        theme.apply(binding.root, anim = false)
+        aps.theme.apply(binding.root, anim = false)
         dialog.show()
     }
 

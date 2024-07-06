@@ -1,6 +1,6 @@
 package com.alteratom.dashboard.daemon.daemons.mqttd
 
-import com.alteratom.dashboard.helper_objects.G
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Storage
 import com.alteratom.dashboard.helper_objects.Storage.prepareSave
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -14,7 +14,7 @@ import java.security.cert.X509Certificate
 import kotlin.random.Random
 
 data class MqttConfig(
-    var isEnabled: Boolean = G.isLicensed,
+    var isEnabled: Boolean = aps.isLicensed,
     var sslTrustAll: Boolean = false,
     @JsonIgnore
     var caCert: X509Certificate? = null,

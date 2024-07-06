@@ -16,17 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.manager.ToolbarManager
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.dashboard
-import com.alteratom.dashboard.helper_objects.G.dashboards
-import com.alteratom.dashboard.helper_objects.G.settings
-import com.alteratom.dashboard.helper_objects.G.theme
-import com.alteratom.dashboard.helper_objects.G.tile
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.screenHeight
 import com.alteratom.dashboard.screenVertical
@@ -60,7 +56,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
         setupRecyclerView()
         setupLogRecyclerView()
-        theme.apply(b.root, requireContext(), false)
+        aps.theme.apply(b.root, requireContext(), false)
 
         fm.doOverrideOnBackPress = {
             if (!adapter.editMode.isNone) {
@@ -70,15 +66,15 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         //Set dashboard name
-        b.dTag.text = dashboard.name.uppercase(Locale.getDefault())
+        b.dTag.text = aps.dashboard.name.uppercase(Locale.getDefault())
 
         //Update dashboard status on change
-        dashboard.daemon?.statePing?.observe(viewLifecycleOwner) {
-            dashboard.daemon?.let { updateStatus(it) }
+        aps.dashboard.daemon?.statePing?.observe(viewLifecycleOwner) {
+            aps.dashboard.daemon?.let { updateStatus(it) }
         }
 
         //Hide navigation arrows if required
-        if (dashboards.size < 2 || settings.hideNav) {
+        if (aps.dashboards.size < 2 || aps.settings.hideNav) {
             b.dLeft.visibility = GONE
             b.dRight.visibility = GONE
         }
@@ -96,7 +92,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.dToolbar, requireContext(), false)
+            aps.theme.apply(b.dToolbar, requireContext(), false)
         }
 
         toolBarManager = ToolbarManager(
@@ -165,7 +161,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     override fun onResume() {
         super.onResume()
         adapter.notifyDataSetChanged()
-        settings.lastDashboardId = dashboard.id
+        aps.settings.lastDashboardId = aps.dashboard.id
     }
 
     //----------------------------------------------------------------------------------------------
@@ -187,18 +183,18 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         adapter.onItemEdit = { item ->
-            tile = item
+            aps.tile = item
             fm.replaceWith(TilePropertiesFragment())
         }
 
         adapter.onItemLongClick = { item ->
             if (item is SliderTile && !item.dragCon || item !is SliderTile) {
-                tile = item
+                aps.tile = item
                 fm.replaceWith(TilePropertiesFragment())
             }
         }
 
-        adapter.submitList(dashboard.tiles)
+        adapter.submitList(aps.dashboard.tiles)
 
         val layoutManager =
             StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL)
@@ -212,7 +208,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
     private fun setupLogRecyclerView() {
         val adapter = RecyclerViewAdapter<LogEntry>(requireContext())
         adapter.setHasStableIds(true)
-        adapter.submitList(dashboard.log.list)
+        adapter.submitList(aps.dashboard.log.list)
 
         val layoutManager = LinearLayoutManager(context)
 
@@ -245,7 +241,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                         it <= 0 -> 0
                         it <= (.9 * screenHeight) -> it
                         else -> {
-                            dashboard.log.flush()
+                            aps.dashboard.log.flush()
                             (.9 * screenHeight).toInt()
                         }
                     }

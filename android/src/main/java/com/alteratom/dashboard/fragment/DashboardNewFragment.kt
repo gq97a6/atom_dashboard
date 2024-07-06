@@ -38,8 +38,7 @@ import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.dashboards
-import com.alteratom.dashboard.helper_objects.G.setCurrentDashboard
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import kotlin.math.abs
 import kotlin.random.Random
@@ -92,12 +91,12 @@ class DashboardNewFragment : Fragment() {
                                 .toString()
 
                             val dashboard = Dashboard(name, Daemon.Type.MQTTD)
-                            dashboards.add(dashboard)
-                            dashboards.saveToFile()
+                            aps.dashboards.add(dashboard)
+                            aps.dashboards.saveToFile()
 
                             DaemonsManager.notifyAssigned(dashboard, requireContext())
 
-                            if (setCurrentDashboard(dashboard.id)) fm.replaceWith(
+                            if (aps.setCurrentDashboard(dashboard.id)) fm.replaceWith(
                                 DashboardPropertiesFragment(), false
                             )
                         }

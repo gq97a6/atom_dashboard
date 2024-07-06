@@ -11,8 +11,8 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogColorPickerBinding
@@ -76,7 +76,7 @@ class ColorTile : Tile() {
         mqtt.payloads[ColorTypes.HEX.name] = "#@hex"
         mqtt.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
 
-        colorToHSV(theme.a.pallet.color, hsvPicked)
+        colorToHSV(aps.theme.a.pallet.color, hsvPicked)
         colorType = colorType
     }
 
@@ -94,10 +94,10 @@ class ColorTile : Tile() {
         super.onSetTheme(holder)
 
         if (doPaint) {
-            theme.apply(
+            aps.theme.apply(
                 holder.itemView as ViewGroup,
                 anim = false,
-                colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                colorPallet = aps.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
             )
         }
     }
@@ -161,7 +161,7 @@ class ColorTile : Tile() {
         }
 
         dialog.dialogSetup()
-        theme.apply(binding.root)
+        aps.theme.apply(binding.root)
         dialog.show()
     }
 
@@ -203,10 +203,10 @@ class ColorTile : Tile() {
 
         if (doPaint) {
             holder?.itemView?.let {
-                theme.apply(
+                aps.theme.apply(
                     it as ViewGroup,
                     anim = false,
-                    colorPallet = theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+                    colorPallet = aps.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
                 )
             }
         }

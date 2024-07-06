@@ -46,8 +46,7 @@ import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.dashboard
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.tile.Tile
 
 class TileNewFragment : Fragment() {
@@ -88,11 +87,11 @@ class TileNewFragment : Fragment() {
                         .clip(RoundedCornerShape(10.dp))
                         .clickable(tile != null) {
                             tile?.let {
-                                it.dashboard = dashboard
+                                it.dashboard = aps.dashboard
                                 it.onCreateTile()
-                                dashboard.tiles.add(it)
+                                aps.dashboard.tiles.add(it)
 
-                                G.tile = it
+                                aps.tile = it
                                 fm.replaceWith(TilePropertiesFragment(), false)
                             }
                         }

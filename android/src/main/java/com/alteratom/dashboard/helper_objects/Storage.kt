@@ -1,6 +1,6 @@
 package com.alteratom.dashboard.helper_objects
 
-import com.alteratom.dashboard.helper_objects.G.path
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -17,7 +17,7 @@ object Storage {
     //Save serialized object to file
     fun Any.saveToFile(save: String = this.prepareSave()) {
         try {
-            val path = path[this::class]
+            val path = aps.path[this::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
             Debug.recordException(e)
@@ -27,7 +27,7 @@ object Storage {
     //Save serialized collection of objects to file
     inline fun <reified T> Collection<T>.saveToFile(save: String = this.prepareSave()) {
         try {
-            val path = path[T::class]
+            val path = aps.path[T::class]
             File(path!!).writeText(save)
         } catch (e: Exception) {
             Debug.recordException(e)
@@ -36,7 +36,7 @@ object Storage {
 
     //Get string from file
     inline fun <reified T> getSave() = try {
-        FileReader(path[T::class]).readText()
+        FileReader(aps.path[T::class]).readText()
     } catch (e: Exception) {
         Debug.recordException(e)
         ""

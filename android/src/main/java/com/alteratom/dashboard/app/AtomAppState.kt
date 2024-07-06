@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.helper_objects
+package com.alteratom.dashboard.app
 
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
@@ -6,7 +6,7 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.tile.Tile
 import kotlin.reflect.KClass
 
-object G {
+class AtomAppState {
     var isLicensed = false
     var areInitialized = false
     var settings = Settings()
@@ -39,4 +39,3 @@ object G {
         return true
     }
 }
-

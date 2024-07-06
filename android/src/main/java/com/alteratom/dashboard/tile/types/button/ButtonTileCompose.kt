@@ -16,23 +16,22 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object ButtonTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as ButtonTile
+        val tile = aps.tile as ButtonTile
 
         TilePropertiesComposeComponents.CommunicationBox {
-            var pub by remember { mutableStateOf(G.tile.mqtt.pubs["base"] ?: "") }
+            var pub by remember { mutableStateOf(aps.tile.mqtt.pubs["base"] ?: "") }
             EditText(
                 label = { Text("Publish topic") },
                 value = pub,
                 onValueChange = {
                     pub = it
-                    G.tile.mqtt.pubs["base"] = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.tile.mqtt.pubs["base"] = it
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 }
             )
 
@@ -50,7 +49,7 @@ object ButtonTileCompose : DaemonBasedCompose {
                 }
             )
 
-            var qos by remember { mutableIntStateOf(G.tile.mqtt.qos) }
+            var qos by remember { mutableIntStateOf(aps.tile.mqtt.qos) }
             RadioGroup(
                 listOf(
                     "QoS 0: At most once. No guarantee.",
@@ -60,23 +59,23 @@ object ButtonTileCompose : DaemonBasedCompose {
                 qos,
                 {
                     qos = it
-                    G.tile.mqtt.qos = it
-                    G.dashboard.daemon?.notifyConfigChanged()
+                    aps.tile.mqtt.qos = it
+                    aps.dashboard.daemon?.notifyConfigChanged()
                 },
                 modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
             )
 
-            var ret by remember { mutableStateOf(G.tile.mqtt.doRetain) }
+            var ret by remember { mutableStateOf(aps.tile.mqtt.doRetain) }
             LabeledSwitch(
                 label = { Text("Retain massages:", fontSize = 15.sp, color = Theme.colors.a) },
                 checked = ret,
                 onCheckedChange = {
                     ret = it
-                    G.tile.mqtt.doRetain = it
+                    aps.tile.mqtt.doRetain = it
                 }
             )
 
-            var conf by remember { mutableStateOf(G.tile.mqtt.doConfirmPub) }
+            var conf by remember { mutableStateOf(aps.tile.mqtt.doConfirmPub) }
             LabeledSwitch(
                 label = {
                     Text(
@@ -88,7 +87,7 @@ object ButtonTileCompose : DaemonBasedCompose {
                 checked = conf,
                 onCheckedChange = {
                     conf = it
-                    G.tile.mqtt.doConfirmPub = it
+                    aps.tile.mqtt.doConfirmPub = it
                 }
             )
         }

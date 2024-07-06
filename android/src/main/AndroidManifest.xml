@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".dashboard.AtomApp"
+        android:name=".dashboard.app.AtomApp"
         android:allowBackup="true"
         android:hasFragileUserData="true"
         android:icon="@mipmap/ic_icon"

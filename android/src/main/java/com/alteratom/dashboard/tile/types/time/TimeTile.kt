@@ -4,9 +4,8 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.widget.TextView
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.settings
-import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogTimeBinding
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -22,7 +21,7 @@ class TimeTile : Tile() {
     override var iconKey = "il_time_clock"
 
     var isDate = false
-    var isMilitary = settings.militaryTime
+    var isMilitary = aps.settings.militaryTime
 
     var value = ""
         set(value) {
@@ -78,7 +77,7 @@ class TimeTile : Tile() {
         }
 
         dialog.dialogSetup()
-        theme.apply(binding.root, colorPallet = theme.a.getColorPallet(floatArrayOf(0f, 0f, 1f)))
+        aps.theme.apply(binding.root, colorPallet = aps.theme.a.getColorPallet(floatArrayOf(0f, 0f, 1f)))
         dialog.show()
     }
 

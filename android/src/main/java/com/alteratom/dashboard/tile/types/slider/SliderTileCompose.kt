@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication0
@@ -23,12 +24,11 @@ import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponent
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.helper_objects.G.tile
 
 object SliderTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as SliderTile
+        val tile = aps.tile as SliderTile
 
 
         TilePropertiesComposeComponents.CommunicationBox {

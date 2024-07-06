@@ -12,8 +12,7 @@ import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.daemon.Daemonized
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.helper_objects.G.settings
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
@@ -46,12 +45,12 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     val iconRes: Int
         get() = Icons.icons[iconKey]?.res ?: R.drawable.il_interface_plus
 
-    var hsv = theme.a.hsv.let {
+    var hsv = aps.theme.a.hsv.let {
         floatArrayOf(it[0], it[1], it[2])
     }
 
     val pallet: ColorPallet
-        get() = theme.a.getColorPallet(hsv, true)
+        get() = aps.theme.a.getColorPallet(hsv, true)
 
     @JsonAlias("mqttData")
     override val mqtt: MqttDaemonizedConfig = MqttDaemonizedConfig()
@@ -85,7 +84,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
     }
 
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
-        theme.apply(
+        aps.theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
             colorPallet = pallet
@@ -106,13 +105,13 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
                     mqtt.notifyTitle.replace("@v", msg),
                     mqtt.notifyPayload.replace("@v", msg),
                     this.mqtt.silentNotify,
-                    if (settings.notifyStack) 999 else Random().nextInt()
+                    if (aps.settings.notifyStack) 999 else Random().nextInt()
                 )
             }
         }
 
         if (this.mqtt.doLog) dashboard?.log?.newEntry("${tag.ifBlank { topic }}: $msg")
-        if (settings.animateUpdate && holder?.itemView?.animation == null) {
+        if (aps.settings.animateUpdate && holder?.itemView?.animation == null) {
             holder?.itemView?.attentate()
         }
     }

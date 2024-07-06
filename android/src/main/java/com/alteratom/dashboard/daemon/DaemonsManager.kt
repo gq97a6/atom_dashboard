@@ -3,16 +3,16 @@ package com.alteratom.dashboard.daemon
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.helper_objects.Debug
-import com.alteratom.dashboard.helper_objects.G.dashboards
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 //Manages creation and assignment of daemons
 object DaemonsManager {
 
-    fun notifyAllAssigned(context: Context) = dashboards.forEach { notifyAssigned(it, context) }
+    fun notifyAllAssigned(context: Context) = aps.dashboards.forEach { notifyAssigned(it, context) }
 
     fun notifyAllDischarged() {
         Debug.log("DM_DISCHARGE_ALL")
-        dashboards.forEach { notifyDischarged(it) }
+        aps.dashboards.forEach { notifyDischarged(it) }
     }
 
     fun notifyAssigned(dashboard: Dashboard, context: Context) = try {

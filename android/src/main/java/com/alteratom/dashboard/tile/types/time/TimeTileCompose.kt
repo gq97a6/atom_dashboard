@@ -14,6 +14,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.app.AtomApp
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesMqttComposeComponents.Communication0
@@ -22,12 +24,11 @@ import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledSwitch
-import com.alteratom.dashboard.helper_objects.G.tile
 
 object TimeTileCompose : DaemonBasedCompose {
     @Composable
     override fun Mqttd(fragment: Fragment) {
-        val tile = tile as TimeTile
+        val tile = aps.tile as TimeTile
 
         var type by remember { mutableIntStateOf(if (tile.isDate) 1 else 0) }
 

@@ -15,10 +15,7 @@ import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.manager.ToolbarManager
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G
-import com.alteratom.dashboard.helper_objects.G.dashboards
-import com.alteratom.dashboard.helper_objects.G.setCurrentDashboard
-import com.alteratom.dashboard.helper_objects.G.theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.dashboard.proAlert
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
@@ -43,7 +40,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        theme.apply(b.root, requireContext(), false)
+        aps.theme.apply(b.root, requireContext(), false)
 
         setupRecyclerView()
 
@@ -55,14 +52,14 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val addOnClick: () -> Unit = {
-            if (G.isLicensed || dashboards.size < 2) {
+            if (aps.isLicensed || aps.dashboards.size < 2) {
                 //Temporarily skip dashboard type selection
                 val name = abs(Random.nextInt()).toString()
                 val dashboard = Dashboard(name, Daemon.Type.MQTTD)
-                dashboards.add(dashboard)
-                dashboards.saveToFile()
+                aps.dashboards.add(dashboard)
+                aps.dashboards.saveToFile()
                 DaemonsManager.notifyAssigned(dashboard, requireContext())
-                if (setCurrentDashboard(dashboard.id)) {
+                if (aps.setCurrentDashboard(dashboard.id)) {
                     fm.replaceWith(DashboardPropertiesFragment())
                 }
                 //fm.replaceWith(DashboardNewFragment())
@@ -73,7 +70,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         val onUiChange: () -> Unit = {
-            theme.apply(b.msToolbar, requireContext(), false)
+            aps.theme.apply(b.msToolbar, requireContext(), false)
         }
 
         toolBarManager = ToolbarManager(
@@ -112,27 +109,27 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         }
 
         adapter.onItemEdit = { item ->
-            if (setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
+            if (aps.setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.onItemClick = { item ->
-            if (adapter.editMode.isNone && setCurrentDashboard(item.id))
+            if (adapter.editMode.isNone && aps.setCurrentDashboard(item.id))
                 fm.replaceWith(DashboardFragment())
         }
 
         adapter.onItemLongClick = { item ->
-            if (setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
+            if (aps.setCurrentDashboard(item.id)) fm.replaceWith(DashboardPropertiesFragment())
         }
 
         adapter.editMode.onSet = {
-            if (!G.isLicensed && dashboards.size > 2 && adapter.editMode.isSwap) {
+            if (!aps.isLicensed && aps.dashboards.size > 2 && adapter.editMode.isSwap) {
                 b.msRemove.callOnClick()
                 createToast(requireContext(), "Too many dashboards")
                 requireContext().proAlert(requireActivity())
             }
         }
 
-        adapter.submitList(dashboards)
+        adapter.submitList(aps.dashboards)
 
         val layoutManager = LinearLayoutManager(requireContext())
 

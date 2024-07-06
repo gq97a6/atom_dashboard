@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.roundCloser
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding
@@ -85,7 +85,7 @@ class SliderTile : Tile() {
             }
 
             dialog.dialogSetup()
-            theme.apply(binding.root, anim = false)
+            aps.theme.apply(binding.root, anim = false)
             dialog.show()
         }
     }

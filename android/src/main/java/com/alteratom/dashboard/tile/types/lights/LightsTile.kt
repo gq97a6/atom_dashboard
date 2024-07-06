@@ -21,9 +21,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.app.AtomApp
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.helper_objects.G.theme
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile
@@ -66,13 +67,13 @@ class LightsTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
 
-    var hsvTrue = theme.a.hsv
+    var hsvTrue = aps.theme.a.hsv
     val palletTrue: Theme.ColorPallet
-        get() = theme.a.getColorPallet(hsvTrue, true)
+        get() = aps.theme.a.getColorPallet(hsvTrue, true)
 
     private var hsvFalse = floatArrayOf(0f, 0f, 0f)
     val palletFalse: Theme.ColorPallet
-        get() = theme.a.getColorPallet(hsvFalse, true)
+        get() = aps.theme.a.getColorPallet(hsvFalse, true)
 
     private val colorPalletState
         get() = when (state) {
@@ -138,7 +139,7 @@ class LightsTile : Tile() {
         mqtt.payloads[ColorTypes.HEX.name] = "#@hex"
         mqtt.payloads[ColorTypes.RGB.name] = "@r;@g;@b"
 
-        colorToHSV(theme.a.pallet.color, hsvPicked)
+        colorToHSV(aps.theme.a.pallet.color, hsvPicked)
         colorType = colorType
     }
 
@@ -155,11 +156,11 @@ class LightsTile : Tile() {
     override fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) {
         super.onSetTheme(holder)
 
-        theme.apply(
+        aps.theme.apply(
             holder.itemView as ViewGroup,
             anim = false,
             colorPallet = if (!doPaint) colorPalletState
-            else theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
+            else aps.theme.a.getColorPallet(hsvPicked, isRaw = paintRaw)
         )
     }
 
@@ -300,7 +301,7 @@ class LightsTile : Tile() {
 
                     holder.itemView.findViewById<View>(R.id.is_background).let {
                         it.backgroundTintList =
-                            ColorStateList.valueOf(theme.a.pallet.color)
+                            ColorStateList.valueOf(aps.theme.a.pallet.color)
                         it.alpha = if (mode == notEmpty[pos].second) 0.15f else 0f
                     }
                 }
@@ -330,7 +331,7 @@ class LightsTile : Tile() {
                 binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()
-                theme.apply(binding.root)
+                aps.theme.apply(binding.root)
                 dialog.show()
             }
         }
@@ -356,7 +357,7 @@ class LightsTile : Tile() {
         onColorChange()
 
         dialog.dialogSetup()
-        theme.apply(binding.root, anim = false)
+        aps.theme.apply(binding.root, anim = false)
         dialog.show()
     }
 
@@ -382,11 +383,11 @@ class LightsTile : Tile() {
                         ?.setBackgroundResource(iconResState)
 
                     holder?.itemView?.let {
-                        theme.apply(
+                        aps.theme.apply(
                             it as ViewGroup,
                             anim = false,
                             colorPallet = if (!doPaint) colorPalletState
-                            else theme.a.getColorPallet(
+                            else aps.theme.a.getColorPallet(
                                 hsvPicked,
                                 isRaw = paintRaw
                             )
@@ -426,10 +427,10 @@ class LightsTile : Tile() {
 
                     if (doPaint) {
                         holder?.itemView?.let {
-                            theme.apply(
+                            aps.theme.apply(
                                 it as ViewGroup,
                                 anim = false,
-                                colorPallet = theme.a.getColorPallet(
+                                colorPallet = aps.theme.a.getColorPallet(
                                     hsvPicked,
                                     isRaw = paintRaw
                                 )

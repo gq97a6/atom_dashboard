@@ -51,9 +51,7 @@ import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.nrClickable
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.G.dashboard
-import com.alteratom.dashboard.helper_objects.G.settings
-import com.alteratom.dashboard.helper_objects.G.tile
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
@@ -75,32 +73,32 @@ object TilePropertiesComposeComponents {
                 BasicButton(
                     contentPadding = PaddingValues(13.dp),
                     onClick = {
-                        getIconHSV = { tile.hsv }
-                        getIconRes = { tile.iconRes }
-                        getIconColorPallet = { tile.pallet }
+                        getIconHSV = { aps.tile.hsv }
+                        getIconRes = { aps.tile.iconRes }
+                        getIconColorPallet = { aps.tile.pallet }
 
-                        setIconHSV = { hsv -> tile.hsv = hsv }
-                        setIconKey = { key -> tile.iconKey = key }
+                        setIconHSV = { hsv -> aps.tile.hsv = hsv }
+                        setIconKey = { key -> aps.tile.iconKey = key }
 
                         fm.replaceWith(TileIconFragment())
                     },
-                    border = BorderStroke(1.dp, tile.pallet.cc.color),
+                    border = BorderStroke(1.dp, aps.tile.pallet.cc.color),
                     modifier = Modifier.size(52.dp)
                 ) {
-                    Icon(painterResource(tile.iconRes), "", tint = tile.pallet.cc.color)
+                    Icon(painterResource(aps.tile.iconRes), "", tint = aps.tile.pallet.cc.color)
                 }
 
-                val typeTag = tile.typeTag.replaceFirstChar {
+                val typeTag = aps.tile.typeTag.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                 }
 
-                var tag by remember { mutableStateOf(tile.tag) }
+                var tag by remember { mutableStateOf(aps.tile.tag) }
                 EditText(
                     label = { BoldStartText("$typeTag ", "tile tag") },
                     value = tag,
                     onValueChange = {
                         tag = it
-                        tile.tag = it
+                        aps.tile.tag = it
                     },
                     modifier = Modifier.padding(start = 12.dp)
                 )
@@ -115,7 +113,7 @@ object TilePropertiesComposeComponents {
             )
         }
 
-        if (!settings.hideNav && dashboard.tiles.size > 1) NavigationArrows(
+        if (!aps.settings.hideNav && aps.dashboard.tiles.size > 1) NavigationArrows(
             { TileSwitcher.switch(false) },
             { TileSwitcher.switch(true) })
     }
@@ -125,8 +123,8 @@ object TilePropertiesComposeComponents {
         type: String = "MQTT",
         crossinline content: @Composable () -> Unit
     ) {
-        var show by remember { mutableStateOf(settings.mqttTabShow) }
-        var enabled by remember { mutableStateOf(dashboard.mqtt.isEnabled) }
+        var show by remember { mutableStateOf(aps.settings.mqttTabShow) }
+        var enabled by remember { mutableStateOf(aps.dashboard.mqtt.isEnabled) }
         val rotation = if (show) 0f else 180f
 
         val angle: Float by animateFloatAsState(
@@ -149,8 +147,8 @@ object TilePropertiesComposeComponents {
                         onCheckedChange = {
                             enabled = it
                             show = it
-                            dashboard.mqtt.isEnabled = it
-                            dashboard.daemon?.notifyConfigChanged()
+                            aps.dashboard.mqtt.isEnabled = it
+                            aps.dashboard.daemon?.notifyConfigChanged()
                         }
                     )
 
@@ -158,7 +156,7 @@ object TilePropertiesComposeComponents {
                         modifier = Modifier.size(40.dp),
                         onClick = {
                             show = !show
-                            settings.mqttTabShow = show
+                            aps.settings.mqttTabShow = show
                         }
                     ) {
                         Icon(
@@ -185,13 +183,13 @@ object TilePropertiesComposeComponents {
 
         FrameBox(a = "Logging") {
             Column {
-                var log by remember { mutableStateOf(tile.mqtt.doLog) }
+                var log by remember { mutableStateOf(aps.tile.mqtt.doLog) }
                 LabeledSwitch(
                     label = { Text("Log new values:", fontSize = 15.sp, color = Theme.colors.a) },
                     checked = log,
                     onCheckedChange = {
                         log = it
-                        tile.mqtt.doLog = it
+                        aps.tile.mqtt.doLog = it
                     },
                 )
             }
@@ -199,7 +197,7 @@ object TilePropertiesComposeComponents {
 
         FrameBox(a = "Notifications") {
             Column {
-                var notify by remember { mutableStateOf(tile.mqtt.doNotify) }
+                var notify by remember { mutableStateOf(aps.tile.mqtt.doNotify) }
                 LabeledSwitch(
                     label = {
                         Text(
@@ -212,12 +210,12 @@ object TilePropertiesComposeComponents {
                     onCheckedChange = {
                         if (fragment.activity?.areNotificationsAllowed() == true || !it) {
                             notify = it
-                            tile.mqtt.doNotify = it
+                            aps.tile.mqtt.doNotify = it
                         } else fragment.activity?.requestNotifications()
                     },
                 )
 
-                var quiet by remember { mutableStateOf(tile.mqtt.silentNotify) }
+                var quiet by remember { mutableStateOf(aps.tile.mqtt.silentNotify) }
                 AnimatedVisibility(visible = notify) {
                     Column {
                         LabeledCheckbox(
@@ -231,29 +229,29 @@ object TilePropertiesComposeComponents {
                             checked = quiet,
                             onCheckedChange = {
                                 quiet = it
-                                tile.mqtt.silentNotify = it
+                                aps.tile.mqtt.silentNotify = it
                             },
                             modifier = Modifier.padding(vertical = 10.dp)
                         )
 
-                        var notifyPayload by remember { mutableStateOf(tile.mqtt.notifyPayload) }
+                        var notifyPayload by remember { mutableStateOf(aps.tile.mqtt.notifyPayload) }
                         EditText(
                             label = { Text("Notification payload") },
                             value = notifyPayload,
                             onValueChange = {
                                 notifyPayload = it
-                                tile.mqtt.notifyPayload = it
+                                aps.tile.mqtt.notifyPayload = it
                             },
                             modifier = Modifier.padding(top = 0.dp)
                         )
 
-                        var notifyTitle by remember { mutableStateOf(tile.mqtt.notifyTitle) }
+                        var notifyTitle by remember { mutableStateOf(aps.tile.mqtt.notifyTitle) }
                         EditText(
                             label = { Text("Notification title") },
                             value = notifyTitle,
                             onValueChange = {
                                 notifyTitle = it
-                                tile.mqtt.notifyTitle = it
+                                aps.tile.mqtt.notifyTitle = it
                             },
                             modifier = Modifier.padding(top = 10.dp)
                         )

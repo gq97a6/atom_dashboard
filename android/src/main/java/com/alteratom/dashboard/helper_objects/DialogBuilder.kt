@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View.TEXT_ALIGNMENT_CENTER
 import android.view.WindowManager
 import com.alteratom.R
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.databinding.DialogConfirmBinding
 
 object DialogBuilder {
@@ -35,7 +36,7 @@ object DialogBuilder {
         binding.dcText.text = message
 
         dialog.dialogSetup()
-        G.theme.apply(binding.root)
+        aps.theme.apply(binding.root)
         dialog.show()
     }
 
@@ -69,7 +70,7 @@ object DialogBuilder {
         binding.dcText.textAlignment = textAlign
 
         dialog.dialogSetup()
-        G.theme.apply(binding.root)
+        aps.theme.apply(binding.root)
         dialog.show()
     }
 

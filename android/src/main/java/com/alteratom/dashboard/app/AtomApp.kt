@@ -7,10 +7,12 @@ import com.alteratom.dashboard.helper_objects.Setup
 class AtomApp : Application() {
     companion object {
         val aps = AtomAppState()
+        lateinit var app: AtomApp
     }
 
     override fun onCreate() {
         super.onCreate()
-        Setup.initialize(this)
+        app = this
+        Setup.initialize()
     }
 }

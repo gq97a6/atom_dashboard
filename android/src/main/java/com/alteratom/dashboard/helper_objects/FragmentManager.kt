@@ -103,6 +103,4 @@ object FragmentManager {
             true
         }
     }
-
-    fun addBackstack(fragment: Fragment) = backstack.add(fragment)
 }

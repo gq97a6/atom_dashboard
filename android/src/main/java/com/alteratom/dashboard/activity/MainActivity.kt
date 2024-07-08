@@ -59,14 +59,11 @@ class MainActivity : AppCompatActivity() {
         //Setup fragment manager
         fm.mainActivity = this
         if (aps.settings.startFromLast && aps.setCurrentDashboard(aps.settings.lastDashboardId)) {
-            fm.addBackstack(DashboardFragment())
+            fm.backstack.add(DashboardFragment())
         }
 
         //Launch loading fragment
         fm.replaceWith(LoadingFragment(), animation = null)
-
-        //TODO: RUN ON BACKUP INSERT
-        //if (!areNotificationsAllowed()) requestNotifications()
     }
 
     override fun onPause() {

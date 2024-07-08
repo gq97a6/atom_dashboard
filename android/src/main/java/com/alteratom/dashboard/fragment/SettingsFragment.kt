@@ -48,25 +48,24 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
-import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.PayActivity
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
+import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
-import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.helper_objects.Debug
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Setup
 import com.alteratom.dashboard.helper_objects.Storage.mapper
 import com.alteratom.dashboard.helper_objects.Storage.parseListSave
 import com.alteratom.dashboard.helper_objects.Storage.parseSave
 import com.alteratom.dashboard.helper_objects.Storage.prepareSave
-import com.alteratom.dashboard.helper_objects.Storage.saveToFile
+import com.alteratom.dashboard.isBatteryOptimized
 import com.alteratom.dashboard.openBatterySettings
+import com.alteratom.dashboard.requestNotifications
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
@@ -136,28 +135,29 @@ class SettingsFragment : Fragment() {
                                 listOf()
                             }
 
-                            if (backup.isNotEmpty()) {
-                                val d = parseListSave<Dashboard>(backup[0])
-                                val s = parseSave<Settings>(backup[1])
-                                val t = parseSave<Theme>(backup[2])
-
-                                DaemonsManager.notifyAllDischarged()
-                                aps.dashboards = d
-                                DaemonsManager.notifyAllAssigned(requireContext())
-
-                                if (s != null) aps.settings = s
-                                if (t != null) aps.theme = t
-
-                                aps.dashboards.saveToFile()
-                                aps.settings.saveToFile()
-                                aps.theme.saveToFile()
-
-                                //Restart the app
-                                val activity = requireActivity() as MainActivity
-                                Setup.restart(activity.application)
-                            } else {
+                            //Abort if empty
+                            if (backup.isEmpty()) {
                                 createToast(requireContext(), "Backup restore failed")
+                                return@also
                             }
+
+                            //Unpack
+                            val d = parseListSave<Dashboard>(backup[0])
+                            val s = parseSave<Settings>(backup[1])
+                            val t = parseSave<Theme>(backup[2])
+
+                            //Abort on fail
+                            if (s == null || t == null) throw Exception("Backup restore failed")
+
+                            //Search for any tile with doNotify enabled
+                            if (d.any { it.tiles.any { tile -> tile.mqtt.doNotify } }) {
+                                //Request notifications permissions
+                                activity?.apply {
+                                    if (!areNotificationsAllowed()) requestNotifications()
+                                }
+                            }
+
+                            Setup.applyConfig(d, s, t)
                         } catch (e: Exception) {
                             Debug.recordException(e)
                             createToast(requireContext(), "Backup restore failed")
@@ -301,8 +301,7 @@ class SettingsFragment : Fragment() {
                                 .padding(horizontal = 20.dp)
                                 .clip(RoundedCornerShape(6.dp))
                                 .border(
-                                    BorderStroke(1.dp, colors.color),
-                                    RoundedCornerShape(6.dp)
+                                    BorderStroke(1.dp, colors.color), RoundedCornerShape(6.dp)
                                 )
                                 .background(colors.background.copy(.8f))
                                 .padding(15.dp),
@@ -349,30 +348,14 @@ class SettingsFragment : Fragment() {
                                 if (context?.isBatteryOptimized() == false || !it) {
                                     fgEnabled = it
                                     aps.settings.fgEnabled = fgEnabled
-
-                                    //Restart the app
-                                    val activity = requireActivity() as MainActivity
-                                    Setup.restart(activity.application)
-
-                                    //CoroutineScope(Dispatchers.Default).launch {
-                                    //    Setup.apply {
-                                    //
-                                    //        showFragment()
-                                    //        batteryCheck(activity)
-                                    //        setCase()
-                                    //        service(activity)
-                                    //        daemons(activity)
-                                    //        hideFragment()
-                                    //    }
-                                    //}
-
+                                    Setup.applyConfig(aps.dashboards, aps.settings, aps.theme)
                                 } else workShow = true
                             },
                         )
 
                         Text(
                             "This option enables the app to operate in " +
-                                    "the background by creating a persistent notification." +
+                                    "the background by creating a persistent notification. " +
                                     "However this can affect battery life and it " +
                                     "does not guarantee that the app will not be terminated by the system.",
                             fontSize = 13.sp,

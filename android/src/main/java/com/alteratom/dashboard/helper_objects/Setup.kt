@@ -1,16 +1,20 @@
 package com.alteratom.dashboard.helper_objects
 
 import ButtonTile
-import android.app.Application
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.app.AtomApp.Companion.app
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.checkBilling
+import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.fragment.LoadingFragment
+import com.alteratom.dashboard.fragment.MainScreenFragment
+import com.alteratom.dashboard.fragment.SettingsFragment
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_COLD
@@ -18,6 +22,8 @@ import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_TO_SERVIC
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_COLD
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
+import com.alteratom.dashboard.helper_objects.Storage.saveToFile
+import com.alteratom.dashboard.isBatteryOptimized
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,24 +35,51 @@ object Setup {
         //Cases when background work is enabled
         //------------------------------------------------------------
         SERVICE, //When app starts WITH service running
-        SERVICE_COLD, //When app starts WITHOUT service running
+        SERVICE_COLD, //When app starts from scratch
         ACTIVITY_TO_SERVICE, //When app starts WITH activity running
 
         //------------------------------------------------------------
         //Cases when background work is disabled
         //------------------------------------------------------------
         ACTIVITY, //When app starts WITH activity running
-        ACTIVITY_COLD, //When app starts WITHOUT activity running
+        ACTIVITY_COLD, //When app starts from scratch
         SERVICE_TO_ACTIVITY, //When app starts WITH service running
     }
 
-    fun restart(app: Application) {
-        //TODO: Clear up here
-        fm.backstack = mutableListOf()
-        initialize(app)
+    fun applyConfig(dashboards: MutableList<Dashboard>, settings: Settings, theme: Theme) {
+        CoroutineScope(Dispatchers.Default).launch {
+            //Reset app status initialization flag
+            aps.isInitialized = MutableLiveData(false)
+
+            //Launch loading fragment
+            fm.replaceWith(LoadingFragment(), animation = null)
+
+            //Discharge all current daemons
+            DaemonsManager.notifyAllDischarged()
+
+            //Apply backup files
+            dashboards.saveToFile()
+            settings.saveToFile()
+            theme.saveToFile()
+
+            //Reset backstack
+            fm.backstack = mutableListOf(
+                MainScreenFragment(),
+                SettingsFragment(),
+                LoadingFragment()
+            )
+
+            //Initialize the app
+            initialize()
+        }
+
     }
 
-    fun initialize(app: Application) {
+    fun restart() {
+        initialize()
+    }
+
+    fun initialize() {
         setFilesPaths(app)
         initializeBasicGlobals()
 
@@ -59,6 +92,7 @@ object Setup {
             configureForegroundService(app, case)
             initializeOtherGlobals()
             assignDaemons(app, case)
+            finish()
         }
     }
 
@@ -76,7 +110,7 @@ object Setup {
         if (aps.isInitialized.value == false) {
             Debug.log("SETUP_BASIC_GLOBALS")
             aps.dashboard = Dashboard(name = "Error")
-            aps.tile = ButtonTile().apply { }
+            aps.tile = ButtonTile().apply { tag = "Error" }
             aps.theme = Storage.parseSave() ?: Theme()
             aps.settings = Storage.parseSave() ?: Settings()
         }
@@ -91,7 +125,10 @@ object Setup {
     //Check if battery optimization is enabled
     private fun checkBatteryStatus(context: Context) {
         //Disable foreground service if battery is optimized
-        if (context.isBatteryOptimized()) aps.settings.fgEnabled = false
+        if (context.isBatteryOptimized()) {
+            aps.settings.fgEnabled = false
+            createToast(app, "Disabling background work due to battery optimization")
+        }
     }
 
     //Set setup case
@@ -101,9 +138,11 @@ object Setup {
             else SERVICE_TO_ACTIVITY
         } else {
             if (aps.settings.fgEnabled) {
+                //If aps is initialized assume that activity is running and we need to switch
                 if (aps.isInitialized.value == true) ACTIVITY_TO_SERVICE
                 else SERVICE_COLD
             } else {
+                //If aps is initialized assume that activity is already running
                 if (aps.isInitialized.value == true) ACTIVITY
                 else ACTIVITY_COLD
             }
@@ -142,7 +181,6 @@ object Setup {
     private fun initializeOtherGlobals() {
         if (aps.isInitialized.value == false) {
             aps.dashboards = Storage.parseListSave()
-            aps.isInitialized.postValue(true)
         }
     }
 
@@ -158,4 +196,6 @@ object Setup {
             else -> {}
         }
     }
+
+    private fun finish() = aps.isInitialized.postValue(true)
 }

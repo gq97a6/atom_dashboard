@@ -18,7 +18,7 @@ android {
         minSdkVersion 26
         targetSdkVersion 34
         versionCode 28
-        versionName "3.0.0 | stable" //stable or beta
+        versionName "3.1.0 | beta" //stable or beta
     }
 
     buildFeatures {
@@ -76,16 +76,17 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.compose.runtime:runtime-livedata:1.6.7'
+    implementation 'androidx.compose.runtime:runtime-livedata:1.6.8'
 
     //DO NOT UPGRADE FROM 1.4.3
     //BREAKS ICONS IN WHOLE APP
+    //BREAKS MULTILINE TEXT IN WHOLE APP
     implementation 'androidx.compose.material:material:1.4.3'
     implementation 'androidx.compose.animation:animation:1.4.3'
     implementation 'androidx.compose.ui:ui-tooling:1.4.3'
 
     implementation 'androidx.activity:activity-compose:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.activity:activity-ktx:1.9.0'
@@ -93,9 +94,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
     implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
     implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.android.billingclient:billing:6.2.1'
+    implementation 'com.android.billingclient:billing:7.0.0'
     implementation 'com.android.support:localbroadcastmanager:33.0.0'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.6'
@@ -107,7 +108,7 @@ dependencies {
     implementation 'me.tankery.lib:circularSeekBar:1.4.2'
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
 }

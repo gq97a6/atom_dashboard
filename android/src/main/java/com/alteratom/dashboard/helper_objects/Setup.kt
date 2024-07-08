@@ -76,7 +76,7 @@ object Setup {
         if (aps.isInitialized.value == false) {
             Debug.log("SETUP_BASIC_GLOBALS")
             aps.dashboard = Dashboard(name = "Error")
-            aps.tile = ButtonTile().apply {  }
+            aps.tile = ButtonTile().apply { }
             aps.theme = Storage.parseSave() ?: Theme()
             aps.settings = Storage.parseSave() ?: Settings()
         }
@@ -154,6 +154,7 @@ object Setup {
             }
 
             SERVICE_TO_ACTIVITY, ACTIVITY_COLD -> DaemonsManager.notifyAllAssigned(context)
+
             else -> {}
         }
     }

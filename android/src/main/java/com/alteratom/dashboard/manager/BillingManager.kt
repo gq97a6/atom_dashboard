@@ -230,7 +230,7 @@ class BillingManager(val context: Context) {
         }
     }
 
-    inner class Manager : StatusManager(context, 100) {
+    inner class Manager : StatusManager(100) {
         override fun check(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false

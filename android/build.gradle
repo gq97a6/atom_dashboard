@@ -38,7 +38,7 @@ android {
             //shrinkResources true
             //minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable true
+            debuggable false
         }
     }
 
@@ -78,15 +78,15 @@ android {
 dependencies {
     implementation 'androidx.compose.runtime:runtime-livedata:1.6.8'
 
-    //DO NOT UPGRADE FROM 1.4.3
+    //DO NOT UPGRADE
     //BREAKS ICONS IN WHOLE APP
     //BREAKS MULTILINE TEXT IN WHOLE APP
     implementation 'androidx.compose.material:material:1.4.3'
     implementation 'androidx.compose.animation:animation:1.4.3'
     implementation 'androidx.compose.ui:ui-tooling:1.4.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
 
     implementation 'androidx.activity:activity-compose:1.9.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.activity:activity-ktx:1.9.0'

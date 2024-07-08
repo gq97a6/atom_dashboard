@@ -2,22 +2,22 @@ package com.alteratom.dashboard.activity
 
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.remember
-import androidx.lifecycle.lifecycleScope
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import com.alteratom.R
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.fragment.DashboardFragment
 import com.alteratom.dashboard.fragment.LoadingFragment
-import com.alteratom.dashboard.fragment.MainScreenFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager
 import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +34,18 @@ class MainActivity : AppCompatActivity() {
 
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
+
+        //Apply padding to not cover status bar
+        ViewCompat.setOnApplyWindowInsetsListener(b.mFragment) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+                bottomMargin = insets.bottom
+            }
+
+            WindowInsetsCompat.CONSUMED
+        }
 
         //Apply theme
         aps.theme.apply(b.root, this, false)

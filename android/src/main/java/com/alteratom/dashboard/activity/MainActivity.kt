@@ -9,11 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import com.alteratom.R
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.fragment.DashboardFragment
 import com.alteratom.dashboard.fragment.LoadingFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.databinding.ActivityMainBinding
@@ -64,14 +62,10 @@ class MainActivity : AppCompatActivity() {
             fm.addBackstack(DashboardFragment())
         }
 
-        aps.isInitialized.observe(this) {
-            if (it == true) {
-                fm.popBackstack(false, fadeLong)
-            }
-        }
-
+        //Launch loading fragment
         fm.replaceWith(LoadingFragment(), animation = null)
 
+        //TODO: RUN ON BACKUP INSERT
         //if (!areNotificationsAllowed()) requestNotifications()
     }
 

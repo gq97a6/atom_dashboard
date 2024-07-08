@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -16,10 +17,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
@@ -40,9 +39,10 @@ import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.runBlocking
 
 class LoadingFragment : Fragment() {
 
@@ -57,26 +57,17 @@ class LoadingFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = composeConstruct(requireContext()) {
-        var scaleInitialValue by remember { mutableFloatStateOf(1f) }
-        var scaleTargetValue by remember { mutableFloatStateOf(.8f) }
-        var scaleDuration by remember { mutableIntStateOf(2500) }
+        var closed by remember { mutableStateOf(false) }
 
-        var rotationInitialValue by remember { mutableFloatStateOf(0f) }
-        var rotationTargetValue by remember { mutableFloatStateOf(360f) }
-
-
-        val scale = rememberInfiniteTransition(label = "").animateFloat(
-            initialValue = scaleInitialValue,
-            targetValue = scaleTargetValue,
-            animationSpec = infiniteRepeatable(
-                animation = tween(scaleDuration),
-                repeatMode = RepeatMode.Reverse,
-            ), label = ""
+        val scale by animateFloatAsState(
+            label = "",
+            targetValue = if (closed) 0f else 1f,
+            animationSpec = tween(600)
         )
 
-        val rotation = rememberInfiniteTransition(label = "").animateFloat(
-            initialValue = rotationInitialValue,
-            targetValue = rotationTargetValue,
+        val rotation by rememberInfiniteTransition(label = "").animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
             animationSpec = infiniteRepeatable(
                 animation = tween(2500),
                 repeatMode = RepeatMode.Reverse,
@@ -94,9 +85,9 @@ class LoadingFragment : Fragment() {
                 ), "",
                 modifier = Modifier
                     .padding(bottom = 100.dp)
-                    .scale(scale.value)
-                    .rotate(rotation.value)
-                    .size(300.dp),
+                    .scale(scale)
+                    .rotate(rotation)
+                    .size(250.dp),
                 colorFilter = ColorFilter.tint(
                     Theme.colors.color.copy(alpha = .4f),
                     BlendMode.SrcAtop
@@ -105,17 +96,11 @@ class LoadingFragment : Fragment() {
         }
 
         remember {
-            lifecycleScope.launch {
-                aps.isInitialized.observe(activity as MainActivity) {
-                    if (it == true) {
-                        rotationInitialValue = rotation.value
-                        rotationTargetValue = rotation.value
-
-                        scaleDuration = 1600
-                        scaleInitialValue = scale.value
-                        scaleTargetValue = 0f
-                    }
-                }
+            //Wait for app state to be initialized
+            aps.isInitialized.observe(activity as MainActivity) {
+                if (it != true) return@observe
+                closed = true
+                fm.popBackstack(false, fadeLong)
             }
         }
     }

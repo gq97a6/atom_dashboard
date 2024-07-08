@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
 import com.alteratom.dashboard.click
-import com.alteratom.dashboard.iterate
 import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
+import com.alteratom.dashboard.iterate
 
 @Suppress("UNUSED")
 open class RecyclerViewAdapter<item : RecyclerViewItem>(

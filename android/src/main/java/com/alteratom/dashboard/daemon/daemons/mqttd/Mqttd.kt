@@ -5,8 +5,8 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.manager.StatusManager
 import com.alteratom.dashboard.helper_objects.Debug
+import com.alteratom.dashboard.manager.StatusManager
 import com.hivemq.client.mqtt.datatypes.MqttQos
 import com.hivemq.client.mqtt.exceptions.ConnectionFailedException
 import com.hivemq.client.mqtt.mqtt5.Mqtt5AsyncClient
@@ -90,8 +90,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                 if (isConnected) {
                     Debug.log("MQTT_DISCONNECT")
                     client?.disconnect()
-                }
-                else {
+                } else {
                     Debug.log("MQTT_CONNECT")
                     if (currentConfig != d.mqtt || client == null) {
                         Debug.log("MQTT_BUILD_NEW_CLIENT")

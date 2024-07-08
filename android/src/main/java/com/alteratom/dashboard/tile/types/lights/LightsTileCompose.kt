@@ -23,12 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.fragment.TileIconFragment
-import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconColorPallet
-import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconHSV
-import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconRes
-import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconHSV
-import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconKey
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.PairList
@@ -39,8 +34,13 @@ import com.alteratom.dashboard.compose_global.FrameBox
 import com.alteratom.dashboard.compose_global.HorizontalRadioGroup
 import com.alteratom.dashboard.compose_global.LabeledCheckbox
 import com.alteratom.dashboard.compose_global.LabeledSwitch
+import com.alteratom.dashboard.fragment.TileIconFragment
+import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconColorPallet
+import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconHSV
+import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconRes
+import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconHSV
+import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 
 object LightsTileCompose : DaemonBasedCompose {
     @Composable

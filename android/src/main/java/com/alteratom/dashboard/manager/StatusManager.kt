@@ -1,8 +1,5 @@
 package com.alteratom.dashboard.manager
 
-import android.content.Context
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.alteratom.BuildConfig
 import com.alteratom.dashboard.helper_objects.Debug
 import kotlinx.coroutines.DelicateCoroutinesApi

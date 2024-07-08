@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
-import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
+import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem
 import com.alteratom.dashboard.tile.Tile

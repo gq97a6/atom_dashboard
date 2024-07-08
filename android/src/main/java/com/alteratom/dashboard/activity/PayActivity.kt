@@ -43,6 +43,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
@@ -51,7 +52,6 @@ import com.alteratom.dashboard.manager.BillingManager.Companion.DON1
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON25
 import com.alteratom.dashboard.manager.BillingManager.Companion.DON5
 import com.alteratom.dashboard.manager.BillingManager.Companion.PRO
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

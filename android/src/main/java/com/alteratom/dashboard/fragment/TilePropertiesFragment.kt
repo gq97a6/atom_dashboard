@@ -51,13 +51,13 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.BoldStartText
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.NavigationArrows
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale
 
@@ -146,7 +146,11 @@ class TilePropertiesFragment : Fragment() {
                 }.Compose(it, this@TilePropertiesFragment)
             }
 
-            if (!aps.settings.hideNav && aps.dashboards.size > 1) Spacer(modifier = Modifier.height(60.dp))
+            if (!aps.settings.hideNav && aps.dashboards.size > 1) Spacer(
+                modifier = Modifier.height(
+                    60.dp
+                )
+            )
         }
 
         if (!aps.settings.hideNav && aps.dashboard.tiles.size > 1) NavigationArrows(

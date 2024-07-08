@@ -26,7 +26,6 @@ import androidx.core.graphics.ColorUtils.blendARGB
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alteratom.R
-import com.alteratom.dashboard.app.AtomApp
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.Debug
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -159,7 +158,13 @@ class Theme {
 
             "rippleForeground" -> {
                 val background = this.background as RippleDrawable
-                background.setColor(ColorStateList.valueOf(aps.theme.artist.pallet.background.alpha(150)))
+                background.setColor(
+                    ColorStateList.valueOf(
+                        aps.theme.artist.pallet.background.alpha(
+                            150
+                        )
+                    )
+                )
             }
 
             "rippleForegroundDim" -> {
@@ -199,7 +204,9 @@ class Theme {
                 drawable?.setStroke(3, p.color)
             }
 
-            "bar" -> this.backgroundTintList = ColorStateList.valueOf(contrastColor(!artist.isDark, 100))
+            "bar" -> this.backgroundTintList =
+                ColorStateList.valueOf(contrastColor(!artist.isDark, 100))
+
             else -> onUnknownTag(this.tag, "constraintLayout")
         }
     }

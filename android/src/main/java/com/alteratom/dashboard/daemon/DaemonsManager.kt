@@ -2,8 +2,8 @@ package com.alteratom.dashboard.daemon
 
 import android.content.Context
 import com.alteratom.dashboard.Dashboard
-import com.alteratom.dashboard.helper_objects.Debug
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
+import com.alteratom.dashboard.helper_objects.Debug
 
 //Manages creation and assignment of daemons
 object DaemonsManager {

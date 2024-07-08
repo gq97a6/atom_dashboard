@@ -75,10 +75,6 @@ object Setup {
 
     }
 
-    fun restart() {
-        initialize()
-    }
-
     fun initialize() {
         setFilesPaths(app)
         initializeBasicGlobals()

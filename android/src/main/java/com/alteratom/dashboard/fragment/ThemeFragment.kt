@@ -36,10 +36,10 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.ArcSlider
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.compose_global.switchColors
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.pHsv
 import com.alteratom.dashboard.toPx
 

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.alteratom.R
 import com.alteratom.dashboard.alpha
-import com.alteratom.dashboard.generateNewId
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
+import com.alteratom.dashboard.generateNewId
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 @Suppress("UNUSED")

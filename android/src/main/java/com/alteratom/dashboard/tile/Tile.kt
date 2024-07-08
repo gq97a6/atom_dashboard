@@ -7,12 +7,12 @@ import android.widget.TextView
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Theme.ColorPallet
+import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.attentate
 import com.alteratom.dashboard.createNotification
 import com.alteratom.dashboard.daemon.Daemonized
 import com.alteratom.dashboard.daemon.daemons.mqttd.MqttDaemonizedConfig
 import com.alteratom.dashboard.icon.Icons
-import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.performClick
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter
 import com.alteratom.dashboard.recycler_view.RecyclerViewItem

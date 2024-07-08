@@ -48,6 +48,7 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.areNotificationsAllowed
@@ -57,7 +58,6 @@ import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.createToast
 import com.alteratom.dashboard.helper_objects.Debug
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Setup
 import com.alteratom.dashboard.helper_objects.Storage.mapper
 import com.alteratom.dashboard.helper_objects.Storage.parseListSave

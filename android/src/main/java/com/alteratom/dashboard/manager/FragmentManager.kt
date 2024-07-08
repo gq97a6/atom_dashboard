@@ -1,4 +1,4 @@
-package com.alteratom.dashboard.helper_objects
+package com.alteratom.dashboard.manager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -7,15 +7,13 @@ import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.fragment.MainScreenFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.swap
+import com.alteratom.dashboard.manager.FragmentManager.Animations.swap
 
-object FragmentManager {
+class FragmentManager(val activity: MainActivity) {
 
     var backstack = mutableListOf<Fragment>(MainScreenFragment())
     private var currentFragment: Fragment = MainScreenFragment()
     var doOverrideOnBackPress: () -> Boolean = { false }
-    var mainActivity: MainActivity? = null
-    var fm = FragmentManager
 
     object Animations {
         val swap: (FragmentTransaction) -> Unit = {
@@ -79,18 +77,16 @@ object FragmentManager {
         stack: Boolean = true,
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ) {
-        mainActivity?.apply {
-            //Reset onGlobalTouch action
-            onGlobalTouch = { false }
-            supportFragmentManager.commit {
-                animation?.invoke(this)
-                replace(R.id.m_fragment, fragment)
-                if (stack) backstack.add(currentFragment)
-                currentFragment = fragment
-            }
-        }
-
+        //Reset callbacks
+        onGlobalTouch = { false }
         doOverrideOnBackPress = { false }
+
+        activity.supportFragmentManager.commit {
+            animation?.invoke(this)
+            replace(R.id.m_fragment, fragment)
+            if (stack) backstack.add(currentFragment)
+            currentFragment = fragment
+        }
     }
 
     fun popBackstack(

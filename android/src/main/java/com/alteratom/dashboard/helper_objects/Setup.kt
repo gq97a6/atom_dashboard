@@ -7,6 +7,7 @@ import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.Settings
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.app
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.checkBilling
@@ -15,7 +16,6 @@ import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.fragment.LoadingFragment
 import com.alteratom.dashboard.fragment.MainScreenFragment
 import com.alteratom.dashboard.fragment.SettingsFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_COLD
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.ACTIVITY_TO_SERVICE
@@ -24,6 +24,8 @@ import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_COLD
 import com.alteratom.dashboard.helper_objects.Setup.SetupCase.SERVICE_TO_ACTIVITY
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import com.alteratom.dashboard.isBatteryOptimized
+import com.alteratom.dashboard.manager.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.observeUntil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +49,7 @@ object Setup {
     }
 
     fun applyConfig(dashboards: MutableList<Dashboard>, settings: Settings, theme: Theme) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             //Reset app status initialization flag
             aps.isInitialized = MutableLiveData(false)
 
@@ -63,11 +65,17 @@ object Setup {
             theme.saveToFile()
 
             //Reset backstack
-            fm.backstack = mutableListOf(
-                MainScreenFragment(),
-                SettingsFragment(),
-                LoadingFragment()
-            )
+            fm.backstack = mutableListOf(MainScreenFragment())
+
+            aps.isInitialized.observeUntil {
+                if (it != true) return@observeUntil false
+
+                //Replace with settings fragment
+                fm.replaceWith(SettingsFragment(), false, fadeLong)
+
+                //Remove observer
+                return@observeUntil true
+            }
 
             //Initialize the app
             initialize()

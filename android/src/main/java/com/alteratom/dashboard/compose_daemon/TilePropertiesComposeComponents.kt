@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.areNotificationsAllowed
 import com.alteratom.dashboard.compose_global.BasicButton
@@ -51,7 +52,6 @@ import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconHSV
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.requestNotifications
 import com.alteratom.dashboard.switcher.TileSwitcher
 import java.util.Locale

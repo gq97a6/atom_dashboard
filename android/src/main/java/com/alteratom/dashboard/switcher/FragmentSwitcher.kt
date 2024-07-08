@@ -2,10 +2,10 @@ package com.alteratom.dashboard.switcher
 
 import android.view.MotionEvent
 import androidx.fragment.app.Fragment
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
-import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.slideLeft as slideLeftAnimation
-import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.slideRight as slideRightAnimation
+import com.alteratom.dashboard.manager.FragmentManager.Animations.slideLeft as slideLeftAnimation
+import com.alteratom.dashboard.manager.FragmentManager.Animations.slideRight as slideRightAnimation
 
 object FragmentSwitcher : Switcher() {
 

@@ -15,12 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.alteratom.R
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.manager.ToolbarManager
 import com.alteratom.dashboard.recycler_view.RecyclerViewAdapter

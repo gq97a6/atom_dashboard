@@ -12,8 +12,10 @@ import androidx.core.view.updateLayoutParams
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.fragment.DashboardFragment
 import com.alteratom.dashboard.fragment.LoadingFragment
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
+import com.alteratom.dashboard.manager.FragmentManager
+import com.alteratom.dashboard.manager.FragmentManager.Animations.fadeLong
+import com.alteratom.dashboard.observeUntil
 import com.alteratom.databinding.ActivityMainBinding
 
 
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var b: ActivityMainBinding
 
     companion object {
+        lateinit var fm: FragmentManager
         var onGlobalTouch: (ev: MotionEvent?) -> Boolean = { false }
     }
 
@@ -57,13 +60,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Setup fragment manager
-        fm.mainActivity = this
-        if (aps.settings.startFromLast && aps.setCurrentDashboard(aps.settings.lastDashboardId)) {
-            fm.backstack.add(DashboardFragment())
-        }
+        fm = FragmentManager(this)
 
-        //Launch loading fragment
-        fm.replaceWith(LoadingFragment(), animation = null)
+        //Launch loading fragment without stacking and no animation
+        fm.replaceWith(LoadingFragment(), false, null)
+
+        //Wait for aps to be initialized
+        aps.isInitialized.observeUntil {
+            if (it != true) return@observeUntil false
+
+            if (aps.settings.startFromLast && aps.setCurrentDashboard(aps.settings.lastDashboardId)) {
+                //Replace loading fragment with dashboard fragment
+                fm.replaceWith(DashboardFragment(), false, fadeLong)
+            } else {
+                //Pop to main fragment
+                fm.popBackstack(false, fadeLong)
+            }
+
+            //Remove observer
+            return@observeUntil true
+        }
     }
 
     override fun onPause() {

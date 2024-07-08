@@ -37,6 +37,8 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.alteratom.R
 import com.alteratom.dashboard.activity.PayActivity
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
@@ -316,6 +318,15 @@ fun createNotification(
     with(NotificationManagerCompat.from(context)) {
         notify(id, notification.build())
     }
+}
+
+//Observe until observer returns true
+fun <T> LiveData<T>.observeUntil(observer: (T) -> Boolean) {
+    observeForever(object : Observer<T> {
+        override fun onChanged(value: T) {
+            if (observer(value)) removeObserver(this)
+        }
+    })
 }
 
 fun generateNewId() = kotlin.math.abs(Random().nextLong())

@@ -67,6 +67,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.BasicButton
 import com.alteratom.dashboard.compose_global.EditText
@@ -79,7 +80,6 @@ import com.alteratom.dashboard.daemon.daemons.mqttd.MqttConfig
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.fragment.DashboardPropertiesFragment
 import com.alteratom.dashboard.helper_objects.DialogBuilder.buildConfirm
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.proAlert
 import java.util.Locale
 import kotlin.math.abs

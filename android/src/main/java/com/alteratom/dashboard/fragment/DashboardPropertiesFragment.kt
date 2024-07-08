@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DashboardPropertiesCompose
 import com.alteratom.dashboard.compose_global.BasicButton
@@ -52,7 +53,6 @@ import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconKey
 import com.alteratom.dashboard.helper_objects.Debug
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.switcher.FragmentSwitcher
 import java.io.InputStream
 import kotlin.math.abs

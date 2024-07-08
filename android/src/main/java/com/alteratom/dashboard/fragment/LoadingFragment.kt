@@ -32,11 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Theme
-import com.alteratom.dashboard.activity.MainActivity
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.composeConstruct
-import com.alteratom.dashboard.helper_objects.FragmentManager.Animations.fadeLong
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 
 class LoadingFragment : Fragment() {
 
@@ -91,10 +89,9 @@ class LoadingFragment : Fragment() {
 
         remember {
             //Wait for app state to be initialized
-            aps.isInitialized.observe(activity as MainActivity) {
+            aps.isInitialized.observe(viewLifecycleOwner) {
                 if (it != true) return@observe
                 closed = true
-                fm.popBackstack(false, fadeLong)
             }
         }
     }

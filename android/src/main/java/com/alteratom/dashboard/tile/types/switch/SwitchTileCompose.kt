@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
@@ -27,7 +28,6 @@ import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconHSV
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.getIconRes
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconHSV
 import com.alteratom.dashboard.fragment.TileIconFragment.Companion.setIconKey
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 
 object SwitchTileCompose : DaemonBasedCompose {
     @Composable

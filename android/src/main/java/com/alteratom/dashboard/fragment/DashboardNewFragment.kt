@@ -34,11 +34,11 @@ import androidx.fragment.app.Fragment
 import com.alteratom.R
 import com.alteratom.dashboard.Dashboard
 import com.alteratom.dashboard.Theme.Companion.colors
+import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.composeConstruct
 import com.alteratom.dashboard.daemon.Daemon
 import com.alteratom.dashboard.daemon.DaemonsManager
-import com.alteratom.dashboard.helper_objects.FragmentManager.fm
 import com.alteratom.dashboard.helper_objects.Storage.saveToFile
 import kotlin.math.abs
 import kotlin.random.Random

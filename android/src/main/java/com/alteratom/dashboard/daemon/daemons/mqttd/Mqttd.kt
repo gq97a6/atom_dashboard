@@ -91,11 +91,11 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
                     Debug.log("MQTT_DISCONNECT")
                     client?.disconnect()
                 } else {
-                    Debug.log("MQTT_CONNECT")
                     if (currentConfig != d.mqtt || client == null) {
                         Debug.log("MQTT_BUILD_NEW_CLIENT")
                         buildClient(d.mqtt.copy())
                     }
+                    Debug.log("MQTT_CONNECT")
                     client?.connect()
                 }
             } else {
@@ -122,10 +122,12 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .serverHost(config.address)
             .serverPort(config.port)
             .addConnectedListener {
+                Debug.log("MQTT_ON_CONNECTED")
                 topicCheck()
                 statePing.postValue(null)
             }
             .addDisconnectedListener {
+                Debug.log("MQTT_ON_DISCONNECTED")
                 topics = mutableListOf()
                 manager.dispatch(reason = "connection")
 

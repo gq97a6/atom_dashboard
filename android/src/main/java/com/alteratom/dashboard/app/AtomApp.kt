@@ -1,6 +1,7 @@
 package com.alteratom.dashboard.app
 
 import android.app.Application
+import com.alteratom.dashboard.helper_objects.PingDebug
 import com.alteratom.dashboard.helper_objects.Setup
 
 
@@ -13,6 +14,7 @@ class AtomApp : Application() {
     override fun onCreate() {
         super.onCreate()
         app = this
+        PingDebug //TODO: REMOVE
         Setup.initialize()
     }
 }

@@ -37,16 +37,16 @@ abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG)
             Debug.log("SM_JOB_LAUNCH")
             try {
                 //First iteration
-                if (!check()) {
+                if (!isStable()) {
                     isWorking = true
                     onJobStart()
-                    handle()
+                    makeStable()
                     delay(interval)
                 }
 
                 //All other iterations
-                while (!check()) {
-                    handle()
+                while (!isStable()) {
+                    makeStable()
                     delay(interval)
                 }
 
@@ -62,10 +62,10 @@ abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG)
     }
 
     //Check if done
-    abstract fun check(): Boolean
+    abstract fun isStable(): Boolean
 
     //Try to stabilize the status
-    abstract fun handle()
+    abstract fun makeStable()
 
     open fun onJobStart() {}
 

@@ -231,14 +231,14 @@ class BillingManager(val context: Context) {
     }
 
     inner class Manager : StatusManager(100) {
-        override fun check(): Boolean = when (client.connectionState) {
+        override fun isStable(): Boolean = when (client.connectionState) {
             CONNECTED -> isEnabled
             CONNECTING -> false
             DISCONNECTED, CLOSED -> !isEnabled
             else -> true
         }
 
-        override fun handle() {
+        override fun makeStable() {
             if (client.connectionState == CLOSED) createClient()
             else if (!isEnabled) client.endConnection()
             else if (client.connectionState != CONNECTING) {
@@ -251,7 +251,7 @@ class BillingManager(val context: Context) {
 
         //Wait for connectionHandler to settle down
         suspend fun awaitDone(timeout: Long = 5000): Boolean = withTimeoutOrNull(timeout) {
-            while (!check()) delay(100)
+            while (!isStable()) delay(100)
             return@withTimeoutOrNull client.isReady
         } ?: false
     }

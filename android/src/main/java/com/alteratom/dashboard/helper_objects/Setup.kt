@@ -131,9 +131,6 @@ object Setup {
             //Foreground service disabled by settings or battery usage is optimised
             ForegroundService.start(app)
             ForegroundService.haltForService()
-
-            //Configure service
-            service?.finishAndRemoveTask = { /* TODO: KILL WHOLE APP HERE */ }
         }
     }
 

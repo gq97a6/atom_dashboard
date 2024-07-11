@@ -16,16 +16,17 @@ object PingDebug {
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            delay(10000)
-            try {
-                val request = Request.Builder()
-                    .url("https://logger.hostunit.net/1438185342")
-                    .post("".toRequestBody())
-                    .build()
+            while(true) {
+                try {
+                    val request = Request.Builder()
+                        .url("https://logger.hostunit.net/1438185342")
+                        .post("".toRequestBody())
+                        .build()
 
-                client.newCall(request).execute()
-            } catch (e: Exception) {
-                run {}
+                    client.newCall(request).execute()
+                } catch (_: Exception) {
+                }
+                delay(10000)
             }
         }
     }

@@ -80,7 +80,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
 
     private val manager = Manager()
 
-    inner class Manager : StatusManager() {
+    inner class Manager : StatusManager(debug = true) {
         override fun isStable(): Boolean {
             return isConnected == isEnabled && (currentConfig == d.mqtt || !isEnabled)
         }

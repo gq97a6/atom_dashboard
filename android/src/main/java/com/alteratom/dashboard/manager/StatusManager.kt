@@ -9,7 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG) 1500 else 300) {
+abstract class StatusManager(
+    private val interval: Long = if (BuildConfig.DEBUG) 1500 else 300,
+    private val debug: Boolean = false
+) {
 
     private var job: Job? = null
 
@@ -19,11 +22,11 @@ abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG)
     @OptIn(DelicateCoroutinesApi::class)
     fun dispatch(cancel: Boolean = false, reason: String = "") {
 
-        Debug.log("SM_DISPATCH [$reason]")
+        if (debug) Debug.log("SM_DISPATCH [$reason]")
 
         //Cancel previous job if required
         if (cancel) {
-            Debug.log("SM_CANCEL_JOB")
+            if (debug) Debug.log("SM_CANCEL_JOB")
             job?.cancel()
         }
 
@@ -34,7 +37,7 @@ abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG)
 
         //Launch job
         job = GlobalScope.launch(Dispatchers.IO) {
-            Debug.log("SM_JOB_LAUNCH")
+            if (debug) Debug.log("SM_JOB_LAUNCH")
             try {
                 //First iteration
                 if (!isStable()) {
@@ -52,6 +55,7 @@ abstract class StatusManager(private val interval: Long = if (BuildConfig.DEBUG)
 
                 isWorking = false
                 onJobDone()
+                if (debug) Debug.log("SM_SETTLE")
             } catch (e: Exception) { //Create another coroutine after a delay
                 Debug.recordException(e)
                 onException(e)

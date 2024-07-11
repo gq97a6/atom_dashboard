@@ -67,6 +67,11 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
         if (isConnected) manager.dispatch(reason = "discharged")
     }
 
+    override fun notifyCheck() {
+        super.notifyCheck()
+        if (!manager.isStable()) manager.dispatch(reason = "unstable")
+    }
+
     override fun notifyConfigChanged() {
         super.notifyConfigChanged()
         if (isConnected && isEnabled && currentConfig == d.mqtt) topicCheck()

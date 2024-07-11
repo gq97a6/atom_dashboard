@@ -8,14 +8,14 @@ import com.alteratom.dashboard.helper_objects.Debug
 //Manages creation and assignment of daemons
 object DaemonsManager {
 
-    fun notifyAllAssigned(context: Context) = aps.dashboards.forEach { notifyAssigned(it, context) }
+    fun assignAll(context: Context) = aps.dashboards.forEach { assign(it, context) }
 
-    fun notifyAllDischarged() {
+    fun dischargeAll() {
         Debug.log("DM_DISCHARGE_ALL")
-        aps.dashboards.forEach { notifyDischarged(it) }
+        aps.dashboards.forEach { discharge(it) }
     }
 
-    fun notifyAssigned(dashboard: Dashboard, context: Context) = try {
+    fun assign(dashboard: Dashboard, context: Context) = try {
         Debug.log("DM_ASSIGN")
 
         dashboard.apply {
@@ -26,7 +26,7 @@ object DaemonsManager {
         Debug.recordException(e)
     }
 
-    fun notifyDischarged(dashboard: Dashboard) = try {
+    fun discharge(dashboard: Dashboard) = try {
         Debug.log("DM_DISCHARGE")
         dashboard.daemon?.notifyDischarged()
     } catch (e: Exception) {

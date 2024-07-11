@@ -94,7 +94,7 @@ class DashboardNewFragment : Fragment() {
                             aps.dashboards.add(dashboard)
                             aps.dashboards.saveToFile()
 
-                            DaemonsManager.notifyAssigned(dashboard, requireContext())
+                            DaemonsManager.assign(dashboard, requireContext())
 
                             if (aps.setCurrentDashboard(dashboard.id)) fm.replaceWith(
                                 DashboardPropertiesFragment(), false

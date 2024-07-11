@@ -67,9 +67,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         }
 
         //Notify daemon in case its frozen
-        aps.dashboard.daemon?.context?.let {
-            DaemonsManager.notifyAssigned(aps.dashboard, it)
-        }
+        aps.dashboard.daemon?.notifyCheck()
 
         //Set dashboard name
         b.dTag.text = aps.dashboard.name.uppercase(Locale.getDefault())

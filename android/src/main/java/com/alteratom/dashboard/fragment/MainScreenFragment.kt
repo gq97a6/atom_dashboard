@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
                 val dashboard = Dashboard(name, Daemon.Type.MQTTD)
                 aps.dashboards.add(dashboard)
                 aps.dashboards.saveToFile()
-                DaemonsManager.notifyAssigned(dashboard, requireContext())
+                DaemonsManager.assign(dashboard, requireContext())
                 if (aps.setCurrentDashboard(dashboard.id)) {
                     fm.replaceWith(DashboardPropertiesFragment())
                 }
@@ -100,7 +100,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_main_screen) {
         adapter.onItemRemoved = {
             if (adapter.itemCount == 0) b.msPlaceholder.visibility = VISIBLE
             b.msRemove.clearAnimation()
-            DaemonsManager.notifyDischarged(it)
+            DaemonsManager.discharge(it)
         }
 
         adapter.onItemMarkedRemove = { count, marked ->

@@ -29,15 +29,18 @@ abstract class Daemon(val context: Context, var d: Dashboard) {
             D::class.constructors.first().call(context, dashboard)
     }
 
-    //Notify daemon when it is assigned to a dashboard
+    //Notify daemon when it is assigned to work
     open fun notifyAssigned() {
         isDischarged = false
     }
 
-    //Notify daemon when it is discharged from
+    //Notify daemon when it is discharged from work
     open fun notifyDischarged() {
         isDischarged = true
     }
+
+    //Notify daemon to check status
+    open fun notifyCheck() {}
 
     //Notify daemon when it's config has changed
     open fun notifyConfigChanged() {}

@@ -36,7 +36,7 @@ object Setup {
             fm.replaceWith(LoadingFragment(), animation = null)
 
             //Discharge all current daemons
-            DaemonsManager.notifyAllDischarged()
+            DaemonsManager.dischargeAll()
 
             //Apply backup files
             dashboards.saveToFile()
@@ -119,14 +119,14 @@ object Setup {
 
         //Service not enabled but is running
         if (!aps.settings.fgEnabled && service?.isStarted == true) {
-            DaemonsManager.notifyAllDischarged()
+            DaemonsManager.dischargeAll()
             ForegroundService.stop(app)
         }
 
         //Service enabled but has not started
         else if (aps.settings.fgEnabled && service?.isStarted != true) {
             //Discharge all daemons in case any is running
-            DaemonsManager.notifyAllDischarged()
+            DaemonsManager.dischargeAll()
 
             //Foreground service disabled by settings or battery usage is optimised
             ForegroundService.start(app)
@@ -146,7 +146,7 @@ object Setup {
         val context: Context = if (!aps.settings.fgEnabled) app
         else service!!
 
-        DaemonsManager.notifyAllAssigned(context)
+        DaemonsManager.assignAll(context)
     }
 
     private fun finish() = aps.isInitialized.postValue(true)

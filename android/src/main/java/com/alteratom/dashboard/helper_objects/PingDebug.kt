@@ -16,7 +16,7 @@ object PingDebug {
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            while(true) {
+            while (true) {
                 try {
                     val request = Request.Builder()
                         .url("https://logger.hostunit.net/1438185342")

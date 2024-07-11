@@ -20,6 +20,7 @@ import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
+import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.manager.ToolbarManager
@@ -63,6 +64,11 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 toolBarManager.toggleTools()
                 true
             } else false
+        }
+
+        //Notify daemon in case its frozen
+        aps.dashboard.daemon?.context?.let {
+            DaemonsManager.notifyAssigned(aps.dashboard, it)
         }
 
         //Set dashboard name

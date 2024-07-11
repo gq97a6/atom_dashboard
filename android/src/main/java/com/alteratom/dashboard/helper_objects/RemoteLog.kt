@@ -26,7 +26,7 @@ object RemoteLog {
             val payload = logsToSend.removeFirst()
             val request = Request.Builder()
                 .url("https://logger.hostunit.net/3958935417")
-                .post("$payload".toRequestBody())
+                .post(payload.toRequestBody())
                 .build()
 
             client.newCall(request).execute()

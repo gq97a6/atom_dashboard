@@ -3,6 +3,7 @@ package com.alteratom.dashboard.manager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
@@ -77,6 +78,8 @@ class FragmentManager(val activity: MainActivity) {
         stack: Boolean = true,
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ) {
+        if (activity.supportFragmentManager.isStateSaved) return
+
         //Reset callbacks
         onGlobalTouch = { false }
         doOverrideOnBackPress = { false }
@@ -93,10 +96,10 @@ class FragmentManager(val activity: MainActivity) {
         stack: Boolean = false,
         animation: ((FragmentTransaction) -> Unit?)? = swap
     ): Boolean {
-        return if (backstack.isEmpty()) false
-        else {
-            replaceWith(backstack.removeLast(), stack, animation)
-            true
-        }
+        if (activity.supportFragmentManager.isStateSaved) return false
+        if (backstack.isEmpty()) return false
+
+        replaceWith(backstack.removeLast(), stack, animation)
+        return true
     }
 }

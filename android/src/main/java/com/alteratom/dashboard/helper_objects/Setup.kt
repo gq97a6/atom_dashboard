@@ -116,15 +116,16 @@ object Setup {
 
     //Either stop foreground service if it is no longer used or set it up
     private suspend fun configureForegroundService() {
-        //Service enabled but has not started
-        if (aps.settings.fgEnabled && service?.isStarted != true) {
+
+        //Service not enabled but is running
+        if (!aps.settings.fgEnabled && service?.isStarted == true) {
             DaemonsManager.notifyAllDischarged()
             ForegroundService.stop(app)
         }
 
-        //Service not enabled but is running
-        else if (!aps.settings.fgEnabled && service?.isStarted == true) {
-            //Discharge all daemons
+        //Service enabled but has not started
+        else if (aps.settings.fgEnabled && service?.isStarted != true) {
+            //Discharge all daemons in case any is running
             DaemonsManager.notifyAllDischarged()
 
             //Foreground service disabled by settings or battery usage is optimised
@@ -132,7 +133,7 @@ object Setup {
             ForegroundService.haltForService()
 
             //Configure service
-            ForegroundService.service?.finishAndRemoveTask = { /* TODO: KILL WHOLE APP HERE */ }
+            service?.finishAndRemoveTask = { /* TODO: KILL WHOLE APP HERE */ }
         }
     }
 
@@ -148,9 +149,7 @@ object Setup {
         val context: Context = if (!aps.settings.fgEnabled) app
         else service!!
 
-        aps.dashboards.forEach {
-            DaemonsManager.notifyAssigned(it, context)
-        }
+        DaemonsManager.notifyAllAssigned(context)
     }
 
     private fun finish() = aps.isInitialized.postValue(true)

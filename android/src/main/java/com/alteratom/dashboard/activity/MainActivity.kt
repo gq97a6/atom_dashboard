@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import com.alteratom.dashboard.ForegroundService
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.fragment.DashboardFragment
 import com.alteratom.dashboard.fragment.LoadingFragment
@@ -68,6 +69,8 @@ class MainActivity : AppCompatActivity() {
         //Wait for aps to be initialized
         aps.isInitialized.observeUntil {
             if (it != true) return@observeUntil false
+
+            ForegroundService.service?.finishAndRemoveTask = { finishAndRemoveTask() }
 
             if (aps.settings.startFromLast && aps.setCurrentDashboard(aps.settings.lastDashboardId)) {
                 //Replace loading fragment with dashboard fragment

@@ -19,7 +19,7 @@ object RemoteLog {
         manager.dispatch()
     }
 
-    class Manager : StatusManager(100) {
+    class Manager : StatusManager(10) {
         override fun isStable() = logsToSend.isEmpty()
 
         override fun makeStable() {

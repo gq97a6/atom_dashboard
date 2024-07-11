@@ -20,7 +20,6 @@ import com.alteratom.dashboard.activity.MainActivity.Companion.onGlobalTouch
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.blink
 import com.alteratom.dashboard.daemon.Daemon
-import com.alteratom.dashboard.daemon.DaemonsManager
 import com.alteratom.dashboard.daemon.daemons.mqttd.Mqttd
 import com.alteratom.dashboard.log.LogEntry
 import com.alteratom.dashboard.manager.ToolbarManager

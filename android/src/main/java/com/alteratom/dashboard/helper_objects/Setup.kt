@@ -109,8 +109,10 @@ object Setup {
     private fun checkBatteryStatus() {
         //Disable foreground service if battery is optimized
         if (app.isBatteryOptimized()) {
+            if (aps.settings.fgEnabled) {
+                createToast(app, "Disabling background work due to battery optimization")
+            }
             aps.settings.fgEnabled = false
-            createToast(app, "Disabling background work due to battery optimization")
         }
     }
 

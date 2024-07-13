@@ -64,8 +64,8 @@ interface Daemonized {
                     Storage.mapper.readTree(msg).at(p.value).asText()
                 } catch (e: Exception) {
                     null
-                }?.let {
-                    jsonResult[p.key] = msg
+                }?.let { result ->
+                    jsonResult[p.key] = result
                 }
             }
         }

@@ -65,9 +65,6 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
             } else false
         }
 
-        //Notify daemon in case its frozen
-        aps.dashboard.daemon?.notifyCheck()
-
         //Set dashboard name
         b.dTag.text = aps.dashboard.name.uppercase(Locale.getDefault())
 
@@ -165,6 +162,9 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         super.onResume()
         adapter.notifyDataSetChanged()
         aps.settings.lastDashboardId = aps.dashboard.id
+
+        //Notify daemon in case its frozen
+        aps.dashboard.daemon?.notifyCheck()
     }
 
     //----------------------------------------------------------------------------------------------

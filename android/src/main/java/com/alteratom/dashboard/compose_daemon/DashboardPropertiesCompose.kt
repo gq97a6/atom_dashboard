@@ -61,6 +61,7 @@ import androidx.compose.ui.text.font.FontStyle.Companion.Normal
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -84,7 +85,6 @@ import com.alteratom.dashboard.proAlert
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.random.Random
-
 
 object DashboardPropertiesCompose : DaemonBasedCompose {
 
@@ -155,8 +155,8 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                     Box(
                         modifier = Modifier
                             .alpha(if (conStatus == "ATTEMPTING") alpha.value else 1f)
+                            .height(35.dp)
                             .fillMaxWidth(.9f)
-                            .aspectRatio(4f)
                             .border(
                                 BorderStroke(2.dp, colors.a),
                                 RoundedCornerShape(10.dp)

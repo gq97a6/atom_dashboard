@@ -19,8 +19,7 @@ object Storage {
         try {
             val path = aps.path[this::class]
             File(path!!).writeText(save)
-        } catch (e: Exception) {
-            Debug.recordException(e)
+        } catch (_: Exception) {
         }
     }
 
@@ -29,16 +28,14 @@ object Storage {
         try {
             val path = aps.path[T::class]
             File(path!!).writeText(save)
-        } catch (e: Exception) {
-            Debug.recordException(e)
+        } catch (_: Exception) {
         }
     }
 
     //Get string from file
     inline fun <reified T> getSave() = try {
         FileReader(aps.path[T::class]).readText()
-    } catch (e: Exception) {
-        Debug.recordException(e)
+    } catch (_: Exception) {
         ""
     }
 
@@ -46,8 +43,7 @@ object Storage {
     inline fun <reified T> parseSave(save: String = getSave<T>()): T? =
         try {
             mapper.readValue(save, T::class.java)
-        } catch (e: Exception) {
-            Debug.recordException(e)
+        } catch (_: Exception) {
             null
         }
 
@@ -55,8 +51,7 @@ object Storage {
     inline fun <reified T> parseListSave(save: String = getSave<T>()): MutableList<T> =
         try {
             mapper.readerForListOf(T::class.java).readValue(save)
-        } catch (e: Exception) {
-            Debug.recordException(e)
+        } catch (_: Exception) {
             mutableListOf()
         }
 }

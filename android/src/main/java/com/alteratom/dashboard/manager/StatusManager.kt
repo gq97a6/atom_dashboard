@@ -57,7 +57,6 @@ abstract class StatusManager(
                 onJobDone()
                 if (debug) Debug.log("SM_SETTLE")
             } catch (e: Exception) { //Create another coroutine after a delay
-                Debug.recordException(e)
                 onException(e)
                 delay(interval)
                 dispatch(true)

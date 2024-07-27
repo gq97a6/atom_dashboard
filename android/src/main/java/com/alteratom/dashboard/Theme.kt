@@ -65,8 +65,7 @@ class Theme {
 
                 //it.window.statusBarColor = colorPallet.background
                 //it.window.navigationBarColor = colorPallet.background
-            } catch (e: Exception) {
-                Debug.recordException(e)
+            } catch (_: Exception) {
             }
         }
 

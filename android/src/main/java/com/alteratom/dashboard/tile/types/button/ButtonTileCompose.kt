@@ -14,6 +14,7 @@ import com.alteratom.dashboard.Theme
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_daemon.DaemonBasedCompose
 import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents
+import com.alteratom.dashboard.compose_daemon.TilePropertiesComposeComponents.Notification
 import com.alteratom.dashboard.compose_global.EditText
 import com.alteratom.dashboard.compose_global.LabeledSwitch
 import com.alteratom.dashboard.compose_global.RadioGroup
@@ -91,6 +92,8 @@ object ButtonTileCompose : DaemonBasedCompose {
                 }
             )
         }
+
+        Notification(fragment)
     }
 
     @Composable

@@ -21,7 +21,6 @@ object SelectTileCompose : DaemonBasedCompose {
     override fun Mqttd(fragment: Fragment) {
         val tile = aps.tile as SelectTile
 
-
         TilePropertiesComposeComponents.CommunicationBox {
             Communication()
         }

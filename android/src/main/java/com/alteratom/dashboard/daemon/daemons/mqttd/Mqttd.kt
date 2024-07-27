@@ -109,7 +109,7 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             }
         }
 
-        override fun onJobDone() = statePing.postValue(null)
+        override fun onJobDone() = statePing.postValue("")
         override fun onJobStart() = statePing.postValue(null)
         override fun onException(e: Exception) {
             super.onException(e)
@@ -129,14 +129,14 @@ class Mqttd(context: Context, dashboard: Dashboard) : Daemon(context, dashboard)
             .addConnectedListener {
                 Debug.log("MQTT_ON_CONNECTED")
                 topicCheck()
-                statePing.postValue(null)
+                statePing.postValue("")
             }
             .addDisconnectedListener {
                 Debug.log("MQTT_ON_DISCONNECTED")
                 topics = mutableListOf()
                 manager.dispatch(reason = "connection")
 
-                if (it.cause !is ConnectionFailedException) statePing.postValue(null)
+                if (it.cause !is ConnectionFailedException) statePing.postValue("")
                 else statePing.postValue(it.cause.cause?.message)
             }
 

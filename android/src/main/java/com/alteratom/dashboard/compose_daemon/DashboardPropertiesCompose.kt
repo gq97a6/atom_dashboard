@@ -137,7 +137,7 @@ object DashboardPropertiesCompose : DaemonBasedCompose {
                                         Mqttd.State.CONNECTED_SSL -> "CONNECTED"
                                     }
 
-                                    conReason = state ?: ""
+                                    state?.let { conReason = it }
                                 }
                             }
                         }

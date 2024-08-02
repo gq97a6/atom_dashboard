@@ -36,10 +36,13 @@ class SelectTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
+        if (adapter == null) return
+
         val notEmpty = options.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
         if (notEmpty.isNotEmpty()) {
-            val dialog = Dialog(adapter.context)
-            val adapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
+
+            val dialog = Dialog(adapter!!.context)
+            val adapter = RecyclerViewAdapter<RecyclerViewItem>(adapter!!.context)
 
             dialog.setContentView(R.layout.dialog_select)
             val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -69,6 +72,6 @@ class SelectTile : Tile() {
             dialog.dialogSetup()
             aps.theme.apply(binding.root)
             dialog.show()
-        } else createToast(adapter.context, "Add options first")
+        } else createToast(adapter!!.context, "Add options first")
     }
 }

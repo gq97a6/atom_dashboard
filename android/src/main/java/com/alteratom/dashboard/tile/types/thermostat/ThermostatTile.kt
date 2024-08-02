@@ -117,6 +117,8 @@ class ThermostatTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
+        if (adapter == null) return
+
         if (temperatureRange[0] > temperatureRange[1]) {
             val tmp = temperatureRange[0]
             temperatureRange[0] = temperatureRange[1]
@@ -128,8 +130,8 @@ class ThermostatTile : Tile() {
             }
         }
 
-        val dialog = Dialog(adapter.context)
-        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
+        val dialog = Dialog(adapter!!.context)
+        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter!!.context)
 
         dialog.setContentView(R.layout.dialog_thermostat)
         val binding = DialogThermostatBinding.bind(dialog.findViewById(R.id.root))
@@ -162,7 +164,7 @@ class ThermostatTile : Tile() {
             hasReceived.removeObserver(observer)
         }
 
-        hasReceived.observe(adapter.context as LifecycleOwner, observer)
+        hasReceived.observe(adapter!!.context as LifecycleOwner, observer)
 
         var tempSetpointTmp = tempSetpoint
         var humiSetpointTmp = humiSetpoint
@@ -221,7 +223,7 @@ class ThermostatTile : Tile() {
             }
 
             if (mqtt.doConfirmPub) {
-                with(adapter.context) {
+                with(adapter!!.context) {
                     buildConfirm(message = "Confirm publishing", label = "PUBLISH") {
                         send()
                     }
@@ -239,8 +241,8 @@ class ThermostatTile : Tile() {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
             if (notEmpty.isNotEmpty() && !mqtt.pubs["mode"].isNullOrEmpty()) {
 
-                val dialog = Dialog(adapter.context)
-                modeAdapter = RecyclerViewAdapter(adapter.context)
+                val dialog = Dialog(adapter!!.context)
+                modeAdapter = RecyclerViewAdapter(adapter!!.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -278,7 +280,7 @@ class ThermostatTile : Tile() {
                     )
                 })
 
-                binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
+                binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter!!.context)
                 binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()

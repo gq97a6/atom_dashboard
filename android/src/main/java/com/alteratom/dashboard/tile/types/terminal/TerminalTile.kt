@@ -40,7 +40,7 @@ class TerminalTile : Tile() {
         val layoutParams = holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams
         layoutParams.isFullSpan = true
 
-        terminalAdapter = RecyclerViewAdapter(adapter.context)
+        terminalAdapter = RecyclerViewAdapter(adapter!!.context)
         terminalAdapter.setHasStableIds(true)
 
         terminalAdapter.onBindViewHolder = { _, terminalHolder, pos ->
@@ -54,7 +54,7 @@ class TerminalTile : Tile() {
             RecyclerViewItem(R.layout.item_terminal_entry)
         })
 
-        val layoutManager = LinearLayoutManager(adapter.context)
+        val layoutManager = LinearLayoutManager(adapter!!.context)
         layoutManager.reverseLayout = true
 
         val rv = holder.itemView.findViewById<RecyclerView>(R.id.tt_recycler_view)
@@ -66,7 +66,7 @@ class TerminalTile : Tile() {
         super.onClick(v, e)
 
         if (mqtt.payloadIsVar) {
-            val dialog = Dialog(adapter.context)
+            val dialog = Dialog(adapter!!.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))
@@ -99,7 +99,7 @@ class TerminalTile : Tile() {
         val entry = jsonResult["base"] ?: msg
         log.add(0, entry)
 
-        (adapter.context as MainActivity).runOnUiThread {
+        (adapter!!.context as MainActivity).runOnUiThread {
             terminalAdapter.let {
                 if (log.size > 10) {
                     log.removeLast()

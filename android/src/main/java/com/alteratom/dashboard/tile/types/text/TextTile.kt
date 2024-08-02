@@ -51,7 +51,7 @@ class TextTile : Tile() {
         }
 
         if (mqtt.payloadIsVar) {
-            val dialog = Dialog(adapter.context)
+            val dialog = Dialog(adapter!!.context)
 
             dialog.setContentView(R.layout.dialog_text)
             val binding = DialogTextBinding.bind(dialog.findViewById(R.id.root))

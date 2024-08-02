@@ -41,7 +41,9 @@ class TimeTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        val dialog = Dialog(adapter.context)
+        if (adapter == null) return
+
+        val dialog = Dialog(adapter!!.context)
         dialog.setContentView(R.layout.dialog_time)
         val binding = DialogTimeBinding.bind(dialog.findViewById(R.id.root))
 

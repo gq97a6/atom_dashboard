@@ -11,7 +11,6 @@ import com.alteratom.R
 import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
-import com.alteratom.dashboard.rangedIn
 import com.alteratom.dashboard.roundCloser
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding
@@ -66,8 +65,10 @@ class SliderTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
+        if (adapter == null) return
+
         if (!dragCon) {
-            val dialog = Dialog(adapter.context)
+            val dialog = Dialog(adapter!!.context)
 
             dialog.setContentView(R.layout.dialog_slider)
             val binding = DialogSliderBinding.bind(dialog.findViewById(R.id.root))
@@ -135,9 +136,12 @@ class SliderTile : Tile() {
     }
 
     private fun setBackground(value: Int, background: View?) {
+        if (adapter == null) return
+
         val params = background?.layoutParams as ConstraintLayout.LayoutParams?
-        (adapter.context as MainActivity).runOnUiThread {
-            val widthPercent = abs((range[0] - value).toFloat() / (range[1] - range[0]))
+        val widthPercent = abs((range[0] - value).toFloat() / (range[1] - range[0]))
+
+        (adapter!!.context as MainActivity).runOnUiThread {
             params?.matchConstraintPercentWidth = widthPercent
             background?.requestLayout()
         }

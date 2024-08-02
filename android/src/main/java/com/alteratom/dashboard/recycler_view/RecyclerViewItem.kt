@@ -21,7 +21,7 @@ abstract class RecyclerViewItem {
     var holder: RecyclerViewAdapter.ViewHolder? = null
 
     @JsonIgnore
-    lateinit var adapter: RecyclerViewAdapter<*>
+    var adapter: RecyclerViewAdapter<*>? = null
 
     @JsonIgnore
     var flag = Flags()
@@ -56,7 +56,7 @@ abstract class RecyclerViewItem {
         position: Int
     ) { //3 (order of execution)
         this.holder = holder
-        onEdit(!(adapter.editMode.isNone))
+        onEdit(!(adapter!!.editMode.isNone))
     }
 
     open fun onSetTheme(holder: RecyclerViewAdapter.ViewHolder) { //4 (order of execution)

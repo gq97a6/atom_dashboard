@@ -64,7 +64,8 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
 
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
-        performClick(adapter.context)
+        if (adapter == null) return
+        performClick(adapter!!.context)
     }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.ViewHolder, position: Int) {
@@ -74,7 +75,7 @@ abstract class Tile : RecyclerViewItem(), Daemonized {
         val params = view.layoutParams
 
         params.height =
-            ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter.spanCount).toInt()
+            ((screenWidth - view.paddingLeft * 2) * height / 1.61803398875 / adapter!!.spanCount).toInt()
         view.layoutParams = params
 
         holder.itemView.findViewById<View>(R.id.t_icon)?.setBackgroundResource(iconRes)

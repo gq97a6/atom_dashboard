@@ -166,8 +166,10 @@ class LightsTile : Tile() {
     override fun onClick(v: View, e: MotionEvent) {
         super.onClick(v, e)
 
-        val dialog = Dialog(adapter.context)
-        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter.context)
+        if (adapter == null) return
+
+        val dialog = Dialog(adapter!!.context)
+        var modeAdapter = RecyclerViewAdapter<RecyclerViewItem>(adapter!!.context)
 
         dialog.setContentView(R.layout.dialog_lights)
         val binding = DialogLightsBinding.bind(dialog.findViewById(R.id.root))
@@ -188,7 +190,7 @@ class LightsTile : Tile() {
             hasReceived.removeObserver(observer)
         }
 
-        hasReceived.observe(adapter.context as LifecycleOwner, observer)
+        hasReceived.observe(adapter!!.context as LifecycleOwner, observer)
 
         binding.dlPicker.visibility = if (includePicker) VISIBLE else GONE
         binding.dlBright.startAngle = if (includePicker) 30f else 150f
@@ -270,7 +272,7 @@ class LightsTile : Tile() {
             }
 
             if (mqtt.doConfirmPub) {
-                with(adapter.context) {
+                with(adapter!!.context) {
                     buildConfirm(message = "Confirm publishing", label = "PUBLISH") {
                         send()
                     }
@@ -287,8 +289,8 @@ class LightsTile : Tile() {
         binding.dlMode.setOnClickListener {
             val notEmpty = modes.filter { !(it.first.isEmpty() && it.second.isEmpty()) }
             if (notEmpty.isNotEmpty()) {
-                val dialog = Dialog(adapter.context)
-                modeAdapter = RecyclerViewAdapter(adapter.context)
+                val dialog = Dialog(adapter!!.context)
+                modeAdapter = RecyclerViewAdapter(adapter!!.context)
 
                 dialog.setContentView(R.layout.dialog_select)
                 val binding = DialogSelectBinding.bind(dialog.findViewById(R.id.root))
@@ -326,7 +328,7 @@ class LightsTile : Tile() {
                     )
                 })
 
-                binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter.context)
+                binding.dsRecyclerView.layoutManager = LinearLayoutManager(adapter!!.context)
                 binding.dsRecyclerView.adapter = modeAdapter
 
                 dialog.dialogSetup()

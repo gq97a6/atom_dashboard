@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.alteratom.R
+import com.alteratom.dashboard.activity.MainActivity
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.helper_objects.DialogBuilder.dialogSetup
+import com.alteratom.dashboard.rangedIn
 import com.alteratom.dashboard.roundCloser
 import com.alteratom.dashboard.tile.Tile
 import com.alteratom.databinding.DialogSliderBinding
@@ -107,8 +109,9 @@ class SliderTile : Tile() {
     ) {
         super.onReceive(topic, msg, jsonResult)
 
-        (jsonResult["base"] ?: msg).toFloatOrNull()
-            ?.let { this.value = it.roundCloser(range[2]) }
+        (jsonResult["base"] ?: msg).toFloatOrNull()?.let {
+            this.value = it.roundCloser(range[2])
+        }
     }
 
     private fun control(e: MotionEvent, v: View?): Pair<Int, Boolean> {
@@ -133,8 +136,10 @@ class SliderTile : Tile() {
 
     private fun setBackground(value: Int, background: View?) {
         val params = background?.layoutParams as ConstraintLayout.LayoutParams?
-        params?.matchConstraintPercentWidth =
-            abs((((range[0] - value).toFloat() / (range[1] - range[0]))))
-        background?.requestLayout()
+        (adapter.context as MainActivity).runOnUiThread {
+            val widthPercent = abs((range[0] - value).toFloat() / (range[1] - range[0]))
+            params?.matchConstraintPercentWidth = widthPercent
+            background?.requestLayout()
+        }
     }
 }

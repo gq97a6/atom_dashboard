@@ -44,13 +44,18 @@ class LightsTile : Tile() {
 
     override var iconKey = "il_business_lightbulb_alt"
 
+    @JsonIgnore
     private var hasReceived = MutableLiveData("")
 
-    private var state: Boolean? = null
-    private var mode: String? = null
-    private var hsvPicked = floatArrayOf(0f, 0f, 0f)
-    private var brightness: Int? = null
+    var state: Boolean? = null
+    var mode: String? = null
+    var hsvPicked = floatArrayOf(0f, 0f, 0f)
+    var brightness: Int? = null
+
+    @JsonIgnore
     private var toRemoves = mutableListOf<String>()
+
+    @JsonIgnore
     private var flagIndexes = mutableMapOf<String, Int>()
 
     val modes = mutableListOf("Solid" to "0", "Blink" to "1", "Breathe" to "2", "Rainbow" to "3")
@@ -61,7 +66,7 @@ class LightsTile : Tile() {
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyTrue]?.res
             ?: R.drawable.il_interface_toggle_on
 
-    private var iconKeyFalse = "il_interface_toggle_off"
+    var iconKeyFalse = "il_interface_toggle_off"
     val iconResFalse: Int
         get() = com.alteratom.dashboard.icon.Icons.icons[iconKeyFalse]?.res
             ?: R.drawable.il_interface_toggle_off
@@ -70,7 +75,7 @@ class LightsTile : Tile() {
     val palletTrue: Theme.ColorPallet
         get() = aps.theme.artist.getColorPallet(hsvTrue, true)
 
-    private var hsvFalse = floatArrayOf(0f, 0f, 0f)
+    var hsvFalse = floatArrayOf(0f, 0f, 0f)
     val palletFalse: Theme.ColorPallet
         get() = aps.theme.artist.getColorPallet(hsvFalse, true)
 

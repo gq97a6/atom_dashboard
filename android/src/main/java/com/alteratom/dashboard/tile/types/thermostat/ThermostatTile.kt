@@ -40,10 +40,11 @@ class ThermostatTile : Tile() {
     @JsonIgnore
     override var height = 2f
 
+    @JsonIgnore
     private var hasReceived = MutableLiveData("")
 
-    private var mode: String? = null
-    private var temp: Float? = null
+    var mode: String? = null
+    var temp: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_temp_value)?.text = value.let {
@@ -55,7 +56,7 @@ class ThermostatTile : Tile() {
             }
         }
 
-    private var humi: Float? = null
+    var humi: Float? = null
         set(value) {
             field = value
             holder?.itemView?.findViewById<TextView>(R.id.th_humi_value)?.text = value.let {
@@ -67,7 +68,7 @@ class ThermostatTile : Tile() {
             }
         }
 
-    private var tempSetpoint: Float? = null
+    var tempSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {
@@ -76,7 +77,7 @@ class ThermostatTile : Tile() {
             }
         }
 
-    private var humiSetpoint: Float? = null
+    var humiSetpoint: Float? = null
         set(value) {
             field = value
             value?.let {

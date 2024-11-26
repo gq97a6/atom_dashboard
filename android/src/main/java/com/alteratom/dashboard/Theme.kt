@@ -77,10 +77,10 @@ class Theme {
 
     private fun ViewGroup.applyTheme(p: ColorPallet) {
         for (i in 0 until this.childCount) {
-            val v = this.getChildAt(i)
-
-            if (v is ViewGroup) v.applyTheme(p)
-            v.defineType(p)
+            this.getChildAt(i).let {
+                if (it is ViewGroup) it.applyTheme(p)
+                it.defineType(p)
+            }
         }
 
         this.defineType(p)

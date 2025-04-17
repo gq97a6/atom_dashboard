@@ -7,7 +7,6 @@ import com.alteratom.dashboard.helper_objects.Debug
 
 //Manages creation and assignment of daemons
 object DaemonsManager {
-
     fun assignAll(context: Context) = aps.dashboards.forEach { assign(it, context) }
 
     fun dischargeAll() {
@@ -32,5 +31,4 @@ object DaemonsManager {
     } catch (e: Exception) {
         Debug.recordException(e)
     }
-
 }

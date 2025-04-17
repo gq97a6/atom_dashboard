@@ -45,6 +45,7 @@ import com.alteratom.dashboard.Theme.Companion.colors
 import com.alteratom.dashboard.activity.MainActivity.Companion.fm
 import com.alteratom.dashboard.app.AtomApp.Companion.aps
 import com.alteratom.dashboard.compose_global.composeConstruct
+import com.alteratom.dashboard.screenVertical
 
 class TileNewFragment : Fragment() {
 
@@ -151,7 +152,7 @@ class TileNewFragment : Fragment() {
             )
 
             LazyVerticalGrid(
-                columns = GridCells.Adaptive(80.dp),
+                columns = if (screenVertical) GridCells.Fixed(3) else GridCells.Adaptive(80.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
@@ -159,14 +160,11 @@ class TileNewFragment : Fragment() {
                     .fillMaxWidth(.85f)
             ) {
                 items(10, span = { index ->
-                    GridItemSpan(if (index in listOf(6, 9)) 2 else 1)
+                    val span = if (index in listOf(6, 9)) 2 else 1
+                    GridItemSpan(span)
                 }) { index ->
-                    TilePick(
-                        index, if (index in listOf(
-                                6, 9
-                            )
-                        ) 2f else 1f
-                    )
+                    val span = if (index in listOf(6, 9)) 2f else 1f
+                    TilePick(index, span)
                 }
             }
 

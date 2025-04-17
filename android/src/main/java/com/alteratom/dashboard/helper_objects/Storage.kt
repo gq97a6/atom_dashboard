@@ -20,7 +20,6 @@ object Storage {
             val path = aps.path[this::class]
             File(path!!).writeText(save)
         } catch (_: Exception) {
-            null
         }
     }
 
@@ -30,7 +29,6 @@ object Storage {
             val path = aps.path[T::class]
             File(path!!).writeText(save)
         } catch (_: Exception) {
-            null
         }
     }
 

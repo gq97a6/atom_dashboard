@@ -1,6 +1,5 @@
 package com.alteratom.dashboard.manager
 
-import com.alteratom.BuildConfig
 import com.alteratom.dashboard.helper_objects.Debug
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -10,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class StatusManager(
-    private val interval: Long = if (BuildConfig.DEBUG) 1500 else 300,
+    private val interval: Long = 1500,
     private val debug: Boolean = false
 ) {
 

@@ -18,6 +18,7 @@ import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.ConsumeParams
+import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.Purchase.PurchaseState.PURCHASED
@@ -59,19 +60,22 @@ class BillingManager(val context: Context) {
     }
 
     internal fun createClient() {
+        val ppp = PendingPurchasesParams
+            .newBuilder()
+            .enableOneTimeProducts()
+            .build()
+
         client = BillingClient.newBuilder(context)
-            .setListener { billingResult, purchases ->
-                if (purchases != null &&
-                    (billingResult.responseCode == OK ||
-                            billingResult.responseCode == ITEM_ALREADY_OWNED)
-                ) {
+            .setListener { bResult, purchases ->
+                val toBeProcessed = (bResult.responseCode == OK || bResult.responseCode == ITEM_ALREADY_OWNED)
+                if (purchases != null && toBeProcessed) {
                     for (purchase in purchases) {
                         onPurchased(purchase)
                         onPurchaseProcessed(purchase)
                     }
                 }
             }
-            .enablePendingPurchases()
+            .enablePendingPurchases(ppp)
             .build()
     }
 
@@ -124,7 +128,7 @@ class BillingManager(val context: Context) {
         }
     }
 
-    private suspend fun getProductDetails(id: String): MutableList<ProductDetails>? =
+    private suspend fun getProductDetails(id: String): List<ProductDetails>? =
         coroutineScope {
             return@coroutineScope if (!manager.awaitDone()) {
                 //createToast(activity, "Failed to connect")
@@ -142,8 +146,8 @@ class BillingManager(val context: Context) {
                             )
                         ).build()
 
-                    client.queryProductDetailsAsync(queryDetails) { _, details ->
-                        continuation.resume(details)
+                    client.queryProductDetailsAsync(queryDetails) { _, queryResult ->
+                        continuation.resume(queryResult.productDetailsList)
                     }
                 }
             }
@@ -179,12 +183,14 @@ class BillingManager(val context: Context) {
     suspend fun getPriceTags(ids: List<String>): Map<String, String>? = withTimeoutOrNull(2000) {
         if (!manager.awaitDone()) return@withTimeoutOrNull null
 
-        List(ids.size) {
-            getProductDetails(ids[it])?.firstOrNull() ?: return@withTimeoutOrNull null
-        }.map {
-            it.productId to
-                    (it.oneTimePurchaseOfferDetails?.formattedPrice
-                        ?: return@withTimeoutOrNull null)
+        ids.map { id ->
+            val productDetails = getProductDetails(id)?.firstOrNull()
+            if (productDetails == null) return@withTimeoutOrNull null
+
+            val price = productDetails.oneTimePurchaseOfferDetails?.formattedPrice
+            if (price == null) return@withTimeoutOrNull null
+
+            productDetails.productId to price
         }.toMap()
     }
 
@@ -192,8 +198,8 @@ class BillingManager(val context: Context) {
         if (context !is Activity) return
         if (!manager.awaitDone()) return
 
-        val productDetails = getProductDetails(id)
-        if (productDetails.isNullOrEmpty()) return
+        val productDetails = getProductDetails(id)?.firstOrNull()
+        if (productDetails == null) return
 
         client.launchBillingFlow(
             context,
@@ -203,7 +209,7 @@ class BillingManager(val context: Context) {
                     listOf(
                         BillingFlowParams.ProductDetailsParams
                             .newBuilder()
-                            .setProductDetails(productDetails.first())
+                            .setProductDetails(productDetails)
                             .build()
                     )
                 )
@@ -225,7 +231,7 @@ class BillingManager(val context: Context) {
             }
         }.let {
             delay(maxOf(eta - it, 0))
-            if (result != null) for (purchase in result!!) onPurchaseProcessed(purchase)
+            if (result != null) for (purchase in result) onPurchaseProcessed(purchase)
             onDone(result)
         }
     }

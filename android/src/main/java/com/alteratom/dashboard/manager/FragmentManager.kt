@@ -99,7 +99,7 @@ class FragmentManager(val activity: MainActivity) {
         if (activity.supportFragmentManager.isStateSaved) return false
         if (backstack.isEmpty()) return false
 
-        replaceWith(backstack.removeLast(), stack, animation)
+        replaceWith(backstack.removeAt(backstack.lastIndex), stack, animation)
         return true
     }
 }

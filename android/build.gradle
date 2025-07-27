@@ -7,24 +7,25 @@ plugins {
     id 'com.google.firebase.crashlytics'
 
     //Sentry
-    id "io.sentry.android.gradle" version "4.9.0"
+    id "io.sentry.android.gradle" version "5.8.0"
 
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     defaultConfig {
         applicationId "com.alteratom.dashboard"
-        compileSdk 34
-        minSdkVersion 26
-        targetSdkVersion 34
-        versionCode 35
-        versionName "4.0.0 | stable" //stable or beta
+        compileSdk = 36
+        minSdkVersion 26 //bump to 29
+        targetSdkVersion 36
+        versionCode = 38
+        versionName = "4.1.0 | stable" //stable or beta or debug
     }
 
     buildFeatures {
-        viewBinding true
-        compose true
-        buildConfig true
+        viewBinding = true
+        compose = true
+        buildConfig = true
     }
 
     buildTypes {
@@ -43,12 +44,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
+    kotlin {
+        jvmToolchain(17)
     }
 
     sourceSets {
@@ -63,7 +64,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.5.7"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 
     packagingOptions {
@@ -72,58 +73,45 @@ android {
         }
     }
 
-    namespace 'com.alteratom'
+    namespace = 'com.alteratom'
 }
 
 dependencies {
-    implementation 'androidx.compose.runtime:runtime-livedata:1.6.8'
+    implementation libs.androidx.runtime.livedata
 
     //DO NOT UPGRADE
     //BREAKS ICONS IN WHOLE APP
     //BREAKS MULTILINE TEXT IN WHOLE APP
-    implementation 'androidx.compose.material:material:1.4.3'
-    implementation 'androidx.compose.animation:animation:1.4.3'
-    implementation 'androidx.compose.ui:ui-tooling:1.4.3'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation libs.androidx.material
+    implementation libs.androidx.animation
+    implementation libs.androidx.ui.tooling
+    implementation libs.androidx.lifecycle.viewmodel.compose
 
-    implementation 'androidx.activity:activity-compose:1.9.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.activity:activity-ktx:1.9.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.android.billingclient:billing:7.0.0'
-    implementation 'com.android.support:localbroadcastmanager:33.0.0'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
-    implementation 'com.github.gq97a6:arc_textview:1.0.0'
-    implementation 'io.netty:netty-handler:4.1.104.Final'
-    implementation 'com.hivemq:hivemq-mqtt-client:1.3.3'
-    implementation platform('com.hivemq:hivemq-mqtt-client-websocket:1.3.3')
-    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
-    implementation 'me.tankery.lib:circularSeekBar:1.4.2'
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.extensions
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.legacy.support.v4
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.billing
+    implementation libs.localbroadcastmanager
+    implementation libs.jackson.module.kotlin
+    implementation libs.okhttp
+    implementation libs.arctextview
+    implementation libs.netty.handler
+    implementation libs.bcpkix.jdk15on
+    implementation libs.circularseekbar
+
+    //HiveMQ
+    implementation libs.hivemq.mqtt.client
+    implementation(platform(libs.hivemq.mqtt.client.websocket))
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation(platform(libs.firebase.bom))
+    implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
 }
-
-/*
-Firebase debug commands
-
-adb shell setprop log.tag.FA VERBOSE
-adb shell setprop log.tag.FA-SVC VERBOSE
-adb shell setprop debug.firebase.analytics.app com.alteratom.dashboard
-adb shell setprop debug.firebase.analytics.app .none.
-
-Firebase log example
-G.analytics.logEvent("testName") {
-    param("testLong", 1L)
-    param("testString", "1")
-}
- */

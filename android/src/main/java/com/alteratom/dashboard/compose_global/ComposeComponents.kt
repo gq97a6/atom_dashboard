@@ -417,7 +417,7 @@ fun ArcSlider(
 
                     for (i in colorList.size - 1 downTo 0) {
                         colors.add(0, Pair((start + step * i).toFloat(), colorList.last()))
-                        colorList.removeLast()
+                        colorList.removeAt(colorList.lastIndex)
                     }
                 }
 

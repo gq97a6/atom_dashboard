@@ -102,7 +102,7 @@ class TerminalTile : Tile() {
         (adapter!!.context as MainActivity).runOnUiThread {
             terminalAdapter.let {
                 if (log.size > 10) {
-                    log.removeLast()
+                    log.removeAt(log.lastIndex)
                     it.removeItemAt(it.list.lastIndex, false)
                 }
 

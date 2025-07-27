@@ -60,7 +60,7 @@ val screenHeight
 val screenWidth
     get() = Resources.getSystem().displayMetrics.widthPixels
 val screenVertical
-    get() = screenHeight / screenWidth > 1
+    get() = screenWidth / screenHeight < 1
 
 fun Int.toDp(): Int = (this / Resources.getSystem().displayMetrics.density).toInt()
 fun Int.toPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()

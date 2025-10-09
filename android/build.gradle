@@ -54,12 +54,11 @@ android {
 
     sourceSets {
         main {
-            res {
-                srcDirs 'src\\main\\res',
-                        file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
-                        file('src\\main\\res\\icons')
-
-            }
+            res.srcDirs = [
+                    'src\\main\\res',
+                    file('src\\main\\res\\icons'),
+                    file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
+            ]
         }
     }
 

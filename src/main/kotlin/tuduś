@@ -1,0 +1,5 @@
+Get rid of XML?
+What ic_icon_bold-playstore.png is doing here?
+Check if everything works after huge refactor.
+Clean up gradle build file.
+Fix sketchy sourceSets.

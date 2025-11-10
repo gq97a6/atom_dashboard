@@ -59,7 +59,7 @@ android {
         getByName("main") {
             res.srcDirs(
                     "src/main/res",
-                    file("src/main/java/com/alteratom/dashboard/tile/types").listFiles(),
+                    file("src/main/kotlin/com/alteratom/dashboard/tile/types").listFiles(),
                     "src/main/res/icons"
             )
         }

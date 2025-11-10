@@ -7,25 +7,24 @@ plugins {
     id 'com.google.firebase.crashlytics'
 
     //Sentry
-    id "io.sentry.android.gradle" version "5.8.0"
+    id "io.sentry.android.gradle" version "5.12.2"
 
-    alias(libs.plugins.compose.compiler)
 }
 
 android {
     defaultConfig {
         applicationId "com.alteratom.dashboard"
-        compileSdk = 36
-        minSdkVersion 26 //bump to 29
-        targetSdkVersion 36
-        versionCode = 38
-        versionName = "4.1.0 | stable" //stable or beta or debug
+        compileSdk 34
+        minSdkVersion 26
+        targetSdkVersion 34
+        versionCode 35
+        versionName "4.0.0 | stable" //stable or beta
     }
 
     buildFeatures {
-        viewBinding = true
-        compose = true
-        buildConfig = true
+        viewBinding true
+        compose true
+        buildConfig true
     }
 
     buildTypes {
@@ -44,26 +43,27 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlin {
-        jvmToolchain(17)
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 
     sourceSets {
         main {
-            res.srcDirs = [
-                    'src\\main\\res',
-                    file('src\\main\\res\\icons'),
-                    file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
-            ]
+            res {
+                srcDirs 'src\\main\\res',
+                        file('src\\main\\java\\com\\alteratom\\dashboard\\tile\\types').listFiles(),
+                        file('src\\main\\res\\icons')
+
+            }
         }
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+        kotlinCompilerExtensionVersion "1.5.7"
     }
 
     packagingOptions {
@@ -72,45 +72,43 @@ android {
         }
     }
 
-    namespace = 'com.alteratom'
+    namespace 'com.alteratom'
 }
 
 dependencies {
-    implementation libs.androidx.runtime.livedata
+    implementation 'androidx.compose.runtime:runtime-livedata:1.9.4'
 
     //DO NOT UPGRADE
     //BREAKS ICONS IN WHOLE APP
     //BREAKS MULTILINE TEXT IN WHOLE APP
-    implementation libs.androidx.material
-    implementation libs.androidx.animation
-    implementation libs.androidx.ui.tooling
-    implementation libs.androidx.lifecycle.viewmodel.compose
+    implementation 'androidx.compose.material:material:1.4.3'
+    implementation 'androidx.compose.animation:animation:1.4.3'
+    implementation 'androidx.compose.ui:ui-tooling:1.4.3'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
 
-    implementation libs.androidx.activity.compose
-    implementation libs.androidx.constraintlayout
-    implementation libs.androidx.lifecycle.extensions
-    implementation libs.androidx.activity.ktx
-    implementation libs.androidx.legacy.support.v4
-    implementation libs.androidx.navigation.fragment.ktx
-    implementation libs.androidx.navigation.ui.ktx
-    implementation libs.androidx.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.material
-    implementation libs.billing
-    implementation libs.localbroadcastmanager
-    implementation libs.jackson.module.kotlin
-    implementation libs.okhttp
-    implementation libs.arctextview
-    implementation libs.netty.handler
-    implementation libs.bcpkix.jdk15on
-    implementation libs.circularseekbar
-
-    //HiveMQ
-    implementation libs.hivemq.mqtt.client
-    implementation(platform(libs.hivemq.mqtt.client.websocket))
+    implementation 'androidx.activity:activity-compose:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.activity:activity-ktx:1.11.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.9.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.9.6'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.android.billingclient:billing:8.1.0'
+    implementation 'com.android.support:localbroadcastmanager:33.0.0'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1'
+    implementation 'com.squareup.okhttp3:okhttp:5.3.0'
+    implementation 'org.labcluster.arctextview:arctextview:3.0.0'
+    implementation 'io.netty:netty-handler:4.1.104.Final'
+    implementation 'com.hivemq:hivemq-mqtt-client:1.3.10'
+    implementation platform('com.hivemq:hivemq-mqtt-client-websocket:1.3.10')
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+    implementation 'me.tankery.lib:circularSeekBar:1.4.2'
 
     //Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation libs.firebase.analytics
-    implementation libs.firebase.crashlytics
+    implementation(platform("com.google.firebase:firebase-bom:34.5.0"))
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
 }

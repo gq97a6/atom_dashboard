@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="@+id/dt_temp"
             app:layout_constraintTop_toTopOf="@+id/dt_temp" />
 
-        <com.alteratom.lib.ArcTextView
+        <org.labcluster.arctextview.ArcTextView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="0dp"
@@ -59,7 +59,7 @@
             app:textOrientation="outward"
             app:textSize="20dp" />
 
-        <com.alteratom.lib.ArcTextView
+        <org.labcluster.arctextview.ArcTextView
             android:id="@+id/dt_humi_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
